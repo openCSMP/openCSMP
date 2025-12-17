@@ -354,7 +354,7 @@ template<uint32_t dim,template<uint32_t> class STP>
 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::~ExplicitNodeCenteredFiniteVolumeTransport()
  {
 #if defined(_OPENMP )
-    for (auto i = 0 ; i < omp_get_max_threads(); i++)
+    for ( size_t i = 0 ; i < omp_get_max_threads(); i++)
          delete(thread_stencil_processor_[i]);
 #endif
  }
@@ -425,7 +425,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryCondi
          Luat's fix 4/6/2020
 */
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions( uint32_t var_comp_nr)
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions( uint32_t  )
   {
       double        inflow, flux_balance;
       const double  zero(0.);
@@ -979,7 +979,7 @@ template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AccumulateFluxUpwindProducts()
 {
    // for all finite-volume facets
-   for ( auto i{0}; i<this->gref_.E(stencil_.eidx_)->FV()->Facets(); i++ )
+   for ( uint32_t i{0u}; i<this->gref_.E(stencil_.eidx_)->FV()->Facets(); i++ )
       {
       // identifying the finite volumes to which the flux will be distributed
       this->gref_.E(stencil_.eidx_)->FV()->FacetEdgeNodes( i, stencil_.inside_node_, stencil_.outside_node_ );

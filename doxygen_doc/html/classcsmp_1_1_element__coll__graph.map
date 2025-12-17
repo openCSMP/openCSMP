@@ -1,0 +1,15 @@
+<map id="csmp::Element&lt; dim &gt;" name="csmp::Element&lt; dim &gt;">
+<area shape="rect" id="Node000001" title="Object representation of a finite element Bridge pattern together with FiniteElement class." alt="" coords="231,695,374,965"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element_policy.html" title=" " alt="" coords="5,361,197,646"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,657,233,712,229,715,194,660"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_finite_element_policy.html" title="finite element policy for class Element" alt="" coords="5,5,197,290"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,305,104,361,99,361,99,305"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_finite_volume_policy.html" title=" " alt="" coords="221,463,384,544"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="305,559,305,695,300,695,300,559"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_finite_volume_policy.html" title="Element policy for node&#45;centered finite&#45;volume computations; see full specializations for 1D,..." alt="" coords="221,107,384,188"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="305,203,305,463,300,463,300,203"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="408,361,581,646"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="406,659,377,709,372,706,401,657"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="408,5,581,290"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="497,305,497,361,492,361,492,305"/>
+</map>

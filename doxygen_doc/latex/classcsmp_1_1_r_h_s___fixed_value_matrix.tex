@@ -1,0 +1,231 @@
+\doxysection{csmp\+::RHS\+\_\+\+Fixed\+Value\+Matrix\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_r_h_s___fixed_value_matrix}{}\label{classcsmp_1_1_r_h_s___fixed_value_matrix}\index{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$@{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$}}
+
+
+{\ttfamily \#include $<$PDE\+\_\+\+Integrator\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::RHS\+\_\+\+Fixed\+Value\+Matrix\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_r_h_s___fixed_value_matrix__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::RHS\+\_\+\+Fixed\+Value\+Matrix\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_r_h_s___fixed_value_matrix__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_r_h_s___fixed_value_matrix_a59b627618b1b33f159ed0d95068914e2}\label{classcsmp_1_1_r_h_s___fixed_value_matrix_a59b627618b1b33f159ed0d95068914e2} 
+{\bfseries RHS\+\_\+\+Fixed\+Value\+Matrix} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}test, double value)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix_a2daddc57992bbb9927a8d0097c67a22e}{Compute\+Contribution}} (const CELL \&)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{RHS\+\_\+\+Fixed\+Value\+Matrix}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix_afb9a8b7eebe7b4d9caa01342e254286c}{clone}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, CELL $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Math\+Operator\+RHS} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \&)
+\item 
+{\bfseries Math\+Operator\+RHS} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+{\bfseries Math\+Operator\+RHS} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_operand}{Operand} Functions. \end{DoxyCompactList}\item 
+void {\bfseries Name} (const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*}topname)
+\begin{DoxyCompactList}\small\item\em =================================== \doxylink{classcsmp_1_1_operand}{Operand} Functions ======================================================================== \end{DoxyCompactList}\item 
+void {\bfseries Name} (const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*}opname, const char \texorpdfstring{$\ast$}{*}topname)
+\item 
+virtual void {\bfseries Out} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Material\+Operand} () const
+\begin{DoxyCompactList}\small\item\em op \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Material\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Material\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Material\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Material\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Material\+Operand\+Data\+Depth} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Basic\+Operand} () const
+\begin{DoxyCompactList}\small\item\em bop \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Basic\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Basic\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Basic\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Basic\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Basic\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Basic\+Operand\+Offset} () const
+\item 
+void {\bfseries Basic\+Operand\+Offset} (size\+\_\+t)
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Test\+Operand} () const
+\begin{DoxyCompactList}\small\item\em top \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Test\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Test\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Test\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Test\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Test\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Test\+Operand\+Offset} () const
+\item 
+void {\bfseries Test\+Operand\+Offset} (size\+\_\+t)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_af950a8b9a3d4ea2229f60d27ab6a69c2}{Add}} () const
+\begin{DoxyCompactList}\small\item\em Accumulation Process Settings. \end{DoxyCompactList}\item 
+bool {\bfseries Subtract} () const
+\item 
+bool {\bfseries Add\+Later} () const
+\item 
+bool {\bfseries Subtract\+Later} () const
+\item 
+bool {\bfseries Multiply} () const
+\item 
+bool {\bfseries Lumped\+Formulation} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycle} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycles} () const
+\item 
+double {\bfseries Multiply\+By} () const
+\item 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+bool {\bfseries Divide\+By\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a95426d12ae7f3a6eb1bf10c036505e7b}{Add\+Accumulate}} ()
+\begin{DoxyCompactList}\small\item\em Set Flags and Properties. \end{DoxyCompactList}\item 
+void {\bfseries Subtract\+Accumulate} ()
+\item 
+void {\bfseries Add\+Accumulate\+Later} ()
+\item 
+void {\bfseries Subtract\+Accumulate\+Later} ()
+\item 
+void {\bfseries Multiply\+Accumulate} ()
+\item 
+void {\bfseries Lumped\+Formulation} (bool)
+\item 
+void {\bfseries Application\+Cycle} (uint32\+\_\+t)
+\item 
+void {\bfseries Application\+Cycles} (uint32\+\_\+t)
+\item 
+void {\bfseries Multiply\+By} (double integral\+\_\+mult\+\_\+factor)
+\item 
+void {\bfseries Multiply\+With\+Time\+Increment} (bool multiply)
+\item 
+void {\bfseries Divide\+By\+Time\+Increment} (bool divide)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a4ac9c3b2f60149cd6cc4a35681b29e0d}{Property\+At\+Integration\+Point}} (const CELL$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t ip, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em interpolation of property if isoparametric elements are used \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad5614fa4de569146a684d28635eb9ff7}{Get\+Operands}} (const CELL$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ab77b3c1f4f078290ec9330a916482ed7}{Compute\+Contribution}} (const CELL$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em integration performed on \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void {\bfseries Write\+Operands} (CELL$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em writing data to the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a5a6138f5b4e123f88a9115e1d9315871}{Multiply\+With\+Time\+Factor}} (double dt)
+\begin{DoxyCompactList}\small\item\em if so specified multiply with time increment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad9c03f1d3138a22e0bc40778d0032f6a}{Assign\+To\+Global}} (const CELL$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&rhs)
+\begin{DoxyCompactList}\small\item\em assigment to the right hand side global vector (after everything was calculated ) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a9470acdb9a64217b4ae019cc7cd5b66f}{Assign\+To\+Global}} (const CELL$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&rhs, const std\+::vector$<$ size\+\_\+t $>$ \&)
+\begin{DoxyCompactList}\small\item\em used by PDE\+\_\+\+Integrator\+UoM for assembly of a pre-\/eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, CELL $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of operator \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} {\bfseries op}
+\begin{DoxyCompactList}\small\item\em material property operand \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries top}
+\begin{DoxyCompactList}\small\item\em test function operand \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries RHS}
+\begin{DoxyCompactList}\small\item\em solution \doxylink{classvector}{vector$<$double$>$} to be accumulated \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ {\bfseries MTRL}
+\begin{DoxyCompactList}\small\item\em material property matrix(es) needed for PDE operand \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DERIV}
+\begin{DoxyCompactList}\small\item\em shape function derivative matrix \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries IPOL}
+\begin{DoxyCompactList}\small\item\em shape function vector \end{DoxyCompactList}\item 
+double {\bfseries factor\+\_\+}
+\begin{DoxyCompactList}\small\item\em constant factor \end{DoxyCompactList}\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+}
+\begin{DoxyCompactList}\small\item\em specifies accumulation procedure \end{DoxyCompactList}\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries multiply\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries lump\+\_\+matrices\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycles\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycle\+\_\+}
+\item 
+bool {\bfseries time\+\_\+multiply\+\_\+}
+\begin{DoxyCompactList}\small\item\em time-\/dependent multipliers \end{DoxyCompactList}\item 
+bool {\bfseries time\+\_\+divide\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, class CELL = Element$<$dim$>$$>$\newline
+class csmp\+::\+RHS\+\_\+\+Fixed\+Value\+Matrix$<$ dim, CELL $>$}
+RHS operator that puts fixed values in the matrix 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_r_h_s___fixed_value_matrix_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_r_h_s___fixed_value_matrix_afb9a8b7eebe7b4d9caa01342e254286c}\index{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$@{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$}!clone@{clone}}
+\index{clone@{clone}!csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$@{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{clone()}{clone()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_r_h_s___fixed_value_matrix_afb9a8b7eebe7b4d9caa01342e254286c} 
+template$<$uint32\+\_\+t dim, class CELL = Element$<$dim$>$$>$ \\
+virtual \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{RHS\+\_\+\+Fixed\+Value\+Matrix}}$<$ dim, CELL $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{csmp\+::\+RHS\+\_\+\+Fixed\+Value\+Matrix}}$<$ dim, CELL $>$\+::clone (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, CELL $>$}}.
+
+\Hypertarget{classcsmp_1_1_r_h_s___fixed_value_matrix_a2daddc57992bbb9927a8d0097c67a22e}\index{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$@{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$}!ComputeContribution@{ComputeContribution}}
+\index{ComputeContribution@{ComputeContribution}!csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$@{csmp::RHS\_FixedValueMatrix$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ComputeContribution()}{ComputeContribution()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_r_h_s___fixed_value_matrix_a2daddc57992bbb9927a8d0097c67a22e} 
+template$<$uint32\+\_\+t dim, class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_r_h_s___fixed_value_matrix}{csmp\+::\+RHS\+\_\+\+Fixed\+Value\+Matrix}}$<$ dim, CELL $>$\+::\+Compute\+Contribution (\begin{DoxyParamCaption}\item[{const CELL \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Computes contribution from value input in constructor. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/PDE\+\_\+\+Integrator\+\_\+\+Test.\+h\item 
+tests/unit/PDE\+\_\+\+Integrator\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,408 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_random_field_generator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::RandomFieldGenerator</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_random_field_generator_1a2568829834217baebc520804eb20ecc9" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">csmp::Matrix</ref></type>
+        <definition>csmp::Matrix csmp::RandomFieldGenerator&lt; dim &gt;::m1_</definition>
+        <argsstring></argsstring>
+        <name>m1_</name>
+        <qualifiedname>csmp::RandomFieldGenerator::m1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="28" column="19" bodyfile="source/includes/math/RandomFieldGenerator.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_random_field_generator_1aee1bba38f3a58e825d07ad6bd4be923b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">csmp::Matrix</ref></type>
+        <definition>csmp::Matrix csmp::RandomFieldGenerator&lt; dim &gt;::m2_</definition>
+        <argsstring></argsstring>
+        <name>m2_</name>
+        <qualifiedname>csmp::RandomFieldGenerator::m2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="28" column="23" bodyfile="source/includes/math/RandomFieldGenerator.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_random_field_generator_1ab5a36d3e72abc21b749234373bb09e8b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">csmp::Matrix</ref></type>
+        <definition>csmp::Matrix csmp::RandomFieldGenerator&lt; dim &gt;::m3_</definition>
+        <argsstring></argsstring>
+        <name>m3_</name>
+        <qualifiedname>csmp::RandomFieldGenerator::m3_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="28" column="27" bodyfile="source/includes/math/RandomFieldGenerator.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_random_field_generator_1a352d07f2018d3aa3eb1a7ed1becd5060" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::RandomFieldGenerator&lt; dim &gt;::pi_</definition>
+        <argsstring></argsstring>
+        <name>pi_</name>
+        <qualifiedname>csmp::RandomFieldGenerator::pi_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="29" column="18" bodyfile="source/includes/math/RandomFieldGenerator.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_random_field_generator_1ad0c1ceac6929d64168dd338f8f90f1bf" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::RandomFieldGenerator&lt; dim &gt;::k_</definition>
+        <argsstring></argsstring>
+        <name>k_</name>
+        <qualifiedname>csmp::RandomFieldGenerator::k_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="30" column="17" bodyfile="source/includes/math/RandomFieldGenerator.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_random_field_generator_1aa241d5ef55a93d112043bc94cb6e466e" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::RandomFieldGenerator&lt; dim &gt;::fname</definition>
+        <argsstring></argsstring>
+        <name>fname</name>
+        <qualifiedname>csmp::RandomFieldGenerator::fname</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="31" column="17" bodyfile="source/includes/math/RandomFieldGenerator.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1a8c86da55d4eff8e35b699a496153c1f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::RandomFieldGenerator&lt; dim &gt;::RandomFieldGenerator</definition>
+        <argsstring>()</argsstring>
+        <name>RandomFieldGenerator</name>
+        <qualifiedname>csmp::RandomFieldGenerator::RandomFieldGenerator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="14" column="5" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="13" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1a39888baab598f62dd87bc4a1a04e885f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RandomFieldGenerator&lt; dim &gt;::RandomElementField2D</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *variable, double mean, double sigma, double xlength, double ylength, bool logarithmic, const char *region=&quot;Model&quot;, size_t iterations=50)</argsstring>
+        <name>RandomElementField2D</name>
+        <qualifiedname>csmp::RandomFieldGenerator::RandomElementField2D</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variable</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>mean</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sigma</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xlength</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>ylength</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>logarithmic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>region</declname>
+          <defval>&quot;Model&quot;</defval>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>iterations</declname>
+          <defval>50</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="16" column="10" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="135" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1a292bce5ed71b585854f82c5582474773" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RandomFieldGenerator&lt; dim &gt;::RandomNodeField2D</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *variable, double mean, double sigma, double xlength, double ylength, bool logarithmic, const char *region=&quot;Model&quot;, size_t iterations=50)</argsstring>
+        <name>RandomNodeField2D</name>
+        <qualifiedname>csmp::RandomFieldGenerator::RandomNodeField2D</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variable</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>mean</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sigma</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xlength</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>ylength</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>logarithmic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>region</declname>
+          <defval>&quot;Model&quot;</defval>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>iterations</declname>
+          <defval>50</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="18" column="10" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="269" bodyend="364"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1a7d5c76a8071e207ae10235e619653051" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RandomFieldGenerator&lt; dim &gt;::OutputRandomNodeField</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg)</argsstring>
+        <name>OutputRandomNodeField</name>
+        <qualifiedname>csmp::RandomFieldGenerator::OutputRandomNodeField</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="21" column="10" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="397" bodyend="423"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1abf08d812d76c7935e250c197ee3ff35c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RandomFieldGenerator&lt; dim &gt;::OutputRandomElementField</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg)</argsstring>
+        <name>OutputRandomElementField</name>
+        <qualifiedname>csmp::RandomFieldGenerator::OutputRandomElementField</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="22" column="10" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="368" bodyend="394"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1ad1cbfde7df8182164e1ce4d607e87649" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RandomFieldGenerator&lt; dim &gt;::InputRandomNodeField</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *variable)</argsstring>
+        <name>InputRandomNodeField</name>
+        <qualifiedname>csmp::RandomFieldGenerator::InputRandomNodeField</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variable</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="24" column="10" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="467" bodyend="503"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1af851e5f3d3b04c0b335592e88d845254" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RandomFieldGenerator&lt; dim &gt;::InputRandomElementField</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *variable)</argsstring>
+        <name>InputRandomElementField</name>
+        <qualifiedname>csmp::RandomFieldGenerator::InputRandomElementField</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>variable</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="25" column="10" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="428" bodyend="464"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1a33720d7aeedbf56087e25ce44be2fded" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::RandomFieldGenerator&lt; dim &gt;::UniformRandomMatrix</definition>
+        <argsstring>(size_t m, size_t n)</argsstring>
+        <name>UniformRandomMatrix</name>
+        <qualifiedname>csmp::RandomFieldGenerator::UniformRandomMatrix</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="32" column="12" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="20" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1af4e975fe5b5cb8ddb205016bb84a82a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+        <definition>Matrix &amp; csmp::RandomFieldGenerator&lt; dim &gt;::NormalRandomMatrix</definition>
+        <argsstring>(size_t m, size_t n)</argsstring>
+        <name>NormalRandomMatrix</name>
+        <qualifiedname>csmp::RandomFieldGenerator::NormalRandomMatrix</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="33" column="12" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="47" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_random_field_generator_1a8b463aaac5573002903bd44a89c4ba43" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::RandomFieldGenerator&lt; dim &gt;::TheoreticalStandardDeviation</definition>
+        <argsstring>(size_t m, double xl, double yl, double Lx, double Ly)</argsstring>
+        <name>TheoreticalStandardDeviation</name>
+        <qualifiedname>csmp::RandomFieldGenerator::TheoreticalStandardDeviation</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xl</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yl</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Lx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Ly</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/RandomFieldGenerator.h" line="34" column="12" bodyfile="source/modules/math/RandomFieldGenerator.cpp" bodystart="73" bodyend="95"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::RandomFieldGenerator&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_random_field_generator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/math/RandomFieldGenerator.h" line="12" column="1" bodyfile="source/includes/math/RandomFieldGenerator.h" bodystart="12" bodyend="35"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_random_field_generator_1aa241d5ef55a93d112043bc94cb6e466e" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>fname</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1af851e5f3d3b04c0b335592e88d845254" prot="public" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>InputRandomElementField</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1ad1cbfde7df8182164e1ce4d607e87649" prot="public" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>InputRandomNodeField</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1ad0c1ceac6929d64168dd338f8f90f1bf" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>k_</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a2568829834217baebc520804eb20ecc9" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>m1_</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1aee1bba38f3a58e825d07ad6bd4be923b" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>m2_</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1ab5a36d3e72abc21b749234373bb09e8b" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>m3_</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1af4e975fe5b5cb8ddb205016bb84a82a3" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>NormalRandomMatrix</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1abf08d812d76c7935e250c197ee3ff35c" prot="public" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>OutputRandomElementField</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a7d5c76a8071e207ae10235e619653051" prot="public" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>OutputRandomNodeField</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a352d07f2018d3aa3eb1a7ed1becd5060" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>pi_</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a39888baab598f62dd87bc4a1a04e885f" prot="public" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>RandomElementField2D</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a8c86da55d4eff8e35b699a496153c1f4" prot="public" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>RandomFieldGenerator</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a292bce5ed71b585854f82c5582474773" prot="public" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>RandomNodeField2D</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a8b463aaac5573002903bd44a89c4ba43" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>TheoreticalStandardDeviation</name></member>
+      <member refid="classcsmp_1_1_random_field_generator_1a33720d7aeedbf56087e25ce44be2fded" prot="private" virt="non-virtual"><scope>csmp::RandomFieldGenerator</scope><name>UniformRandomMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

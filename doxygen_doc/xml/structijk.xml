@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structijk" kind="struct" language="C++" prot="public">
+    <compoundname>ijk</compoundname>
+    <includes refid="_corner_point_grid_8h" local="no">CornerPointGrid.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structijk_1a6d6708207bf881e24776afa33c623d7c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t ijk::i</definition>
+        <argsstring></argsstring>
+        <name>i</name>
+        <qualifiedname>ijk::i</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="11" column="13" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structijk_1a30fdd3e6dc93044309de16ff1d52ed64" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t ijk::j</definition>
+        <argsstring></argsstring>
+        <name>j</name>
+        <qualifiedname>ijk::j</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="11" column="15" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structijk_1a0737bdcf94792f5d2c71dcd528c6d9f5" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t ijk::k</definition>
+        <argsstring></argsstring>
+        <name>k</name>
+        <qualifiedname>ijk::k</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="11" column="17" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structijk_1ac29d16bf5108e969a6701bc33d165005" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool ijk::operator&lt;</definition>
+        <argsstring>(const ijk &amp;rhs) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>ijk::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structijk" kindref="compound">ijk</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="13" column="3" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="13" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="structijk_1aa657c70b1ffe705244b10c3ca8588b49" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool ijk::operator==</definition>
+        <argsstring>(const ijk &amp;rhs) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>ijk::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structijk" kindref="compound">ijk</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="19" column="8" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="19" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="structijk_1a4f24f12ae688ed43e3607723308927e8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>ijk::ijk</definition>
+        <argsstring>(uint32_t i, uint32_t j, uint32_t k)</argsstring>
+        <name>ijk</name>
+        <qualifiedname>ijk::ijk</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>k</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/regular_grids/CornerPointGrid.h" line="23" column="3" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="23" bodyend="24"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Hash table utility class for storing (i,j,k) coordinates, in this case the i,j,k indices of the CornerPointGrid </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>ijk</label>
+        <link refid="structijk"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/regular_grids/CornerPointGrid.h" line="10" column="1" bodyfile="source/includes/regular_grids/CornerPointGrid.h" bodystart="10" bodyend="25"/>
+    <listofallmembers>
+      <member refid="structijk_1a6d6708207bf881e24776afa33c623d7c" prot="public" virt="non-virtual"><scope>ijk</scope><name>i</name></member>
+      <member refid="structijk_1a4f24f12ae688ed43e3607723308927e8" prot="public" virt="non-virtual"><scope>ijk</scope><name>ijk</name></member>
+      <member refid="structijk_1a30fdd3e6dc93044309de16ff1d52ed64" prot="public" virt="non-virtual"><scope>ijk</scope><name>j</name></member>
+      <member refid="structijk_1a0737bdcf94792f5d2c71dcd528c6d9f5" prot="public" virt="non-virtual"><scope>ijk</scope><name>k</name></member>
+      <member refid="structijk_1ac29d16bf5108e969a6701bc33d165005" prot="public" virt="non-virtual"><scope>ijk</scope><name>operator&lt;</name></member>
+      <member refid="structijk_1aa657c70b1ffe705244b10c3ca8588b49" prot="public" virt="non-virtual"><scope>ijk</scope><name>operator==</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

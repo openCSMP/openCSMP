@@ -521,11 +521,13 @@ std::vector<uint32_t>  IsoparametricLinearPrism::NodesConnectedTo( uint32_t node
 CSMP_FEM_TYPE  IsoparametricLinearPrism::ElementTypeOfFace( uint32_t face )  const
  {
     assert( face < fpe );
-    if ( face == 0U || face == 4U )
-        return ISOPARAMETRIC_LINEAR_TRIANGLE;
+    if ( face == 0U || face == 4U ) return ISOPARAMETRIC_LINEAR_TRIANGLE;
 
     return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
  }
+
+
+
 
 double IsoparametricLinearPrism::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
@@ -1510,7 +1512,7 @@ IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%zu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
 
@@ -1565,7 +1567,7 @@ IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
      if ( DATA.Rows() == 1 )
        {
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
-           ofs <<"LOOKUP_TABLE default" << endl; // table must always be createds
+           ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
            for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;

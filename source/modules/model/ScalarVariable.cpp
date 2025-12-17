@@ -29,6 +29,11 @@ ScalarVariable::ScalarVariable( VARIABLE_FLAG f, double val )
 }
 
 
+ScalarVariable&  ScalarVariable::operator+=( double val ) { data_ += val; return *this; }
+ScalarVariable&  ScalarVariable::operator-=( double val ) { data_ -= val; return *this; }
+ScalarVariable&  ScalarVariable::operator*=( double val ) { data_ *= val; return *this; }
+ScalarVariable&  ScalarVariable::operator/=( double val ) { data_ /= val; return *this; }
+
 
 
 ScalarVariable&  ScalarVariable::operator+=( const ScalarVariable& s )
@@ -37,26 +42,17 @@ ScalarVariable&  ScalarVariable::operator+=( const ScalarVariable& s )
   return(*this);
 }
 
-
-
-
 ScalarVariable&  ScalarVariable::operator-=( const ScalarVariable& s )
 {
   data_ -= s.data_;
   return(*this);
 }
 
-
-
-
 ScalarVariable&  ScalarVariable::operator*=( const ScalarVariable& s )
 {
   data_ *= s.data_;
   return(*this);
 }
-
-
-
 
 ScalarVariable&  ScalarVariable::operator/=( const ScalarVariable& s )
 {
@@ -151,28 +147,28 @@ ScalarVariable  operator/( const ScalarVariable& l, const double& r )
 
 
 
-ScalarVariable  operator+( const double& l, const ScalarVariable& r )
+ScalarVariable  operator+( double l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l + r() );
 }
 
 
 
-ScalarVariable  operator-( const double& l, const ScalarVariable& r )
+ScalarVariable  operator-( double l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l - r() );
 }
 
 
 
-ScalarVariable  operator*( const double& l, const ScalarVariable& r )
+ScalarVariable  operator*( double l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l * r() );
 }
 
 
 
-ScalarVariable  operator/( const double& l, const ScalarVariable& r )
+ScalarVariable  operator/( double l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l / r() );
 }

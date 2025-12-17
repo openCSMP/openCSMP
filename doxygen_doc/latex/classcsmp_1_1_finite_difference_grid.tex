@@ -1,0 +1,278 @@
+\doxysection{csmp\+::Finite\+Difference\+Grid Class Reference}
+\hypertarget{classcsmp_1_1_finite_difference_grid}{}\label{classcsmp_1_1_finite_difference_grid}\index{csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}}
+
+
+Two-\/dimensional regular grid with interpolation operations and an optional halo across which interpolation still works; can be used for grid-\/point in finite-\/element cell transport computations.  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Difference\+Grid.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Finite\+Difference\+Grid\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{classcsmp_1_1_finite_difference_grid__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ac71b93be493c87754670a4591ad0e32b}\label{classcsmp_1_1_finite_difference_grid_ac71b93be493c87754670a4591ad0e32b} 
+{\bfseries Finite\+Difference\+Grid} (const \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid}} \&\mbox{\hyperlink{group___c_s_m_pglobal_functions_gaf74e7967f030170c3046146f7b5fc229}{g}})
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ac12d0773841f8a30e7210f3c5771c18b}\label{classcsmp_1_1_finite_difference_grid_ac12d0773841f8a30e7210f3c5771c18b} 
+{\bfseries Finite\+Difference\+Grid} (double x\+\_\+dim, double y\+\_\+dim, double xres, double yres, int32\+\_\+t frame\+\_\+width=0)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ae055cb7a66d0c4124975be4ffb42cb31}\label{classcsmp_1_1_finite_difference_grid_ae055cb7a66d0c4124975be4ffb42cb31} 
+{\bfseries Finite\+Difference\+Grid} (double x\+\_\+min, double x\+\_\+max, double y\+\_\+min, double y\+\_\+max, double xres, double yres, int32\+\_\+t frame\+\_\+width=0)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_aaa2aedaec242ba92c36f7f448d59f9c4}\label{classcsmp_1_1_finite_difference_grid_aaa2aedaec242ba92c36f7f448d59f9c4} 
+void {\bfseries Initialize} (double x\+\_\+dim, double y\+\_\+dim, double xres, double yres, int32\+\_\+t frame\+\_\+width=0)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a69b3f7e7db6b3a699f45c5605f5c868b}\label{classcsmp_1_1_finite_difference_grid_a69b3f7e7db6b3a699f45c5605f5c868b} 
+void {\bfseries Initialize} (double x\+\_\+min, double x\+\_\+max, double y\+\_\+min, double y\+\_\+max, double xres, double yres, int32\+\_\+t frame\+\_\+width=0)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a220fde032f47215c56fcb19c10fa98ec}\label{classcsmp_1_1_finite_difference_grid_a220fde032f47215c56fcb19c10fa98ec} 
+\mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid}} \&\mbox{\hyperlink{group___c_s_m_pglobal_functions_gaf74e7967f030170c3046146f7b5fc229}{g}})
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a94d6da54fd65eac95534d6e17a977456}\label{classcsmp_1_1_finite_difference_grid_a94d6da54fd65eac95534d6e17a977456} 
+\mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid}} \& {\bfseries operator=} (double val)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid_a977cfb1dbe03cd6b849afcaf4530efad}{Linear\+Interpolate\+On\+To}} (\mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid}} \&grid) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a6f47f1595d32cb1e47c01ce4ed4256d9}\label{classcsmp_1_1_finite_difference_grid_a6f47f1595d32cb1e47c01ce4ed4256d9} 
+double {\bfseries Interpolate\+Outside} (double x, double y) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid_abba1f256dbf0f0c4327cc16acfa03acf}{Interpolate\+Within}} (double \&x, double \&y) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid_a069d3d5c3364fa4e892dcaa748e17262}{Extrapolate\+To}} (double x, double y) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid_a3cebb2ae952823bddf1c08be7e67eee2}{operator()}} (double x, double y, bool rounded=false) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a4d97a82ad42f2393198b7bdf8ab37892}\label{classcsmp_1_1_finite_difference_grid_a4d97a82ad42f2393198b7bdf8ab37892} 
+double \& {\bfseries operator()} (int32\+\_\+t row, int32\+\_\+t col)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_acbfa46c6e26b1a85e5eef427219380fc}\label{classcsmp_1_1_finite_difference_grid_acbfa46c6e26b1a85e5eef427219380fc} 
+double {\bfseries operator()} (int32\+\_\+t row, int32\+\_\+t col) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ad41c151964c32d96183233815aa9ace8}\label{classcsmp_1_1_finite_difference_grid_ad41c151964c32d96183233815aa9ace8} 
+double {\bfseries Value} (int32\+\_\+t row, int32\+\_\+t col) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_af1413b1d9509de21c4da0b2f2c9d2df2}\label{classcsmp_1_1_finite_difference_grid_af1413b1d9509de21c4da0b2f2c9d2df2} 
+double \& {\bfseries N} (int32\+\_\+t row, int32\+\_\+t col)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ac90239b2db0a0d2dee41580b2de713ff}\label{classcsmp_1_1_finite_difference_grid_ac90239b2db0a0d2dee41580b2de713ff} 
+double \& {\bfseries S} (int32\+\_\+t i, int32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a33aa9b3529cc6bd138c24fc746fc9bc3}\label{classcsmp_1_1_finite_difference_grid_a33aa9b3529cc6bd138c24fc746fc9bc3} 
+double \& {\bfseries E} (int32\+\_\+t i, int32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a029a65e10bb06e41e7f26059f79bd395}\label{classcsmp_1_1_finite_difference_grid_a029a65e10bb06e41e7f26059f79bd395} 
+double \& {\bfseries W} (int32\+\_\+t i, int32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a450db1e4d4863642ef10e3805e1caa72}\label{classcsmp_1_1_finite_difference_grid_a450db1e4d4863642ef10e3805e1caa72} 
+double \& {\bfseries NW} (int32\+\_\+t i, int32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a60dca9c117e0351f997bf732895af349}\label{classcsmp_1_1_finite_difference_grid_a60dca9c117e0351f997bf732895af349} 
+double \& {\bfseries NE} (int32\+\_\+t i, int32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a170f18c410ec909b9374395544c29889}\label{classcsmp_1_1_finite_difference_grid_a170f18c410ec909b9374395544c29889} 
+double \& {\bfseries SW} (int32\+\_\+t i, int32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ae0be45e227c4c0eef5ab6dee2ed0ebf0}\label{classcsmp_1_1_finite_difference_grid_ae0be45e227c4c0eef5ab6dee2ed0ebf0} 
+double \& {\bfseries SE} (int32\+\_\+t i, int32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a48fee1eb9408a76502f5b1241612867b}\label{classcsmp_1_1_finite_difference_grid_a48fee1eb9408a76502f5b1241612867b} 
+double {\bfseries ResolutionX} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a3e0dff367328184eb63594ae082bf79f}\label{classcsmp_1_1_finite_difference_grid_a3e0dff367328184eb63594ae082bf79f} 
+double {\bfseries ResolutionY} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a94f35756df2d4eb32cc6366488b19006}\label{classcsmp_1_1_finite_difference_grid_a94f35756df2d4eb32cc6366488b19006} 
+int32\+\_\+t {\bfseries Rows} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_afd1aef7c00b295c47f47006abfe75ae2}\label{classcsmp_1_1_finite_difference_grid_afd1aef7c00b295c47f47006abfe75ae2} 
+int32\+\_\+t {\bfseries Columns} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ae89600684cc175a33d2ddb427cd5ff24}\label{classcsmp_1_1_finite_difference_grid_ae89600684cc175a33d2ddb427cd5ff24} 
+bool {\bfseries Has\+Frame} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_aca120747ced19c8394150311a3a8a1cd}\label{classcsmp_1_1_finite_difference_grid_aca120747ced19c8394150311a3a8a1cd} 
+double {\bfseries MinX} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_adc7dae9824e08e274e0ae0a2e05294db}\label{classcsmp_1_1_finite_difference_grid_adc7dae9824e08e274e0ae0a2e05294db} 
+double {\bfseries MinY} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ac7511985ace77a496d92c119bbef7c36}\label{classcsmp_1_1_finite_difference_grid_ac7511985ace77a496d92c119bbef7c36} 
+double {\bfseries MinZ} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a9a98dcc47feb5968c2332f9def5b09b0}\label{classcsmp_1_1_finite_difference_grid_a9a98dcc47feb5968c2332f9def5b09b0} 
+double {\bfseries MaxX} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ac8feda3fa1b1e9e8d3a2603a6d462f12}\label{classcsmp_1_1_finite_difference_grid_ac8feda3fa1b1e9e8d3a2603a6d462f12} 
+double {\bfseries MaxY} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ae10fd3cb16e18a1bd7a54a9cfcff0cda}\label{classcsmp_1_1_finite_difference_grid_ae10fd3cb16e18a1bd7a54a9cfcff0cda} 
+double {\bfseries MaxZ} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a8348f9ba2816766a06df9bdf16f96d8a}\label{classcsmp_1_1_finite_difference_grid_a8348f9ba2816766a06df9bdf16f96d8a} 
+void {\bfseries Data\+Min\+Max} (double \&dmin, double \&dmax, bool incl\+\_\+frame=false) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a65f452e2065f97b6cbd41ca9b4bf20c2}\label{classcsmp_1_1_finite_difference_grid_a65f452e2065f97b6cbd41ca9b4bf20c2} 
+void {\bfseries Data\+Min\+Max\+Without\+NAN} (double \&dmin, double \&dmax, bool incl\+\_\+frame=false) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a4c6f837d20f10e323a5662f02fed266a}\label{classcsmp_1_1_finite_difference_grid_a4c6f837d20f10e323a5662f02fed266a} 
+double {\bfseries X} (int32\+\_\+t i) const
+\begin{DoxyCompactList}\small\item\em returns x-\/coordinate for column c-\/style index 0...n \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ad1e8c57c668a5dd99987ceda8bd16635}\label{classcsmp_1_1_finite_difference_grid_ad1e8c57c668a5dd99987ceda8bd16635} 
+double {\bfseries Y} (int32\+\_\+t j) const
+\begin{DoxyCompactList}\small\item\em returns x-\/coordinate for row c-\/style index 0...n \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_difference_grid_a18978bbd9d6f0cb6e57694e0b7e7482c}{Closest\+Grid\+Point\+To}} (double x, double y, int32\+\_\+t \&index\+\_\+row, int32\+\_\+t \&index\+\_\+col) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_ac06ef4e9e45c27ba42e792c64228c853}\label{classcsmp_1_1_finite_difference_grid_ac06ef4e9e45c27ba42e792c64228c853} 
+double {\bfseries Row\+Average} (int32\+\_\+t row) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a3f6c28231aedab2d7c60f093ceff2f69}\label{classcsmp_1_1_finite_difference_grid_a3f6c28231aedab2d7c60f093ceff2f69} 
+double {\bfseries Column\+Average} (int32\+\_\+t col) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a2e269f67e79140dc5f1510554527360d}\label{classcsmp_1_1_finite_difference_grid_a2e269f67e79140dc5f1510554527360d} 
+void {\bfseries Scale\+Data\+To\+Range} (double dmin, double dmax)
+\begin{DoxyCompactList}\small\item\em scales all grid data to range\+: dmin to dmax \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a9a4081da96d2ad92c65d4677f5a27a56}\label{classcsmp_1_1_finite_difference_grid_a9a4081da96d2ad92c65d4677f5a27a56} 
+bool {\bfseries Is\+Initialized} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a81de16daa9de68c026f0fa3de5deba73}\label{classcsmp_1_1_finite_difference_grid_a81de16daa9de68c026f0fa3de5deba73} 
+void {\bfseries Set\+Row\+To} (int32\+\_\+t row, double val)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_aa164bf6fa2ab3d68992f48e982cf239e}\label{classcsmp_1_1_finite_difference_grid_aa164bf6fa2ab3d68992f48e982cf239e} 
+void {\bfseries Set\+Column\+To} (int32\+\_\+t col, double val)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a357b9aad56577d95722901c5ef8e62fa}\label{classcsmp_1_1_finite_difference_grid_a357b9aad56577d95722901c5ef8e62fa} 
+void {\bfseries Set\+First\+NRows\+To} (int32\+\_\+t n, double val)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a902f28adf3fdd69373e0fb5869aebc23}\label{classcsmp_1_1_finite_difference_grid_a902f28adf3fdd69373e0fb5869aebc23} 
+void {\bfseries Set\+Last\+NRows\+To} (int32\+\_\+t n, double val)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a389fc7f88ec961804ef1e25290d677df}\label{classcsmp_1_1_finite_difference_grid_a389fc7f88ec961804ef1e25290d677df} 
+void {\bfseries Set\+Region\+To} (double xmin, double xmax, double ymin, double ymax, double val)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a193a99119d69943a5afa3db98a22be4a}\label{classcsmp_1_1_finite_difference_grid_a193a99119d69943a5afa3db98a22be4a} 
+void {\bfseries Out} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_abb6a8025e8daf7c7b042b756c2903315}\label{classcsmp_1_1_finite_difference_grid_abb6a8025e8daf7c7b042b756c2903315} 
+void {\bfseries Out} (const char \texorpdfstring{$\ast$}{*}fname, int32\+\_\+t tstep=0, bool with\+\_\+frame=false) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a149633622dd58635201b70d84a277046}\label{classcsmp_1_1_finite_difference_grid_a149633622dd58635201b70d84a277046} 
+bool {\bfseries Binary\+Out} (const char \texorpdfstring{$\ast$}{*}bin\+\_\+name, int32\+\_\+t tstep=0, bool with\+\_\+frame=false) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a8f2f56ce75b0de8f1af5967731bb54c2}\label{classcsmp_1_1_finite_difference_grid_a8f2f56ce75b0de8f1af5967731bb54c2} 
+bool {\bfseries In} (const char \texorpdfstring{$\ast$}{*}fname)
+\item 
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a42356c6347decf34163e49f82915bd2b}\label{classcsmp_1_1_finite_difference_grid_a42356c6347decf34163e49f82915bd2b} 
+bool {\bfseries Binary\+In} (const char \texorpdfstring{$\ast$}{*}fname)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Two-\/dimensional regular grid with interpolation operations and an optional halo across which interpolation still works; can be used for grid-\/point in finite-\/element cell transport computations. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28/7/97
+\end{DoxyDate}
+\doxylink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid} class implements a regular grid i \{0,i\+\_\+max-\/1\} corresponding to the horizontal coordinate direction and j \{0,j\+\_\+max-\/1\} corresponding to the vertical coordinate direction. Thus i=columns, j=rows. an operator(x,y) is provided to interpolate values within the grid domain. \doxylink{classcsmp_1_1_finite_difference_grid_a4c6f837d20f10e323a5662f02fed266a}{X()}, \doxylink{classcsmp_1_1_finite_difference_grid_ad1e8c57c668a5dd99987ceda8bd16635}{Y()} give x and y values corresponding to column and row indices of the regular grid, respectively. Val(i,j) is used to input and output values at the exact grid locations indicated by i(column=x) and j(row=y). 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_difference_grid_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a18978bbd9d6f0cb6e57694e0b7e7482c}\index{csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}!ClosestGridPointTo@{ClosestGridPointTo}}
+\index{ClosestGridPointTo@{ClosestGridPointTo}!csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}}
+\doxysubsubsection{\texorpdfstring{ClosestGridPointTo()}{ClosestGridPointTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_difference_grid_a18978bbd9d6f0cb6e57694e0b7e7482c} 
+void csmp\+::\+Finite\+Difference\+Grid\+::\+Closest\+Grid\+Point\+To (\begin{DoxyParamCaption}\item[{double}]{x}{, }\item[{double}]{y}{, }\item[{int32\+\_\+t \&}]{row}{, }\item[{int32\+\_\+t \&}]{col}{}\end{DoxyParamCaption}) const}
+
+Computes the grid indices (i\{0,n-\/1\}, j\{0..m-\/1\}) of the grid point (x,y) that is located the closest to the entered point
+
+NB\+: i,j are NOT numbered in the usual matrix sense
+\begin{DoxyItemize}
+\item i refers to x-\/coordinate direction
+\item j refers to y-\/coordinate direction 
+\end{DoxyItemize}\Hypertarget{classcsmp_1_1_finite_difference_grid_a069d3d5c3364fa4e892dcaa748e17262}\index{csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}!ExtrapolateTo@{ExtrapolateTo}}
+\index{ExtrapolateTo@{ExtrapolateTo}!csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}}
+\doxysubsubsection{\texorpdfstring{ExtrapolateTo()}{ExtrapolateTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_difference_grid_a069d3d5c3364fa4e892dcaa748e17262} 
+double csmp\+::\+Finite\+Difference\+Grid\+::\+Extrapolate\+To (\begin{DoxyParamCaption}\item[{double}]{x}{, }\item[{double}]{y}{}\end{DoxyParamCaption}) const}
+
+given the point x,y outside of the grid use linear interpolation of the values at the grid boundary to find the property value outside the grid. The point which is extrapolated must be in the first square outside the grid.
+
+A third order polynomial extrapolation is used which performs well if the grid variable varies smoothly and monotonous. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_difference_grid_a069d3d5c3364fa4e892dcaa748e17262_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_difference_grid_a069d3d5c3364fa4e892dcaa748e17262_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_finite_difference_grid_abba1f256dbf0f0c4327cc16acfa03acf}\index{csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}!InterpolateWithin@{InterpolateWithin}}
+\index{InterpolateWithin@{InterpolateWithin}!csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}}
+\doxysubsubsection{\texorpdfstring{InterpolateWithin()}{InterpolateWithin()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_difference_grid_abba1f256dbf0f0c4327cc16acfa03acf} 
+double csmp\+::\+Finite\+Difference\+Grid\+::\+Interpolate\+Within (\begin{DoxyParamCaption}\item[{double \&}]{x}{, }\item[{double \&}]{y}{}\end{DoxyParamCaption}) const}
+
+Interpolates strictly within the confines of the grid\+: If y is smaller than the minimum of the y-\/range value is interpolated on the horizontal model boundary x is set to the smallest x value. Then the desired value is interpolated along the grid boundary between the marginal 2 points. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_difference_grid_abba1f256dbf0f0c4327cc16acfa03acf_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_finite_difference_grid_a977cfb1dbe03cd6b849afcaf4530efad}\index{csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}!LinearInterpolateOnTo@{LinearInterpolateOnTo}}
+\index{LinearInterpolateOnTo@{LinearInterpolateOnTo}!csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}}
+\doxysubsubsection{\texorpdfstring{LinearInterpolateOnTo()}{LinearInterpolateOnTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_difference_grid_a977cfb1dbe03cd6b849afcaf4530efad} 
+void csmp\+::\+Finite\+Difference\+Grid\+::\+Linear\+Interpolate\+On\+To (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid}} \&}]{grid2}{}\end{DoxyParamCaption}) const}
+
+interpolates its values on the target grid where the two grids overlap, elsewhere, the target grid is left untouched. Only the area inside the frame is considered. \Hypertarget{classcsmp_1_1_finite_difference_grid_a3cebb2ae952823bddf1c08be7e67eee2}\index{csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}!operator()@{operator()}}
+\index{operator()@{operator()}!csmp::FiniteDifferenceGrid@{csmp::FiniteDifferenceGrid}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_difference_grid_a3cebb2ae952823bddf1c08be7e67eee2} 
+double csmp\+::\+Finite\+Difference\+Grid\+::operator() (\begin{DoxyParamCaption}\item[{double}]{x}{, }\item[{double}]{y}{, }\item[{bool}]{rounded}{ = {\ttfamily false}}\end{DoxyParamCaption}) const}
+
+outputs interpolated value of grid-\/point at the location x,y in the domain of the regular grid 0.\+0...x\+\_\+max, 0.\+0...y\+\_\+max. NB\+: if the queried x,y coordinates lie outside of the grid, operator(x,y) returns the closest value on the grid. It does not give a warning. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_difference_grid_a3cebb2ae952823bddf1c08be7e67eee2_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_difference_grid_a3cebb2ae952823bddf1c08be7e67eee2_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/regular\+\_\+grids/Finite\+Difference\+Grid.\+h\item 
+source/modules/regular\+\_\+grids/Finite\+Difference\+Grid.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,5 @@
+<map id="csmp::IntegrationPointVariables" name="csmp::IntegrationPointVariables">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,427,200,575"/>
+<area shape="rect" id="Node000002" href="$structcsmp_1_1_local_variables.html" title="Data class to store physical variable count at given placement." alt="" coords="35,5,171,316"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,316,105,410,100,410,100,316"/>
+</map>

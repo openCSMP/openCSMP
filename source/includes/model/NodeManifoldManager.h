@@ -29,7 +29,7 @@ class NodeManifoldManager {
     NodeManifoldManager& operator=( const NodeManifoldManager& ) = delete;
     
     /// deleting the dynamically allocated manifolds
-    ~NodeManifoldManager();
+    ~NodeManifoldManager() = default;
     
     /// for sorting the manifolds by their pointers
     typedef typename plf::colony< NodeManifold<dim>>::iterator  manifoldIterator;
@@ -48,7 +48,7 @@ class NodeManifoldManager {
     typename plf::colony<NodeManifold<dim> >::iterator  AddManifold( plf::colony<Node<dim> >& nodes,
                                                                      Node<dim>* const inside,
                                                                      Node<dim>* const outside,
-                                                                     ManifoldType );
+                                                                     ManifoldType manifold_type );
     
     /// puts the nodes inside of the manifolds into the ascending order of values of the user specified  variable
     void SortManifoldsByVariableValue( std::string var_name, const csmp::Index& var_index );

@@ -1,0 +1,41 @@
+name	MParameter	unit	index	min.	max.	place
+									
+fluid pressure1			PF	Pa		1	0.00E+00	1.00E+10	node
+fluid pressure2			PF	Pa		1	0.00E+00	1.00E+10	node
+fluid pressure3			PF	Pa		1	0.00E+00	1.00E+10	node
+fluid volume source		QV	m3		1	-1.00E+01	1.00E+01	element
+permeability			k	m2		1	1.00E-25	1.00E+02	element
+porosity			PHI	X		1	1.00E-05	1.00E+01	element
+transmissivity			T	m2 s-1		1	1.00E-25	1.00E+02	element
+velocity			V	m s-1		2	-1.00E+02	1.00E+02	element
+velocity1			V	m s-1		2	-1.00E+02	1.00E+02	element
+velocity2			V	m s-1		2	-1.00E+02	1.00E+02	element
+velocity3			V	m s-1		2	-1.00E+02	1.00E+02	element
+fluid pressure gradient1	dP1	m s-1		2	-1.00E+02	1.00E+02	element
+fluid pressure gradient2	dP1	m s-1		2	-1.00E+02	1.00E+02	element
+fluid pressure gradient3	dP1	m s-1		2	-1.00E+02	1.00E+02	element
+pore velocity			PV	m s-1		2	-1.00E+02	1.00E+02	element
+flow speed			FS	m s-1		1	0.00E+00	1.00E+05	element
+volume flux			VF	m3 s-1		1	0.00E+00	1.00E+05	element
+thickness			h	m	1	1.00E-06	1.00E+03	element
+failure				FF	X	1	-1.		4.		element
+fluid pressure			PF	Pa	1	-1.00E+09	1.00E+09	node
+block radius			BR	m	1	1.00E-20	1.00E+08	element
+fault size			FS	m	1	1.		1.00E+05	region
+slip patch area			AS	m2	1	0.1		1.00E+10	region
+normal stress			SN	Pa m2	1	-1.00E+08	1.00E+08	element
+shear stress			SS	Pa m2	1	-1.00E+08	1.00E+08	element
+overburden stress		OS	Pa m2	1	0.		1.00E+08	element
+effective stress		SSE	Pa m2	1	-1.00E+08	1.00E+08	element
+dilatation			DIL	X	1	-1.		1.		element
+tipline distance		DTL	m	1	0.		1.00E+05	element
+centerline distance		DCL	m	1	0.		1.00E+05	element
+region identifier		RI	X	1	0.		1.0e6		element
+Youngs modulus			E	Pa-1	1	1.0e7		1.00E+11	region
+shear modulus			G	Pa-1	1	1.0e7		5.00E+10	region
+Poissons ratio			NU2	X	1	0.01		0.4999		region
+tensile strength		TS	Pa	1	1.0e6		2.0e8		region
+unconfined compressive strength	UCS	Pa	1	1.0e7		5.0e9		region
+friction coefficient		MU	X	1	0.1		0.9		region
+cohesion			C	Pa	1	1.0e3		5.0e7		region
+joint roughness coefficient	JRC	X	1	1.		20.		region

@@ -16,9 +16,7 @@ template<uint32_t> class Model;
 class VSet_Test2 : public Test
   {
     public:
-      explicit VSet_Test2( bool verbose=false );
-      ~VSet_Test2();
-      
+      explicit VSet_Test2( bool verbose=false );      
       virtual void run();
     
     private:

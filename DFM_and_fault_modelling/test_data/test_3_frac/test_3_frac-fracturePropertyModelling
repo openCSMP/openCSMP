@@ -1,0 +1,28 @@
+
+Standard_IO_Handler::Out: File 'test_3_frac-fracturePropertyModelling'
+fracturePropertyModelling: do you have a fracture-set and a stress data file (*-permeability-modeling-data.txt) -> true.
+	Choose option:                                               
+		(1) Cruikshank effective stress- and fracture radius dependent max aperture                                               
+		(2) Cruikshank with aperture variations across fracture plane                                               
+		(3) Cruikshank for elliptic/rectangular fractures open along their side boundaries                                               
+		(4) Lower limit of aperture assigned to fractures undergoing compressional failure                                               
+		(5) Upper limit of aperture assigned to all fractures                                               
+		(6) Fractures treated like faults (use to compute k of sheared fractures)                                               
+		(7) Re-read configuration file (with fracture and matrix data)                                               
+		(8) exit from loop.
+ -> 2
+fracturePropertyModelling: Do you want to output results to VTU -> true.
+	Choose option:                                               
+		(1) Cruikshank effective stress- and fracture radius dependent max aperture                                               
+		(2) Cruikshank with aperture variations across fracture plane                                               
+		(3) Cruikshank for elliptic/rectangular fractures open along their side boundaries                                               
+		(4) Lower limit of aperture assigned to fractures undergoing compressional failure                                               
+		(5) Upper limit of aperture assigned to all fractures                                               
+		(6) Fractures treated like faults (use to compute k of sheared fractures)                                               
+		(7) Re-read configuration file (with fracture and matrix data)                                               
+		(8) exit from loop.
+ -> 8
+fracturePropertyModelling: Do you want to smooth the computed permeability values -> false.
+fracturePropertyModelling: Do you want to scale the computed permeability values -> false.
+fracturePropertyModelling: Do you want to manually impose upper- and lower limits on fracture permeability -> false.
+fracturePropertyModelling: Do you want to overwrite the 'permeability' etc. of the model with the newly computed values? -> true.

@@ -1,0 +1,134 @@
+\doxysection{Explicit\+Finite\+Volume\+Transport\+PHX.\+h}
+\hypertarget{_explicit_finite_volume_transport_p_h_x_8h_source}{}\label{_explicit_finite_volume_transport_p_h_x_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/ExplicitFiniteVolumeTransportPHX.h@{source/includes/integration/cvfe\_hydrothermal/ExplicitFiniteVolumeTransportPHX.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{EXPLICIT\_FINITE\_VOLUME\_TRANSPORT\_PHX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{EXPLICIT\_FINITE\_VOLUME\_TRANSPORT\_PHX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \ \ \ \ February\ 2015,\ Philipp\ Weis:}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_node_centered_finite_volume_transport_8h}{"{}NodeCenteredFiniteVolumeTransport.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_stencil_processor_p_h_x_8h}{"{}StencilProcessorPHX.h"{}}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ \ @class\ ExplicitFiniteVolumeTransportPHX\ ExplicitFiniteVolumeTransportPHX.h}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ \ Finitive\ volume\ calculations\ for\ one\ phase\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ Specialized\ version\ of\ explicit\ finite\ volume\ transport\ class\ for\ PHX\ scheme.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ \ To\ be\ used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00032\ \textcolor{comment}{}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ Performs\ mass\ balanced\ finite\ volume\ tansport}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ The\ functions\ are\ tailored\ for\ use\ in\ TwoPhaseTransportPHX.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ Needs\ StencilProcessorPHX}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00048\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00049\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{ExplicitFiniteVolumeTransportPHX}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport}{NodeCenteredFiniteVolumeTransport}}<dim>\ \{}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa9b89c4ad237db91de8ded8546b843bc}{ExplicitFiniteVolumeTransportPHX}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ lhs\_property,\ \textcolor{comment}{//\ vector\ with\ left-\/hand\ side\ variables\ for\ finite\ volume\ transport}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ rhs\_property,\ \textcolor{comment}{//\ vector\ with\ right-\/hand\ side\ variables\ for\ finite\ volume\ transport\ -\/\ matching\ lhs\_property\ ordering}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ velocity,\ \textcolor{comment}{//\ "{}velocity"{}\ in\ this\ particular\ case\ should\ only\ be\ K\ *\ grad(\ P\ )}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ source,\ \textcolor{comment}{//\ currently\ not\ used\ but\ needed\ for\ constructor\ of\ base\ class}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density);\ \textcolor{comment}{//\ density\ of\ the\ fluid\ phase}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad3da90054e55aeee5ac05fba14226b10}{ExplicitFiniteVolumeTransportPHX}}();}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b1b76a50396069e544d5c949e3adf23}{AdvectMassConservedSinglePhase}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ time\_increment\ );\ \textcolor{comment}{//\ For\ use\ with\ single-\/phase\ fluid}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ function\ takes\ a\ time\ step\ suggestions}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ performs\ transport\ with\ this\ time\ step}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ flux\ with\ this\ time\ step\ violates\ mass-\/based\ time\ step\ criterium,\ flux\ is\ performed\ with\ a\ smaller\ time\ step}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ time\ step\ used\ for\ transport\ calculations\ is\ returned}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3f471649df8617f1c5dc573259fe2559}{AddAdvectionVariable}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_lhs,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_rhs);\ \textcolor{comment}{//\ Adding\ further\ variables\ for\ finite\ volume\ calculations}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b9e904a14a4955fe1a41efd88f1e237}{WithGravityComponent}}(\ );\ \textcolor{comment}{//\ activate\ gravity\ component}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae265b54e0855b9607e7463fed81b52c2}{SetMaximumTimeStep}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ new\_max\_time\_step\ );\ \textcolor{comment}{//\ manually\ set\ the\ maximum\ time\ step\ size}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ the\ remaining\ function\ are\ used\ by\ TwoPhaseTransportPHX}}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ab11dabb02c1134ba243f3e0d684da086}{GetDensityKey}}(\ );}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aba49a00f7644703e90aee387758d7d4c}{UpdateProjection}}(\ );\ \ \ \ \ \textcolor{comment}{//\ updating\ projection\ of\ "{}velocity"{},\ i.e.\ pressure\ gradient,\ onto\ facte\ normals}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a41e1dc67b0a7d2c92170ee965b6adce9}{DetermineFacetFlux}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ time\_increment,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\&\ upwind\_visitor\ );}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a420b3aed5e0fbc5e30b90d7b406f8202}{DetermineFacetFluxSinglePhase}}(\ );}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1ce227a2061658721bff5fbfc5a44bf7}{AdjustAndPerformFacetFlux}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ time\_factor\ );}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a6114cf370b562cd7c05606570f4c9891}{GetPropertyValue}}(\ size\_t\ idx\ );}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a8cb26fee42655fd554e6e3b41755b380}{GetFluxOut}}(\ size\_t\ idx\ );\ \textcolor{comment}{//\ return\ the\ main\ property}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae23661659adba3517647a8d4b25f0f8e}{GetFluxIn}}(\ \ size\_t\ idx\ );\ \textcolor{comment}{//\ returns\ the\ main\ property}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1fbf9d7835a18eddd072fb284deb72ee}{GetFluxOut}}(\ size\_t\ idx,\ uint32\_t\ property\ );\ \textcolor{comment}{//\ returns\ the\ indicated\ property\ of\ the\ property-\/vector}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a16fff56feebdd0a52bc3646295d9b5f7}{GetFluxIn}}(\ \ size\_t\ idx,\ uint32\_t\ property\ );\ \textcolor{comment}{//\ returns\ the\ indicated\ property\ of\ the\ property-\/vector}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_adc16893c2d519e20ea55e9dda31a242f}{GetMainPropertyLHS}}(\ size\_t\ idx\ );}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90a3f565aeab00b10719a97fee69748c}{GetFacetFlux}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,\ uint32\_t\ facet\_idx,\ uint32\_t\ property\ =\ 0U);}
+\DoxyCodeLine{00088\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ GetUpwindCoefficients(\ size\_t\ eidx\ );}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aebe538575332650740d0539c6eb9d3cf}{GetProjectedVelocities}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,\ uint32\_t\ i\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abe48a0098a38e7f7a7178ca6de114082}{GetFacetNormalVelocity}}(\ size\_t\ element,\ uint32\_t\ facet\ );}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a235bdb377e1b3d6f52ab59af13949fd0}{GetFacetNormalComponent}}(\ size\_t\ element,\ uint32\_t\ facet,\ uint32\_t\ x\_or\_y\_or\_z\ );}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9c8c100d0e5f03d53c7cfa3dbdc47b1c}{GetFacetArea}}(\ size\_t\ element,\ uint32\_t\ facet\ );}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{comment}{//\ TODO:\ Why\ store\ these\ in\ here?}}
+\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\_ref;}
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region\_ref;}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x}{StencilProcessorPHX}}<dim>\ \ stencilPHX;}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90c162f8069fa2b6c53c49de821e3d8e}{ComposeAdvection}}(\ );}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae0d9ef62ca98bb2ce4045f275e89e48c}{WriteResults}}(\ );}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fb7c1bfd8de6818422530b5e4c2b1e5}{CalculateOutflowPerPoreVolume}}();}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fee1c7d1793927303cb7ce5af7b6de0}{CalculateInflowPerPoreVolume}}();}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad6df981d2171f1ec86e45d23899cff8a}{AdjustFluxOut}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ time\_factor\ );}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a2dd30a8ab2afb69c9f4fcea19471689f}{CalculateFluxIn}}();}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3ed323fe078481531e337ab46d32aff3}{GetUpwindMatrix}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,\ std::vector<DenseMatrix<DM\_MIN>\ >\&\ upwind\_visitor\ );}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a688203f998333531b1b8173432fa996e}{CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase}}(\ );}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ \ internal\_time\_step,\ max\_time\_step,\ single\_phase\_time\_step\_factor;}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_gravity;}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ upwind;}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ k\_key,\ rho\_key,\ pv\_key;}
+\DoxyCodeLine{00117\ \ \ \ \ std::vector<csmp::Index>\ \ pl\_key,\ pr\_key;}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ flux\ vectors}}
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{std}}::\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{vector}}<\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{std}}::\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{vector}}<\textcolor{keywordtype}{double}>\ >\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{flux\_in\_vectors}},\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{flux\_out\_vectors}},}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{property\_vectors}},\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{mass\_balance\_vectors}};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{std}}::\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{vector}}<\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{std}}::\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{vector}}<\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{std}}::\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{vector}}<\textcolor{keywordtype}{double}>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{facet\_flux\_vectors}};}
+\DoxyCodeLine{00124\ \};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

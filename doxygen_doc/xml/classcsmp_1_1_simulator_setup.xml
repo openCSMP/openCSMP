@@ -1,0 +1,1590 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_simulator_setup" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>csmp::SimulatorSetup</compoundname>
+    <includes refid="_simulator_setup_8h" local="no">SimulatorSetup.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a939746f13700fb02f45f244a2319d40a" prot="protected" static="no" mutable="no">
+        <type>std::list&lt; <ref refid="structcsmp_1_1_simulator_setup_parameter" kindref="compound">SimulatorSetupParameter</ref> &gt;</type>
+        <definition>std::list&lt;SimulatorSetupParameter&gt; csmp::SimulatorSetup&lt; dim &gt;::parameter_list_</definition>
+        <argsstring></argsstring>
+        <name>parameter_list_</name>
+        <qualifiedname>csmp::SimulatorSetup::parameter_list_</qualifiedname>
+        <briefdescription>
+<para>add extra functionality for laternative solve </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="161" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a6729b2c49f2fb19d3c58acd3bab9eee9" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::created_lists_</definition>
+        <argsstring></argsstring>
+        <name>created_lists_</name>
+        <qualifiedname>csmp::SimulatorSetup::created_lists_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="162" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1aca1c663310466ded75a677ebd9e7407b" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::interactive_</definition>
+        <argsstring></argsstring>
+        <name>interactive_</name>
+        <qualifiedname>csmp::SimulatorSetup::interactive_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="165" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="165" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a32b05c11781369a3405164f7ac05ea0c" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::SimulatorSetup&lt; dim &gt;::name_</definition>
+        <argsstring></argsstring>
+        <name>name_</name>
+        <qualifiedname>csmp::SimulatorSetup::name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="170" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a24afbbe7613cce5c4c98f8934ba2d05d" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::SimulatorSetup&lt; dim &gt;::geometry_file_prefix_</definition>
+        <argsstring></argsstring>
+        <name>geometry_file_prefix_</name>
+        <qualifiedname>csmp::SimulatorSetup::geometry_file_prefix_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="171" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a46818b5ae2924d81a51267f36b3ea7b2" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; bool &gt;</type>
+        <definition>std::vector&lt;bool&gt; csmp::SimulatorSetup&lt; dim &gt;::options_</definition>
+        <argsstring></argsstring>
+        <name>options_</name>
+        <qualifiedname>csmp::SimulatorSetup::options_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="173" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a4efc5092e43ae8ddca8da2220fe73e60" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::validated_</definition>
+        <argsstring></argsstring>
+        <name>validated_</name>
+        <qualifiedname>csmp::SimulatorSetup::validated_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="174" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a6aab4822ae34eb21068faa535fa32ead" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::debug_</definition>
+        <argsstring></argsstring>
+        <name>debug_</name>
+        <qualifiedname>csmp::SimulatorSetup::debug_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="176" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a52e6962365153d3c1313ba5a77a2c623" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::SimulatorSetup::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="177" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a64e187096ed348d42a0cc7678c63bc89" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::restart_</definition>
+        <argsstring></argsstring>
+        <name>restart_</name>
+        <qualifiedname>csmp::SimulatorSetup::restart_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="178" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1aa7b618b0faf4422e0b97a594922e1ef4" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+        <definition>Model&lt;dim&gt;* csmp::SimulatorSetup&lt; dim &gt;::model_</definition>
+        <argsstring></argsstring>
+        <name>model_</name>
+        <qualifiedname>csmp::SimulatorSetup::model_</qualifiedname>
+        <briefdescription>
+<para>add extra functionality for laternative solve </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="195" column="11" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a52cc375f8bf3fe431d1f7a58a9061451" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref></type>
+        <definition>ComputationalSettings csmp::SimulatorSetup&lt; dim &gt;::run_settings_</definition>
+        <argsstring></argsstring>
+        <name>run_settings_</name>
+        <qualifiedname>csmp::SimulatorSetup::run_settings_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="196" column="28" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a5a4eeb6b6175a17f55ca361822e02873" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::lateral_boundaries_</definition>
+        <argsstring></argsstring>
+        <name>lateral_boundaries_</name>
+        <qualifiedname>csmp::SimulatorSetup::lateral_boundaries_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="197" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a764d331ff88a9e2f7b79d4a759572462" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::top_boundaries_</definition>
+        <argsstring></argsstring>
+        <name>top_boundaries_</name>
+        <qualifiedname>csmp::SimulatorSetup::top_boundaries_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="197" column="36" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a7cfe0581d8efe5ae33a002ca8f2edd48" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::bottom_boundaries_</definition>
+        <argsstring></argsstring>
+        <name>bottom_boundaries_</name>
+        <qualifiedname>csmp::SimulatorSetup::bottom_boundaries_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="197" column="51" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a83c619d2afd29223d6cf7e6398c852dd" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::well_regions_</definition>
+        <argsstring></argsstring>
+        <name>well_regions_</name>
+        <qualifiedname>csmp::SimulatorSetup::well_regions_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="198" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a9442aeb1edcf2bfaf8b14fb6d60d4246" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, std::pair&lt; std::string, std::string &gt; &gt;</type>
+        <definition>std::map&lt;std::string,std::pair&lt;std::string,std::string &gt; &gt; csmp::SimulatorSetup&lt; dim &gt;::well_rate_vars_</definition>
+        <argsstring></argsstring>
+        <name>well_rate_vars_</name>
+        <qualifiedname>csmp::SimulatorSetup::well_rate_vars_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="199" column="14" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1aa76bb489e40d59c927f14940689a031a" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::internal_vars_</definition>
+        <argsstring></argsstring>
+        <name>internal_vars_</name>
+        <qualifiedname>csmp::SimulatorSetup::internal_vars_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="200" column="14" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1ab5f2b148c9118b5944da92af78d253d8" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_simulator_monitor" kindref="compound">SimulatorMonitor</ref>&lt; dim &gt; *</type>
+        <definition>SimulatorMonitor&lt;dim&gt;* csmp::SimulatorSetup&lt; dim &gt;::simulator_monitor_</definition>
+        <argsstring></argsstring>
+        <name>simulator_monitor_</name>
+        <qualifiedname>csmp::SimulatorSetup::simulator_monitor_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="206" column="22" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="206" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a73b48d063e3eed2cffcd0a1b50736df2" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredProps_</definition>
+        <argsstring></argsstring>
+        <name>monitoredProps_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredProps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="207" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="207" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a6089501dbecb8222716122597f6dbce9" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredRegions_</definition>
+        <argsstring></argsstring>
+        <name>monitoredRegions_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredRegions_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="208" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="208" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a108558f6d9205e6999075a89b8890cba" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::vtuOutputProps_</definition>
+        <argsstring></argsstring>
+        <name>vtuOutputProps_</name>
+        <qualifiedname>csmp::SimulatorSetup::vtuOutputProps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="210" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a10b37534091cafbcbfd8e2c426e2d136" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::vtuOutputRegions_</definition>
+        <argsstring></argsstring>
+        <name>vtuOutputRegions_</name>
+        <qualifiedname>csmp::SimulatorSetup::vtuOutputRegions_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="211" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a55c93bee5bba4acabac3780e1ecdf7ae" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredRangeProps_</definition>
+        <argsstring></argsstring>
+        <name>monitoredRangeProps_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredRangeProps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="213" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1aff8637b8a514c318a33c789fc60e24a6" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredIntegralProps_</definition>
+        <argsstring></argsstring>
+        <name>monitoredIntegralProps_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredIntegralProps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="213" column="35" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a9c6747c113624301e3edad398088729b" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredValueProps_</definition>
+        <argsstring></argsstring>
+        <name>monitoredValueProps_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredValueProps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="213" column="58" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a39e6c4040b9e191a9803a373fdf96601" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredRegionIntegralList_</definition>
+        <argsstring></argsstring>
+        <name>monitoredRegionIntegralList_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredRegionIntegralList_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="214" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1aa0354cbe9d3ac5f4b94dc05ba4518bc3" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredRegionRangeList_</definition>
+        <argsstring></argsstring>
+        <name>monitoredRegionRangeList_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredRegionRangeList_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="214" column="44" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1ace2501017eab452e545b502903bdbffb" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredRegionDimensionList_</definition>
+        <argsstring></argsstring>
+        <name>monitoredRegionDimensionList_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredRegionDimensionList_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="214" column="69" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a80588f2d4e1ac9228ccc96a7c0b0de37" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::SimulatorSetup&lt; dim &gt;::monitoredRegionPerimeterList_</definition>
+        <argsstring></argsstring>
+        <name>monitoredRegionPerimeterList_</name>
+        <qualifiedname>csmp::SimulatorSetup::monitoredRegionPerimeterList_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="214" column="99" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1af2f334178c4643312f371c5d18aae36c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_property_at_point_visitor" kindref="compound">PropertyAtPointVisitor</ref>&lt; dim &gt; *</type>
+        <definition>PropertyAtPointVisitor&lt;dim&gt;* csmp::SimulatorSetup&lt; dim &gt;::property_at_point_</definition>
+        <argsstring></argsstring>
+        <name>property_at_point_</name>
+        <qualifiedname>csmp::SimulatorSetup::property_at_point_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="217" column="28" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a53a26f81b1ef1f05dcfa4fcd4a27a55f" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &gt;</type>
+        <definition>std::map&lt;std::string,std::map&lt;size_t,std::vector&lt;double&gt; &gt; &gt; csmp::SimulatorSetup&lt; dim &gt;::points_to_monitor_</definition>
+        <argsstring></argsstring>
+        <name>points_to_monitor_</name>
+        <qualifiedname>csmp::SimulatorSetup::points_to_monitor_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="218" column="14" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_simulator_setup_1a7a4fa626f1018fdbb887828ce2d6528a" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::map&lt;size_t,Element&lt;dim&gt;*&gt; csmp::SimulatorSetup&lt; dim &gt;::point_in_element_in_region_</definition>
+        <argsstring></argsstring>
+        <name>point_in_element_in_region_</name>
+        <qualifiedname>csmp::SimulatorSetup::point_in_element_in_region_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="219" column="14" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="219" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a3cda962ef88219bafc27b917c751ea0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SimulatorSetup&lt; dim &gt;::SimulatorSetup</definition>
+        <argsstring>(std::string geometry_prefix, std::string project_name, std::vector&lt; bool &gt; options, bool verbose=false)</argsstring>
+        <name>SimulatorSetup</name>
+        <qualifiedname>csmp::SimulatorSetup::SimulatorSetup</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>geometry_prefix</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>project_name</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; bool &gt;</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="34" column="5" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="19" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ae382a604bf62fe726f4cc25a24ef3337" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::SimulatorSetup&lt; dim &gt;::~SimulatorSetup</definition>
+        <argsstring>()</argsstring>
+        <name>~SimulatorSetup</name>
+        <qualifiedname>csmp::SimulatorSetup::~SimulatorSetup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>add extra functionality for alternative solver if needed</para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="38" column="13" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="1050" bodyend="1100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ae7ec9b094c68b36921049d06871b38b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::LoadModel</definition>
+        <argsstring>()</argsstring>
+        <name>LoadModel</name>
+        <qualifiedname>csmp::SimulatorSetup::LoadModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="42" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="927" bodyend="1022"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a897e17654108dd5aaec8e5f31ef6805e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::Initialize</definition>
+        <argsstring>(bool verbose=false)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::SimulatorSetup::Initialize</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="43" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="37" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a5cc6b45f5d0edb270e74236fc92bc6bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void csmp::SimulatorSetup&lt; dim &gt;::CreateParameterList</definition>
+        <argsstring>()=0</argsstring>
+        <name>CreateParameterList</name>
+        <qualifiedname>csmp::SimulatorSetup::CreateParameterList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="44" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aa8b9f593d3d51e2c46a4419253562a73" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void csmp::SimulatorSetup&lt; dim &gt;::CheckOptions</definition>
+        <argsstring>()=0</argsstring>
+        <name>CheckOptions</name>
+        <qualifiedname>csmp::SimulatorSetup::CheckOptions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="45" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a1622f2998438085f7a3b813e1f05a421" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::AddPreExistingModelVariables</definition>
+        <argsstring>()</argsstring>
+        <name>AddPreExistingModelVariables</name>
+        <qualifiedname>csmp::SimulatorSetup::AddPreExistingModelVariables</qualifiedname>
+        <briefdescription>
+<para><ref refid="classcsmp_1_1_simulator_setup_1a1622f2998438085f7a3b813e1f05a421" kindref="member">SimulatorSetup&lt;dim&gt;::AddPreExistingModelVariables</ref> this method adds pre-existing model variables to the parameter list of the <ref refid="classcsmp_1_1_simulator_setup" kindref="compound">SimulatorSetup</ref>. Typically, these &quot;pre-existing&quot; variables are loaded from the variables file when creating the model. The parameter list is sorted following this addition. Loading pre-existing variables will replace any existing parameters with the same name in the parameter list. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="46" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="181" bodyend="205"/>
+        <references refid="structcsmp_1_1_parameter_1adf8461db474be0f6796afad96ad60c2d" compoundref="_parameter_8h" startline="62">csmp::Parameter::max</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a5e1b66215fc729a54b0cfb86dec512a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; bool &gt; &amp;</type>
+        <definition>std::vector&lt; bool &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetOptions</definition>
+        <argsstring>()</argsstring>
+        <name>GetOptions</name>
+        <qualifiedname>csmp::SimulatorSetup::GetOptions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="47" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ab405a9ab5fe3d434d7e67fc0944a3518" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; bool &gt;</type>
+        <definition>vector&lt; bool &gt; csmp::SimulatorSetup&lt; dim &gt;::LoadDefaultOptions</definition>
+        <argsstring>()</argsstring>
+        <name>LoadDefaultOptions</name>
+        <qualifiedname>csmp::SimulatorSetup::LoadDefaultOptions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="48" column="25" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="918" bodyend="923"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aeac90190d97694c8bcec5ee286532645" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::CheckVariables</definition>
+        <argsstring>()</argsstring>
+        <name>CheckVariables</name>
+        <qualifiedname>csmp::SimulatorSetup::CheckVariables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="49" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="290" bodyend="381"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a51564ebf0ff1b1142c6309216ef9e065" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::CreateAllProperties</definition>
+        <argsstring>()</argsstring>
+        <name>CreateAllProperties</name>
+        <qualifiedname>csmp::SimulatorSetup::CreateAllProperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="50" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="86" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a967d4f1af990125bf94e1ab56862bb91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::CreatePreviousProperties</definition>
+        <argsstring>()</argsstring>
+        <name>CreatePreviousProperties</name>
+        <qualifiedname>csmp::SimulatorSetup::CreatePreviousProperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="51" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1adb3f2159eb8042e9aac48d24923c660d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::CheckProperties</definition>
+        <argsstring>()</argsstring>
+        <name>CheckProperties</name>
+        <qualifiedname>csmp::SimulatorSetup::CheckProperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="52" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="384" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a555471e7eeddce529584e131f6e483f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::CheckInputRanges</definition>
+        <argsstring>()</argsstring>
+        <name>CheckInputRanges</name>
+        <qualifiedname>csmp::SimulatorSetup::CheckInputRanges</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="53" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="428" bodyend="461"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1af3e058cd137bf0c6d626a966ec5b0106" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::CheckModel</definition>
+        <argsstring>()</argsstring>
+        <name>CheckModel</name>
+        <qualifiedname>csmp::SimulatorSetup::CheckModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="54" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="141" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a914ce28e32d45ca249efb7536ad56145" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::CheckModelMinMaxCoordinates</definition>
+        <argsstring>()</argsstring>
+        <name>CheckModelMinMaxCoordinates</name>
+        <qualifiedname>csmp::SimulatorSetup::CheckModelMinMaxCoordinates</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="55" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="419" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a8fa811eab6e45aa6ba6719bb072d0749" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::OutputSampleVariablesFile</definition>
+        <argsstring>(std::string filename=&quot;SimulatorSetupSampleVariables.txt&quot;)</argsstring>
+        <name>OutputSampleVariablesFile</name>
+        <qualifiedname>csmp::SimulatorSetup::OutputSampleVariablesFile</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>filename</declname>
+          <defval>&quot;SimulatorSetupSampleVariables.txt&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Note: if properties in model match those in parameter list, then keep the original list version. (Julian 1-07-2014)</para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="56" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="679" bodyend="713"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a85af27bc1950b2b0cc9e817b8b6bb1db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::OutputSampleConfigurationFile</definition>
+        <argsstring>()</argsstring>
+        <name>OutputSampleConfigurationFile</name>
+        <qualifiedname>csmp::SimulatorSetup::OutputSampleConfigurationFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="57" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="716" bodyend="806"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a0cbc7712cc42244c30588f5daa222820" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::OutputSampleRegionsFile</definition>
+        <argsstring>()</argsstring>
+        <name>OutputSampleRegionsFile</name>
+        <qualifiedname>csmp::SimulatorSetup::OutputSampleRegionsFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="58" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="809" bodyend="858"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1acdc5cab4f7e60cac5dabf5236badd3f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::OutputParameterListCode</definition>
+        <argsstring>()</argsstring>
+        <name>OutputParameterListCode</name>
+        <qualifiedname>csmp::SimulatorSetup::OutputParameterListCode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Note: if properties in model match those in parameter list, then keep the original list version. (Julian 1-07-2014)</para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="59" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="861" bodyend="892"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1abb85d25c075998016512114f2d436c5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::ReadOptionsFromRegionsFile</definition>
+        <argsstring>()</argsstring>
+        <name>ReadOptionsFromRegionsFile</name>
+        <qualifiedname>csmp::SimulatorSetup::ReadOptionsFromRegionsFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000210"><xreftitle>Todo</xreftitle><xrefdescription><para>flag if eof is reached. Perhaps throw an exception. Some region should be in there! </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="60" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="468" bodyend="596"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a72c464ca8a78fe277222136ec8cf5847" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::LoadBoundaryAndWellNames</definition>
+        <argsstring>()</argsstring>
+        <name>LoadBoundaryAndWellNames</name>
+        <qualifiedname>csmp::SimulatorSetup::LoadBoundaryAndWellNames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="62" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a83422b378980566004a16f2e18876096" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::LoadWells</definition>
+        <argsstring>()</argsstring>
+        <name>LoadWells</name>
+        <qualifiedname>csmp::SimulatorSetup::LoadWells</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="63" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a8eec0fd7d63b8d03105bb8eb4fb7a6c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::LoadMonitor</definition>
+        <argsstring>()</argsstring>
+        <name>LoadMonitor</name>
+        <qualifiedname>csmp::SimulatorSetup::LoadMonitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>not active for now. Until I get time for testing and implementing control file option. Julian 22-08-2014</para>
+<para>not active for now. Until I get time for testing and implementing control file option. Julian 22-08-2014</para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="64" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="1025" bodyend="1045"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a966810bb39c2db7ee91a084d23ab1b1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::LoadControlSimulatorSetupParameters</definition>
+        <argsstring>()</argsstring>
+        <name>LoadControlSimulatorSetupParameters</name>
+        <qualifiedname>csmp::SimulatorSetup::LoadControlSimulatorSetupParameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="65" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="63" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a656261d0d9260119e264e3cd91071433" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::ModelSetupFromConfigFile</definition>
+        <argsstring>()</argsstring>
+        <name>ModelSetupFromConfigFile</name>
+        <qualifiedname>csmp::SimulatorSetup::ModelSetupFromConfigFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="66" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="232" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a6eb0f86584b18c34adc314f8d0f14df1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> &amp;</type>
+        <definition>ComputationalSettings &amp; csmp::SimulatorSetup&lt; dim &gt;::RunSettings</definition>
+        <argsstring>()</argsstring>
+        <name>RunSettings</name>
+        <qualifiedname>csmp::SimulatorSetup::RunSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="67" column="27" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a0ed62d3233c2685cae7c84b83a81d8df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::OutputParameterListToScreen</definition>
+        <argsstring>()</argsstring>
+        <name>OutputParameterListToScreen</name>
+        <qualifiedname>csmp::SimulatorSetup::OutputParameterListToScreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="73" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="895" bodyend="915"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a80c329bc8e39cdadfde173215265df09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::SetupWellRatesBasedOnRateVariables</definition>
+        <argsstring>()</argsstring>
+        <name>SetupWellRatesBasedOnRateVariables</name>
+        <qualifiedname>csmp::SimulatorSetup::SetupWellRatesBasedOnRateVariables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000211"><xreftitle>Todo</xreftitle><xrefdescription><para>This should probably use a map of well names vs which field is supposed to be used to read in the rates, as well as which phase, if other than single phase flow is intended. </para>
+</xrefdescription></xrefsect><xrefsect id="todo_1_todo000212"><xreftitle>Todo</xreftitle><xrefdescription></xrefdescription></xrefsect><xrefsect id="todo_1_todo000213"><xreftitle>Todo</xreftitle><xrefdescription><para>first thing to do is check that all input information froms from fields defined on the region. </para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000214"><xreftitle>Todo</xreftitle><xrefdescription><para>this needs to be constructed better. Better logic for other users to create their own simulators. </para>
+</xrefdescription></xrefsect></para>
+<para>Special Note: Here, we do not divide by the thickness (to get [m^3/(m^3*s)]) because the <ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref> does not multiply by any thickness when performing integrals over line elements. If it did, then we would be cancelling our division by thickness here, with the multiplication by thickness when we integrate the fluid volume source with FEM at the <ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref>. As a result, we do not need to divide by thickness.</para>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="76" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="599" bodyend="676"/>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a776f6bcdf6181f98a47acddf75354e0d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::TriggerRestart</definition>
+        <argsstring>()</argsstring>
+        <name>TriggerRestart</name>
+        <qualifiedname>csmp::SimulatorSetup::TriggerRestart</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="77" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1adcddf544dfebad3d83ee999aa6640973" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::YesOrNo</definition>
+        <argsstring>()</argsstring>
+        <name>YesOrNo</name>
+        <qualifiedname>csmp::SimulatorSetup::YesOrNo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="78" column="10" bodyfile="source/modules/run_control/SimulatorSetup.cpp" bodystart="210" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a0fe60efb3dc793657b52197658df3b3c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::Interactive</definition>
+        <argsstring>()</argsstring>
+        <name>Interactive</name>
+        <qualifiedname>csmp::SimulatorSetup::Interactive</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="82" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ac08d9d8fba64663cba474eeaeebd415c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::Restart</definition>
+        <argsstring>()</argsstring>
+        <name>Restart</name>
+        <qualifiedname>csmp::SimulatorSetup::Restart</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="83" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aa2fa0eea9098fca5709776c0e6e74b49" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::Restart</definition>
+        <argsstring>(bool restart)</argsstring>
+        <name>Restart</name>
+        <qualifiedname>csmp::SimulatorSetup::Restart</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>restart</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="84" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a0867b4b723a939579cf0157ad7fa676e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+        <definition>Model&lt; dim &gt; * csmp::SimulatorSetup&lt; dim &gt;::GetModel</definition>
+        <argsstring>()</argsstring>
+        <name>GetModel</name>
+        <qualifiedname>csmp::SimulatorSetup::GetModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="85" column="11" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a38d4cc94e740c0236be2d1ae6b2ae49c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetup&lt; dim &gt;::Verbose</definition>
+        <argsstring>()</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::SimulatorSetup::Verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="87" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ab3d94d89301487db2b15511410b13842" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::Verbose</definition>
+        <argsstring>(bool choice)</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::SimulatorSetup::Verbose</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>choice</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="88" column="10" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a9b8bc700399feb4c825ca3c8d5f13fc1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::SimulatorSetup&lt; dim &gt;::GetGeometryPrefix</definition>
+        <argsstring>()</argsstring>
+        <name>GetGeometryPrefix</name>
+        <qualifiedname>csmp::SimulatorSetup::GetGeometryPrefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="90" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a032d66da33ce3441fc3560ece7b72d14" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::SimulatorSetup&lt; dim &gt;::GetProjectName</definition>
+        <argsstring>()</argsstring>
+        <name>GetProjectName</name>
+        <qualifiedname>csmp::SimulatorSetup::GetProjectName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="91" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a980414e9d04a7683ed4258ef65c24d8d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref> &amp;</type>
+        <definition>ComputationalSettings &amp; csmp::SimulatorSetup&lt; dim &gt;::GetRunSettings</definition>
+        <argsstring>()</argsstring>
+        <name>GetRunSettings</name>
+        <qualifiedname>csmp::SimulatorSetup::GetRunSettings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="93" column="27" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1abf9eba18c1014fbaf0bfe2ff0e6c8563" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; std::string &gt; &amp;</type>
+        <definition>std::vector&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetWells</definition>
+        <argsstring>()</argsstring>
+        <name>GetWells</name>
+        <qualifiedname>csmp::SimulatorSetup::GetWells</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="98" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="98" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1abebb0baa34aeafd38fafade5aaa7caeb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::map&lt; std::string, std::pair&lt; std::string, std::string &gt; &gt; &amp;</type>
+        <definition>std::map&lt; std::string, std::pair&lt; std::string, std::string &gt; &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetWellRateVars</definition>
+        <argsstring>()</argsstring>
+        <name>GetWellRateVars</name>
+        <qualifiedname>csmp::SimulatorSetup::GetWellRateVars</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="99" column="14" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aabb24b34b7749236cdbdcc08eab3f8cc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; std::string &gt; &amp;</type>
+        <definition>std::vector&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetTopBoundaries</definition>
+        <argsstring>()</argsstring>
+        <name>GetTopBoundaries</name>
+        <qualifiedname>csmp::SimulatorSetup::GetTopBoundaries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="100" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a1eabb0bb3348de97a0435b354ee80a04" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; std::string &gt; &amp;</type>
+        <definition>std::vector&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetLateralBoundaries</definition>
+        <argsstring>()</argsstring>
+        <name>GetLateralBoundaries</name>
+        <qualifiedname>csmp::SimulatorSetup::GetLateralBoundaries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="101" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="101" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1adf92e28bbc0e768cae978e5a9bb39bfc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; std::string &gt; &amp;</type>
+        <definition>std::vector&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetBottomBoundaries</definition>
+        <argsstring>()</argsstring>
+        <name>GetBottomBoundaries</name>
+        <qualifiedname>csmp::SimulatorSetup::GetBottomBoundaries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="102" column="17" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a5535ee4998567f54c878e707b68e5fc8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetVTUPropList</definition>
+        <argsstring>()</argsstring>
+        <name>GetVTUPropList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetVTUPropList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="105" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aa3ff09073e231190fc7efd710bd33340" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetRegOutList</definition>
+        <argsstring>()</argsstring>
+        <name>GetRegOutList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetRegOutList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="106" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1af9aa06e7f2ec298b20818ca6207a8e7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredPropList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredPropList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredPropList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="108" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a7fa6a5b86207d094d9f099169b15e6d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredRegionsList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredRegionsList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredRegionsList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="109" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="109" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a77ffd7c8c9402782db69732f60e055e6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredRangePropList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredRangePropList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredRangePropList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="111" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="111" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1adc961769b084e6ac6e2a22b901fe7260" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredIntegralPropList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredIntegralPropList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredIntegralPropList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="112" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="112" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a609cd648ccc9bae171c921225edae6db" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredValuePropList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredValuePropList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredValuePropList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="113" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aa079e5dbefae8f105507e85c3cb04af1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredRegionIntegralList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredRegionIntegralList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredRegionIntegralList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="114" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="114" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a051bba4d7aebbea41bfc8b31d5fc74e1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredRegionRangeList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredRegionRangeList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredRegionRangeList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="115" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ad030268780f29b5aed3017e6b812a625" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredRegionDimensionList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredRegionDimensionList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredRegionDimensionList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="116" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a6faaa142e6778bf2b99c77f082e2245b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; std::string &gt; &amp;</type>
+        <definition>std::list&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetMonitoredRegionPerimeterList</definition>
+        <argsstring>()</argsstring>
+        <name>GetMonitoredRegionPerimeterList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetMonitoredRegionPerimeterList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="117" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a7e131fb60cb84f7824695a9a626922e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; <ref refid="structcsmp_1_1_simulator_setup_parameter" kindref="compound">SimulatorSetupParameter</ref> &gt; &amp;</type>
+        <definition>std::list&lt; SimulatorSetupParameter &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetParameterList</definition>
+        <argsstring>()</argsstring>
+        <name>GetParameterList</name>
+        <qualifiedname>csmp::SimulatorSetup::GetParameterList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="121" column="15" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ac0773afdf73b7e16fd305eb655300ef8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_simulator_monitor" kindref="compound">SimulatorMonitor</ref>&lt; dim &gt; *</type>
+        <definition>SimulatorMonitor&lt; dim &gt; * csmp::SimulatorSetup&lt; dim &gt;::GetSimulatorMonitor</definition>
+        <argsstring>()</argsstring>
+        <name>GetSimulatorMonitor</name>
+        <qualifiedname>csmp::SimulatorSetup::GetSimulatorMonitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="122" column="22" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="122" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aa8f26b800899f3900b8c2301cc8885b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::InsertNewMonitorDataValues</definition>
+        <argsstring>(double time)</argsstring>
+        <name>InsertNewMonitorDataValues</name>
+        <qualifiedname>csmp::SimulatorSetup::InsertNewMonitorDataValues</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="123" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aeabddb09a6d075feebef30e2ce87d125" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::Add_DESCompatible_Integrator</definition>
+        <argsstring>(std::string name)</argsstring>
+        <name>Add_DESCompatible_Integrator</name>
+        <qualifiedname>csmp::SimulatorSetup::Add_DESCompatible_Integrator</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000217"><xreftitle>Todo</xreftitle><xrefdescription><para>in principle, integrators will be executed in the sequence they were created. This could be done by checking the order of the SAMG_Solvers, to avoid creating wrappers for <ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref> and NCFVT classes. This seems easier said than done, as many things need to happen between solver calls. Perhaps it is better to allow the usage of names are keys and call the correct one when desired. This is left to the user. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="132" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a5bd41db29cdd491dd2f7c73883d48a75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::AddLegacy_FE_Integrator</definition>
+        <argsstring>(std::string name)</argsstring>
+        <name>AddLegacy_FE_Integrator</name>
+        <qualifiedname>csmp::SimulatorSetup::AddLegacy_FE_Integrator</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="133" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1ae04a9e108dce34376bffe5e2d8337379" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::DeleteLegacy_FE_Integrator</definition>
+        <argsstring>(std::string name)</argsstring>
+        <name>DeleteLegacy_FE_Integrator</name>
+        <qualifiedname>csmp::SimulatorSetup::DeleteLegacy_FE_Integrator</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="134" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1aad6ee480043ba9b7418036c3b63f7294" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SimulatorSetup&lt; dim &gt;::AddLegacy_FEFV_Integrator</definition>
+        <argsstring>(std::string name, std::vector&lt; std::string &gt; variables)</argsstring>
+        <name>AddLegacy_FEFV_Integrator</name>
+        <qualifiedname>csmp::SimulatorSetup::AddLegacy_FEFV_Integrator</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::string &gt;</type>
+          <declname>variables</declname>
+        </param>
+        <briefdescription>
+<para>J.E.M. Added because we need to remove Legacy FE integrators if we switch variable flags to PLAIN. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="135" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a22b2f980975ac3d5ad5fbe48f504cfde" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        <definition>PropertyDatabase&lt; dim &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::Database</definition>
+        <argsstring>()</argsstring>
+        <name>Database</name>
+        <qualifiedname>csmp::SimulatorSetup::Database</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="137" column="22" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="137" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_simulator_setup_1a9ac50615889daca8f3dd1373ea5d731a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::set&lt; std::string &gt; &amp;</type>
+        <definition>std::set&lt; std::string &gt; &amp; csmp::SimulatorSetup&lt; dim &gt;::GetInternalVars</definition>
+        <argsstring>()</argsstring>
+        <name>GetInternalVars</name>
+        <qualifiedname>csmp::SimulatorSetup::GetInternalVars</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetup.h" line="138" column="14" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="138" bodyend="138"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Relates to the geothermal simulator application</para>
+<para><xrefsect id="todo_1_todo000215"><xreftitle>Todo</xreftitle><xrefdescription><para>documentation is needed (probably Julian Mindel)</para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000216"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM move to applications, geothermal energy storage simulator</para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SimulatorSetup&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_simulator_setup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/SimulatorSetup.h" line="32" column="1" bodyfile="source/includes/run_control/SimulatorSetup.h" bodystart="32" bodyend="221"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_simulator_setup_1aeabddb09a6d075feebef30e2ce87d125" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Add_DESCompatible_Integrator</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a5bd41db29cdd491dd2f7c73883d48a75" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>AddLegacy_FE_Integrator</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aad6ee480043ba9b7418036c3b63f7294" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>AddLegacy_FEFV_Integrator</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a1622f2998438085f7a3b813e1f05a421" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>AddPreExistingModelVariables</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a7cfe0581d8efe5ae33a002ca8f2edd48" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>bottom_boundaries_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a555471e7eeddce529584e131f6e483f8" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>CheckInputRanges</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1af3e058cd137bf0c6d626a966ec5b0106" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>CheckModel</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a914ce28e32d45ca249efb7536ad56145" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>CheckModelMinMaxCoordinates</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa8b9f593d3d51e2c46a4419253562a73" prot="public" virt="pure-virtual"><scope>csmp::SimulatorSetup</scope><name>CheckOptions</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1adb3f2159eb8042e9aac48d24923c660d" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>CheckProperties</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aeac90190d97694c8bcec5ee286532645" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>CheckVariables</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a51564ebf0ff1b1142c6309216ef9e065" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>CreateAllProperties</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a6729b2c49f2fb19d3c58acd3bab9eee9" prot="protected" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>created_lists_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a5cc6b45f5d0edb270e74236fc92bc6bd" prot="public" virt="pure-virtual"><scope>csmp::SimulatorSetup</scope><name>CreateParameterList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a967d4f1af990125bf94e1ab56862bb91" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>CreatePreviousProperties</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a22b2f980975ac3d5ad5fbe48f504cfde" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Database</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a6aab4822ae34eb21068faa535fa32ead" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>debug_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ae04a9e108dce34376bffe5e2d8337379" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>DeleteLegacy_FE_Integrator</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a24afbbe7613cce5c4c98f8934ba2d05d" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>geometry_file_prefix_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1adf92e28bbc0e768cae978e5a9bb39bfc" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetBottomBoundaries</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a9b8bc700399feb4c825ca3c8d5f13fc1" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetGeometryPrefix</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a9ac50615889daca8f3dd1373ea5d731a" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetInternalVars</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a1eabb0bb3348de97a0435b354ee80a04" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetLateralBoundaries</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a0867b4b723a939579cf0157ad7fa676e" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetModel</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1adc961769b084e6ac6e2a22b901fe7260" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredIntegralPropList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1af9aa06e7f2ec298b20818ca6207a8e7f" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredPropList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a77ffd7c8c9402782db69732f60e055e6" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredRangePropList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ad030268780f29b5aed3017e6b812a625" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredRegionDimensionList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa079e5dbefae8f105507e85c3cb04af1" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredRegionIntegralList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a6faaa142e6778bf2b99c77f082e2245b" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredRegionPerimeterList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a051bba4d7aebbea41bfc8b31d5fc74e1" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredRegionRangeList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a7fa6a5b86207d094d9f099169b15e6d6" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredRegionsList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a609cd648ccc9bae171c921225edae6db" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetMonitoredValuePropList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a5e1b66215fc729a54b0cfb86dec512a4" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetOptions</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a7e131fb60cb84f7824695a9a626922e3" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetParameterList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a032d66da33ce3441fc3560ece7b72d14" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetProjectName</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa3ff09073e231190fc7efd710bd33340" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetRegOutList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a980414e9d04a7683ed4258ef65c24d8d" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetRunSettings</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ac0773afdf73b7e16fd305eb655300ef8" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetSimulatorMonitor</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aabb24b34b7749236cdbdcc08eab3f8cc" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetTopBoundaries</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a5535ee4998567f54c878e707b68e5fc8" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetVTUPropList</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1abebb0baa34aeafd38fafade5aaa7caeb" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetWellRateVars</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1abf9eba18c1014fbaf0bfe2ff0e6c8563" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>GetWells</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a897e17654108dd5aaec8e5f31ef6805e" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa8f26b800899f3900b8c2301cc8885b7" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>InsertNewMonitorDataValues</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a0fe60efb3dc793657b52197658df3b3c" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Interactive</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aca1c663310466ded75a677ebd9e7407b" prot="protected" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>interactive_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa76bb489e40d59c927f14940689a031a" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>internal_vars_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a5a4eeb6b6175a17f55ca361822e02873" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>lateral_boundaries_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a72c464ca8a78fe277222136ec8cf5847" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>LoadBoundaryAndWellNames</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a966810bb39c2db7ee91a084d23ab1b1c" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>LoadControlSimulatorSetupParameters</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ab405a9ab5fe3d434d7e67fc0944a3518" prot="public" virt="virtual"><scope>csmp::SimulatorSetup</scope><name>LoadDefaultOptions</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ae7ec9b094c68b36921049d06871b38b6" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>LoadModel</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a8eec0fd7d63b8d03105bb8eb4fb7a6c0" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>LoadMonitor</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a83422b378980566004a16f2e18876096" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>LoadWells</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa7b618b0faf4422e0b97a594922e1ef4" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>model_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a656261d0d9260119e264e3cd91071433" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>ModelSetupFromConfigFile</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aff8637b8a514c318a33c789fc60e24a6" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredIntegralProps_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a73b48d063e3eed2cffcd0a1b50736df2" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredProps_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a55c93bee5bba4acabac3780e1ecdf7ae" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredRangeProps_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ace2501017eab452e545b502903bdbffb" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredRegionDimensionList_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a39e6c4040b9e191a9803a373fdf96601" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredRegionIntegralList_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a80588f2d4e1ac9228ccc96a7c0b0de37" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredRegionPerimeterList_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa0354cbe9d3ac5f4b94dc05ba4518bc3" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredRegionRangeList_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a6089501dbecb8222716122597f6dbce9" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredRegions_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a9c6747c113624301e3edad398088729b" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>monitoredValueProps_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a32b05c11781369a3405164f7ac05ea0c" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a46818b5ae2924d81a51267f36b3ea7b2" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>options_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1acdc5cab4f7e60cac5dabf5236badd3f2" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>OutputParameterListCode</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a0ed62d3233c2685cae7c84b83a81d8df" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>OutputParameterListToScreen</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a85af27bc1950b2b0cc9e817b8b6bb1db" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>OutputSampleConfigurationFile</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a0cbc7712cc42244c30588f5daa222820" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>OutputSampleRegionsFile</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a8fa811eab6e45aa6ba6719bb072d0749" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>OutputSampleVariablesFile</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a939746f13700fb02f45f244a2319d40a" prot="protected" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>parameter_list_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a7a4fa626f1018fdbb887828ce2d6528a" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>point_in_element_in_region_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a53a26f81b1ef1f05dcfa4fcd4a27a55f" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>points_to_monitor_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1af2f334178c4643312f371c5d18aae36c" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>property_at_point_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1abb85d25c075998016512114f2d436c5b" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>ReadOptionsFromRegionsFile</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ac08d9d8fba64663cba474eeaeebd415c" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Restart</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1aa2fa0eea9098fca5709776c0e6e74b49" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Restart</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a64e187096ed348d42a0cc7678c63bc89" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>restart_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a52cc375f8bf3fe431d1f7a58a9061451" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>run_settings_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a6eb0f86584b18c34adc314f8d0f14df1" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>RunSettings</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a80c329bc8e39cdadfde173215265df09" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>SetupWellRatesBasedOnRateVariables</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ab5f2b148c9118b5944da92af78d253d8" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>simulator_monitor_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a3cda962ef88219bafc27b917c751ea0d" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>SimulatorSetup</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a764d331ff88a9e2f7b79d4a759572462" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>top_boundaries_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a776f6bcdf6181f98a47acddf75354e0d" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>TriggerRestart</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a4efc5092e43ae8ddca8da2220fe73e60" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>validated_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a38d4cc94e740c0236be2d1ae6b2ae49c" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ab3d94d89301487db2b15511410b13842" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a52e6962365153d3c1313ba5a77a2c623" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a108558f6d9205e6999075a89b8890cba" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>vtuOutputProps_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a10b37534091cafbcbfd8e2c426e2d136" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>vtuOutputRegions_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a9442aeb1edcf2bfaf8b14fb6d60d4246" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>well_rate_vars_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1a83c619d2afd29223d6cf7e6398c852dd" prot="private" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>well_regions_</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1adcddf544dfebad3d83ee999aa6640973" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetup</scope><name>YesOrNo</name></member>
+      <member refid="classcsmp_1_1_simulator_setup_1ae382a604bf62fe726f4cc25a24ef3337" prot="public" virt="virtual"><scope>csmp::SimulatorSetup</scope><name>~SimulatorSetup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

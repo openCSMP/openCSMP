@@ -1,0 +1,7 @@
+<map id="csmp::buildRegionsBasedOnPropertyRange" name="csmp::buildRegionsBasedOnPropertyRange">
+<area shape="rect" id="Node000001" title="build Regions based on the range of particular property data ( a.k.a block1 )" alt="" coords="5,23,196,64"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a34701d1c9fda79fddb23382772ee2859" title=" " alt="" coords="256,5,384,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,30,240,25,241,30,197,35"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#a6c42e9e0529dda9c61a77681f2735608" title="detects lines beginning with #, %, –; char* not constant because first comment char gets replaced by ..." alt="" coords="244,55,396,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,51,228,55,228,60,196,57"/>
+</map>

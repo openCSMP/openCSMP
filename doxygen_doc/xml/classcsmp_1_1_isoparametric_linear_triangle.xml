@@ -1,0 +1,1508 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_isoparametric_linear_triangle" kind="class" language="C++" prot="public">
+    <compoundname>csmp::IsoparametricLinearTriangle</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element" prot="public" virt="non-virtual">csmp::FiniteElement</basecompoundref>
+    <includes refid="_isoparametric_linear_triangle_8h" local="no">IsoparametricLinearTriangle.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1a4f83f3a0bcf9f52e6be266a578b104eb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearTriangle::rr_</definition>
+        <argsstring></argsstring>
+        <name>rr_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::rr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="77" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1a9457c6d2be4db3595f7ce99c6df850b6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearTriangle::ss_</definition>
+        <argsstring></argsstring>
+        <name>ss_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::ss_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="78" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1a9a7be081800650f23fcebf37a9389a8b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearTriangle::W_</definition>
+        <argsstring></argsstring>
+        <name>W_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::W_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="79" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1a4dac737cff843b5a0e62f583af10b25f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearTriangle::NXY_</definition>
+        <argsstring></argsstring>
+        <name>NXY_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::NXY_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="80" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1acbc31582295e461ad72acf12d97927d5" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearTriangle::JMAT_</definition>
+        <argsstring></argsstring>
+        <name>JMAT_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::JMAT_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="81" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1a890a9a51e69fe62e0d44f3fe80eb318b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearTriangle::RS_</definition>
+        <argsstring></argsstring>
+        <name>RS_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::RS_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="82" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1a036e325f014fe58d12194807f12e5ceb" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IsoparametricLinearTriangle::use2Dto3Djacobi_</definition>
+        <argsstring></argsstring>
+        <name>use2Dto3Djacobi_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::use2Dto3Djacobi_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="83" column="27" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_triangle_1a94aa5a66c90ea817083b5e8c0be7f833" prot="private" static="yes" mutable="no">
+        <type>const uint32_t</type>
+        <definition>const uint32_t csmp::IsoparametricLinearTriangle::parametricDimensions_</definition>
+        <argsstring></argsstring>
+        <name>parametricDimensions_</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::parametricDimensions_</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="85" column="27" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a1942d151bae1596cf59aea43f7c0e882" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IsoparametricLinearTriangle::IsoparametricLinearTriangle</definition>
+        <argsstring>(uint32_t dimensions=2, uint32_t ipoints=3)</argsstring>
+        <name>IsoparametricLinearTriangle</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::IsoparametricLinearTriangle</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dimensions</declname>
+          <defval>2</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ipoints</declname>
+          <defval>3</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor initializes quadrilateral to use local coordinates and a four-point integration scheme where the Gauss points are located inside quad at convergence points . The weights of the integration points are set to 1 such that the integrated contributions add up to 1. . </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="11" column="14" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="20" bodyend="90"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a1942d151bae1596cf59aea43f7c0e882" compoundref="_isoparametric_linear_triangle_8cpp" startline="20" endline="90">IsoparametricLinearTriangle</references>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1a1942d151bae1596cf59aea43f7c0e882" compoundref="_isoparametric_linear_triangle_8cpp" startline="20" endline="90">IsoparametricLinearTriangle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a1915fda940309e013abb704ee1d37cdc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::Volume</definition>
+        <argsstring>()</argsstring>
+        <name>Volume</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::Volume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a16025c5d7f2ac217d2dbedad5d561a06">Volume</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes Integral N dA = 1/2 sum_1...n Wi Ji Ni. This formulation also gives a meaningful area if the element boundaries are curved. For a description of numerical integration of isoparametric quadratic triangular elements, refer to Cook et al. (1989) 3rd Ed., p. 183.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The finite element which supplies the nodal coordinates from which the area is computed.</para>
+<para><simplesect kind="return"><para>The area (m2) of the finite element. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="15" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="569" bodyend="594"/>
+        <referencedby refid="namespacecsmp_1a454b86bd00b667e07e864d97e187fcde" compoundref="_v_set_8cpp" startline="1017" endline="1179">csmp::extrapolateElementToNodeProperty</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1a786f3a8fe6fa8b7f0f87126c424f1280" compoundref="_isoparametric_linear_triangle_8cpp" startline="438" endline="488">InnerRadius</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1ac6a7a91c0cb98b6a4ae4ba5a1ee3875c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::AspectRatio</definition>
+        <argsstring>()</argsstring>
+        <name>AspectRatio</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::AspectRatio</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c6148f7a38b639b721013dbd8f8d3f5">AspectRatio</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the element aspect ratio as the ratio between the longest and the shortest boundary segment.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> is consulted for its global coordinates. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="16" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="405" bodyend="420"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a786f3a8fe6fa8b7f0f87126c424f1280" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::InnerRadius</definition>
+        <argsstring>()</argsstring>
+        <name>InnerRadius</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::InnerRadius</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3ad8c30e7136d47df5ca95907647c538">InnerRadius</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method attempts to calculate the inner radius of the straight-sided triangle by talking 1/2 of the perimeter and dividing this measure by the area of the tri.</para>
+<para>The procedure is empirically based giving a good match if triangles are relatively even-sided and have straight edges.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent element is queried for its node coordinates. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="17" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="438" bodyend="488"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a1915fda940309e013abb704ee1d37cdc" compoundref="_isoparametric_linear_triangle_8cpp" startline="569" endline="594">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a31040540ce8e37b0075ab500fbc93b71" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::EdgeLengths</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>EdgeLengths</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::EdgeLengths</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac2348fa774457d4adde9354189277d9e">EdgeLengths</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+          <defname>len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Segment length is calculated as the sum of the length of two linear segments making up each face of the triangle.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>len</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lengths of the segments will be returned into the vector which is the second method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The segment lengths are computed as the sum of the straight line segments which make up the element face.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>For example, when stresses are to be applied at the element side, the (area=length at unit thickness) must be taken into account. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="18" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="510" bodyend="551"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1aec78a84f7cdc4941fa9f13d8f45fa991" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::NodesOfSegment</definition>
+        <argsstring>(uint32_t segm_id, std::vector&lt; uint32_t &gt; &amp;snids) const</argsstring>
+        <name>NodesOfSegment</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::NodesOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a443213e98dc0cc9692bd3eef5a168295">NodesOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segm_id</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>snids</declname>
+        </param>
+        <briefdescription>
+<para>segments are numbered like faces </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="19" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="215" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a9d39d2517c97cd2170174b1e550e82d6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricLinearTriangle::NodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>NodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::NodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a32fc14575277846326041fe914209f9a">NodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Gives the local node numbers (0...5) of the nodes which make up the requested face of the element (possible numbers 0, 1, 2). For this element, the faces are numbered such that face 0 lies opposite of node 0, face 1 node 1 etc.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The number of the desired face (0, 1, or 2).</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fnids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The local node numbers are returned into the integer vector &apos;fnids&apos;.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>When boundary conditions shall be applied it is necessary to determine the properties associated with the nodes of that element face. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="21" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="281" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a29d9dbca9ff64634c6b09a6b479571f0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricLinearTriangle::CornerNodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>CornerNodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::CornerNodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a9614d03193a707898a0b26336a61d9d9">CornerNodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the corner nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="22" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="293" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a8c60c6731bf969a6db6fdb0ba47a7208" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>std::vector&lt; uint32_t &gt; csmp::IsoparametricLinearTriangle::NodesConnectedTo</definition>
+        <argsstring>(uint32_t node_id) const</argsstring>
+        <name>NodesConnectedTo</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::NodesConnectedTo</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ab7196476d9fb740d91384c6c4521b0f5">NodesConnectedTo</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>node_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the nodes at the other end of the sgment that the argument node is on </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="23" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="307" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a4acdf51ac2be08e532e05e008e7c93c1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::CornerNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae3f0ae4a9ad3424ccc4553ff270b155e">CornerNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns local node ids of the nodes which sit on the corner of the quadratic triagular element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returns a Meschpp integer vector with the 3 local corner node ID numbers for the element (These integers are germane to all quadratic triangular elements in the mesh). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="24" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="328" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1aa73e9c9a122dea5ae043c0d4afa4b15a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::MidSideNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a8149423046e10426a7eb520164ad3a38">MidSideNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns local node ids of the nodes which sit on the midsides of the quadratic triagular element.</para>
+<para>Returns an integer vector with the 3 local midside-node ID numbers for the element (These integers are germane to all quadratic triangular elements in the mesh).</para>
+<para><xrefsect id="todo_1_todo000074"><xreftitle>Todo</xreftitle><xrefdescription><para>(3) Check what should be assigned </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="25" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="348" bodyend="351"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a264646b1fbe760b1f846017db1324e60" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::CounterClockwiseNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CounterClockwiseNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::CounterClockwiseNodes</qualifiedname>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="26" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="356" bodyend="362"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a9954546c704f713980eca1d46404dbbc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricLinearTriangle::MidSideNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aec5a871df4af8c883e496f6283872780">MidSideNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="27" column="23" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a92292efdf215d89399da8e4f58284ec8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricLinearTriangle::CornerNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1abf2597e5cf0563435169689ee94d57a1">CornerNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="28" column="23" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a4461f2d8579fc0fe8f4af9afe0e3f6b0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>vector&lt; double &gt; csmp::IsoparametricLinearTriangle::UnitNormal</definition>
+        <argsstring>() const</argsstring>
+        <name>UnitNormal</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::UnitNormal</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a1dedbd91a6e8765f57dfdaf999494b76">UnitNormal</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>normal points to front when looking at element with nodes numbered counter clockwise.</para>
+<para><simplesect kind="attention"><para>in 2D, a 3D unit normal is returned, with the z-component equal to 1.</para>
+</simplesect>
+<xrefsect id="test_1_test000016"><xreftitle>Test</xreftitle><xrefdescription><para>OK - SKM 3/3/2016 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="29" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1559" bodyend="1583"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1adbc30ec60739948f58ea3729bbfb71ac" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::UnitNormalToFace</definition>
+        <argsstring>(uint32_t face, std::vector&lt; double &gt; &amp;unrml) const</argsstring>
+        <name>UnitNormalToFace</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::UnitNormalToFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a39eb6d5a1827783a679870277b4c68b8">UnitNormalToFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>unrml</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>outward pointing normals to the faces that lie on the opposite nodes</para>
+<para><simplesect kind="author"><para>SKM 18/2/2016</para>
+</simplesect>
+<xrefsect id="test_1_test000017"><xreftitle>Test</xreftitle><xrefdescription><para>OK - for 3D version </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="30" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1595" bodyend="1668"/>
+        <references refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" compoundref="_m_j_l___edge_8cpp" startline="42" endline="51">mjl::Edge::Rot</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a09495d30b8a99fc0b06be33af6ad4264" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::IsoparametricLinearTriangle::ElementTypeOfFace</definition>
+        <argsstring>(uint32_t face) const</argsstring>
+        <name>ElementTypeOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::ElementTypeOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a066cbd92cd983a3c2e73859286280587">ElementTypeOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000069"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="32" column="28" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="365" bodyend="368"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a1240c80b31e49e16765a9e8ffaa9fcf9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>virtual CSMP_FEM_TYPE csmp::IsoparametricLinearTriangle::ElementTypeOfSegment</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>ElementTypeOfSegment</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::ElementTypeOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a136f53aa9d4cd295a984ca46c0864ff7">ElementTypeOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segment</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding segment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000070"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="33" column="28" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a88b6751e46d19ca8aea0f76e0f44f5c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::N</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::N</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aac8b400d7e198282e0b8196df3338858">N</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the values of the interpolation functions at the global coordinate &apos;xy&apos;. Since a Jacobian matrix can only be obtained for points which lie inside the local triangle, such a transformation cannot be performed here. Because of this reason global area-coordinate functions are employed to obtain the interpolation function values at the global point. These functions are borrowed from the NaturalQuadratic triangle.</para>
+<para>Note, that the use of global interpolation functions implies that the method only gives highly accurate results if the element boundaries are not curved.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the vector which will hold the interpolation function values, and the coordinate vector &apos;xy&apos; in the global coordinate system. Note that if the global coordinates given by &apos;xy&apos; do not lie within the global extent of the quadratic triangular element, the interpolation function values will no longer add to one and the interpolation will then be erroneous.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The second method argument, the vector FN, will hold the interpolation function values as computed at the point &apos;xy&apos;.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The inverse of the Jacobian matrix is found for the global point &apos;xy&apos;. Then &apos;xy&apos; transposed is pre-multiplied with the Jacobian to find the local coordinate pair &apos;rs&apos; corresponding to &apos;xy&apos;. Using these local coordinates the interpolation function values are found.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To interpolate a property value withing the quadratic triangular element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="36" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1056" bodyend="1064"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1af8557d3b42b0a05b7888d55fd92c5aca" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::N_AtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip, std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::N_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac1168c0c1cc280d1a1ecba676877d13b">N_AtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the interpolation function values at the specified integration point &apos;ip&apos;.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the number of the integration point.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The interpolation function values are returned into the third argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="37" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="201" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a7ce5635eff9d27c8c5b1bc682d799edb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::N_AtBaryCenter</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtBaryCenter</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::N_AtBaryCenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6df28d2a7b4bcaff49cb726d6ef0890b">N_AtBaryCenter</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+<para>reports the values of the interpolation functions at the center of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="38" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="375" bodyend="379"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1ac0fcba58f86cf88132235e9adb83a3ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::JacobianAtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip)</argsstring>
+        <name>JacobianAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::JacobianAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac6a31722bbf25abad86ccea3b653953e">JacobianAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+<para>initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="39" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1707" bodyend="1722"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::JacobianInverse</definition>
+        <argsstring>()</argsstring>
+        <name>JacobianInverse</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::JacobianInverse</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce">JacobianInverse</reimplements>
+        <briefdescription>
+<para>overwrites the base class method in order to get 2D to 3D mapping functionality </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="40" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1485" bodyend="1547"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a146ac4ff1201107ca6a5162eb844a1c9" compoundref="_isoparametric_linear_triangle_8cpp" startline="1317" endline="1408">OutputNodeDataToVTK</references>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1ac5e97f9699e62698ab87ca0412d7c678" compoundref="_isoparametric_linear_triangle_8cpp" startline="876" endline="924">dN</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1ac5dbcdb7f31d089fd0a01fd564be63b3" compoundref="_isoparametric_linear_triangle_8cpp" startline="613" endline="657">dN</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1a650ba185543cba1da41459a8d792e36e" compoundref="_isoparametric_linear_triangle_8cpp" startline="1210" endline="1253">dN_AtBarycenter</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1a25db2facfc1a51eba64ce2faa1fb6e1f" compoundref="_isoparametric_linear_triangle_8cpp" startline="1092" endline="1136">dN_AtIntegrationPoint</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1a4f73440045576e154acf189be39baf58" compoundref="_isoparametric_linear_triangle_8cpp" startline="1162" endline="1207">dN_AtNode</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a4b33c09168e6f416ac247872a5bb51a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::JacobianAt</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;rst)</argsstring>
+        <name>JacobianAt</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::JacobianAt</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a246043f81c66c9f65e08c6a5190ea381">JacobianAt</reimplements>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <briefdescription>
+<para>initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="41" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1780" bodyend="1792"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1acffaff1292ad12448dbfb21bce33a9e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::JacobianDeterminant</definition>
+        <argsstring>()</argsstring>
+        <name>JacobianDeterminant</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::JacobianDeterminant</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae758e82d3b214e9f9c5bda10cd20b515">JacobianDeterminant</reimplements>
+        <briefdescription>
+<para>returns the determinant of the member Jacobian matrix JAC that must have been initialised before </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="42" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1756" bodyend="1776"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1ac5e97f9699e62698ab87ca0412d7c678" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;dn, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::dN</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>dn</declname>
+          <defname>DN</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes derivatives of shape functions at a point XY given in global coordinates within the element (also given in global coordinates).</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global shape of the triangle and the interpolation function derivatives at the point XY are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><simplesect kind="return"><para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="45" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="876" bodyend="924"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" compoundref="_isoparametric_linear_triangle_8cpp" startline="1485" endline="1547">JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1ac5dbcdb7f31d089fd0a01fd564be63b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::dN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3bf543b54ba24535aced15598495730f">dN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>DN</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Compute derivatives of interpolation functions at corresponding nodes with respect to the global coordinate system. If a transformation from 2D local to 3D global space is applied, the function Jacobi is called.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global interpolation of the triangle and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="46" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="613" bodyend="657"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" compoundref="_isoparametric_linear_triangle_8cpp" startline="1485" endline="1547">JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a25db2facfc1a51eba64ce2faa1fb6e1f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::dN_AtIntegrationPoint</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t gauss_point)</argsstring>
+        <name>dN_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::dN_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a885bb35784705f295c5f8ad9aa47f227">dN_AtIntegrationPoint</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>B</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gauss_point</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the gauss point i (i=0...i=gauss points-1). If a transformation from 2D local to 3D global space is applied, the function Jacobi is called.</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="49" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1092" bodyend="1136"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" compoundref="_isoparametric_linear_triangle_8cpp" startline="1485" endline="1547">JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a4f73440045576e154acf189be39baf58" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::dN_AtNode</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t node)</argsstring>
+        <name>dN_AtNode</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::dN_AtNode</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a89d6f320e17b4cfe1f9ddbeade1c9255">dN_AtNode</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>B</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+          <defname>nd</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0...i=gauss points-1). If a transformation from 2D local to 3D global space is applied, the function Jacobi is called.</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="50" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1162" bodyend="1207"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" compoundref="_isoparametric_linear_triangle_8cpp" startline="1485" endline="1547">JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a650ba185543cba1da41459a8d792e36e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::dN_AtBarycenter</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>dN_AtBarycenter</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::dN_AtBarycenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a703b7ce9d818248bbd9864dffee30b7c">dN_AtBarycenter</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>DM</defname>
+        </param>
+        <briefdescription>
+<para>returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="51" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1210" bodyend="1253"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" compoundref="_isoparametric_linear_triangle_8cpp" startline="1485" endline="1547">JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a877f45f5c0bdd55b06c50a160cc42c6e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::Nrs</definition>
+        <argsstring>(double r, double s, std::vector&lt; double &gt; &amp;nrst) const</argsstring>
+        <name>Nrs</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::Nrs</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1adb2baab01a52b040d73c10623a0605b2">Nrs</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>nrst</declname>
+          <defname>N</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the value of the element interpolation functions at the point &apos;rst&apos; in local coordinates.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The floating point coordinates &apos;r&apos;, &apos;s&apos; and &apos;t&apos; of the point at which the interpolation shall be carried out.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The fourth method argument is the vector into which the values of the n=nodes interpolation functions at the point &apos;rst&apos; will be returned.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>See in source code header file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Method is used to compute property values at the integration points of the element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="54" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="117" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1afc17e49f05bea120f69dffa03118f9bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::Nrs</definition>
+        <argsstring>(double r, double s, double *nrst) const</argsstring>
+        <name>Nrs</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::Nrs</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>nrst</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="55" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="129" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a8888ca55f9dcaf38dacef128ff408703" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::dNr</definition>
+        <argsstring>(double r, double s, std::vector&lt; double &gt; &amp;dNr) const</argsstring>
+        <name>dNr</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::dNr</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1af159e5f99a0281ae603ca6ddde9bf6bf">dNr</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>dNr</declname>
+          <defname>DNR</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method and the complementary method <ref refid="classcsmp_1_1_isoparametric_linear_triangle_1ade3bc44a19951b080e803ef09f24a45f" kindref="member">dNs()</ref> compute the shape function derivates with respect to the local coordinate axis &apos;r&apos;, and &apos;s&apos;.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes the local coordinates of the point at which the shape function derivatives shall be evaluated as third argument.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DNR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shape function derivatives are returned into the second method argument which is a floating point vector of the size n=nodes per element.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>see inlined source code in the header file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The shape function derivatives are needed in most integration procedures for elements. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="56" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="166" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1ade3bc44a19951b080e803ef09f24a45f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::dNs</definition>
+        <argsstring>(double r, double s, std::vector&lt; double &gt; &amp;dNs) const</argsstring>
+        <name>dNs</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::dNs</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6d2fb4557b0681959501365138c9d3c3">dNs</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>DNS</declname>
+        </param>
+        <briefdescription>
+<para>2D element interpolation functions derivatives N(r,s)/ds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="57" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="178" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a3bce9f2a34af88bbe6d5400d819d3bbe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::ExtrapolateIntegrationPointVariableToNodes</definition>
+        <argsstring>(uint32_t nvars, const std::vector&lt; double &gt; &amp;IVAR, std::vector&lt; double &gt; &amp;NVAR) const</argsstring>
+        <name>ExtrapolateIntegrationPointVariableToNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::ExtrapolateIntegrationPointVariableToNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae7ea6940dcaa8403c7c35e70db4ba21c">ExtrapolateIntegrationPointVariableToNodes</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>nvars</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>IVAR</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>NVAR</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Because, in the local coordinate system, the quadrilateral is always straight sided, and the derivatives of the interpolation functions are bilinear, variable values computed at integration points can simply be extrapolated to the nodes. This involves the steps:</para>
+<para><orderedlist>
+<listitem><para>Compute the interpolation function coefficients for the quad which is defined by the four integration points.</para>
+</listitem><listitem><para>For each node point compute the values of the interpolation functions and use these to extrapolate the values of the variables at the nodes. </para>
+</listitem></orderedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="59" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1425" bodyend="1480"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1af0a1ca0db0b0e7dd77c38734cb7718ea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::WeightAtIntegrationPoint</definition>
+        <argsstring>(uint32_t i) const</argsstring>
+        <name>WeightAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::WeightAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac224265aa216deebfcf44b54d2689d1d">WeightAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>returns the integration weight of the desired quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="63" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="371" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1aff465171ce038f0486361d923f9d7df0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::IntegrationPoint</definition>
+        <argsstring>(uint32_t i, std::vector&lt; double &gt; &amp;xyz) const</argsstring>
+        <name>IntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::IntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aef00dcb02705580693988e47924a055d">IntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defname>ip</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>integration point location transformed into global coordinates <simplesect kind="warning"><para>the matrix XYZ must be updated </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="64" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1675" bodyend="1701"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a146ac4ff1201107ca6a5162eb844a1c9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::OutputNodeDataToVTK</definition>
+        <argsstring>(const char *file_name, const char *var_name, DenseMatrix&lt; DM_MIN &gt; &amp;DATA) const</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::OutputNodeDataToVTK</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a67341585f83bc9d941c67e7a84801248">OutputNodeDataToVTK</reimplements>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DATA</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method returns a vector with a size of 3, containing the consecutively ordered local node numbers of the side of the element which lies at the indicated model boundary. If the element is not on the model boundary an error is reported and the vector is initialized to unspecified.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the target boundary of the the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> of elements, and a Meschach vector which will hold the the local indices of the identified nodes (0...5).</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fnids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resulting local node id&apos;s are returned into the third method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>While only the element knows which nodes are located at the mode boundary, the <ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> knows in which order these appear.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To assign Neumann boundary conditions with a PDE operator for surface integrals. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="66" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1317" bodyend="1408"/>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" compoundref="_isoparametric_linear_triangle_8cpp" startline="1485" endline="1547">JacobianInverse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1af837e16ed60024fa618e134d3517a2b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::IntegrationPointsFromParToPhys</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;IPPHYS)</argsstring>
+        <name>IntegrationPointsFromParToPhys</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::IntegrationPointsFromParToPhys</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>IPPHYS</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="70" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1727" bodyend="1739"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a6ee0256085412fd92fb1885b11471611" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::ReferenceCoordinates</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;matCoords) const</argsstring>
+        <name>ReferenceCoordinates</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::ReferenceCoordinates</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a34a5c030987c7e9842af332f5ed0d61b">ReferenceCoordinates</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>matCoords</declname>
+        </param>
+        <briefdescription>
+<para>for element types defined using a local coordinate system, returns the node coordinates into the argument matrix </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the reference coordinates of the element.</para>
+<para><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref> &amp; matCoords; -&gt; Holds the reference coordinates of the finite element. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="72" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="1743" bodyend="1753"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1aa03911450b31c90ab90f9a16367a4b43" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::Dimensions</definition>
+        <argsstring>(uint32_t dimensions)</argsstring>
+        <name>Dimensions</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::Dimensions</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dimensions</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="87" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="383" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1ae71bff5d1e9a1310bd1783bc9086c7b4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::Jacobi</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;rs, std::vector&lt; double &gt; &amp;EFG, DenseMatrix&lt; DM_MIN &gt; &amp;J)</argsstring>
+        <name>Jacobi</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::Jacobi</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>rs</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>EFG</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>J</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>When a surface element is located in a 3D space, the Jacobian matrix reduces to a 2x3 matrix. This function allows to calculate the jacobi (essentially the determinant of the 2x3 Jacobian matrix), which can be used to extrapolate the values of the interpolation functions and interpolation function derivatives that were calculated on a 2D reference element in local coordinates to the surface element that is located in the 3D space in global coordinates</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the parent element and a vector containing the local coordinates at which the Jacobian shall be evaluated are the input function arguments. The method returns the jacobi. In the function argument, it also returns a vector containing the L2 norms (squared) of the 2x3 Jacobian matrix (returned in the next argument), and the interpolation function derivatives with respect to the local coordinates r and s.</para>
+<para>A second overloaded function exists that returns only the jacobi and uses the reference to the parent element and the vector containing the local coordinates as input arguments. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="89" column="13" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="949" bodyend="981"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1af6b569bbbe4f9f7947230e5396b2986e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearTriangle::Jacobi</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;rs)</argsstring>
+        <name>Jacobi</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::Jacobi</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>rs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="93" column="13" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="984" bodyend="1015"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a2528b6be2bc887e8c0ca3fd3b4ec5011" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::ParametricToPhysical</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>ParametricToPhysical</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::ParametricToPhysical</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+<para>Projection function from rs-&gt;xy(z) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="96" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="666" bodyend="692"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_triangle_1a5c99d1a42918373df6a95a444149a6d4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearTriangle::PhysicalToParametric</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>PhysicalToParametric</name>
+        <qualifiedname>csmp::IsoparametricLinearTriangle::PhysicalToParametric</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+          <defname>rSt</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Projection function from xyz-&gt;rst </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="97" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearTriangle.cpp" bodystart="697" bodyend="857"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>3-noded triangle with a choice of Gaussian quadrature points and construction options for 2D and 3D models </para>
+    </briefdescription>
+    <detaileddescription>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Linear Triangle finite-element with local interpolation function and Jacobian transformation capability. <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> numbering:</para>
+<para>| s-axis (of local coordinate system) | o3 <table rows="2" cols="1"><row>
+<entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+</table>
+o -<mdash/> o -----&gt; r-axis 1 2</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Since the linear triangle uses local shape functions, the integration procedure is as follows.</para>
+<para>The weights of the interpolation functions always must add up to 1. Thus, since there are 4 integration points, each weight is 0.25 </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricLinearTriangle</label>
+        <link refid="classcsmp_1_1_isoparametric_linear_triangle"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="3">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#M</edgelabel>
+          <edgelabel>+JAC</edgelabel>
+          <edgelabel>+JINV</edgelabel>
+          <edgelabel>+XY</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricLinearTriangle</label>
+        <link refid="classcsmp_1_1_isoparametric_linear_triangle"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" line="9" column="1" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearTriangle.h" bodystart="9" bodyend="99"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1ac6a7a91c0cb98b6a4ae4ba5a1ee3875c" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab4ad41c705b9691a4d01ee979b6214cc" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>cne</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a4acdf51ac2be08e532e05e008e7c93c1" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a92292efdf215d89399da8e4f58284ec8" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a29d9dbca9ff64634c6b09a6b479571f0" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a264646b1fbe760b1f846017db1324e60" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>CounterClockwiseNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9831bfb64a8fa07f20eb7024fc5a22f2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab44758c4df00ff2cac338fbf7580b8d0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a93be3242020acc01e32f26ee56c5d487" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Dim</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dim</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1aa03911450b31c90ab90f9a16367a4b43" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Dimensions</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1ac5e97f9699e62698ab87ca0412d7c678" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1ac5dbcdb7f31d089fd0a01fd564be63b3" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb4103981ca8a56bbea237ef71c0cdc1" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dN_At</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a650ba185543cba1da41459a8d792e36e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dN_AtBarycenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a25db2facfc1a51eba64ce2faa1fb6e1f" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a4f73440045576e154acf189be39baf58" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>DNR</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a8888ca55f9dcaf38dacef128ff408703" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84befa0a4da0b4b8469ec5e7be89860e" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearTriangle</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5b77ad8925c75b096867822e83bed7cd" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearTriangle</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1a9d9ee7a3326164b35a523273dc54c9" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>DNS</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1ade3bc44a19951b080e803ef09f24a45f" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1c5cfe76807ea0d685c8e22d74c5582e" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearTriangle</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a203a9d019620abee39fdbe7847ee8df0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>DNT</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6c22543bd89563413954beb8697fa914" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>dNt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a31040540ce8e37b0075ab500fbc93b71" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>EdgeLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac2a37f7440f83acbcda169280fcb84b0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac0a98e18654722a181c17a7e01b67e56" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a09495d30b8a99fc0b06be33af6ad4264" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ElementTypeOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a1240c80b31e49e16765a9e8ffaa9fcf9" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ElementTypeOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5684660784d3f15adffb485e8f47d9f3" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>epe</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a3bce9f2a34af88bbe6d5400d819d3bbe" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9666661fa30a04d97f6c04a059a6bba6" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a746f7ba1b4acf8dd74f39e3962f0707f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa7a383bc5d1c0ee8f71ecb6c604db2ec" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa61e202519a3523f70da1f1854170c64" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a36972113f6f8351c891431038f8514bd" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>fpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a0729a0486b6febb96160f3e184c3f33f" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>gpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a564e0da11c00c28430fb146d5597c6ce" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IDX</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4aaeb22c3a8da44a33361057ef2097f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>InitialID</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a786f3a8fe6fa8b7f0f87126c424f1280" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa5c7e3d4b60cdaa863b70edad755b09a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d79c3309e261dd0939e5b733aac83d9" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IntegraldNdN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84a69958fd3567565d4dc83037664d97" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1aff465171ce038f0486361d923f9d7df0" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a35ee85b7635207926c97d4bf0bec7d1d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1af837e16ed60024fa618e134d3517a2b1" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IntegrationPointsFromParToPhys</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8439ec45c22a2741b8782de67de98862" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2d45ffc4fd8598af124125bfe93a2597" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae2d5d559efe7f2b27dc5ec5e271c9b68" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4390186773409c6a5e30feb449e55f17" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d0543e1e432fdf65177495d72e4d51c" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac57108260f93ab6ef491448def2e9c50" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a1942d151bae1596cf59aea43f7c0e882" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IsoparametricLinearTriangle</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aca610ffda39cad1d959db0ec403c3019" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IsSimplex</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a09d0c59e19d2cd5a6e46b7dc60fd5f07" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7ffd856e7bb1b9c1009d572775925c8d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac8f4f6ea8649710e01ea018c61d93a30" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>itp</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5de71dcc5e56c2e814d31d798969f437" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>JAC</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1ae71bff5d1e9a1310bd1783bc9086c7b4" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Jacobi</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1af6b569bbbe4f9f7947230e5396b2986e" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Jacobi</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae62e0c447141f0e2b7f7a4eb8412278b" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a81d93860f25ffe781837581f45caac4c" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af63fe74d4b20b02d72574d8380f5e41a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a4b33c09168e6f416ac247872a5bb51a5" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>JacobianAt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1ac0fcba58f86cf88132235e9adb83a3ff" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>JacobianAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1acffaff1292ad12448dbfb21bce33a9e6" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>JacobianDeterminant</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a9e6d47dc9de095bcc549c394f809f5a3" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>JacobianInverse</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5c3fd117b986587599dcb441feeb000a" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>JINV</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1acbc31582295e461ad72acf12d97927d5" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>JMAT_</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac3204e22e57b8658797037802003c490" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>LineElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a64381c8d0e2f4840551c2da986fb9a25" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>M</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1aa73e9c9a122dea5ae043c0d4afa4b15a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a9954546c704f713980eca1d46404dbbc" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a88b6751e46d19ca8aea0f76e0f44f5c1" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a7ce5635eff9d27c8c5b1bc682d799edb" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1af8557d3b42b0a05b7888d55fd92c5aca" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad75cb0ef9bea852c900e58b74662b0d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2509e6d8ab556b6a65a9036a62485df4" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>nne</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad1e29de6aed41fb434a485b875d7d8d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a8c60c6731bf969a6db6fdb0ba47a7208" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>NodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a9d39d2517c97cd2170174b1e550e82d6" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>NodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1aec78a84f7cdc4941fa9f13d8f45fa991" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>NodesOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3cb7bc938ad00c9f4dbfbfa94c13e781" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>NodesPerFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>npe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9d9ced72fa35fd6a9fc755a219590820" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>npf</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af583becda82f4fef39bbe2d4c3b41cea" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Nr</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a877f45f5c0bdd55b06c50a160cc42c6e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Nrs</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1afc17e49f05bea120f69dffa03118f9bd" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Nrs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa13754bef9eb502c77561f216d0258e7" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>NRST</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a34bd4d39b1a026b1de15f028e9692bd8" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a4dac737cff843b5a0e62f583af10b25f" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>NXY_</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1aa0c4f0fabe88be0c254f121d5a483b" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a698633a6c268ac88c82929093cd65cc1" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a94820d970b7a970757c91dac9934b424" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>OrderOfShapeFunctions</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae963674dc3ef25ce0e7bd8d2937c75ee" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a146ac4ff1201107ca6a5162eb844a1c9" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a94aa5a66c90ea817083b5e8c0be7f833" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>parametricDimensions_</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a2528b6be2bc887e8c0ca3fd3b4ec5011" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ParametricToPhysical</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a5c99d1a42918373df6a95a444149a6d4" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>PhysicalToParametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a6ee0256085412fd92fb1885b11471611" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ReferenceCoordinates</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a4f83f3a0bcf9f52e6be266a578b104eb" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>rr_</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a890a9a51e69fe62e0d44f3fe80eb318b" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>RS_</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7f488b707067cb6d1ee0b25a97c883a2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>spe</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a9457c6d2be4db3595f7ce99c6df850b6" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>ss_</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a930e53402dc4847a3084e38853d3bfd6" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>SurfaceElement</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a4461f2d8579fc0fe8f4af9afe0e3f6b0" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae600307171225f53a2615aaffd5afb18" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>UnitNormalAtFaceBarycenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1adbc30ec60739948f58ea3729bbfb71ac" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a036e325f014fe58d12194807f12e5ceb" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>use2Dto3Djacobi_</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4d20a792255fd2b0984b255ec3e6817" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8211ac6a7c8734f142eaa51f459d25af" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a1915fda940309e013abb704ee1d37cdc" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad92268835407ea5fc1df04583a754637" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>VolumeElement</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1a9a7be081800650f23fcebf37a9389a8b" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>W_</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_triangle_1af0a1ca0db0b0e7dd77c38734cb7718ea" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>XY</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae4bd0bcbccb811f852c26668f6959f14" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a56c5bc7db73c50f4448380eeee48fa3f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4e65701c3dcf1f2c98688d3204bccb6d" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearTriangle</scope><name>~FiniteElement</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

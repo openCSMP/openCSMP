@@ -55,7 +55,7 @@ bool ModelBasics_Test::TestModelConstructionFromVSet()
  {
     const  bool bSkewed{false};
     VSet<3U>    vset, vset1;
-    create_Pyramid_Hexa_VSet( vset, bSkewed );
+    create_Pyramid_Hexa_VSet( vset, bSkewed ); // no boundaries!
     
     // does the VSet write/reads correctly?
     double time0{3600.123}, time1;
@@ -66,7 +66,7 @@ bool ModelBasics_Test::TestModelConstructionFromVSet()
     _test( approximatelyEqual(time0,time1) );
     
     // test: basic constructor
-    Model<3U>   model( vset, "CSMP-1phase-variables.txt" );
+    Model<3U>   model( vset, "ModelBasics_Test-variables.txt" );
     // save to native binary
     model.OutputToBinaryFile( "ModelBasics_Test" );
     // bring back from binary
@@ -88,7 +88,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
 
      // creating model
      const bool do_not_use_regions_file{true};
-     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", do_not_use_regions_file );
+     Model<3U>  model( topology, vset, "ModelBasics_Test-variables.txt", do_not_use_regions_file );
      model.Name("FracBox");
      
      // assigning some dummy values to verify functionality

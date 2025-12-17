@@ -1,0 +1,277 @@
+\doxysection{csmp\+::Experimental\+Saturation\+Functions\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_experimental_saturation_functions}{}\label{classcsmp_1_1_experimental_saturation_functions}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+
+
+{\ttfamily \#include $<$Experimental\+Saturation\+Functions.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Experimental\+Saturation\+Functions\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_experimental_saturation_functions__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Experimental\+Saturation\+Functions\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=248pt]{classcsmp_1_1_experimental_saturation_functions__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a32a3ef3b21379fcc16f7b6d762818dcf}{Experimental\+Saturation\+Functions}} (const char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em reads capillary preessure and saturation functions from "{}rocktype"{} file \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a6b96bce5cf5e3060fbc27b0431c8ac28}{Effective\+Saturation}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em TODO\+: revise to extract this from the curves in a consistent fashion\+: (sw-\/swr) / (1-\/swr-\/snr); use only in 2-\/phase flow simulations. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a2abcd769a16f6f7fd09b65327d7e4aeb}{Effective\+Saturation\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\begin{DoxyCompactList}\small\item\em TODO\+: revise to extract this from the curves in a consistent fashion\+: (sw-\/swr) / (1-\/swr-\/snr); use only in 2-\/phase flow simulations. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a197ee96e8bdb3984fa25c0a3da838549}\label{classcsmp_1_1_experimental_saturation_functions_a197ee96e8bdb3984fa25c0a3da838549} 
+double {\bfseries pc\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_abffd14ec94d319c0721e5027f746a629}\label{classcsmp_1_1_experimental_saturation_functions_abffd14ec94d319c0721e5027f746a629} 
+double {\bfseries dpcds\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a0cf95ffc73167c7a46e6e91967334aa9}\label{classcsmp_1_1_experimental_saturation_functions_a0cf95ffc73167c7a46e6e91967334aa9} 
+double {\bfseries krw\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a58c81c37c1ec62809e168c503dc18e8d}\label{classcsmp_1_1_experimental_saturation_functions_a58c81c37c1ec62809e168c503dc18e8d} 
+double {\bfseries krn\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a638728e5f6d5623d721297d9997d8092}\label{classcsmp_1_1_experimental_saturation_functions_a638728e5f6d5623d721297d9997d8092} 
+double {\bfseries dkrwds\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a77c0a31bc9293ac3855522f2ea327d5b}{dkrnds\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_ab0d58a9fef813d7ecbc649868870d1db}\label{classcsmp_1_1_experimental_saturation_functions_ab0d58a9fef813d7ecbc649868870d1db} 
+double {\bfseries dpcdsw\+\_\+at\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const p, double sw, double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a767104d73c3f141da695cc3800ecbd0f}\label{classcsmp_1_1_experimental_saturation_functions_a767104d73c3f141da695cc3800ecbd0f} 
+double {\bfseries dkrwds\+\_\+at\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const p, double sw, double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a82e730f4da9322c612b23ec6f1a14397}\label{classcsmp_1_1_experimental_saturation_functions_a82e730f4da9322c612b23ec6f1a14397} 
+double {\bfseries dkrnds\+\_\+at\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const p, double sw, double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a048a5e101c1a11e96cc9e0e1d34ca0a7}{pc}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_acdd4f1b02a9874c44d194a9e3d60d20d}{dpcds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a97ccb97056db13e1e9fbaed2f99e9047}\label{classcsmp_1_1_experimental_saturation_functions_a97ccb97056db13e1e9fbaed2f99e9047} 
+double {\bfseries krw} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a073b232c7ff4e806d5b259407af89d57}\label{classcsmp_1_1_experimental_saturation_functions_a073b232c7ff4e806d5b259407af89d57} 
+double {\bfseries krn} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a67e07d1300648e7e8bb47a3ff561e862}{dkrwds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a790f0dd9d431cfa397b73df9539c8430}{dkrnds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a0dd06c4b3ecedfc005c99f604385cbe2}\label{classcsmp_1_1_experimental_saturation_functions_a0dd06c4b3ecedfc005c99f604385cbe2} 
+double {\bfseries dpcdsw\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const p, double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a24d5c57a9286fca6d7827b28e514e983}{dkrwds\+\_\+\+Numerical}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const p, double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}) const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a5b268ca25a451efae8e63f95358fec0b}\label{classcsmp_1_1_experimental_saturation_functions_a5b268ca25a451efae8e63f95358fec0b} 
+double {\bfseries dkrnds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const p, double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}) const
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_aea5e94a43634a350ef2fd890f02074ee}{Rock\+Types}} () const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a921436a96a443386ab1773ce422a5977}\label{classcsmp_1_1_experimental_saturation_functions_a921436a96a443386ab1773ce422a5977} 
+void {\bfseries Out} () const
+\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_ab2bfa2d9127fc8b42631db4f7067181f}\label{classcsmp_1_1_experimental_saturation_functions_ab2bfa2d9127fc8b42631db4f7067181f} 
+void {\bfseries initialise\+Residual\+Saturations} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model)
+\begin{DoxyCompactList}\small\item\em initialise swr and snr from input table data \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a13cc8a97ae251dd04504d8a94c27f8c3}\label{classcsmp_1_1_experimental_saturation_functions_a13cc8a97ae251dd04504d8a94c27f8c3} 
+double {\bfseries seff\+\_\+to\+\_\+sw} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const e, double \mbox{\hyperlink{namespacecsmp_ad5f148f07d290165871424c6a79b2c1b}{seff}}) const
+\begin{DoxyCompactList}\small\item\em return wetting-\/phase saturation based on effective saturation \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_acb50fd5b105ac0039d8adc3acfb346a4}\label{classcsmp_1_1_experimental_saturation_functions_acb50fd5b105ac0039d8adc3acfb346a4} 
+double {\bfseries sw\+\_\+from\+\_\+pc\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const e, double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a048a5e101c1a11e96cc9e0e1d34ca0a7}{pc}}, double sw) const
+\begin{DoxyCompactList}\small\item\em inverse capillary pressure function \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$\newline
+class csmp\+::\+Experimental\+Saturation\+Functions$<$ dim, USER $>$}
+Saturation functions parameterised with experimental data, including relperm-\/ and pc-\/s relations read from user-\/specified data (ASCII-\/text) files are interpolated with cubic splines.
+
+Each curve is indentified by a unique integer code that represents the rocktype of interest.
+
+Input file format\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ To\ use\ experimental\ data\ \textcolor{keywordflow}{for}\ rock\ types\ you\ need\ to\ define}
+\DoxyCodeLine{\ RELPERM\_MODEL\ in\ Numerical.txt\ file\ as\ EXPERIMENTAL}
+\DoxyCodeLine{\ Input\ file\ \textcolor{keywordflow}{for}\ rock\ types\ should\ be\ put\ in\ the\ execution\ folder}
+\DoxyCodeLine{\ and\ the\ file\ name\ that\ contains\ relative\ permeability\ data\ and}
+\DoxyCodeLine{\ capillary\ values\ should\ be\ \textcolor{stringliteral}{'rock\ type.txt'}}
+\DoxyCodeLine{\ File\ structure\ is\ as\ follow:}
+\DoxyCodeLine{2\ -\/>number\ of\ tables}
+\DoxyCodeLine{1\ -\/>rocktype}
+\DoxyCodeLine{21\ -\/>number\ of\ entries\ \textcolor{keywordflow}{for}\ table\ 0\ (first\ table)\ excluding\ the\ first\ row}
+\DoxyCodeLine{-\/1.99513\ -\/0.00488\ \ \ \ 0.000125\ \ \ \ 3.709875\ \ \ \ -\/10557.3\ \ \ \ -\/519.567\ -\/>derivatives\ at\ start\ and\ end\ \textcolor{keywordflow}{for}\ kro,\ krw\ and\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a048a5e101c1a11e96cc9e0e1d34ca0a7}{pc}}}
+\DoxyCodeLine{0\ \ \ \ 1\ \ \ 0\ \ \ 5000\ -\/>\ data\ (sw\ \ kro\ krw\ \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions_a048a5e101c1a11e96cc9e0e1d34ca0a7}{pc}})}
+\DoxyCodeLine{0.05\ 0.90024375\ \ 0.00000625\ \ 4472.135955}
+\DoxyCodeLine{0.1\ \ 0.8019\ \ 0.0001\ \ 3162.27766}
+\DoxyCodeLine{0.15\ 0.70624375\ \ 0.00050625\ \ 2581.988897}
+\DoxyCodeLine{0.2\ \ 0.6144\ \ 0.0016\ \ 2236.067977}
+\DoxyCodeLine{0.25\ 0.52734375\ \ 0.00390625\ \ 2000}
+\DoxyCodeLine{0.3\ \ 0.4459\ \ 0.0081\ \ 1825.741858}
+\DoxyCodeLine{0.35\ 0.37074375\ \ 0.01500625\ \ 1690.308509}
+\DoxyCodeLine{0.4\ \ 0.3024\ \ 0.0256\ \ 1581.13883}
+\DoxyCodeLine{0.45\ 0.24124375\ \ 0.04100625\ \ 1490.711985}
+\DoxyCodeLine{0.5\ \ 0.1875\ \ 0.0625\ \ 1414.213562}
+\DoxyCodeLine{0.55\ 0.14124375\ \ 0.09150625\ \ 1348.399725}
+\DoxyCodeLine{0.6\ \ 0.1024\ \ 0.1296\ \ 1290.994449}
+\DoxyCodeLine{0.65\ 0.07074375\ \ 0.17850625\ \ 1240.347346}
+\DoxyCodeLine{0.7\ \ 0.0459\ \ 0.2401\ \ 1195.228609}
+\DoxyCodeLine{0.75\ 0.02734375\ \ 0.31640625\ \ 1154.700538}
+\DoxyCodeLine{0.8\ \ 0.0144\ \ 0.4096\ \ 1118.033989}
+\DoxyCodeLine{0.85\ 0.00624375\ \ 0.52200625\ \ 1084.652289}
+\DoxyCodeLine{0.9\ \ 0.0019\ \ 0.6561\ \ 1054.092553}
+\DoxyCodeLine{0.95\ 0.00024375\ \ 0.81450625\ \ 1025.978352}
+\DoxyCodeLine{1\ \ \ \ 0\ \ \ 1\ \ \ 1000}
+\DoxyCodeLine{2\ -\/>rocktype}
+\DoxyCodeLine{6\ -\/>number\ of\ entries\ \textcolor{keywordflow}{for}\ table\ 1\ (second\ table)\ excluding\ the\ first\ row}
+\DoxyCodeLine{-\/1\ \ \ -\/1\ \ 1\ \ \ 1\ \ \ 0\ \ \ 0\ -\/>derivatives}
+\DoxyCodeLine{0\ \ \ \ 1\ \ \ 0\ \ \ 0\ -\/>data}
+\DoxyCodeLine{0.2\ \ 0.8\ 0.2\ 0}
+\DoxyCodeLine{0.4\ \ 0.6\ 0.4\ 0}
+\DoxyCodeLine{0.6\ \ 0.4\ 0.6\ 0}
+\DoxyCodeLine{0.8\ \ 0.2\ 0.8\ 0}
+\DoxyCodeLine{1\ \ \ \ 0\ \ \ 1\ \ \ 0}
+
+\end{DoxyCode}
+
+
+\begin{DoxyAttention}{Attention}
+DO NOT SET ANY SATURATION ENDPOINTS (swr or snr) when using experimentally determined saturation functions as these will naturally emerge from the curves.
+
+consequently, effective saturation also is already accounted for in terms of the spline values negative values are avoided by returning 0 or 1 at saturations below and above the end-\/point saturations.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+14/1/2007 @update 9/2/2019 
+\end{DoxyDate}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a32a3ef3b21379fcc16f7b6d762818dcf}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!ExperimentalSaturationFunctions@{ExperimentalSaturationFunctions}}
+\index{ExperimentalSaturationFunctions@{ExperimentalSaturationFunctions}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{ExperimentalSaturationFunctions()}{ExperimentalSaturationFunctions()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a32a3ef3b21379fcc16f7b6d762818dcf} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::\+Experimental\+Saturation\+Functions (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{filename}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+reads capillary preessure and saturation functions from "{}rocktype"{} file 
+
+The default constructor of Exoperimental Saturation Functions With Hysteresis class 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a790f0dd9d431cfa397b73df9539c8430}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!dkrnds@{dkrnds}}
+\index{dkrnds@{dkrnds}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dkrnds()}{dkrnds()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a790f0dd9d431cfa397b73df9539c8430} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::dkrnds (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyNote}{Note}
+by contrast with the wetting phase relative permeability, the non-\/wetting phase kri is expected to have a negative slope w.\+r.\+t. water saturation. 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a77c0a31bc9293ac3855522f2ea327d5b}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!dkrnds\_at@{dkrnds\_at}}
+\index{dkrnds\_at@{dkrnds\_at}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dkrnds\_at()}{dkrnds\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a77c0a31bc9293ac3855522f2ea327d5b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::dkrnds\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+1st derivative of non-\/wetting phase relative permeability as a function of saturation. \Hypertarget{classcsmp_1_1_experimental_saturation_functions_a67e07d1300648e7e8bb47a3ff561e862}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!dkrwds@{dkrwds}}
+\index{dkrwds@{dkrwds}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dkrwds()}{dkrwds()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a67e07d1300648e7e8bb47a3ff561e862} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::dkrwds (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+calculating the 1st derivative of water relative permeability at the element barycentre. \Hypertarget{classcsmp_1_1_experimental_saturation_functions_a24d5c57a9286fca6d7827b28e514e983}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!dkrwds\_Numerical@{dkrwds\_Numerical}}
+\index{dkrwds\_Numerical@{dkrwds\_Numerical}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dkrwds\_Numerical()}{dkrwds\_Numerical()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a24d5c57a9286fca6d7827b28e514e983} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::dkrwds\+\_\+\+Numerical (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{e}{, }\item[{double}]{h}{}\end{DoxyParamCaption}) const}
+
+Computes derivative of the wetting phase relative permeability using central finite difference method. \Hypertarget{classcsmp_1_1_experimental_saturation_functions_acdd4f1b02a9874c44d194a9e3d60d20d}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!dpcds@{dpcds}}
+\index{dpcds@{dpcds}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dpcds()}{dpcds()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_acdd4f1b02a9874c44d194a9e3d60d20d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::dpcds (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyAttention}{Attention}
+this treatment assumes that the capillary pressure derivative with regard to the wetting phase saturation is always negative. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_a6b96bce5cf5e3060fbc27b0431c8ac28}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!EffectiveSaturation@{EffectiveSaturation}}
+\index{EffectiveSaturation@{EffectiveSaturation}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{EffectiveSaturation()}{EffectiveSaturation()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a6b96bce5cf5e3060fbc27b0431c8ac28} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::\+Effective\+Saturation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+TODO\+: revise to extract this from the curves in a consistent fashion\+: (sw-\/swr) / (1-\/swr-\/snr); use only in 2-\/phase flow simulations. 
+
+(sw-\/swr) / (1-\/swr-\/snr); use only in 2-\/phase flow simulations
+
+TODO\+: this needs to be computed from the curves in the input file \Hypertarget{classcsmp_1_1_experimental_saturation_functions_a2abcd769a16f6f7fd09b65327d7e4aeb}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!EffectiveSaturation\_at@{EffectiveSaturation\_at}}
+\index{EffectiveSaturation\_at@{EffectiveSaturation\_at}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{EffectiveSaturation\_at()}{EffectiveSaturation\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a2abcd769a16f6f7fd09b65327d7e4aeb} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::\+Effective\+Saturation\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+
+
+TODO\+: revise to extract this from the curves in a consistent fashion\+: (sw-\/swr) / (1-\/swr-\/snr); use only in 2-\/phase flow simulations. 
+
+(sw-\/swr) / (1-\/swr-\/snr); use only in 2-\/phase flow simulations \Hypertarget{classcsmp_1_1_experimental_saturation_functions_a048a5e101c1a11e96cc9e0e1d34ca0a7}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!pc@{pc}}
+\index{pc@{pc}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{pc()}{pc()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_a048a5e101c1a11e96cc9e0e1d34ca0a7} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::pc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyNote}{Note}
+Note that capillary pressure also exists outside of the effective saturation range 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_experimental_saturation_functions_aea5e94a43634a350ef2fd890f02074ee}\index{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}!RockTypes@{RockTypes}}
+\index{RockTypes@{RockTypes}!csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$@{csmp::ExperimentalSaturationFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{RockTypes()}{RockTypes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_experimental_saturation_functions_aea5e94a43634a350ef2fd890f02074ee} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_experimental_saturation_functions}{csmp\+::\+Experimental\+Saturation\+Functions}}$<$ dim, USER $>$\+::\+Rock\+Types (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+number of RRTs (reservoir rock types) for which saturation function values are stored
+\end{DoxyReturn}
+returns for how many rocktypes information is stored in the underlying data arrays. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/two\+\_\+phase\+\_\+flow/Experimental\+Saturation\+Functions.\+h\item 
+source/modules/thmc/two\+\_\+phase\+\_\+flow/Experimental\+Saturation\+Functions.\+cpp\end{DoxyCompactItemize}

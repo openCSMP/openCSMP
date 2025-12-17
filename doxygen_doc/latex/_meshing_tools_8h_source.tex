@@ -1,0 +1,315 @@
+\doxysection{Meshing\+Tools.\+h}
+\hypertarget{_meshing_tools_8h_source}{}\label{_meshing_tools_8h_source}\index{source/includes/interfaces/Eclipse/MeshingTools.h@{source/includes/interfaces/Eclipse/MeshingTools.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MESHING\_TOOLS\_UOM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MESHING\_TOOLS\_UOM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p___element_specifications_8h}{"{}CSMP\_ElementSpecifications.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_polygon_grid_8h}{"{}PolygonGrid.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{geometric_calculations_8h}{"{}geometricCalculations.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ Collection\ of\ functions\ that\ process\ correctly\ numbered\ finite-\/element\ cells\ from\ the\ supplied\ point\ vectors.\ (numbered\ to\ size\_t)}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ TODO:\ clean\ up\ function\ arguments\ and\ make\ these\ global\ functions\ member\ of\ classes}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ TODO:\ typedef\ some\ of\ the\ nested\ containers}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ these\ functions\ are\ used\ by\ the\ Eclipse\ interface}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{///\ vector\ of\ pairs\ of\ FE-\/type\ -\/\ GridNode\ pointer\ vectors}}
+\DoxyCodeLine{00023\ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_cell}{Cell}}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{structcsmp_1_1_cell}{std}}::\mbox{\hyperlink{structcsmp_1_1_cell}{vector}}<\mbox{\hyperlink{structcsmp_1_1_cell}{std}}::\mbox{\hyperlink{structcsmp_1_1_cell}{pair}}<\mbox{\hyperlink{structcsmp_1_1_cell}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_cell}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{structcsmp_1_1_cell}{std}}::\mbox{\hyperlink{structcsmp_1_1_cell}{vector}}<\mbox{\hyperlink{structcsmp_1_1_cell}{GridNode}}*>\ >\ >\ \ \mbox{\hyperlink{structcsmp_1_1_cell}{Vector}};}
+\DoxyCodeLine{00025\ \ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{///\ gathering\ cells}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a9cdf50b442e7fc689a1596402a538548}{checkCell}}(\ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ cell\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{///\ alternative\ form\ of\ addHexaCell;\ @todo\ create\ struct\ to\ group\ swath\ of\ arguments}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a707ff681e66cc222039b51699395c03f}{addHexaCellTo}}(\ Cell::Vector\&,\ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const},\ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{void}\ addHexaCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n3}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n4}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n5}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n6}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n7}}\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keywordtype}{void}\ addPrismCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n3}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n4}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n5}}\ );}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keywordtype}{void}\ addPyramidCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n3}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n4}}\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keywordtype}{void}\ addTetraCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n3}}\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keywordtype}{void}\ addQuadCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n3}}\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ addTriCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}}\ );}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{keywordtype}{void}\ addBarCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}}\ );}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keywordtype}{void}\ addPointCell(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{cells}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}}\ );}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{comment}{///\ gathering\ faces}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_acf10db6b6b6b412b5faf010783c028b7}{addQuadFace}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{faces}},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{fid}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n3}}\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{void}\ addTriFace(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{faces}},}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{fid}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n2}}\ );}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{keywordtype}{void}\ addBarFace(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{faces}},\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{fid}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n1}}\ );}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{keywordtype}{void}\ addPointFace(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\ >\&\ \mbox{\hyperlink{namespacecsmp}{faces}},\ \mbox{\hyperlink{namespacecsmp}{size\_t}}\ \mbox{\hyperlink{namespacecsmp}{fid}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n0}}\ );}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{comment}{///\ gathering\ extra\ nodes}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ac697ff973aa33964309e71824c90c2fd}{addExtraNode}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp}{extra\_nodes}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{n}}\ );}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{comment}{///\ additional\ edges}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \mbox{\hyperlink{namespacecsmp_af59dfff29d4fd71a3a67a776406db497}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_af59dfff29d4fd71a3a67a776406db497}{doesEdgeExist}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{additional\_edges}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{ids}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \mbox{\hyperlink{namespacecsmp_a6e9765bcbb12fd0f5b3a5da924eddb55}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a6e9765bcbb12fd0f5b3a5da924eddb55}{chooseValidAndPreferablyFirstEdge}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{ids}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \mbox{\hyperlink{namespacecsmp_a26cf1144b77f485fa48a597e1eb1623f}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a26cf1144b77f485fa48a597e1eb1623f}{chooseValidAndPreferablySecondEdge}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{ids}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \mbox{\hyperlink{namespacecsmp_a0bfd6b5b1d49fdf4cc080c80c65ef171}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a0bfd6b5b1d49fdf4cc080c80c65ef171}{chooseValidAndShortestOrBiggerSolidAngleEdge}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{ids}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ size\_t\ addValidAndPreferablyFirstEdge(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{additional\_edges}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{ids}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ size\_t\ addValidAndPreferablySecondEdge(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{additional\_edges}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{ids}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ size\_t\ addValidAndShortestOrBiggerSolidAngleEdge(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\ >\&\ \mbox{\hyperlink{namespacecsmp}{additional\_edges}},\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>\&\ \mbox{\hyperlink{namespacecsmp}{ids}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{comment}{///\ rename\ and\ check\ whether\ 'additional\_points'\ already\ contains\ a\ point\ set\ that\ is\ equal\ to\ the\ supplied\ points;\ if\ so\ the\ corresponging\ grid\ node\ is\ returned\ into\ point;\ also\ only\ 3D\ version\ is\ needed}}
+\DoxyCodeLine{00107\ \ \textcolor{comment}{//\ TODO:\ replace\ *\&\ by\ an\ const\_iterator\ to\ the\ add-\/points\ map,\ or\ return\ pair<iterator,bool>\ to\ get\ desired\ output}}
+\DoxyCodeLine{00108\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{doesPointExist}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{std}}::\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{map}}<\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{std}}::\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{set}}<\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{size\_t}}>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{additional\_points}},}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\&\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt0}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt1}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt2}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt3}}\ );}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{doesPointExist}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{std}}::\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{map}}<\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{std}}::\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{set}}<\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{size\_t}}>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\&\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt0}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt1}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt2}}\ );}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{doesPointExist}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{std}}::\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{map}}<\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{std}}::\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{set}}<\mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{size\_t}}>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\&\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt0}},\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{GridNode}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_a655c4718c3144154940ae9b8bc034471}{pt1}}\ );}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{keywordtype}{bool}\ containRemeshedFaces(\ \textcolor{keyword}{const}\ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,\ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,\ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{keywordtype}{bool}\ containRemeshedEdges(\ \textcolor{keyword}{const}\ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,\ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,\ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{keywordtype}{bool}\ chooseFaceCentroid(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>,\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}\&\ \mbox{\hyperlink{namespacecsmp}{pt}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{keywordtype}{bool}\ chooseFaceCentroid(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>,\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}\&\ \mbox{\hyperlink{namespacecsmp}{pt}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}}\ );}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{keywordtype}{bool}\ chooseFaceCentroid(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>,\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}\&\ \mbox{\hyperlink{namespacecsmp}{pt}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}}\ );}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keywordtype}{void}\ addExistingFaceCentroid(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>,\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt3}}\ );}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{keywordtype}{void}\ addExistingFaceCentroid(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>,\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt2}}\ );}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{keywordtype}{void}\ addExistingFaceCentroid(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{map}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{set}}<\mbox{\hyperlink{namespacecsmp}{size\_t}}>,\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp}{additional\_points}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt0}},\ \mbox{\hyperlink{namespacecsmp}{GridNode}}*\ \mbox{\hyperlink{namespacecsmp}{pt1}}\ );}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \textcolor{comment}{//\ TODO:\ check\ whether\ all\ these\ methods\ want\ to\ be\ part\ of\ the\ PolygonGridManager\ ?}}
+\DoxyCodeLine{00144\ \textcolor{keywordtype}{bool}\ addFaceCentroid(\ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,\ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GridNode*\&\ pt,\ GridNode*\ pt0,\ GridNode*\ pt1,\ GridNode*\ pt2,\ GridNode*\ pt3\ );}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{keywordtype}{bool}\ addFaceCentroid(\ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,\ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GridNode*\&\ pt,\ GridNode*\ pt0,\ GridNode*\ pt1,\ GridNode*\ pt2\ );}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{keywordtype}{bool}\ addFaceCentroid(\ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,\ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GridNode*\&\ pt,\ GridNode*\ pt0,\ GridNode*\ pt1\ );}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{comment}{///\ extra\ useful\ meshing\ techiques}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{addCellCentroid}}(\ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{std}}::\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{map}}<\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{std}}::\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{set}}<\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{size\_t}}>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{additional\_points}},}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{std}}::\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{set}}<\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{std}}::\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{set}}<\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{size\_t}}>\ >\&\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{additional\_edges}},}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{GridNode}}*\&\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{cgn}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{std}}::\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{vector}}<\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{GridNode}}*>\&\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{nodes}},}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{std}}::\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{vector}}<\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{std}}::\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{vector}}<\mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{size\_t}}>\ >\&\ \mbox{\hyperlink{namespacecsmp_adf9cf4d3e5e441b2f6634de85735daed}{quad\_face\_nodes}}\ );}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{keywordtype}{bool}\ addCellFaceCentroids(\ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,\ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \textcolor{keywordtype}{bool}\ addOverlappingCellFaceCentroids(\ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,\ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GridNode*\&\ cgn,\ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \textcolor{comment}{///\ processing\ certain\ elements}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \textcolor{comment}{//\ TODO:\ give\ these\ typedefs\ class\ scope,\ put\ it\ into\ CornerPointCell}}
+\DoxyCodeLine{00177\ \textcolor{comment}{///\ faces[i][j]\ is\ a\ 6\ x\ 5\ matrix\ of\ faces\ defined\ by\ face-\/type\ and\ corresponding\ node\ pointers\ as\ entries\ (type,\ value\ pairs)}}
+\DoxyCodeLine{00178\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\ >\ \mbox{\hyperlink{namespacecsmp}{CellFaces}};}
+\DoxyCodeLine{00179\ \textcolor{comment}{//\ ???}}
+\DoxyCodeLine{00180\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{namespacecsmp}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{GridNode}}*>\ >\ >\ \mbox{\hyperlink{namespacecsmp}{Cells}};}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \textcolor{comment}{//\ TODO:\ reduce\ this\ crazy\ number\ of\ arguments,\ these\ functions\ should\ be\ member\ functions\ of\ the\ CornerPointCell\ or\ the\ PolygonCell\ (what\ is\ the\ difference\ between\ these?)}}
+\DoxyCodeLine{00184\ \textcolor{comment}{//\ in\ fact,\ these\ classes\ already\ take\ the\ pgm\ as\ a\ constructor\ argument\ !!!}}
+\DoxyCodeLine{00185\ \textcolor{comment}{//\ break\ up\ -\/\ far\ too\ many\ options\ make\ debugging\ impossible}}
+\DoxyCodeLine{00186\ \textcolor{keywordtype}{bool}\ processCellWithCentroids(\ \textcolor{keywordtype}{bool}\ add\_edge\_centroid,\ \textcolor{keywordtype}{bool}\ add\_face\_centroid,\ \textcolor{keywordtype}{bool}\ add\_cell\_centroid,\ \textcolor{keywordtype}{bool}\ is\_volumetric\_element,\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::pair<csmp::CSMP\_FEM\_TYPE,std::vector<GridNode*>\ >\ >\&\ cells,}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \textcolor{comment}{//\ TODO:\ tetra\ mesh\ is\ an\ option\ that\ will\ produce\ tetrahedra\ from\ the\ cell,\ but\ this\ should\ rather\ be\ a\ seperate\ method}}
+\DoxyCodeLine{00197\ \textcolor{keywordtype}{bool}\ processDegenerateHexahedronElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \textcolor{keywordtype}{bool}\ processHexahedronElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \textcolor{keywordtype}{bool}\ processPrismElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \textcolor{keywordtype}{bool}\ processPyramidElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \textcolor{keywordtype}{bool}\ processTetrahedronElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \textcolor{keywordtype}{bool}\ processQuadrilateralElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \textcolor{keywordtype}{bool}\ processTriangleElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \textcolor{keywordtype}{bool}\ processBarElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \textcolor{keywordtype}{bool}\ processPointElement(\ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ pgm,}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::set<size\_t>,\mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*>\&\ additional\_points,}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::set<size\_t>\ >\&\ additional\_edges,}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cells\&\ cells,}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CellFaces\&\ faces,}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<GridNode*\ >\&\ extra\_nodes,}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<GridNode*>\&\ nodes,}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<size\_t>\ >\&\ face\_nodes\ );}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00296\ \textcolor{comment}{}}
+\DoxyCodeLine{00297\ \textcolor{comment}{@author\ R.\ Manasipov}}
+\DoxyCodeLine{00298\ \textcolor{comment}{@date\ 2015}}
+\DoxyCodeLine{00299\ \textcolor{comment}{}}
+\DoxyCodeLine{00300\ \textcolor{comment}{Common\ gridding\ utilities\ relying\ on\ a\ suite\ of\ classes\ in\ other\ directories:\ GridNode,\ PoygonGridManager}}
+\DoxyCodeLine{00301\ \textcolor{comment}{}}
+\DoxyCodeLine{00302\ \textcolor{comment}{@todo\ SKM:\ turn\ code\ into\ C++\ which\ will\ also\ make\ it\ a\ lot\ more\ efficient}}
+\DoxyCodeLine{00303\ \textcolor{comment}{@todo\ SKM:\ refactor\ GeometricCalculations\ collection\ of\ functions\ to\ make\ design\ cleared}}
+\DoxyCodeLine{00304\ \textcolor{comment}{}}
+\DoxyCodeLine{00305\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \}\textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

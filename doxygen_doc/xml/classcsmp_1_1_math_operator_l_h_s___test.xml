@@ -1,0 +1,450 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_math_operator_l_h_s___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::MathOperatorLHS_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_l_h_s___test_1acc0901d25c0f9e18ab052200cfe82b3c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MathOperatorLHS_Test::fTolerance_</definition>
+        <argsstring></argsstring>
+        <name>fTolerance_</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::fTolerance_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="42" column="24" bodyfile="tests/unit/MathOperatorLHS_Test.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_l_h_s___test_1ad0d028ef585689ff1d6b92c5840f6289" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model1_d" kindref="compound">Model1D</ref>&lt; 1U &gt; *</type>
+        <definition>Model1D&lt;1U&gt;* csmp::MathOperatorLHS_Test::model_</definition>
+        <argsstring></argsstring>
+        <name>model_</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::model_</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="43" column="19" bodyfile="tests/unit/MathOperatorLHS_Test.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_math_operator_l_h_s___test_1ac89513145344e9400a660590272d6b1c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; 1 &gt; &amp;</type>
+        <definition>PropertyDatabase&lt;1&gt;&amp; csmp::MathOperatorLHS_Test::database_</definition>
+        <argsstring></argsstring>
+        <name>database_</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::database_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="44" column="20" bodyfile="tests/unit/MathOperatorLHS_Test.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1ab88153606027608c038fbd449ad7ba27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MathOperatorLHS_Test::MathOperatorLHS_Test</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_Test</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="15" column="1" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="10" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a00afd467799ba862e754867d69dfbff1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MathOperatorLHS_Test::~MathOperatorLHS_Test</definition>
+        <argsstring>()</argsstring>
+        <name>~MathOperatorLHS_Test</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::~MathOperatorLHS_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="16" column="1" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="18" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a010434d39e9f30e783db420d5fe2628e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="18" column="6" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="25" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1ada03d544a76cb1d9966926245d62e15d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_Ctor</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_Ctor</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_Ctor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="20" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="53" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a9b8b7aa13ed46c26df2239d843dbe559" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_CopyCtor</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_CopyCtor</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_CopyCtor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="21" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="74" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a8648b02d881274e32384457c6f02cfcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_Equal</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_Equal</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_Equal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="22" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="131" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1add2aed8c4fe5493f4af06cc50e17efc9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_Name</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_Name</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="23" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="192" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1ab0e7d8309e5c3cbceb541b5c7be1faa9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_OperandName</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_OperandName</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_OperandName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="24" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="230" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1ad3ecf11ae19cdfac569d2878dcbe7309" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_BasicOperandName</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_BasicOperandName</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_BasicOperandName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="25" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="239" bodyend="247"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1ae3b65243caeccb8fc04d4489acc99f10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_TestFunctionName</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_TestFunctionName</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_TestFunctionName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="26" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="250" bodyend="258"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a11da4e72cf0ae6a908faa57765d18d71" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_Add</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_Add</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_Add</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="27" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="261" bodyend="271"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1ababc1ef9c2472f2ef0f0505fb1a45884" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_Multiply</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_Multiply</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_Multiply</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="28" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="274" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1ab90082f3edf632e66c04ac4c36ebbd3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_AddLater</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_AddLater</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_AddLater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="29" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="287" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1aa4515258f9861588b1b3f34b83d2dd09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_MultiplyWithTimeIncrement</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_MultiplyWithTimeIncrement</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_MultiplyWithTimeIncrement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="30" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="300" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a30352351a313c67938408c979f32bdf7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_MultiplyBy</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_MultiplyBy</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_MultiplyBy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="31" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="318" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a070a204cb32e0177e5e34f3f09575e95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_LumpedFormulation</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_LumpedFormulation</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_LumpedFormulation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="32" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="336" bodyend="351"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1af86de50c2cbf92db78c1ba484b9d5ad4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_BasicOffset</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_BasicOffset</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_BasicOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="33" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="355" bodyend="370"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a80120c4592afeac9f7e07d8926676ade" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_TestOffset</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_TestOffset</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_TestOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="34" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="373" bodyend="388"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a058ec038edc4e04750e6e51509b538c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycles</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_ApplicationCycles</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="35" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="392" bodyend="407"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a87c99e179665e8b9cd663f8c27c575ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycle</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_ApplicationCycle</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="36" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="410" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a49ebdb5f537696a5de7c2feb89b7e29c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_MaterialOperand</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_MaterialOperand</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_MaterialOperand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="37" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="428" bodyend="440"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1a63bcd719229cca788d3f7b289c50e7c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_BasicOperand</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_BasicOperand</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_BasicOperand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="38" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="443" bodyend="455"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_math_operator_l_h_s___test_1aaeb5c701f6ad333ab245d70aafed3f8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MathOperatorLHS_Test::MathOperatorLHS_TestFunctionOperand</definition>
+        <argsstring>()</argsstring>
+        <name>MathOperatorLHS_TestFunctionOperand</name>
+        <qualifiedname>csmp::MathOperatorLHS_Test::MathOperatorLHS_TestFunctionOperand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/MathOperatorLHS_Test.h" line="39" column="8" bodyfile="tests/unit/MathOperatorLHS_Test.cpp" bodystart="458" bodyend="470"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::MathOperatorLHS_Test</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::MathOperatorLHS_Test</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/MathOperatorLHS_Test.h" line="11" column="1" bodyfile="tests/unit/MathOperatorLHS_Test.h" bodystart="12" bodyend="46"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ac89513145344e9400a660590272d6b1c" prot="private" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>database_</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1acc0901d25c0f9e18ab052200cfe82b3c" prot="private" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>fTolerance_</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a11da4e72cf0ae6a908faa57765d18d71" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_Add</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ab90082f3edf632e66c04ac4c36ebbd3e" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_AddLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a87c99e179665e8b9cd663f8c27c575ff" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a058ec038edc4e04750e6e51509b538c3" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1af86de50c2cbf92db78c1ba484b9d5ad4" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_BasicOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a63bcd719229cca788d3f7b289c50e7c5" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_BasicOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ad3ecf11ae19cdfac569d2878dcbe7309" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_BasicOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a9b8b7aa13ed46c26df2239d843dbe559" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_CopyCtor</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ada03d544a76cb1d9966926245d62e15d" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_Ctor</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a8648b02d881274e32384457c6f02cfcb" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_Equal</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a070a204cb32e0177e5e34f3f09575e95" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a49ebdb5f537696a5de7c2feb89b7e29c" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_MaterialOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ababc1ef9c2472f2ef0f0505fb1a45884" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_Multiply</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a30352351a313c67938408c979f32bdf7" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1aa4515258f9861588b1b3f34b83d2dd09" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1add2aed8c4fe5493f4af06cc50e17efc9" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ab0e7d8309e5c3cbceb541b5c7be1faa9" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_OperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ab88153606027608c038fbd449ad7ba27" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_Test</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ae3b65243caeccb8fc04d4489acc99f10" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_TestFunctionName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1aaeb5c701f6ad333ab245d70aafed3f8e" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_TestFunctionOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a80120c4592afeac9f7e07d8926676ade" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>MathOperatorLHS_TestOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1ad0d028ef585689ff1d6b92c5840f6289" prot="private" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>model_</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a010434d39e9f30e783db420d5fe2628e" prot="public" virt="virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s___test_1a00afd467799ba862e754867d69dfbff1" prot="public" virt="non-virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>~MathOperatorLHS_Test</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::MathOperatorLHS_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

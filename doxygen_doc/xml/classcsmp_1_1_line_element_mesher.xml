@@ -1,0 +1,594 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_line_element_mesher" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LineElementMesher</compoundname>
+    <includes refid="_line_element_mesher_8h" local="no">LineElementMesher.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_line_element_mesher_1a21fbc731d3d1c384554b342e04239769" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; *</type>
+        <definition>VSet&lt;dim&gt;* csmp::LineElementMesher&lt; dim &gt;::vset_</definition>
+        <argsstring></argsstring>
+        <name>vset_</name>
+        <qualifiedname>csmp::LineElementMesher::vset_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="164" column="17" bodyfile="source/includes/discretisation/LineElementMesher.h" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_line_element_mesher_1aaa5127eb55b27d550891327d7a402b28" prot="private" static="no" mutable="no">
+        <type>std::set&lt; double &gt;</type>
+        <definition>std::set&lt;double&gt; csmp::LineElementMesher&lt; dim &gt;::splitnodes_</definition>
+        <argsstring></argsstring>
+        <name>splitnodes_</name>
+        <qualifiedname>csmp::LineElementMesher::splitnodes_</qualifiedname>
+        <briefdescription>
+<para>nodes that will be duplicated to model split boundaries </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="165" column="15" bodyfile="source/includes/discretisation/LineElementMesher.h" bodystart="165" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1af75feb811a6dea4e9ca87ed4655dd33b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::BuildUniformMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, double length, size_t n_elements, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>BuildUniformMesh</name>
+        <qualifiedname>csmp::LineElementMesher::BuildUniformMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_elements</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates an uniform mesh; org &amp; dest mark the desired end point coordinates of the mesh </para>
+        </briefdescription>
+        <detaileddescription>
+<para>creates a mesh in which all elements have the same length</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>splitnode_coordinates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>location of splitboundaries, if any </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>origin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>desired first corner point of the mesh </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>destination</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>desired end-point of the mesh </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="81" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="21" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1a76d66fcce4d9d857e255aff2867142c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::BuildRefinedMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, double length, double dx_min, double dx_max, double width_of_transition_zone, MeshDensity *density, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>BuildRefinedMesh</name>
+        <qualifiedname>csmp::LineElementMesher::BuildRefinedMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_max</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width_of_transition_zone</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_density" kindref="compound">MeshDensity</ref> *</type>
+          <declname>density</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a refined mesh </para>
+        </briefdescription>
+        <detaileddescription>
+<para>create a mesh size gradient </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="89" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="48" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1ae727ff608c1ae59cec6ef4f75ee0962d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::BuildCustomMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const std::vector&lt; double &gt; &amp;node_coordinates, const std::vector&lt; double &gt; &amp;splitnode_coordinates=std::vector&lt; double &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>BuildCustomMesh</name>
+        <qualifiedname>csmp::LineElementMesher::BuildCustomMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; double &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="100" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="71" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1a6fe5107193938cb8a00736a914515e34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::BuildCustomMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;node_coordinates, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;splitnode_coordinates=std::vector&lt; Point&lt; dim &gt; &gt;(), const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>BuildCustomMesh</name>
+        <qualifiedname>csmp::LineElementMesher::BuildCustomMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>splitnode_coordinates</declname>
+          <defval>std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D, 2D or 3D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="107" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="90" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1a76acb9605473e767730dff61d31d1e7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::AssignCornerPoints</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const Point&lt; dim &gt; &amp;origin, const Point&lt; dim &gt; &amp;destination)</argsstring>
+        <name>AssignCornerPoints</name>
+        <qualifiedname>csmp::LineElementMesher::AssignCornerPoints</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+        </param>
+        <briefdescription>
+<para>Method which modifies already existing mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Modifies the mesh based on the new coordinates of corner points without changing the connectivity of previously created mesh</para>
+<para><simplesect kind="author"><para>R. Manasipov </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="115" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="124" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1a8def82ab1dc73bc2c8d223cb9964a51e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::InsertSplitNodes</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const std::vector&lt; double &gt; &amp;splitnodes)</argsstring>
+        <name>InsertSplitNodes</name>
+        <qualifiedname>csmp::LineElementMesher::InsertSplitNodes</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="119" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="175" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1a03252a627e5721d66a435b262f594c27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::InsertSplitNodes</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, std::set&lt; Point&lt; dim &gt; &gt; &amp;splitnodes)</argsstring>
+        <name>InsertSplitNodes</name>
+        <qualifiedname>csmp::LineElementMesher::InsertSplitNodes</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>std::set&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>splitnodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="122" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1ad042f8c1a9de6a0077ef5fbb28f34988" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::CompleteMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const std::vector&lt; double &gt; &amp;splitnodes, const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>CompleteMesh</name>
+        <qualifiedname>csmp::LineElementMesher::CompleteMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>splitnodes</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+<para>duplicates nodes, for the purpose of creating split boundaries </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="127" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="211" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1aaf280f705363fb338a13f92b6e33fdc3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::CompleteMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;splitnodes, const Point&lt; dim &gt; &amp;origin=Point&lt; dim &gt;(), const Point&lt; dim &gt; &amp;destination=Point&lt; dim &gt;())</argsstring>
+        <name>CompleteMesh</name>
+        <qualifiedname>csmp::LineElementMesher::CompleteMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>splitnodes</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <declname>destination</declname>
+          <defval><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="132" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="229" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1a51e0407303fc0ea36714d6481d0e703f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::UniformMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, double length, size_t n_elements)</argsstring>
+        <name>UniformMesh</name>
+        <qualifiedname>csmp::LineElementMesher::UniformMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_elements</declname>
+        </param>
+        <briefdescription>
+<para>creates an uniform mesh </para>
+        </briefdescription>
+        <detaileddescription>
+<para>create an uniform mesh </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="138" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="257" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1ac08825d171beb24e6f3a319ec713d133" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::RefinedMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, double length, double dx_min, double dx_max, double width_of_transition_zone, MeshDensity *density)</argsstring>
+        <name>RefinedMesh</name>
+        <qualifiedname>csmp::LineElementMesher::RefinedMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dx_max</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width_of_transition_zone</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_density" kindref="compound">MeshDensity</ref> *</type>
+          <declname>density</declname>
+        </param>
+        <briefdescription>
+<para>creates a refined mesh based on errf </para>
+        </briefdescription>
+        <detaileddescription>
+<para>create a refined mesh </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="143" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="289" bodyend="388"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1aab96805068b06feee41752849cbd69c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::CustomMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const std::vector&lt; double &gt; &amp;node_coordinates)</argsstring>
+        <name>CustomMesh</name>
+        <qualifiedname>csmp::LineElementMesher::CustomMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="151" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="395" bodyend="419"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1afd4f7904c9a6075a7a62d7e9fe51e66a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::CustomMesh</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, const std::vector&lt; Point&lt; dim &gt; &gt; &amp;node_coordinates)</argsstring>
+        <name>CustomMesh</name>
+        <qualifiedname>csmp::LineElementMesher::CustomMesh</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>node_coordinates</declname>
+        </param>
+        <briefdescription>
+<para>creates a custom mesh with <ref refid="classvector" kindref="compound">vector( 1D, 2D or 3D node coordinates )</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="155" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="427" bodyend="450"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1a6c63a3bbeb1dc6050895f8a933c17199" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::EstablishConnectivity</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset)</argsstring>
+        <name>EstablishConnectivity</name>
+        <qualifiedname>csmp::LineElementMesher::EstablishConnectivity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates line element mesh where the corners = endpoints are flagged:</para>
+<para>First node = CNR1 Last node = CNR2</para>
+<para>in correspondance with the labeling of box-shaped models.</para>
+<para><simplesect kind="attention"><para>for a 1D model which is oriented vertically the assignment of the second corner is not strictly correct. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="159" column="10" bodyfile="source/modules/discretisation/LineElementMesher.cpp" bodystart="467" bodyend="504"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_line_element_mesher_1aa8d80847f35f926ccfbb83fbf31a15f0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LineElementMesher&lt; dim &gt;::EstablishConnectivity</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, std::set&lt; Point&lt; dim &gt; &gt; &amp;splitnodes)</argsstring>
+        <name>EstablishConnectivity</name>
+        <qualifiedname>csmp::LineElementMesher::EstablishConnectivity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>std::set&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>splitnodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/LineElementMesher.h" line="161" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Line element mesher: collection of functions.</para>
+<para>Creates polyline meshes that of an arbitrary dimension (like a spiral in 3D space). The meshes can contain duplicated nodes and INTERNAL boundaries.</para>
+<para><simplesect kind="attention"><para>Mesher does not assign <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags nor neighbor connectivity</para>
+</simplesect>
+<simplesect kind="author"><para>Stephan Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>extended to work with mulit-dimensional models by Roman Manasipov </para>
+</simplesect>
+<simplesect kind="date"><para>2002, 2012</para>
+</simplesect>
+<xrefsect id="todo_1_todo000053"><xreftitle>Todo</xreftitle><xrefdescription><para>ADD BOUNDARY FLAGS, <ref refid="group___c_s_m_p__global__enumerations_1ga65b4b9788928fc2599d5cc1d1960942a" kindref="member">TOPOTYPE</ref>, AND MATERIAL IDENTIFIERS TO VSET! </para>
+<para>create <ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref> objects in case of a split boundary </para>
+<para>create <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags </para>
+<para>create neighbor connectivity </para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::LineElementMesher&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_line_element_mesher"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/LineElementMesher.h" line="78" column="1" bodyfile="source/includes/discretisation/LineElementMesher.h" bodystart="78" bodyend="166"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_line_element_mesher_1a76acb9605473e767730dff61d31d1e7f" prot="public" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>AssignCornerPoints</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1ae727ff608c1ae59cec6ef4f75ee0962d" prot="public" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>BuildCustomMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1a6fe5107193938cb8a00736a914515e34" prot="public" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>BuildCustomMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1a76d66fcce4d9d857e255aff2867142c1" prot="public" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>BuildRefinedMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1af75feb811a6dea4e9ca87ed4655dd33b" prot="public" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>BuildUniformMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1ad042f8c1a9de6a0077ef5fbb28f34988" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>CompleteMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1aaf280f705363fb338a13f92b6e33fdc3" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>CompleteMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1aab96805068b06feee41752849cbd69c2" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>CustomMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1afd4f7904c9a6075a7a62d7e9fe51e66a" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>CustomMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1a6c63a3bbeb1dc6050895f8a933c17199" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>EstablishConnectivity</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1aa8d80847f35f926ccfbb83fbf31a15f0" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>EstablishConnectivity</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1a8def82ab1dc73bc2c8d223cb9964a51e" prot="public" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>InsertSplitNodes</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1a03252a627e5721d66a435b262f594c27" prot="public" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>InsertSplitNodes</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1ac08825d171beb24e6f3a319ec713d133" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>RefinedMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1aaa5127eb55b27d550891327d7a402b28" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>splitnodes_</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1a51e0407303fc0ea36714d6481d0e703f" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>UniformMesh</name></member>
+      <member refid="classcsmp_1_1_line_element_mesher_1a21fbc731d3d1c384554b342e04239769" prot="private" virt="non-virtual"><scope>csmp::LineElementMesher</scope><name>vset_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

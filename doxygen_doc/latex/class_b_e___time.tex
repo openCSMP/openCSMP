@@ -1,0 +1,73 @@
+\doxysection{BE\+\_\+\+Time Class Reference}
+\hypertarget{class_b_e___time}{}\label{class_b_e___time}\index{BE\_Time@{BE\_Time}}
+
+
+{\ttfamily \#include $<$BE\+\_\+\+Time.\+h$>$}
+
+
+
+Collaboration diagram for BE\+\_\+\+Time\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{class_b_e___time__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_b_e___time_a1d73898d6b7555c543eda0895893c947}\label{class_b_e___time_a1d73898d6b7555c543eda0895893c947} 
+{\bfseries BE\+\_\+\+Time} ()
+\begin{DoxyCompactList}\small\item\em constructor records current system time \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_aeeabe169ebdd6ab7fa3b1fac9879c74c}\label{class_b_e___time_aeeabe169ebdd6ab7fa3b1fac9879c74c} 
+void {\bfseries mark} ()
+\item 
+\Hypertarget{class_b_e___time_a27088bca1654c8230adf49a4a150de2a}\label{class_b_e___time_a27088bca1654c8230adf49a4a150de2a} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries ascii} ()
+\begin{DoxyCompactList}\small\item\em time as a day/month/year string \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_ab43dc97444cd3ec1d1d0cf6ce75f7993}\label{class_b_e___time_ab43dc97444cd3ec1d1d0cf6ce75f7993} 
+double {\bfseries delta} (const \mbox{\hyperlink{class_b_e___time}{BE\+\_\+\+Time}} \&dt) const
+\begin{DoxyCompactList}\small\item\em difference in seconds \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_aeceaed2f7a42013a6f62ba8ba84f3828}\label{class_b_e___time_aeceaed2f7a42013a6f62ba8ba84f3828} 
+int {\bfseries Daylight\+Savings} ()
+\item 
+\Hypertarget{class_b_e___time_ae544c4f38782d9dcacd3f112ce121373}\label{class_b_e___time_ae544c4f38782d9dcacd3f112ce121373} 
+int {\bfseries Day\+Of\+Year} ()
+\begin{DoxyCompactList}\small\item\em days since January 1 \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_a42585dd421d0f66f93973160e90fab28}\label{class_b_e___time_a42585dd421d0f66f93973160e90fab28} 
+int {\bfseries Day\+Of\+Week} ()
+\begin{DoxyCompactList}\small\item\em days since Sunday \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_aceab4d2b80de5ccb5464378bc4c8eaf9}\label{class_b_e___time_aceab4d2b80de5ccb5464378bc4c8eaf9} 
+int {\bfseries Since1900} ()
+\begin{DoxyCompactList}\small\item\em years since 1/1/1900 \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_ad4fd1158a23743768fe974fb044b856a}\label{class_b_e___time_ad4fd1158a23743768fe974fb044b856a} 
+int {\bfseries Month} ()
+\begin{DoxyCompactList}\small\item\em since January \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_a5ea5fdef6e90b27b964e8b36ae88ffbf}\label{class_b_e___time_a5ea5fdef6e90b27b964e8b36ae88ffbf} 
+int {\bfseries Day\+Of\+Month} ()
+\item 
+\Hypertarget{class_b_e___time_a4f91d8c62fb2c19df27aa0e19b109896}\label{class_b_e___time_a4f91d8c62fb2c19df27aa0e19b109896} 
+int {\bfseries Hour} ()
+\begin{DoxyCompactList}\small\item\em since midnight (24 hour clock) \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_a483b08ae8dfaa37f7191acbd6110ee33}\label{class_b_e___time_a483b08ae8dfaa37f7191acbd6110ee33} 
+int {\bfseries Minute} ()
+\item 
+\Hypertarget{class_b_e___time_a50ef43353976350961f52a0a536ae399}\label{class_b_e___time_a50ef43353976350961f52a0a536ae399} 
+int {\bfseries Second} ()
+\item 
+\Hypertarget{class_b_e___time_a0ebcfcf0a7e64e973890627dff8200dd}\label{class_b_e___time_a0ebcfcf0a7e64e973890627dff8200dd} 
+void {\bfseries Time} (long \&yr, long \&hr, long \&mi, long \&sec)
+\begin{DoxyCompactList}\small\item\em gets ascii hours,minutes, seconds and tenth\textquotesingle{}s of seconds out of the time-\/string \end{DoxyCompactList}\item 
+\Hypertarget{class_b_e___time_a7136da93e0ba63a8aa90488f6bc5e538}\label{class_b_e___time_a7136da93e0ba63a8aa90488f6bc5e538} 
+void {\bfseries Time} (long \&year, long \&month, long \&day)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Bruce Eckel\textquotesingle{}s Time class from "{}\+Thinking in C++"{} p. 314 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/utilities/BE\+\_\+\+Time.\+h\item 
+source/modules/utilities/BE\+\_\+\+Time.\+cpp\end{DoxyCompactItemize}

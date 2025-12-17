@@ -1,0 +1,10 @@
+frac_layer_box-configuration.txt - volumetric fracture model made of tetra
+
+# matrix properties
+permeability	1.0E-21
+porosity	0.1
+thickness	1.
+
+# fracture with a thickness of 1 meter
+FRACTURE	complete	permeability	1.0E-12
+FRACTURE	complete	porosity	1.

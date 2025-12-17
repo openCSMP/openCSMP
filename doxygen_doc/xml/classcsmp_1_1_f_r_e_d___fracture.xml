@@ -1,0 +1,637 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_f_r_e_d___fracture" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FRED_Fracture</compoundname>
+    <includes refid="_f_r_e_d___fracture_8h" local="no">FRED_Fracture.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a01f9e46cc2e0e5d195da03b84eb62162" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FRED_Fracture::aperture</definition>
+        <argsstring></argsstring>
+        <name>aperture</name>
+        <qualifiedname>csmp::FRED_Fracture::aperture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="54" column="13" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a3890550d3afa96d11032132bf8955190" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FRED_Fracture::compressibility</definition>
+        <argsstring></argsstring>
+        <name>compressibility</name>
+        <qualifiedname>csmp::FRED_Fracture::compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="55" column="13" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1aeeabad2ef9171ab65a562c4b138cdd58" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FRED_Fracture::permeability</definition>
+        <argsstring></argsstring>
+        <name>permeability</name>
+        <qualifiedname>csmp::FRED_Fracture::permeability</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="56" column="13" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a8695a02ff824b21eb5ae43516ce5a763" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FRED_Fracture::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>csmp::FRED_Fracture::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="57" column="17" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a619ecc942107988206a5d9dcf30a4b10" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::FRED_Fracture::fracture_set_id</definition>
+        <argsstring></argsstring>
+        <name>fracture_set_id</name>
+        <qualifiedname>csmp::FRED_Fracture::fracture_set_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="58" column="13" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a76759d0bcde068d6cd3405c14256214d" prot="private" static="no" mutable="no">
+        <type>std::list&lt; double &gt;</type>
+        <definition>std::list&lt;double&gt; csmp::FRED_Fracture::props</definition>
+        <argsstring></argsstring>
+        <name>props</name>
+        <qualifiedname>csmp::FRED_Fracture::props</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="61" column="19" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a89d1c905b646dd1dcae9e07ae523b0ab" prot="private" static="no" mutable="no">
+        <type>std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt;</type>
+        <definition>std::list&lt;mjl::Point3D&gt; csmp::FRED_Fracture::boundary</definition>
+        <argsstring></argsstring>
+        <name>boundary</name>
+        <qualifiedname>csmp::FRED_Fracture::boundary</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="62" column="16" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a85ef20480c5c25492782054a9dd07069" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_edge3_d" kindref="compound">mjl::Edge3D</ref></type>
+        <definition>mjl::Edge3D csmp::FRED_Fracture::unit_normal</definition>
+        <argsstring></argsstring>
+        <name>unit_normal</name>
+        <qualifiedname>csmp::FRED_Fracture::unit_normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="63" column="30" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_e_d___fracture_1a6a3467e6d00df0f2b34686e526a41a45" prot="private" static="yes" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FRED_Fracture::global_id</definition>
+        <argsstring></argsstring>
+        <name>global_id</name>
+        <qualifiedname>csmp::FRED_Fracture::global_id</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="59" column="22" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a9dcf0d2173208ce1c474bc191efafe27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRED_Fracture::FRED_Fracture</definition>
+        <argsstring>()</argsstring>
+        <name>FRED_Fracture</name>
+        <qualifiedname>csmp::FRED_Fracture::FRED_Fracture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="14" column="5" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="13" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a249372b5edb8fd8dc1b042bc5c32537b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRED_Fracture::FRED_Fracture</definition>
+        <argsstring>(const FRED_Fracture &amp;ffr)</argsstring>
+        <name>FRED_Fracture</name>
+        <qualifiedname>csmp::FRED_Fracture::FRED_Fracture</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_r_e_d___fracture" kindref="compound">FRED_Fracture</ref> &amp;</type>
+          <declname>ffr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="15" column="5" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="47" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a3f333a919da8c002464376c3fb736567" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRED_Fracture::FRED_Fracture</definition>
+        <argsstring>(double ap, double compr, double perm, const std::list&lt; double &gt; &amp;properties, const std::list&lt; mjl::Point3D &gt; &amp;boundary)</argsstring>
+        <name>FRED_Fracture</name>
+        <qualifiedname>csmp::FRED_Fracture::FRED_Fracture</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>ap</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>compr</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>perm</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; double &gt; &amp;</type>
+          <declname>properties</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt; &amp;</type>
+          <declname>boundary</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="17" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a934df7916bd47625fcb10eadb44b39a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRED_Fracture::~FRED_Fracture</definition>
+        <argsstring>()</argsstring>
+        <name>~FRED_Fracture</name>
+        <qualifiedname>csmp::FRED_Fracture::~FRED_Fracture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="23" column="5" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="41" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a7493bc682d8a01c0f152a2eb03dd0ec6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_f_r_e_d___fracture" kindref="compound">FRED_Fracture</ref> &amp;</type>
+        <definition>FRED_Fracture &amp; csmp::FRED_Fracture::operator=</definition>
+        <argsstring>(const FRED_Fracture &amp;ffr)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FRED_Fracture::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_r_e_d___fracture" kindref="compound">FRED_Fracture</ref> &amp;</type>
+          <declname>ffr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="24" column="19" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="83" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a64099039579eefec6272f6547e003926" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FRED_Fracture::InitializeFrom</definition>
+        <argsstring>(int nprops, std::ifstream &amp;ifs)</argsstring>
+        <name>InitializeFrom</name>
+        <qualifiedname>csmp::FRED_Fracture::InitializeFrom</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>nprops</declname>
+        </param>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Explanation and file entries:</para>
+<para><programlisting><codeline><highlight class="normal">ID#<sp/><sp/>#points<sp/>#fset<sp/>permeability<sp/><sp/><sp/><sp/><sp/><sp/>compressibility<sp/><sp/><sp/>aperture</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/>4<sp/><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/><sp/>1.000000e+000<sp/><sp/><sp/><sp/><sp/>3.000000e-006<sp/><sp/><sp/><sp/><sp/>1.000000e-001</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/>-1.000000e+002<sp/><sp/><sp/><sp/><sp/>1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>2<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/>-1.000000e+002<sp/><sp/><sp/><sp/>-1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>3<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/><sp/>1.000000e+002<sp/><sp/><sp/><sp/>-1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>4<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/><sp/>1.000000e+002<sp/><sp/><sp/><sp/><sp/>1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>0<sp/><sp/><sp/><sp/><sp/>1.000000e+000<sp/><sp/><sp/><sp/><sp/>0.000000e+000<sp/><sp/><sp/><sp/><sp/>0.000000e+000</highlight></codeline>
+</programlisting> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="26" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="117" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a5990e86494cf42487bc15c395de297cd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FRED_Fracture::operator&lt;</definition>
+        <argsstring>(const FRED_Fracture &amp;ffr) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::FRED_Fracture::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_r_e_d___fracture" kindref="compound">FRED_Fracture</ref> &amp;</type>
+          <declname>ffr</declname>
+        </param>
+        <briefdescription>
+<para>compare perimeter length </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="29" column="5" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="231" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1ad97cb9e8e83a348df4bbd6de488a4909" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FRED_Fracture::ID</definition>
+        <argsstring>() const</argsstring>
+        <name>ID</name>
+        <qualifiedname>csmp::FRED_Fracture::ID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="31" column="17" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1ad14d44e7e3f4174fcba2f95c4c05ac9a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::FRED_Fracture::TextID</definition>
+        <argsstring>() const</argsstring>
+        <name>TextID</name>
+        <qualifiedname>csmp::FRED_Fracture::TextID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="32" column="18" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="59" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a390cf20fa67214f0fbbbe4fe3465bf05" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::FRED_Fracture::SetID</definition>
+        <argsstring>() const</argsstring>
+        <name>SetID</name>
+        <qualifiedname>csmp::FRED_Fracture::SetID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="33" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="68" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a0ee532cfa104be7409d749e15f5e97c0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::FRED_Fracture::TextSetID</definition>
+        <argsstring>() const</argsstring>
+        <name>TextSetID</name>
+        <qualifiedname>csmp::FRED_Fracture::TextSetID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="34" column="18" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="74" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a42fb900e7d72a4ccde9527c9a486ab14" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRED_Fracture::BaryCenter</definition>
+        <argsstring>(mjl::Point3D &amp;ctr) const</argsstring>
+        <name>BaryCenter</name>
+        <qualifiedname>csmp::FRED_Fracture::BaryCenter</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &amp;</type>
+          <declname>ctr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="35" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="237" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1abaabe2158261dd386bd09609ba15b140" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRED_Fracture::BaryCenter</definition>
+        <argsstring>(double &amp;x, double &amp;y, double &amp;z) const</argsstring>
+        <name>BaryCenter</name>
+        <qualifiedname>csmp::FRED_Fracture::BaryCenter</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="36" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="251" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a2b8deb7ec0984efea18620a306df3f5c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FRED_Fracture::Perimeter</definition>
+        <argsstring>() const</argsstring>
+        <name>Perimeter</name>
+        <qualifiedname>csmp::FRED_Fracture::Perimeter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="37" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="262" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a55f7ace792f5191152e285b30ebb153e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FRED_Fracture::Diameter</definition>
+        <argsstring>() const</argsstring>
+        <name>Diameter</name>
+        <qualifiedname>csmp::FRED_Fracture::Diameter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="38" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="284" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a13a95358a40a27c932209b448224d9f8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRED_Fracture::BoundingBox</definition>
+        <argsstring>(mjl::Point3D &amp;cnr1, mjl::Point3D &amp;cnr8) const</argsstring>
+        <name>BoundingBox</name>
+        <qualifiedname>csmp::FRED_Fracture::BoundingBox</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &amp;</type>
+          <declname>cnr1</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &amp;</type>
+          <declname>cnr8</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="39" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="292" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1ac32b08aef5fa2bdf2e237d52c91ede51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRED_Fracture::Move</definition>
+        <argsstring>(double dx, double dy, double dz)</argsstring>
+        <name>Move</name>
+        <qualifiedname>csmp::FRED_Fracture::Move</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="40" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="315" bodyend="322"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a4a19889498ff0dfa27f08983304fabbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRED_Fracture::Scale</definition>
+        <argsstring>(double xfac, double dfac, double zfac)</argsstring>
+        <name>Scale</name>
+        <qualifiedname>csmp::FRED_Fracture::Scale</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>xfac</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dfac</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>zfac</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="41" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="326" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a38e9d8f94953337356ca0fc73a9be556" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt;::const_iterator</type>
+        <definition>std::list&lt; mjl::Point3D &gt;::const_iterator csmp::FRED_Fracture::Begin</definition>
+        <argsstring>() const</argsstring>
+        <name>Begin</name>
+        <qualifiedname>csmp::FRED_Fracture::Begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="43" column="33" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="67" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1ac8cb7864bf4862be5232faa6d1802711" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt;::const_iterator</type>
+        <definition>std::list&lt; mjl::Point3D &gt;::const_iterator csmp::FRED_Fracture::End</definition>
+        <argsstring>() const</argsstring>
+        <name>End</name>
+        <qualifiedname>csmp::FRED_Fracture::End</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="44" column="33" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="73" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a0e5f47c969b38f7d6baac056631da5bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FRED_Fracture::PolygonPoints</definition>
+        <argsstring>() const</argsstring>
+        <name>PolygonPoints</name>
+        <qualifiedname>csmp::FRED_Fracture::PolygonPoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="45" column="45" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="79" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1aca3bc67089089c54e670a2e8e3edd674" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; double &gt;::const_iterator</type>
+        <definition>std::list&lt; double &gt;::const_iterator csmp::FRED_Fracture::PropertiesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>PropertiesBegin</name>
+        <qualifiedname>csmp::FRED_Fracture::PropertiesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="46" column="35" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a7157ea0310e376f19e63f026626c0580" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; double &gt;::const_iterator</type>
+        <definition>std::list&lt; double &gt;::const_iterator csmp::FRED_Fracture::PropertiesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>PropertiesEnd</name>
+        <qualifiedname>csmp::FRED_Fracture::PropertiesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="47" column="35" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="91" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a8e90e61599aba23a74f8a7fc2c349dec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRED_Fracture::Erase</definition>
+        <argsstring>()</argsstring>
+        <name>Erase</name>
+        <qualifiedname>csmp::FRED_Fracture::Erase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="49" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="300" bodyend="312"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_e_d___fracture_1a1f04def93ef0d4279de651b25b2b4fec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRED_Fracture::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FRED_Fracture::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="51" column="13" bodyfile="source/modules/interfaces/Fracman/FRED_Fracture.cpp" bodystart="340" bodyend="373"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_fracture" kindref="compound">Fracture</ref> specifications; FRED was a DFN-modelling consortium run by Golder Associates &lt;2004. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FRED_Fracture</label>
+        <link refid="classcsmp_1_1_f_r_e_d___fracture"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Fracman/FRED_Fracture.h" line="12" column="1" bodyfile="source/includes/interfaces/Fracman/FRED_Fracture.h" bodystart="12" bodyend="64"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a01f9e46cc2e0e5d195da03b84eb62162" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>aperture</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a42fb900e7d72a4ccde9527c9a486ab14" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>BaryCenter</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1abaabe2158261dd386bd09609ba15b140" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>BaryCenter</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a38e9d8f94953337356ca0fc73a9be556" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>Begin</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a89d1c905b646dd1dcae9e07ae523b0ab" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>boundary</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a13a95358a40a27c932209b448224d9f8" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>BoundingBox</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a3890550d3afa96d11032132bf8955190" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>compressibility</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a55f7ace792f5191152e285b30ebb153e" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>Diameter</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1ac8cb7864bf4862be5232faa6d1802711" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>End</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a8e90e61599aba23a74f8a7fc2c349dec" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>Erase</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a619ecc942107988206a5d9dcf30a4b10" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>fracture_set_id</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a9dcf0d2173208ce1c474bc191efafe27" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>FRED_Fracture</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a249372b5edb8fd8dc1b042bc5c32537b" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>FRED_Fracture</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a3f333a919da8c002464376c3fb736567" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>FRED_Fracture</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a6a3467e6d00df0f2b34686e526a41a45" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>global_id</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1ad97cb9e8e83a348df4bbd6de488a4909" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>ID</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a8695a02ff824b21eb5ae43516ce5a763" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>id</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a64099039579eefec6272f6547e003926" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>InitializeFrom</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1ac32b08aef5fa2bdf2e237d52c91ede51" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>Move</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a5990e86494cf42487bc15c395de297cd" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a7493bc682d8a01c0f152a2eb03dd0ec6" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a1f04def93ef0d4279de651b25b2b4fec" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a2b8deb7ec0984efea18620a306df3f5c" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>Perimeter</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1aeeabad2ef9171ab65a562c4b138cdd58" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>permeability</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a0e5f47c969b38f7d6baac056631da5bf" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>PolygonPoints</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1aca3bc67089089c54e670a2e8e3edd674" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>PropertiesBegin</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a7157ea0310e376f19e63f026626c0580" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>PropertiesEnd</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a76759d0bcde068d6cd3405c14256214d" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>props</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a4a19889498ff0dfa27f08983304fabbd" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>Scale</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a390cf20fa67214f0fbbbe4fe3465bf05" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>SetID</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1ad14d44e7e3f4174fcba2f95c4c05ac9a" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>TextID</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a0ee532cfa104be7409d749e15f5e97c0" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>TextSetID</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a85ef20480c5c25492782054a9dd07069" prot="private" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>unit_normal</name></member>
+      <member refid="classcsmp_1_1_f_r_e_d___fracture_1a934df7916bd47625fcb10eadb44b39a9" prot="public" virt="non-virtual"><scope>csmp::FRED_Fracture</scope><name>~FRED_Fracture</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

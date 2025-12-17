@@ -1,0 +1,969 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_field_variable" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FieldVariable</compoundname>
+    <includes refid="model_2_field_variable_8h" local="no">FieldVariable.h</includes>
+    <templateparamlist>
+      <param>
+        <type>size_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_field_variable_1a52d0e7d0e5cf858d51279817a8e509ca" prot="public" static="no">
+        <type><ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">ModelSubDomain</ref>&lt; dim, CELL &gt;</type>
+        <definition>using csmp::FieldVariable&lt; dim &gt;::SubdomainType =  ModelSubDomain&lt;dim, CELL&gt;</definition>
+        <argsstring></argsstring>
+        <name>SubdomainType</name>
+        <qualifiedname>csmp::FieldVariable::SubdomainType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="103" column="5" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_field_variable_1a6c00cc04b81cf993a22e129306772d96" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>Model&lt;dim&gt;&amp; csmp::FieldVariable&lt; dim &gt;::model_</definition>
+        <argsstring></argsstring>
+        <name>model_</name>
+        <qualifiedname>csmp::FieldVariable::model_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="224" column="11" bodyfile="source/includes/model/FieldVariable.h" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_field_variable_1a8c9d3bb0ea7703845f66821214f6db89" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::FieldVariable&lt; dim &gt;::variable_name_</definition>
+        <argsstring></argsstring>
+        <name>variable_name_</name>
+        <qualifiedname>csmp::FieldVariable::variable_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="225" column="17" bodyfile="source/includes/model/FieldVariable.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_field_variable_1a09c8affaaf086c859d6806fd8c67ec4e" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::FieldVariable&lt; dim &gt;::key_</definition>
+        <argsstring></argsstring>
+        <name>key_</name>
+        <qualifiedname>csmp::FieldVariable::key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="226" column="17" bodyfile="source/includes/model/FieldVariable.h" bodystart="226" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_field_variable_1a1100310b5319af873633ab6f3b4b55ce" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::FieldVariable&lt; dim &gt;::var_id_</definition>
+        <argsstring></argsstring>
+        <name>var_id_</name>
+        <qualifiedname>csmp::FieldVariable::var_id_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="138" column="20" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_field_variable_1a1ba6c789f7fb410a833c3cab76877bd3" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">SubdomainType</ref> *</type>
+        <definition>SubdomainType* csmp::FieldVariable&lt; dim &gt;::subdomain_</definition>
+        <argsstring></argsstring>
+        <name>subdomain_</name>
+        <qualifiedname>csmp::FieldVariable::subdomain_</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="140" column="19" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a365f4a2cdbd3d2dee30fe230b248d191" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FieldVariable&lt; dim &gt;::FieldVariable</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model, const std::string &amp;variable_name)</argsstring>
+        <name>FieldVariable</name>
+        <qualifiedname>csmp::FieldVariable::FieldVariable</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_name</declname>
+        </param>
+        <briefdescription>
+<para>Construct a new <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>model</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reference to the model containing the variable </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>variable_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the variable to access </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="exception"><parameteritem>
+<parameternamelist>
+<parametername>std::runtime_error</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>if variable doesn&apos;t exist in database </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="38" column="5" bodyfile="source/includes/model/FieldVariable.h" bodystart="38" bodyend="47"/>
+        <references refid="classcsmp_1_1_field_variable_1a365f4a2cdbd3d2dee30fe230b248d191" compoundref="model_2_field_variable_8h" startline="38" endline="47">csmp::FieldVariable&lt; dim &gt;::FieldVariable</references>
+        <referencedby refid="classcsmp_1_1_field_variable_1a365f4a2cdbd3d2dee30fe230b248d191" compoundref="model_2_field_variable_8h" startline="38" endline="47">csmp::FieldVariable&lt; dim &gt;::FieldVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a10f90a0e4b7fc4ce15d5fa6bc473ebd5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FieldVariable&lt; dim &gt;::FieldVariable</definition>
+        <argsstring>(const FieldVariable &amp;other)=default</argsstring>
+        <name>FieldVariable</name>
+        <qualifiedname>csmp::FieldVariable::FieldVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="50" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1ab381496ff449aea5ef287e2834eeab7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FieldVariable&lt; dim &gt;::FieldVariable</definition>
+        <argsstring>(FieldVariable &amp;&amp;other)=default</argsstring>
+        <name>FieldVariable</name>
+        <qualifiedname>csmp::FieldVariable::FieldVariable</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="53" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a1209f69cdf6f417856f62024fd7876d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator=</definition>
+        <argsstring>(const FieldVariable &amp;other)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FieldVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="56" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a67d6454b7a265838be0ffb0c617c930f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator=</definition>
+        <argsstring>(FieldVariable &amp;&amp;other)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FieldVariable::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;&amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="59" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a2a11dee75cb0070408cb512627113d72" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim &gt;::Store</definition>
+        <argsstring>(const T &amp;value)</argsstring>
+        <name>Store</name>
+        <qualifiedname>csmp::FieldVariable::Store</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Store a value in the variable. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of variable to store </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value to store </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="68" column="10" bodyfile="source/includes/model/FieldVariable.h" bodystart="68" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1abc7c8cec361a60be054a8ff4661dccc3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim &gt;::Read</definition>
+        <argsstring>(T &amp;value) const</argsstring>
+        <name>Read</name>
+        <qualifiedname>csmp::FieldVariable::Read</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Read a value from the variable. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of variable to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value to read into </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="104" column="10" bodyfile="source/includes/model/FieldVariable.h" bodystart="104" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1ab9612362bf0ca851b6276b2b0fb0cf4c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim &gt;::Status</definition>
+        <argsstring>(bool status)</argsstring>
+        <name>Status</name>
+        <qualifiedname>csmp::FieldVariable::Status</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>status</declname>
+        </param>
+        <briefdescription>
+<para>Set the status flag for the variable. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>status</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The status to set </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="138" column="10" bodyfile="source/includes/model/FieldVariable.h" bodystart="138" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a9ccd2d3734b840324a5f19639c588ad6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator=</definition>
+        <argsstring>(const T &amp;value)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FieldVariable::operator=</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="169" column="19" bodyfile="source/includes/model/FieldVariable.h" bodystart="169" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a194b0c8089891a91297ffc72b77c572f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator+=</definition>
+        <argsstring>(const T &amp;value)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::FieldVariable::operator+=</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="175" column="19" bodyfile="source/includes/model/FieldVariable.h" bodystart="175" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a5ce1f4f10db42aa9beb062bfb3365549" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator-=</definition>
+        <argsstring>(const T &amp;value)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::FieldVariable::operator-=</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="182" column="19" bodyfile="source/includes/model/FieldVariable.h" bodystart="182" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a3a2e75d200ade01f6a2ae2461578f6a5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator*=</definition>
+        <argsstring>(const T &amp;value)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::FieldVariable::operator*=</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="189" column="19" bodyfile="source/includes/model/FieldVariable.h" bodystart="189" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a8df0b9014cbcfd1facd69a38915dad34" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator/=</definition>
+        <argsstring>(const T &amp;value)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::FieldVariable::operator/=</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="196" column="19" bodyfile="source/includes/model/FieldVariable.h" bodystart="196" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a5676d30300bff13d35ff15c10cd774ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto csmp::FieldVariable&lt; dim &gt;::operator+</definition>
+        <argsstring>(const T &amp;other) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::FieldVariable::operator+</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="204" column="10" bodyfile="source/includes/model/FieldVariable.h" bodystart="204" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a8cb0d1e059926773eb83134829a475cc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto csmp::FieldVariable&lt; dim &gt;::operator-</definition>
+        <argsstring>(const T &amp;other) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::FieldVariable::operator-</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="209" column="10" bodyfile="source/includes/model/FieldVariable.h" bodystart="209" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1acdd11f491cbd326dcde0aef67586b1ba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto csmp::FieldVariable&lt; dim &gt;::operator*</definition>
+        <argsstring>(const T &amp;other) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::FieldVariable::operator*</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="214" column="10" bodyfile="source/includes/model/FieldVariable.h" bodystart="214" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1af4140066b2ad2c9bc27d90e02a3e0254" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto csmp::FieldVariable&lt; dim &gt;::operator/</definition>
+        <argsstring>(const T &amp;other) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::FieldVariable::operator/</qualifiedname>
+        <param>
+          <type>const T &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="219" column="10" bodyfile="source/includes/model/FieldVariable.h" bodystart="219" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1ada7d1d93975b5145e860faad0e45eb17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FieldVariable&lt; dim, CELL &gt;::FieldVariable</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model, const std::string &amp;subdomain_name, const std::string &amp;var_name)</argsstring>
+        <name>FieldVariable</name>
+        <qualifiedname>csmp::FieldVariable::FieldVariable</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>subdomain_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>var_name</declname>
+        </param>
+        <briefdescription>
+<para>Constructor: binds to an existing variable in the model&apos;s property database. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="106" column="5" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="146" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a87664d0fc3bf294d816b8d0ad9cb0510" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FieldVariable&lt; dim &gt;::FieldVariable</definition>
+        <argsstring>(const FieldVariable &amp;)=default</argsstring>
+        <name>FieldVariable</name>
+        <qualifiedname>csmp::FieldVariable::FieldVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>Defaulted copy constructor and assignment. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="109" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a26b358089e8cfec29e735074b09cb863" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable &amp; csmp::FieldVariable&lt; dim &gt;::operator=</definition>
+        <argsstring>(const FieldVariable &amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FieldVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="110" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a3c4827dd12fd6807d822971619aa5447" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable&lt; dim, CELL &gt; &amp; csmp::FieldVariable&lt; dim, CELL &gt;::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;s)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FieldVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+<para>Assignment from scalar, vector, or tensor constants. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="113" column="19" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="165" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a8cda9fce435d462689930595c00ee76e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable&lt; dim, CELL &gt; &amp; csmp::FieldVariable&lt; dim, CELL &gt;::operator=</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;v)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FieldVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="114" column="19" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="174" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a169fee71109b60e826db4e1852ab0903" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+        <definition>FieldVariable&lt; dim, CELL &gt; &amp; csmp::FieldVariable&lt; dim, CELL &gt;::operator=</definition>
+        <argsstring>(const TensorVariable&lt; dim &gt; &amp;t)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FieldVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="115" column="19" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="183" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1ac235cc2f5c25aa16eebd7cb5df36ecb2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Add</definition>
+        <argsstring>(const FieldVariable &amp;other)</argsstring>
+        <name>Add</name>
+        <qualifiedname>csmp::FieldVariable::Add</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="117" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="191" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1afea4706341b58c85e8e648775866ed8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Subtract</definition>
+        <argsstring>(const FieldVariable &amp;other)</argsstring>
+        <name>Subtract</name>
+        <qualifiedname>csmp::FieldVariable::Subtract</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="118" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="200" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a2725ae0929d16bdfcf56b19b252deff5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Multiply</definition>
+        <argsstring>(const FieldVariable &amp;other)</argsstring>
+        <name>Multiply</name>
+        <qualifiedname>csmp::FieldVariable::Multiply</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="119" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="209" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a919900514871a224c50f599e2d73b79a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Divide</definition>
+        <argsstring>(const FieldVariable &amp;other)</argsstring>
+        <name>Divide</name>
+        <qualifiedname>csmp::FieldVariable::Divide</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="120" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="218" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1ab1cc5285f31e4edc0ec8f8225c528d36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Add</definition>
+        <argsstring>(const Var &amp;value)</argsstring>
+        <name>Add</name>
+        <qualifiedname>csmp::FieldVariable::Add</qualifiedname>
+        <param>
+          <type>const Var &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="123" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="228" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1aa66893b17f99eaf297be7555e807c72c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Subtract</definition>
+        <argsstring>(const Var &amp;value)</argsstring>
+        <name>Subtract</name>
+        <qualifiedname>csmp::FieldVariable::Subtract</qualifiedname>
+        <param>
+          <type>const Var &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="125" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="236" bodyend="240"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a07a907ed57975e4677d38687ca3460bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Multiply</definition>
+        <argsstring>(const Var &amp;value)</argsstring>
+        <name>Multiply</name>
+        <qualifiedname>csmp::FieldVariable::Multiply</qualifiedname>
+        <param>
+          <type>const Var &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="127" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="244" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a15c40c8d20f559394830445471170116" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FieldVariable&lt; dim, CELL &gt;::Divide</definition>
+        <argsstring>(const Var &amp;value)</argsstring>
+        <name>Divide</name>
+        <qualifiedname>csmp::FieldVariable::Divide</qualifiedname>
+        <param>
+          <type>const Var &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="129" column="10" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="252" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a7e9d62659df4599a5d8c0adb4fd224c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">SubdomainType</ref> &amp;</type>
+        <definition>const SubdomainType &amp; csmp::FieldVariable&lt; dim &gt;::Subdomain</definition>
+        <argsstring>() const</argsstring>
+        <name>Subdomain</name>
+        <qualifiedname>csmp::FieldVariable::Subdomain</qualifiedname>
+        <briefdescription>
+<para>Access the associated subdomain. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="132" column="25" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1ae08b256a5d65a74fad5a41a3689b4b5e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+        <definition>const Index &amp; csmp::FieldVariable&lt; dim &gt;::VarKey</definition>
+        <argsstring>() const</argsstring>
+        <name>VarKey</name>
+        <qualifiedname>csmp::FieldVariable::VarKey</qualifiedname>
+        <briefdescription>
+<para>Access the variable key (index) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="135" column="17" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="135" bodyend="135"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_field_variable_1a42e408438da346cc67fb0c6af79458df" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+            <defval>double</defval>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T csmp::FieldVariable&lt; dim &gt;::GetValue</definition>
+        <argsstring>() const</argsstring>
+        <name>GetValue</name>
+        <qualifiedname>csmp::FieldVariable::GetValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/FieldVariable.h" line="230" column="7" bodyfile="source/includes/model/FieldVariable.h" bodystart="230" bodyend="234"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> class for accessing distributed variables in the model. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> represents a handle to a distributed variable (scalar, vector, tensor) in the model.</para>
+<para>This class provides a clean interface for accessing variables that are distributed across the model hierarchy (<ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> &gt; <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> &gt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> &gt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>). It uses the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> to look up variable indices and <ref refid="classcsmp_1_1_local_variable_storage" kindref="compound">LocalVariableStorage</ref> for actual variable access.</para>
+<para>The class supports expression templates and operator overloading for mathematical operations.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dimension of the model (2 or 3)</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The <ref refid="classcsmp_1_1_field_variable" kindref="compound">FieldVariable</ref> provides access to variable values across a subdomain (e.g., <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>, <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>) and supports arithmetic operations and expression templates.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spatial dimension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>CELL</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cell type used in the subdomain, i.e. <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> for <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> for <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> for <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FieldVariable&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_field_variable"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/FieldVariable.h" line="29" column="1" bodyfile="source/includes/model/FieldVariable.h" bodystart="29" bodyend="235"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_field_variable_1ac235cc2f5c25aa16eebd7cb5df36ecb2" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_field_variable_1ab1cc5285f31e4edc0ec8f8225c528d36" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a919900514871a224c50f599e2d73b79a" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Divide</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a15c40c8d20f559394830445471170116" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Divide</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a365f4a2cdbd3d2dee30fe230b248d191" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>FieldVariable</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a10f90a0e4b7fc4ce15d5fa6bc473ebd5" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>FieldVariable</name></member>
+      <member refid="classcsmp_1_1_field_variable_1ab381496ff449aea5ef287e2834eeab7e" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>FieldVariable</name></member>
+      <member refid="classcsmp_1_1_field_variable_1ada7d1d93975b5145e860faad0e45eb17" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>FieldVariable</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a87664d0fc3bf294d816b8d0ad9cb0510" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>FieldVariable</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a42e408438da346cc67fb0c6af79458df" prot="private" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>GetValue</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a09c8affaaf086c859d6806fd8c67ec4e" prot="private" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>key_</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a6c00cc04b81cf993a22e129306772d96" prot="private" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>model_</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a2725ae0929d16bdfcf56b19b252deff5" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a07a907ed57975e4677d38687ca3460bb" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_field_variable_1acdd11f491cbd326dcde0aef67586b1ba" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a3a2e75d200ade01f6a2ae2461578f6a5" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a5676d30300bff13d35ff15c10cd774ad" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a194b0c8089891a91297ffc72b77c572f" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a8cb0d1e059926773eb83134829a475cc" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a5ce1f4f10db42aa9beb062bfb3365549" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1af4140066b2ad2c9bc27d90e02a3e0254" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a8df0b9014cbcfd1facd69a38915dad34" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a1209f69cdf6f417856f62024fd7876d0" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a67d6454b7a265838be0ffb0c617c930f" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a9ccd2d3734b840324a5f19639c588ad6" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a26b358089e8cfec29e735074b09cb863" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a3c4827dd12fd6807d822971619aa5447" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a8cda9fce435d462689930595c00ee76e" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a169fee71109b60e826db4e1852ab0903" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_field_variable_1abc7c8cec361a60be054a8ff4661dccc3" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_field_variable_1ab9612362bf0ca851b6276b2b0fb0cf4c" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a2a11dee75cb0070408cb512627113d72" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a7e9d62659df4599a5d8c0adb4fd224c3" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Subdomain</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a1ba6c789f7fb410a833c3cab76877bd3" prot="private" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>subdomain_</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a52d0e7d0e5cf858d51279817a8e509ca" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>SubdomainType</name></member>
+      <member refid="classcsmp_1_1_field_variable_1afea4706341b58c85e8e648775866ed8c" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_field_variable_1aa66893b17f99eaf297be7555e807c72c" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a1100310b5319af873633ab6f3b4b55ce" prot="private" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>var_id_</name></member>
+      <member refid="classcsmp_1_1_field_variable_1a8c9d3bb0ea7703845f66821214f6db89" prot="private" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>variable_name_</name></member>
+      <member refid="classcsmp_1_1_field_variable_1ae08b256a5d65a74fad5a41a3689b4b5e" prot="public" virt="non-virtual"><scope>csmp::FieldVariable</scope><name>VarKey</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

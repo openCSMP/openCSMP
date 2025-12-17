@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_f60e294565533fae9cab23bb3d4e12ab" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir/source/modules/integration/cvfe_hydrothermal</compoundname>
+    <innerfile refid="_c_v_f_e_m___math_operator_l_h_s_8cpp_8o_8d">CVFEM_MathOperatorLHS.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___math_operator_r_h_s_8cpp_8o_8d">CVFEM_MathOperatorRHS.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___num_integral__d_n_t__op__d_n__d_v_8cpp_8o_8d">CVFEM_NumIntegral_dNT_op_dN_dV.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___p_h_x___scheme_8cpp_8o_8d">CVFEM_PHX_Scheme.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___point_source__rhsop_8cpp_8o_8d">CVFEM_PointSource_rhsop.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___pressure_gradient_visitor_8cpp_8o_8d">CVFEM_PressureGradientVisitor.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_8cpp_8o_8d">CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_8cpp_8o_8d">CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp.o.d</innerfile>
+    <innerfile refid="_c_v_f_e_m___visitor_8cpp_8o_8d">CVFEM_Visitor.cpp.o.d</innerfile>
+    <innerfile refid="_explicit_finite_volume_transport_p_h_x_8cpp_8o_8d">ExplicitFiniteVolumeTransportPHX.cpp.o.d</innerfile>
+    <innerfile refid="_limiter_8cpp_8o_8d">Limiter.cpp.o.d</innerfile>
+    <innerfile refid="_na_cl_h2_o_properties_visitor_p_h_x_8cpp_8o_8d">NaClH2OPropertiesVisitorPHX.cpp.o.d</innerfile>
+    <innerfile refid="_num_integral___n_t__lhs__nodal__op___n__d_v_8cpp_8o_8d">NumIntegral_NT_lhs_nodal_op_N_dV.cpp.o.d</innerfile>
+    <innerfile refid="_num_integral___n_t__rhs__nodal__op___n__d_v_8cpp_8o_8d">NumIntegral_NT_rhs_nodal_op_N_dV.cpp.o.d</innerfile>
+    <innerfile refid="_pore_volume_visitor_8cpp_8o_8d">PoreVolumeVisitor.cpp.o.d</innerfile>
+    <innerfile refid="_stencil_processor_p_h_x_8cpp_8o_8d">StencilProcessorPHX.cpp.o.d</innerfile>
+    <innerfile refid="_two_phase_transport_p_h_x_8cpp_8o_8d">TwoPhaseTransportPHX.cpp.o.d</innerfile>
+    <innerfile refid="_upwind_control_visitor_8cpp_8o_8d">UpwindControlVisitor.cpp.o.d</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/source/modules/integration/cvfe_hydrothermal/"/>
+  </compounddef>
+</doxygen>

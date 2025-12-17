@@ -229,7 +229,7 @@ void Tutorial1_Example::Run()
     const double     max_time(240.0*hour); // run for 10 days
     double           time_increment(2.0*hour); // timestep 2 hours
     const long       save_frequency(6); // write results to file every 12 hours
-    size_t	         save_counter(1);
+    long   	         save_counter(1);
 
     // set the time increment for the FE algorithm
     fluid_pressure.TimeIncrement( 1.0/time_increment );
@@ -258,8 +258,8 @@ void Tutorial1_Example::Run()
               vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       time );
               vtk_output.OutputDataToVTK( model, "volume_flux",    "volume flux",    time );
               // to Matlab files
-              matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    time );
-              matlab.Write2DMatlabFile(  model, "volume_flux",    "nodal volume flux", time );
+              matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    save_counter );
+              matlab.Write2DMatlabFile(  model, "volume_flux",    "nodal volume flux", save_counter );
               save_counter = 0;
           }
          save_counter++;
@@ -275,8 +275,8 @@ void Tutorial1_Example::Run()
     vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       time );
     vtk_output.OutputDataToVTK( model, "flux",           "volume flux",    time );
     // Matlab
-    matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    time );
-    matlab.Write2DMatlabFile(  model, "volume_flux",    "nodal volume flux", time );
+    matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    save_counter );
+    matlab.Write2DMatlabFile(  model, "volume_flux",    "nodal volume flux", save_counter );
 
     // terminate
     cout <<"\nmain: That's it..."<< endl;

@@ -1,0 +1,112 @@
+\doxysection{Test.\+h}
+\hypertarget{_test_8h_source}{}\label{_test_8h_source}\index{tests/Test.h@{tests/Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iosfwd}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \_\_GNUC\_\_}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}cxxabi.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ The\ following\ have\ underscores\ because\ they\ are\ macros}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ (and\ it's\ impolite\ to\ usurp\ other\ users'\ functions!).}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{RUNNING\_UNDER\_CATCH}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}catch.hpp"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_test}\textcolor{preprocessor}{(}\textcolor{preprocessor}{cond}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{REQUIRE}\textcolor{preprocessor}{(}\ \textcolor{preprocessor}{(}\textcolor{preprocessor}{cond}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_fail}\textcolor{preprocessor}{(}\textcolor{preprocessor}{e}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{FAIL}\textcolor{preprocessor}{(}\ \textcolor{preprocessor}{e}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_equal}\textcolor{preprocessor}{(}\textcolor{preprocessor}{expr}\textcolor{preprocessor}{,}\textcolor{preprocessor}{value}\textcolor{preprocessor}{,}\textcolor{preprocessor}{tol}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{REQUIRE}\textcolor{preprocessor}{(}\ \textcolor{preprocessor}{(}\textcolor{preprocessor}{expr}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{==}\ \textcolor{preprocessor}{Approx}\textcolor{preprocessor}{(}\ \textcolor{preprocessor}{(}\textcolor{preprocessor}{value}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{)}\textcolor{preprocessor}{.}\textcolor{preprocessor}{epsilon}\textcolor{preprocessor}{(}\ \textcolor{preprocessor}{(}\textcolor{preprocessor}{tol}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{)}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_succeed}\textcolor{preprocessor}{(}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_warn}\textcolor{preprocessor}{(}\textcolor{preprocessor}{e}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{WARN}\textcolor{preprocessor}{(}\ \textcolor{preprocessor}{e}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_info}\textcolor{preprocessor}{(}\textcolor{preprocessor}{e}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{INFO}\textcolor{preprocessor}{(}\ \textcolor{preprocessor}{e}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_test}\textcolor{preprocessor}{(}\textcolor{preprocessor}{cond}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{do\_test}\textcolor{preprocessor}{(}\textcolor{preprocessor}{cond}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{cond}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\_\_FILE\_\_}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\_\_LINE\_\_}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_fail}\textcolor{preprocessor}{(}\textcolor{preprocessor}{str}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{do\_fail}\textcolor{preprocessor}{(}\textcolor{preprocessor}{str}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\_\_FILE\_\_}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\_\_LINE\_\_}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_equal}\textcolor{preprocessor}{(}\textcolor{preprocessor}{expr}\textcolor{preprocessor}{,}\textcolor{preprocessor}{value}\textcolor{preprocessor}{,}\textcolor{preprocessor}{tol}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{do\_equal}\textcolor{preprocessor}{(}\textcolor{preprocessor}{expr}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{value}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{tol}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{expr}\ \textcolor{stringliteral}{"{}\ ==\ "{}}\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{value}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\_\_FILE\_\_}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{\_\_LINE\_\_}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_succeed}\textcolor{preprocessor}{(}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{do\_succeed}\textcolor{preprocessor}{(}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_warn}\textcolor{preprocessor}{(}\textcolor{preprocessor}{str}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{std}\textcolor{preprocessor}{::}\textcolor{preprocessor}{cerr}\ \textcolor{preprocessor}{<<}\ \textcolor{preprocessor}{str}\ \textcolor{preprocessor}{<<}\ \textcolor{stringliteral}{'\(\backslash\)n'}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_info}\textcolor{preprocessor}{(}\textcolor{preprocessor}{str}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{std}\textcolor{preprocessor}{::}\textcolor{preprocessor}{cout}\ \textcolor{preprocessor}{<<}\ \textcolor{preprocessor}{str}\ \textcolor{preprocessor}{<<}\ \textcolor{stringliteral}{'\(\backslash\)n'}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{comment}{/**\ Test\ \ base\ class\ for\ unit\ testing.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ Usage\ example:}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ \ 1.\ define\ default\ constructor\ and\ run()\ function}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ \ 2.\ in\ run()\ function,\ use\ the\ macros\ provided\ to\ test\ whether\ desired\ conditions}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ apply\ or\ not.\ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ \ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ \ Examples:}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ -\/\ check\ whether\ the\ floating\ point\ value,\ a,\ is\ equal\ to\ b\ within\ given\ tolerance,\ tol:}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \_equal(a,b,tol);}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ -\/\ check\ whether\ a\ boolean\ conditions\ applies:}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \_test(isoparametric==false);}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ -\/\ add\ a\ message\ to\ a\ failure\ report:}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \_fail("{}for\ this\ input\ this\ did\ not\ work"{});}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ -\/\ report\ that\ a\ test\ passed:\ if\ (...)\ \_succeed();}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ 3.\ Obtain\ a\ fail/succeed\ report\ after\ running\ the\ test.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ \ \ \ test.report();}}
+\DoxyCodeLine{00063\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00064\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00065\ \ \ \{}
+\DoxyCodeLine{00066\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00067\ \ \ \ \ Test(\ std::ostream*\ osptr\ =\ 0\ );}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~Test()\{\}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run()\ =\ 0;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{long}\ getNumPassed()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{long}\ getNumFailed()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{const}\ std::ostream*\ getStream()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ setStream(std::ostream*\ osptr);}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ setName(\ std::string\ testName\ )\ \{\ testName\_\ =\ testName;\ \}}
+\DoxyCodeLine{00076\ \ \ \ \ std::string\ getName()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ testName\_;\ \}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{bool}\ hasName()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ !testName\_.empty();\ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ do\_succeed();}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{long}\ report()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ reset();}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ do\_equal(\ \textcolor{keywordtype}{double}\ expr,\ \textcolor{keywordtype}{double}\ value,\ \textcolor{keywordtype}{double}\ tol,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ lbl,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keywordtype}{long}\ lineno\ );}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ do\_test(\ \textcolor{keywordtype}{bool}\ cond,\ \textcolor{keyword}{const}\ std::string\&\ lbl,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keywordtype}{long}\ lineno\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{void}\ do\_fail(\ \textcolor{keyword}{const}\ std::string\&\ lbl,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keywordtype}{long}\ lineno\ );}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prefix\_;}
+\DoxyCodeLine{00094\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00095\ \ \ \ \ std::ostream*\ m\_osptr;}
+\DoxyCodeLine{00096\ \ \ \ \ std::string\ testName\_;}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{long}\ m\_nPass;}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{long}\ m\_nFail;}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{//\ Disallowed:}}
+\DoxyCodeLine{00100\ \ \ \ \ Test(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\&);}
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\&);}
+\DoxyCodeLine{00102\ \};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

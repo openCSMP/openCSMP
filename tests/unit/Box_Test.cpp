@@ -6,6 +6,8 @@
 #include "VTU_Interface.h"
 #include "vsetMakers.h"
 #include "CSMP_mathUtilities.h"
+#include "CSMP_physical_constants.h"
+#include "meshManagementUtilities.h"
 #include "compareFloats.h"
 
 using namespace std;
@@ -19,6 +21,9 @@ namespace csmp {
 */
 void Box_Test::run()
 {
+  // are the static functions parsing correctly ?
+  TestParsingOfFlags();
+  
   // testing method UnitNormal
   vector<double> unitNormal;
   Box().UnitNormalTo( LEFT, 1, unitNormal );
@@ -73,66 +78,68 @@ void Box_Test::run()
   _test( unitNormal.at(0) == 0 );
   _test( unitNormal.at(1) == 0 );
   _test( unitNormal.at(2) == -1 );
+  // edges of 3D model
+  const double sine45 = sin(45.0 * csmp::CSMP_PI / 180.0);
   Box().UnitNormalTo( EDGE1, 3, unitNormal );
   _test( unitNormal.size() == 3 );
   _test( unitNormal.at(0) == 0 );
-  _test( unitNormal.at(1) == sin(45.) );
-  _test( unitNormal.at(2) == sin(45.) );
+  _test( unitNormal.at(1) == -sine45 );
+  _test( unitNormal.at(2) == -sine45 );
   Box().UnitNormalTo( EDGE2, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == -sin(45.) );
+  _test( unitNormal.at(0) == sine45 );
   _test( unitNormal.at(1) == 0 );
-  _test( unitNormal.at(2) == sin(45.) );
+  _test( unitNormal.at(2) == -sine45 );
   Box().UnitNormalTo( EDGE3, 3, unitNormal );
   _test( unitNormal.size() == 3 );
   _test( unitNormal.at(0) == 0 );
-  _test( unitNormal.at(1) == -sin(45.) );
-  _test( unitNormal.at(2) == sin(45.) );
+  _test( unitNormal.at(1) ==  sine45 );
+  _test( unitNormal.at(2) == -sine45 );
   Box().UnitNormalTo( EDGE4, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == sin(45.) );
+  _test( unitNormal.at(0) == -sine45 );
   _test( unitNormal.at(1) == 0 );
-  _test( unitNormal.at(2) == sin(45.) );
+  _test( unitNormal.at(2) == -sine45 );
   Box().UnitNormalTo( EDGE5, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == sin(45.) );
-  _test( unitNormal.at(1) == sin(45.) );
+  _test( unitNormal.at(0) == -sine45 );
+  _test( unitNormal.at(1) == -sine45 );
   _test( unitNormal.at(2) == 0 );
   Box().UnitNormalTo( EDGE6, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == -sin(45.) );
-  _test( unitNormal.at(1) == sin(45.) );
+  _test( unitNormal.at(0) == sine45 );
+  _test( unitNormal.at(1) == -sine45 );
   _test( unitNormal.at(2) == 0 );
   Box().UnitNormalTo( EDGE7, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == -sin(45.) );
-  _test( unitNormal.at(1) == -sin(45.) );
+  _test( unitNormal.at(0) == sine45 );
+  _test( unitNormal.at(1) == sine45 );
   _test( unitNormal.at(2) == 0 );
   Box().UnitNormalTo( EDGE8, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == sin(45.) );
-  _test( unitNormal.at(1) == -sin(45.) );
+  _test( unitNormal.at(0) == -sine45 );
+  _test( unitNormal.at(1) == sine45 );
   _test( unitNormal.at(2) == 0 );
    Box().UnitNormalTo( EDGE9, 3, unitNormal );
   _test( unitNormal.size() == 3 );
   _test( unitNormal.at(0) == 0 );
-  _test( unitNormal.at(1) == -sin(45.) );
-  _test( unitNormal.at(2) == sin(45.) );
+  _test( unitNormal.at(1) == -sine45 );
+  _test( unitNormal.at(2) ==  sine45 );
   Box().UnitNormalTo( EDGE10, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == -sin(45.) );
+  _test( unitNormal.at(0) == sine45 );
   _test( unitNormal.at(1) == 0 );
-  _test( unitNormal.at(2) == -sin(45.) );
+  _test( unitNormal.at(2) == sine45 );
   Box().UnitNormalTo( EDGE11, 3, unitNormal );
   _test( unitNormal.size() == 3 );
   _test( unitNormal.at(0) == 0 );
-  _test( unitNormal.at(1) == -sin(45.) );
-  _test( unitNormal.at(2) == -sin(45.) );
+  _test( unitNormal.at(1) == sine45 );
+  _test( unitNormal.at(2) == sine45 );
   Box().UnitNormalTo( EDGE12, 3, unitNormal );
   _test( unitNormal.size() == 3 );
-  _test( unitNormal.at(0) == sin(45.) );
+  _test( unitNormal.at(0) == -sine45 );
   _test( unitNormal.at(1) == 0 );
-  _test( unitNormal.at(2) == -sin(45.) );
+  _test( unitNormal.at(2) == sine45 );
   
    // testing parse boundary
   _test( parseBoundary( NOT ) == "NOT" );
@@ -179,16 +186,439 @@ void Box_Test::run()
   _test( TestBoundaryVersusBOX_BOUNDARY_Flagging() ); // model FracBox
   
   // tests whether the function recreateBoxBoundaryFlags() manages to reconstruct edges and boundaries correctly
-  // TODO: nodal flag comparison fails; isStrictlyBoxShaped is OK
   _test( TestBoundaryFlagRecreation() );
   
   // tests whether the boundaries of a 2D box model and an ANSYS model are assigned correctly
   _test( TestBoundaryFlagAssigment2D() );
 
-  // fail
+  // establishes model boundaries by using the outward pointing normals of the box model
   TestWhetherElementNormalsAreOutwardPointing();
 
 } // end run
+
+
+
+// Old functions pre-dating the compile-time versions used here to verify the new ones
+/*
+    std::string  parseBoundary( BOX_BOUNDARY i )
+    BOX_BOUNDARY  parseBoundary( const string& i )
+
+    bool isEdge( BOX_BOUNDARY bd )
+    bool isCorner( BOX_BOUNDARY bd )
+    isSide( BOX_BOUNDARY bd )
+
+    isLEFT( BOX_BOUNDARY bd )
+    isRIGHT( BOX_BOUNDARY bd )
+    isTOP( BOX_BOUNDARY bd )
+    bool isBOTTOM( BOX_BOUNDARY bd )
+    bool isFRONT( BOX_BOUNDARY bd )
+    bool isBACK( BOX_BOUNDARY bd )
+
+    belongsToSide( BOX_BOUNDARY side, BOX_BOUNDARY bd )
+    belongsToEdge( BOX_BOUNDARY edge, BOX_BOUNDARY bd )
+
+    BOX_BOUNDARY intToBOX_BOUNDARY( int i )
+*/
+namespace box_test {
+
+/// returns wether a node (or line element) lies on an edge of the model
+static bool isEdge( BOX_BOUNDARY bd )
+ {
+    if ( bd == EDGE1 )  return true;
+    if ( bd == EDGE2 )  return true;
+    if ( bd == EDGE3 )  return true;
+    if ( bd == EDGE4 )  return true;
+    if ( bd == EDGE5 )  return true;
+    if ( bd == EDGE6 )  return true;
+    if ( bd == EDGE7 )  return true;
+    if ( bd == EDGE8 )  return true;
+    if ( bd == EDGE9 )  return true;
+    if ( bd == EDGE10 )  return true;
+    if ( bd == EDGE11 )  return true;
+    if ( bd == EDGE12 )  return true;
+    return false;
+ }
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isCorner( BOX_BOUNDARY bd )
+ {
+    if ( bd == CNR1 )  return true;
+    if ( bd == CNR2 )  return true;
+    if ( bd == CNR3 )  return true;
+    if ( bd == CNR4 )  return true;
+    if ( bd == CNR5 )  return true;
+    if ( bd == CNR6 )  return true;
+    if ( bd == CNR7 )  return true;
+    if ( bd == CNR8 )  return true;
+    return false;
+ }
+
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isSide( BOX_BOUNDARY bd )
+ {
+    if ( bd == RIGHT )  return true;
+    if ( bd == LEFT )   return true;
+    if ( bd == TOP )    return true;
+    if ( bd == BOTTOM ) return true;
+    if ( bd == FRONT )  return true;
+    if ( bd == BACK )   return true;
+    return false;
+ }
+
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isLEFT( BOX_BOUNDARY bd )
+ {
+    if ( bd == LEFT )   return true;
+    if ( bd == EDGE4 )  return true;
+    if ( bd == EDGE8 )  return true;
+    if ( bd == EDGE5 )  return true;
+    if ( bd == EDGE12 ) return true;
+    if ( bd == CNR1 )  return true;
+    if ( bd == CNR4 )  return true;
+    if ( bd == CNR5 )  return true;
+    if ( bd == CNR8 )  return true;
+    return false;
+ }
+
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isRIGHT( BOX_BOUNDARY bd )
+ {
+    if ( bd == RIGHT )  return true;
+    if ( bd == EDGE2 )  return true;
+    if ( bd == EDGE6 )  return true;
+    if ( bd == EDGE7 )  return true;
+    if ( bd == EDGE10 ) return true;
+    if ( bd == CNR2 )  return true;
+    if ( bd == CNR3 )  return true;
+    if ( bd == CNR6 )  return true;
+    if ( bd == CNR7 )  return true;
+    return false;
+ }
+
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isTOP( BOX_BOUNDARY bd )
+ {
+    if ( bd == TOP )    return true;
+    if ( bd == EDGE3 )  return true;
+    if ( bd == EDGE8 )  return true;
+    if ( bd == EDGE7 )  return true;
+    if ( bd == EDGE11 ) return true;
+    if ( bd == CNR3 )  return true;
+    if ( bd == CNR4 )  return true;
+    if ( bd == CNR7 )  return true;
+    if ( bd == CNR8 )  return true;
+    return false;
+ }
+
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isBOTTOM( BOX_BOUNDARY bd )
+ {
+    if ( bd == BOTTOM ) return true;
+    if ( bd == EDGE1 )  return true;
+    if ( bd == EDGE5 )  return true;
+    if ( bd == EDGE6 )  return true;
+    if ( bd == EDGE9 )  return true;
+    if ( bd == CNR1 )  return true;
+    if ( bd == CNR2 )  return true;
+    if ( bd == CNR5 )  return true;
+    if ( bd == CNR6 )  return true;
+    return false;
+ }
+
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isFRONT( BOX_BOUNDARY bd )
+ {
+    if ( bd == FRONT )  return true;
+    if ( bd == EDGE9 )  return true;
+    if ( bd == EDGE10 ) return true;
+    if ( bd == EDGE11 ) return true;
+    if ( bd == EDGE12 ) return true;
+    if ( bd == CNR5 )  return true;
+    if ( bd == CNR6 )  return true;
+    if ( bd == CNR7 )  return true;
+    if ( bd == CNR8 )  return true;
+    return false;
+ }
+
+
+/// of rectangular (brick-shaped) model; @test OK
+static bool isBACK( BOX_BOUNDARY bd )
+ {
+    if ( bd == BACK )   return true;
+    if ( bd == EDGE1 )  return true;
+    if ( bd == EDGE2 )  return true;
+    if ( bd == EDGE3 )  return true;
+    if ( bd == EDGE4 )  return true;
+    if ( bd == CNR1 )  return true;
+    if ( bd == CNR2 )  return true;
+    if ( bd == CNR3 )  return true;
+    if ( bd == CNR4 )  return true;
+    return false;
+ }
+
+
+static BOX_BOUNDARY intToBOX_BOUNDARY( int i )
+  {
+    if ( i == NOT )             return NOT;
+    if ( i == IRREGULAR )       return IRREGULAR;
+    if ( i == LEFT_OUTSIDE )    return LEFT;
+    if ( i == RIGHT_OUTSIDE )   return RIGHT;   
+    if ( i == BOTTOM_OUTSIDE )  return BOTTOM;  
+    if ( i == TOP_OUTSIDE )     return TOP;       
+    if ( i == FRONT_OUTSIDE )   return FRONT;   
+    if ( i == BACK_OUTSIDE )    return BACK;
+    if ( i == CNR_MIN )         return CNR1;
+    if ( i == CNR_X )           return CNR2;
+    if ( i == CNR_XY )          return CNR3;
+    if ( i == CNR_Y )           return CNR4;
+    if ( i == CNR_Z )           return CNR5;
+    if ( i == CNR_XZ )          return CNR6;
+    if ( i == CNR_MAX )         return CNR7;
+    if ( i == CNR_YZ )          return CNR8;
+    if ( i == BACK_BOTTOM )     return EDGE1;
+    if ( i == BACK_RIGHT )      return EDGE2;
+    if ( i == BACK_TOP )        return EDGE3;
+    if ( i == BACK_LEFT )       return EDGE4;
+    if ( i == BOTTOM_LEFT )     return EDGE5;
+    if ( i == BOTTOM_RIGHT )    return EDGE6;
+    if ( i == TOP_RIGHT )       return EDGE7;
+    if ( i == TOP_LEFT )        return EDGE8;
+    if ( i == FRONT_BOTTOM )    return EDGE9;
+    if ( i == FRONT_RIGHT )     return EDGE10;
+    if ( i == FRONT_TOP )       return EDGE11;
+    if ( i == FRONT_LEFT )      return EDGE12;
+    if ( i == REGION_BOUNDARY ) return INTERNAL;
+    if ( i == MULTIPLE )        return MULTIPLE;
+
+    //cout <<"\nintToSG_BOUNDARY(int): unable to parse integer: "<< i << endl;
+    return NOT;   
+  }
+
+
+static std::string  parseBoundary( BOX_BOUNDARY i )
+ {
+    if ( i == NOT )      return string("NOT");
+    if ( i == IRREGULAR )return string("IRREGULAR");    
+    if ( i == LEFT )     return string("LEFT");   
+    if ( i == RIGHT )    return string("RIGHT");   
+    if ( i == BOTTOM )   return string("BOTTOM");  
+    if ( i == TOP )      return string("TOP");       
+    if ( i == FRONT )    return string("FRONT");   
+    if ( i == BACK )     return string("BACK");
+    if ( i == CNR1 )     return string("CNR1");
+    if ( i == CNR2 )     return string("CNR2");
+    if ( i == CNR3 )     return string("CNR3");
+    if ( i == CNR4 )     return string("CNR4");
+    if ( i == CNR5 )     return string("CNR5");
+    if ( i == CNR6 )     return string("CNR6");
+    if ( i == CNR7 )     return string("CNR7");
+    if ( i == CNR8 )     return string("CNR8");
+    if ( i == EDGE1 )    return string("EDGE1");
+    if ( i == EDGE2 )    return string("EDGE2");
+    if ( i == EDGE3 )    return string("EDGE3");
+    if ( i == EDGE4 )    return string("EDGE4");
+    if ( i == EDGE5 )    return string("EDGE5");
+    if ( i == EDGE6 )    return string("EDGE6");
+    if ( i == EDGE7 )    return string("EDGE7");
+    if ( i == EDGE8 )    return string("EDGE8");
+    if ( i == EDGE9 )    return string("EDGE9");
+    if ( i == EDGE10 )   return string("EDGE10");
+    if ( i == EDGE11 )   return string("EDGE11");
+    if ( i == EDGE12 )   return string("EDGE12");
+    if ( i == INTERNAL ) return string("INTERNAL");
+    if ( i == MULTIPLE ) return string("MULTIPLE");
+
+    // Unable to parse BOX_BOUNDARY: returning NOT
+    return string("NOT");
+ }
+
+
+/// text to boundary enum
+static BOX_BOUNDARY  parseBoundary( const string& i )
+ {
+    if ( i == "NOT" )      return NOT;
+    if ( i == "IRREGULAR" )return IRREGULAR;
+    if ( i == "LEFT" )     return LEFT;
+    if ( i == "RIGHT" )    return RIGHT;
+    if ( i == "BOTTOM" )   return BOTTOM;
+    if ( i == "TOP" )      return TOP;
+    if ( i == "FRONT" )    return FRONT;
+    if ( i == "BACK" )     return BACK;
+    if ( i == "CNR1" )     return CNR1;
+    if ( i == "CNR2" )     return CNR2;
+    if ( i == "CNR3" )     return CNR3;
+    if ( i == "CNR4" )     return CNR4;
+    if ( i == "CNR5" )     return CNR5;
+    if ( i == "CNR6" )     return CNR6;
+    if ( i == "CNR7" )     return CNR7;
+    if ( i == "CNR8" )     return CNR8;
+    if ( i == "EDGE1" )    return EDGE1;
+    if ( i == "EDGE2" )    return EDGE2;
+    if ( i == "EDGE3" )    return EDGE3;
+    if ( i == "EDGE4" )    return EDGE4;
+    if ( i == "EDGE5" )    return EDGE5;
+    if ( i == "EDGE6" )    return EDGE6;
+    if ( i == "EDGE7" )    return EDGE7;
+    if ( i == "EDGE8" )    return EDGE8;
+    if ( i == "EDGE9" )    return EDGE9;
+    if ( i == "EDGE10" )   return EDGE10;
+    if ( i == "EDGE11" )   return EDGE11;
+    if ( i == "EDGE12" )   return EDGE12;
+    if ( i == "INTERNAL" ) return INTERNAL;
+    if ( i == "MULTIPLE" ) return MULTIPLE;
+
+    // unable to parse BOX_BOUNDARY: returning NOT
+    return NOT;   
+ }
+
+/**
+    Returns true if @param bd belongs to the corresponding edge.
+    Example: CNR1 and CNR2 belong to EDGE1. 
+*/
+static bool belongsToEdge( BOX_BOUNDARY edge, BOX_BOUNDARY bd )
+ {
+    if      ( edge == EDGE1 and (bd == EDGE1 or bd == CNR1 or bd == CNR2) ) return true;
+    else if ( edge == EDGE2 and (bd == EDGE2 or bd == CNR2 or bd == CNR3) ) return true;
+    else if ( edge == EDGE3 and (bd == EDGE3 or bd == CNR3 or bd == CNR4) ) return true;
+    else if ( edge == EDGE4 and (bd == EDGE4 or bd == CNR1 or bd == CNR4) ) return true;
+    else if ( edge == EDGE5 and (bd == EDGE5 or bd == CNR1 or bd == CNR5) ) return true;
+    else if ( edge == EDGE6 and (bd == EDGE6 or bd == CNR2 or bd == CNR6) ) return true;
+    else if ( edge == EDGE7 and (bd == EDGE7 or bd == CNR3 or bd == CNR7) ) return true;
+    else if ( edge == EDGE8 and (bd == EDGE8 or bd == CNR4 or bd == CNR8) ) return true;
+    else if ( edge == EDGE9 and (bd == EDGE9 or bd == CNR5 or bd == CNR6) ) return true;
+    else if ( edge == EDGE10 and (bd == EDGE10 or bd == CNR6 or bd == CNR7) ) return true;
+    else if ( edge == EDGE11 and (bd == EDGE11 or bd == CNR7 or bd == CNR8) ) return true;
+    else if ( edge == EDGE12 and (bd == EDGE12 or bd == CNR5 or bd == CNR8) ) return true;
+    return false;
+ }
+
+
+/**
+    Returns true if @param bd belongs to the corresponding side of the box-shaped model.
+    Example: CNR1 - CNR4 belong to BACK. 
+*/
+static bool belongsToSide( BOX_BOUNDARY side, BOX_BOUNDARY bd )
+ {
+    if      ( side == LEFT )   return box_test::isLEFT( bd );
+    else if ( side == RIGHT )  return box_test::isRIGHT( bd );
+    else if ( side == TOP )    return box_test::isTOP( bd );
+    else if ( side == BOTTOM ) return box_test::isBOTTOM( bd );
+    else if ( side == FRONT )  return box_test::isFRONT( bd );
+    else if ( side == BACK )   return box_test::isBACK( bd );
+    return false;
+ }
+
+} // end namespace box_test
+
+
+void Box_Test::TestParsingOfFlags()
+ {
+   // dumb basics
+   _test( isLEFT(LEFT) == true );
+   _test( isRIGHT(RIGHT) == true );
+   _test( isTOP(TOP) == true );
+   _test( isBOTTOM(BOTTOM) == true );
+   _test( isFRONT(FRONT) == true );
+   _test( isBACK(BACK) == true );
+   _test( canBeIRREGULAR(IRREGULAR) == true );
+   
+   // and in more detail: isBACK() EDGE1, EDGE2, EDGE3, EDGE4, CNR1, CNR2, CNR3, CNR4
+   _test( isBACK(EDGE1) == true );
+   _test( isBACK(EDGE2) == true );   
+   _test( isBACK(EDGE3) == true );
+   _test( isBACK(EDGE4) == true );
+   _test( isBACK(CNR1) == true );
+   _test( isBACK(CNR2) == true );
+   _test( isBACK(CNR3) == true );
+   _test( isBACK(CNR4) == true );
+   
+   // the main diagnostics tool
+   _test( parseBoundary( BOTTOM ) == "BOTTOM" );
+   _test( parseBoundary( RIGHT ) == "RIGHT" );
+   _test( parseBoundary( TOP ) == "TOP" );
+   _test( parseBoundary( LEFT ) == "LEFT" );
+   _test( parseBoundary( BACK ) == "BACK" );
+   _test( parseBoundary( FRONT ) == "FRONT" );
+   _test( parseBoundary( IRREGULAR ) == "IRREGULAR" );
+   _test( parseBoundary( CNR2 ) == "CNR2" );
+   _test( parseBoundary( CNR5 ) == "CNR5" );
+   _test( parseBoundary( EDGE3 ) == "EDGE3" );
+   _test( parseBoundary( EDGE6 ) == "EDGE6" );
+
+   _test( parseBoundary( "BOTTOM" ) == BOTTOM );
+   _test( parseBoundary( "RIGHT" ) == RIGHT );
+   _test( parseBoundary( "TOP" ) == TOP );
+   _test( parseBoundary( "LEFT" ) == LEFT );
+   _test( parseBoundary( "BACK" ) == BACK );
+   _test( parseBoundary( "FRONT" ) == FRONT );
+   _test( parseBoundary( "IRREGULAR" ) == IRREGULAR );
+   _test( parseBoundary( "CNR2" ) == CNR2 );
+   _test( parseBoundary( "CNR5" ) == CNR5 );
+   _test( parseBoundary( "EDGE3" ) == EDGE3 );
+   _test( parseBoundary( "EDGE6" ) == EDGE6 );
+
+    // for all possible flag values
+    for ( int8_t i{3}; i>MULTIPLE_BOUNDARIES-1; --i )
+      {
+         auto flag            = static_cast<BOX_BOUNDARY>(i);
+         auto boundary_string = box_test::parseBoundary(flag);
+         // enum argument
+         _test( parseBoundary( flag ) == box_test::parseBoundary(flag) );
+         if ( parseBoundary( flag ) != box_test::parseBoundary(flag) )
+           cout <<" "<<"parseBoundary(BOX_BOUNDARY) used with: "<< boundary_string <<" returned "<< parseBoundary( flag ) << endl;
+           
+         // string argument
+         _test( parseBoundary( boundary_string ) == box_test::parseBoundary( boundary_string ) );
+         if ( parseBoundary( boundary_string ) != box_test::parseBoundary( boundary_string ) )
+           cout <<" "<<"parseBoundary(string) used with: "<< boundary_string << endl;
+
+         _test( isLEFT( flag ) == box_test::isLEFT( flag ) );
+         _test( isRIGHT( flag ) == box_test::isRIGHT( flag ) );
+         _test( isTOP( flag ) == box_test::isTOP( flag ) );
+         _test( isBOTTOM( flag ) == box_test::isBOTTOM( flag ) );
+         _test( isFRONT( flag ) == box_test::isFRONT( flag ) );
+         _test( isBACK( flag ) == box_test::isBACK( flag ) );
+
+         _test( isEdge( flag ) == box_test::isEdge( flag ) );
+         _test( isCorner( flag ) == box_test::isCorner( flag ) );
+          if ( isCorner( flag ) != box_test::isCorner( flag ) ) cout <<" "<< boundary_string << endl;
+         
+         // old function is more restrictive
+         if ( box_test::isSide( flag ) )
+         _test( isSide( flag ) == box_test::isSide( flag ) );
+
+         _test( belongsToSide( BOTTOM, flag ) == box_test::belongsToSide( BOTTOM, flag ) );
+         _test( belongsToSide( RIGHT, flag )  == box_test::belongsToSide( RIGHT, flag ) );
+         _test( belongsToSide( TOP, flag )    == box_test::belongsToSide( TOP, flag ) );
+         _test( belongsToSide( LEFT, flag )   == box_test::belongsToSide( LEFT, flag ) );
+         _test( belongsToSide( FRONT, flag )  == box_test::belongsToSide( FRONT, flag ) );
+         _test( belongsToSide( BACK, flag )   == box_test::belongsToSide( BACK, flag ) );
+
+         _test( belongsToEdge( EDGE1, flag ) == box_test::belongsToEdge( EDGE1, flag ) );
+         _test( belongsToEdge( EDGE2, flag ) == box_test::belongsToEdge( EDGE2, flag ) );
+         _test( belongsToEdge( EDGE3, flag ) == box_test::belongsToEdge( EDGE3, flag ) );
+         _test( belongsToEdge( EDGE4, flag ) == box_test::belongsToEdge( EDGE4, flag ) );
+         _test( belongsToEdge( EDGE5, flag ) == box_test::belongsToEdge( EDGE5, flag ) );
+         _test( belongsToEdge( EDGE6, flag ) == box_test::belongsToEdge( EDGE6, flag ) );
+         _test( belongsToEdge( EDGE7, flag ) == box_test::belongsToEdge( EDGE7, flag ) );
+         _test( belongsToEdge( EDGE8, flag ) == box_test::belongsToEdge( EDGE8, flag ) );
+         _test( belongsToEdge( EDGE9, flag ) == box_test::belongsToEdge( EDGE9, flag ) );
+         _test( belongsToEdge( EDGE10, flag ) == box_test::belongsToEdge( EDGE10, flag ) );
+         _test( belongsToEdge( EDGE11, flag ) == box_test::belongsToEdge( EDGE11, flag ) );
+         _test( belongsToEdge( EDGE12, flag ) == box_test::belongsToEdge( EDGE12, flag ) );
+
+         _test( intToBOX_BOUNDARY(i) == box_test::intToBOX_BOUNDARY( static_cast<int>(i) ) );
+         if ( intToBOX_BOUNDARY(i) != box_test::intToBOX_BOUNDARY( static_cast<int>(i) ) ) cout <<" "<< boundary_string << endl;
+      }
+          
+ } // end TestParsingOfFlags
+  
 
 
 
@@ -301,10 +731,9 @@ bool Box_Test::TestBoundaryFlagging()
 
 static void printNeighboursOfElement( const VSet<3U>& vset, size_t elmt )
  {
-    assert( elmt < vset.Elements() );
-    assert( vset.HybridElementTypeMesh() );
+    assert( elmt < vset.Elements() == true );
+    assert( vset.HybridElementTypeMesh() == true ); // expecting 'pelmt' size > 1
 
-//    for ( size_t eidx{0ul}; eidx<vset.Elements(); ++eidx ) {
     const auto n_nbors = distance( vset.PfvertsBegin(elmt), vset.PfvertsEnd(elmt) );
     const auto e_type  = vset.ElementType( elmt );
 
@@ -336,8 +765,9 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
  {
     VSet<3U>  vset;
     const bool bSkewed{false};
-    create_Prism_Hexa_VSet( vset, bSkewed );
-    vset.InitialiseNodeTopologyIdentifiers();
+    create_Prism_Hexa_VSet( vset, bSkewed ); // correct neighbors & node flagging
+//    create_Pyramid_Hexa_VSet( vset, bSkewed ); // correct neighbors & node flagging
+    vset.InitialiseNodeTopologyIdentifiers(); // needed later for error reporting
 
     // checking the Face nodes of element 1
     const size_t element{1ul};
@@ -345,6 +775,8 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     
     if ( verbose_ ) cout <<"\nBox_Test::TestWhetherElementNormalsAreOutwardPointing: building model 'Prism_Hexa'"<< endl;
     Model<3U>  model( vset, "CSMP-variables.txt" );
+    // ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", true ); 
+    
     printModelDimensions( model );
     Region<3U>& model_domain(model.Region("Model"));
     // verifying that the perimeter of the Model region matches that of the overall model
@@ -359,70 +791,166 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     VTU_Interface<3U> vtu_output( model );
     string file_name = "PrismHexa";
     vtu_output.OutputDataToVTU( file_name, out_vars, "Model", 0 );
+    _test( isStrictlyBoxShaped(model) == true );
     
+    // testing that the normals of elements of the model are outward-pointing
+    for ( const auto& eit : model_domain.CellVector() )
+      _test( areUnitNormalsToFacesAreOutwardPointing(eit) == true );
+      
+    // visually
+    if ( verbose_ ) {
+       for ( const auto& eit : model_domain.CellVector() ) {
+             if ( eit->FE_Type() == ISOPARAMETRIC_LINEAR_PRISM ) {
+                  string filename{"prism"}; filename += numberToString( eit->Idx() );
+                  writePrismWithNormalsToVTK( eit, filename );
+               }
+             else if ( eit->FE_Type() == ISOPARAMETRIC_LINEAR_PYRAMID ) {
+                  string filename{"pyramid"}; filename += numberToString( eit->Idx() );
+                  writePyramidWithNormalsToVTK( eit, filename );
+               }
+         }
+    }
+    
+    
+    // 0. Creating Boundary subdomains relying on Element-face normals
+    // ---------------------------------------------------------------
     _test( model.EstablishBoxBoundariesFromOrientation() );
+    _test( isStrictlyBoxShaped(model) == true );
     
-    // 0. Testing that the boundaries get correctly flagged
+    // 0.1 testing that the boundary Face normals are pointing in the same direction as inner element face normals
+    for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit ) {
+        // normal to boundary Face
+        Point<3> Face_nrml  = (*fit).UnitNormal();
+        // normal to boundary facing face of inner element
+        vector<double> eface_normal;
+        (*fit).InnerParent()->UnitNormalToFace( (*fit).InnerParentFaceID(), eface_normal );
+        Point<3> eface_nrml( eface_normal );
+        if ( approximatelyEqual( dotProduct(Face_nrml,eface_nrml), 1. ) == false ) {
+            cout <<"\n\t"<<"Face "<< (*fit).Idx() <<": normal "<< Face_nrml <<" vs "<<"inner Element ";
+            cout << (*fit).InnerParent()->Idx() <<": normal "<< eface_nrml << endl;
+            // (*fit).Out();
+          }
+      }
+      
+     // 0.2 do all FiniteVolumePolicy unit normal calculations give the same result?
+     for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit ) {
+          // UnitNormal( VectorVariable<dim>& nrml )
+          VectorVariable<3> VV_nrml;
+          (*fit).UnitNormal( VV_nrml );
+          // UnitNormal( vector<double>& nrml ) -> used by EstablishBoxBoundariesFromOrientation()
+          vector<double> vec_nrml;
+          (*fit).UnitNormal( vec_nrml );
+          // Point<dim>  UnitNormal()
+          Point<3> pt_nrml = (*fit).UnitNormal();
+          for ( uint32_t i{0}; i<3; ++ i ) _test( approximatelyEqual(pt_nrml[i],VV_nrml[i]) == true );
+          for ( uint32_t i{0}; i<3; ++ i ) _test( approximatelyEqual(pt_nrml[i],vec_nrml[i]) == true );
+       }
+
+    // 0.3 creating Face normal for testing
+    {
+      const csmp::Index nrml_key = model.Database().StorageKey("face vector");
+      size_t n_face{0u};
+      for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit, ++n_face ) {
+           // vector (unit normal)
+           auto nrml = (*fit).UnitNormal();
+           (*fit).Store( nrml_key, makeVector(ANY,ANY,ANY,nrml[0],nrml[1],nrml[2]) );
+       }
+      // Output boundaries with normals to VTU
+      vtu_output.OutputDataToVTU( "Face-normals", "face vector", model.Boundary("BACK"), 0 );
+      vtu_output.OutputDataToVTU( "Face-normals", "face vector", model.Boundary("BOTTOM"), 0 );
+      vtu_output.OutputDataToVTU( "Face-normals", "face vector", model.Boundary("RIGHT"), 0 );
+      vtu_output.OutputDataToVTU( "Face-normals", "face vector", model.Boundary("TOP"), 0 );
+      vtu_output.OutputDataToVTU( "Face-normals", "face vector", model.Boundary("LEFT"), 0 );
+      vtu_output.OutputDataToVTU( "Face-normals", "face vector", model.Boundary("FRONT"), 0 );
+   }
+
+     // 0.4 visual checks: are nodal bflags OK for Prism_Hexa
+     boxFlagsToVariable( model, "node flag", "element flag" ); // element number initialised by VSetMaker
+     file_name = "PrismHexa-rebuilt";
+     vtu_output.OutputDataToVTU( file_name, out_vars, "Model", 0 );
+     // outputting at problematic boundaries BACK and FRONT where prism elements surface
+     vtu_output.OutputDataToVTU( file_name, "face variable", model.Boundary("BACK"), 0 );
+     vtu_output.OutputDataToVTU( file_name, "face variable", model.Boundary("FRONT"), 0 );
+
+
+    // 1. Testing that the boundaries are correctly flagged
     // ----------------------------------------------------
     {
-      // recreateBoxBoundaryFlags( model );
       const Boundary<3U>& back   = model.Boundary("BACK");
       const Boundary<3U>& bottom = model.Boundary("BOTTOM");
       const Boundary<3U>& right  = model.Boundary("RIGHT");
       const Boundary<3U>& top    = model.Boundary("TOP");
       const Boundary<3U>& left   = model.Boundary("LEFT");
       const Boundary<3U>& front  = model.Boundary("FRONT");
+      bool wrong_flag{false};
       
       for ( auto nit=back.NodesBegin(); nit!=back.NodesEnd(); ++nit ) {
-           _test( isBACK( (*nit)->AtBoundary() ) );
-           if ( !isBACK( (*nit)->AtBoundary() ) ) {
-                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
-                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+           _test( isBACK( (*nit)->AtBoundary() ) == true );
+           if ( isBACK( (*nit)->AtBoundary() ) == false ) {
+                cout <<"\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl << endl;
+                wrong_flag = true;
              }
         }
+      if ( wrong_flag ) {
+           // checking nodes
+           cout <<"\nflags of boundary BACK: "<< endl;
+           for ( auto nit=back.NodesBegin(); nit!=back.NodesEnd(); ++nit )
+             cout <<"  "<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() ) <<" z="<< (*nit)->z();
+           cout << endl;
+           // checking faces
+           cout <<"\nFace finite-element types of boundary BACK: "<< endl;
+           for ( const auto& eit : back.CellVector() ) {
+                cout <<"  "<< eit->Idx() <<": "<< parseAbbreviated_FE_Type( eit->FE_Type() );
+                cout <<", npe: "<< eit->Nodes();
+             }
+           cout << endl << endl;
+           wrong_flag = false;
+        }
+        
       for ( auto nit=bottom.NodesBegin(); nit!=bottom.NodesEnd(); ++nit ) {
-           _test( isBOTTOM( (*nit)->AtBoundary() ) );
+           _test( isBOTTOM( (*nit)->AtBoundary() ) == true );
            if ( !isBOTTOM( (*nit)->AtBoundary() ) ) {
-                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
-                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+                cout <<"\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl << endl;
              }
         }
       for ( auto nit=right.NodesBegin(); nit!=right.NodesEnd(); ++nit ) {
-           _test( isRIGHT( (*nit)->AtBoundary() ) );
+           _test( isRIGHT( (*nit)->AtBoundary() ) == true );
            if ( !isRIGHT( (*nit)->AtBoundary() ) ) {
-                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
-                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+                cout <<"\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl << endl;
              }
         }
       for ( auto nit=top.NodesBegin(); nit!=top.NodesEnd(); ++nit ) {
-           _test( isTOP( (*nit)->AtBoundary() ) );
+           _test( isTOP( (*nit)->AtBoundary() ) == true );
            if ( !isTOP( (*nit)->AtBoundary() ) ) {
-                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
-                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+                cout <<"\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl << endl;
              }
         }
       for ( auto nit=left.NodesBegin(); nit!=left.NodesEnd(); ++nit ) {
-           _test( isLEFT( (*nit)->AtBoundary() ) );
+           _test( isLEFT( (*nit)->AtBoundary() ) == true );
            if ( !isLEFT( (*nit)->AtBoundary() ) ) {
-                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
-                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+                cout <<"\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl << endl;
              }
         }
       for ( auto nit=front.NodesBegin(); nit!=front.NodesEnd(); ++nit ) {
-           _test( isFRONT( (*nit)->AtBoundary() ) );
+           _test( isFRONT( (*nit)->AtBoundary() ) == true );
            if ( !isFRONT( (*nit)->AtBoundary() ) ) {
-                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
-                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+                cout <<"\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl << endl;
              }
         }
         
       if ( model.ContainsBoundary("IRREGULAR") ) {
            const Boundary<3U>& irregular = model.Boundary("IRREGULAR");
            for ( auto nit=irregular.NodesBegin(); nit!=irregular.NodesEnd(); ++nit ) {
-                _test( canBeIRREGULAR( (*nit)->AtBoundary() ) );
+                _test( canBeIRREGULAR( (*nit)->AtBoundary() ) == true );
                  if ( !canBeIRREGULAR( (*nit)->AtBoundary() ) ) {
-                      cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
-                      cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+                      cout <<"\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                      cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl << endl;
                    }
                }
         }
@@ -440,8 +968,9 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     Box().UnitNormalTo( BACK,   3, backNormal );
 
     double accumulated_area{ 0. };
-    for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i ) {
-         for ( auto j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
+    for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i )
+       {
+         for ( uint32_t j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
                 const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary( model_domain.PerimeterFace(i,j) );
                 _test( flag != NOT );
                 if ( flag == NOT ) {
@@ -453,14 +982,14 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
                 const auto          fnids = model_domain.E(i)->FE()->NodesOfFace( model_domain.PerimeterFace(i,j) );
                 const CSMP_FEM_TYPE etype = model_domain.E(i)->FE()->ElementTypeOfFace( model_domain.PerimeterFace(i,j) );
                 if ( isTriangular(etype) )
-                  accumulated_area += triangleArea( model_domain.E(i)->N( fnids[0] )->Coordinate(),
+                  accumulated_area += triangleArea( model_domain.E(i)->N( fnids[2] )->Coordinate(), // counter-clockwise nodes
                                                     model_domain.E(i)->N( fnids[1] )->Coordinate(),
-                                                    model_domain.E(i)->N( fnids[2] )->Coordinate() );
+                                                    model_domain.E(i)->N( fnids[0] )->Coordinate() );
                 else if ( isQuadrilateral(etype) )
-                  accumulated_area += facetArea4( model_domain.E(i)->N( fnids[0] )->Coordinate(),
-                                                  model_domain.E(i)->N( fnids[1] )->Coordinate(),
+                  accumulated_area += facetArea4( model_domain.E(i)->N( fnids[3] )->Coordinate(),
                                                   model_domain.E(i)->N( fnids[2] )->Coordinate(),
-                                                  model_domain.E(i)->N( fnids[3] )->Coordinate() );
+                                                  model_domain.E(i)->N( fnids[1] )->Coordinate(),
+                                                  model_domain.E(i)->N( fnids[0] )->Coordinate() );
                   
                 // verifying alignment of the element's unit normal with that of the model boundary
                 model_domain.E(i)->UnitNormalToFace( model_domain.PerimeterFace(i,j), eUnitNormal );
@@ -668,12 +1197,126 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
   
   
 
+// HELPER
+/**
+ * @brief Writes a vector of 3D points to a legacy VTK file format.
+ * * The legacy VTK format is human-readable and ideal for simple unstructured data.
+ * * @param filename The name of the output VTK file (e.g., "output.vtk").
+ * @param points The vector containing the 3D Point structures.
+ * @return true if the file was successfully written, false otherwise.
+ */
+static bool writePointVectorToVTK(const std::string& filename, const std::vector<Point<3>>& points )
+ {
+    std::ofstream outfile(filename);
+
+    if (!outfile.is_open()) {
+        std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
+        return false;
+    }
+
+    // 1. VTK File Header
+    // The header is mandatory for all legacy VTK files.
+    outfile << "# vtk DataFile Version 3.0\n";
+    outfile << "Point Set Example\n";
+    outfile << "ASCII\n"; // Specify ASCII for human-readable format
+
+    // 2. DATASET Structure
+    // Defines the type of data structure, here UNSTRUCTURED_GRID is suitable
+    // for a collection of disconnected points, but POLYDATA is more common
+    // and simpler for just points. We will use POLYDATA for simplicity.
+    outfile << "DATASET POLYDATA\n";
+
+    // 3. POINTS Section
+    // Define the number of points and the data type (float or double)
+    outfile << "POINTS " << points.size() << " double\n";
+
+    // Write all point coordinates
+    for (const auto& pt : points) {
+        // Use a space-separated format for coordinates
+        outfile << pt[0] << " " << pt[1] << " " << pt[2] << "\n";
+    }
+
+    // 4. VERTICES Section (Optional, but recommended for visualization)
+    // This section tells visualization software (like Paraview) that the points
+    // should be rendered as individual vertices (dots).
+    
+    // Format: VERTICES N_cells Cell_list_size
+    // For N points, N_cells is N. Cell_list_size is N + N (index + size_of_list)
+    outfile << "VERTICES " << points.size() << " " << points.size() * 2 << "\n";
+
+    // Write the connectivity list: each "cell" is just one vertex
+    for (size_t i = 0; i < points.size(); ++i) {
+        // Format: <Number of points in cell> <Index of point 1>
+        // Here, 1 is the point count, and i is the zero-based index of the point
+        outfile << "1 " << i << "\n";
+    }
+
+    // 5. POINT DATA (Optional attributes associated with each point)
+    // If you had scalar or vector data (e.g., temperature, velocity) for each point, 
+    // you would write it here. Example:
+    /*
+    outfile << "POINT_DATA " << points.size() << "\n";
+    outfile << "SCALARS PointTemperatures float 1\n";
+    outfile << "LOOKUP_TABLE default\n";
+    for (size_t i = 0; i < points.size(); ++i) {
+        outfile << (10.0 + i) << "\n"; // Example scalar data
+    }
+    */
+
+    outfile.close();
+    return true;
+    
+} // end writePointVectorToVTK
+
+
+
+/**
+       Returns map of points representing nodes in the Model with the chosen boundary flags.
+*/
+map<string,vector<Point<3>>> Box_Test::FormPointCloudsFromBOX_BOUNDARY_Flags( Model<3>& model )
+  {
+     map<BOX_BOUNDARY,vector<Point<3>>>  box_boundary_node_points;
+     const Region<3>&                    model_domain = model.Region("Model");
+     model_domain.RenumberNodes();
+     
+     // organising nodes with the same flag into vectors
+     for ( const auto& nit : model_domain.NodeVector() ) {
+        auto bbit = box_boundary_node_points.insert( make_pair( nit->AtBoundary(), vector<Point<3>>{nit->Coordinate()} ) );
+        // if this flag already exists no new insertion was made
+        if ( !bbit.second ) (*bbit.first).second.push_back( nit->Coordinate() );
+     }
+      
+     // creating the VTK files from the point clouds
+     map<string,vector<Point<3>>>  point_clouds_created;
+     for ( auto& node_vec : box_boundary_node_points ) {
+          // writing VTK files
+          string new_region = parseBoundary( node_vec.first );
+          bool success = writePointVectorToVTK( new_region + "_point_cloud.vtk", node_vec.second );
+          if ( !success || node_vec.second.size() < 1 ) {
+               cerr <<"\n"<<"Box_Test::PointCloudFromBOX_BOUNDARY_Flags: no cells in region '"<< new_region <<"'";
+            }
+          else point_clouds_created.insert( make_pair(new_region,node_vec.second) );
+       }
+
+     if ( verbose_ && !point_clouds_created.empty() ) {
+        cout <<"\n"<<"Box_Test::PointCloudFromBOX_BOUNDARY_Flags: formed new model regions: "<< endl;
+        for ( const auto& region : point_clouds_created )
+          cout <<"  "<< region.first;
+        cout << endl << endl;
+     }
+
+     return point_clouds_created;
+
+  } // end FormRegionsFromBOX_BOUNDARY_Flags
+  
+  
+  
+  
+
 bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
  {
     VSet<3U>      vset;
-    ModelTopology topo = create_FracBox( vset ); // NOT SUITABLE because Bflags are wrong
-    //const bool bSkewed{false};
-    //create_Prism_Hexa_VSet( vset, bSkewed ); // used because boundary flags have been verified
+    ModelTopology topo = create_FracBox( vset ); // without boundary flags
     
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
@@ -689,6 +1332,7 @@ bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
     topo.ChangeDomainName( "BOUNDARY4", "BACK" );
     topo.ChangeDomainName( "BOUNDARY5", "TOP" );
     topo.ChangeDomainName( "BOUNDARY6", "BOTTOM" );
+    // reassigning BOX_BOUNDARY flags
     topo.AssignBoxShapedModelFlags( vset );
     
     // change the name so that the regions file is not found (and all regions are used)
@@ -697,26 +1341,47 @@ bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
     // building model with boundaries, converting surface elements to faces
     const bool create_boundaries_from_surf_elmts{ true };
     Model<3U> model( topo, vset, "CSMP-variables.txt", create_boundaries_from_surf_elmts );
+    if ( verbose_ ) printBoxBoundaryFlags( model );
+
     _test( model.Mesh().Elements() + model.Mesh().Faces() == vset.Cells() );
     _test( model.Mesh().Nodes() == vset.Vertices() );
-    // creating some Face numbers
-    const csmp::Index face_key = model.Database().StorageKey("face number");
-    size_t n_face{0u};
-    for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit, ++n_face ) {
-         (*fit).Store( face_key, makeScalar(ANY,n_face) );
-      }
+    
+    // creating Face numbers and normals
+    {
+      const csmp::Index face_key = model.Database().StorageKey("face number");
+      const csmp::Index nrml_key = model.Database().StorageKey("face vector");
+      size_t n_face{0u};
+      for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit, ++n_face ) {
+           // scalar (face number)
+           (*fit).Store( face_key, makeScalar(ANY,n_face) );
+           // vector (unit normal)
+           auto unrml = (*fit).UnitNormal();
+           VectorVariable<3> vc;
+           for ( uint32_t i{0}; i<3; ++i ) vc(i) = unrml[i];
+           (*fit).Store( nrml_key, vc );
+       }
+    }
+    // saving node flags to 'nodal variable'
+    {
+      const csmp::Index nvar_key = model.Database().StorageKey("nodal variable");
+      Region<3>& model_domain = model.Region("Model");
+      for ( auto& nit : model_domain.NodeVector() )
+        nit->Store( nvar_key, makeScalar(ANY, static_cast<double>(nit->AtBoundary()) ) );
+    }
 
     if ( verbose_ ) {
          const bool vtk_output{ true };
-         if ( vtk_output ) {
+         if ( vtk_output ) { // tested: 5/12/2025: FracBox normals are all outward-pointing
              VTU_Interface<3U> vtu_output( model ); // checked: SKM 6/7/24 (these are the correct boundaries)
-             vtu_output.OutputDataToVTU( "BoxTest_BACK_fn",   "face number", model.Boundary("BACK"), 0 );
-             vtu_output.OutputDataToVTU( "BoxTest_BOTTOM_fn", "face number", model.Boundary("BOTTOM"), 0 );
-             vtu_output.OutputDataToVTU( "BoxTest_RIGHT_fn",  "face number", model.Boundary("RIGHT"), 0 );
-             vtu_output.OutputDataToVTU( "BoxTest_TOP_fn",    "face number", model.Boundary("TOP"), 0 );
-             vtu_output.OutputDataToVTU( "BoxTest_LEFT_fn",   "face number", model.Boundary("LEFT"), 0 );
-             vtu_output.OutputDataToVTU( "BoxTest_FRONT_fn",  "face number", model.Boundary("FRONT"), 0 );
-           }
+             vtu_output.OutputDataToVTU( "BoxTest_BACK_fn",   "face vector", model.Boundary("BACK"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_BOTTOM_fn", "face vector", model.Boundary("BOTTOM"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_RIGHT_fn",  "face vector", model.Boundary("RIGHT"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_TOP_fn",    "face vector", model.Boundary("TOP"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_LEFT_fn",   "face vector", model.Boundary("LEFT"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_FRONT_fn",  "face vector", model.Boundary("FRONT"), 0 );
+             // boundary flags turned into regions
+             FormPointCloudsFromBOX_BOUNDARY_Flags( model );
+          }
          // printing the normal to first Face
          cout <<"\nBoxTest: boundary flag recreation:\n";
          cout <<"\nBACK "<< model.Boundary("BACK").E(0)->UnitNormal();
@@ -769,6 +1434,45 @@ bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
    return true;
    
 } // end Boundary vs BOX_BOUNDARY flagging
+  
+  
+  
+/** Edges (intersections of box-side pairs):
+ 
+    E1:  x-axis, y=0, z=0  -> BOTTOM & BACK
+    E2:  y-axis, x=3, z=0  -> RIGHT & BACK
+    E3:  x-axis, y=3, z=0  -> TOP   & BACK
+    E4:  y-axis, x=0, z=0  -> LEFT  & BACK
+    E5:  z-axis, x=0, y=0  -> LEFT  & BOTTOM
+    E6:  z-axis, x=3, y=0  -> RIGHT & BOTTOM
+    E7:  z-axis, x=3, y=3  -> RIGHT & TOP
+    E8:  z-axis, x=0, y=3  -> LEFT  & TOP
+    E9:  x-axis, y=0, z=3  -> BOTTOM & FRONT
+    E10: y-axis, x=3, z=3  -> RIGHT  & FRONT
+    E11: x-axis, y=3, z=3  -> TOP    & FRONT
+    E12: y-axis, x=0, z=3  -> LEFT   & FRONT
+    
+     SKM checked
+*/
+constexpr std::array<std::array<BOX_BOUNDARY, 2>, 12> sidesOfEdge() noexcept {
+    return {{
+        { static_cast<BOX_BOUNDARY>(BOTTOM_OUTSIDE), static_cast<BOX_BOUNDARY>(BACK_OUTSIDE) },  // EDGE1
+        { static_cast<BOX_BOUNDARY>(RIGHT_OUTSIDE),  static_cast<BOX_BOUNDARY>(BACK_OUTSIDE) },  // EDGE2
+        { static_cast<BOX_BOUNDARY>(TOP_OUTSIDE),    static_cast<BOX_BOUNDARY>(BACK_OUTSIDE) },  // EDGE3
+        { static_cast<BOX_BOUNDARY>(LEFT_OUTSIDE),   static_cast<BOX_BOUNDARY>(BACK_OUTSIDE) },  // EDGE4
+        
+        { static_cast<BOX_BOUNDARY>(LEFT_OUTSIDE),   static_cast<BOX_BOUNDARY>(BOTTOM_OUTSIDE) }, // EDGE5
+        { static_cast<BOX_BOUNDARY>(RIGHT_OUTSIDE),  static_cast<BOX_BOUNDARY>(BOTTOM_OUTSIDE) }, // EDGE6
+        { static_cast<BOX_BOUNDARY>(RIGHT_OUTSIDE),  static_cast<BOX_BOUNDARY>(TOP_OUTSIDE) },    // EDGE7
+        { static_cast<BOX_BOUNDARY>(LEFT_OUTSIDE),   static_cast<BOX_BOUNDARY>(TOP_OUTSIDE) },    // EDGE8
+        
+        { static_cast<BOX_BOUNDARY>(BOTTOM_OUTSIDE), static_cast<BOX_BOUNDARY>(FRONT_OUTSIDE) },  // EDGE9
+        { static_cast<BOX_BOUNDARY>(RIGHT_OUTSIDE),  static_cast<BOX_BOUNDARY>(FRONT_OUTSIDE) },  // EDGE10
+        { static_cast<BOX_BOUNDARY>(TOP_OUTSIDE),    static_cast<BOX_BOUNDARY>(FRONT_OUTSIDE) },  // EDGE11
+        { static_cast<BOX_BOUNDARY>(LEFT_OUTSIDE),   static_cast<BOX_BOUNDARY>(FRONT_OUTSIDE) }   // EDGE12
+    }};
+}
+ 
   
   
 
@@ -917,15 +1621,258 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
  }
 
 
+
+/** How to use the output
+ 
+ This method generates a legacy VTK unstructured grid output file for visualisation with Paraview or other.
+ 
+ @code
+ int main() {
+    const std::string filename = "prism_face_normals.vtk";
+    if (write_prism_normals_to_vtk(filename)) {
+        std::cout << "Successfully wrote the prism faces and normals to " << filename << std::endl;
+        std::cout << "\nTo visualize the normals in Paraview:\n";
+        std::cout << "1. Load the file.\n";
+        std::cout << "2. Apply the 'Glyph' filter.\n";
+        std::cout << "3. In Glyph Properties:\n";
+        std::cout << "   - Set 'Orientation Array' to 'FaceNormals'.\n";
+        std::cout << "   - Set 'Source' to 'Cell Centers'.\n";
+        std::cout << "   - Adjust 'Scale Factor' (e.g., 0.1) for visibility.\n";
+        std::cout << "4. Apply the Glyph filter.\n";
+    } else {
+        std::cerr << "Failed to write VTK file." << std::endl;
+    }
+#endcode
+
+*/
+bool writePrismWithNormalsToVTK( const csmp::Element<3>* eptr, const std::string& filename )
+{
+    assert( eptr != nullptr );
+    if ( eptr->FE_Type() != ISOPARAMETRIC_LINEAR_PRISM ) return false;
+    
+    std::ofstream outfile(filename + ".vtk");
+
+    if (!outfile.is_open()) {
+        std::cerr << "writePrismWithNormalsToVTK: Error: Could not open file " << filename << " for writing." << std::endl;
+        return false;
+    }
+
+    // Set precision for floating-point output
+    outfile << std::fixed << std::setprecision(6);
+
+    // --- 1. Define the Prism's 6 Vertices (Points) ---
+    // A standard prism aligned with the Z-axis (height 1, side 1).
+    const std::vector<Point<3>> points = { eptr->N(0)->Coordinate(), eptr->N(1)->Coordinate(), eptr->N(2)->Coordinate(), // Base Triangle (0, 1, 2)
+                                           eptr->N(3)->Coordinate(), eptr->N(4)->Coordinate(), eptr->N(5)->Coordinate() }; // Top Triangle (3, 4, 5)
+
+    const size_t num_points = points.size();
+
+    // --- 2. Define the 5 Faces (Decomposed Cells) using Point Indices ---
+    // The faces are defined in counter-clockwise order for correct normal visualization.
+    // Face 0: Quad (bottom)
+    // Face 1: Quad (front)
+    // Face 2: Quad (side)
+    // Face 3: Triangle (back-left)
+    // Face 4: Triangle (top)
+    
+    // Connectivity list: (Count, Index0, Index1, ...)
+    std::vector<int> connectivity; 
+    std::vector<int> face_counts;
+    
+    // F0: Bottom Triangle (P0, P2, P1)
+    connectivity.insert(connectivity.end(), {3, 0, 2, 1});
+    face_counts.push_back(3);
+
+    // F1: Quad (P0, P1, P4, P3)
+    connectivity.insert(connectivity.end(), {4, 0, 1, 4, 3});
+    face_counts.push_back(4);
+    
+    // F2: Quad (P1, P2, P5, P4)
+    connectivity.insert(connectivity.end(), {4, 1, 2, 5, 4});
+    face_counts.push_back(4);
+
+    // F3: Quad (P0, P3, P5, P2)
+    connectivity.insert(connectivity.end(), {4, 0, 3, 5, 2});
+    face_counts.push_back(4);
+
+    // F4: Top Triangle (P3, P4, P5) - Note: Normal direction is opposite of F3, hence the index swap.
+    connectivity.insert(connectivity.end(), {3, 3, 4, 5});
+    face_counts.push_back(3);
+
+    const size_t num_faces = face_counts.size();
+
+    // --- 3. Define the Unit Normal Vector for Each Face ---
+    eptr->CoordinateMatrix();
+    const std::vector<Point<3>> face_normals = {
+        eptr->UnitNormalToFace(0),
+        eptr->UnitNormalToFace(1), eptr->UnitNormalToFace(2), eptr->UnitNormalToFace(3),
+        eptr->UnitNormalToFace(4)
+    };
+
+    // --- 4. Write VTK File Header ---
+    outfile << "# vtk DataFile Version 3.0\n";
+    outfile << "VTK Prism Faces with Normals\n";
+    outfile << "ASCII\n";
+    outfile << "DATASET POLYDATA\n"; // POLYDATA is suitable for surface meshes
+
+    // --- 5. POINTS Block ---
+    outfile << "POINTS " << num_points << " double\n";
+    for (const auto& pt : points) {
+        outfile << pt[0] << " " << pt[1] << " " << pt[2] << "\n";
+    }
+
+    // --- 6. POLYGONS (Faces/Cells) Block ---
+    // Total size is sum of all face counts + number of faces (to store the count value).
+    int list_size = 0;
+    for( int count : face_counts) list_size += (count + 1);
+
+    outfile << "POLYGONS " << num_faces << " " << list_size << "\n";
+    
+    int conn_index = 0;
+    for ( unsigned int i = 0; i < num_faces; ++i) {
+        // First value is the number of points in the polygon (3 for triangle, 4 for quad)
+        outfile << face_counts[i]; 
+        for ( int j = 0; j < face_counts[i]; ++j) {
+            outfile << " " << connectivity[ static_cast<size_t>(conn_index + j + 1) ];
+        }
+        outfile << "\n";
+        conn_index += face_counts[i] + 1; // Move to start of next face
+    }
+
+    // --- 7. CELL DATA Block (Normals) ---
+    // Attach the normal vector as VECTORS to each face (cell)
+    outfile << "CELL_DATA " << num_faces << "\n";
+    outfile << "VECTORS FaceNormals double\n";
+
+    for (const auto& normal : face_normals) {
+        outfile << normal[0] << " " << normal[1] << " " << normal[2] << "\n";
+    }
+
+    outfile.close();
+    return true;
+    
+} // end writePrismWithNormalsToVTK
+
+
+
+bool writePyramidWithNormalsToVTK( const csmp::Element<3>* eptr, const std::string& filename )
+{
+    assert( eptr != nullptr );
+    if ( eptr->FE_Type() != ISOPARAMETRIC_LINEAR_PYRAMID ) return false;
+    
+    std::ofstream outfile(filename + ".vtk");
+
+    if (!outfile.is_open()) {
+        std::cerr << "writePrismWithNormalsToVTK: Error: Could not open file " << filename << " for writing." << std::endl;
+        return false;
+    }
+
+    // Set precision for floating-point output
+    outfile << std::fixed << std::setprecision(6);
+
+    // --- 1. Define the Pyramids 5 Vertices (Points) ---
+    // A standard pyramid aligned with the Z-axis (height 1, side 1).
+    const std::vector<Point<3>> points = { eptr->N(0)->Coordinate(), eptr->N(1)->Coordinate(), eptr->N(2)->Coordinate(),
+                                           eptr->N(3)->Coordinate(), eptr->N(4)->Coordinate() };
+
+    const size_t num_points = points.size();
+
+    // --- 2. Define the 5 Faces (Decomposed Cells) using Point Indices ---
+    // The faces are defined in counter-clockwise order for correct normal visualization.
+    // Face 0: Triangle (bottom)
+    // Face 1: Triangle (front)
+    // Face 2: Triangle (side)
+    // Face 3: Triangle (back-left)
+    // Face 4: Quadrilateral (bottom)
+    
+    // Connectivity list: (Count, Index0, Index1, ...)
+    std::vector<int> connectivity; 
+    std::vector<int> face_counts;
+    
+    // F0: Bottom Triangle (P0, P2, P1)
+    connectivity.insert(connectivity.end(), {3, 1,0,4});
+    face_counts.push_back(3);
+
+    // F1: Quad (P1, P2, P5, P4)
+    connectivity.insert(connectivity.end(), {3, 1,2,4});
+    face_counts.push_back(3);
+
+    // F2: Quad (P0, P3, P5, P2)
+    connectivity.insert(connectivity.end(), {3, 2,3,4});
+    face_counts.push_back(3);
+
+    // F3: Quad (P0, P3, P5, P2)
+    connectivity.insert(connectivity.end(), {3, 0,4,3});
+    face_counts.push_back(3);
+
+    // F4: Base
+    connectivity.insert(connectivity.end(), {4, 0,3,2,1 });
+    face_counts.push_back(4);
+
+    const size_t num_faces = face_counts.size();
+
+    // --- 3. Define the Unit Normal Vector for Each Face ---
+    eptr->CoordinateMatrix();
+    const std::vector<Point<3>> face_normals = {
+        eptr->UnitNormalToFace(0),
+        eptr->UnitNormalToFace(1),
+        eptr->UnitNormalToFace(2),
+        eptr->UnitNormalToFace(3),
+        eptr->UnitNormalToFace(4)
+    };
+
+    // --- 4. Write VTK File Header ---
+    outfile << "# vtk DataFile Version 3.0\n";
+    outfile << "VTK Pyramid Faces with Normals\n";
+    outfile << "ASCII\n";
+    outfile << "DATASET POLYDATA\n"; // POLYDATA is suitable for surface meshes
+
+    // --- 5. POINTS Block ---
+    outfile << "POINTS " << num_points << " double\n";
+    for (const auto& pt : points) {
+        outfile << pt[0] << " " << pt[1] << " " << pt[2] << "\n";
+    }
+
+    // --- 6. POLYGONS (Faces/Cells) Block ---
+    // Total size is sum of all face counts + number of faces (to store the count value).
+    int list_size = 0;
+    for( int count : face_counts) list_size += (count + 1);
+
+    outfile << "POLYGONS " << num_faces << " " << list_size << "\n";
+    
+    int conn_index = 0;
+    for ( unsigned int i = 0; i < num_faces; ++i) {
+        // First value is the number of points in the polygon (3 for triangle, 4 for quad)
+        outfile << face_counts[i]; 
+        for ( int j = 0; j < face_counts[i]; ++j) {
+            outfile << " " << connectivity[ static_cast<size_t>(conn_index + j + 1) ];
+        }
+        outfile << "\n";
+        conn_index += face_counts[i] + 1; // Move to start of next face
+    }
+
+    // --- 7. CELL DATA Block (Normals) ---
+    // Attach the normal vector as VECTORS to each face (cell)
+    outfile << "CELL_DATA " << num_faces << "\n";
+    outfile << "VECTORS FaceNormals double\n";
+
+    for (const auto& normal : face_normals) {
+        outfile << normal[0] << " " << normal[1] << " " << normal[2] << "\n";
+    }
+
+    outfile.close();
+    return true;
+    
+} // end writePyramidithNormalsToVTK
+
+
+
+
+
+
+
+
 } // csmp
-
-
-
-
-
-
-
-
 
 
 

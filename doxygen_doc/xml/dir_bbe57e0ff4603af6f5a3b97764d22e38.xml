@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_bbe57e0ff4603af6f5a3b97764d22e38" kind="dir">
+    <compoundname>build/CMakeFiles/jpeg.dir/thirdparty</compoundname>
+    <innerdir refid="dir_dde9fee427fb710a7ca8d01682765770">build/CMakeFiles/jpeg.dir/thirdparty/jpeg</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/jpeg.dir/thirdparty/"/>
+  </compounddef>
+</doxygen>

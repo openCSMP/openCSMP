@@ -1,0 +1,61 @@
+\doxysection{VData\+\_\+\+Test.\+h}
+\hypertarget{_v_data___test_8h_source}{}\label{_v_data___test_8h_source}\index{tests/unit/VData\_Test.h@{tests/unit/VData\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{VDATA\_TEST\_H}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{VDATA\_TEST\_H}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ MISSING}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ TODO:\ test\ all\ the\ functionality\ that\ recreates\ neighbors\ etc.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ TODO:\ test\ read\ /\ write\ of\ VSet/VData\ with\ faces\ and\ interfaces}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ TODO:\ test\ extraction\ of\ manifolds}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{///\ PL\ Nov\ 2010\ \&\ SKM\ 23/12022}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_data___test}{VData\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_data___test_a4b450b418b836954a3937618f41a6e73}{run}}();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\ test\ read-\/write\ complete\ VSet,\ including\ boundaries\ and\ interfaces}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ TestBinaryIO();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ checks\ whether\ mesh\ is\ still\ intact\ after\ corner\ elements\ were\ split}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ test\ model\ FracBox}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ TestReplacementOfCornerTetrahedra();}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{///\ for\ vsetMaker\ vset\ 'MeshPatchWithLineElements'\ tests\ whether\ the\ handcoded\ neighbor\ connectivity\ is\ reproduced}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_data___test_ab3f93defc2ba6d6848b3810bd4456029}{Test\_EstablishElementConnectivity2D}}();}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/*\ checks\ whether\ a\ neighbor-\/based\ traversal\ of\ line\ elements\ is\ possible\ after\ calling\ this\ method}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ \ \ inside\ of\ EstablishElementConnectivity2D()}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_CreateConsistentLineElementOrientations2D();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{///\ reestablishes\ neighbor\ connectivity\ for\ 3D\ model\ Tetra\ (6\ tets\ created\ from\ one\ hex)}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_data___test_a9f083b104618949836af8379d52ee50f}{Test\_RecreateConnectivityOfTetrahedralMesh}}();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ reestablishes\ neighbor\ connectivity\ for\ 3D\ model\ Rubik\ cube}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_data___test_a4dc02c3aa2bb1f91334fd16c15b96737}{Test\_RecreateConnectivityOfHexahedralMesh}}();}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_InitialiseNodeTopologyIdentifiers();}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00047\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ VDATA\_TEST\_H}}
+
+\end{DoxyCode}

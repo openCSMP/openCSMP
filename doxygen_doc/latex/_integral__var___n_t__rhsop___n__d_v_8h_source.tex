@@ -1,0 +1,88 @@
+\doxysection{Integral\+\_\+var\+\_\+\+NT\+\_\+rhsop\+\_\+\+N\+\_\+d\+V.\+h}
+\hypertarget{_integral__var___n_t__rhsop___n__d_v_8h_source}{}\label{_integral__var___n_t__rhsop___n__d_v_8h_source}\index{source/includes/integration/pde\_operators/analytical/Integral\_var\_NT\_rhsop\_N\_dV.h@{source/includes/integration/pde\_operators/analytical/Integral\_var\_NT\_rhsop\_N\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_INTEGRAL\_VAR\_NT\_RHSOP\_N\_DV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_INTEGRAL\_VAR\_NT\_RHSOP\_N\_DV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@brief\ Integral\_var\_NT\_rhsop\_N\_dV\ Integral\_var\_NT\_rhsop\_N\_dV\ "{}pde\_operators/Integral\_var\_NT\_rhsop\_N\_dV.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@author\ S.\ Roberts}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{PDE-\/operator\ for\ off-\/diagonal\ terms\ on\ the\ right\ hand\ side\ of\ a\ matrix}}
+\DoxyCodeLine{00018\ \textcolor{comment}{equation.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{In\ transient\ coupled\ problems,\ the\ following\ matrix\ formulation\ is\ seen}}
+\DoxyCodeLine{00023\ \textcolor{comment}{often:}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ 1/dt(M\ u\string^n+1\ -\/\ M\ u\string^n)\ =\ A\ u\string^n}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{The\ term}}
+\DoxyCodeLine{00028\ \textcolor{comment}{}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ 1/dt\ M\ u\string^n}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{can\ be\ collapsed\ into\ the\ right\ hand\ side\ vector,\ since\ u\string^n\ is\ known.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{In\ the\ case\ of\ a\ coupled\ problem,\ where\ u\ =\ [u1,\ u2],\ the\ matrix\ M\ can}}
+\DoxyCodeLine{00033\ \textcolor{comment}{contain\ off-\/diagonal\ blocks\ which\ are\ multiplied\ with\ u1\ (u2),\ but\ the}}
+\DoxyCodeLine{00034\ \textcolor{comment}{contribution\ must\ be\ assembled\ into\ the\ u2\ (u1)\ part\ of\ the\ global\ rhs}}
+\DoxyCodeLine{00035\ \textcolor{comment}{vector!\ Since\ Integral\_NT\_op\_N\_dV\ cannot\ deal\ with\ that,\ I\ wrote\ this}}
+\DoxyCodeLine{00036\ \textcolor{comment}{animal\ here...}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{Only\ in\ transient\ problems}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00043\ \textcolor{comment}{@section\ structure\ Structure}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{Additional\ variable\ "{}basic"{}\ compared\ to\ other\ classes\ derived\ from}}
+\DoxyCodeLine{00046\ \textcolor{comment}{MathOperatorRHS.\ Corresponds\ to\ the\ u1\ variable\ mentioned\ in\ the\ example}}
+\DoxyCodeLine{00047\ \textcolor{comment}{above.\ The\ variable\ "{}test"{}\ is\ needed\ to\ specify\ where\ the\ entry\ is}}
+\DoxyCodeLine{00048\ \textcolor{comment}{assembled\ in\ the\ global\ rhs\ vector.\ Additional\ variables\ "{}upwind"{}\ and}}
+\DoxyCodeLine{00049\ \textcolor{comment}{"{}trigger"{}\ for\ upwinding}}
+\DoxyCodeLine{00050\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00051\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00052\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v}{Integral\_var\_NT\_rhsop\_N\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00053\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_a6eda8447a487dbed419b0d81c1de040d}{Integral\_var\_NT\_rhsop\_N\_dV}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ prefactor\ =\ 1.);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_ae0468950841ea2f951a3705ad2ed37c5}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__rhsop___n__d_v_a8e6cc69640cc73c939a5d9cb5373e245}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ Integral\_var\_NT\_rhsop\_N\_dV<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ Integral\_var\_NT\_rhsop\_N\_dV<dim,CELL>\ (*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ ComputeIntegral(\ \textcolor{keyword}{const}\ CELL<dim>\&\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ op\_;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\ basic\_;}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}\ var\_;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ std::vector<ScalarVariable\ >\ basic\_var\_;}
+\DoxyCodeLine{00075\ \ \ \ \ std::vector<ScalarVariable\ >\ vvar\_;}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ prefactor\_;}
+\DoxyCodeLine{00077\ \};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

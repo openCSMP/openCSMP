@@ -1,0 +1,39 @@
+\doxysection{CVFE\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h}
+\hypertarget{_c_v_f_e___num_integral__d_n_t__op__d_n__d_v_8h_source}{}\label{_c_v_f_e___num_integral__d_n_t__op__d_n__d_v_8h_source}\index{source/modules/integration/pde\_operators/fv\_integration/CVFE\_NumIntegral\_dNT\_op\_dN\_dV.h@{source/modules/integration/pde\_operators/fv\_integration/CVFE\_NumIntegral\_dNT\_op\_dN\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CVFE\_NUM\_INTEGRAL\_DNT\_OP\_DN\_DN\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CVFE\_NUM\_INTEGRAL\_DNT\_OP\_DN\_DN\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_l_h_s_8h}{"{}MathOperatorLHS.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_operand_8h}{"{}Operand.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_two_phase_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{///\ PDE\ operator:\ \ oper\ div\string^2\ N}}
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e___num_integral__d_n_t__op__d_n__d_v}{CVFE\_NumIntegral\_dNT\_op\_dN\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e___num_integral__d_n_t__op__d_n__d_v}{MathOperatorLHS}}<\mbox{\hyperlink{classcsmp_1_1_c_v_f_e___num_integral__d_n_t__op__d_n__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_c_v_f_e___num_integral__d_n_t__op__d_n__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e___num_integral__d_n_t__op__d_n__d_v_ae143fbb6db8aa32da5a2e9dc8aca46a4}{CVFE\_NumIntegral\_dNT\_op\_dN\_dV}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ pref,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeability,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ );}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e___num_integral__d_n_t__op__d_n__d_v_a421786c2ef50e9c8bc02628e0bbf79a1}{GetOperands}}(\ CELL<dim>\&\ );}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e___num_integral__d_n_t__op__d_n__d_v_a01e488ac6bc29fa24e61f5b0e52bf776}{ComputeContribution}}(\ CELL<dim>\&\ );}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ DN\_,\ LK\_,\ FN\_;}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&\ \ kri\_;}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

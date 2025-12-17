@@ -1,0 +1,77 @@
+\doxysection{Attorney.\+h}
+\hypertarget{_attorney_8h_source}{}\label{_attorney_8h_source}\index{source/includes/utilities/Attorney.h@{source/includes/utilities/Attorney.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ Attorney.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_ReservoirSimulator}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ATTORNEY\_H}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ATTORNEY\_H}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@brief\ Attorney\ design\ pattern\ gives\ access\ to\ protected\ /\ private\ member}}
+\DoxyCodeLine{00014\ \textcolor{comment}{variables\ and\ methods.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{Unit\ tests\ may\ require\ access\ to\ internal\ variables\ and\ methods\ to\ test\ the}}
+\DoxyCodeLine{00020\ \textcolor{comment}{basic\ internal\ works\ of\ a\ class.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{This\ version\ is\ templated\ to}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ 1.\ avoid\ friend\ declaration\ in\ the\ class\ being\ tested.\ Cluttering\ a\ class}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ with\ friend\ declarations\ which\ are\ not\ relevant\ to\ the\ way\ the\ class\ is}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ used\ in\ the\ code\ is\ not\ helpful\ to\ the\ user.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ 2.\ give\ selective\ access\ to\ members\ and\ methods.\ A\ friend\ declaration\ gives}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ access\ to\ all\ protected\ and\ private\ members\ and\ methods.\ This\ templated}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ version\ requires\ explicit\ declaration\ of\ which\ members\ become\ accessible.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{}}
+\DoxyCodeLine{00033\ \textcolor{comment}{}}
+\DoxyCodeLine{00034\ \textcolor{comment}{@section\ example\ Application\ Example}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{Declare\ an\ Attorney\ of\ the\ class\ to\ be\ tested\ and\ declare\ members\ and\ methods\ to}}
+\DoxyCodeLine{00037\ \textcolor{comment}{be\ made\ accessible\ like\ so:}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00040\ \textcolor{comment}{template<uint32\_t\ dim>}}
+\DoxyCodeLine{00041\ \textcolor{comment}{class\ PDE\_Integrator\_Attorney\ :\ public\ Attorney<class\ PDE\_Integrator<dim>>\ \{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{public:}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ using\ Attorney<PDE\_Integrator<dim>>::Attorney;\ //\ Inherit\ Attorney\ constructor}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ using\ PDE\_Integrator<dim>::EstablishMatrixSetup;}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ using\ PDE\_Integrator<dim>::lhs\_operators\_;}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\};}}
+\DoxyCodeLine{00047\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{Then,\ in\ your\ test,\ create\ an\ Attorney\ and\ use\ it\ like\ so:}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00052\ \textcolor{comment}{PDE\_Integrator<2U,Element>\ pde\_integrator(\ ...\ );}}
+\DoxyCodeLine{00053\ \textcolor{comment}{PDE\_Integrator\_Attorney<2U>\ attorney(\ pde\_integrator\ );}}
+\DoxyCodeLine{00054\ \textcolor{comment}{LHS\_FixedValueMatrix<2U>\ \ lhs(\ ...\ );}}
+\DoxyCodeLine{00055\ \textcolor{comment}{attorney.Add(\&lhs);}}
+\DoxyCodeLine{00056\ \textcolor{comment}{attorney.EstablishMatrixSetup(\ ...\ );\ //\ <-\/\ Accessing\ protected\ method}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\_test(\ attorney.lhs\_operators\_.size()\ ==\ 1\ );\ //\ <-\/\ Accessing\ protected\ member\ variable}}
+\DoxyCodeLine{00058\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00061\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Client>}
+\DoxyCodeLine{00062\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_attorney}{Attorney}}\ :\ \textcolor{keyword}{public}\ Client\ \{}
+\DoxyCodeLine{00063\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00064\ \ \ \ \ Attorney(\ Client\&\ client\ )\ :\ client\_(\ client\ )\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00067\ \ \ \ \ Client\&\ client\_;}
+\DoxyCodeLine{00068\ \};}
+\DoxyCodeLine{00069\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ defined(ATTORNEY\_H)\ */}}
+
+\end{DoxyCode}

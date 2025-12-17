@@ -1,0 +1,697 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="namespaceio_1_1detail" kind="namespace" language="C++">
+    <compoundname>io::detail</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="csv_8h_1a5656f385aea8d6ee5814a2abc20f5191" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class quote_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::chop_next_column</definition>
+        <argsstring>(char *&amp;line, char *&amp;col_begin, char *&amp;col_end)</argsstring>
+        <name>chop_next_column</name>
+        <qualifiedname>io::detail::chop_next_column</qualifiedname>
+        <param>
+          <type>char *&amp;</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type>char *&amp;</type>
+          <declname>col_begin</declname>
+        </param>
+        <param>
+          <type>char *&amp;</type>
+          <declname>col_end</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="620" column="22" bodyfile="source/csv.h" bodystart="620" bodyend="635"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1af7113f75d17577c3964d5d45fef65d43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class trim_policy</type>
+          </param>
+          <param>
+            <type>class quote_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse_line</definition>
+        <argsstring>(char *line, char **sorted_col, const std::vector&lt; int &gt; &amp;col_order)</argsstring>
+        <name>parse_line</name>
+        <qualifiedname>io::detail::parse_line</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>sorted_col</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; int &gt; &amp;</type>
+          <declname>col_order</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="638" column="22" bodyfile="source/csv.h" bodystart="638" bodyend="658"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a29aee32eb931073ca832933c7ed7cf51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>unsigned</type>
+            <declname>column_count</declname>
+            <defname>column_count</defname>
+          </param>
+          <param>
+            <type>class trim_policy</type>
+          </param>
+          <param>
+            <type>class quote_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse_header_line</definition>
+        <argsstring>(char *line, std::vector&lt; int &gt; &amp;col_order, const std::string *col_name, ignore_column ignore_policy)</argsstring>
+        <name>parse_header_line</name>
+        <qualifiedname>io::detail::parse_header_line</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; int &gt; &amp;</type>
+          <declname>col_order</declname>
+        </param>
+        <param>
+          <type>const std::string *</type>
+          <declname>col_name</declname>
+        </param>
+        <param>
+          <type>ignore_column</type>
+          <declname>ignore_policy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="661" column="22" bodyfile="source/csv.h" bodystart="661" bodyend="709"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a2109437c5cfde706232ff352a06a8c9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, char &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>char &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="712" column="22" bodyfile="source/csv.h" bodystart="712" bodyend="719"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a0a834d872803de946c45bb9993ff1cdb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, std::string &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="722" column="22" bodyfile="source/csv.h" bodystart="722" bodyend="724"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a4b18842fa823d4e5ff2856c106a935f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, const char *&amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>const char *&amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="727" column="22" bodyfile="source/csv.h" bodystart="727" bodyend="729"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a51894246476f8614a57292c4ecd5ee70" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, char *&amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>char *&amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="732" column="22" bodyfile="source/csv.h" bodystart="732" bodyend="734"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a7e3c24544bc8a152ad2fdcad068cc15d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse_unsigned_integer</definition>
+        <argsstring>(const char *col, T &amp;x)</argsstring>
+        <name>parse_unsigned_integer</name>
+        <qualifiedname>io::detail::parse_unsigned_integer</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="737" column="22" bodyfile="source/csv.h" bodystart="737" bodyend="751"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a989169352cd4a941d3a4b41d34a5b507" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, unsigned char &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>unsigned char &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="753" column="32" bodyfile="source/csv.h" bodystart="753" bodyend="754"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a7c503975d9ebb907a137437620cd88e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, unsigned short &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>unsigned short &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="755" column="32" bodyfile="source/csv.h" bodystart="755" bodyend="756"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1aff0db116bccbbb97c60e15c88cf08c82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, unsigned int &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>unsigned int &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="757" column="32" bodyfile="source/csv.h" bodystart="757" bodyend="758"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1af21cf2ebdccbd344c3fa97ff290d5ba3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, unsigned long &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>unsigned long &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="759" column="32" bodyfile="source/csv.h" bodystart="759" bodyend="760"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1adfb924cb03fa5c6bbf3885eaae6b4900" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, unsigned long long &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>unsigned long long &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="761" column="32" bodyfile="source/csv.h" bodystart="761" bodyend="762"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1abfca68de6bc98a4b80ee15bf6872d9a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse_signed_integer</definition>
+        <argsstring>(const char *col, T &amp;x)</argsstring>
+        <name>parse_signed_integer</name>
+        <qualifiedname>io::detail::parse_signed_integer</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="765" column="22" bodyfile="source/csv.h" bodystart="765" bodyend="786"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1ac3445c529796f7c8a21353123b032359" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, signed char &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>signed char &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="788" column="32" bodyfile="source/csv.h" bodystart="788" bodyend="789"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a8dd4aa570ce585f60eba494b2ae46f8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, signed short &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>signed short &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="790" column="32" bodyfile="source/csv.h" bodystart="790" bodyend="791"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a4cac9397d7e326ffef73945d8dfdb3f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, signed int &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>signed int &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="792" column="32" bodyfile="source/csv.h" bodystart="792" bodyend="793"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1af4f571ee91d11a004c807122129b658f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, signed long &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>signed long &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="794" column="32" bodyfile="source/csv.h" bodystart="794" bodyend="795"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1adae9f76b938985b1a9a93456cb9181eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, signed long long &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>signed long long &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="796" column="32" bodyfile="source/csv.h" bodystart="796" bodyend="797"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a4f2b98902e1a5278853786aa8582df93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse_float</definition>
+        <argsstring>(const char *col, T &amp;x)</argsstring>
+        <name>parse_float</name>
+        <qualifiedname>io::detail::parse_float</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="800" column="22" bodyfile="source/csv.h" bodystart="800" bodyend="860"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1a60d2e8a932d377f25fb4ea80fa56199e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, float &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="862" column="33" bodyfile="source/csv.h" bodystart="862" bodyend="862"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1af795e6a74044788a6b4a3179a7839a9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, double &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="863" column="33" bodyfile="source/csv.h" bodystart="863" bodyend="863"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1aa5ded2fa5b85ef50ef2c0c3334f8fe6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, long double &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>long double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="864" column="33" bodyfile="source/csv.h" bodystart="864" bodyend="864"/>
+      </memberdef>
+      <memberdef kind="function" id="csv_8h_1ae54f2ce37fee9f7320e2167cc6157a98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class overflow_policy</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void io::detail::parse</definition>
+        <argsstring>(char *col, T &amp;x)</argsstring>
+        <name>parse</name>
+        <qualifiedname>io::detail::parse</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="867" column="22" bodyfile="source/csv.h" bodystart="867" bodyend="873"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/csv.h" line="618" column="9"/>
+  </compounddef>
+</doxygen>

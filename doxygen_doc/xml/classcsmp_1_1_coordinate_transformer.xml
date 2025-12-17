@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_coordinate_transformer" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CoordinateTransformer</compoundname>
+    <includes refid="_coordinate_transformer_8h" local="no">CoordinateTransformer.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_coordinate_transformer_1a9912074957504eb76f6591cd1673513c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CoordinateTransformer&lt; dim &gt;::translation_[dim]</definition>
+        <argsstring>[dim]</argsstring>
+        <name>translation_</name>
+        <qualifiedname>csmp::CoordinateTransformer::translation_</qualifiedname>
+        <briefdescription>
+<para>in x,y,z direction </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="42" column="12" bodyfile="source/includes/utilities/CoordinateTransformer.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_coordinate_transformer_1a268240270e9039efe75b9c59c5eb35ad" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CoordinateTransformer&lt; dim &gt;::flip_[dim]</definition>
+        <argsstring>[dim]</argsstring>
+        <name>flip_</name>
+        <qualifiedname>csmp::CoordinateTransformer::flip_</qualifiedname>
+        <briefdescription>
+<para>inverts the corresponding coordinate axis </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="43" column="12" bodyfile="source/includes/utilities/CoordinateTransformer.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_coordinate_transformer_1ab183b9502b36cd6d9212db0f7040da4c" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::pair&lt; uint32_t, uint32_t &gt; &gt;</type>
+        <definition>std::list&lt;std::pair&lt;uint32_t,uint32_t&gt; &gt; csmp::CoordinateTransformer&lt; dim &gt;::swapped_axes_</definition>
+        <argsstring></argsstring>
+        <name>swapped_axes_</name>
+        <qualifiedname>csmp::CoordinateTransformer::swapped_axes_</qualifiedname>
+        <briefdescription>
+<para>as the last step </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="44" column="15" bodyfile="source/includes/utilities/CoordinateTransformer.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_coordinate_transformer_1a63a9373ba7a65ddbbf0f2f72d8e13013" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CoordinateTransformer&lt; dim &gt;::CoordinateTransformer</definition>
+        <argsstring>()</argsstring>
+        <name>CoordinateTransformer</name>
+        <qualifiedname>csmp::CoordinateTransformer::CoordinateTransformer</qualifiedname>
+        <briefdescription>
+<para>no translation, scaling nor inversion of coordinate axis </para>
+        </briefdescription>
+        <detaileddescription>
+<para>initialises translations to zero and flip vector to 1 </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>&lt; in x,y,z direction</para>
+<para>&lt; coordinate multiplier</para>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="22" column="5" bodyfile="source/modules/utilities/CoordinateTransformer.cpp" bodystart="19" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_coordinate_transformer_1a382ca50cd25b154b2269661951447065" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CoordinateTransformer&lt; dim &gt;::Transform</definition>
+        <argsstring>(Point&lt; dim &gt; &amp;) const</argsstring>
+        <name>Transform</name>
+        <qualifiedname>csmp::CoordinateTransformer::Transform</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+<para>transform point coordinates using all specified operations, </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000050"><xreftitle>Todo</xreftitle><xrefdescription><para>make sure that specified sequence is honored </para>
+</xrefdescription></xrefsect></para>
+<para>processes translations etc. returning the point </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="25" column="10" bodyfile="source/modules/utilities/CoordinateTransformer.cpp" bodystart="33" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_coordinate_transformer_1a1e15ade48c9ae7af979a9e6d80497159" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;</type>
+        <definition>Point&lt; dim &gt; csmp::CoordinateTransformer&lt; dim &gt;::Transform</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;) const</argsstring>
+        <name>Transform</name>
+        <qualifiedname>csmp::CoordinateTransformer::Transform</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>vec</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>processes translations etc. returning the point </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="26" column="11" bodyfile="source/modules/utilities/CoordinateTransformer.cpp" bodystart="54" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_coordinate_transformer_1a0ccbdb1efc850b17cbbe02c0b81b7a3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CoordinateTransformer&lt; dim &gt;::Translate</definition>
+        <argsstring>(uint32_t axis, double distance_meters)</argsstring>
+        <name>Translate</name>
+        <qualifiedname>csmp::CoordinateTransformer::Translate</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>axis</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>distance_meters</declname>
+        </param>
+        <briefdescription>
+<para>translation along the specified axis </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="30" column="10" bodyfile="source/modules/utilities/CoordinateTransformer.cpp" bodystart="88" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_coordinate_transformer_1a7b49f93ba9c434b6d95a83958785229b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CoordinateTransformer&lt; dim &gt;::FlipAxis</definition>
+        <argsstring>(uint32_t axis)</argsstring>
+        <name>FlipAxis</name>
+        <qualifiedname>csmp::CoordinateTransformer::FlipAxis</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>axis</declname>
+        </param>
+        <briefdescription>
+<para>multiplies coordinates of specified axis by -1 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="33" column="10" bodyfile="source/modules/utilities/CoordinateTransformer.cpp" bodystart="98" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_coordinate_transformer_1ad625c113924aace86485851054ebea54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CoordinateTransformer&lt; dim &gt;::ExchangeAxes</definition>
+        <argsstring>(uint32_t axis_a, uint32_t axis_b)</argsstring>
+        <name>ExchangeAxes</name>
+        <qualifiedname>csmp::CoordinateTransformer::ExchangeAxes</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>axis_a</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>axis_b</declname>
+        </param>
+        <briefdescription>
+<para>exchange of axis </para>
+        </briefdescription>
+        <detaileddescription>
+<para>classical swap </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="36" column="10" bodyfile="source/modules/utilities/CoordinateTransformer.cpp" bodystart="108" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_coordinate_transformer_1a51806b93bc6b311b7126f04203ee5cda" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CoordinateTransformer&lt; dim &gt;::Reset</definition>
+        <argsstring>()</argsstring>
+        <name>Reset</name>
+        <qualifiedname>csmp::CoordinateTransformer::Reset</qualifiedname>
+        <briefdescription>
+<para>returns settings to ones which preserve value of input coordinate </para>
+        </briefdescription>
+        <detaileddescription>
+<para>sets to preserve input coordinate </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/CoordinateTransformer.h" line="39" column="10" bodyfile="source/modules/utilities/CoordinateTransformer.cpp" bodystart="120" bodyend="126"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>utility to convert between coordinate systems and flip axes </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CoordinateTransformer&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_coordinate_transformer"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/CoordinateTransformer.h" line="19" column="1" bodyfile="source/includes/utilities/CoordinateTransformer.h" bodystart="19" bodyend="45"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a63a9373ba7a65ddbbf0f2f72d8e13013" prot="public" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>CoordinateTransformer</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1ad625c113924aace86485851054ebea54" prot="public" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>ExchangeAxes</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a268240270e9039efe75b9c59c5eb35ad" prot="private" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>flip_</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a7b49f93ba9c434b6d95a83958785229b" prot="public" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>FlipAxis</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a51806b93bc6b311b7126f04203ee5cda" prot="public" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>Reset</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1ab183b9502b36cd6d9212db0f7040da4c" prot="private" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>swapped_axes_</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a382ca50cd25b154b2269661951447065" prot="public" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>Transform</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a1e15ade48c9ae7af979a9e6d80497159" prot="public" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>Transform</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a0ccbdb1efc850b17cbbe02c0b81b7a3b" prot="public" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>Translate</name></member>
+      <member refid="classcsmp_1_1_coordinate_transformer_1a9912074957504eb76f6591cd1673513c" prot="private" virt="non-virtual"><scope>csmp::CoordinateTransformer</scope><name>translation_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

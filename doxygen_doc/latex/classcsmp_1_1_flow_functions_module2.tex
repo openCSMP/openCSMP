@@ -1,0 +1,185 @@
+\doxysection{csmp\+::Flow\+Functions\+Module2\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_flow_functions_module2}{}\label{classcsmp_1_1_flow_functions_module2}\index{csmp::FlowFunctionsModule2$<$ dim $>$@{csmp::FlowFunctionsModule2$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Flow\+Functions\+Module2\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_flow_functions_module2__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Flow\+Functions\+Module2\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_flow_functions_module2__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_flow_functions_module2_a2b94cb82ed85beced7bff46c3746962c}\label{classcsmp_1_1_flow_functions_module2_a2b94cb82ed85beced7bff46c3746962c} 
+{\bfseries Flow\+Functions\+Module2} (\mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, double acc\+\_\+gravity)
+\begin{DoxyCompactList}\small\item\em \texorpdfstring{$<$}{<} fluids module / EOS interface \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis}{csmp\+::\+Brooks\+Corey\+Saturation\+Functions\+With\+Hysteresis$<$ dim, Flow\+Functions\+Module2 $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Brooks\+Corey\+Saturation\+Functions\+With\+Hysteresis} (\mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em accesses the model to create or attach to associated variable storage \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_af5bcc3b9e061c7a989ab9b21186b3793}{Effective\+Saturation}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em Effective saturation function. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a93369ed3b8820a5437add806950b9242}{Effective\+Saturation\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double s1) const
+\begin{DoxyCompactList}\small\item\em Effective saturation function for saturation S. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_adf43707907281e88d786ce36dbddeeef}{pc}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em Capillary pressure Eq. (2) from Skjaeveland et al. 2000. \end{DoxyCompactList}\item 
+double {\bfseries pc\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double s1) const
+\begin{DoxyCompactList}\small\item\em Capillary pressure Eq. (2) from Skjaeveland et al. 2000 for saturation S. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_ab81eb8f2bf4a7ad9054222813b854f12}{dpcds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em First derivative of capillary pressure as a function of saturation. \end{DoxyCompactList}\item 
+double {\bfseries dpcds\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_aaf4a851f527de153ce191cff3967abab}{krw}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em The water relative Permeability is evaluated from the Brooks \doxylink{classcsmp_1_1_corey}{Corey} Capillary Pressure model. See the Skaevland et al. 2000 at page 65. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a6a25c494d34c8c497b5a35494fc83080}{krw\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double S) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a6cc88b1e6b2c950897c233adcd1aa235}{krn}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em The CO2 relative Permeability is evaluated from the Brooks \doxylink{classcsmp_1_1_corey}{Corey} Capillary Pressure model. See the Skaevland et al. 2000 at page 65. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a1222b3b1510eb77617f17d63367ba429}{krn\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double S) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a299921caa154813daf10549c510b28c0}{dkrwds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em The first relative of water relative Permeability is evaluated from the Brooks \doxylink{classcsmp_1_1_corey}{Corey} Capillary Pressure model. See the Skaevland et al. 2000 at page 65. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a7c965a647ed0a29a3d03cdf43d5e3154}{dkrwds\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double S) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a875a55eb9e181de81590cb781139e052}{dkrnds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em The first relative of CO2 relative Permeability is evaluated from the Brooks \doxylink{classcsmp_1_1_corey}{Corey} Capillary Pressure model. See the Skaevland et al. 2000 at page 65. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_aa409c03ab16ad8cf8020a3972378b7ae}{dkrnds\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double S) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a909f4831d1f036cbbd37d1c524108f68}{dkrwds\+\_\+\+Numerical}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s) const
+\begin{DoxyCompactList}\small\item\em Numerical derivatives of first derivatives of relative permeability of water and CO2. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a3c0f1793300b779c4494cda791ca85c3}{dkrwds\+\_\+at\+\_\+\+Numerical}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw, double delta\+\_\+s) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a5ead3e2a1fb0ed42e5ebb98971fd7467}{dkrnds\+\_\+\+Numerical}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a840a44219023142221730eb65d53a9df}{dkrnds\+\_\+at\+\_\+\+Numerical}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw, double delta\+\_\+s) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a372e33207818c1975b5e5d9e0dc2fb3c}{Oil\+Residual\+Saturation}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em Oil residual saturation estimated from Land\textquotesingle{}s formula. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a676678e9e9c12542bf7e7f1a8a30515f}{Water\+Residual\+Saturation}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double Sor) const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_water}{Water} residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a450182a9b75bc36312e73c73e9aa07ca}{Water\+And\+Oil\+Residual\+Saturation\+Imbibition\+To\+Drainage}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const e, double \&Swr, double \&Sor) const
+\begin{DoxyCompactList}\small\item\em Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions}{csmp\+::\+Two\+Phase\+Flow\+Functions$<$ dim, Flow\+Functions\+Module2 $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries Sw} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const e) const
+\begin{DoxyCompactList}\small\item\em current water saturation initialised inside of the model \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a8e815f1d0e3d35290fd8012738f9e104}{Mobility}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em lambda parameter\+: 0 for water, 1 for the non-\/wetting phase \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ae13f971b41fa6659d59deb823ce2d53f}{Mobility\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double sw) const
+\begin{DoxyCompactList}\small\item\em lambda parameter\+: 0 for water, 1 for the non-\/wetting phase (using prescribed sw) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_adfd3f10a6452ceec887ac6ee94bd8d11}{Mobility\+Derivative}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, bool evaluate\+\_\+numerically=false) const
+\begin{DoxyCompactList}\small\item\em d lambda\+\_\+i / dsw \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a3583273f56e339059560bae1603257fa}{Mobility\+Derivative\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double sw) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_aff163b77e8e057a168b63bc49ad02f70}{Total\+Mobility}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em lambda\+\_\+t\+: sum of phase mobilities \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a02064e66435763d9f45572881696ee9b}{Total\+Mobility\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\begin{DoxyCompactList}\small\item\em lambda\+\_\+t\+: sum of phase mobilities (using prescribed sw) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ab23f9375ae7f476e0eaecef7baa6e4dc}{Mobility\+Product}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em lambda overbar\+: l1 \texorpdfstring{$\ast$}{*} l2 / l1 + l2 = mobility product / total mobility also known as G \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a0c9df8a94676491e468a0c1d42795d05}{Mobility\+Product\+Derivative}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, bool evaluate\+\_\+numerically=false) const
+\begin{DoxyCompactList}\small\item\em d lambda overbar / dsw also known as d\+Gds \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ad204036ce2dec252065021b10678cefd}{Mobility\+Product\+Derivative\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a7a0f8565a17ea1a85363c7327f97fee4}{f}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em fractional flow; 0=water, 1=non-\/wetting phase \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a5e1ace14d22cf90a5e137805f099b336}{f\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double sw) const
+\begin{DoxyCompactList}\small\item\em fractional flow; 0=water, 1=non-\/wetting phase (using prescribed sw) \end{DoxyCompactList}\item 
+double {\bfseries Permeability} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em Permeability. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a41d0e0204c5ea1eecd96e04f41376dd8}{dfds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw\+\_\+dsw=dfn\+\_\+dsn \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a27eab09c3d0ae37c4e37ec13dd8df655}{dfds\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a842bd5a14959aa69fa952455640bc36a}{Max\+Fractional\+Flow\+Derivative}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em maximum value of previous derivative \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a5d4bbc14660932b74f00f8499784e71a}{Advection\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em multiplier for advection viscosity coefficient in the case of non-\/linear advection \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a4a1087561974cfd736c2be0e9d81c3f4}{Shock\+Speed}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em outputs the shock wave celerity \end{DoxyCompactList}\item 
+double {\bfseries Shock\+Height} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em outputs the water saturation at the non-\/wetting phase shock front \end{DoxyCompactList}\item 
+void {\bfseries Shock\+Speed\+And\+Height} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double \&speed, double \&height) const
+\begin{DoxyCompactList}\small\item\em calculated shock height and speed \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_ab171e4e81f6e13024d434dd2c2704a53}{Gravity\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec) const
+\begin{DoxyCompactList}\small\item\em multipliers for gravity-\/driven flow (advection multiplier and source term) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_aba1760c4175e399fe5eed6939ab1d4fc}{Gravity\+Multiplier\+\_\+G}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a61764ee0bc11afb6bdc45c68fea29402}{Gravity\+Multiplier\+\_\+d\+Gds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a3d5af31b69a0cba26bbbe8017792702d}{Diffusion\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, size\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em multiplier for diffusion coefficient in the case of non-\/linear diffusion uses viscosity(phase) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a7e4d7221b06b72bb90cb2aa6b2f0f10a}{Capillary\+Diffusion\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em driven by capillary pressure gradient \end{DoxyCompactList}\item 
+double {\bfseries Capillary\+Diffusion\+Multiplier\+\_\+\+Phase} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, size\+\_\+t phase) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a1ebdf0d643ec5f0fb5a85779bf8a3e12}{Shock\+Front\+Velocity}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em calculating the Shock velocity \end{DoxyCompactList}\item 
+double {\bfseries dfds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double delta\+\_\+s=0.\+001) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_flow_functions_a22a444b0c017e83b3f9230a1a54c0176}{dfds\+\_\+at\+\_\+\+Numerical}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw, double delta\+\_\+s=0.\+001) const
+\item 
+double {\bfseries d\+Gds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s=0.\+000001) const
+\item 
+double {\bfseries dlwds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s=0.\+001) const
+\begin{DoxyCompactList}\small\item\em derivative of wetting phase mobility \end{DoxyCompactList}\item 
+double {\bfseries dlnds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s=0.\+001) const
+\begin{DoxyCompactList}\small\item\em derivative of non-\/wetting phase mobility \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_fluid}{csmp\+::\+Fluid$<$ dim, Flow\+Functions\+Module2 $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Fluid} ()
+\begin{DoxyCompactList}\small\item\em default constructor that tests the phase-\/state key \end{DoxyCompactList}\item 
+double {\bfseries Viscosity} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em the node property fluid viscosity (Pa.\+s) returned has been interpolated to the user-\/specified target placement (argument parameter) \end{DoxyCompactList}\item 
+double {\bfseries Density} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em the returned node property fluid density (of phase) (kg/m3) interpolated to the user-\/specified target placement (argument parameter) \end{DoxyCompactList}\item 
+double {\bfseries Mixture\+Density} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em returns saturation-\/weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_fluid_ae18bd5309962a5d0a15e766c159f8ae0}{Viscosity\+Ratio}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em returns the ratio of the phase viscosities at the target placement \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_flow_functions_module2_a4dadd507b65620824cba097f63e2dd61}\label{classcsmp_1_1_flow_functions_module2_a4dadd507b65620824cba097f63e2dd61} 
+double {\bfseries acceleration\+\_\+of\+\_\+gravity\+\_\+}
+\begin{DoxyCompactList}\small\item\em this must be read and input from the model (key\+\_\+g) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis}{csmp\+::\+Brooks\+Corey\+Saturation\+Functions\+With\+Hysteresis$<$ dim, Flow\+Functions\+Module2 $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a234593ee529e2c7bc2235d7fd29239ad}\label{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a234593ee529e2c7bc2235d7fd29239ad} 
+enum {\bfseries FLUID\+\_\+\+PHASE} 
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a43fa762c336c131fd484077850a0f541}\label{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a43fa762c336c131fd484077850a0f541} 
+enum {\bfseries TWO\+\_\+\+PHASE\+\_\+\+FLOW\+\_\+\+PROCESS} 
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a5c895e11fd5de544162e4e80c90e2905}\label{classcsmp_1_1_brooks_corey_saturation_functions_with_hysteresis_a5c895e11fd5de544162e4e80c90e2905} 
+enum {\bfseries HYSTERIC\+\_\+\+MODEL\+\_\+\+PARAMETERS} 
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_fluid}{csmp\+::\+Fluid$<$ dim, Flow\+Functions\+Module2 $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_flow_functions_module2}{Flow\+Functions\+Module2}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries User} ()
+\begin{DoxyCompactList}\small\item\em shorthand for accessing the class that Facet\+Flux\+\_\+\+Tracer\+Transfer\+Explicit is a policy of \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/two\+\_\+phase\+\_\+flow/Flow\+Functions\+Module.\+h\item 
+source/modules/thmc/two\+\_\+phase\+\_\+flow/Flow\+Functions\+Module.\+cpp\end{DoxyCompactItemize}

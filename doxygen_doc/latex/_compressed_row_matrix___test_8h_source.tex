@@ -1,0 +1,48 @@
+\doxysection{Compressed\+Row\+Matrix\+\_\+\+Test.\+h}
+\hypertarget{_compressed_row_matrix___test_8h_source}{}\label{_compressed_row_matrix___test_8h_source}\index{tests/unit/CompressedRowMatrix\_Test.h@{tests/unit/CompressedRowMatrix\_Test.h}}
+\mbox{\hyperlink{_compressed_row_matrix___test_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00002\ \textcolor{comment}{@file\ CompressedRowMatrix\_Test.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{@author\ J.\ E.\ Mindel}}
+\DoxyCodeLine{00004\ \textcolor{comment}{}}
+\DoxyCodeLine{00005\ \textcolor{comment}{Tests\ Compressed\ Row\ Matrix\ storage\ (CSR)\ for\ compatibility}}
+\DoxyCodeLine{00006\ \textcolor{comment}{with\ external\ solvers.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{Methods\ OffsetNumbering,SetRowToZero,RemoveRowAndColumn,RemoveRowsFromMatrix\ are}}
+\DoxyCodeLine{00008\ \textcolor{comment}{not\ used\ and\ therefore\ not\ tested.\ They\ probably\ exist\ in\ the\ TODO\ list.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{COMPRESSED\_ROW\_MATRIX\_TEST\_H}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{COMPRESSED\_ROW\_MATRIX\_TEST\_H}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_compressed_row_matrix_8h}{"{}CompressedRowMatrix.h"{}}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ @addtogroup\ CSMPUnitTests}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ @\{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix___test}{CompressedRowMatrix\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00024\ \ \ \ \ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ CompressedRowMatrix\_Test(\ \textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{false},}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ tolerance\ =\ std::numeric\_limits<\textcolor{keywordtype}{double}>::epsilon()\ *\ 10.\ )}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ :\ tolerance\_(tolerance),}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ verbose\_(verbose)\ \{\}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ tolerance\_;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_;}
+\DoxyCodeLine{00036\ \ \ \};}
+\DoxyCodeLine{00037\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ @\}}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00040\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ COMPRESSED\_ROW\_MATRIX\_TEST\_H}}
+
+\end{DoxyCode}

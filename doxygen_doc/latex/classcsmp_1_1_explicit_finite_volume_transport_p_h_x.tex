@@ -1,0 +1,721 @@
+\doxysection{csmp\+::Explicit\+Finite\+Volume\+Transport\+PHX\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Explicit\+Finite\+Volume\+Transport\+PHX.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Explicit\+Finite\+Volume\+Transport\+PHX\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Explicit\+Finite\+Volume\+Transport\+PHX\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa9b89c4ad237db91de8ded8546b843bc}{Explicit\+Finite\+Volume\+Transport\+PHX}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, std\+::vector$<$ std\+::string $>$ \&lhs\+\_\+property, std\+::vector$<$ std\+::string $>$ \&rhs\+\_\+property, const char \texorpdfstring{$\ast$}{*}velocity, const char \texorpdfstring{$\ast$}{*}source, const char \texorpdfstring{$\ast$}{*}density)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad3da90054e55aeee5ac05fba14226b10}{\texorpdfstring{$\sim$}{\string~}\+Explicit\+Finite\+Volume\+Transport\+PHX}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b1b76a50396069e544d5c949e3adf23}{Advect\+Mass\+Conserved\+Single\+Phase}} (const double \&time\+\_\+increment)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3f471649df8617f1c5dc573259fe2559}{Add\+Advection\+Variable}} (const char \texorpdfstring{$\ast$}{*}new\+\_\+lhs, const char \texorpdfstring{$\ast$}{*}new\+\_\+rhs)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b9e904a14a4955fe1a41efd88f1e237}{With\+Gravity\+Component}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae265b54e0855b9607e7463fed81b52c2}{Set\+Maximum\+Time\+Step}} (const double \&new\+\_\+max\+\_\+time\+\_\+step)
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ab11dabb02c1134ba243f3e0d684da086}{Get\+Density\+Key}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aba49a00f7644703e90aee387758d7d4c}{Update\+Projection}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a41e1dc67b0a7d2c92170ee965b6adce9}{Determine\+Facet\+Flux}} (const double \&time\+\_\+increment, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ \&upwind\+\_\+visitor)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a420b3aed5e0fbc5e30b90d7b406f8202}{Determine\+Facet\+Flux\+Single\+Phase}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1ce227a2061658721bff5fbfc5a44bf7}{Adjust\+And\+Perform\+Facet\+Flux}} (const double \&time\+\_\+factor)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a6114cf370b562cd7c05606570f4c9891}{Get\+Property\+Value}} (size\+\_\+t idx)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a8cb26fee42655fd554e6e3b41755b380}{Get\+Flux\+Out}} (size\+\_\+t idx)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae23661659adba3517647a8d4b25f0f8e}{Get\+Flux\+In}} (size\+\_\+t idx)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1fbf9d7835a18eddd072fb284deb72ee}{Get\+Flux\+Out}} (size\+\_\+t idx, uint32\+\_\+t property)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a16fff56feebdd0a52bc3646295d9b5f7}{Get\+Flux\+In}} (size\+\_\+t idx, uint32\+\_\+t property)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_adc16893c2d519e20ea55e9dda31a242f}{Get\+Main\+Property\+LHS}} (size\+\_\+t idx)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90a3f565aeab00b10719a97fee69748c}{Get\+Facet\+Flux}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, uint32\+\_\+t facet\+\_\+idx, uint32\+\_\+t property=0U)
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_af9614cb8fbef0504774d6462fe03709e}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_af9614cb8fbef0504774d6462fe03709e} 
+std\+::vector$<$ double $>$ {\bfseries Get\+Upwind\+Coefficients} (size\+\_\+t eidx)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aebe538575332650740d0539c6eb9d3cf}{Get\+Projected\+Velocities}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, uint32\+\_\+t i)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abe48a0098a38e7f7a7178ca6de114082}{Get\+Facet\+Normal\+Velocity}} (size\+\_\+t element, uint32\+\_\+t facet)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a235bdb377e1b3d6f52ab59af13949fd0}{Get\+Facet\+Normal\+Component}} (size\+\_\+t element, uint32\+\_\+t facet, uint32\+\_\+t x\+\_\+or\+\_\+y\+\_\+or\+\_\+z)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9c8c100d0e5f03d53c7cfa3dbdc47b1c}{Get\+Facet\+Area}} (size\+\_\+t element, uint32\+\_\+t facet)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport}{csmp\+::\+Node\+Centered\+Finite\+Volume\+Transport$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a07bd595b4f331fbc0901c6525bc16283}{Node\+Centered\+Finite\+Volume\+Transport}} (const char \texorpdfstring{$\ast$}{*}group\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}porosity, const char \texorpdfstring{$\ast$}{*}advected\+\_\+prop, const char \texorpdfstring{$\ast$}{*}transp\+\_\+velocity, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+source, bool second\+\_\+order\+\_\+in\+\_\+space, bool second\+\_\+order\+\_\+in\+\_\+time, const char \texorpdfstring{$\ast$}{*}elmt\+\_\+thickness\+\_\+attribute=NULL, const char \texorpdfstring{$\ast$}{*}velocity\+\_\+multiplier=NULL)
+\begin{DoxyCompactList}\small\item\em single-\/phase solute advection-\/\+ONLY constructor, 1st-\/order method \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_af9aee0e06ad78eaabb494faec9030522}{Node\+Centered\+Finite\+Volume\+Transport}} (const char \texorpdfstring{$\ast$}{*}group\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}porosity, const char \texorpdfstring{$\ast$}{*}diffusivity, const char \texorpdfstring{$\ast$}{*}advected\+\_\+prop, const char \texorpdfstring{$\ast$}{*}transp\+\_\+velocity, const char \texorpdfstring{$\ast$}{*}nodal\+\_\+source, bool second\+\_\+order\+\_\+in\+\_\+space, bool second\+\_\+order\+\_\+in\+\_\+time, const char \texorpdfstring{$\ast$}{*}elmt\+\_\+thickness\+\_\+attribute=NULL, const char \texorpdfstring{$\ast$}{*}velocity\+\_\+multiplier=NULL)
+\begin{DoxyCompactList}\small\item\em single-\/phase solute advection-\/diffusion constructor, 1st-\/order method \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ad979521202f91de51ac610ec07485654}{Advect\+Variable}} (double time\+\_\+interval, double cfl\+\_\+multiplication\+\_\+factor=1., bool apply\+\_\+flux\+\_\+balance\+\_\+correction=true, bool update\+\_\+pore\+\_\+volumes=false)
+\begin{DoxyCompactList}\small\item\em single-\/phase passive advection, returns Courant increment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a768228265f4b8e25b542057ae2fd024d}{Advect\+Variable\+Single\+Step}} (double time\+\_\+increment, bool apply\+\_\+flux\+\_\+balance\+\_\+correction=true, bool update\+\_\+pore\+\_\+volumes=false)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ad1d6a7630eb4b890531c5a61b9986a68}{Transport\+Phase}} (\mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&, double time\+\_\+interval)
+\begin{DoxyCompactList}\small\item\em advection of one of two phases in two-\/phase flow handled by subclasses \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a9abfcfd050074aef529c61eed260cbdc}{Anisotropic\+Courant\+Increment}} ()
+\begin{DoxyCompactList}\small\item\em evaluation of Courant-\/\+Friedrich-\/\+Levy condition, i.\+e., grid Courant number \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_adb692c997a6f3e7cb3be728f47b4c418}{Anisotropic\+Courant\+Increment}} (\mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&, double max\+\_\+time\+\_\+increment=3153600000.)
+\begin{DoxyCompactList}\small\item\em advection, capillary diffusion and gravitational flow \end{DoxyCompactList}\item 
+void {\bfseries CFL\+\_\+\+Multiplier} (double desired\+\_\+value)
+\begin{DoxyCompactList}\small\item\em to set scaling (default=1) \end{DoxyCompactList}\item 
+double {\bfseries CFL\+\_\+\+Multiplier} () const
+\item 
+void {\bfseries With\+Lsm\+Gradient\+Limiter} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em to apply the gradient limiter \end{DoxyCompactList}\item 
+void {\bfseries Max\+Nonlinear2nd\+Order\+Iterations} (size\+\_\+t max\+\_\+nonlinear\+\_\+iterations)
+\item 
+void {\bfseries Target\+Nonlinear2nd\+Order\+Residual} (double target\+\_\+residual)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a156e8e8b10ce7924ebb70181515f4999}{Model\+Inflow}} () const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ac00d03a879b6c065102c63dc1192c8c9}{Model\+Outflow}} () const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a2801b5865f9c527e3560b2b9b1e5d911}{Boundary\+Fluxes}} (double \&inflow, double \&out\+\_\+flow, bool box\+\_\+shaped\+\_\+model=true, bool use\+\_\+advected\+\_\+variable=false, const char \texorpdfstring{$\ast$}{*}advected\+\_\+variable="{}no advected variable"{}, const char \texorpdfstring{$\ast$}{*}variable\+\_\+to\+\_\+determine\+\_\+no\+\_\+flow="{}fluid pressure"{}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} exclude\+\_\+flag=\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3}{ANY}}) const
+\begin{DoxyCompactList}\small\item\em returns inflow, outflow, and mismatch between these; calculation can FVs where variable is flagged with exclude\+\_\+flag \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_af90902b427124c1ba5d87e7deef8c76c}{Flux\+Balance}} (double \&fmin, double \&fmax) const
+\begin{DoxyCompactList}\small\item\em for each finite volume it sums up incoming and outgoing fluxes reporting the extrema \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a50835f1dfcbae0d4d5922c9475f9e6e3}{Divergence}} (const char \texorpdfstring{$\ast$}{*}div\+\_\+property, const char \texorpdfstring{$\ast$}{*}result\+\_\+prop) const
+\begin{DoxyCompactList}\small\item\em as previous method, but assigns surface integrals to the result property \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a4dea04628d5f0131f982d1bb4da14749}{Multiply\+Scalar\+Node\+Property\+By\+Finite\+Volume}} (const char \texorpdfstring{$\ast$}{*}property)
+\begin{DoxyCompactList}\small\item\em integrates nodal scalar properties finite volume by finite volume \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_aaa98f0e7db32931d3c61c9f9bf2ce1b7}{Volume\+Integrate\+Scalar\+Finite\+Volume\+Variable}} (const char \texorpdfstring{$\ast$}{*}property, bool consider\+\_\+porosity) const
+\begin{DoxyCompactList}\small\item\em integrates scalar node and element variables \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_af13d3506668332b24e2527909029a437}{Volume\+Integrate\+Scalar\+Finite\+Element\+Variable}} (const char \texorpdfstring{$\ast$}{*}property, bool take\+\_\+porosity\+\_\+into\+\_\+account=false, const char \texorpdfstring{$\ast$}{*}region=NULL) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ad00aa2e0bf03212f193973f1f9ca98ca}{Volume\+Integrate\+Scalar\+Finite\+Volume\+Variable}} (const char \texorpdfstring{$\ast$}{*}group, const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}property, bool consider\+\_\+porosity) const
+\begin{DoxyCompactList}\small\item\em integrates target property over a region of interest, result can be scaled by porosity \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a55683f1c67165d2124c293de8a5a79b4}{Volume\+Integrate}} (const char \texorpdfstring{$\ast$}{*}integrand\+\_\+property, const char \texorpdfstring{$\ast$}{*}result\+\_\+prop) const
+\begin{DoxyCompactList}\small\item\em integrals for finite-\/element computations \end{DoxyCompactList}\item 
+void {\bfseries Volume\+Integrate} (const char \texorpdfstring{$\ast$}{*}integrand\+\_\+property, const char \texorpdfstring{$\ast$}{*}integrand\+\_\+multiplier, const char \texorpdfstring{$\ast$}{*}result\+\_\+prop) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a35790fff81073a4b1391de1f05920203}{Multiply\+Scalar\+Boundary\+Values\+By\+Finite\+Volume\+Cross\+Sectional\+Area}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}, const char \texorpdfstring{$\ast$}{*}property)
+\begin{DoxyCompactList}\small\item\em conversion of values already assigned to the nodes (only possible if nodes comprise model boundary) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a5dcdd3fb2c5e3b7d6b3d6536852c0366}{Transform\+Scalar\+Boundary\+Values\+Into\+Neumann\+Conditions}} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}} boundary, const char \texorpdfstring{$\ast$}{*}node\+\_\+property, const char \texorpdfstring{$\ast$}{*}propertionality\+\_\+constant, bool distribute\+\_\+total\+\_\+amount)
+\begin{DoxyCompactList}\small\item\em computation and assignment of Neumann boundary gradients to target boundary \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_af810d392d535432743c946f59d6b072d}{Assign\+Scalar\+Boundary\+Values}} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}, const char \texorpdfstring{$\ast$}{*}property, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} bcond, double val, bool distribute\+\_\+total\+\_\+amount)
+\begin{DoxyCompactList}\small\item\em assignment of a single specific value that is projected on outward point normal \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a4d86469675a964640c219292495133ff}{Finite\+Volume}} (const char \texorpdfstring{$\ast$}{*}volume\+\_\+property) const
+\begin{DoxyCompactList}\small\item\em returns the actual volume of the finite volume i \end{DoxyCompactList}\item 
+double {\bfseries Pore\+Volume} (size\+\_\+t i\+Fv\+\_\+cell) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a2d61751dc5d77e3f89166af31e5f7a89}{Adjust\+Solver\+Settings}} ()
+\begin{DoxyCompactList}\small\item\em Adjust flexible samg solver settings. \end{DoxyCompactList}\item 
+virtual CSMP\+\_\+\+DEFAULT\+\_\+\+LINEAR\+\_\+\+SOLVER\+\_\+\+SETTINGS \& {\bfseries Get\+Solver\+Settings} ()
+\begin{DoxyCompactList}\small\item\em Access to advector\textquotesingle{}s solver settings. \end{DoxyCompactList}\item 
+virtual CSMP\+\_\+\+DEFAULT\+\_\+\+LINEAR\+\_\+\+SOLVER \texorpdfstring{$\ast$}{*} {\bfseries Get\+Solver} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ac1f2bbb106198d2fd6bd5fbb0a260733}{Out}} () const
+\item 
+void {\bfseries Verbose} (bool verbose)
+\item 
+bool {\bfseries Verbose} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90c162f8069fa2b6c53c49de821e3d8e}{Compose\+Advection}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae0d9ef62ca98bb2ce4045f275e89e48c}{Write\+Results}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fb7c1bfd8de6818422530b5e4c2b1e5}{Calculate\+Outflow\+Per\+Pore\+Volume}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fee1c7d1793927303cb7ce5af7b6de0}{Calculate\+Inflow\+Per\+Pore\+Volume}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad6df981d2171f1ec86e45d23899cff8a}{Adjust\+Flux\+Out}} (const double \&time\+\_\+factor)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a2dd30a8ab2afb69c9f4fcea19471689f}{Calculate\+Flux\+In}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3ed323fe078481531e337ab46d32aff3}{Get\+Upwind\+Matrix}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ \&upwind\+\_\+visitor)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a688203f998333531b1b8173432fa996e}{Check\+Dry\+Finite\+Volumes\+And\+Adjust\+Timestep\+For\+Single\+Phase}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport}{csmp\+::\+Node\+Centered\+Finite\+Volume\+Transport$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Node\+Centered\+Finite\+Volume\+Transport} (const \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport}{Node\+Centered\+Finite\+Volume\+Transport}}$<$ dim $>$ \&)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a814ff0ad4354144f592212f3cd7339a7}{Initialize\+Finite\+Volume\+Data}} (bool multiply\+\_\+pore\+\_\+volumes\+\_\+with\+\_\+thickness\+\_\+attribute=false)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ab29eb3a570dfa5a1adf1e2360495a754}{Initialize\+Finite\+Volume\+Data\+Parametric\+To\+Physical}} (bool store\+\_\+normals)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ad06f1afe38f28acd169164dc5bc4e0ef}{Initialize\+Sector\+Pore\+Volume\+Data}} (bool multiply\+\_\+pore\+\_\+volumes\+\_\+with\+\_\+thickness\+\_\+attribute)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a9956a45367b253e029a72bb433b03f9f}{Initialize\+Arrays\+For\+First\+Order\+Method}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_abfa262d7f73e2bc066f1ea03355e884e}{Initialize\+Arrays\+For\+Second\+Order\+Method}} (bool second\+\_\+order\+\_\+in\+\_\+space, bool second\+\_\+order\+\_\+in\+\_\+time)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_aff97d20c1265aae75a5700c959852ca0}{Check\+Transport\+Variables}} () const
+\item 
+virtual size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_af8a417200d91240703ee1071a384f707}{Measure\+Allocated\+Memory}} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ad2d42a33ffd92a6d65a1b225251fd006}{Second\+Order\+In\+Time}} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a2a926f7c536a6b7ee5f7d5981a39d0f7}{Second\+Order\+In\+Space}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ae6dd507f8dbcb0ba988bc836128ff37d}{Initial\+Advected\+Property\+Values}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&adv\+\_\+key)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a5e2c4e92e52a5c7c5883f2d9d73d6383}{Initial\+Advected\+Property\+Values}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&adv\+\_\+key, double \&smin, double \&smax)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a0b4cb3da4977c7fdf0ec2f4fa995d9c6}{Min\+Max\+Advected\+Property}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_adcb083c96e98d048628b81c235fd9290}{Backup\+Facet\+Fluxes}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a6c2b1f748d8076da9b4c049538fea632}{Update\+Projected\+Velocities\+And\+Flux\+Balances}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a7ddbca649a78eeb7d80d54ffabb27a3a}{Flux\+Through\+Boundary\+Finite\+Volume}} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}fv\+\_\+ptr, double \&inflow, double \&flux\+\_\+balance) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a040f7ba73ebc67804b4e2b050643b350}{Assign\+Flux\+Boundary\+Conditions}} (\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_algorithm}{Node\+Centered\+Finite\+Volume\+Algorithm}}$<$ dim $>$ \&advection\+\_\+algorithm, bool use\+\_\+t0\+\_\+saturation) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a0bbef9edf038c4c6d828eda419dc21a8}{Record\+Flux\+Balances}} (const char \texorpdfstring{$\ast$}{*}balance\+\_\+var, double \&total\+\_\+surplus, double \&total\+\_\+deficit) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ac99db1e9d5b7e982c1d760e0fc162c3a}{Advect\+Variable1st\+Order}} (\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_algorithm}{Node\+Centered\+Finite\+Volume\+Algorithm}}$<$ dim $>$ \&, double time\+\_\+interval, bool with\+\_\+flux\+\_\+balance\+\_\+correction)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_ac37b4d828c5e36ed87d40edebb6b1427}{Advect\+Variable2nd\+Order}} (\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_algorithm}{Node\+Centered\+Finite\+Volume\+Algorithm}}$<$ dim $>$ \&, double time\+\_\+increment, bool with\+\_\+flux\+\_\+balance\+\_\+correction)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport_a9a6d9bce8ea7244c580e3970e7031a06}{Advect\+Variable2nd\+Order\+In\+Space\+And\+Time}} (\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_algorithm}{Node\+Centered\+Finite\+Volume\+Algorithm}}$<$ dim $>$ \&, double time\+\_\+increment, bool with\+\_\+flux\+\_\+balance\+\_\+correction)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a173ef2ae4283c59a19610a229aa5343a}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a173ef2ae4283c59a19610a229aa5343a} 
+\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \& {\bfseries model\+\_\+ref}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a95f12cb5850704b5c7b454d47ef8dfbd}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a95f12cb5850704b5c7b454d47ef8dfbd} 
+\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \& {\bfseries region\+\_\+ref}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a15b629865ba88bf2435b78a3844df5ba}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a15b629865ba88bf2435b78a3844df5ba} 
+\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x}{Stencil\+Processor\+PHX}}$<$ dim $>$ {\bfseries stencil\+PHX}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a5dc0420f9c763441a4dc15116f19c3d2}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a5dc0420f9c763441a4dc15116f19c3d2} 
+double {\bfseries internal\+\_\+time\+\_\+step}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a24f56050c6c0f59e8153b39e02d831d1}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a24f56050c6c0f59e8153b39e02d831d1} 
+double {\bfseries max\+\_\+time\+\_\+step}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a775f6946b8a2accffa919b586158a2dd}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a775f6946b8a2accffa919b586158a2dd} 
+double {\bfseries single\+\_\+phase\+\_\+time\+\_\+step\+\_\+factor}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abc521a2648c0eec6b728db6d42496848}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abc521a2648c0eec6b728db6d42496848} 
+bool {\bfseries with\+\_\+gravity}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9e44c5ef82df81d1267fb96c4417f9c4}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9e44c5ef82df81d1267fb96c4417f9c4} 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries upwind}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abcfe897bf594216066839474ad8b539a}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abcfe897bf594216066839474ad8b539a} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries k\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aabc1eaa2ac1b631ac3c90a8d9d988b7d}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aabc1eaa2ac1b631ac3c90a8d9d988b7d} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries rho\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae636cbce33913b0bfdb504e5c1396024}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae636cbce33913b0bfdb504e5c1396024} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries pv\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a95b6da8150caeec0bab50c843eae0ae4}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a95b6da8150caeec0bab50c843eae0ae4} 
+std\+::vector$<$ \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} $>$ {\bfseries pl\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa503c705e4f7f9362282c72b2de49ccb}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa503c705e4f7f9362282c72b2de49ccb} 
+std\+::vector$<$ \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} $>$ {\bfseries pr\+\_\+key}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_af6f05c118595754603189d4f49a41d03}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_af6f05c118595754603189d4f49a41d03} 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ {\bfseries flux\+\_\+in\+\_\+vectors}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a829e999a2f9d2cc4e68206477566584c}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a829e999a2f9d2cc4e68206477566584c} 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ {\bfseries flux\+\_\+out\+\_\+vectors}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae4e27bd35981cbcbafa5cb25f40bc09a}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae4e27bd35981cbcbafa5cb25f40bc09a} 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ {\bfseries property\+\_\+vectors}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a16781a01cccbc8d7e54fc675a2e86143}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a16781a01cccbc8d7e54fc675a2e86143} 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ {\bfseries mass\+\_\+balance\+\_\+vectors}
+\item 
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad4d71ab557d572466149d82a0987f9a4}\label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad4d71ab557d572466149d82a0987f9a4} 
+std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ double $>$ $>$ $>$ {\bfseries facet\+\_\+flux\+\_\+vectors}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_transport}{csmp\+::\+Node\+Centered\+Finite\+Volume\+Transport$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries pref\+\_\+}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \& {\bfseries gref\+\_\+}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \& {\bfseries mref\+\_\+}
+\item 
+bool {\bfseries verbose\+\_\+}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\+\_\+\+Parameter}} $>$ {\bfseries STENCIL\+\_\+\+DATA}
+\begin{DoxyCompactList}\small\item\em finite-\/volume data for fast calculations \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries FVPOREVOL}
+\begin{DoxyCompactList}\small\item\em pore volumes of finite-\/volume cells for theta calculation etc. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries SAT0}
+\begin{DoxyCompactList}\small\item\em advected variable at t0 \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries FLUX\+\_\+\+BALANCE}
+\begin{DoxyCompactList}\small\item\em for each FV, but excluding truncated FV at global model boundaries \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ {\bfseries SMINMAX}
+\begin{DoxyCompactList}\small\item\em min, max values of advected property at neighbor FV\textquotesingle{}s of current FV \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ {\bfseries FACETFLUXES0}
+\begin{DoxyCompactList}\small\item\em at time, t (at last time step) \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ {\bfseries LTDSATS0}
+\begin{DoxyCompactList}\small\item\em ltd values of advected property \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries phi\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em porosity \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries diff\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em diffusivity of advected variable (only in 2nd-\/order method) \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries adv1\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em transported variable \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries vel\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em transport velocity \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries src\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em nodal fluid volume source \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries thi\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em thickness multiplier for lower dimensional elements \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries velo\+\_\+mult\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em velocity multiplier key \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries mass\+\_\+center\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em center of mass for each CV \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries grad\+\_\+advprop\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em gradient of the advacted property \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries grad\+\_\+advprop\+\_\+limiter\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em limiter for the gradient of the advected property \end{DoxyCompactList}\item 
+std\+::string {\bfseries advected\+\_\+variable\+\_\+}
+\item 
+double {\bfseries cfl\+\_\+multiplier\+\_\+}
+\item 
+size\+\_\+t {\bfseries var\+\_\+ncomponents\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_stencil_processor}{Stencil\+Processor}}$<$ dim $>$ {\bfseries stencil\+\_\+}
+\begin{DoxyCompactList}\small\item\em default size is 1 if only a scalar is being advected. (Julian) \end{DoxyCompactList}\item 
+bool {\bfseries first\+Call\+\_\+}
+\item 
+bool {\bfseries with\+\_\+lsmgrad\+\_\+limiter\+\_\+}
+\item 
+double {\bfseries target\+\_\+nonlinear\+\_\+limiting\+\_\+case\+\_\+residual\+\_\+}
+\begin{DoxyCompactList}\small\item\em targed residual in order to get correct 2nd order approximations \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries max\+\_\+nonlinear\+\_\+limiting\+\_\+case\+\_\+iterations\+\_\+}
+\begin{DoxyCompactList}\small\item\em maximum number of nonlinear iterations in 2nd order scheme \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node_centered_finite_volume_algorithm}{Node\+Centered\+Finite\+Volume\+Algorithm}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries base\+Advector\+\_\+} = nullptr
+\item 
+\mbox{\hyperlink{classcsmp_1_1_generic_node_property_gradient_limiter}{Generic\+Node\+Property\+Gradient\+Limiter}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries grad\+\_\+advprop\+\_\+limiter\+\_\+} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX$<$ dim $>$}
+Finitive volume calculations for one phase within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+\begin{DoxyAuthor}{Author}
+Philipp Weis, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:philipp.weis@erdw.ethz.ch}{\texttt{philipp.\+weis@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Specialized version of explicit finite volume transport class for PHX scheme.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+To be used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Performs\ mass\ balanced\ finite\ volume\ tansport}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+The functions are tailored for use in \doxylink{classcsmp_1_1_two_phase_transport_p_h_x}{Two\+Phase\+Transport\+PHX}. Needs \doxylink{classcsmp_1_1_stencil_processor_p_h_x}{Stencil\+Processor\+PHX}\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2014. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa9b89c4ad237db91de8ded8546b843bc}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!ExplicitFiniteVolumeTransportPHX@{ExplicitFiniteVolumeTransportPHX}}
+\index{ExplicitFiniteVolumeTransportPHX@{ExplicitFiniteVolumeTransportPHX}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ExplicitFiniteVolumeTransportPHX()}{ExplicitFiniteVolumeTransportPHX()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa9b89c4ad237db91de8ded8546b843bc} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Explicit\+Finite\+Volume\+Transport\+PHX (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{lhs\+\_\+property}{, }\item[{std\+::vector$<$ std\+::string $>$ \&}]{rhs\+\_\+property}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{velocity}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{source}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{density}{}\end{DoxyParamCaption})}
+
+custom constructor Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=254pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa9b89c4ad237db91de8ded8546b843bc_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=254pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aa9b89c4ad237db91de8ded8546b843bc_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad3da90054e55aeee5ac05fba14226b10}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!````~ExplicitFiniteVolumeTransportPHX@{\texorpdfstring{$\sim$}{\string~}ExplicitFiniteVolumeTransportPHX}}
+\index{````~ExplicitFiniteVolumeTransportPHX@{\texorpdfstring{$\sim$}{\string~}ExplicitFiniteVolumeTransportPHX}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ExplicitFiniteVolumeTransportPHX()}{\string~ExplicitFiniteVolumeTransportPHX()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad3da90054e55aeee5ac05fba14226b10} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{Explicit\+Finite\+Volume\+Transport\+PHX}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+default destructor 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3f471649df8617f1c5dc573259fe2559}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!AddAdvectionVariable@{AddAdvectionVariable}}
+\index{AddAdvectionVariable@{AddAdvectionVariable}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AddAdvectionVariable()}{AddAdvectionVariable()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3f471649df8617f1c5dc573259fe2559} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Add\+Advection\+Variable (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+lhs}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+rhs}{}\end{DoxyParamCaption})}
+
+add new advection variables for finite volume calculations \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1ce227a2061658721bff5fbfc5a44bf7}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!AdjustAndPerformFacetFlux@{AdjustAndPerformFacetFlux}}
+\index{AdjustAndPerformFacetFlux@{AdjustAndPerformFacetFlux}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AdjustAndPerformFacetFlux()}{AdjustAndPerformFacetFlux()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1ce227a2061658721bff5fbfc5a44bf7} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Adjust\+And\+Perform\+Facet\+Flux (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+factor}{}\end{DoxyParamCaption})}
+
+adjust fluxes, perform advection calculations and store results Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1ce227a2061658721bff5fbfc5a44bf7_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1ce227a2061658721bff5fbfc5a44bf7_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad6df981d2171f1ec86e45d23899cff8a}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!AdjustFluxOut@{AdjustFluxOut}}
+\index{AdjustFluxOut@{AdjustFluxOut}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AdjustFluxOut()}{AdjustFluxOut()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad6df981d2171f1ec86e45d23899cff8a} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Adjust\+Flux\+Out (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+factor}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+adjust fluxes Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ad6df981d2171f1ec86e45d23899cff8a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b1b76a50396069e544d5c949e3adf23}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!AdvectMassConservedSinglePhase@{AdvectMassConservedSinglePhase}}
+\index{AdvectMassConservedSinglePhase@{AdvectMassConservedSinglePhase}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AdvectMassConservedSinglePhase()}{AdvectMassConservedSinglePhase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b1b76a50396069e544d5c949e3adf23} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Advect\+Mass\+Conserved\+Single\+Phase (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+increment}{}\end{DoxyParamCaption})}
+
+single-\/phase version of mass balanced finite volume calculations Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b1b76a50396069e544d5c949e3adf23_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a2dd30a8ab2afb69c9f4fcea19471689f}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!CalculateFluxIn@{CalculateFluxIn}}
+\index{CalculateFluxIn@{CalculateFluxIn}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateFluxIn()}{CalculateFluxIn()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a2dd30a8ab2afb69c9f4fcea19471689f} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Calculate\+Flux\+In (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+calculate flux into control volumes Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a2dd30a8ab2afb69c9f4fcea19471689f_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fee1c7d1793927303cb7ce5af7b6de0}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!CalculateInflowPerPoreVolume@{CalculateInflowPerPoreVolume}}
+\index{CalculateInflowPerPoreVolume@{CalculateInflowPerPoreVolume}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateInflowPerPoreVolume()}{CalculateInflowPerPoreVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fee1c7d1793927303cb7ce5af7b6de0} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Calculate\+Inflow\+Per\+Pore\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+calculate total flux into control volumes Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fee1c7d1793927303cb7ce5af7b6de0_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fb7c1bfd8de6818422530b5e4c2b1e5}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!CalculateOutflowPerPoreVolume@{CalculateOutflowPerPoreVolume}}
+\index{CalculateOutflowPerPoreVolume@{CalculateOutflowPerPoreVolume}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CalculateOutflowPerPoreVolume()}{CalculateOutflowPerPoreVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fb7c1bfd8de6818422530b5e4c2b1e5} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Calculate\+Outflow\+Per\+Pore\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+calculate total flux out of control volumes Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9fb7c1bfd8de6818422530b5e4c2b1e5_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a688203f998333531b1b8173432fa996e}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase@{CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase}}
+\index{CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase@{CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase()}{CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a688203f998333531b1b8173432fa996e} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Check\+Dry\+Finite\+Volumes\+And\+Adjust\+Timestep\+For\+Single\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+mass-\/balance check, reducing time step if criterion is not met Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a688203f998333531b1b8173432fa996e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90c162f8069fa2b6c53c49de821e3d8e}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!ComposeAdvection@{ComposeAdvection}}
+\index{ComposeAdvection@{ComposeAdvection}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ComposeAdvection()}{ComposeAdvection()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90c162f8069fa2b6c53c49de821e3d8e} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Compose\+Advection (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+change lhs variable by adding and subtracting flux in and out of control volume Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90c162f8069fa2b6c53c49de821e3d8e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a41e1dc67b0a7d2c92170ee965b6adce9}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!DetermineFacetFlux@{DetermineFacetFlux}}
+\index{DetermineFacetFlux@{DetermineFacetFlux}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{DetermineFacetFlux()}{DetermineFacetFlux()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a41e1dc67b0a7d2c92170ee965b6adce9} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Determine\+Facet\+Flux (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+increment}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ \&}]{upwind\+\_\+visitor}{}\end{DoxyParamCaption})}
+
+calculate and store facet fluxes with suggested time step Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a41e1dc67b0a7d2c92170ee965b6adce9_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a420b3aed5e0fbc5e30b90d7b406f8202}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!DetermineFacetFluxSinglePhase@{DetermineFacetFluxSinglePhase}}
+\index{DetermineFacetFluxSinglePhase@{DetermineFacetFluxSinglePhase}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{DetermineFacetFluxSinglePhase()}{DetermineFacetFluxSinglePhase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a420b3aed5e0fbc5e30b90d7b406f8202} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Determine\+Facet\+Flux\+Single\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+calculate facet flux for single-\/phase version Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a420b3aed5e0fbc5e30b90d7b406f8202_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a420b3aed5e0fbc5e30b90d7b406f8202_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ab11dabb02c1134ba243f3e0d684da086}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetDensityKey@{GetDensityKey}}
+\index{GetDensityKey@{GetDensityKey}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetDensityKey()}{GetDensityKey()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ab11dabb02c1134ba243f3e0d684da086} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Density\+Key (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+get index of phase density \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9c8c100d0e5f03d53c7cfa3dbdc47b1c}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFacetArea@{GetFacetArea}}
+\index{GetFacetArea@{GetFacetArea}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFacetArea()}{GetFacetArea()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a9c8c100d0e5f03d53c7cfa3dbdc47b1c} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Facet\+Area (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{element}{, }\item[{uint32\+\_\+t}]{facet}{}\end{DoxyParamCaption})}
+
+get area of indicated facet \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90a3f565aeab00b10719a97fee69748c}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFacetFlux@{GetFacetFlux}}
+\index{GetFacetFlux@{GetFacetFlux}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFacetFlux()}{GetFacetFlux()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a90a3f565aeab00b10719a97fee69748c} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Facet\+Flux (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&}]{e}{, }\item[{uint32\+\_\+t}]{facet\+\_\+idx}{, }\item[{uint32\+\_\+t}]{property\+\_\+idx}{ = {\ttfamily 0U}}\end{DoxyParamCaption})}
+
+get facte flux of specified propoerty at indicated facet \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a235bdb377e1b3d6f52ab59af13949fd0}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFacetNormalComponent@{GetFacetNormalComponent}}
+\index{GetFacetNormalComponent@{GetFacetNormalComponent}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFacetNormalComponent()}{GetFacetNormalComponent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a235bdb377e1b3d6f52ab59af13949fd0} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Facet\+Normal\+Component (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{element}{, }\item[{uint32\+\_\+t}]{facet}{, }\item[{uint32\+\_\+t}]{x\+\_\+or\+\_\+y\+\_\+or\+\_\+z}{}\end{DoxyParamCaption})}
+
+get normal component of indicated facet and direction \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abe48a0098a38e7f7a7178ca6de114082}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFacetNormalVelocity@{GetFacetNormalVelocity}}
+\index{GetFacetNormalVelocity@{GetFacetNormalVelocity}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFacetNormalVelocity()}{GetFacetNormalVelocity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_abe48a0098a38e7f7a7178ca6de114082} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Facet\+Normal\+Velocity (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{element}{, }\item[{uint32\+\_\+t}]{facet}{}\end{DoxyParamCaption})}
+
+update projection of velocity onto the facet \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae23661659adba3517647a8d4b25f0f8e}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFluxIn@{GetFluxIn}}
+\index{GetFluxIn@{GetFluxIn}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFluxIn()}{GetFluxIn()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae23661659adba3517647a8d4b25f0f8e} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Flux\+In (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index}{}\end{DoxyParamCaption})}
+
+access to flux into control volume -\/ main property \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a16fff56feebdd0a52bc3646295d9b5f7}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFluxIn@{GetFluxIn}}
+\index{GetFluxIn@{GetFluxIn}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFluxIn()}{GetFluxIn()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a16fff56feebdd0a52bc3646295d9b5f7} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Flux\+In (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index}{, }\item[{uint32\+\_\+t}]{property\+\_\+idx}{}\end{DoxyParamCaption})}
+
+access to flux into control volume -\/ specified property \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a8cb26fee42655fd554e6e3b41755b380}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFluxOut@{GetFluxOut}}
+\index{GetFluxOut@{GetFluxOut}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFluxOut()}{GetFluxOut()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a8cb26fee42655fd554e6e3b41755b380} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Flux\+Out (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index}{}\end{DoxyParamCaption})}
+
+access to flux out of control volume -\/ main property \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1fbf9d7835a18eddd072fb284deb72ee}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetFluxOut@{GetFluxOut}}
+\index{GetFluxOut@{GetFluxOut}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetFluxOut()}{GetFluxOut()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a1fbf9d7835a18eddd072fb284deb72ee} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Flux\+Out (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index}{, }\item[{uint32\+\_\+t}]{property\+\_\+idx}{}\end{DoxyParamCaption})}
+
+access to flux out of control volume -\/ specified property \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_adc16893c2d519e20ea55e9dda31a242f}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetMainPropertyLHS@{GetMainPropertyLHS}}
+\index{GetMainPropertyLHS@{GetMainPropertyLHS}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetMainPropertyLHS()}{GetMainPropertyLHS()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_adc16893c2d519e20ea55e9dda31a242f} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Main\+Property\+LHS (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index}{}\end{DoxyParamCaption})}
+
+get facte flux of specified propoerty at indicated facet \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aebe538575332650740d0539c6eb9d3cf}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetProjectedVelocities@{GetProjectedVelocities}}
+\index{GetProjectedVelocities@{GetProjectedVelocities}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetProjectedVelocities()}{GetProjectedVelocities()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aebe538575332650740d0539c6eb9d3cf} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Projected\+Velocities (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&}]{e}{, }\item[{uint32\+\_\+t}]{i}{}\end{DoxyParamCaption})}
+
+get projected velocity for specified facet \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a6114cf370b562cd7c05606570f4c9891}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetPropertyValue@{GetPropertyValue}}
+\index{GetPropertyValue@{GetPropertyValue}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetPropertyValue()}{GetPropertyValue()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a6114cf370b562cd7c05606570f4c9891} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Property\+Value (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index}{}\end{DoxyParamCaption})}
+
+get value of main property at specified control volume \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3ed323fe078481531e337ab46d32aff3}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!GetUpwindMatrix@{GetUpwindMatrix}}
+\index{GetUpwindMatrix@{GetUpwindMatrix}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetUpwindMatrix()}{GetUpwindMatrix()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3ed323fe078481531e337ab46d32aff3} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Get\+Upwind\+Matrix (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&}]{e}{, }\item[{std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ \&}]{upwind\+\_\+visitor}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+get matrix for upwind nodes \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae265b54e0855b9607e7463fed81b52c2}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!SetMaximumTimeStep@{SetMaximumTimeStep}}
+\index{SetMaximumTimeStep@{SetMaximumTimeStep}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SetMaximumTimeStep()}{SetMaximumTimeStep()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae265b54e0855b9607e7463fed81b52c2} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Set\+Maximum\+Time\+Step (\begin{DoxyParamCaption}\item[{const double \&}]{new\+\_\+max\+\_\+time\+\_\+step}{}\end{DoxyParamCaption})}
+
+change size of maximum time step \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aba49a00f7644703e90aee387758d7d4c}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!UpdateProjection@{UpdateProjection}}
+\index{UpdateProjection@{UpdateProjection}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UpdateProjection()}{UpdateProjection()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aba49a00f7644703e90aee387758d7d4c} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Update\+Projection (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+update projection of velocity onto the facet Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_aba49a00f7644703e90aee387758d7d4c_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b9e904a14a4955fe1a41efd88f1e237}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!WithGravityComponent@{WithGravityComponent}}
+\index{WithGravityComponent@{WithGravityComponent}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{WithGravityComponent()}{WithGravityComponent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_a3b9e904a14a4955fe1a41efd88f1e237} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+With\+Gravity\+Component (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+activate gravity component \Hypertarget{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae0d9ef62ca98bb2ce4045f275e89e48c}\index{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}!WriteResults@{WriteResults}}
+\index{WriteResults@{WriteResults}!csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$@{csmp::ExplicitFiniteVolumeTransportPHX$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{WriteResults()}{WriteResults()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae0d9ef62ca98bb2ce4045f275e89e48c} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_explicit_finite_volume_transport_p_h_x}{csmp\+::\+Explicit\+Finite\+Volume\+Transport\+PHX}}$<$ dim $>$\+::\+Write\+Results (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+store lhs variables Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae0d9ef62ca98bb2ce4045f275e89e48c_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_explicit_finite_volume_transport_p_h_x_ae0d9ef62ca98bb2ce4045f275e89e48c_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/CVFEM\+\_\+\+Upwind\+\_\+\+Num\+Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/Explicit\+Finite\+Volume\+Transport\+PHX.\+h\item 
+source/modules/integration/cvfe\+\_\+hydrothermal/Explicit\+Finite\+Volume\+Transport\+PHX.\+cpp\end{DoxyCompactItemize}

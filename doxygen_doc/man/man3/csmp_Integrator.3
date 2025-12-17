@@ -1,0 +1,90 @@
+.TH "csmp::Integrator< dim, USER >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Integrator< dim, USER >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Integrator\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIntegrator\fP (size_t m_x_n, double lower_limit, double upper_limit)"
+.br
+.RI "m=n since solution matrix is square, limits should include permitted tolerances "
+.ti -1c
+.RI "void \fBIntegrateOver\fP (double time_increment)"
+.br
+.RI "uses \fBIntegralEquation\fP and \fBAccumulator\fP to build system and \fBSolver\fP to solve it "
+.ti -1c
+.RI "void \fBReconfigureSolverForRepeatedUse\fP ()"
+.br
+.RI "transform solver settings from initial use to reuse of settings and previous solution "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBAssignInitialConditions\fP ()"
+.br
+.ti -1c
+.RI "void \fBAssignEssentialConditions\fP ()"
+.br
+.ti -1c
+.RI "void \fBSolveLinearAlgebraicSystem\fP ()"
+.br
+.ti -1c
+.RI "double \fBVerifyAndAssignResults\fP (bool show_range, bool do_range_check)"
+.br
+.RI "transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class USER>
+.br
+class csmp::Integrator< dim, USER >"\fBIntegrator\fP - to solve the linear algebraic system arising from the upwind implicit form of the transport equations\&.
+
+.PP
+Operations
+.IP "\(bu" 2
+IntegrateOver( equation, domain, time )
+.IP "\(bu" 2
+AssignInitialConditions( domain )
+.IP "\(bu" 2
+AssignEssentialConditions( domain )
+.IP "\(bu" 2
+InsertInMatrix()
+.IP "\(bu" 2
+InsertInVector()
+.IP "\(bu" 2
+Solve( solver );
+.IP "\(bu" 2
+PostProcess( domain );
+.IP "\(bu" 2
+OutputResults( domain ); Attributes
+.IP "\(bu" 2
+\fBSparseMatrix\fP A_;
+.IP "\(bu" 2
+Vector rhs_;
+.IP "\(bu" 2
+Vector x_; 
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::Integrator\fP< dim, USER >::IntegrateOver (double time_increment)"
+
+.PP
+uses \fBIntegralEquation\fP and \fBAccumulator\fP to build system and \fBSolver\fP to solve it assuming that the \fBIntegralEquation\fP and \fBAccumulator\fP have already been applied to build system and \fBSolver\fP to solve it 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::Integrator\fP< dim, USER >::VerifyAndAssignResults (bool show_range, bool do_range_check)\fR [protected]\fP"
+
+.PP
+transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error Checks the range of 'new saturation oil' against that specified in the property database\&. Where the new values comply, they are used to replace the previous ones stored as 'saturation oil'\&. If not, the deviations are reported and the nearest maximum or minimum permitted values of saturation are stored\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

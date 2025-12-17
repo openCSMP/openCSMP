@@ -1,0 +1,202 @@
+\doxysection{mjl\+::Edge Class Reference}
+\hypertarget{classmjl_1_1_edge}{}\label{classmjl_1_1_edge}\index{mjl::Edge@{mjl::Edge}}
+
+
+Collaboration diagram for mjl\+::Edge\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classmjl_1_1_edge__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classmjl_1_1_edge_af5dfa8eff77ce7f55232e0f1b7f94f0b}\label{classmjl_1_1_edge_af5dfa8eff77ce7f55232e0f1b7f94f0b} 
+{\bfseries Edge} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&)
+\item 
+\Hypertarget{classmjl_1_1_edge_ac6fdb6c565b9294ea025ae4b87fbe7f5}\label{classmjl_1_1_edge_ac6fdb6c565b9294ea025ae4b87fbe7f5} 
+{\bfseries Edge} (const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&)
+\item 
+\Hypertarget{classmjl_1_1_edge_a9258c5fbfbe1b80e4e74f05653af36f9}\label{classmjl_1_1_edge_a9258c5fbfbe1b80e4e74f05653af36f9} 
+\mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \& {\bfseries operator=} (const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&m)
+\item 
+\Hypertarget{classmjl_1_1_edge_a083c2cf3e0388ba80c50d5890d821a7e}\label{classmjl_1_1_edge_a083c2cf3e0388ba80c50d5890d821a7e} 
+void {\bfseries Set} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&)
+\item 
+\Hypertarget{classmjl_1_1_edge_a7183be9738a1705632b05cec5e367e7c}\label{classmjl_1_1_edge_a7183be9738a1705632b05cec5e367e7c} 
+void {\bfseries Set} (double x1, double y1, double x2, double y2)
+\item 
+\Hypertarget{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff}\label{classmjl_1_1_edge_aa096f2213bacb2ee22c408a94a0f19ff} 
+\mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \& {\bfseries Rot} ()
+\begin{DoxyCompactList}\small\item\em pivots an edge 90o clockwise around it\textquotesingle{}s midpoint \end{DoxyCompactList}\item 
+\Hypertarget{classmjl_1_1_edge_a1b896c136d9135197195c914cb5dd410}\label{classmjl_1_1_edge_a1b896c136d9135197195c914cb5dd410} 
+\mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \& {\bfseries Flip} ()
+\begin{DoxyCompactList}\small\item\em flip the direction of an edge \end{DoxyCompactList}\item 
+\Hypertarget{classmjl_1_1_edge_af13d7118ceb2e852b6eac2fcb6e64893}\label{classmjl_1_1_edge_af13d7118ceb2e852b6eac2fcb6e64893} 
+void {\bfseries Move} (double dx, double dy)
+\item 
+\Hypertarget{classmjl_1_1_edge_a19742ebe7e9aac1b2dde1a4683a1fd9d}\label{classmjl_1_1_edge_a19742ebe7e9aac1b2dde1a4683a1fd9d} 
+void {\bfseries Scale} (double xfac, double yfac)
+\item 
+\Hypertarget{classmjl_1_1_edge_a988de5e9e5b14ec26c9deda68b881498}\label{classmjl_1_1_edge_a988de5e9e5b14ec26c9deda68b881498} 
+void {\bfseries Normalize\+To} (double n)
+\item 
+\Hypertarget{classmjl_1_1_edge_a157a8b2a1693128000335c3ddd573a97}\label{classmjl_1_1_edge_a157a8b2a1693128000335c3ddd573a97} 
+bool {\bfseries If\+Closer\+Than\+Merge} (double tolerance, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&)
+\item 
+\Hypertarget{classmjl_1_1_edge_a979074f4cc0a54b3f3c27bc8d287c665}\label{classmjl_1_1_edge_a979074f4cc0a54b3f3c27bc8d287c665} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_edge_a1c6f86abebed7c6b020ad6aff0f25817}\label{classmjl_1_1_edge_a1c6f86abebed7c6b020ad6aff0f25817} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_edge_aff9f38ef8990ca0b0e4a0384e30e085b}\label{classmjl_1_1_edge_aff9f38ef8990ca0b0e4a0384e30e085b} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classmjl_1_1_edge}{mjl\+::\+Edge}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_edge_abed691a1c42c9bc7c0e5d8e96f998690}\label{classmjl_1_1_edge_abed691a1c42c9bc7c0e5d8e96f998690} 
+\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} {\bfseries Point} (double t) const
+\item 
+double \mbox{\hyperlink{classmjl_1_1_edge_ab25f2c3f909a72b7dc69cefeb2e72726}{Y}} (double x) const
+\item 
+\Hypertarget{classmjl_1_1_edge_aa6e6bf7c1ef5a3896109691b89d247ae}\label{classmjl_1_1_edge_aa6e6bf7c1ef5a3896109691b89d247ae} 
+\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} {\bfseries Origin} () const
+\item 
+\Hypertarget{classmjl_1_1_edge_adc5a183337f3632520d93dc25610cc9e}\label{classmjl_1_1_edge_adc5a183337f3632520d93dc25610cc9e} 
+\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} {\bfseries Destination} () const
+\item 
+\Hypertarget{classmjl_1_1_edge_a9d4d6ec62261f87dea517514c8f4d072}\label{classmjl_1_1_edge_a9d4d6ec62261f87dea517514c8f4d072} 
+void {\bfseries Mid\+Point} (\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_edge_acf7e7a4e2abe2e1afb47053532d5af2b}\label{classmjl_1_1_edge_acf7e7a4e2abe2e1afb47053532d5af2b} 
+\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} {\bfseries Mid\+Point} () const
+\item 
+\Hypertarget{classmjl_1_1_edge_af097eac0fd09d2f4db7fd95e7caf0549}\label{classmjl_1_1_edge_af097eac0fd09d2f4db7fd95e7caf0549} 
+bool {\bfseries Is\+Vertical} () const
+\item 
+\Hypertarget{classmjl_1_1_edge_a4367da33356c52e215a2bc1e39ccba85}\label{classmjl_1_1_edge_a4367da33356c52e215a2bc1e39ccba85} 
+double {\bfseries Slope} () const
+\item 
+\Hypertarget{classmjl_1_1_edge_a752215e38347a92fc808e32afc1ef964}\label{classmjl_1_1_edge_a752215e38347a92fc808e32afc1ef964} 
+double {\bfseries Distance\+From} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_edge_a7246452d0e34fd0d6422ad4779709301}\label{classmjl_1_1_edge_a7246452d0e34fd0d6422ad4779709301} 
+double {\bfseries Length} () const
+\item 
+\Hypertarget{classmjl_1_1_edge_af805ffd94d60dfd23e4dfe07a23d0980}\label{classmjl_1_1_edge_af805ffd94d60dfd23e4dfe07a23d0980} 
+LOCATION {\bfseries Classify} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&) const
+\item 
+INTERSECTION \mbox{\hyperlink{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}{Intersect}} (const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&, double \&) const
+\item 
+INTERSECTION \mbox{\hyperlink{classmjl_1_1_edge_a95c95b8e922e8f7c2605df1906342dca}{Cross}} (const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&, double \&) const
+\item 
+INTERSECTION \mbox{\hyperlink{classmjl_1_1_edge_ac8bf9ec6d584ddc112f3c8b9ecff4cc4}{Crossing\+Point}} (double tolerance, const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&) const
+\item 
+INTERSECTION \mbox{\hyperlink{classmjl_1_1_edge_a2eb063c4229dbbcb316e776ba7cc5b4e}{SKM\+\_\+\+Crossing\+Point}} (double tolerance, const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&, \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&) const
+\item 
+EDGE\+\_\+\+CLASSIFICATION \mbox{\hyperlink{classmjl_1_1_edge_a3f5aaefd4ce06b1c5ac0d1ce01df4310}{Type}} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_edge_af5d187a055ed2e533e2fbe6a135e1d88}\label{classmjl_1_1_edge_af5d187a055ed2e533e2fbe6a135e1d88} 
+double {\bfseries Angle\+To} (const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&) const
+\begin{DoxyCompactList}\small\item\em see "{}\+Mathematische Formeln"{} p. 170, Schnittwinkel... \end{DoxyCompactList}\item 
+\Hypertarget{classmjl_1_1_edge_a60e86d8713618aa4737516c7858e2de6}\label{classmjl_1_1_edge_a60e86d8713618aa4737516c7858e2de6} 
+double {\bfseries Dot\+Product} (const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&, const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&) const
+\item 
+\Hypertarget{classmjl_1_1_edge_acf7decd2ca4a85df7b99cd51bba06092}\label{classmjl_1_1_edge_acf7decd2ca4a85df7b99cd51bba06092} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classmjl_1_1_edge_a7570f0f32a63ebc9ddc94b3b75a490a9}\label{classmjl_1_1_edge_a7570f0f32a63ebc9ddc94b3b75a490a9} 
+\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} {\bfseries org\+\_\+}
+\item 
+\Hypertarget{classmjl_1_1_edge_a57ad4099619d93e37e8455b45931b405}\label{classmjl_1_1_edge_a57ad4099619d93e37e8455b45931b405} 
+\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} {\bfseries dest\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classmjl_1_1_edge_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classmjl_1_1_edge_a95c95b8e922e8f7c2605df1906342dca}\index{mjl::Edge@{mjl::Edge}!Cross@{Cross}}
+\index{Cross@{Cross}!mjl::Edge@{mjl::Edge}}
+\doxysubsubsection{\texorpdfstring{Cross()}{Cross()}}
+{\footnotesize\ttfamily \label{classmjl_1_1_edge_a95c95b8e922e8f7c2605df1906342dca} 
+INTERSECTION mjl\+::\+Edge\+::\+Cross (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&}]{e}{, }\item[{double \&}]{t}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+SKEW\+\_\+\+CROSS if the line segments intersect (in constrast with the infinite lines) COLLINEAR, PARALLEL SKEW\+\_\+\+NO\+\_\+\+CROSS as appropriate t = x value of intersection if intersection occurs 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=307pt]{classmjl_1_1_edge_a95c95b8e922e8f7c2605df1906342dca_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classmjl_1_1_edge_ac8bf9ec6d584ddc112f3c8b9ecff4cc4}\index{mjl::Edge@{mjl::Edge}!CrossingPoint@{CrossingPoint}}
+\index{CrossingPoint@{CrossingPoint}!mjl::Edge@{mjl::Edge}}
+\doxysubsubsection{\texorpdfstring{CrossingPoint()}{CrossingPoint()}}
+{\footnotesize\ttfamily \label{classmjl_1_1_edge_ac8bf9ec6d584ddc112f3c8b9ecff4cc4} 
+INTERSECTION mjl\+::\+Edge\+::\+Crossing\+Point (\begin{DoxyParamCaption}\item[{double}]{tolerance}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&}]{f}{, }\item[{\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{p}{}\end{DoxyParamCaption}) const}
+
+includes start and end-\/point into the edge comparison. Thus if the intersection is within the tolerance of these nodes, \doxylink{classmjl_1_1_edge_ac8bf9ec6d584ddc112f3c8b9ecff4cc4}{Crossing\+Point()} will return SKEW\+\_\+\+CROSS and it will snap the intersection point to that node. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{classmjl_1_1_edge_ac8bf9ec6d584ddc112f3c8b9ecff4cc4_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9}\index{mjl::Edge@{mjl::Edge}!Intersect@{Intersect}}
+\index{Intersect@{Intersect}!mjl::Edge@{mjl::Edge}}
+\doxysubsubsection{\texorpdfstring{Intersect()}{Intersect()}}
+{\footnotesize\ttfamily \label{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9} 
+INTERSECTION mjl\+::\+Edge\+::\+Intersect (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&}]{e}{, }\item[{double \&}]{t}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+SKEW if infinite lines defined by edges crossat a point p COLLINEAR if the lines are the same PARALLEL if the two lines defined by the edges are parallel
+\end{DoxyReturn}
+t is assigned the parametric value (along the line) of where the lines intersect if they do. t = x of the intersection Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmjl_1_1_edge_a977fdbbbeae30e368545c71835aa7fd9_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classmjl_1_1_edge_a2eb063c4229dbbcb316e776ba7cc5b4e}\index{mjl::Edge@{mjl::Edge}!SKM\_CrossingPoint@{SKM\_CrossingPoint}}
+\index{SKM\_CrossingPoint@{SKM\_CrossingPoint}!mjl::Edge@{mjl::Edge}}
+\doxysubsubsection{\texorpdfstring{SKM\_CrossingPoint()}{SKM\_CrossingPoint()}}
+{\footnotesize\ttfamily \label{classmjl_1_1_edge_a2eb063c4229dbbcb316e776ba7cc5b4e} 
+INTERSECTION mjl\+::\+Edge\+::\+SKM\+\_\+\+Crossing\+Point (\begin{DoxyParamCaption}\item[{double}]{tolerance}{, }\item[{const \mbox{\hyperlink{classmjl_1_1_edge}{Edge}} \&}]{f}{, }\item[{\mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{p}{}\end{DoxyParamCaption}) const}
+
+as above but no snapping to points, the intersection point is returned into p. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmjl_1_1_edge_a2eb063c4229dbbcb316e776ba7cc5b4e_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classmjl_1_1_edge_a3f5aaefd4ce06b1c5ac0d1ce01df4310}\index{mjl::Edge@{mjl::Edge}!Type@{Type}}
+\index{Type@{Type}!mjl::Edge@{mjl::Edge}}
+\doxysubsubsection{\texorpdfstring{Type()}{Type()}}
+{\footnotesize\ttfamily \label{classmjl_1_1_edge_a3f5aaefd4ce06b1c5ac0d1ce01df4310} 
+EDGE\+\_\+\+CLASSIFICATION mjl\+::\+Edge\+::\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmjl_1_1_point}{mjl\+::\+Point}} \&}]{p}{}\end{DoxyParamCaption}) const}
+
+classifies an edge relative to its location compared with the point p. Options are CROSSING, TOUCHING and INESSENTIAL \Hypertarget{classmjl_1_1_edge_ab25f2c3f909a72b7dc69cefeb2e72726}\index{mjl::Edge@{mjl::Edge}!Y@{Y}}
+\index{Y@{Y}!mjl::Edge@{mjl::Edge}}
+\doxysubsubsection{\texorpdfstring{Y()}{Y()}}
+{\footnotesize\ttfamily \label{classmjl_1_1_edge_ab25f2c3f909a72b7dc69cefeb2e72726} 
+double mjl\+::\+Edge\+::Y (\begin{DoxyParamCaption}\item[{double}]{x}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+for a given x value \doxylink{classmjl_1_1_edge_ab25f2c3f909a72b7dc69cefeb2e72726}{Y()} returns the corresponding y value on the line defined by the \doxylink{classmjl_1_1_edge}{Edge} 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/discretisation/MJL\+\_\+\+Edge.\+h\item 
+source/modules/discretisation/MJL\+\_\+\+Edge.\+cpp\end{DoxyCompactItemize}

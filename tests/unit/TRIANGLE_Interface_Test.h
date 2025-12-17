@@ -22,7 +22,7 @@ class TRIANGLE_Interface_Test : public Test {
     
     void Test_BOX_BOUNDARY_NodeFlags();
 
-   const bool verbose_ = true;
+   const bool verbose_ = false;
 };
 
 

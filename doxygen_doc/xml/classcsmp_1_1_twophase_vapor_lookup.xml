@@ -1,0 +1,1602 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_twophase_vapor_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TwophaseVaporLookup</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ad8f6dfb1d7976cf3b6528eb39ade5a21" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::TwophaseVaporLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="39" column="26" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a9d290a3795814235c48a14160358d9dd" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::TwophaseVaporLookup::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="40" column="26" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1acfa9ff52fe29f1215fe25a95ab10af4e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::tcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="42" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a7a899d18de51a2b98068971b12c19f76" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="43" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1aae8c1f720173ff700d0e3bd486243b2b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::xcurrent</definition>
+        <argsstring></argsstring>
+        <name>xcurrent</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::xcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="44" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ae6c252cc14100acfc4f63454ab5e7159" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::tdummy</definition>
+        <argsstring></argsstring>
+        <name>tdummy</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::tdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="45" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ac6a721c76e9407edf2b079bba123d06c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pdummy</definition>
+        <argsstring></argsstring>
+        <name>pdummy</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="46" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a362bd9e1527114e8f97f9aced4eb4f74" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="47" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a72a2f5d2afae1b62193d62036c391c38" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::p_res</definition>
+        <argsstring></argsstring>
+        <name>p_res</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::p_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="48" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a11be7af04cf98256ce298ef33645a2e1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="49" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a1ee35a8643555c12245065c220ba95af" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="50" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1aa6885ef0b7b27e9e683efd7848948057" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pvlh</definition>
+        <argsstring></argsstring>
+        <name>pvlh</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pvlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="51" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a9d2ec0ca3471e132702b5125bad56d8a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::ph2o</definition>
+        <argsstring></argsstring>
+        <name>ph2o</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::ph2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="52" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1abe56a8f92660666123dcad5faf33c95a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::t_iA</definition>
+        <argsstring></argsstring>
+        <name>t_iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::t_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="53" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a02daf20be444e49ba421be4fe2459991" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::t_iB</definition>
+        <argsstring></argsstring>
+        <name>t_iB</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::t_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="54" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a0d4f9b2a6a4864a7f701089505f74690" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::t_iC</definition>
+        <argsstring></argsstring>
+        <name>t_iC</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::t_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="55" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a4855ce999352d0c399b7a640411aac2a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::t_iD</definition>
+        <argsstring></argsstring>
+        <name>t_iD</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::t_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="56" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a88d5af6bae4895b8ddf007fb9a650940" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::p_iA</definition>
+        <argsstring></argsstring>
+        <name>p_iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::p_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="57" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a918a9996d411585205da922d804b25d3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::p_iB</definition>
+        <argsstring></argsstring>
+        <name>p_iB</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::p_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="58" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1aa222687b8b5786a731c8f82efc900015" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::p_iC</definition>
+        <argsstring></argsstring>
+        <name>p_iC</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::p_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="59" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a292c25a3a7815c756282e63540375c13" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::p_iD</definition>
+        <argsstring></argsstring>
+        <name>p_iD</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::p_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="60" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a60e1cd42b42bbabacdb9816f3cfdc9b6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_iA</definition>
+        <argsstring></argsstring>
+        <name>value_iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="61" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a3ddde4c957061f312543b28970b16f63" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_iB</definition>
+        <argsstring></argsstring>
+        <name>value_iB</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="62" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1acbe6ea15795724b3b8a3d1fdf46cd2aa" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_iC</definition>
+        <argsstring></argsstring>
+        <name>value_iC</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="63" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1aa0d8583b3b474fe994d03d4a7134c517" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_iD</definition>
+        <argsstring></argsstring>
+        <name>value_iD</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="64" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a343c89585d46f97431c47a255b900c1e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_bottom</definition>
+        <argsstring></argsstring>
+        <name>value_bottom</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_bottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="65" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1afb26788d74c0b3474a97505f63ff758a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_top</definition>
+        <argsstring></argsstring>
+        <name>value_top</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_top</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="66" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ac1c044d5c1678243cd349a6a04caf84a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_before</definition>
+        <argsstring></argsstring>
+        <name>value_before</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_before</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="67" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ae76b42145f26ade054327757d01ee0cf" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_behind</definition>
+        <argsstring></argsstring>
+        <name>value_behind</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="68" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a8d5c369baa3cca35901f0ee1dcb5c647" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_interpolated</definition>
+        <argsstring></argsstring>
+        <name>value_interpolated</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_interpolated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="69" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a4d2c9095d92b84973b91f5a8e6f5af43" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_crit</definition>
+        <argsstring></argsstring>
+        <name>value_crit</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_crit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="70" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a64e1dea46ce578da7189364ec1601f2a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_crit_behind</definition>
+        <argsstring></argsstring>
+        <name>value_crit_behind</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_crit_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="71" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a622c39981b9a468ff216f45905fc726a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_vlh</definition>
+        <argsstring></argsstring>
+        <name>value_vlh</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_vlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="72" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a940bbf0ae9e9e84ad485ec882e7e6d6e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_vlh_behind</definition>
+        <argsstring></argsstring>
+        <name>value_vlh_behind</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_vlh_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="73" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1acc7d38da654bb5b9f46bd5d8f045ceb8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_vlh_before</definition>
+        <argsstring></argsstring>
+        <name>value_vlh_before</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_vlh_before</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="74" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1abb56154c19d89b6353bb50246b921e5a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_boil</definition>
+        <argsstring></argsstring>
+        <name>value_boil</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_boil</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="75" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a020be398a4d3d9d4f9c275a452e7576a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::value_boil_behind</definition>
+        <argsstring></argsstring>
+        <name>value_boil_behind</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::value_boil_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="76" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1adb8bbd27cd4ea1dbe55a4261fb418b3f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pboil_iA</definition>
+        <argsstring></argsstring>
+        <name>pboil_iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pboil_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="77" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a9cc9b29579bec1d8e89a54edca5e22a6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pboil_iB</definition>
+        <argsstring></argsstring>
+        <name>pboil_iB</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pboil_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="78" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ae1bbd4c0fd94d82eb5fb892dcd888788" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::tboil</definition>
+        <argsstring></argsstring>
+        <name>tboil</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::tboil</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="79" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a5796b13e00f705cd8bf60e983adf205f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::tcrit</definition>
+        <argsstring></argsstring>
+        <name>tcrit</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::tcrit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="80" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a441222d6918fb4bed71a4827494dbed5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::tvlh</definition>
+        <argsstring></argsstring>
+        <name>tvlh</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::tvlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="81" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a31e2fca2b31aa83084e9fecd261bc3c2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::x_low</definition>
+        <argsstring></argsstring>
+        <name>x_low</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::x_low</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="82" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a1ab9462ccf79071855e679656c583a04" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::x_high</definition>
+        <argsstring></argsstring>
+        <name>x_high</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::x_high</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="83" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a2f7d40b0f22e0477411d2a6c86f327c0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pcrit_iB</definition>
+        <argsstring></argsstring>
+        <name>pcrit_iB</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pcrit_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="84" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a86879f7f70f4234d6c81f3c717113116" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::pcrit_iA</definition>
+        <argsstring></argsstring>
+        <name>pcrit_iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::pcrit_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="85" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a384ed36c255419583bf89479b674f305" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="87" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1aac881bdbe6a4fff132fe8a292b14de87" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::ip</definition>
+        <argsstring></argsstring>
+        <name>ip</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::ip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="88" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ac52cc6a9db68a0127bcb08f52ed72f2d" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="89" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a1cf9b4eacdeac7419f2e5498fee083f7" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::p_dim</definition>
+        <argsstring></argsstring>
+        <name>p_dim</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::p_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="90" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ae48a64ff5d0d0004191ed83d2dbd5cee" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::iA</definition>
+        <argsstring></argsstring>
+        <name>iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="91" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a3e3125ff444ce44090201ce77d3e7dd9" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::iB</definition>
+        <argsstring></argsstring>
+        <name>iB</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="92" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1abee8e58f55e3cecfdb977ab3dfcd3f3e" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::iC</definition>
+        <argsstring></argsstring>
+        <name>iC</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="93" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a390125ffdec380f8edf01d612d20ec6c" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::iD</definition>
+        <argsstring></argsstring>
+        <name>iD</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="94" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a4f093f78a2a9837e0fb6856ab91664bd" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::i_dummy</definition>
+        <argsstring></argsstring>
+        <name>i_dummy</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::i_dummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="95" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a440f1e95eb7e91ec4ba6ecb7ae1525cf" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::it_p_max</definition>
+        <argsstring></argsstring>
+        <name>it_p_max</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::it_p_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="96" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a1909377ee0729e4aa0d03559d38ab87b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::TwophaseVaporLookup::ip_p_max</definition>
+        <argsstring></argsstring>
+        <name>ip_p_max</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::ip_p_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="97" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ad39512754bb5ee989e354f51eee5ea23" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::TwophaseVaporLookup::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="99" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a29ee73bb99b0ab8f3e2d7397b5013ba6" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::TwophaseVaporLookup::state_iA</definition>
+        <argsstring></argsstring>
+        <name>state_iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::state_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="100" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a1e462a34052881b3b0ec90ffd18250cf" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::TwophaseVaporLookup::state_iB</definition>
+        <argsstring></argsstring>
+        <name>state_iB</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::state_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="101" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a99057ed88091fe443760886936254f68" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::TwophaseVaporLookup::state_iC</definition>
+        <argsstring></argsstring>
+        <name>state_iC</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::state_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="102" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1ab711a939f82d2c0d303f0758a307ec5a" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::TwophaseVaporLookup::state_iD</definition>
+        <argsstring></argsstring>
+        <name>state_iD</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::state_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="103" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a264db40da39349c9b1861f41ddd4b558" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::TwophaseVaporLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::storage_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="105" column="19" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a032b07383af2097c680cb6ba36e90b8c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; States &gt;</type>
+        <definition>std::vector&lt;States&gt; csmp::TwophaseVaporLookup::state_vector</definition>
+        <argsstring></argsstring>
+        <name>state_vector</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::state_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="106" column="21" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1abc391bfed1bdd709270f74cb065def64" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_point_h2_o" kindref="compound">CriticalPointH2O</ref></type>
+        <definition>CriticalPointH2O csmp::TwophaseVaporLookup::cp_h2o</definition>
+        <argsstring></argsstring>
+        <name>cp_h2o</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::cp_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="123" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a68c12b20b5c99ad9ca2e43845901e74f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_curve_lookup" kindref="compound">CriticalCurveLookup</ref></type>
+        <definition>CriticalCurveLookup csmp::TwophaseVaporLookup::critcurve</definition>
+        <argsstring></argsstring>
+        <name>critcurve</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::critcurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="124" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a0b62746317643bb2bd5e98543aaf5073" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_v_l_h___vapor_lookup" kindref="compound">VLH_VaporLookup</ref></type>
+        <definition>VLH_VaporLookup csmp::TwophaseVaporLookup::vlh_vapor</definition>
+        <argsstring></argsstring>
+        <name>vlh_vapor</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::vlh_vapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="125" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1acf2ff40cdd0d5c8ebdf5f5f27cfe3f1a" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_h2_o_lookup" kindref="compound">H2OLookup</ref></type>
+        <definition>H2OLookup csmp::TwophaseVaporLookup::water</definition>
+        <argsstring></argsstring>
+        <name>water</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::water</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="126" column="29" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a18b6eca812261bbf2750e02399cf44d1" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TwophaseVaporLookup::vlh_tmax</definition>
+        <argsstring></argsstring>
+        <name>vlh_tmax</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::vlh_tmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="128" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a054c1124a249890855b286c07d2e99ce" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::TwophaseVaporLookup::vlh_pmax</definition>
+        <argsstring></argsstring>
+        <name>vlh_pmax</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::vlh_pmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="129" column="27" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_lookup_1a7bb7f03f4ec59a284dd736f1784a837a" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_error_handler" kindref="compound">ErrorHandler</ref> &amp;</type>
+        <definition>ErrorHandler&amp; csmp::TwophaseVaporLookup::csmp_error</definition>
+        <argsstring></argsstring>
+        <name>csmp_error</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::csmp_error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="131" column="28" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="131" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1aadee47fe7a57f62c93e6ada7c08936ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwophaseVaporLookup::TwophaseVaporLookup</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>TwophaseVaporLookup</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::TwophaseVaporLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="18" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="17" bodyend="292"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a4fb2977304aaf462713aa4d4334fdaab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwophaseVaporLookup::~TwophaseVaporLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~TwophaseVaporLookup</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::~TwophaseVaporLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="19" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="296" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a4c00f679b303ed33f85759db8eea68c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwophaseVaporLookup::TwophaseVaporLookup</definition>
+        <argsstring>(const TwophaseVaporLookup &amp;)</argsstring>
+        <name>TwophaseVaporLookup</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::TwophaseVaporLookup</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_twophase_vapor_lookup" kindref="compound">TwophaseVaporLookup</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="20" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a801e82c1db995aea0fbd1a2a3825eefe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_twophase_vapor_lookup" kindref="compound">TwophaseVaporLookup</ref> &amp;</type>
+        <definition>TwophaseVaporLookup &amp; csmp::TwophaseVaporLookup::operator=</definition>
+        <argsstring>(const TwophaseVaporLookup &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_twophase_vapor_lookup" kindref="compound">TwophaseVaporLookup</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="21" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1ad5bbc94397c9e585b1107c6fbd56a396" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::Temperature</definition>
+        <argsstring>()</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="23" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="303" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a705c4dbc19a0dc18dbfed0d6343594e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="24" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="304" bodyend="304"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a663c2bac2a9e44792a6ff5260c69b006" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="25" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="305" bodyend="305"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a5b0c5cdf372bd67c5975ef074b57a4f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="26" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="306" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a40f94dbbca997be95e42324b403e03c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="27" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="307" bodyend="307"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1ab3c6b1e09e882d5577087dd198e6f24e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="28" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="308" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a2bf95cadaf59a394fd12b9dfebfc57b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="29" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="309" bodyend="309"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1ad0cf6b2055cda6fe937362e50218c84d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="30" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="310" bodyend="310"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1af1b46b97934e83c6334f03ab64caefff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::DCompositionDT</definition>
+        <argsstring>()</argsstring>
+        <name>DCompositionDT</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::DCompositionDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="31" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="378" bodyend="434"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a0ef0226a89db4f88615d627da7ccd2d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::DSaltMassFractionDT</definition>
+        <argsstring>()</argsstring>
+        <name>DSaltMassFractionDT</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::DSaltMassFractionDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="32" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="437" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a6108e59056b31f6c2b9a4d5a0230bc76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::ReportMassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>ReportMassFractionNaCl</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::ReportMassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="33" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="314" bodyend="314"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1ab9e2c1e65b3da5c475d2c8a61c5b5629" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::ReportEnthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>ReportEnthalpy</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::ReportEnthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="34" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="315" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1ab2ef2d4e28be8d5e582aec087131d86a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::DEnthalpyDT</definition>
+        <argsstring>()</argsstring>
+        <name>DEnthalpyDT</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::DEnthalpyDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="35" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="319" bodyend="375"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a199b3d9b49cf7950652340df375ba59e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::Interpolate</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>Interpolate</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::Interpolate</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="108" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="515" bodyend="606"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a9353eaa5843d588eb78ccbf81e9774a8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::NormalInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NormalInterpolation</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::NormalInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="109" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="608" bodyend="629"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1af3386f86da3c1843a33900bafdda8dbd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::NearCritpointInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearCritpointInterpolation</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::NearCritpointInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="110" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="798" bodyend="842"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a4efe895678368056fe40ace10bbdf631" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::NearCritcurveInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearCritcurveInterpolation</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::NearCritcurveInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="111" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="847" bodyend="1002"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a51e66579283550b696d8c86511d3a151" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::NearBoilingCurveInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearBoilingCurveInterpolation</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::NearBoilingCurveInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="112" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="1007" bodyend="1155"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a68db8dc8f1f3a239e27ea301e1987b6f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::NearVLHInterpolationLowT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationLowT</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::NearVLHInterpolationLowT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="113" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="1159" bodyend="1301"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a2d3d004572fb3e55b11ce35f3efaeb53" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::NearVLHInterpolationHighT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationHighT</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::NearVLHInterpolationHighT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="114" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="1306" bodyend="1436"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1ae7258efe0419e8309e515b1e183d7625" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::InterpolateBetweenBoilingCurveAndVLH</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>InterpolateBetweenBoilingCurveAndVLH</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::InterpolateBetweenBoilingCurveAndVLH</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="115" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="1438" bodyend="1446"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1aa881f578a8109e4e55f4fc71e5909792" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVaporLookup::NearVLHMaxInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHMaxInterpolation</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::NearVLHMaxInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="116" column="27" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="632" bodyend="795"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1adf2c6cacccad10cdd80435faa4cd4742" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwophaseVaporLookup::SetTemperatureAndPressure</definition>
+        <argsstring>()</argsstring>
+        <name>SetTemperatureAndPressure</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::SetTemperatureAndPressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="118" column="29" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="491" bodyend="498"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a0223f61184da8d4af67decef8a670fba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwophaseVaporLookup::GetIndex_iA</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>GetIndex_iA</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::GetIndex_iA</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="119" column="29" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="501" bodyend="512"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a6d0748d0388182ef4bfc603a2df86401" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwophaseVaporLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="120" column="29" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="1450" bodyend="1467"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_lookup_1a9415e9525991aba29dc53b6b80ce653a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwophaseVaporLookup::GetPressureIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>GetPressureIndex</name>
+        <qualifiedname>csmp::TwophaseVaporLookup::GetPressureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVaporLookup.h" line="121" column="29" bodyfile="source/modules/eos/h2o_nacl_lookup/TwophaseVaporLookup.cpp" bodystart="1469" bodyend="1486"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TwophaseVaporLookup</label>
+        <link refid="classcsmp_1_1_twophase_vapor_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/TwophaseVaporLookup.h" line="15" column="3" bodyfile="source/includes/eos/TwophaseVaporLookup.h" bodystart="15" bodyend="132"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a2bf95cadaf59a394fd12b9dfebfc57b6" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1abc391bfed1bdd709270f74cb065def64" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>cp_h2o</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a68c12b20b5c99ad9ca2e43845901e74f" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>critcurve</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a7bb7f03f4ec59a284dd736f1784a837a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>csmp_error</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1af1b46b97934e83c6334f03ab64caefff" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>DCompositionDT</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a5b0c5cdf372bd67c5975ef074b57a4f4" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ab2ef2d4e28be8d5e582aec087131d86a" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>DEnthalpyDT</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a0ef0226a89db4f88615d627da7ccd2d4" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>DSaltMassFractionDT</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a40f94dbbca997be95e42324b403e03c1" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a0223f61184da8d4af67decef8a670fba" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>GetIndex_iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a9415e9525991aba29dc53b6b80ce653a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>GetPressureIndex</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a6d0748d0388182ef4bfc603a2df86401" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ab3c6b1e09e882d5577087dd198e6f24e" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a4f093f78a2a9837e0fb6856ab91664bd" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>i_dummy</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ae48a64ff5d0d0004191ed83d2dbd5cee" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a3e3125ff444ce44090201ce77d3e7dd9" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>iB</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1abee8e58f55e3cecfdb977ab3dfcd3f3e" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>iC</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a390125ffdec380f8edf01d612d20ec6c" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>iD</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a199b3d9b49cf7950652340df375ba59e" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>Interpolate</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ae7258efe0419e8309e515b1e183d7625" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>InterpolateBetweenBoilingCurveAndVLH</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1aac881bdbe6a4fff132fe8a292b14de87" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>ip</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a1909377ee0729e4aa0d03559d38ab87b" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>ip_p_max</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a384ed36c255419583bf89479b674f305" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a440f1e95eb7e91ec4ba6ecb7ae1525cf" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>it_p_max</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a663c2bac2a9e44792a6ff5260c69b006" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a51e66579283550b696d8c86511d3a151" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>NearBoilingCurveInterpolation</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a4efe895678368056fe40ace10bbdf631" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>NearCritcurveInterpolation</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1af3386f86da3c1843a33900bafdda8dbd" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>NearCritpointInterpolation</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a2d3d004572fb3e55b11ce35f3efaeb53" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>NearVLHInterpolationHighT</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a68db8dc8f1f3a239e27ea301e1987b6f" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>NearVLHInterpolationLowT</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1aa881f578a8109e4e55f4fc71e5909792" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>NearVLHMaxInterpolation</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a9353eaa5843d588eb78ccbf81e9774a8" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>NormalInterpolation</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a801e82c1db995aea0fbd1a2a3825eefe" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a1cf9b4eacdeac7419f2e5498fee083f7" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>p_dim</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a88d5af6bae4895b8ddf007fb9a650940" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>p_iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a918a9996d411585205da922d804b25d3" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>p_iB</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1aa222687b8b5786a731c8f82efc900015" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>p_iC</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a292c25a3a7815c756282e63540375c13" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>p_iD</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a72a2f5d2afae1b62193d62036c391c38" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>p_res</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1adb8bbd27cd4ea1dbe55a4261fb418b3f" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pboil_iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a9cc9b29579bec1d8e89a54edca5e22a6" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pboil_iB</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a86879f7f70f4234d6c81f3c717113116" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pcrit_iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a2f7d40b0f22e0477411d2a6c86f327c0" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pcrit_iB</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a7a899d18de51a2b98068971b12c19f76" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ac6a721c76e9407edf2b079bba123d06c" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pdummy</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a9d2ec0ca3471e132702b5125bad56d8a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>ph2o</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a1ee35a8643555c12245065c220ba95af" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a705c4dbc19a0dc18dbfed0d6343594e3" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a9d290a3795814235c48a14160358d9dd" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pressure</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1aa6885ef0b7b27e9e683efd7848948057" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>pvlh</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ab9e2c1e65b3da5c475d2c8a61c5b5629" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>ReportEnthalpy</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a6108e59056b31f6c2b9a4d5a0230bc76" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>ReportMassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1adf2c6cacccad10cdd80435faa4cd4742" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>SetTemperatureAndPressure</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ad39512754bb5ee989e354f51eee5ea23" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>state</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a29ee73bb99b0ab8f3e2d7397b5013ba6" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>state_iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a1e462a34052881b3b0ec90ffd18250cf" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>state_iB</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a99057ed88091fe443760886936254f68" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>state_iC</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ab711a939f82d2c0d303f0758a307ec5a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>state_iD</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a032b07383af2097c680cb6ba36e90b8c" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>state_vector</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a264db40da39349c9b1861f41ddd4b558" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ac52cc6a9db68a0127bcb08f52ed72f2d" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1abe56a8f92660666123dcad5faf33c95a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>t_iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a02daf20be444e49ba421be4fe2459991" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>t_iB</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a0d4f9b2a6a4864a7f701089505f74690" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>t_iC</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a4855ce999352d0c399b7a640411aac2a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>t_iD</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a362bd9e1527114e8f97f9aced4eb4f74" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ae1bbd4c0fd94d82eb5fb892dcd888788" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>tboil</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a5796b13e00f705cd8bf60e983adf205f" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>tcrit</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1acfa9ff52fe29f1215fe25a95ab10af4e" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ae6c252cc14100acfc4f63454ab5e7159" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>tdummy</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ad5bbc94397c9e585b1107c6fbd56a396" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ad8f6dfb1d7976cf3b6528eb39ade5a21" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a11be7af04cf98256ce298ef33645a2e1" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a441222d6918fb4bed71a4827494dbed5" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>tvlh</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1aadee47fe7a57f62c93e6ada7c08936ed" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>TwophaseVaporLookup</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a4c00f679b303ed33f85759db8eea68c3" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>TwophaseVaporLookup</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ac1c044d5c1678243cd349a6a04caf84a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_before</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ae76b42145f26ade054327757d01ee0cf" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_behind</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1abb56154c19d89b6353bb50246b921e5a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_boil</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a020be398a4d3d9d4f9c275a452e7576a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_boil_behind</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a343c89585d46f97431c47a255b900c1e" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_bottom</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a4d2c9095d92b84973b91f5a8e6f5af43" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_crit</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a64e1dea46ce578da7189364ec1601f2a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_crit_behind</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a60e1cd42b42bbabacdb9816f3cfdc9b6" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_iA</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a3ddde4c957061f312543b28970b16f63" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_iB</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1acbe6ea15795724b3b8a3d1fdf46cd2aa" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_iC</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1aa0d8583b3b474fe994d03d4a7134c517" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_iD</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a8d5c369baa3cca35901f0ee1dcb5c647" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_interpolated</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1afb26788d74c0b3474a97505f63ff758a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_top</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a622c39981b9a468ff216f45905fc726a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_vlh</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1acc7d38da654bb5b9f46bd5d8f045ceb8" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_vlh_before</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a940bbf0ae9e9e84ad485ec882e7e6d6e" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>value_vlh_behind</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1ad0cf6b2055cda6fe937362e50218c84d" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a054c1124a249890855b286c07d2e99ce" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>vlh_pmax</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a18b6eca812261bbf2750e02399cf44d1" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>vlh_tmax</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a0b62746317643bb2bd5e98543aaf5073" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>vlh_vapor</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1acf2ff40cdd0d5c8ebdf5f5f27cfe3f1a" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>water</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a1ab9462ccf79071855e679656c583a04" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>x_high</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a31e2fca2b31aa83084e9fecd261bc3c2" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>x_low</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1aae8c1f720173ff700d0e3bd486243b2b" prot="private" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>xcurrent</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_lookup_1a4fb2977304aaf462713aa4d4334fdaab" prot="public" virt="non-virtual"><scope>csmp::TwophaseVaporLookup</scope><name>~TwophaseVaporLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

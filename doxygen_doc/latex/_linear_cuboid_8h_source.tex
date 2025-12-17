@@ -1,0 +1,57 @@
+\doxysection{Linear\+Cuboid.\+h}
+\hypertarget{_linear_cuboid_8h_source}{}\label{_linear_cuboid_8h_source}\index{source/includes/integration/finite\_elements/LinearCuboid.h@{source/includes/integration/finite\_elements/LinearCuboid.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LINEAR\_CUBOID\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LINEAR\_CUBOID\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ @class\ LinearCuboid}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ @author\ Hani\ Akbari\ (Jan.\ 2017)}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ This\ class\ implements\ linear\ cuboid\ element,\ so\ each\ element\ has\ 8\ nodes.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid}{LinearCuboid}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}\ \{}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad4c488cb97c836e2847ab54028956a36}{LinearCuboid}}();}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a9cbf9756633e31bcb708d8e1bfbbb675}{Volume}}();}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a2f7cd58661dffcefe9e9f5f452c6d37f}{AspectRatio}}();}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a45cf4f975fc8068422e29dd2cb8ca0a1}{InnerRadius}}();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ \ CornerNodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 8U;\ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a4cdd5b61ea9304b1e4bc935ecbbf025f}{EdgeLengths}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ );}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad496cf1879f971900327e8c54eee7763}{CornerNodes}}(std::vector<uint32\_t>\&\ ids)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ac10396c001ec148504d438ce0934caf9}{NodesOfSegment}}(\ uint32\_t\ segm\_id,\ std::vector<uint32\_t>\&\ snids)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a060186c391c939fbe7cec4ee957ef124}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a060186c391c939fbe7cec4ee957ef124}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a060186c391c939fbe7cec4ee957ef124}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a060186c391c939fbe7cec4ee957ef124}{NodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_abf45f4d9a020c1472d15af27cb8e5d28}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_cuboid_abf45f4d9a020c1472d15af27cb8e5d28}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_cuboid_abf45f4d9a020c1472d15af27cb8e5d28}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_abf45f4d9a020c1472d15af27cb8e5d28}{CornerNodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad5521280aadd9fb6df9f9f5aaadb2166}{std}}::\mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad5521280aadd9fb6df9f9f5aaadb2166}{vector}}<\mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad5521280aadd9fb6df9f9f5aaadb2166}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ad5521280aadd9fb6df9f9f5aaadb2166}{NodesConnectedTo}}(\ uint32\_t\ node\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ab151240f310dd30a70d96ef161564177}{UnitNormalToFace}}(\ uint32\_t\ face,\ std::vector<\textcolor{keywordtype}{double}>\&\ unrml)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a9649dca67cdc17bb6ef99588d0d4a4c8}{OutputNodeDataToVTK}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ file\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ var\_name,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DATA)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a493e75088e6df7fa7ae858f612ecd945}{N}}(std::vector<\textcolor{keywordtype}{double}>\&\ M,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz);}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ N\_AtGlobalPoint(std::vector<\textcolor{keywordtype}{double}>\&\ M,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz);}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ae1364bd168749c8ada38d14cdd46d14a}{N\_AtBaryCenter}}(std::vector<\textcolor{keywordtype}{double}>\&\ M);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a8ba10c74ad78f585ea385618b6d2bef2}{IntegralNN}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ N);}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_ab5677773b1097d815b9f34371002de40}{IntegraldNdN}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DN);}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a2b2db69138df7e843a34c857000dc5cf}{dN\_At}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ B,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a74187f476e45a6d8e3971b04637f9e5d}{ElementTypeOfSegment}}(\ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a74187f476e45a6d8e3971b04637f9e5d}{uint32\_t}})\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ LINEAR\_BAR;\ \};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a57b24b5534cc4e3cc3794695c71c838f}{ElementTypeOfFace}}(\ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid_a57b24b5534cc4e3cc3794695c71c838f}{uint32\_t}})\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ LINEAR\_RECTANGLE;\ \};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ void\ TestElementIntegrals(DenseMatrix<DM\_MIN>\&\ XY);}}
+\DoxyCodeLine{00040\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ dN\_Partial\_At(std::vector<\textcolor{keywordtype}{double}>\&\ V,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz,\ uint32\_t\ partial);}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ MidSideNodes(std::vector<uint32\_t>\&\ ids)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ CenterOfFacePoints(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM12>\&\ XF);}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ MidSegmentPoints(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM12>\&\ XS);}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM12>\ M1\_,\ M2\_,\ M3\_;\ \textcolor{comment}{//\ Auxiliary\ Dense\ Matrix}}
+\DoxyCodeLine{00046\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ V\_;\ \textcolor{comment}{//\ Auxiliary\ vector}}
+\DoxyCodeLine{00047\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ LINEAR\_CUBOID\_H}}
+
+\end{DoxyCode}

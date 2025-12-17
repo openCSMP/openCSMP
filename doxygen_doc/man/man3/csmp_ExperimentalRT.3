@@ -1,0 +1,474 @@
+.TH "csmp::ExperimentalRT< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ExperimentalRT< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExperimentalRT\fP (const \fBPropertyDatabase\fP< dim > &database, const char *rt_file_name, const char *rt_number, const bool sw_ro_mu_placement=true)"
+.br
+.ti -1c
+.RI "\fBExperimentalRT\fP (const \fBPropertyDatabase\fP< dim > &database, const char *rt_file_name, const char *rt_number, const char *permeability, const char *viscosity_nw, const char *viscosity_w, const char *density_nw, const char *density_w, const char *sat_w, const char *res_sat_nw, const char *res_sat_w, const bool sw_ro_mu_placement=true)"
+.br
+.ti -1c
+.RI "void \fBConstructRTs\fP (const char *rt_file_name)"
+.br
+.ti -1c
+.RI "void \fBInitialize\fP (const \fBElement\fP< dim > &e)"
+.br
+.RI "reads element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement "
+.ti -1c
+.RI "virtual double \fBkrn_Phase\fP () const"
+.br
+.RI "relative permeabilities "
+.ti -1c
+.RI "virtual double \fBkrw_Phase\fP () const"
+.br
+.RI "relative permeabilities "
+.ti -1c
+.RI "virtual double \fBdkrnds_Phase\fP () const"
+.br
+.RI "derivatives of relative permeabilities "
+.ti -1c
+.RI "virtual double \fBdkrwds_Phase\fP () const"
+.br
+.RI "derivatives of relative permeabilities "
+.ti -1c
+.RI "virtual double \fBpc_Phase\fP () const"
+.br
+.RI "capillary pressure "
+.ti -1c
+.RI "virtual double \fBdpcds_Phase\fP () const"
+.br
+.RI "capillary pressure derivatives (treat seff as for previous function) "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::TwoPhaseModel< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBTwoPhaseModel\fP (const \fBPropertyDatabase\fP< dim > &database, double viscosity_nw, double viscosity_w, double density_nw, double density_w, const char *kkk, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)"
+.br
+.RI "for fixed values of fluid viscosities and densities "
+.ti -1c
+.RI "\fBTwoPhaseModel\fP (const \fBPropertyDatabase\fP< dim > &database, const char *kkk, const char *mun, const char *muw, const char *rhn, const char *rhw, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)"
+.br
+.RI "for interpolated values "
+.ti -1c
+.RI "virtual void \fBInitializeAndStore\fP (\fBElement\fP< dim > &e)"
+.br
+.RI "read and modify element properties when the saturation functions are history dependent "
+.ti -1c
+.RI "virtual void \fBInitializeForBaryCenter\fP (const \fBElement\fP< dim > &e)"
+.br
+.RI "interpolates node properties to element barycenter "
+.ti -1c
+.RI "virtual void \fBInitializeForNode\fP (const \fBElement\fP< dim > &e, uint32_t node)"
+.br
+.ti -1c
+.RI "virtual void \fBInitializeForIntegrationPoint\fP (uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite element integration points "
+.ti -1c
+.RI "virtual void \fBInitializeForFacetIntegrationPoint\fP (uint32_t facet, uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite volume facets "
+.ti -1c
+.RI "virtual void \fBInitializeForSectorIntegrationPoint\fP (uint32_t sector, uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite volume sectors "
+.ti -1c
+.RI "virtual void \fBInterpolateNodeProperties\fP (const \fBElement\fP< dim > &e)"
+.br
+.ti -1c
+.RI "void \fBSaturationWettingPhase\fP (double s_wetting)"
+.br
+.RI "to set properties on the fly for compressible flow modelling "
+.ti -1c
+.RI "void \fBViscosityNonWettingPhase\fP (double visc)"
+.br
+.ti -1c
+.RI "void \fBViscosityWettingPhase\fP (double visc)"
+.br
+.ti -1c
+.RI "void \fBDensityNonWettingPhase\fP (double dens)"
+.br
+.ti -1c
+.RI "void \fBDensityWettingPhase\fP (double dens)"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBWettingPhaseSaturationKey\fP () const"
+.br
+.RI "Return of keys for calculation of two phase mobilities in transport\&. "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBNonWettingPhaseSaturationKey\fP () const"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBTotalMobilityKey\fP () const"
+.br
+.ti -1c
+.RI "double \fBPermeability\fP () const"
+.br
+.RI "accessors "
+.ti -1c
+.RI "void \fBPermeability\fP (double permeability)"
+.br
+.ti -1c
+.RI "\fBTensorVariable\fP< dim > \fBTensorPermeability\fP () const"
+.br
+.ti -1c
+.RI "void \fBTensorPermeability\fP (\fBTensorVariable\fP< dim > permeability)"
+.br
+.ti -1c
+.RI "double \fBSwr\fP () const"
+.br
+.ti -1c
+.RI "double \fBSnr\fP () const"
+.br
+.ti -1c
+.RI "void \fBSwr\fP (double swr)"
+.br
+.ti -1c
+.RI "void \fBSnr\fP (double snr)"
+.br
+.ti -1c
+.RI "double \fBViscosityNonWettingPhase\fP () const"
+.br
+.RI "fluid properties "
+.ti -1c
+.RI "double \fBViscosityWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBDensityNonWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBDensityWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBSaturation\fP (uint32_t phase) const"
+.br
+.ti -1c
+.RI "double \fBMobilityPhase\fP (uint32_t phase) const"
+.br
+.ti -1c
+.RI "double \fBViscosityRatio\fP () const"
+.br
+.ti -1c
+.RI "double \fBTotalMobility\fP () const"
+.br
+.RI "sum of all phase mobilities * k "
+.ti -1c
+.RI "double \fBTotalMobilityMultiplier\fP () const"
+.br
+.RI "sum of all phase mobilities "
+.ti -1c
+.RI "double \fBDiffusionMultiplier\fP (size_t phase) const"
+.br
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier\fP () const"
+.br
+.RI "driven by capillary pressure gradient "
+.ti -1c
+.RI "double \fBGravityTerm\fP () const"
+.br
+.RI "multipliers for gravity-driven flow (advection multiplier and source term) "
+.ti -1c
+.RI "double \fBGravityMultiplier_G\fP () const"
+.br
+.ti -1c
+.RI "double \fBGravityMultiplier_dGds\fP () const"
+.br
+.ti -1c
+.RI "double \fBG\fP () const"
+.br
+.RI "G multiplier\&. "
+.ti -1c
+.RI "double \fBAdvectionMultiplier\fP () const"
+.br
+.RI "multiplier for advection viscosity coefficient in the case of non-linear advection "
+.ti -1c
+.RI "virtual double \fBDiffusionCharacteristic\fP (size_t phase) const"
+.br
+.RI "linearized diffusion multiplier for large-timestep calculations "
+.ti -1c
+.RI "virtual double \fBShockSpeed\fP () const"
+.br
+.RI "linearized fractional flow derivative "
+.ti -1c
+.RI "virtual double \fBShockHeight\fP () const"
+.br
+.ti -1c
+.RI "void \fBShockSpeedHeight\fP (double &speed, double &height) const"
+.br
+.ti -1c
+.RI "virtual double \fBMaxFractionalFlowDerivative\fP () const"
+.br
+.RI "maximum value of previous derivative "
+.ti -1c
+.RI "double \fBMaxCapillaryPressure\fP (uint32_t phase=1U) const"
+.br
+.RI "maximum value of dpcdS "
+.ti -1c
+.RI "virtual double \fBEffectiveSaturation\fP () const"
+.br
+.RI "always of the wetting phase by convention "
+.ti -1c
+.RI "virtual double \fBSeffToSw\fP () const"
+.br
+.RI "return wetting-phase saturation based on effective saturation "
+.ti -1c
+.RI "virtual double \fBSeffToSw\fP (double \fBseff\fP) const"
+.br
+.RI "return wetting-phase saturation based on effective saturation ( useful for numerical calculations ) "
+.ti -1c
+.RI "double \fBf_Phase\fP (uint32_t phase) const"
+.br
+.RI "fractional flow "
+.ti -1c
+.RI "double \fBfw_at\fP (double sw) const"
+.br
+.RI "fractional flow of water at water saturation sw "
+.ti -1c
+.RI "double \fBfn_at\fP (double sw) const"
+.br
+.ti -1c
+.RI "virtual double \fBdlnds\fP () const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBdlwds\fP () const"
+.br
+.RI "derivative of wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBSw_Phase\fP (double \fBpc_Phase\fP) const"
+.br
+.RI "inverse capillary pressure function "
+.ti -1c
+.RI "virtual double \fBdsdpc_Phase\fP (double \fBpc_Phase\fP) const"
+.br
+.RI "derivatives of inverse capillary pressure function "
+.ti -1c
+.RI "virtual double \fBdfds\fP () const"
+.br
+.RI "derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn "
+.ti -1c
+.RI "virtual double \fBdGds\fP () const"
+.br
+.RI "derivatives of gravitational flow (advection multipliers) "
+.ti -1c
+.RI "double \fBmobility_w_at\fP (double) const"
+.br
+.RI "Numerical derivatives\&. "
+.ti -1c
+.RI "double \fBmobility_n_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBkrw_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBkrn_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdfds_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBG_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBpc_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBdpcds_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBSw_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBdsdpc_at\fP (double se) const"
+.br
+.ti -1c
+.RI "virtual double \fBdlwds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.RI "Numerical derivatives\&. "
+.ti -1c
+.RI "virtual double \fBdlnds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBdkrwds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdkrnds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdfds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdGds_numerical\fP (double \fBh\fP=0\&.000001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdpcds_numerical\fP (double \fBh\fP=0\&.00001) const"
+.br
+.ti -1c
+.RI "virtual void \fBOut\fP (uint32_t phase=1U) const"
+.br
+.RI "default is the wetting phase "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::TwoPhaseModel< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBperm_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBsat_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBsnr_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBswr_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBift_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBmun_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBmuw_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBrhw_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBrhn_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBlt_key_\fP"
+.br
+.ti -1c
+.RI "double \fBswr_\fP"
+.br
+.ti -1c
+.RI "double \fBsnr_\fP"
+.br
+.ti -1c
+.RI "double \fBk_\fP"
+.br
+.ti -1c
+.RI "double \fBift_\fP"
+.br
+.ti -1c
+.RI "double \fBmun_\fP"
+.br
+.ti -1c
+.RI "double \fBmuw_\fP"
+.br
+.ti -1c
+.RI "double \fBrhn_\fP"
+.br
+.ti -1c
+.RI "double \fBrhw_\fP"
+.br
+.ti -1c
+.RI "\fBTensorVariable\fP< dim > \fBK_\fP"
+.br
+.ti -1c
+.RI "double \fBsat_\fP"
+.br
+.ti -1c
+.RI "double \fBseff_\fP"
+.br
+.ti -1c
+.RI "const double \fBacc_gravity_\fP"
+.br
+.ti -1c
+.RI "const double \fBtolerance_\fP"
+.br
+.ti -1c
+.RI "const double \fBMAX_CAPILLARY_PRESSURE_\fP"
+.br
+.ti -1c
+.RI "const double \fBMAX_CAPILLARY_PRESSURE_SLOPE_\fP"
+.br
+.ti -1c
+.RI "const bool \fBinterpolate_fluid_properties_\fP"
+.br
+.ti -1c
+.RI "const bool \fBsw_ro_mu_placement_\fP"
+.br
+.ti -1c
+.RI "bool \fBtensor_permeability_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> double \fBcsmp::ExperimentalRT\fP< dim >::dkrnds_Phase () const\fR [virtual]\fP"
+
+.PP
+derivatives of relative permeabilities 
+.PP
+Reimplemented from \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::ExperimentalRT\fP< dim >::dkrwds_Phase () const\fR [virtual]\fP"
+
+.PP
+derivatives of relative permeabilities 
+.PP
+Reimplemented from \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::ExperimentalRT\fP< dim >::dpcds_Phase () const\fR [virtual]\fP"
+
+.PP
+capillary pressure derivatives (treat seff as for previous function) capillary pressure derivatives 
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::ExperimentalRT\fP< dim >::Initialize (const \fBElement\fP< dim > & e)\fR [virtual]\fP"
+
+.PP
+reads element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement calculates lambda_t (total mobility) = sum of phase mobilities
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM averages tensor properties, but should create tensor mobilities in stead 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::ExperimentalRT\fP< dim >::krn_Phase () const\fR [virtual]\fP"
+
+.PP
+relative permeabilities 
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::ExperimentalRT\fP< dim >::krw_Phase () const\fR [virtual]\fP"
+
+.PP
+relative permeabilities 
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::ExperimentalRT\fP< dim >::pc_Phase () const\fR [virtual]\fP"
+
+.PP
+capillary pressure capillary pressure (limit this to 4e7, the max strength of the rock) do this by computing seff for which pc=4e7, then use this seff as a limiting value 
+.PP
+Implements \fBcsmp::TwoPhaseModel< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

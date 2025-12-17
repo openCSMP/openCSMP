@@ -1,0 +1,335 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_region_boundary_flux_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::RegionBoundaryFluxVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <includes refid="_region_boundary_flux_visitor_8h" local="no">RegionBoundaryFluxVisitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>COMPUTATION_DOMAIN</declname>
+        <defname>COMPUTATION_DOMAIN</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_region_boundary_flux_visitor_1ab7fd7c39400fedb9ae052e4a7c348af7" prot="protected" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">ModelSubDomain</ref>&lt; dim, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> &gt; *</type>
+        <definition>ModelSubDomain&lt;dim,Element&gt;* csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::domain_ptr_</definition>
+        <argsstring></argsstring>
+        <name>domain_ptr_</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::domain_ptr_</qualifiedname>
+        <briefdescription>
+<para>either of: </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="41" column="21" bodyfile="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_boundary_flux_visitor_1ad082efb163603adf6621af4adc020743" prot="protected" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::flux_key_</definition>
+        <argsstring></argsstring>
+        <name>flux_key_</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::flux_key_</qualifiedname>
+        <briefdescription>
+<para>for the user-defined flux variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="42" column="35" bodyfile="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_boundary_flux_visitor_1af7a39fe4388bf845df4627f44dc58c10" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::FVinflux_</definition>
+        <argsstring></argsstring>
+        <name>FVinflux_</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::FVinflux_</qualifiedname>
+        <briefdescription>
+<para>flux summation variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="43" column="35" bodyfile="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_boundary_flux_visitor_1a4d271347976e0aecdc93f1e4d610e919" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::delta_t_</definition>
+        <argsstring></argsstring>
+        <name>delta_t_</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::delta_t_</qualifiedname>
+        <briefdescription>
+<para>time increment used in the flux integration </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="44" column="35" bodyfile="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_region_boundary_flux_visitor_1a2fc827906d6be2829f7d42ea9096fcb9" prot="protected" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::vt_</definition>
+        <argsstring></argsstring>
+        <name>vt_</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::vt_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="45" column="30" bodyfile="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_region_boundary_flux_visitor_1a95ca5b17d452ed98b7ee5ba16d43370d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::RegionBoundaryFluxVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *target_region, const char *Darcy_velocity)</argsstring>
+        <name>RegionBoundaryFluxVisitor</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::RegionBoundaryFluxVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>target_region</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>Darcy_velocity</declname>
+        </param>
+        <briefdescription>
+<para>choice between <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>, <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> is desired </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>EXPERIMENTAL CODE</para>
+</simplesect>
+After construction this visitor should be passed to the region of interest </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="26" column="5" bodyfile="source/modules/thmc/single_phase_flow/RegionBoundaryFluxVisitor.cpp" bodystart="25" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_boundary_flux_visitor_1af1c6f8c0b8a5871c0ab7c393ababa674" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::~RegionBoundaryFluxVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~RegionBoundaryFluxVisitor</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::~RegionBoundaryFluxVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="30" column="13" bodyfile="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_boundary_flux_visitor_1a88fadf58e36c2bac7c00a7f077d9c52f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <defname>nd</defname>
+        </param>
+        <briefdescription>
+<para>application target = node-centered finite volume </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sitting on a boundary node of the target <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> We look at the surrounding finite volume sectors that do not form part of this region and calculate the incoming fluxes into the region using the user-supplied flux variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="33" column="18" bodyfile="source/modules/thmc/single_phase_flow/RegionBoundaryFluxVisitor.cpp" bodystart="62" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_boundary_flux_visitor_1aae018a6023863c22010e6ff14562db09" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::InFlux</definition>
+        <argsstring>() const</argsstring>
+        <name>InFlux</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::InFlux</qualifiedname>
+        <briefdescription>
+<para>returns the flux through the region boundary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="36" column="12" bodyfile="source/modules/thmc/single_phase_flow/RegionBoundaryFluxVisitor.cpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_boundary_flux_visitor_1a43e7200d416bdea57d4a935c3df59d06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::ResetFlux</definition>
+        <argsstring>()</argsstring>
+        <name>ResetFlux</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::ResetFlux</qualifiedname>
+        <briefdescription>
+<para>resets the internal flux counter to zero </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="37" column="10" bodyfile="source/modules/thmc/single_phase_flow/RegionBoundaryFluxVisitor.cpp" bodystart="104" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region_boundary_flux_visitor_1a5bf59f12d8d3d720a590f4a19dfae932" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;::TimeIncrement</definition>
+        <argsstring>(double)</argsstring>
+        <name>TimeIncrement</name>
+        <qualifiedname>csmp::RegionBoundaryFluxVisitor::TimeIncrement</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>dt</defname>
+        </param>
+        <briefdescription>
+<para>use this to set the time interval over which the flux shall be integrated </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="38" column="10" bodyfile="source/modules/thmc/single_phase_flow/RegionBoundaryFluxVisitor.cpp" bodystart="112" bodyend="115"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>using the FVM this visitor computes the cumulative single-phase influx into the target region </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;</label>
+        <link refid="classcsmp_1_1_region_boundary_flux_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="7">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="4">
+        <label>csmp::ModelSubDomain&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_model_sub_domain"/>
+      </node>
+      <node id="3">
+        <label>csmp::ModelSubDomain&lt; dim, csmp::Element &gt;</label>
+        <link refid="classcsmp_1_1_model_sub_domain"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, csmp::Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::RegionBoundaryFluxVisitor&lt; dim, COMPUTATION_DOMAIN &gt;</label>
+        <link refid="classcsmp_1_1_region_boundary_flux_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#domain_ptr_</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>#flux_key_</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>#vt_</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::VectorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_vector_variable"/>
+      </node>
+      <node id="9">
+        <label>csmp::VectorVariable&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_vector_variable"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" line="23" column="1" bodyfile="source/includes/thmc/single_phase_flow/RegionBoundaryFluxVisitor.h" bodystart="23" bodyend="46"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1a4d271347976e0aecdc93f1e4d610e919" prot="protected" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>delta_t_</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1ab7fd7c39400fedb9ae052e4a7c348af7" prot="protected" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>domain_ptr_</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1ad082efb163603adf6621af4adc020743" prot="protected" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>flux_key_</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1af7a39fe4388bf845df4627f44dc58c10" prot="protected" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>FVinflux_</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1aae018a6023863c22010e6ff14562db09" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>InFlux</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1a95ca5b17d452ed98b7ee5ba16d43370d" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>RegionBoundaryFluxVisitor</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1a43e7200d416bdea57d4a935c3df59d06" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>ResetFlux</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1a5bf59f12d8d3d720a590f4a19dfae932" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>TimeIncrement</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1a88fadf58e36c2bac7c00a7f077d9c52f" prot="public" virt="virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1a2fc827906d6be2829f7d42ea9096fcb9" prot="protected" virt="non-virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>vt_</name></member>
+      <member refid="classcsmp_1_1_region_boundary_flux_visitor_1af1c6f8c0b8a5871c0ab7c393ababa674" prot="public" virt="virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>~RegionBoundaryFluxVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::RegionBoundaryFluxVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

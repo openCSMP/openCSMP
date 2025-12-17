@@ -1,0 +1,638 @@
+\doxysection{csmp\+::Node\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_node}{}\label{classcsmp_1_1_node}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+
+
+\doxylink{classcsmp_1_1_node}{Node} = lowest class of the model hierarchy.  
+
+
+
+
+{\ttfamily \#include $<$Node.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Node\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_node__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Node\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_node__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_node_ab80fa439107feaca2630d1eb2d5ee524}{Node}} ()
+\item 
+\mbox{\hyperlink{classcsmp_1_1_node_aa1ddbf0cf9ffbdc0065e0483cb6f4964}{Node}} (size\+\_\+t idx, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&, \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}=\mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858}{NOT}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}}=\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga65b4b9788928fc2599d5cc1d1960942aac19e2573a57305f2328a9d45aeb508d1}{MESH\+\_\+\+VERTEX}})
+\begin{DoxyCompactList}\small\item\em custom constructor used when model is reconstructed from binary file \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node_a82b9fda5b3cc11a6432f64c7e23f649e}{Node}} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_node_af20feef0b07265766e8cbcf63c90cc2d}\label{classcsmp_1_1_node_af20feef0b07265766e8cbcf63c90cc2d} 
+\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_node_a8538cd11cc36e6ac7f76d5d0167c0b1a}{Node}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&\&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_node_ada7c8ae104c6930bf4ff05af79d0c75e}{operator=}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&\&)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_a0173cbf2b8e36e4b1096440a9bdad844}{operator==}} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em compares memory location, idx\+\_\+, BREP classifier and boundary flag \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a772867802c39c117d2b896ead13e0360}\label{classcsmp_1_1_node_a772867802c39c117d2b896ead13e0360} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Placement} () const
+\begin{DoxyCompactList}\small\item\em Local variable storage interface. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_ab3845b54da91f94db6a044b415d0b9c3}{Unit\+Normal}} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&unrml) const
+\begin{DoxyCompactList}\small\item\em for node forming part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{Vertex\+Normal}} (typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator first, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator last) const
+\begin{DoxyCompactList}\small\item\em normal to surface mesh at the \doxylink{classcsmp_1_1_node}{Node} as based on its connectivity with the surrounding nodes on the surface (cf., computer graphics) TODO\+: fails for quadrilateral meshes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a01d216a1ca3dbb5468fda45c5c7b1233}\label{classcsmp_1_1_node_a01d216a1ca3dbb5468fda45c5c7b1233} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}} {\bfseries Attribute} () const
+\begin{DoxyCompactList}\small\item\em which geometric part of the discretisation of the initial boundary representation (BREP) of the model geometry the node belongs to \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ab23de0bd2f319d8c125c565e5cecc797}\label{classcsmp_1_1_node_ab23de0bd2f319d8c125c565e5cecc797} 
+void {\bfseries Attribute} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}} geom\+\_\+feature)
+\item 
+\Hypertarget{classcsmp_1_1_node_aa7ce86784de00bbfb3785bad89d16046}\label{classcsmp_1_1_node_aa7ce86784de00bbfb3785bad89d16046} 
+void {\bfseries Reserve\+Parent\+Storage} (size\+\_\+t capacity)
+\begin{DoxyCompactList}\small\item\em if it is known how many parent elements will have to be assigned this can be done more efficiently with the optional help of this \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_a8a15ed57856e17990f8b9b8d43809499}{Assign}} (uint32\+\_\+t parent\+\_\+elmt\+\_\+node\+\_\+number, \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const parent\+\_\+elmt)
+\begin{DoxyCompactList}\small\item\em assign new parent element where there is a NOT\+\_\+\+INITIALISED slot in the parent element storage, else adds new one \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_a977d09d4774948b75a196c56bfc7db41}{Unassign}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const parent\+\_\+elmt)
+\begin{DoxyCompactList}\small\item\em if found, sets matching parent element pointer to nullptr and the corresponding node number to NOT\+\_\+\+INITIALIZED \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a9d9041421b4f83f734c73d3fcdfd8800}\label{classcsmp_1_1_node_a9d9041421b4f83f734c73d3fcdfd8800} 
+void {\bfseries Erase\+Parents} ()
+\begin{DoxyCompactList}\small\item\em remove all current parent elements \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ae1be0800f6df20027261c903b5833bd6}\label{classcsmp_1_1_node_ae1be0800f6df20027261c903b5833bd6} 
+uint32\+\_\+t {\bfseries Parents} () const
+\begin{DoxyCompactList}\small\item\em returns how many elements share this node \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a292a5befc5e1bad35187627e492f9e08}\label{classcsmp_1_1_node_a292a5befc5e1bad35187627e492f9e08} 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries Parent} (uint32\+\_\+t)
+\begin{DoxyCompactList}\small\item\em access to the (0..n-\/1) parent element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a41b3fa980a12db9c9cf479b750a3ea10}\label{classcsmp_1_1_node_a41b3fa980a12db9c9cf479b750a3ea10} 
+const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries Parent} (uint32\+\_\+t) const
+\item 
+\Hypertarget{classcsmp_1_1_node_a6a23d90851aa006348fe9c53a138e41d}\label{classcsmp_1_1_node_a6a23d90851aa006348fe9c53a138e41d} 
+uint32\+\_\+t {\bfseries Parent\+Node\+Number} (uint32\+\_\+t parent\+\_\+element) const
+\begin{DoxyCompactList}\small\item\em the local number of this node within the node-\/numbering scheme of parent element (and equal to sector number) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_node_a6751bdcc8a4f83e0dc7e6f49bf3a91de}{Is\+Parent}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em checks whether \doxylink{classcsmp_1_1_element}{Element} is a parent of the node; call Sort\+Parents() first !!! \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ab8d3b953181fdaf8f8025609bf30a3e4}\label{classcsmp_1_1_node_ab8d3b953181fdaf8f8025609bf30a3e4} 
+std\+::vector$<$ std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, short $>$ $>$\+::const\+\_\+iterator {\bfseries Parent\+Elements\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_acbbd70026f5368a1cbfffb16a3a8f131}\label{classcsmp_1_1_node_acbbd70026f5368a1cbfffb16a3a8f131} 
+std\+::vector$<$ std\+::pair$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, short $>$ $>$\+::const\+\_\+iterator {\bfseries Parent\+Elements\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_a867e22cb459eb0759f3db8e39c58d4f5}\label{classcsmp_1_1_node_a867e22cb459eb0759f3db8e39c58d4f5} 
+void {\bfseries Assign} (std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \&neighbor\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em initialises the corner-\/node to neighbor corner node pointer vector \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ac7e8f8b32a6904510f8191764a3ae36e}\label{classcsmp_1_1_node_ac7e8f8b32a6904510f8191764a3ae36e} 
+void {\bfseries Assign} (std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \&neighbor\+\_\+nodes, bool sort\+\_\+neighbors=false)
+\begin{DoxyCompactList}\small\item\em expects a sorted vector without duplicates \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a370bcf702dab4c4797918b23c5420cb2}\label{classcsmp_1_1_node_a370bcf702dab4c4797918b23c5420cb2} 
+void {\bfseries Copy\+Property\+Values\+From} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em copies property values from the argument node to the current node \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_node_a1ed11501ad4ad3153358a5b80c02fb3e}{Assign\+Node\+Neighbors}} ()
+\begin{DoxyCompactList}\small\item\em builds the neighbor connectivity working through higher-\/dimensional parent element edges that the node is part of; returns new number of neighbors \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_node_ade278c160680c6ede0742396b5589538}{Update\+Neighbors}} ()
+\begin{DoxyCompactList}\small\item\em removes null pointers and potential duplicates returning the resulting number of neighbors \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ad24e3f4cf62f64063e93b66c3f1d46d8}\label{classcsmp_1_1_node_ad24e3f4cf62f64063e93b66c3f1d46d8} 
+bool {\bfseries Is\+Neighbor} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+\Hypertarget{classcsmp_1_1_node_a859ccd549bc2a44bf0330ae8014aa295}\label{classcsmp_1_1_node_a859ccd549bc2a44bf0330ae8014aa295} 
+void {\bfseries Add\+Neighbor} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}neighbor\+\_\+node)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_aa0ef4c1fa15bba30daf6fa8ff15d9d05}{Remove\+Neighbor}} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const neighbor\+\_\+node)
+\item 
+\Hypertarget{classcsmp_1_1_node_ae0b3805bbdf3786b581a8b8fdddc6f32}\label{classcsmp_1_1_node_ae0b3805bbdf3786b581a8b8fdddc6f32} 
+void {\bfseries Erase\+Neighbors} ()
+\begin{DoxyCompactList}\small\item\em releases all the memory used \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_node_ab00c4c1b3113b81f29dcc87ae7264393}{Neighbors}} () const
+\begin{DoxyCompactList}\small\item\em the number of corner nodes that this node is directly connected with via segments \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_node_a2ce1e1373c810b976331e948c732bdab}{Neighbor}} (uint32\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em access to any of the neighbor nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a56ccc35427eba37587d4b68ecd210639}\label{classcsmp_1_1_node_a56ccc35427eba37587d4b68ecd210639} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Neighbors\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_acbe3ad872084a4170fd498bdc368916e}\label{classcsmp_1_1_node_acbe3ad872084a4170fd498bdc368916e} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Neighbors\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_a2f7931bc60ac1f8aaf6efb6d51aff589}\label{classcsmp_1_1_node_a2f7931bc60ac1f8aaf6efb6d51aff589} 
+bool {\bfseries Linear\+Search} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const nptr) const
+\begin{DoxyCompactList}\small\item\em check whether a node is neighbor of this node via linear search algorithm \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ab6594e1dc4ff46bf4c599e5bcefe1a15}\label{classcsmp_1_1_node_ab6594e1dc4ff46bf4c599e5bcefe1a15} 
+bool {\bfseries Binary\+Search} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const nptr) const
+\begin{DoxyCompactList}\small\item\em checks whether a node is neighbor of this node ( since a sorted vector is required call \doxylink{classcsmp_1_1_node_a102a26181c4c4483f508f2f9fbcb250d}{Sort\+Neighbors()} first) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a102a26181c4c4483f508f2f9fbcb250d}\label{classcsmp_1_1_node_a102a26181c4c4483f508f2f9fbcb250d} 
+void {\bfseries Sort\+Neighbors} ()
+\begin{DoxyCompactList}\small\item\em to prepare neighbor vector for binary search \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_af6ed446d9422671abdafd68f21ad6092}\label{classcsmp_1_1_node_af6ed446d9422671abdafd68f21ad6092} 
+void {\bfseries Assign} (\mbox{\hyperlink{classcsmp_1_1_node_manifold}{Node\+Manifold}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em connects the node to other topologically collocated nodes if any \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a610a5812fa01a04055e670b750b94ddb}\label{classcsmp_1_1_node_a610a5812fa01a04055e670b750b94ddb} 
+bool {\bfseries Is\+Manifold} () const
+\begin{DoxyCompactList}\small\item\em access to manifold if any; returns nullptr if the node is not a manifold \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a658c978449007540a0de069a0ddbc347}\label{classcsmp_1_1_node_a658c978449007540a0de069a0ddbc347} 
+\mbox{\hyperlink{classcsmp_1_1_node_manifold}{Node\+Manifold}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const {\bfseries Manifold} () const
+\begin{DoxyCompactList}\small\item\em access to other topologically collocarted \doxylink{classcsmp_1_1_node}{Node} objects through manifold if any; returns nullptr if the node is not a manifold \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ab174c8ca72f6ef98da824186dcd967d0}\label{classcsmp_1_1_node_ab174c8ca72f6ef98da824186dcd967d0} 
+void {\bfseries Accept} (\mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em support of the vistor design pattern \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a051b23082644bb2ec3deea446eb9cb68}\label{classcsmp_1_1_node_a051b23082644bb2ec3deea446eb9cb68} 
+void {\bfseries Idx} (size\+\_\+t id\+\_\+0\+\_\+to\+\_\+n\+\_\+minus\+\_\+1) const
+\begin{DoxyCompactList}\small\item\em on-\/the-\/fly 0..n-\/1 numbering stored in a mutable local variable (therefore const) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a658f6953fc50a725205d96add1e034aa}\label{classcsmp_1_1_node_a658f6953fc50a725205d96add1e034aa} 
+size\+\_\+t {\bfseries Idx} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_adb56c23a2595912cf1a3a89849e537aa}\label{classcsmp_1_1_node_adb56c23a2595912cf1a3a89849e537aa} 
+void {\bfseries Coordinate} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_node_a2cb34ac0a0492c9a2d1ed22df0f678d8}\label{classcsmp_1_1_node_a2cb34ac0a0492c9a2d1ed22df0f678d8} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Coordinate} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_af16c2518b96975730e4a5dc02c58037a}{At\+Boundary}} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}})
+\begin{DoxyCompactList}\small\item\em flagging for box-\/shaped models\+: NOT, LEFT, BOTTOM, RIGHT, TOP, BACK, FRONT etc. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_abf761b847a7f25b273c9fc3e68302670}\label{classcsmp_1_1_node_abf761b847a7f25b273c9fc3e68302670} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}} {\bfseries At\+Boundary} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_ade577e9b2d27a92e45ba9aaf9225c614}\label{classcsmp_1_1_node_ade577e9b2d27a92e45ba9aaf9225c614} 
+double {\bfseries operator\mbox{[}$\,$\mbox{]}} (uint32\+\_\+t i) const
+\begin{DoxyCompactList}\small\item\em accessors/mutators for specific node coordinates x=0, y=1, z=2 (z exists only in 3D) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_ac73e5ace69949209bde38d2e119f0ef7}\label{classcsmp_1_1_node_ac73e5ace69949209bde38d2e119f0ef7} 
+double \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (uint32\+\_\+t i)
+\item 
+\Hypertarget{classcsmp_1_1_node_a621c04fc62ddf10cc74764714ca61484}\label{classcsmp_1_1_node_a621c04fc62ddf10cc74764714ca61484} 
+double \& {\bfseries operator()} (uint32\+\_\+t i)
+\item 
+\Hypertarget{classcsmp_1_1_node_a4692885734714defff43ab45026df542}\label{classcsmp_1_1_node_a4692885734714defff43ab45026df542} 
+void {\bfseries x} (double)
+\begin{DoxyCompactList}\small\item\em Set or return the coordinates of the current node. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a09eddfecb7b663d04798a59997cf9236}\label{classcsmp_1_1_node_a09eddfecb7b663d04798a59997cf9236} 
+void {\bfseries y} (double)
+\item 
+\Hypertarget{classcsmp_1_1_node_ad68e22331a9acd8c58abc00e533bcfeb}\label{classcsmp_1_1_node_ad68e22331a9acd8c58abc00e533bcfeb} 
+void {\bfseries z} (double)
+\item 
+\Hypertarget{classcsmp_1_1_node_aaeb1d9d03533c7be1313b0f8bebf518b}\label{classcsmp_1_1_node_aaeb1d9d03533c7be1313b0f8bebf518b} 
+double {\bfseries x} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_a8ca7ddd72b051716dbecb10f579e564f}\label{classcsmp_1_1_node_a8ca7ddd72b051716dbecb10f579e564f} 
+double {\bfseries y} () const
+\item 
+\Hypertarget{classcsmp_1_1_node_ae0f2d4593759da1033c3ded6ad690f67}\label{classcsmp_1_1_node_ae0f2d4593759da1033c3ded6ad690f67} 
+double {\bfseries z} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_node_a3ed80521d49889a0920f99ecfe302577}{Out}} () const
+\begin{DoxyCompactList}\small\item\em output current state of class \doxylink{classcsmp_1_1_node}{Node} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage$<$ dim, Node $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_node}{Node}} $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}{Add\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}{Delete\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}{Is\+Within\+Range}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+double {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value. \end{DoxyCompactList}\item 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double array\+\_\+elmt\+\_\+value, int\+\_\+type)
+\item 
+double {\bfseries Read\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type array\+\_\+elmt) const
+\begin{DoxyCompactList}\small\item\em reads single double element inside of the target array \end{DoxyCompactList}\item 
+bool {\bfseries Empty\+LVS} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}{Out\+LVS}} () const
+\item 
+void {\bfseries Assert\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Finite\+Volume\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Local\+State} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&lv)
+\begin{DoxyCompactList}\small\item\em We store in debug only. \end{DoxyCompactList}\item 
+void {\bfseries LVS} (const Data \&data)
+\begin{DoxyCompactList}\small\item\em copy or move supplied data into storage \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_node_a5432c6513839ff9cf850ed24aa43a4df}\label{classcsmp_1_1_node_a5432c6513839ff9cf850ed24aa43a4df} 
+{\footnotesize template$<$uint32\+\_\+t$>$ }\\class {\bfseries Mesh\+Manager}
+\begin{DoxyCompactList}\small\item\em private because these operators are owned by the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_a9b1f915c17a319e4c45f8870044d579a}\label{classcsmp_1_1_node_a9b1f915c17a319e4c45f8870044d579a} 
+class {\bfseries Finite\+Element\+\_\+\+Test\+Data}
+\item 
+\Hypertarget{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de}\label{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de} 
+std\+::istream \& {\bfseries operator$>$$>$} (std\+::istream \&i\+Stream, \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{Finite\+Element\+\_\+\+Test\+Data}} \&fem\+Test\+Data)
+\begin{DoxyCompactList}\small\item\em PL 2010\+: overloaded istream operator for the \doxylink{classcsmp_1_1_finite_element___test_data}{Finite\+Element\+\_\+\+Test\+Data} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Node$<$ dim $>$}
+\doxylink{classcsmp_1_1_node}{Node} = lowest class of the model hierarchy. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+\doxylink{classcsmp_1_1_node}{Node} class in the finite element mesh hierarchy stores the coordinate of the node point and the variables associated with the node.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+Mesh vertex with coordinates and associated flags. ~\newline
+\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+Uses \doxylink{classcsmp_1_1_point}{Point$<$$>$} template to represent the coordinate. ~\newline
+\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+Elements are registered as parents, Faces and Inter\+Faces are not. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_node_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_node_ab80fa439107feaca2630d1eb2d5ee524}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Node@{Node}}
+\index{Node@{Node}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_ab80fa439107feaca2630d1eb2d5ee524} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Node (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+default constructor
+
+\doxylink{classcsmp_1_1_node}{Node} coordinate is initialised to origin (0,0,0) Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_ab80fa439107feaca2630d1eb2d5ee524_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_ab80fa439107feaca2630d1eb2d5ee524_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_node_aa1ddbf0cf9ffbdc0065e0483cb6f4964}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Node@{Node}}
+\index{Node@{Node}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_aa1ddbf0cf9ffbdc0065e0483cb6f4964} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Node (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{idx}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&}]{pt}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&}]{lvs}{, }\item[{\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}}]{boundary\+\_\+flag}{ = {\ttfamily \mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858}{NOT}}}, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}}}]{topotype}{ = {\ttfamily \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga65b4b9788928fc2599d5cc1d1960942aac19e2573a57305f2328a9d45aeb508d1}{MESH\+\_\+\+VERTEX}}}}\end{DoxyParamCaption})}
+
+
+
+custom constructor used when model is reconstructed from binary file 
+
+Initialises everything except for parent element related vectors. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_aa1ddbf0cf9ffbdc0065e0483cb6f4964_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_aa1ddbf0cf9ffbdc0065e0483cb6f4964_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_node_a82b9fda5b3cc11a6432f64c7e23f649e}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Node@{Node}}
+\index{Node@{Node}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a82b9fda5b3cc11a6432f64c7e23f649e} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Node (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&}]{nd}{}\end{DoxyParamCaption})}
+
+Copy constructor also copies the pointer assignments (!).
+
+\begin{DoxyAttention}{Attention}
+when copy constructing manifold nodes, make sure to add this new \doxylink{classcsmp_1_1_node}{Node} to it 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_a82b9fda5b3cc11a6432f64c7e23f649e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_a82b9fda5b3cc11a6432f64c7e23f649e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_node_a8538cd11cc36e6ac7f76d5d0167c0b1a}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Node@{Node}}
+\index{Node@{Node}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a8538cd11cc36e6ac7f76d5d0167c0b1a} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&\&}]{nd}{}\end{DoxyParamCaption})}
+
+Move constructor also copies the pointer assignments (!). Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_a8538cd11cc36e6ac7f76d5d0167c0b1a_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=179pt]{classcsmp_1_1_node_a8538cd11cc36e6ac7f76d5d0167c0b1a_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_node_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_node_a8a15ed57856e17990f8b9b8d43809499}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Assign@{Assign}}
+\index{Assign@{Assign}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Assign()}{Assign()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a8a15ed57856e17990f8b9b8d43809499} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Assign (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{pnode}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{parent\+\_\+elmt}{}\end{DoxyParamCaption})}
+
+
+
+assign new parent element where there is a NOT\+\_\+\+INITIALISED slot in the parent element storage, else adds new one 
+
+Assigns parent element pointer and remembers which node (local idx) of the parent element this node is.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pnode} & is the node number in the parent element of the assigned node. \\
+\hline
+{\em element} & is pointer to the parent element that gets assigned.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The local number of the parent element which is going to be assigned. ~\newline
+ The local node number of this node in the parent element. ~\newline
+ A pointer to the parent \doxylink{classcsmp_1_1_element}{Element} which shall be added. \Hypertarget{classcsmp_1_1_node_a1ed11501ad4ad3153358a5b80c02fb3e}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!AssignNodeNeighbors@{AssignNodeNeighbors}}
+\index{AssignNodeNeighbors@{AssignNodeNeighbors}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AssignNodeNeighbors()}{AssignNodeNeighbors()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a1ed11501ad4ad3153358a5b80c02fb3e} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Assign\+Node\+Neighbors (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+builds the neighbor connectivity working through higher-\/dimensional parent element edges that the node is part of; returns new number of neighbors 
+
+Re-\/establishes the node neighbors of the node using the parent element connectivity. Since lower-\/dimensional elements share the nodes with the higher dimensional ones, they are ignored. Only corner nodes are considered in the first pass. Subsequently midside nodes which exist in higher-\/order elements are detected and their neighbors are assigned. \Hypertarget{classcsmp_1_1_node_af16c2518b96975730e4a5dc02c58037a}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!AtBoundary@{AtBoundary}}
+\index{AtBoundary@{AtBoundary}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AtBoundary()}{AtBoundary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_af16c2518b96975730e4a5dc02c58037a} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+At\+Boundary (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}}]{b}{}\end{DoxyParamCaption})}
+
+
+
+flagging for box-\/shaped models\+: NOT, LEFT, BOTTOM, RIGHT, TOP, BACK, FRONT etc. 
+
+Set or return the global boundary flag of the \doxylink{classcsmp_1_1_node}{Node}. \Hypertarget{classcsmp_1_1_node_a6751bdcc8a4f83e0dc7e6f49bf3a91de}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!IsParent@{IsParent}}
+\index{IsParent@{IsParent}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IsParent()}{IsParent()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a6751bdcc8a4f83e0dc7e6f49bf3a91de} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Is\+Parent (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{eptr}{}\end{DoxyParamCaption}) const}
+
+
+
+checks whether \doxylink{classcsmp_1_1_element}{Element} is a parent of the node; call Sort\+Parents() first !!! 
+
+checks whether \doxylink{classcsmp_1_1_element}{Element} is a parent of the node \Hypertarget{classcsmp_1_1_node_a2ce1e1373c810b976331e948c732bdab}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Neighbor@{Neighbor}}
+\index{Neighbor@{Neighbor}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Neighbor()}{Neighbor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a2ce1e1373c810b976331e948c732bdab} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Neighbor (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{neighbor\+\_\+node}{}\end{DoxyParamCaption}) const}
+
+
+
+access to any of the neighbor nodes 
+
+Implements node connectivity graph, giving access to all the \doxylink{classcsmp_1_1_node}{Node} objects that the \doxylink{classcsmp_1_1_node}{Node} is connected to via \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face} or \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} edges. \doxylink{classcsmp_1_1_node}{Node} neighbors are enlisted in an order that is determined by sorting the points to them (this makes the neighbor vector searchable).
+
+
+\begin{DoxyParams}{Parameters}
+{\em neighbor\+\_\+node} & the nth \doxylink{classcsmp_1_1_node}{Node} in the sortes vector of pointers to nodes stored in the node.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyAttention}{Attention}
+If the node is a manifold (topologically co-\/located with other nodes that can be accessed looping over the branches of the manifold, then only those Nodes are neighbors who are on the same contiguous mesh patch as the \doxylink{classcsmp_1_1_node}{Node}, i.\+e., not shared with the other nodes in the manifold.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+8/10/2021 
+\end{DoxyDate}
+\Hypertarget{classcsmp_1_1_node_ab00c4c1b3113b81f29dcc87ae7264393}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Neighbors@{Neighbors}}
+\index{Neighbors@{Neighbors}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Neighbors()}{Neighbors()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_ab00c4c1b3113b81f29dcc87ae7264393} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Neighbors (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+the number of corner nodes that this node is directly connected with via segments 
+
+If the parent elements are of the same dimension as the node, then there are exactly as many elements as are nodes.
+
+\begin{DoxyAttention}{Attention}
+calculation is costly, compute only once per node loop!
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000051}{Test}}]correct SKM (unit test exists) \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_node_ada7c8ae104c6930bf4ff05af79d0c75e}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_ada7c8ae104c6930bf4ff05af79d0c75e} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&\&}]{nd}{}\end{DoxyParamCaption})}
+
+Move assignment, relying on that similar operators exist for the nodes components.
+
+\begin{DoxyNote}{Note}
+this assumes that the supplied node is a temporary. 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_node_a0173cbf2b8e36e4b1096440a9bdad844}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a0173cbf2b8e36e4b1096440a9bdad844} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&}]{nd}{}\end{DoxyParamCaption})}
+
+
+
+compares memory location, idx\+\_\+, BREP classifier and boundary flag 
+
+Tries to distinguish 2 nodes from one another.
+
+This comparison operator was designed specifically for the creation of particular \doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects. Hence, only information important for this process is taken into account, distinguishing 2 Nodes from each other. That must be coordinate and parent elements \Hypertarget{classcsmp_1_1_node_a3ed80521d49889a0920f99ecfe302577}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Out@{Out}}
+\index{Out@{Out}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a3ed80521d49889a0920f99ecfe302577} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+output current state of class \doxylink{classcsmp_1_1_node}{Node} 
+
+Outputs internal data of the node. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=318pt]{classcsmp_1_1_node_a3ed80521d49889a0920f99ecfe302577_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=332pt]{classcsmp_1_1_node_a3ed80521d49889a0920f99ecfe302577_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_node_aa0ef4c1fa15bba30daf6fa8ff15d9d05}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!RemoveNeighbor@{RemoveNeighbor}}
+\index{RemoveNeighbor@{RemoveNeighbor}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{RemoveNeighbor()}{RemoveNeighbor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_aa0ef4c1fa15bba30daf6fa8ff15d9d05} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Remove\+Neighbor (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{neighbor\+\_\+node}{}\end{DoxyParamCaption})}
+
+Moves unwanted \doxylink{classcsmp_1_1_node}{Node} to the end of the vector before erasing it. \begin{DoxyAttention}{Attention}
+Use Update\+Neighbors to shrink vector to new size. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_node_a977d09d4774948b75a196c56bfc7db41}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!Unassign@{Unassign}}
+\index{Unassign@{Unassign}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Unassign()}{Unassign()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_a977d09d4774948b75a196c56bfc7db41} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Unassign (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{element}{}\end{DoxyParamCaption})}
+
+
+
+if found, sets matching parent element pointer to nullptr and the corresponding node number to NOT\+\_\+\+INITIALIZED 
+
+Sets the pointer to the argument element to zero, and the corresponding node number to NOT\+\_\+\+INITIALIZED.
+
+\begin{DoxyNote}{Note}
+the argument element is not deleted. To do this use Erase\+Null\+Pointer\+Parents(). 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_node_ab3845b54da91f94db6a044b415d0b9c3}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!UnitNormal@{UnitNormal}}
+\index{UnitNormal@{UnitNormal}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UnitNormal()}{UnitNormal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_ab3845b54da91f94db6a044b415d0b9c3} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Unit\+Normal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&}]{avg\+\_\+nrml}{}\end{DoxyParamCaption}) const}
+
+
+
+for node forming part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements 
+
+If node is part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements.
+
+\begin{DoxyReturn}{Returns}
+false if 1) the node is not located on the inside of a patch of lower dimensional elements, 2) not properly initialised or 3) adjacent element normals are pointing in opposite directions 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_node_ab3845b54da91f94db6a044b415d0b9c3_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_node_ade278c160680c6ede0742396b5589538}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!UpdateNeighbors@{UpdateNeighbors}}
+\index{UpdateNeighbors@{UpdateNeighbors}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{UpdateNeighbors()}{UpdateNeighbors()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_ade278c160680c6ede0742396b5589538} 
+template$<$uint32\+\_\+t dim$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Update\+Neighbors (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+removes null pointers and potential duplicates returning the resulting number of neighbors 
+
+Sorts vector and removes duplicates and nullptrs. The vector is trimmed so that size matches capacity. \Hypertarget{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}\index{csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}!VertexNormal@{VertexNormal}}
+\index{VertexNormal@{VertexNormal}!csmp::Node$<$ dim $>$@{csmp::Node$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{VertexNormal()}{VertexNormal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$\+::\+Vertex\+Normal (\begin{DoxyParamCaption}\item[{typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator}]{first}{, }\item[{typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator}]{last}{}\end{DoxyParamCaption}) const}
+
+
+
+normal to surface mesh at the \doxylink{classcsmp_1_1_node}{Node} as based on its connectivity with the surrounding nodes on the surface (cf., computer graphics) TODO\+: fails for quadrilateral meshes 
+
+Computes normal to \doxylink{classcsmp_1_1_node}{Node} from its neighbor nodes, but ignoring neighbors that are not contained with the supplied \doxylink{classcsmp_1_1_node}{Node} vector (as in computer graphics) Supplying this vector allows to narrow the calculation to nodes that lie on a line or surface.
+
+\begin{DoxyNote}{Note}
+The method was created to help check the consistency of the node numbering of lower-\/dimensional elements representing surfaces prior to converting them into boundaries.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em first} & iterator to first node in the restricted node range that shall be considered (so that a geometric element can be captured) \\
+\hline
+{\em last} & iterator to last node in the restricted node range that shall be considered (so that a geometric element can be captured) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+either the vertex normal or a \doxylink{classcsmp_1_1_point}{Point} object initialised with signalling NaN
+\end{DoxyReturn}
+\begin{DoxyAttention}{Attention}
+std\+::find() is used so that the supplied \doxylink{classcsmp_1_1_node}{Node} range does not have to be sorted (or may consist of 2 sorted ranges, like in a model subdomain)
+\end{DoxyAttention}
+Explanation of algorithm\+: for each vertex, calculate the normal of the plane formed by the two edges entering and leaving that vertex. More formally, given vertices 𝐯1,𝐯2,…𝐯𝑛 with counterclockwise winding, define the normal at the 𝑖th vertex as\+: \begin{DoxyVerb} 𝐧𝑖=(𝐯𝑖−𝐯𝑖−1)×(𝐯𝑖+1−𝐯𝑖)
+\end{DoxyVerb}
+
+
+(where the indices wrap around). The algorithm is implemented using the MJL library in the discretisation/ directory
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+12/10/24 
+\end{DoxyDate}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Element.\+h\item 
+source/includes/model/Node.\+h\item 
+source/modules/model/Node.\+cpp\end{DoxyCompactItemize}

@@ -19,8 +19,8 @@ class Integral_NT_N_dV : public MathOperatorLHS<dim,CELL> {
     // variable must be the same as in the RHS (it is not used to form integral)
     Integral_NT_N_dV( const PropertyDatabase<dim>&, const char* test_variable );
     
-    virtual void GetOperands( const CELL<dim>& ) {}
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final {}
+    void ComputeContribution( const CELL<dim>& ) override final;
 };
 
 

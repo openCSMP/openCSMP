@@ -1,0 +1,39 @@
+\doxysection{Two\+Phase\+Model\+\_\+\+Test\+Suite.\+h}
+\hypertarget{_two_phase_model___test_suite_8h_source}{}\label{_two_phase_model___test_suite_8h_source}\index{tests/unit/TwoPhaseModel\_TestSuite.h@{tests/unit/TwoPhaseModel\_TestSuite.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWO\_PHASE\_MODEL\_TESTS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWO\_PHASE\_MODEL\_TESTS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_suite_8h}{"{}TestSuite.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model1_d_8h}{"{}Model1D.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{///\ PL\ Nov\ 2010}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite}{TwoPhaseModel\_TestSuite}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ TwoPhaseModel\_TestSuite(\ \mbox{\hyperlink{classcsmp_1_1_test_suite}{TestSuite}}\&\ suite\ )\ :\ suite\_(suite),\ free\_(\textcolor{keyword}{true})\ \{\}}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{virtual}\ \string~TwoPhaseModel\_TestSuite()\ \{\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{free}}\mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{(}}\mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{)}};\ \}}
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00018\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{free}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \textcolor{keywordtype}{void}\ AssignSaturationValues(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ );}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \mbox{\hyperlink{classcsmp_1_1_test_suite}{TestSuite}}\&\ \ suite\_;}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ free\_;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ \ rock\_model\_;}
+\DoxyCodeLine{00027\ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ \ fracture\_rock\_model\_;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ TWOPHASEMODEL\_TESTS\_H}}
+
+\end{DoxyCode}

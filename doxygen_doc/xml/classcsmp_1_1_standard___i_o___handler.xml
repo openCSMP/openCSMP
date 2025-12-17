@@ -1,0 +1,517 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_standard___i_o___handler" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Standard_IO_Handler</compoundname>
+    <includes refid="_standard___i_o___handler_8h" local="no">Standard_IO_Handler.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_standard___i_o___handler_1afb252b428a6adbb850b2b35101832e36" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Standard_IO_Handler::protocol_file_</definition>
+        <argsstring></argsstring>
+        <name>protocol_file_</name>
+        <qualifiedname>csmp::Standard_IO_Handler::protocol_file_</qualifiedname>
+        <briefdescription>
+<para>the ASCII text file to which the log will be written </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="58" column="29" bodyfile="source/includes/run_control/Standard_IO_Handler.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_standard___i_o___handler_1a78eed32612ab688da4a8e4c379f020b1" prot="private" static="no" mutable="no">
+        <type>std::list&lt; std::string &gt;</type>
+        <definition>std::list&lt;std::string&gt; csmp::Standard_IO_Handler::input_output</definition>
+        <argsstring></argsstring>
+        <name>input_output</name>
+        <qualifiedname>csmp::Standard_IO_Handler::input_output</qualifiedname>
+        <briefdescription>
+<para>the collected information </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="59" column="16" bodyfile="source/includes/run_control/Standard_IO_Handler.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_standard___i_o___handler_1ae519baaa8e2a85f9762eee549af36ad4" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::Standard_IO_Handler::default_help_</definition>
+        <argsstring></argsstring>
+        <name>default_help_</name>
+        <qualifiedname>csmp::Standard_IO_Handler::default_help_</qualifiedname>
+        <initializer>{ &quot;No available help...&quot; }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="60" column="29" bodyfile="source/includes/run_control/Standard_IO_Handler.h" bodystart="60" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1a8105cd4759bd140a390127a275cf6ec1" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Standard_IO_Handler::Standard_IO_Handler</definition>
+        <argsstring>(const char *doc_file)</argsstring>
+        <name>Standard_IO_Handler</name>
+        <qualifiedname>csmp::Standard_IO_Handler::Standard_IO_Handler</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>doc_file</declname>
+        </param>
+        <briefdescription>
+<para>constructs handler, specifying which file the collected information shall be written to </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Custom Constructor</para>
+<para>establishes protocol filename based on argument <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>doc_file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Filename for protocol file </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="17" column="14" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="23" bodyend="26"/>
+        <references refid="classcsmp_1_1_standard___i_o___handler_1a8105cd4759bd140a390127a275cf6ec1" compoundref="_standard___i_o___handler_8cpp" startline="23" endline="26">Standard_IO_Handler</references>
+        <referencedby refid="classcsmp_1_1_standard___i_o___handler_1a8105cd4759bd140a390127a275cf6ec1" compoundref="_standard___i_o___handler_8cpp" startline="23" endline="26">Standard_IO_Handler</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1acf208c3bc8bf44a540fe4c2e300ebf20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Standard_IO_Handler::Standard_IO_Handler</definition>
+        <argsstring>()</argsstring>
+        <name>Standard_IO_Handler</name>
+        <qualifiedname>csmp::Standard_IO_Handler::Standard_IO_Handler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor</para>
+<para>Establishes Standard_IO_Handler-protocol.txt as protocol file <simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="18" column="5" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="13" bodyend="16"/>
+        <references refid="classcsmp_1_1_standard___i_o___handler_1acf208c3bc8bf44a540fe4c2e300ebf20" compoundref="_standard___i_o___handler_8cpp" startline="13" endline="16">Standard_IO_Handler</references>
+        <referencedby refid="namespacecsmp_1a5f7f8c7949cc5c2e6688db47740b15e2" compoundref="_model_8cpp" startline="456" endline="507">csmp::createVariablesInVSetThatAreMissingFromDatabase</referencedby>
+        <referencedby refid="classcsmp_1_1_standard___i_o___handler_1acf208c3bc8bf44a540fe4c2e300ebf20" compoundref="_standard___i_o___handler_8cpp" startline="13" endline="16">Standard_IO_Handler</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1a163199ea92758f9dcef96eef1c013303" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Standard_IO_Handler::~Standard_IO_Handler</definition>
+        <argsstring>()</argsstring>
+        <name>~Standard_IO_Handler</name>
+        <qualifiedname>csmp::Standard_IO_Handler::~Standard_IO_Handler</qualifiedname>
+        <briefdescription>
+<para>Default destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="19" column="5" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="29" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1acdae7781bc4ba1f497baef59969a41a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Standard_IO_Handler::YesNo</definition>
+        <argsstring>(const std::string &amp;question, const char *help_message=nullptr)</argsstring>
+        <name>YesNo</name>
+        <qualifiedname>csmp::Standard_IO_Handler::YesNo</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>question</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>help_message</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>prints question onto screen and collects input from user (stdin) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Prompts the user for yes/no input</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>question</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Question to be asked </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if user replies &apos;yes&apos; </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="22" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="40" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1a0c7eb82c59b5e03f551d04ae367d4bc4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Standard_IO_Handler::RecordChoice</definition>
+        <argsstring>(const char *question)</argsstring>
+        <name>RecordChoice</name>
+        <qualifiedname>csmp::Standard_IO_Handler::RecordChoice</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>question</declname>
+        </param>
+        <briefdescription>
+<para>prompts user to enter a floating point value which is collected from stdin returned </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Records user choice to the protocol cache</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>question</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The question that is to be prompted </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The user input </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="25" column="15" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="149" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1ad962fe1f66ca4ceb53058f3c869dd109" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long</type>
+        <definition>long csmp::Standard_IO_Handler::RecordIntChoice</definition>
+        <argsstring>(const char *question)</argsstring>
+        <name>RecordIntChoice</name>
+        <qualifiedname>csmp::Standard_IO_Handler::RecordIntChoice</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>question</declname>
+        </param>
+        <briefdescription>
+<para>prompts user to enter an integer value which is collected from stdin returned </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Records user choice to the protocol cache</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>question</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The question that is to be prompted </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The user input </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="28" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="175" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1a5526bf3f6d3e2d6aab9b084fc474c334" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Standard_IO_Handler::RecordLogicalChoice</definition>
+        <argsstring>(const char *question)</argsstring>
+        <name>RecordLogicalChoice</name>
+        <qualifiedname>csmp::Standard_IO_Handler::RecordLogicalChoice</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>question</declname>
+        </param>
+        <briefdescription>
+<para>prompts user to make a binary choice which is collected from stdin returned </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Records logical user choice to the protocol cache</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>question</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The question that is to be prompted </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The boolean user input, true if &apos;yes&apos; </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="31" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="200" bodyend="211"/>
+        <referencedby refid="classcsmp_1_1_linear_elasticity___example_1a39759e281a82b4a30cfb3ee1a74873aa" compoundref="_linear_elasticity___example_8cpp" startline="81" endline="307">csmp::LinearElasticity_Example::Run</referencedby>
+        <referencedby refid="classcsmp_1_1_mechanics_and_multiphase_flow___example_1a24a03c910a9880a81cc74082ad1684ea" compoundref="_mechanics_and_multiphase_flow___example_8cpp" startline="85" endline="314">csmp::MechanicsAndMultiphaseFlow_Example::Run</referencedby>
+        <referencedby refid="classcsmp_1_1_stream_function___example_1a484aa34e6b4ca259ce948451e9407fb6" compoundref="_stream_function___example_8cpp" startline="72" endline="314">csmp::StreamFunction_Example::Run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1ab868825d31b25f02163a92dc373e415c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::Standard_IO_Handler::RecordLiteralChoice</definition>
+        <argsstring>(const char *question)</argsstring>
+        <name>RecordLiteralChoice</name>
+        <qualifiedname>csmp::Standard_IO_Handler::RecordLiteralChoice</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>question</declname>
+        </param>
+        <briefdescription>
+<para>prompts user to input a word of text in response to the posed question </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Records literal user choice to the protocol cache</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>question</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The question that is to be prompted </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The user&apos;s response, up to the first white space </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="34" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="223" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1ab12d3679c9e56fe69a3f4ea2b11f616a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::Standard_IO_Handler::RecordMultipleLiteralChoice</definition>
+        <argsstring>(const char *question)</argsstring>
+        <name>RecordMultipleLiteralChoice</name>
+        <qualifiedname>csmp::Standard_IO_Handler::RecordMultipleLiteralChoice</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>question</declname>
+        </param>
+        <briefdescription>
+<para>prompts user to input a string of text in response to the posed question </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Records literal user choice to the protocol cache</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>question</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The question that is to be prompted </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The user&apos;s response, including white spaces, up to carriage return </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="37" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="244" bodyend="257"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1ac9e4a340c2bdec57c395093252e2890c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Standard_IO_Handler::RecordInformation</definition>
+        <argsstring>(const std::string &amp;info)</argsstring>
+        <name>RecordInformation</name>
+        <qualifiedname>csmp::Standard_IO_Handler::RecordInformation</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+<para>collects text from stdin and stores it in internal container of strings </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Records argument to the protocol cache</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The information that is to be protocolled </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="40" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="265" bodyend="268"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1a605327534a857f73d6dd3f6a7a117945" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Standard_IO_Handler::Erase</definition>
+        <argsstring>()</argsstring>
+        <name>Erase</name>
+        <qualifiedname>csmp::Standard_IO_Handler::Erase</qualifiedname>
+        <briefdescription>
+<para>removes all logged information </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="43" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1a6de91ef5a27592f868e2137241dc0928" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Standard_IO_Handler::Protocol</definition>
+        <argsstring>(const char *info)</argsstring>
+        <name>Protocol</name>
+        <qualifiedname>csmp::Standard_IO_Handler::Protocol</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+<para>appends info string to doc_file (specified during handler construction) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Documents outputs in logfile</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The text to be displayed if file was opened successfully </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="46" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="83" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1ad2511fabf2b743d1bcb9467f8c3a73f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Standard_IO_Handler::Protocol</definition>
+        <argsstring>(const char *info, double parameter)</argsstring>
+        <name>Protocol</name>
+        <qualifiedname>csmp::Standard_IO_Handler::Protocol</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>info</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>parameter</declname>
+        </param>
+        <briefdescription>
+<para>appends info string + numeric value to doc_file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Documents outputs in logfile</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The text to be displayed if file was opened successfully </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>parameter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number to be displayed after successfully opening file </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="49" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="116" bodyend="136"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1af0c6c5b2725833937b5c92ef1a586cf3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Standard_IO_Handler::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Standard_IO_Handler::Out</qualifiedname>
+        <briefdescription>
+<para>prints all the recorded information to the output text file &apos;doc_file&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+<para>CSMP output feature</para>
+<para><ref refid="classcsmp_1_1_standard___i_o___handler_1af0c6c5b2725833937b5c92ef1a586cf3" kindref="member">Out()</ref> returns all the internal data that <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> needs to access variables. These include the type and placement of a variable in the finite element mesh and the associated data storage index. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="52" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="281" bodyend="296"/>
+        <referencedby refid="classcsmp_1_1_linear_elasticity___example_1a39759e281a82b4a30cfb3ee1a74873aa" compoundref="_linear_elasticity___example_8cpp" startline="81" endline="307">csmp::LinearElasticity_Example::Run</referencedby>
+        <referencedby refid="classcsmp_1_1_mechanics_and_multiphase_flow___example_1a24a03c910a9880a81cc74082ad1684ea" compoundref="_mechanics_and_multiphase_flow___example_8cpp" startline="85" endline="314">csmp::MechanicsAndMultiphaseFlow_Example::Run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_standard___i_o___handler_1a35bfc0de1077ece70ddcb1c79712c4e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Standard_IO_Handler::SetDefaultHelp</definition>
+        <argsstring>(const std::string &amp;default_help)</argsstring>
+        <name>SetDefaultHelp</name>
+        <qualifiedname>csmp::Standard_IO_Handler::SetDefaultHelp</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>default_help</declname>
+        </param>
+        <briefdescription>
+<para>sets default help message fot this handler </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Changes default help message for this handler </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Standard_IO_Handler.h" line="55" column="17" bodyfile="source/modules/run_control/Standard_IO_Handler.cpp" bodystart="304" bodyend="306"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Primitive handler for command line and file input/output of user-defined input parameters during runs (input may also be read from file) </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Stephan K. Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>1996 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Standard_IO_Handler</label>
+        <link refid="classcsmp_1_1_standard___i_o___handler"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/Standard_IO_Handler.h" line="14" column="1" bodyfile="source/includes/run_control/Standard_IO_Handler.h" bodystart="14" bodyend="61"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1ae519baaa8e2a85f9762eee549af36ad4" prot="private" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>default_help_</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a605327534a857f73d6dd3f6a7a117945" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>Erase</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a78eed32612ab688da4a8e4c379f020b1" prot="private" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>input_output</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1af0c6c5b2725833937b5c92ef1a586cf3" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a6de91ef5a27592f868e2137241dc0928" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>Protocol</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1ad2511fabf2b743d1bcb9467f8c3a73f4" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>Protocol</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1afb252b428a6adbb850b2b35101832e36" prot="private" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>protocol_file_</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a0c7eb82c59b5e03f551d04ae367d4bc4" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>RecordChoice</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1ac9e4a340c2bdec57c395093252e2890c" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>RecordInformation</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1ad962fe1f66ca4ceb53058f3c869dd109" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>RecordIntChoice</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1ab868825d31b25f02163a92dc373e415c" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>RecordLiteralChoice</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a5526bf3f6d3e2d6aab9b084fc474c334" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>RecordLogicalChoice</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1ab12d3679c9e56fe69a3f4ea2b11f616a" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>RecordMultipleLiteralChoice</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a35bfc0de1077ece70ddcb1c79712c4e0" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>SetDefaultHelp</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a8105cd4759bd140a390127a275cf6ec1" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>Standard_IO_Handler</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1acf208c3bc8bf44a540fe4c2e300ebf20" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>Standard_IO_Handler</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1acdae7781bc4ba1f497baef59969a41a5" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>YesNo</name></member>
+      <member refid="classcsmp_1_1_standard___i_o___handler_1a163199ea92758f9dcef96eef1c013303" prot="public" virt="non-virtual"><scope>csmp::Standard_IO_Handler</scope><name>~Standard_IO_Handler</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

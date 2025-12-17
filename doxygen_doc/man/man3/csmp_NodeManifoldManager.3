@@ -1,0 +1,213 @@
+.TH "csmp::NodeManifoldManager< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NodeManifoldManager< dim > \- Policy of \fBModel\fP class for the management of manifolds that consist of multiplicated nodes\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <NodeManifoldManager\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef plf::colony< \fBNodeManifold\fP< dim > >::iterator \fBmanifoldIterator\fP"
+.br
+.RI "for sorting the manifolds by their pointers "
+.ti -1c
+.RI "typedef plf::colony< \fBNodeManifold\fP< dim > >::const_iterator \fBmanifoldConstIterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNodeManifoldManager\fP (plf::colony< \fBNode\fP< dim > > &node_pointer_storage, VData::manifoldContainer::const_iterator first, VData::manifoldContainer::const_iterator last)"
+.br
+.RI "Re-constructor when node manifolds are read back from a CSMP native binary fileset\&. "
+.ti -1c
+.RI "\fBNodeManifoldManager\fP (const \fBNodeManifoldManager\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBNodeManifoldManager\fP & \fBoperator=\fP (const \fBNodeManifoldManager\fP &)=delete"
+.br
+.ti -1c
+.RI "\fB~NodeManifoldManager\fP ()"
+.br
+.RI "deleting the dynamically allocated manifolds "
+.ti -1c
+.RI "\fBmanifoldIterator\fP \fBManifoldsBegin\fP ()"
+.br
+.ti -1c
+.RI "\fBmanifoldIterator\fP \fBManifoldsEnd\fP ()"
+.br
+.ti -1c
+.RI "manifoldConstIterator \fBManifoldsBegin\fP () const"
+.br
+.ti -1c
+.RI "manifoldConstIterator \fBManifoldsEnd\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBManifolds\fP () const"
+.br
+.ti -1c
+.RI "plf::colony< \fBNodeManifold\fP< dim > >::iterator \fBAddManifold\fP (plf::colony< \fBNode\fP< dim > > &nodes, \fBNode\fP< dim > *const inside, \fBNode\fP< dim > *const outside, \fBManifoldType\fP)"
+.br
+.RI "constructs a node manifold accessing the supplied node colony and node pointers "
+.ti -1c
+.RI "void \fBSortManifoldsByVariableValue\fP (std::string var_name, const \fBcsmp::Index\fP &var_index)"
+.br
+.RI "puts the nodes inside of the manifolds into the ascending order of values of the user specified variable "
+.ti -1c
+.RI "bool \fBMergeManifolds\fP (\fBNodeManifold\fP< dim > *, \fBNodeManifold\fP< dim > *)"
+.br
+.RI "tries to replace two manifolds by a single one that connects all of their nodes; succeeds if there the two shares node returning true; fixes all node connections "
+.ti -1c
+.RI "void \fBDelete\fP (\fBNodeManifold\fP< dim > *const)"
+.br
+.RI "deletes = erases manifold from storage container, reordering / compacting as necessary "
+.ti -1c
+.RI "size_t \fBDeleteSingleNodeManifolds\fP ()"
+.br
+.RI "scans for manifolds with a single \fBNode\fP only and deletes them "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "prints manifolds and other stats to screen "
+.ti -1c
+.RI "void \fBOutputNodeManifoldsToBinary\fP (const char *file_name, const char *node_sorting_variable) const"
+.br
+.RI "writes manifolds to binary file; relies on unique node indexes "
+.ti -1c
+.RI "std::string \fBInputNodeManifoldsFromBinary\fP (plf::colony< \fBNode\fP< dim > > &nodes, const char *file_name)"
+.br
+.RI "Reads manifolds from binary file, using indices to create pointer connections; the name of the sorting variable for the manifolds is returned\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "plf::colony< \fBNodeManifold\fP< dim > > \fBnode_manifolds_\fP"
+.br
+.RI "sorted deque of pointers to manifolds created with new and delete "
+.ti -1c
+.RI "std::string \fBcurrent_sort_variable_\fP = 'none'"
+.br
+.RI "TODO: update the sort order if some modifications are made\&. "
+.ti -1c
+.RI "const bool \fBverbose_\fP = false"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::NodeManifoldManager< dim >"Policy of \fBModel\fP class for the management of manifolds that consist of multiplicated nodes\&. 
+
+
+.PP
+\fBNote\fP
+.RS 4
+this class is not copy constructable because only a single instance is needed\&. 
+
+.PP
+just storage management for manifolds; no targeted access\&. 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::NodeManifoldManager\fP< dim >::NodeManifoldManager (plf::colony< \fBNode\fP< dim > > & mesh_nodes, VData::manifoldContainer::const_iterator first, VData::manifoldContainer::const_iterator last)"
+
+.PP
+Re-constructor when node manifolds are read back from a CSMP native binary fileset\&. Preferred constructor of node manifolds, including the case where these are read back from a CSMP native binary fileset
+
+.PP
+\fBAttention\fP
+.RS 4
+do not use this constructor after nodes were deleted from the \fBMeshManager\fP\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+make sure that the map:key nodes are ideed contained in the manifolds\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> plf::colony< \fBNodeManifold\fP< dim > >::iterator \fBcsmp::NodeManifoldManager\fP< dim >::AddManifold (plf::colony< \fBNode\fP< dim > > & nodes, \fBNode\fP< dim > *const inside, \fBNode\fP< dim > *const outside, \fBManifoldType\fP manifold_type)"
+
+.PP
+constructs a node manifold accessing the supplied node colony and node pointers Creates a node manifold from the 2 pointers to co-located nodes\&. Additional nodes can be added to it later\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fInodes\fP reference to the primary storage of the nodes in the \fBMeshManager\fP 
+.br
+\fIinside\fP pointer to the node that will assumed to be on the INSIDE of the interface that that manifold is part of 
+.br
+\fIoutside\fP opposing yet collocated node in the manifold 
+.br
+\fImanifold_type\fP geometric classifier of the new manifold, default is INTERFACE but may need to be revised if the node is at a model boudary or other\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+an iterator to the new manifold stored in a colony in the \fBNodeManifoldManager\fP\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+this method does not assign the nodes to the new manifold\&.; this must be done by calling Node::Assign( manifold ) after its successful creation which only happens on the return from this method\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> size_t \fBcsmp::NodeManifoldManager\fP< dim >::DeleteSingleNodeManifolds ()"
+
+.PP
+scans for manifolds with a single \fBNode\fP only and deletes them If there are single-node manifolds, their nodes are deconnected and the manifolds are deleted\&. Later, the manager is searched for the remaining null pointers and these are removed\&. 
+.SS "template<uint32_t dim> string \fBcsmp::NodeManifoldManager\fP< dim >::InputNodeManifoldsFromBinary (plf::colony< \fBNode\fP< dim > > & mesh_nodes, const char * file_name)"
+
+.PP
+Reads manifolds from binary file, using indices to create pointer connections; the name of the sorting variable for the manifolds is returned\&. Reads manifolds from binary file, using indices to create pointer connections 
+.SS "template<uint32_t dim> bool \fBcsmp::NodeManifoldManager\fP< dim >::MergeManifolds (\fBNodeManifold\fP< dim > * nmf1, \fBNodeManifold\fP< dim > * nmf2)"
+
+.PP
+tries to replace two manifolds by a single one that connects all of their nodes; succeeds if there the two shares node returning true; fixes all node connections Tries to replace the two manifolds by a single one that connects all of their nodes; succeeds if the two share nodes\&. Will return true in this case; Fixes all node connections\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+true if it was possible to merge the manifolds because they did share nodes\&.
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fInmf1\fP if the operation is successful, the enlarged manifold is returned into the first manifold pointer, else both manifolds remain untouched\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::NodeManifoldManager\fP< dim >::OutputNodeManifoldsToBinary (const char * file_name, const char * node_sorting_variable) const"
+
+.PP
+writes manifolds to binary file; relies on unique node indexes writes manifolds to binary file; relies on unique node indexes
+
+.PP
+\fBAttention\fP
+.RS 4
+call \fBDeleteSingleNodeManifolds()\fP before to avoid storing any defunct manifolds 
+
+.PP
+make sure that the nodes have unique numbers that match those in the other binary files 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

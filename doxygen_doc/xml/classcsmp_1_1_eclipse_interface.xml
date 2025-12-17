@@ -1,0 +1,1727 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_eclipse_interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::EclipseInterface</compoundname>
+    <includes refid="_eclipse_interface_8h" local="no">EclipseInterface.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a2a72766f33fe5d19b06302cb01209a4a" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::EclipseInterface::keyword_</definition>
+        <argsstring></argsstring>
+        <name>keyword_</name>
+        <qualifiedname>csmp::EclipseInterface::keyword_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="267" column="31" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="267" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1ad6c74db611bea08278a927211aa36d2b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; csmp::EclipseInterface::keyword_parameters_</definition>
+        <argsstring></argsstring>
+        <name>keyword_parameters_</name>
+        <qualifiedname>csmp::EclipseInterface::keyword_parameters_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="268" column="18" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a7c178648f3564f567703f7b6fd483934" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::EclipseInterface::model_name_</definition>
+        <argsstring></argsstring>
+        <name>model_name_</name>
+        <qualifiedname>csmp::EclipseInterface::model_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="271" column="31" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="271" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a7fb5817caee7c9873a45ff798bf029c7" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">csmp::ModelTopology</ref> *</type>
+        <definition>csmp::ModelTopology* csmp::EclipseInterface::model_topology_</definition>
+        <argsstring></argsstring>
+        <name>model_topology_</name>
+        <qualifiedname>csmp::EclipseInterface::model_topology_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="272" column="30" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="272" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a543bd1b43a78f3ad62d873f883408948" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; *</type>
+        <definition>csmp::VSet&lt;3U&gt;* csmp::EclipseInterface::vset_</definition>
+        <argsstring></argsstring>
+        <name>vset_</name>
+        <qualifiedname>csmp::EclipseInterface::vset_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="273" column="26" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="273" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a303ba2f43a7a0684024484615aa130ff" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseInterface::regions_</definition>
+        <argsstring></argsstring>
+        <name>regions_</name>
+        <qualifiedname>csmp::EclipseInterface::regions_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="276" column="18" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="276" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1ab5fd922d67f0d1c191e7f66ca68ced09" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseInterface::faults_</definition>
+        <argsstring></argsstring>
+        <name>faults_</name>
+        <qualifiedname>csmp::EclipseInterface::faults_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="277" column="18" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a64312d472fcb0df4679df604f92d20fd" prot="private" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseInterface::wells_</definition>
+        <argsstring></argsstring>
+        <name>wells_</name>
+        <qualifiedname>csmp::EclipseInterface::wells_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="278" column="18" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="278" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a8f7d61e117b6514f5a50a622cb979a63" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::EclipseInterface::NX_</definition>
+        <argsstring></argsstring>
+        <name>NX_</name>
+        <qualifiedname>csmp::EclipseInterface::NX_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="281" column="31" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="281" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a54b441bf265de57c093b613b223ee5ff" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::EclipseInterface::NY_</definition>
+        <argsstring></argsstring>
+        <name>NY_</name>
+        <qualifiedname>csmp::EclipseInterface::NY_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="282" column="31" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a20ff271fcac51e7892ee09b5368c9de1" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::EclipseInterface::NZ_</definition>
+        <argsstring></argsstring>
+        <name>NZ_</name>
+        <qualifiedname>csmp::EclipseInterface::NZ_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="283" column="31" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="283" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a8adb61ad95340b1ea9e94264647dad46" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::EclipseInterface::zcorn_</definition>
+        <argsstring></argsstring>
+        <name>zcorn_</name>
+        <qualifiedname>csmp::EclipseInterface::zcorn_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="284" column="23" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="284" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1aebb1be6eba95db9fd34bf4a52854e947" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref></type>
+        <definition>CornerPointGrid csmp::EclipseInterface::grid_</definition>
+        <argsstring></argsstring>
+        <name>grid_</name>
+        <qualifiedname>csmp::EclipseInterface::grid_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="285" column="31" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="285" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1aa413014ef00ecd4ce1f488843f110d5d" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_cell_centered_grid" kindref="compound">CellCenteredGrid</ref></type>
+        <definition>CellCenteredGrid csmp::EclipseInterface::block_grid_</definition>
+        <argsstring></argsstring>
+        <name>block_grid_</name>
+        <qualifiedname>csmp::EclipseInterface::block_grid_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="286" column="31" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="286" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a02861f13eb763378c2dd2395f98a653a" prot="private" static="no" mutable="no">
+        <type>std::map&lt; int, <ref refid="structcsmp_1_1_parameter" kindref="compound">csmp::Parameter</ref> &gt;</type>
+        <definition>std::map&lt;int, csmp::Parameter&gt; csmp::EclipseInterface::properties_</definition>
+        <argsstring></argsstring>
+        <name>properties_</name>
+        <qualifiedname>csmp::EclipseInterface::properties_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="294" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="294" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a4814c62c235061cbdc36f8adc4969836" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::ntg_</definition>
+        <argsstring></argsstring>
+        <name>ntg_</name>
+        <qualifiedname>csmp::EclipseInterface::ntg_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="295" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="295" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a0fb481599375ad28cadd6c9b32f698a5" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::poro_</definition>
+        <argsstring></argsstring>
+        <name>poro_</name>
+        <qualifiedname>csmp::EclipseInterface::poro_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="296" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="296" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1ac04564bc4b0e26d891c700c0578a6aa1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::perm_</definition>
+        <argsstring></argsstring>
+        <name>perm_</name>
+        <qualifiedname>csmp::EclipseInterface::perm_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="297" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="297" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1ae68be164d231d94650a76fe22fefacb8" prot="private" static="no" mutable="no">
+        <type>std::vector&lt;<ref refid="classcsmp_1_1_tensor_variable" kindref="compound">::csmp::TensorVariable</ref>&lt; 3U &gt; &gt;</type>
+        <definition>std::vector&lt;::csmp::TensorVariable&lt;3U&gt; &gt; csmp::EclipseInterface::permxyz_</definition>
+        <argsstring></argsstring>
+        <name>permxyz_</name>
+        <qualifiedname>csmp::EclipseInterface::permxyz_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="298" column="17" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="298" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1afef35f539a19f3a2668a3cb3cfcd522b" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, double &gt;</type>
+        <definition>std::map&lt;std::string, double&gt; csmp::EclipseInterface::multflt_</definition>
+        <argsstring></argsstring>
+        <name>multflt_</name>
+        <qualifiedname>csmp::EclipseInterface::multflt_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="299" column="22" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="299" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a3beac611d81b4e663359af8a22125eaa" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::EclipseInterface::pressure_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="300" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="300" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1abadaf6d8813ef1030e9ee6e37b3d1d6d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::swat_</definition>
+        <argsstring></argsstring>
+        <name>swat_</name>
+        <qualifiedname>csmp::EclipseInterface::swat_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="301" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a684590816c43a7ef6fcc953b2cf65e7d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::soil_</definition>
+        <argsstring></argsstring>
+        <name>soil_</name>
+        <qualifiedname>csmp::EclipseInterface::soil_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="302" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="302" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a4e1b3ffc4e6a21958a8f180213acf6df" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::sgas_</definition>
+        <argsstring></argsstring>
+        <name>sgas_</name>
+        <qualifiedname>csmp::EclipseInterface::sgas_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="303" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="303" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a29c24f1c40ae22a655b3d23fc86c236b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::satnum_</definition>
+        <argsstring></argsstring>
+        <name>satnum_</name>
+        <qualifiedname>csmp::EclipseInterface::satnum_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="306" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="306" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a7e9e76ec4b3d27a432446f8ac754d1f6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::pvtnum_</definition>
+        <argsstring></argsstring>
+        <name>pvtnum_</name>
+        <qualifiedname>csmp::EclipseInterface::pvtnum_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="307" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="307" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a730048c6099f085a359e993738cd34b4" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::rocknum_</definition>
+        <argsstring></argsstring>
+        <name>rocknum_</name>
+        <qualifiedname>csmp::EclipseInterface::rocknum_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="308" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="308" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a3c91c0f609938193964bd12f99980b42" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::eqlnum_</definition>
+        <argsstring></argsstring>
+        <name>eqlnum_</name>
+        <qualifiedname>csmp::EclipseInterface::eqlnum_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="309" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="309" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1aca7cda873c4942f36d5a2b173ab80311" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;csmp::ScalarVariable&gt; csmp::EclipseInterface::fipnum_</definition>
+        <argsstring></argsstring>
+        <name>fipnum_</name>
+        <qualifiedname>csmp::EclipseInterface::fipnum_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="310" column="21" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="310" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a78dd68f8efcad48b4329b2b5ab052944" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="structcsmp_1_1_eclipse_fault" kindref="compound">EclipseFault</ref> &gt;</type>
+        <definition>std::map&lt;std::string, EclipseFault&gt; csmp::EclipseInterface::faults_data_</definition>
+        <argsstring></argsstring>
+        <name>faults_data_</name>
+        <qualifiedname>csmp::EclipseInterface::faults_data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="312" column="16" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1a25a8e83d72411c92bed4e40d3786b486" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="structcsmp_1_1_eclipse_well" kindref="compound">EclipseWell</ref> &gt;</type>
+        <definition>std::map&lt;std::string, EclipseWell&gt; csmp::EclipseInterface::well_data_</definition>
+        <argsstring></argsstring>
+        <name>well_data_</name>
+        <qualifiedname>csmp::EclipseInterface::well_data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="315" column="17" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_interface_1af763ffe475119ad65969f32639b49367" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="structcsmp_1_1_eclipse_well_path" kindref="compound">EclipseWellPath</ref> &gt;</type>
+        <definition>std::map&lt;std::string, EclipseWellPath&gt; csmp::EclipseInterface::well_face_path_</definition>
+        <argsstring></argsstring>
+        <name>well_face_path_</name>
+        <qualifiedname>csmp::EclipseInterface::well_face_path_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="316" column="13" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="316" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a69b473c100215c2431aa6a360933c5bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseInterface::EclipseInterface</definition>
+        <argsstring>()</argsstring>
+        <name>EclipseInterface</name>
+        <qualifiedname>csmp::EclipseInterface::EclipseInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="143" column="3" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="23" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a845388c7c46bb10a1beed2842998c5aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseInterface::~EclipseInterface</definition>
+        <argsstring>()</argsstring>
+        <name>~EclipseInterface</name>
+        <qualifiedname>csmp::EclipseInterface::~EclipseInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="144" column="3" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="31" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1aabf8d47808d51036640e4e1df71d237b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadFile</definition>
+        <argsstring>(VSet&lt; 3U &gt; &amp;vset, ModelTopology &amp;model_topology, const std::string &amp;fname, bool exclude_inactive_cells, bool tetra_mesh)</argsstring>
+        <name>ReadFile</name>
+        <qualifiedname>csmp::EclipseInterface::ReadFile</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+          <declname>model_topology</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>exclude_inactive_cells</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>tetra_mesh</declname>
+        </param>
+        <briefdescription>
+<para>MASTER METHOD not only reads the Eclipse input files, but also creates grid objects and converts them into CSMP cells / mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>MASTER METHOD of <ref refid="classcsmp_1_1_eclipse_interface" kindref="compound">EclipseInterface</ref> which does everything:</para>
+<para><orderedlist>
+<listitem><para>Reads sequence of files which all have the .grdecl extension </para>
+</listitem></orderedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+<para><orderedlist>
+<listitem><para>Open fname.grdecl file</para>
+</listitem></orderedlist>
+</para>
+<para><orderedlist>
+<listitem><para>Assign object members and reader settings</para>
+</listitem></orderedlist>
+</para>
+<para><orderedlist>
+<listitem><para>Write properties to <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref></para>
+</listitem></orderedlist>
+</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="147" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="81" bodyend="139"/>
+        <references refid="classcsmp_1_1_eclipse_interface_1a6fa057d3cad82b5112916627b969fa7f" compoundref="_eclipse_interface_8cpp" startline="3037" endline="3081">AddWell</references>
+        <references refid="classcsmp_1_1_model_topology_1a9889be49c4614fd925b1159f21f54f9f" compoundref="_model_topology_8cpp" startline="212" endline="215">csmp::ModelTopology::ModelName</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a2b3ca52df8246c9fcb86286733f3a730" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadFile</definition>
+        <argsstring>(std::ifstream &amp;ifs, size_t line_length)</argsstring>
+        <name>ReadFile</name>
+        <qualifiedname>csmp::EclipseInterface::ReadFile</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+<para>configures reader for the case where INCLUDE is set so that instructions are spread across multiple files </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Configures the interface for the case where everything is supplied as separated files </para>
+        </detaileddescription>
+        <inbodydescription>
+<para>section</para>
+<para>grid</para>
+<para>regions</para>
+<para>cell properties</para>
+<para>well properties</para>
+<para>advanced well data assignment ( explicit path through faces )</para>
+<para>advanced well data assignment ( explicit path through nodes )</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="154" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="377" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a595a01f986fd0f61888dff68abf7cab4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::SetProperties</definition>
+        <argsstring>(const std::map&lt; int, csmp::Parameter &gt; &amp;)</argsstring>
+        <name>SetProperties</name>
+        <qualifiedname>csmp::EclipseInterface::SetProperties</qualifiedname>
+        <param>
+          <type>const std::map&lt; int, <ref refid="structcsmp_1_1_parameter" kindref="compound">csmp::Parameter</ref> &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+<para>assigns CSMP parameter specifications to the interface so that corresponding variables can be read </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="157" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2994" bodyend="2997"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a6fa057d3cad82b5112916627b969fa7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::AddWell</definition>
+        <argsstring>()</argsstring>
+        <name>AddWell</name>
+        <qualifiedname>csmp::EclipseInterface::AddWell</qualifiedname>
+        <briefdescription>
+<para>inserts wells in the Eclipse data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="160" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="3037" bodyend="3081"/>
+        <referencedby refid="classcsmp_1_1_eclipse_interface_1aabf8d47808d51036640e4e1df71d237b" compoundref="_eclipse_interface_8cpp" startline="81" endline="139">ReadFile</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1ab69f45d7d86340547123977c44f1e0cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::AddWell</definition>
+        <argsstring>(const std::string &amp;well_name, const Point&lt; 3U &gt; &amp;well_start_point, const Point&lt; 3U &gt; &amp;well_end_point)</argsstring>
+        <name>AddWell</name>
+        <qualifiedname>csmp::EclipseInterface::AddWell</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>well_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>well_start_point</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>well_end_point</declname>
+        </param>
+        <briefdescription>
+<para>inserts a well from its start and end points </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="163" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="3083" bodyend="3118"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a30b39a6f5de457a5b4e9480c21e910ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Container</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::EclipseInterface::GetRegions</definition>
+        <argsstring>(Container &amp;data)</argsstring>
+        <name>GetRegions</name>
+        <qualifiedname>csmp::EclipseInterface::GetRegions</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="176" column="20" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="3001" bodyend="3005"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a8e269237ee9ceec0bcacbe7606c62161" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Container</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::EclipseInterface::GetFaults</definition>
+        <argsstring>(Container &amp;data)</argsstring>
+        <name>GetFaults</name>
+        <qualifiedname>csmp::EclipseInterface::GetFaults</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="178" column="20" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="3014" bodyend="3018"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a13c96330c5a01de2f41223628db2725f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Container</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::EclipseInterface::GetWells</definition>
+        <argsstring>(Container &amp;wells)</argsstring>
+        <name>GetWells</name>
+        <qualifiedname>csmp::EclipseInterface::GetWells</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>wells</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="180" column="20" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="3027" bodyend="3031"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1aa21c38ffc68fc115f696d9fa9f50b132" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::Read_COORD</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>Read_COORD</name>
+        <qualifiedname>csmp::EclipseInterface::Read_COORD</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+<para>ReadPillarCoordinates -&gt; Read_COORD. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>ReadPillarCoordinates -&gt; Read_COORD</para>
+<para>COORD = vertical grid top-&gt;bottom coordinate lines, where x,y,z... x pointing east, y south, and z down. These lines become the grid pillars, extending all the way from the top to the bottom of the grid. Subsequently, the pillars are subdivided by cell corners stored in ZCORN, for which x,y is found by interpolation.</para>
+<para>The ordering of the pillars and z-cordinates is in “book order”, line after line until a page has been read, then the next page until all data has been read. i.e. first the top layer (K=1) is read, line by line (begin with J=1, read I=1,...,NX, then J=2, etc.) Then repeat for K=2,...,NZ.</para>
+<para>NX number of cells in x-direction (E) NY number of cells in y-direction (S)</para>
+<para>pillar grid is y-first (rows), then x (columns) then z (3rd dim= downwards)</para>
+<para>called by ReadBlock(s) after ReadGridSpecs() so dimensions of grid are already known</para>
+<para><xrefsect id="todo_1_todo000118"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM write Out() const function for <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref> testing </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="185" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2776" bodyend="2823"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1aad99acbcb163015e7df8d85ad3da2a43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::Read_ZCORN</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>Read_ZCORN</name>
+        <qualifiedname>csmp::EclipseInterface::Read_ZCORN</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+<para>ReadCornerDepths -&gt; Read_ZCORN. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>ReadCornerDepths -&gt; Read_ZCORN, i.e. puts the beads on the pillars, dividing them by the cell corners.</para>
+<para>The cell coorners are stored in grid, an i,j-array of beads. However, here the <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref> class is used for this purpose.</para>
+<para>Each row contains NX + 1 coordinate entries, but for adjacent cells the values are duplicated. Inside the <ref refid="classcsmp_1_1_pillar" kindref="compound">Pillar</ref> grids the rows are duplicated as well to create a 1:1 mapping of cell corners to entries.</para>
+<para>For each pillar point only the Z coordinate is read the others are deduced from the the direction of the <ref refid="classcsmp_1_1_pillar" kindref="compound">Pillar</ref>. This assumes that the pillar is a straight line.</para>
+<para>Corner depths are defined by the keyword ZCORN. The intersection between a (non-horizontal) coordinate line and a depth value is unique, such that from coordinate lines and corner depths, all coordinates can be calculated. It would perhaps seem natural to define corners cell by cell, but Eclipse sticks strictly to the book page format, so (with x pointing east, y south) first the top northern edge of all cells are read from west to east, then the southern edge, then advancing to next row of cells. When the top of a layer has been read, the bottom is read in a similar fashion, and then we are ready for the next layer. Recall that corners associated with the same coordinate line may have different depths, but are equal in continuous areas, such that all corners must be defined – nothing is “implicitly assumed”. When explaining the syntax we will use indices NW, NE, SW, SE to denote the corners (assuming a standard orientation of the grid), and T, B for Top, Bottom.</para>
+<para>ZCORN z(1,1,1)T,NW z(1,1,1)T,NE z(2,1,1)T,NW z(2,1,1)T,NE ... z(NX,1,1)T,NE z(1,1,1)T,SW z(1,1,1)T,SE z(2,1,1)T,SW z(2,1,1)T,SE ... z(NX,1,1)T,SE z(1,2,1)T,NW z(1,2,1)T,NE z(2,2,1)T,NW z(2,2,1)T,NE ... z(NX,2,1)T,NE z(1,2,1)T,SW z(1,2,1)T,SE z(2,2,1)T,SW z(2,1,1)T,SE ... z(NX,2,1)T,SE .z(1,NY,1)T,SW z(1,NY,1)T,SE z(2,NY,1)T,SW z(2,NY,1)T,SE ... z(NX,NY,1)T,SE z(1,1,1)B,NW z(1,1,1)B,NE z(2,1,1)B,NW z(2,1,1)B,NE ... z(NX,1,1)B,NEz(1,NY,1)B,SW z(1,NY,1)B,SE z(2,NY,1)B,SW z(2,NY,1)B,SE ... z(NX,NY,1)B,SE z(1,1,2)T,NW z(1,1,2)T,NE z(2,1,2)T,NW z(2,1,2)T,NE ... z(NX,1,2)T,NEz(1,NY,NZ)T,SW z(1,NY,NZ)T,SE z(2,NY,NZ)T,SW z(2,NY,NZ)T,SE ... z(NX,NY,NZ)T,SE </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="188" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="2870" bodyend="2991"/>
+        <references refid="namespacecsmp_1a34701d1c9fda79fddb23382772ee2859" compoundref="_text_file_i_o_8cpp" startline="381" endline="388">csmp::isBlankLine</references>
+        <references refid="namespacecsmp_1af8c2740a4e6be30bdfb4207bf22e8609" compoundref="_eclipse_interface_8cpp" startline="2230" endline="2246">csmp::isEclipseEndOfBlock</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a0ea63560838948c721b4d3dc1d8f8e51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::multimap&lt; <ref refid="structijk" kindref="compound">ijk</ref>, size_t &gt; &amp;</type>
+        <definition>std::multimap&lt; ijk, size_t &gt; &amp; csmp::EclipseInterface::IJKMap</definition>
+        <argsstring>()</argsstring>
+        <name>IJKMap</name>
+        <qualifiedname>csmp::EclipseInterface::IJKMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="190" column="18" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="3121" bodyend="3124"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a515b66f27b1921801ed631688964aa2b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadBlock</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadBlock</name>
+        <qualifiedname>csmp::EclipseInterface::ReadBlock</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generic function which reads blocks of data identified by keywords</para>
+<para><simplesect kind="author"><para>Roman, 2014 </para>
+</simplesect>
+<xrefsect id="todo_1_todo000117"><xreftitle>Todo</xreftitle><xrefdescription><para>add properly BOX and ENDBOX keywords </para>
+<para>add face properties: MULTXYZ, MULTFLT, TRANXYZ</para>
+</xrefdescription></xrefsect></para>
+<para><simplesect kind="attention"><para>SKM: KEY FUNCTION ALWAYS EXECUTED BY INTERFACE </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+<para>GRID SECTION</para>
+<para>REGIONS SECTION</para>
+<para>CELL PROPERTIES</para>
+<para>WELL PROPERTIES</para>
+<para>INCLUDE EXTERNAL FILE</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="196" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="492" bodyend="625"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a7ec35bfa06507b67717f575c2ec2542f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadIncludeFile</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadIncludeFile</name>
+        <qualifiedname>csmp::EclipseInterface::ReadIncludeFile</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="197" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="435" bodyend="455"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a930547532aaccb6d1ac9db75bcba1a7f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadUnknownBlock</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadUnknownBlock</name>
+        <qualifiedname>csmp::EclipseInterface::ReadUnknownBlock</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="198" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="461" bodyend="475"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1ad4096c185ccb97d4072086698e7f6c69" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadDimensions</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadDimensions</name>
+        <qualifiedname>csmp::EclipseInterface::ReadDimensions</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="199" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="628" bodyend="639"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1af161e6d11962d072d0bed8fdbc7be90b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadCellSizes</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadCellSizes</name>
+        <qualifiedname>csmp::EclipseInterface::ReadCellSizes</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="200" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="656" bodyend="665"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a13823351fe8619cadfd753d92c86d7a3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadCellDepths</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadCellDepths</name>
+        <qualifiedname>csmp::EclipseInterface::ReadCellDepths</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="201" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="668" bodyend="676"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1ae64be61720b0d3fd700aec058a9a1865" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadGridSpecs</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadGridSpecs</name>
+        <qualifiedname>csmp::EclipseInterface::ReadGridSpecs</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="202" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="642" bodyend="653"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1ad052bb048e8f1adae684755f8c47c949" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadPillarCoordinates</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadPillarCoordinates</name>
+        <qualifiedname>csmp::EclipseInterface::ReadPillarCoordinates</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="203" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="679" bodyend="689"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1ae3438befb4a0345f2058252fadfd5445" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadCornerDepths</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadCornerDepths</name>
+        <qualifiedname>csmp::EclipseInterface::ReadCornerDepths</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="204" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="693" bodyend="703"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a164c050956435f38e4e210b061e15f0a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadActiveCells</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadActiveCells</name>
+        <qualifiedname>csmp::EclipseInterface::ReadActiveCells</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="205" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="706" bodyend="713"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1abdec317e9a7fd5dab70e4c694e2b1a0c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadWellSpecs</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadWellSpecs</name>
+        <qualifiedname>csmp::EclipseInterface::ReadWellSpecs</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="206" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="716" bodyend="724"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a1d2681388ebb7629843f7fc56e3a245a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadWellCompletionsData</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadWellCompletionsData</name>
+        <qualifiedname>csmp::EclipseInterface::ReadWellCompletionsData</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="207" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="727" bodyend="736"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a7522cc84554f280e33a2f27cb89b98d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadExplicitFaceWellCompletionsData</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadExplicitFaceWellCompletionsData</name>
+        <qualifiedname>csmp::EclipseInterface::ReadExplicitFaceWellCompletionsData</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="208" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="739" bodyend="748"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a93f9fce15acd953823a51325e192f7bb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadExplicitNodeWellCompletionsData</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadExplicitNodeWellCompletionsData</name>
+        <qualifiedname>csmp::EclipseInterface::ReadExplicitNodeWellCompletionsData</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="209" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="751" bodyend="760"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a7bb58237cfcdd4a08842f33abca9fc0d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadFaultsData</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadFaultsData</name>
+        <qualifiedname>csmp::EclipseInterface::ReadFaultsData</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="210" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="763" bodyend="771"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1afd0926178a9c6691200f020cbd39d652" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadFaultTransmissibilityMultipliers</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadFaultTransmissibilityMultipliers</name>
+        <qualifiedname>csmp::EclipseInterface::ReadFaultTransmissibilityMultipliers</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="211" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="774" bodyend="782"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1afcac8f6e76a6b27d744d9d89e6b819df" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadBoxData</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length)</argsstring>
+        <name>ReadBoxData</name>
+        <qualifiedname>csmp::EclipseInterface::ReadBoxData</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="212" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="786" bodyend="794"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a267f0b848483317c7a52e6749a18a6cb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadScalarProperty</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length, std::vector&lt; csmp::ScalarVariable &gt; &amp;prop_data)</argsstring>
+        <name>ReadScalarProperty</name>
+        <qualifiedname>csmp::EclipseInterface::ReadScalarProperty</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt; &amp;</type>
+          <declname>prop_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="213" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="797" bodyend="805"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1ae322aa9193c912f57a8722d9632ab275" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseInterface::ReadTensorProperty</definition>
+        <argsstring>(std::ifstream &amp;ifs, char *text_line, size_t line_length, std::vector&lt;::csmp::TensorVariable&lt; 3U &gt; &gt; &amp;prop_data, const std::string &amp;compx_name, const std::string &amp;compy_name, const std::string &amp;compz_name)</argsstring>
+        <name>ReadTensorProperty</name>
+        <qualifiedname>csmp::EclipseInterface::ReadTensorProperty</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>text_line</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>line_length</declname>
+        </param>
+        <param>
+          <type>std::vector&lt;<ref refid="classcsmp_1_1_tensor_variable" kindref="compound">::csmp::TensorVariable</ref>&lt; 3U &gt; &gt; &amp;</type>
+          <declname>prop_data</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>compx_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>compy_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>compz_name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="214" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="808" bodyend="823"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a920eee94ed72eddd4f977b4e54667502" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::WritePropertiesToVSet</definition>
+        <argsstring>()</argsstring>
+        <name>WritePropertiesToVSet</name>
+        <qualifiedname>csmp::EclipseInterface::WritePropertiesToVSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>ECLIPSE_ROCKNUM is not recognised? </para>
+        </detaileddescription>
+        <inbodydescription>
+<para><orderedlist>
+<listitem><para>write rock types</para>
+</listitem></orderedlist>
+</para>
+<para><orderedlist>
+<listitem><para>write ntg</para>
+</listitem></orderedlist>
+</para>
+<para><orderedlist>
+<listitem><para>write porosity</para>
+</listitem></orderedlist>
+</para>
+<para><orderedlist>
+<listitem><para>write permeability</para>
+</listitem></orderedlist>
+</para>
+<para>check value whether it is in the valid <linebreak/>
+</para>
+<para>check value whether it is in the valid <linebreak/>
+</para>
+<para><orderedlist>
+<listitem><para>write pressure</para>
+</listitem></orderedlist>
+</para>
+<para>converting to SI system</para>
+<para><orderedlist>
+<listitem><para>write water saturation</para>
+</listitem></orderedlist>
+</para>
+<para><orderedlist>
+<listitem><para>write oil saturation</para>
+</listitem></orderedlist>
+</para>
+<para><orderedlist>
+<listitem><para>write gas saturation</para>
+</listitem></orderedlist>
+</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="219" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="146" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a09ad782a261fab1544a50fd03fda7200" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::WriteScalarPropertyToVSet</definition>
+        <argsstring>(csmp::VSet&lt; 3U &gt; &amp;vset, const CornerPointGrid &amp;grid, const std::vector&lt; csmp::ScalarVariable &gt; &amp;scalar_data, const std::string &amp;property_name, const ::csmp::PLACEMENT &amp;place)</argsstring>
+        <name>WriteScalarPropertyToVSet</name>
+        <qualifiedname>csmp::EclipseInterface::WriteScalarPropertyToVSet</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref> &amp;</type>
+          <declname>grid</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt; &amp;</type>
+          <declname>scalar_data</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>property_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>place</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="221" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1aa49243aab8af8629f5b083dbb6f2ef5f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::WriteScalarPropertyToVSet</definition>
+        <argsstring>(csmp::VSet&lt; 3U &gt; &amp;vset, const CornerPointGrid &amp;grid, const std::vector&lt;::csmp::VectorVariable&lt; 3U &gt; &gt; &amp;vector_data, const std::string &amp;property_name, const ::csmp::PLACEMENT &amp;place)</argsstring>
+        <name>WriteScalarPropertyToVSet</name>
+        <qualifiedname>csmp::EclipseInterface::WriteScalarPropertyToVSet</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref> &amp;</type>
+          <declname>grid</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt;<ref refid="classcsmp_1_1_vector_variable" kindref="compound">::csmp::VectorVariable</ref>&lt; 3U &gt; &gt; &amp;</type>
+          <declname>vector_data</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>property_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>place</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="227" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a9f5d76c068fda74b4f769933e78fbfe7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::WriteScalarPropertyToVSet</definition>
+        <argsstring>(csmp::VSet&lt; 3U &gt; &amp;vset, const CornerPointGrid &amp;grid, const std::vector&lt;::csmp::TensorVariable&lt; 3U &gt; &gt; &amp;tensor_data, const std::string &amp;property_name, const ::csmp::PLACEMENT &amp;place)</argsstring>
+        <name>WriteScalarPropertyToVSet</name>
+        <qualifiedname>csmp::EclipseInterface::WriteScalarPropertyToVSet</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref> &amp;</type>
+          <declname>grid</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt;<ref refid="classcsmp_1_1_tensor_variable" kindref="compound">::csmp::TensorVariable</ref>&lt; 3U &gt; &gt; &amp;</type>
+          <declname>tensor_data</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>property_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>place</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="233" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a5c9bedb201435793ded7ce31de5d3963" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::WriteVectorPropertyToVSet</definition>
+        <argsstring>(csmp::VSet&lt; 3U &gt; &amp;vset, const CornerPointGrid &amp;grid, const std::vector&lt;::csmp::VectorVariable&lt; 3U &gt; &gt; &amp;vector_data, const std::string &amp;property_name, const ::csmp::PLACEMENT &amp;place)</argsstring>
+        <name>WriteVectorPropertyToVSet</name>
+        <qualifiedname>csmp::EclipseInterface::WriteVectorPropertyToVSet</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref> &amp;</type>
+          <declname>grid</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt;<ref refid="classcsmp_1_1_vector_variable" kindref="compound">::csmp::VectorVariable</ref>&lt; 3U &gt; &gt; &amp;</type>
+          <declname>vector_data</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>property_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>place</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="239" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="346" bodyend="355"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a56cea19a4632cfa45f4887ee9a7fc028" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::WriteTensorPropertyToVSet</definition>
+        <argsstring>(csmp::VSet&lt; 3U &gt; &amp;vset, const CornerPointGrid &amp;grid, const std::vector&lt;::csmp::TensorVariable&lt; 3U &gt; &gt; &amp;tensor_data, const std::string &amp;property_name, const ::csmp::PLACEMENT &amp;place)</argsstring>
+        <name>WriteTensorPropertyToVSet</name>
+        <qualifiedname>csmp::EclipseInterface::WriteTensorPropertyToVSet</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">csmp::VSet</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref> &amp;</type>
+          <declname>grid</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt;<ref refid="classcsmp_1_1_tensor_variable" kindref="compound">::csmp::TensorVariable</ref>&lt; 3U &gt; &gt; &amp;</type>
+          <declname>tensor_data</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>property_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">::csmp::PLACEMENT</ref> &amp;</type>
+          <declname>place</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="245" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="360" bodyend="369"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a74a073ae6d3d16b0c3655c6222ab42bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::SaveVectorProperty</definition>
+        <argsstring>(uint32_t component, const std::vector&lt; csmp::ScalarVariable &gt; &amp;scalar_data, std::vector&lt;::csmp::VectorVariable&lt; 3U &gt; &gt; &amp;vector_data)</argsstring>
+        <name>SaveVectorProperty</name>
+        <qualifiedname>csmp::EclipseInterface::SaveVectorProperty</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>component</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt; &amp;</type>
+          <declname>scalar_data</declname>
+        </param>
+        <param>
+          <type>std::vector&lt;<ref refid="classcsmp_1_1_vector_variable" kindref="compound">::csmp::VectorVariable</ref>&lt; 3U &gt; &gt; &amp;</type>
+          <declname>vector_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="251" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="826" bodyend="836"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a162955c5e9ba0722a632601cc979c106" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::SaveTensorProperty</definition>
+        <argsstring>(uint32_t component, const std::vector&lt; csmp::ScalarVariable &gt; &amp;scalar_data, std::vector&lt;::csmp::TensorVariable&lt; 3U &gt; &gt; &amp;vector_data)</argsstring>
+        <name>SaveTensorProperty</name>
+        <qualifiedname>csmp::EclipseInterface::SaveTensorProperty</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>component</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">csmp::ScalarVariable</ref> &gt; &amp;</type>
+          <declname>scalar_data</declname>
+        </param>
+        <param>
+          <type>std::vector&lt;<ref refid="classcsmp_1_1_tensor_variable" kindref="compound">::csmp::TensorVariable</ref>&lt; 3U &gt; &gt; &amp;</type>
+          <declname>vector_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="255" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="839" bodyend="849"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a268fd8acc59fa5f07bbe19340ba5fa65" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::ClearBefore</definition>
+        <argsstring>()</argsstring>
+        <name>ClearBefore</name>
+        <qualifiedname>csmp::EclipseInterface::ClearBefore</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>grid specs</para>
+<para>topology data</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="258" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="35" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1a6d345583f04b97c5c128ba0bd9f6015f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::ClearAfter</definition>
+        <argsstring>()</argsstring>
+        <name>ClearAfter</name>
+        <qualifiedname>csmp::EclipseInterface::ClearAfter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>grid</para>
+<para>regions</para>
+<para>cell properties</para>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="259" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="51" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_interface_1af6cbf10d9bc65c1c5aa3f455974fb2f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseInterface::AssignGridDimensions</definition>
+        <argsstring>()</argsstring>
+        <name>AssignGridDimensions</name>
+        <qualifiedname>csmp::EclipseInterface::AssignGridDimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="261" column="8" bodyfile="source/modules/interfaces/Eclipse/EclipseInterface.cpp" bodystart="851" bodyend="854"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Contains the <ref refid="classcsmp_1_1_corner_point_grid" kindref="compound">CornerPointGrid</ref>. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::EclipseInterface</label>
+        <link refid="classcsmp_1_1_eclipse_interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/EclipseInterface.h" line="140" column="1" bodyfile="source/includes/interfaces/Eclipse/EclipseInterface.h" bodystart="141" bodyend="317"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_eclipse_interface_1a6fa057d3cad82b5112916627b969fa7f" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>AddWell</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ab69f45d7d86340547123977c44f1e0cc" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>AddWell</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1af6cbf10d9bc65c1c5aa3f455974fb2f3" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>AssignGridDimensions</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1aa413014ef00ecd4ce1f488843f110d5d" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>block_grid_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a6d345583f04b97c5c128ba0bd9f6015f" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ClearAfter</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a268fd8acc59fa5f07bbe19340ba5fa65" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ClearBefore</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a69b473c100215c2431aa6a360933c5bb" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>EclipseInterface</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a3c91c0f609938193964bd12f99980b42" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>eqlnum_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ab5fd922d67f0d1c191e7f66ca68ced09" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>faults_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a78dd68f8efcad48b4329b2b5ab052944" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>faults_data_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1aca7cda873c4942f36d5a2b173ab80311" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>fipnum_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a8e269237ee9ceec0bcacbe7606c62161" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>GetFaults</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a30b39a6f5de457a5b4e9480c21e910ce" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>GetRegions</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a13c96330c5a01de2f41223628db2725f" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>GetWells</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1aebb1be6eba95db9fd34bf4a52854e947" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>grid_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a0ea63560838948c721b4d3dc1d8f8e51" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>IJKMap</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a2a72766f33fe5d19b06302cb01209a4a" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>keyword_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ad6c74db611bea08278a927211aa36d2b" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>keyword_parameters_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a7c178648f3564f567703f7b6fd483934" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>model_name_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a7fb5817caee7c9873a45ff798bf029c7" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>model_topology_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1afef35f539a19f3a2668a3cb3cfcd522b" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>multflt_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a4814c62c235061cbdc36f8adc4969836" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ntg_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a8f7d61e117b6514f5a50a622cb979a63" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>NX_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a54b441bf265de57c093b613b223ee5ff" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>NY_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a20ff271fcac51e7892ee09b5368c9de1" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>NZ_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ac04564bc4b0e26d891c700c0578a6aa1" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>perm_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ae68be164d231d94650a76fe22fefacb8" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>permxyz_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a0fb481599375ad28cadd6c9b32f698a5" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>poro_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a3beac611d81b4e663359af8a22125eaa" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a02861f13eb763378c2dd2395f98a653a" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>properties_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a7e9e76ec4b3d27a432446f8ac754d1f6" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>pvtnum_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1aa21c38ffc68fc115f696d9fa9f50b132" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>Read_COORD</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1aad99acbcb163015e7df8d85ad3da2a43" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>Read_ZCORN</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a164c050956435f38e4e210b061e15f0a" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadActiveCells</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a515b66f27b1921801ed631688964aa2b" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadBlock</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1afcac8f6e76a6b27d744d9d89e6b819df" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadBoxData</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a13823351fe8619cadfd753d92c86d7a3" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadCellDepths</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1af161e6d11962d072d0bed8fdbc7be90b" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadCellSizes</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ae3438befb4a0345f2058252fadfd5445" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadCornerDepths</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ad4096c185ccb97d4072086698e7f6c69" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadDimensions</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a7522cc84554f280e33a2f27cb89b98d3" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadExplicitFaceWellCompletionsData</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a93f9fce15acd953823a51325e192f7bb" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadExplicitNodeWellCompletionsData</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a7bb58237cfcdd4a08842f33abca9fc0d" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadFaultsData</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1afd0926178a9c6691200f020cbd39d652" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadFaultTransmissibilityMultipliers</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1aabf8d47808d51036640e4e1df71d237b" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadFile</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a2b3ca52df8246c9fcb86286733f3a730" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadFile</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ae64be61720b0d3fd700aec058a9a1865" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadGridSpecs</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a7ec35bfa06507b67717f575c2ec2542f" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadIncludeFile</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ad052bb048e8f1adae684755f8c47c949" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadPillarCoordinates</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a267f0b848483317c7a52e6749a18a6cb" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadScalarProperty</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1ae322aa9193c912f57a8722d9632ab275" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadTensorProperty</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a930547532aaccb6d1ac9db75bcba1a7f" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadUnknownBlock</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a1d2681388ebb7629843f7fc56e3a245a" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadWellCompletionsData</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1abdec317e9a7fd5dab70e4c694e2b1a0c" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>ReadWellSpecs</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a303ba2f43a7a0684024484615aa130ff" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>regions_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a730048c6099f085a359e993738cd34b4" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>rocknum_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a29c24f1c40ae22a655b3d23fc86c236b" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>satnum_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a162955c5e9ba0722a632601cc979c106" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>SaveTensorProperty</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a74a073ae6d3d16b0c3655c6222ab42bf" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>SaveVectorProperty</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a595a01f986fd0f61888dff68abf7cab4" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>SetProperties</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a4e1b3ffc4e6a21958a8f180213acf6df" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>sgas_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a684590816c43a7ef6fcc953b2cf65e7d" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>soil_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1abadaf6d8813ef1030e9ee6e37b3d1d6d" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>swat_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a543bd1b43a78f3ad62d873f883408948" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>vset_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a25a8e83d72411c92bed4e40d3786b486" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>well_data_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1af763ffe475119ad65969f32639b49367" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>well_face_path_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a64312d472fcb0df4679df604f92d20fd" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>wells_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a920eee94ed72eddd4f977b4e54667502" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>WritePropertiesToVSet</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a09ad782a261fab1544a50fd03fda7200" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>WriteScalarPropertyToVSet</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1aa49243aab8af8629f5b083dbb6f2ef5f" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>WriteScalarPropertyToVSet</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a9f5d76c068fda74b4f769933e78fbfe7" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>WriteScalarPropertyToVSet</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a56cea19a4632cfa45f4887ee9a7fc028" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>WriteTensorPropertyToVSet</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a5c9bedb201435793ded7ce31de5d3963" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>WriteVectorPropertyToVSet</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a8adb61ad95340b1ea9e94264647dad46" prot="private" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>zcorn_</name></member>
+      <member refid="classcsmp_1_1_eclipse_interface_1a845388c7c46bb10a1beed2842998c5aa" prot="public" virt="non-virtual"><scope>csmp::EclipseInterface</scope><name>~EclipseInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

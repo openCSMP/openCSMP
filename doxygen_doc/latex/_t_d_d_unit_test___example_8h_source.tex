@@ -1,0 +1,248 @@
+\doxysection{TDDUnit\+Test\+\_\+\+Example.\+h}
+\hypertarget{_t_d_d_unit_test___example_8h_source}{}\label{_t_d_d_unit_test___example_8h_source}\index{examples/source/TDDUnitTest\_Example.h@{examples/source/TDDUnitTest\_Example.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TDD\_UNIT\_TEST\_EXAMPLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TDD\_UNIT\_TEST\_EXAMPLE\_H}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ Test\ Driven\ (code)\ Development\ -\/\ example}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_example_8h}{"{}Example.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ Introduces\ to\ Test\ Driven\ Development\ in\ general\ and\ attempts\ to\ provide\ a\ CSMP++\ specific\ approach.}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_t_d_d_unit_test___example}{TDDUnitTest\_Example}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_example}{Example}}\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Run()\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Specifications()\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00014\ \};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@class\ \ TDDUnitTest\_Example\ TDDUnitTest\_Example\ "{}example\_suite/TDDUnitTest\_Example.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{UnitTests\ and\ Test\ Driven\ Development\ increase\ confidence\ in\ the\ code\ you\ write\ and}}
+\DoxyCodeLine{00020\ \textcolor{comment}{drastically\ reduce\ debugging\ needs.\ In\ an\ environment\ like\ CSMP\ that\ is\ not\ tested}}
+\DoxyCodeLine{00021\ \textcolor{comment}{bottom\ up,\ a\ different\ approach\ to\ testing\ new\ classes\ may\ be\ chosen.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{Also\ for\ classes\ that\ act\ on\ a\ csmp::Model,\ the\ user\ might\ skip\ test}}
+\DoxyCodeLine{00023\ \textcolor{comment}{driven\ development/unit\ testing\ due\ to\ the\ high\ effort\ required.\ This\ document\ tries}}
+\DoxyCodeLine{00024\ \textcolor{comment}{to\ provide\ an\ approach\ to\ CSMP\ specific\ TDD.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{@author\ P\ Lang}}
+\DoxyCodeLine{00027\ \textcolor{comment}{@date\ \ \ September\ 2010}}
+\DoxyCodeLine{00028\ \textcolor{comment}{@note\ \ WORK\ IN\ PROGRESS}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{@section\ outline\ Outline}}
+\DoxyCodeLine{00031\ \textcolor{comment}{-\/\ Unit\ Tests\ and\ Functional\ Tests}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ -\/\ in\ general\ XP}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ -\/\ interpreted\ for\ CSMP}}
+\DoxyCodeLine{00034\ \textcolor{comment}{-\/\ Introduction\ to\ TDD}}
+\DoxyCodeLine{00035\ \textcolor{comment}{-\/\ Implementation}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{@section\ tests\ Unit\ Tests\ and\ Functional\ Tests}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{@subsection\ general\ In\ general\ XP}}
+\DoxyCodeLine{00040\ \textcolor{comment}{}}
+\DoxyCodeLine{00041\ \textcolor{comment}{A\ Unit\ Test\ is\ designed\ to\ test\ the\ interface\ of\ a\ single\ class\ through\ proper\ pass/fail}}
+\DoxyCodeLine{00042\ \textcolor{comment}{criteria.\ A\ Functional\ Test\ tests\ the\ result\ of\ class\ interactions\ within\ a\ bigger\ context.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{Hence,\ pass/fail\ criteria\ are\ more\ complex.\ This\ also\ includes\ performance\ test\ and\ the}}
+\DoxyCodeLine{00044\ \textcolor{comment}{validation\ of\ applications\ in\ their\ whole.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{@subsection\ csmp\ Interpreted\ for\ CSMP}}
+\DoxyCodeLine{00047\ \textcolor{comment}{}}
+\DoxyCodeLine{00048\ \textcolor{comment}{To\ test\ classes\ that\ require\ a\ model\ to\ act\ on,\ multiple\ Unit\ Tests\ may\ be\ run\ within}}
+\DoxyCodeLine{00049\ \textcolor{comment}{one\ test\ function\ and\ work\ with\ the\ same\ model.\ Classes\ are\ tested\ indepently\ from\ another,}}
+\DoxyCodeLine{00050\ \textcolor{comment}{and\ the\ TestSuite\ will\ spot\ failures\ individually.\ To\ sum\ it\ up,\ we\ put\ multiple\ tests}}
+\DoxyCodeLine{00051\ \textcolor{comment}{inside\ a\ single\ test\ function\ that\ establishes\ a\ model\ for\ all\ of\ them.\ This\ is}}
+\DoxyCodeLine{00052\ \textcolor{comment}{done\ to\ reduce\ the\ effort\ that\ goes\ into\ creating\ a\ test.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{Functional\ Tests,\ or\ Test\ Cases,\ measure\ performance\ and\ compare\ results\ of\ complex\ applications.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{}}
+\DoxyCodeLine{00055\ \textcolor{comment}{@section\ tdd\ Introduction\ to\ TDD}}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{Write\ your\ Unit\ Test\ first,\ let\ it\ fail(because\ there\ is\ no\ class\ yet,\ afterall)\ then}}
+\DoxyCodeLine{00058\ \textcolor{comment}{implement\ your\ class\ piecewise\ to\ make\ the\ tests\ pass.\ Once\ the\ tests\ pass,\ improve\ your\ code.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{Benefits:}}
+\DoxyCodeLine{00060\ \textcolor{comment}{-\/\ improves\ design}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ -\/\ think\ it\ through}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ -\/\ then\ implement}}
+\DoxyCodeLine{00063\ \textcolor{comment}{-\/\ reduces\ amount\ of\ code}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ -\/\ by\ sticking\ to\ what\ you\ really\ planned\ to\ do}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ -\/\ by\ having\ code\ that\ does\ the\ job\ quickly}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ -\/\ and\ improve\ it\ when\ there's\ time}}
+\DoxyCodeLine{00067\ \textcolor{comment}{-\/\ used\ together\ with\ SVN,\ often\ replaces\ debugger}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ -\/\ revert\ to\ revision\ that\ works,\ go\ form\ there}}
+\DoxyCodeLine{00069\ \textcolor{comment}{-\/\ YOU\ CAN\ TRUST\ IN\ YOUR\ CODE\ AN\ SUBSEQUENT\ USE\ OF\ IT}}
+\DoxyCodeLine{00070\ \textcolor{comment}{-\/\ IT\ IS\ TESTED(what's\ the\ alternative?)}}
+\DoxyCodeLine{00071\ \textcolor{comment}{}}
+\DoxyCodeLine{00072\ \textcolor{comment}{How\ it's\ done:}}
+\DoxyCodeLine{00073\ \textcolor{comment}{-\/\#\ Write\ your\ test}}
+\DoxyCodeLine{00074\ \textcolor{comment}{-\/\#\ See\ it\ fail}}
+\DoxyCodeLine{00075\ \textcolor{comment}{-\/\#\ Implement\ your\ code}}
+\DoxyCodeLine{00076\ \textcolor{comment}{-\/\#\ Make\ the\ test\ pass}}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00079\ \textcolor{comment}{}}
+\DoxyCodeLine{00080\ \textcolor{comment}{Basic\ Unit\ Test\ and\ TDD\ with\ CSMP's\ csmp::Test\ and\ csmp::TestSuite\ class.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{Available\ Macros:}}
+\DoxyCodeLine{00082\ \textcolor{comment}{-\/\_test(\ cond\ )\ tests\ for\ logical\ statement}}
+\DoxyCodeLine{00083\ \textcolor{comment}{-\/\_fail(\ stri\ )\ fails}}
+\DoxyCodeLine{00084\ \textcolor{comment}{-\/\_equal(\ arg1,\ arg2,\ tolerance\ )\ tests\ if\ arguments\ equal\ within\ tolerance}}
+\DoxyCodeLine{00085\ \textcolor{comment}{}}
+\DoxyCodeLine{00086\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ //\ implementation\ follos}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ class\ Unit}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ public:}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ int\ foo1(\ int\ a\ )\ \{\ return\ a/a;\ \}}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ int\ foo2(\ int\ a\ )\ \{\ return\ a*a;\ \}}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \};}}
+\DoxyCodeLine{00094\ \textcolor{comment}{}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ //\ this\ comes\ first(failing)}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ class\ \ UnitTest\ :\ public\ Test}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \{}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ public:}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ virtual\ void\ run()\ \{\ \_test(\ Unit().foo1(\ 5\ )\ ==\ 1\ );}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_test(\ Unit().foo2(\ 5\ )\ >\ 5\ );\ \}}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \};}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{int\ main(\ int\ argc,\ char**\ argv)}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ TestSuite\ s("{}TDD\ SUITE"{},\ \&cout);}}
+\DoxyCodeLine{00106\ \textcolor{comment}{}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ s.addTest(\ new\ UnitTest()\ );}}
+\DoxyCodeLine{00108\ \textcolor{comment}{}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ s.run();}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ int\ failures\ =\ s.report();}}
+\DoxyCodeLine{00111\ \textcolor{comment}{}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ return\ failures;}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \}}}
+\DoxyCodeLine{00114\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00115\ \textcolor{comment}{}}
+\DoxyCodeLine{00116\ \textcolor{comment}{Multiple\ Unit\ Tests\ within\ one\ test\ function\ for\ a\ group\ of\ classes\ to\ be\ tested,}}
+\DoxyCodeLine{00117\ \textcolor{comment}{e.g.\ Interrelations.}}
+\DoxyCodeLine{00118\ \textcolor{comment}{}}
+\DoxyCodeLine{00119\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00120\ \textcolor{comment}{}}
+\DoxyCodeLine{00121\ \textcolor{comment}{//\ global\ function\ to\ reload\ model\ from\ binary}}
+\DoxyCodeLine{00122\ \textcolor{comment}{void\ resetModel(\ Model<DIM>*\ model\ )}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ if(\ model\ !=\ 0\ )}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ delete\ model;}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ model\ =\ new\ ANSYS\_Model3D(\ "{}small\_prism\_bin"{},}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}CSMP-\/2phase-\/variables.txt"{}\ );}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\}}}
+\DoxyCodeLine{00129\ \textcolor{comment}{}}
+\DoxyCodeLine{00130\ \textcolor{comment}{class\ \ MultipleUnitTest\ :\ public\ Test}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00132\ \textcolor{comment}{public:}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ virtual\ void\ run()\ \{}}
+\DoxyCodeLine{00134\ \textcolor{comment}{}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ //\ establishing\ a\ test\ model}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ Model<DIM>*\ model;}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ resetModel(\ model\ );}}
+\DoxyCodeLine{00138\ \textcolor{comment}{}}
+\DoxyCodeLine{00139\ \textcolor{comment}{}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ //\ getting\ indices\ to\ evaluate\ test\ criterion}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ const\ Region<dim>\&\ rref\ =\ model-\/>Region(\ "{}Model"{}\ );}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ Index\ porosityKey\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ model-\/>Database().StorageKey(\ "{}porosity"{}\ );}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ Index\ frapKey\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ model-\/>Database().StorageKey(\ "{}fracture\ aperture"{}\ );}}
+\DoxyCodeLine{00144\ \textcolor{comment}{}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ //\ backing\ up\ property\ that\ will\ be\ manipulated}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ PropertyHandle<DIM>*\ cachePorosity\ =\ new\ PropertyHandle<DIM>(\ (*model),\ "{}cache\ porosity"{},\ SCALAR,\ ELEMENT\ );}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ Index\ cachePorosityKey\ =\ model-\/>Database().StorageKey(\ "{}cache\ porosity"{}\ );}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ (*model).CopyReplace(\ "{}porosity"{},\ "{}cache\ porosity"{}\ );}}
+\DoxyCodeLine{00149\ \textcolor{comment}{}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ //\ Applying\ an\ Interrelation\ to\ the\ model}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ FracturePorosityFromAperture<DIM>\ fracturePorosityInterrelation(\ (*model).Database()\ );}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ (*model).Apply(\ fracturePorosityInterrelation\ );}}
+\DoxyCodeLine{00153\ \textcolor{comment}{}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ //\ Running\ a\ trivial\ test\ criterion}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ bool\ passed(\ true\ );}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ const\ std::vector<Element<DIM>*>::const\_iterator\ elementsEnd\ =\ rref.CellsEnd();}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ for(\ std::vector<Element<DIM>*>::const\_iterator\ it\ =\ rref.CellsBegin();}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ it\ !=\ elementsEnd;\ ++it\ )}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ \ \{}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ \ \ \ if(\ (*it)-\/>Read(\ porosityKey\ )\ !=\ (*it)-\/>Read(\ cachePorosityKey\ )\ *}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*it)-\/>Read(\ frapKey\ )\ )\ }}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \{}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ passed\ =\ false;}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ break;}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00166\ \textcolor{comment}{}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ \ \ \ //\ if\ we\ wish\ to\ test\ more\ than\ one\ interrelation\ within\ one\ loop,\ we\ do}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ \ \ \ //\ \_equal(\ (*it)-\/>Read(\ cacheValue1Key\ ),\ (*it)-\/>Read(\ value1Key\ )\ ),\ tolerance\_\ );}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ \ \ \ //\ \_equal(\ (*it)-\/>Read(\ cacheValue2Key\ ),\ (*it)-\/>Read(\ value2Key\ )\ ),\ tolerance\_\ );}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ \ \ \ //\ ....}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ \ \ \ //\ as\ long\ as\ the\ tests\ still\ qualify\ as\ independent}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ \ \}}}
+\DoxyCodeLine{00173\ \textcolor{comment}{}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ \ //\ evaluating\ test\ criterion}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ \ \_test(\ passed\ );}}
+\DoxyCodeLine{00176\ \textcolor{comment}{}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ \ //\ restoring\ model}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ \ (*model).CopyReplace(\ "{}cache\ porosity"{},\ "{}porosity"{}\ );}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ \ delete\ cachePorosity;}}
+\DoxyCodeLine{00180\ \textcolor{comment}{}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ \ //...tests}}
+\DoxyCodeLine{00182\ \textcolor{comment}{}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ \ //\ resetting\ model\ if\ required}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ \ resetModel(\ model\ );}}
+\DoxyCodeLine{00185\ \textcolor{comment}{}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ \ //...tests}}
+\DoxyCodeLine{00187\ \textcolor{comment}{}}
+\DoxyCodeLine{00188\ \textcolor{comment}{}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \}\ //\ run}}
+\DoxyCodeLine{00190\ \textcolor{comment}{}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\};}}
+\DoxyCodeLine{00192\ \textcolor{comment}{}}
+\DoxyCodeLine{00193\ \textcolor{comment}{int\ main(\ int\ argc,\ char**\ argv)}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ TestSuite\ s("{}TDD\ SUITE"{},\ \&cout);}}
+\DoxyCodeLine{00196\ \textcolor{comment}{}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ s.addTest(\ new\ MultipleUnitTest()\ );}}
+\DoxyCodeLine{00198\ \textcolor{comment}{}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ s.run();}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ int\ failures\ =\ s.report();}}
+\DoxyCodeLine{00201\ \textcolor{comment}{}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ return\ failures;}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \}}}
+\DoxyCodeLine{00204\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00205\ \textcolor{comment}{}}
+\DoxyCodeLine{00206\ \textcolor{comment}{Points\ to\ consider:}}
+\DoxyCodeLine{00207\ \textcolor{comment}{-\/\ load\ model\ from\ a\ CSMP\ binary}}
+\DoxyCodeLine{00208\ \textcolor{comment}{-\/\ use\ model.CopyReplace(...)\ if\ possible}}
+\DoxyCodeLine{00209\ \textcolor{comment}{}}
+\DoxyCodeLine{00210\ \textcolor{comment}{For\ developers,\ IMHO\ there's\ no\ alternativ\ to\ writing\ a\ single}}
+\DoxyCodeLine{00211\ \textcolor{comment}{test\ per\ core\ class:}}
+\DoxyCodeLine{00212\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00213\ \textcolor{comment}{int\ main(\ int\ argc,\ char**\ argv)}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ TestSuite\ s("{}TDD\ SUITE"{},\ \&cout);}}
+\DoxyCodeLine{00216\ \textcolor{comment}{}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ //\ establishing\ model}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ enum\{\ DIM\ =\ 2\ \};}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ Model<DIM>*\ model;}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ resetModel(\ model\ )}}
+\DoxyCodeLine{00221\ \textcolor{comment}{}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ //\ the\ tests\ themselve\ have\ the\ responsability\ to\ restore\ the\ model}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ //\ to\ its\ default}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ s.addTest(\ new\ UnitTest1(\ model\ )\ );}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ s.addTest(\ new\ UnitTest2(\ model\ )\ );}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ s.addTest(\ new\ UnitTest3(\ model\ )\ );}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ s.addTest(\ new\ UnitTest4(\ model\ )\ );}}
+\DoxyCodeLine{00228\ \textcolor{comment}{}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ s.run();}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ int\ failures\ =\ s.report();}}
+\DoxyCodeLine{00231\ \textcolor{comment}{}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ return\ failures;}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \}}}
+\DoxyCodeLine{00234\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00235\ \textcolor{comment}{}}
+\DoxyCodeLine{00236\ \textcolor{comment}{@note\ 10\ MIN\ BUILD}}
+\DoxyCodeLine{00237\ \textcolor{comment}{@todo\ (3)\ Implement\ Suite\ features\ for\ functioal\ tests(csmp\ binary\ comparison,\ speed,\ vtk\ comparison(DONE)...)}}
+\DoxyCodeLine{00238\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ TDD\_UNIT\_TEST\_EXAMPLE\_H}}
+
+\end{DoxyCode}

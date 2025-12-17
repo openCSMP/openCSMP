@@ -1,0 +1,602 @@
+\doxysection{csmp\+::Local\+Variable\+Storage\texorpdfstring{$<$}{<} dim, STOREE \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_local_variable_storage}{}\label{classcsmp_1_1_local_variable_storage}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+
+
+{\ttfamily \#include $<$Local\+Variable\+Storage.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Local\+Variable\+Storage\texorpdfstring{$<$}{<} dim, STOREE \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_local_variable_storage__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Local\+Variable\+Storage\texorpdfstring{$<$}{<} dim, STOREE \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{classcsmp_1_1_local_variable_storage__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a943ffff1a80038b3c3a32f244cbd9f37}\label{classcsmp_1_1_local_variable_storage_a943ffff1a80038b3c3a32f244cbd9f37} 
+{\bfseries Local\+Variable\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Ctor for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a121a2b924f409130679b4b24b50e5491}{Local\+Variable\+Storage}} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees with \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a1b13299ead3bfd53fe820b5f51122419}\label{classcsmp_1_1_local_variable_storage_a1b13299ead3bfd53fe820b5f51122419} 
+{\bfseries Local\+Variable\+Storage} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, STOREE $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a1811cef41ad3bd7567def6ccb5a20d5c}\label{classcsmp_1_1_local_variable_storage_a1811cef41ad3bd7567def6ccb5a20d5c} 
+{\bfseries Local\+Variable\+Storage} (\mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, STOREE $>$ \&\&)
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_add3acd9ec49db71e0e5bf4f8dda13744}\label{classcsmp_1_1_local_variable_storage_add3acd9ec49db71e0e5bf4f8dda13744} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, STOREE $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a7a7f6185d60844c2f5acc1bcf475e215}\label{classcsmp_1_1_local_variable_storage_a7a7f6185d60844c2f5acc1bcf475e215} 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a6ecafcec1a7d7a21d0bcdc4facd19a14}\label{classcsmp_1_1_local_variable_storage_a6ecafcec1a7d7a21d0bcdc4facd19a14} 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees with \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ac8163f9d2a5ba69c624a065316ecaecd}\label{classcsmp_1_1_local_variable_storage_ac8163f9d2a5ba69c624a065316ecaecd} 
+void {\bfseries Resize\+Property\+Storage} (int\+\_\+type data\+Components, int\+\_\+type flag\+Components)
+\begin{DoxyCompactList}\small\item\em Resizes the storage preserving original values if any (this is where all Resize\+Property\+Storage end up) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}{Add\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}{Delete\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}{Is\+Within\+Range}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a4387c2c28afd79c9142834fc4a976b48}\label{classcsmp_1_1_local_variable_storage_a4387c2c28afd79c9142834fc4a976b48} 
+double {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a02ef711d22a0e425cb2a41d500ae4fbc}\label{classcsmp_1_1_local_variable_storage_a02ef711d22a0e425cb2a41d500ae4fbc} 
+void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a8a4fa64f7878198697f3b95b834f525e}\label{classcsmp_1_1_local_variable_storage_a8a4fa64f7878198697f3b95b834f525e} 
+void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Vector variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aaa34764e718e0c4ddab209275bf2188e}\label{classcsmp_1_1_local_variable_storage_aaa34764e718e0c4ddab209275bf2188e} 
+void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Tensor variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a22977e82e4ebd59627a3dd518263f983}\label{classcsmp_1_1_local_variable_storage_a22977e82e4ebd59627a3dd518263f983} 
+void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Array variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a9709ea566ae6613f5cbd412becb9f166}\label{classcsmp_1_1_local_variable_storage_a9709ea566ae6613f5cbd412becb9f166} 
+void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a8642fe6f83bb6981e7c0d6ab5b2c0248}\label{classcsmp_1_1_local_variable_storage_a8642fe6f83bb6981e7c0d6ab5b2c0248} 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ad200ca66c23381bdacfbc3f7f6cf4490}\label{classcsmp_1_1_local_variable_storage_ad200ca66c23381bdacfbc3f7f6cf4490} 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Vector variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a4a6c92f86cad6caffa00c2b214eb9a72}\label{classcsmp_1_1_local_variable_storage_a4a6c92f86cad6caffa00c2b214eb9a72} 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Tensor variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a73fc889f36748dd1ba74d5f7599c6e73}\label{classcsmp_1_1_local_variable_storage_a73fc889f36748dd1ba74d5f7599c6e73} 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Array variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ac162ac005e0b7501e67e2e74f30ce0a2}\label{classcsmp_1_1_local_variable_storage_ac162ac005e0b7501e67e2e74f30ce0a2} 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a13c8a3dae3a8ba916f712f7e96d000d1}\label{classcsmp_1_1_local_variable_storage_a13c8a3dae3a8ba916f712f7e96d000d1} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ae02042c6e7f036429fd15620575ecd9a}\label{classcsmp_1_1_local_variable_storage_ae02042c6e7f036429fd15620575ecd9a} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type) const
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a86ad0b4ac5ab99e3141491c217a12b31}\label{classcsmp_1_1_local_variable_storage_a86ad0b4ac5ab99e3141491c217a12b31} 
+void {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a95dccf1161e1c9622635d9a93cd81e9a}\label{classcsmp_1_1_local_variable_storage_a95dccf1161e1c9622635d9a93cd81e9a} 
+void {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Vector,Tensor, Flagged\+Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_afd200bca0d016a0d650cec2472516c2a}\label{classcsmp_1_1_local_variable_storage_afd200bca0d016a0d650cec2472516c2a} 
+bool {\bfseries Is\+Within\+Range} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a6c26a2015befff1a0e166467b88cbef0}\label{classcsmp_1_1_local_variable_storage_a6c26a2015befff1a0e166467b88cbef0} 
+double {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a42f95b03393e908d47cddb886f6169ba}\label{classcsmp_1_1_local_variable_storage_a42f95b03393e908d47cddb886f6169ba} 
+void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a8819c6e4a6e55153af7ec9bb0fe30a8b}\label{classcsmp_1_1_local_variable_storage_a8819c6e4a6e55153af7ec9bb0fe30a8b} 
+void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Vector variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ad206a83d2eb7caca6416859a9d9ff0a0}\label{classcsmp_1_1_local_variable_storage_ad206a83d2eb7caca6416859a9d9ff0a0} 
+void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Tensor variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a7f99bc71405d6cd45d230b86b80258d3}\label{classcsmp_1_1_local_variable_storage_a7f99bc71405d6cd45d230b86b80258d3} 
+void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Array variables. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a1b28fe5d98629c434cc637d50903a965}\label{classcsmp_1_1_local_variable_storage_a1b28fe5d98629c434cc637d50903a965} 
+void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variables. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ac9dd5c036c4cdd9dc13dcf325deb732b}\label{classcsmp_1_1_local_variable_storage_ac9dd5c036c4cdd9dc13dcf325deb732b} 
+void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a12842c4e1cc89d5a6490c5afc149f61a}\label{classcsmp_1_1_local_variable_storage_a12842c4e1cc89d5a6490c5afc149f61a} 
+void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Vector variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a42472ece06d76663456aa22c0f088d3e}\label{classcsmp_1_1_local_variable_storage_a42472ece06d76663456aa22c0f088d3e} 
+void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Tensor variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_abf9e39d72177e8066b26612de709cff4}\label{classcsmp_1_1_local_variable_storage_abf9e39d72177e8066b26612de709cff4} 
+void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Array variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a0e9b7ddb382ce5e6bbb03158289dd5d4}\label{classcsmp_1_1_local_variable_storage_a0e9b7ddb382ce5e6bbb03158289dd5d4} 
+void {\bfseries Store\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double array\+\_\+elmt\+\_\+value, int\+\_\+type)
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a15454666d6c782ff34dc7cbcd5654881}\label{classcsmp_1_1_local_variable_storage_a15454666d6c782ff34dc7cbcd5654881} 
+double {\bfseries Read\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type array\+\_\+elmt) const
+\begin{DoxyCompactList}\small\item\em reads single double element inside of the target array \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a0795324f4de1316f1f3ce27280af6a4d}\label{classcsmp_1_1_local_variable_storage_a0795324f4de1316f1f3ce27280af6a4d} 
+void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a9ed4f3ff1123f74ed506d64804ee1fb6}\label{classcsmp_1_1_local_variable_storage_a9ed4f3ff1123f74ed506d64804ee1fb6} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a45f387e3e2dd9df4b54471de22783ab9}\label{classcsmp_1_1_local_variable_storage_a45f387e3e2dd9df4b54471de22783ab9} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type) const
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a16357d8ce67ce8b647816ac0ea35692a}\label{classcsmp_1_1_local_variable_storage_a16357d8ce67ce8b647816ac0ea35692a} 
+void {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ae5439e2d7595802c8ea4284a8c10bb86}\label{classcsmp_1_1_local_variable_storage_ae5439e2d7595802c8ea4284a8c10bb86} 
+void {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a19073fdbded1eb2b08e15fc58a6d42ad}{Is\+Within\+Range}} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3852930742cd6380b8aeea370a26291e}{Read}} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a965ed1d472c2eeeebfd21f610ae8b142}\label{classcsmp_1_1_local_variable_storage_a965ed1d472c2eeeebfd21f610ae8b142} 
+void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a322278ab4b2eadb1a500577305e76d32}\label{classcsmp_1_1_local_variable_storage_a322278ab4b2eadb1a500577305e76d32} 
+void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Vector variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a16142f63833c61e82aa16ff880549b2e}\label{classcsmp_1_1_local_variable_storage_a16142f63833c61e82aa16ff880549b2e} 
+void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Tensor variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a4196e48e8ea59e9b67596512ab1e9c74}\label{classcsmp_1_1_local_variable_storage_a4196e48e8ea59e9b67596512ab1e9c74} 
+void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Array variables at sector or facet integration points. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a50cb7f8227bd7ddcdd6c8c95fa0acfad}\label{classcsmp_1_1_local_variable_storage_a50cb7f8227bd7ddcdd6c8c95fa0acfad} 
+void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variables. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a955a9039f608af0612b0e4f9495934d5}\label{classcsmp_1_1_local_variable_storage_a955a9039f608af0612b0e4f9495934d5} 
+void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a1559bbc995eee4b8647eacc90cbf2716}\label{classcsmp_1_1_local_variable_storage_a1559bbc995eee4b8647eacc90cbf2716} 
+void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Vector variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a8b707c57dac42a763e67f2c97c13f583}\label{classcsmp_1_1_local_variable_storage_a8b707c57dac42a763e67f2c97c13f583} 
+void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Tensor variable at sector or facet integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aa9eff2a8dc44da01ad1daf4d3d752b4d}\label{classcsmp_1_1_local_variable_storage_aa9eff2a8dc44da01ad1daf4d3d752b4d} 
+void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Array variable at sector or facet integration poin. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a57e6c1cfa9339fcdcec629c32eb60278}\label{classcsmp_1_1_local_variable_storage_a57e6c1cfa9339fcdcec629c32eb60278} 
+void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ae28554cea92e0b651f2d5c45ae98523c}\label{classcsmp_1_1_local_variable_storage_ae28554cea92e0b651f2d5c45ae98523c} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a8acf6a476fd8bf93495b229a5329da00}\label{classcsmp_1_1_local_variable_storage_a8acf6a476fd8bf93495b229a5329da00} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type) const
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a95b463979c68e72eebbc664ba79466a5}\label{classcsmp_1_1_local_variable_storage_a95b463979c68e72eebbc664ba79466a5} 
+void {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at facet or sector integration point (note that the Array has only a single flag) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ae0818666eea5a026454440942a7a3ef6}\label{classcsmp_1_1_local_variable_storage_ae0818666eea5a026454440942a7a3ef6} 
+void {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\double \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a57b857ed431aea52804fab6b36ae1a62}{Read}} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&) const
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a54fdd283a22a2a28b416ed21b383a3ce}{Read}} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a186de627f210b61ee527b6124b3b6f47}\label{classcsmp_1_1_local_variable_storage_a186de627f210b61ee527b6124b3b6f47} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Vector variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ac91adea21d8ae5a0dc4556aca01eeeb1}\label{classcsmp_1_1_local_variable_storage_ac91adea21d8ae5a0dc4556aca01eeeb1} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Tensor variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a2cd43aeae8b8507579801de8c012920c}\label{classcsmp_1_1_local_variable_storage_a2cd43aeae8b8507579801de8c012920c} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Array variable (as a whole) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a6ecdadf1a25749e4af62e3a04424ac44}\label{classcsmp_1_1_local_variable_storage_a6ecdadf1a25749e4af62e3a04424ac44} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_acd9570e13b09c58146d4febcbd90b7fc}\label{classcsmp_1_1_local_variable_storage_acd9570e13b09c58146d4febcbd90b7fc} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ab9e15dcf72d6bfe5e592c6885a8f9342}\label{classcsmp_1_1_local_variable_storage_ab9e15dcf72d6bfe5e592c6885a8f9342} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Vector variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_addf37b333ff607cea064824deefe328f}\label{classcsmp_1_1_local_variable_storage_addf37b333ff607cea064824deefe328f} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Tensor variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a82283f4548c8de56475af4be26328440}\label{classcsmp_1_1_local_variable_storage_a82283f4548c8de56475af4be26328440} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Array variable (as a whole) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a7b18aae29027b1d09947090558fcab3a}\label{classcsmp_1_1_local_variable_storage_a7b18aae29027b1d09947090558fcab3a} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a5fc56abbb74395c2f2b7e6d0abfde549}\label{classcsmp_1_1_local_variable_storage_a5fc56abbb74395c2f2b7e6d0abfde549} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ad5b8339c348f14b87563c497f968ff41}\label{classcsmp_1_1_local_variable_storage_ad5b8339c348f14b87563c497f968ff41} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&) const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_array_variable}{Array\+Variable}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a9bd27dc581f08570ce2d66255d5682e9}\label{classcsmp_1_1_local_variable_storage_a9bd27dc581f08570ce2d66255d5682e9} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, int\+\_\+type) const
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ad13f01314bb7f963903f8c81a4e86f81}\label{classcsmp_1_1_local_variable_storage_ad13f01314bb7f963903f8c81a4e86f81} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, int\+\_\+type) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a92a6cff006b9335b96e8122b578488e7}\label{classcsmp_1_1_local_variable_storage_a92a6cff006b9335b96e8122b578488e7} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, int\+\_\+type) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aa493c360535ec1abd8ffd0c441ee88c3}\label{classcsmp_1_1_local_variable_storage_aa493c360535ec1abd8ffd0c441ee88c3} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a0df6086fe3ca85fa52de1ec6bbb3f8c2}\label{classcsmp_1_1_local_variable_storage_a0df6086fe3ca85fa52de1ec6bbb3f8c2} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a7ed215819e400289ba36ba139ce987c2}\label{classcsmp_1_1_local_variable_storage_a7ed215819e400289ba36ba139ce987c2} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Vector variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ae4fa87ef0971005b5c526a0b01bb1f0f}\label{classcsmp_1_1_local_variable_storage_ae4fa87ef0971005b5c526a0b01bb1f0f} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Tensor variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ac8abd9f770503c1342a699a384290471}\label{classcsmp_1_1_local_variable_storage_ac8abd9f770503c1342a699a384290471} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable flag. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a583d13e8c83a784cc1b39d3326e44a42}\label{classcsmp_1_1_local_variable_storage_a583d13e8c83a784cc1b39d3326e44a42} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\double {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aa324a3195401a97a59f66daa734b5b29}\label{classcsmp_1_1_local_variable_storage_aa324a3195401a97a59f66daa734b5b29} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a1da28f054313063e96cb835b87da86a2}\label{classcsmp_1_1_local_variable_storage_a1da28f054313063e96cb835b87da86a2} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Vector variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a9ac4fe786ca19f14ecc84e5410c84418}\label{classcsmp_1_1_local_variable_storage_a9ac4fe786ca19f14ecc84e5410c84418} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Tensor variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ab1d14236f50e18f135a6a3c33e9fef44}\label{classcsmp_1_1_local_variable_storage_ab1d14236f50e18f135a6a3c33e9fef44} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Array variables. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ada162743277777fb9181cfdf366cd703}\label{classcsmp_1_1_local_variable_storage_ada162743277777fb9181cfdf366cd703} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variables. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a0c89850e68dce00ee73dc042d0211af9}\label{classcsmp_1_1_local_variable_storage_a0c89850e68dce00ee73dc042d0211af9} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a1acd86f9d84e98b3aa4eed5282818596}\label{classcsmp_1_1_local_variable_storage_a1acd86f9d84e98b3aa4eed5282818596} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Vector variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a162b797853c687051ec4e16463d1344a}\label{classcsmp_1_1_local_variable_storage_a162b797853c687051ec4e16463d1344a} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Tensor variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aa06e1815cf4d0d5852f60557806a7fdb}\label{classcsmp_1_1_local_variable_storage_aa06e1815cf4d0d5852f60557806a7fdb} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Array variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a22ce78850f72ab6633f39df6067ea227}\label{classcsmp_1_1_local_variable_storage_a22ce78850f72ab6633f39df6067ea227} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ac587758973e1050aa6f8febed1b29186}\label{classcsmp_1_1_local_variable_storage_ac587758973e1050aa6f8febed1b29186} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a2d3bfc619cee71ca33af5e492f41acd3}\label{classcsmp_1_1_local_variable_storage_a2d3bfc619cee71ca33af5e492f41acd3} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a96c3d31215cd044afaef983af527195e}\label{classcsmp_1_1_local_variable_storage_a96c3d31215cd044afaef983af527195e} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, int\+\_\+type) const
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aaaa28e32d4080f49461b6590c6dba446}\label{classcsmp_1_1_local_variable_storage_aaaa28e32d4080f49461b6590c6dba446} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, int\+\_\+type) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a825e4ff2dda91cce868345c0c9e53b1e}\label{classcsmp_1_1_local_variable_storage_a825e4ff2dda91cce868345c0c9e53b1e} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, int\+\_\+type) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a65049d60a190e5b2cc5b67a26438707d}\label{classcsmp_1_1_local_variable_storage_a65049d60a190e5b2cc5b67a26438707d} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ad4c3f9c5118830d5134e9d0264c9ebae}\label{classcsmp_1_1_local_variable_storage_ad4c3f9c5118830d5134e9d0264c9ebae} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a02a867a4f1bd21dc390c4ac7b3735631}\label{classcsmp_1_1_local_variable_storage_a02a867a4f1bd21dc390c4ac7b3735631} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a8b6ddecfdda8ff8f05849b4a8a1ea123}\label{classcsmp_1_1_local_variable_storage_a8b6ddecfdda8ff8f05849b4a8a1ea123} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a7cf2a0491b2d4da053b203c0e7c6db68}\label{classcsmp_1_1_local_variable_storage_a7cf2a0491b2d4da053b203c0e7c6db68} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\double \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a46eba15b070f0cba053ef95e425a33d5}{Read}} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a0604422a5d80d92ec3d9b2125f55d981}\label{classcsmp_1_1_local_variable_storage_a0604422a5d80d92ec3d9b2125f55d981} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a7d2fe729987d160f5513c93c932b523c}\label{classcsmp_1_1_local_variable_storage_a7d2fe729987d160f5513c93c932b523c} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Vector variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ad780770b7dfe632c02738a08d528c1ea}\label{classcsmp_1_1_local_variable_storage_ad780770b7dfe632c02738a08d528c1ea} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Tensor variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a65c6d707af607480d942e5366ab81cac}\label{classcsmp_1_1_local_variable_storage_a65c6d707af607480d942e5366ab81cac} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Array variables at sector or facet integration points. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_af289ee0db2df0b78466ce5ad3cb432ad}\label{classcsmp_1_1_local_variable_storage_af289ee0db2df0b78466ce5ad3cb432ad} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Read} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variables. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a2a4bd5c47f30f8e0fef409d9a8c57059}\label{classcsmp_1_1_local_variable_storage_a2a4bd5c47f30f8e0fef409d9a8c57059} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_af4d47beb87e985c697c3456c65201e40}\label{classcsmp_1_1_local_variable_storage_af4d47beb87e985c697c3456c65201e40} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Vector variable at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a83e86a8f4519e2ee83aab3eede6fc372}\label{classcsmp_1_1_local_variable_storage_a83e86a8f4519e2ee83aab3eede6fc372} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em Tensor variable at sector or facet integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a58a724044d5c82c913bdfb70909b9bfa}\label{classcsmp_1_1_local_variable_storage_a58a724044d5c82c913bdfb70909b9bfa} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Array variable at sector or facet integration poin. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aa74c17b0c24f9def1f5784883d3cf04b}\label{classcsmp_1_1_local_variable_storage_aa74c17b0c24f9def1f5784883d3cf04b} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Store} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Flagged\+Array variable at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a2f7d13a74ab0ace41fe3fe06f53e8b07}\label{classcsmp_1_1_local_variable_storage_a2f7d13a74ab0ace41fe3fe06f53e8b07} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at facet or sector integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a408157dbab496a6e3ac229988f445d67}\label{classcsmp_1_1_local_variable_storage_a408157dbab496a6e3ac229988f445d67} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ae586fb47c03ca92723ebf595c5e9fe77}\label{classcsmp_1_1_local_variable_storage_ae586fb47c03ca92723ebf595c5e9fe77} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, int\+\_\+type) const
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aed6a7f9f3448d46ae1afcd37819c75e3}\label{classcsmp_1_1_local_variable_storage_aed6a7f9f3448d46ae1afcd37819c75e3} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, int\+\_\+type) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a846b3431ab4511bc4ed77be7181d8fa3}\label{classcsmp_1_1_local_variable_storage_a846b3431ab4511bc4ed77be7181d8fa3} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, int\+\_\+type) const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a047a7d1116ba62363fa9721bbe351df7}\label{classcsmp_1_1_local_variable_storage_a047a7d1116ba62363fa9721bbe351df7} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag at facet or sector integration point (note that the Array has only a single flag) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a714427aaf143f16886ef7bc0a9365f8a}\label{classcsmp_1_1_local_variable_storage_a714427aaf143f16886ef7bc0a9365f8a} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, place $>$ \&, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a41316e4503c408417c4fd6f57ba7a71f}\label{classcsmp_1_1_local_variable_storage_a41316e4503c408417c4fd6f57ba7a71f} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\begin{DoxyCompactList}\small\item\em Vector, Tensor, Flagged\+Array variable flag at integration point. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a934d01c05ce96b4e7b63fd6fb8dce680}\label{classcsmp_1_1_local_variable_storage_a934d01c05ce96b4e7b63fd6fb8dce680} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ TENSOR, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_aa915a604a2a32f619e9c1283a41f0f60}\label{classcsmp_1_1_local_variable_storage_aa915a604a2a32f619e9c1283a41f0f60} 
+{\footnotesize template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ }\\void {\bfseries Status} (uint32\+\_\+t sector\+\_\+or\+\_\+facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ FLAGGEDARRAY, place $>$ \&, int\+\_\+type, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a110040be6c3f197163729b7c4ea81069}\label{classcsmp_1_1_local_variable_storage_a110040be6c3f197163729b7c4ea81069} 
+bool {\bfseries Empty\+LVS} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}{Out\+LVS}} () const
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a4cc75be181f8519badea275810fe8275}\label{classcsmp_1_1_local_variable_storage_a4cc75be181f8519badea275810fe8275} 
+void {\bfseries Assert\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a5143bb03ae0bda92a0c01260dee54615}\label{classcsmp_1_1_local_variable_storage_a5143bb03ae0bda92a0c01260dee54615} 
+void {\bfseries Assert\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a0f98d57cdb8354375492e1ecab895b05}\label{classcsmp_1_1_local_variable_storage_a0f98d57cdb8354375492e1ecab895b05} 
+void {\bfseries Assert\+Finite\+Volume\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a482c445697287f2ae4d8b76319725d7a}\label{classcsmp_1_1_local_variable_storage_a482c445697287f2ae4d8b76319725d7a} 
+void {\bfseries Store\+Local\+State} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&lv)
+\begin{DoxyCompactList}\small\item\em We store in debug only. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a3568b1d87af863a457f038ca8982bcea}\label{classcsmp_1_1_local_variable_storage_a3568b1d87af863a457f038ca8982bcea} 
+void {\bfseries LVS} (const \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \&data)
+\begin{DoxyCompactList}\small\item\em copy or move supplied data into storage \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_ade0980b8b634e236bd46991d3f64d483}\label{classcsmp_1_1_local_variable_storage_ade0980b8b634e236bd46991d3f64d483} 
+void {\bfseries LVS} (\mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \&\&data)
+\item 
+\Hypertarget{classcsmp_1_1_local_variable_storage_a4979c8f9dc2e3d7d400fc6e42b0f3f1a}\label{classcsmp_1_1_local_variable_storage_a4979c8f9dc2e3d7d400fc6e42b0f3f1a} 
+const \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} {\bfseries LVS} () const
+\begin{DoxyCompactList}\small\item\em return copy of the data container for misc operations (will use rcopy elision \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$\newline
+class csmp\+::\+Local\+Variable\+Storage$<$ dim, STOREE $>$}
+CSMP local/physical variable storage
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2007-\/2012
+\end{DoxyDate}
+\begin{DoxyAttention}{Attention}
+CSMP runs should be performed at least once in DEBUG mode with conceptual models to check validity of Read/\+Store calls. For performance, these checks are omitted in RELEASE.
+\end{DoxyAttention}
+\hypertarget{classcsmp_1_1_local_variable_storage_storees}{}\doxysubsection{\texorpdfstring{Storee Concept}{Storee Concept}}\label{classcsmp_1_1_local_variable_storage_storees}
+Storees have to follow\+:
+
+
+\begin{DoxyItemize}
+\item providing a 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ Placement()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}};\ \}\ }
+
+\end{DoxyCode}
+ function, in which \doxylink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT} is i.\+e. ELEMENT, NODE etc. (global csmp enum)
+\item in the assignment operator (and copy ctor), add\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{this-\/>\mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a4979c8f9dc2e3d7d400fc6e42b0f3f1a}{LVS}}(\ el.LVS()\ );\ }
+
+\end{DoxyCode}
+
+\end{DoxyItemize}\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+We use CRT static polymorphism here to allow for non-\/virtual Placement() functions and exploit compile time type information. All methods specific to storees with integration points (\doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}) will fail AT COMPILE TIME when used for storees without integration points (\doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_boundary}{Boundary}, \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary})
+
+\begin{DoxyNote}{Note}
+Ideally we would like to use type traits instead of crt, but this would require change of csmp interface and wouldn\textquotesingle{}t provide any performance increase
+\end{DoxyNote}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+We store always in order\+: all \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable} data/flags, then all \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} data/flags, then all \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable} data/flags and finally all \doxylink{classcsmp_1_1_array_variable}{Array\+Variable} data/flags At integration points this holds, whith all ELEMENT\+\_\+\+INTEGRATION\+\_\+\+POINT variables first (storing all such values for the first integration point, then for the second and so forth), then all SECTOR\+\_\+\+INTEGRATION\+\_\+\+POINT and last all FACET\+\_\+\+INTEGRATION\+\_\+\+POINT (for each IP) We perform validity checks on Read/\+Store etc in debug mode only, that is with no \textquotesingle{}NDEBUG\textquotesingle{} symbol. Additional checks are activated if \textquotesingle{}VARIABLE\+\_\+\+STORAGE\+\_\+\+DEBUG\textquotesingle{} is set.
+
+\begin{DoxyAttention}{Attention}
+The variable storage is implicitly coupled with the \doxylink{classcsmp_1_1_property_database}{Property\+Database} through the \doxylink{structcsmp_1_1_index}{Index} and its offset calculation performed there
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000016}{Todo}}](3-\/D) We could now even go for a single Read/\+Write function templatized on Variable type. Variable placement would then be needed to be available in variables. \end{DoxyRefDesc}
+\begin{DoxyNote}{Note}
+It\textquotesingle{}s probably not sensible to merge duplicated functionality here for performance reasons 
+\end{DoxyNote}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000017}{Todo}}](2-\/D) Doc\+Me (index arithmetic) \end{DoxyRefDesc}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_local_variable_storage_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_local_variable_storage_a121a2b924f409130679b4b24b50e5491}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!LocalVariableStorage@{LocalVariableStorage}}
+\index{LocalVariableStorage@{LocalVariableStorage}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{LocalVariableStorage()}{LocalVariableStorage()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_a121a2b924f409130679b4b24b50e5491} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Local\+Variable\+Storage (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&}]{lv}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&}]{ipv}{}\end{DoxyParamCaption})}
+
+
+
+Goto overload for storees with \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. 
+
+\begin{DoxyAttention}{Attention}
+Will fail AT COMPILE TIME (very nice...) if used for an storee without integration points 
+\end{DoxyAttention}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_local_variable_storage_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!AddProperty@{AddProperty}}
+\index{AddProperty@{AddProperty}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{AddProperty()}{AddProperty()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Add\+Property (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{}\end{DoxyParamCaption})}
+
+
+
+Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000152}{Todo}}](2-\/F) Integration point properties not supported \end{DoxyRefDesc}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000153}{Todo}}](2-\/F) Asserts missing \end{DoxyRefDesc}
+
+
+Roman, 2013\+: with ipvs support\Hypertarget{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!DeleteProperty@{DeleteProperty}}
+\index{DeleteProperty@{DeleteProperty}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{DeleteProperty()}{DeleteProperty()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Delete\+Property (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{}\end{DoxyParamCaption})}
+
+
+
+Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000154}{Todo}}](2-\/F) Asserts missing \end{DoxyRefDesc}
+
+
+Roman, 2013\+: with ipvs support\Hypertarget{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!IsWithinRange@{IsWithinRange}}
+\index{IsWithinRange@{IsWithinRange}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{IsWithinRange()}{IsWithinRange()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Is\+Within\+Range (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{double}]{vmin}{, }\item[{double}]{vmax}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000155}{Todo}}]replace this super wasteful method \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_local_variable_storage_a19073fdbded1eb2b08e15fc58a6d42ad}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!IsWithinRange@{IsWithinRange}}
+\index{IsWithinRange@{IsWithinRange}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{IsWithinRange()}{IsWithinRange()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_a19073fdbded1eb2b08e15fc58a6d42ad} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Is\+Within\+Range (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{sector\+\_\+or\+\_\+facet}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{double}]{vmin}{, }\item[{double}]{vmax}{}\end{DoxyParamCaption}) const}
+
+checks whether any value of the target variable is within the range supplied via the arguments vmin and vmax.
+
+\begin{DoxyAttention}{Attention}
+for a vector, tensor, or array this range check is performed on all their elements.
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000156}{Todo}}]refactor\+: for vectors, tensors and array variables this method is terribly inefficient as it creates temporaries for the checking. \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!OutLVS@{OutLVS}}
+\index{OutLVS@{OutLVS}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{OutLVS()}{OutLVS()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Out\+LVS (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+revised SKM 5/6/2020 -\/ Michael Liem highlighted output problem; not tested for vectors and tensors yet
+
+\begin{DoxyAttention}{Attention}
+this method only outputs variables stored on the \doxylink{classcsmp_1_1_model}{Model} 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_local_variable_storage_a57b857ed431aea52804fab6b36ae1a62}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!Read@{Read}}
+\index{Read@{Read}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_a57b857ed431aea52804fab6b36ae1a62} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Read (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&}]{idx}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+double Read( const csmp\+::\+INDEX$<$\+SCALAR,\+NODE$>$\& ) const; \Hypertarget{classcsmp_1_1_local_variable_storage_a54fdd283a22a2a28b416ed21b383a3ce}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!Read@{Read}}
+\index{Read@{Read}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_a54fdd283a22a2a28b416ed21b383a3ce} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Read (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&}]{idx}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&}]{sc}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+void Read ( const \doxylink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX$<$\+SCALAR,\+NODE$>$}\&, \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}\& ) const; \Hypertarget{classcsmp_1_1_local_variable_storage_a3852930742cd6380b8aeea370a26291e}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!Read@{Read}}
+\index{Read@{Read}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_a3852930742cd6380b8aeea370a26291e} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Read (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{sector\+\_\+or\+\_\+facet}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{}\end{DoxyParamCaption}) const}
+
+Scalar variable value at sector or facet integration points only. \texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\Hypertarget{classcsmp_1_1_local_variable_storage_a46eba15b070f0cba053ef95e425a33d5}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}!Read@{Read}}
+\index{Read@{Read}!csmp::LocalVariableStorage$<$ dim, STOREE $>$@{csmp::LocalVariableStorage$<$ dim, STOREE $>$}}
+\doxysubsubsection{\texorpdfstring{Read()}{Read()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_local_variable_storage_a46eba15b070f0cba053ef95e425a33d5} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+template$<$\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Read (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{sector\+\_\+or\+\_\+facet}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, place $>$ \&}]{idx}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Scalar variable value at sector or facet integration points only. \texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Local\+Variable\+Storage.\+h\item 
+source/modules/model/Local\+Variable\+Storage.\+cpp\end{DoxyCompactItemize}

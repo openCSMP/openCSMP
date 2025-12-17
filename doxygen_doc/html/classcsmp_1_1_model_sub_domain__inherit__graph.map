@@ -1,0 +1,19 @@
+<map id="csmp::ModelSubDomain&lt; dim, CELL &gt;" name="csmp::ModelSubDomain&lt; dim, CELL &gt;">
+<area shape="rect" id="Node000001" title="Storage of Node and Cell pointers to subdomains of the overall computational model...." alt="" coords="487,5,702,549"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_model_sub_domain.html" title=" " alt="" coords="36,620,251,1194"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="480,427,334,622,253,740,249,737,330,618,476,424"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_model_sub_domain.html" title=" " alt="" coords="344,620,559,1194"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="530,564,528,574,517,621,512,620,523,572,525,563"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_model_sub_domain.html" title=" " alt="" coords="583,620,798,1194"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="641,564,649,620,644,621,636,564"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_model_sub_domain.html" title=" " alt="" coords="822,620,1037,1194"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="712,447,764,532,813,619,824,641,819,643,808,621,760,534,708,450"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_boundary.html" title="A Boundary is lower&#45;dimensional ModelSubDomain, consisting of Face objects. Consisting of Faces endow..." alt="" coords="5,1243,210,1614"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,1209,123,1243,118,1243,120,1209"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_nimble_region.html" title=" " alt="" coords="235,1256,368,1602"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="367,1209,353,1257,348,1255,362,1207"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_region.html" title="To associate and access elements which share certain properties. Once such a distinction has been mad..." alt="" coords="392,1274,616,1584"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="485,1208,491,1274,486,1274,479,1209"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_split_boundary.html" title="Representation of a model boundary across which the elements are node&#45;matching, but have unique nodes..." alt="" coords="640,1258,810,1599"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="713,1208,717,1258,711,1259,708,1209"/>
+</map>

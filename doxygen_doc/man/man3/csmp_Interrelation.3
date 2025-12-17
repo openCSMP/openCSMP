@@ -1,0 +1,470 @@
+.TH "csmp::Interrelation< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Interrelation< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherited by \fBcsmp::ArithmeticMean< dim, var >\fP, \fBcsmp::ComputeSecondPhaseSaturation< dim >\fP, \fBcsmp::Concatenate< dim, operation >\fP, \fBcsmp::ConcentrationFluidVolumeSource< dim >\fP, \fBcsmp::ConstantFactor< dim, operation >\fP, \fBcsmp::ExtractTensorVariableComponent< dim >\fP, \fBcsmp::ExtractTensorVariableEigenvalue< dim >\fP, \fBcsmp::ExtractTensorVariableRow< dim >\fP, \fBcsmp::ExtractVectorVariableComponent< dim >\fP, \fBcsmp::ExtractVectorVariableLength< dim >\fP, \fBcsmp::FluidDensityFromConcentration< dim >\fP, \fBcsmp::GroundwaterDarcyVelocity< dim >\fP, \fBcsmp::GroundwaterDarcyVelocity< dim >\fP, \fBcsmp::GroundwaterDarcyVelocity< dim >\fP, \fBcsmp::HydraulicHead< dim >\fP, \fBcsmp::HydrostaticPressure< dim >\fP, \fBcsmp::IAPWS_H2O_Conductivity< dim >\fP, \fBcsmp::IAPWS_H2O_HeatTransferVelocity< dim >\fP, \fBcsmp::IAPWS_H2O_Storativity< dim >\fP, \fBcsmp::IAPWS_H2O_dVdT_Source< dim >\fP, \fBcsmp::Limiter< dim >\fP, \fBcsmp::MaximumDifference< dim >\fP, \fBcsmp::ModifyPropertyWhere< dim >\fP, \fBcsmp::MohrCoulombFailure< dim >\fP, \fBcsmp::PotentialSource< dim >\fP, \fBcsmp::QuartzPrecipitation< dim >\fP, \fBcsmp::QuartzSolubility< dim >\fP, \fBcsmp::QuartzSolubilityNaCl< dim >\fP, \fBcsmp::StokesEinsteinDiffusivity< dim >\fP, and \fBcsmp::TransportStepSize< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInterrelation\fP (const \fBPropertyDatabase\fP< dim > &p)"
+.br
+.ti -1c
+.RI "void \fBName\fP (const char *s)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApply\fP (\fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "template<template< uint32_t > class CELL> void \fBApply\fP (\fBModelSubDomain\fP< dim, CELL > &)"
+.br
+.RI "a simplex is any geometrical association of points "
+.ti -1c
+.RI "virtual void \fBCalculate\fP ()"
+.br
+.ti -1c
+.RI "bool \fBResultWithinRange\fP ()"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBOperandsEnd\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBResult\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBOperand\fP< dim > & \fBGlobalProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBResultProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "void \fBOutputCondition\fP (\fBOperand\fP< dim > &var, \fBVARIABLE_FLAG\fP output)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBp_ref\fP"
+.br
+.ti -1c
+.RI "std::string \fBname_\fP"
+.br
+.ti -1c
+.RI "std::string \fBresult_property_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > > \fBoperand_list_\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBOperand\fP< dim > >::iterator \fBresult_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::Interrelation< dim >"
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+
+.PP
+Stephen G\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999
+.RE
+.PP
+.SH "Motivation"
+.PP
+Traditionally, locally resolvable interdependencies of dependent model variables are computed in so-called 'post-processing' operations which involve looping through arrays of nodes and elements, applying mathematical relationships to compute the \fBvariable(s)\fP of interest\&. This procedure is error prone, firstly, because of the danger of writing beyond array bounds which the top level user is not necessarily familiar with; secondly, the results of such calculations are not tested before they are written into the global arrays; and, thirdly, if one has many of such calculation procedures inside of a time-stepping loop, it becomes hard to track which post-processing procedure depends on a previous one, to determine an execution order which must be adhered to\&.
+
+.PP
+The \fBInterrelation\fP class represents an attempt to overcome these dangers by encapsulating post-processing operations into modules\&. This design achieves the following objectives:
+
+.PP
+Firstly, the loop operations and variable access is embedded into the \fBInterrelation\fP class\&. The user must only associate an \fBOperand\fP object with the variable which he can subsequently use in the mathematical expressions\&.
+
+.PP
+Secondly, The result of such a calculation is tested before it is stored back into the MemoryManager\&. This test determines whether the result lies in a physically meaningful range for which other Interrelations that use the variable as an input, have been tested (This is essential to ascertain the correctness of a complex simulation)\&. 
+.br
+
+.PP
+Thirdly, Interrelations always modify only a single variable\&. This restriction allows them to be managed by an InterrelationManager which automatically determines an \fBInterrelation\fP computation sequence in time-stepping loops\&.
+
+.PP
+There is also a need to used node variables in the computation of element properties and so forth\&. For these type of calculations, the \fBInterrelation\fP class has the capability of taking property averages or apply other useful strategies through the use of \fBOperand\fP objects\&.
+.SH "Design Intent"
+.PP
+In the CSMP modeling code, all calculations that do not involve the inversion of a global solution matrix are done by passing \fBInterrelation\fP subclass instances to \fBModel\fP objects\&. An example of an \fBInterrelation\fP would be the calculation of the hydraulic conductivity from the permeability by dividing permeability by viscosity and assigning the result to the variable conductivity\&. The code that does this is provided as the class 'ConductivityFromPerm' as defined in a header file with the same name\&. 
+.br
+.SH "Applicability"
+.PP
+All calculations in a CSP model which can be done in an element by element fashion or just by looking at node or constraint point variables only, should be encapsulated into Interrelations\&. Exceptions from this rule are global expressions which one may want to write using \fBPropertyHandle\fP objects\&. Also, for the special case where a well-understood process modifies several variables simultaneously, which would require multiple interrelations, a visitor object may be better suited to achieve the computation goal\&. 
+.br
+
+.PP
+Importantly, Interrelations can be restricted such that they apply only to subregions of a model identified as \fBRegion\fP objects\&. This capability allows, for instance, to compute a magmatic fluid source within a cooling granite without the overhead of traversing the entire mesh\&.
+.SH "Structure"
+.PP
+The \fBInterrelation\fP class is a base class from which the user inherits a subclass object for instance 'ConductivityFromPerm' which contains the mathematical expression which the user wants to apply\&. Inheriting such a subclass involves the following steps:
+
+.PP
+Firstly, the user must define a notation for his mathematical expression by associating a \fBOperand\fP objects with the global physical variables of interest (for the above example):
+
+.PP
+.PP
+.nf
+class ConductivityFromPerm : public Interrelation {
+Operand& K; // hydraulic conductivity
+Operand& k; // permeability
+Operand& V; // dynamic viscosity
+\&.\&.\&.
+.fi
+.PP
+
+.PP
+Secondly, the user must register the variables with the \fBModel\fP, define a name of the \fBInterrelation\fP, the output property, and the write permission flag\&. This is done in the constructor of the \fBInterrelation\fP subclass:
+
+.PP
+.PP
+.nf
+ConductivityFromPerm::ConductivityFromPerm( const Property& p ) 
+      : Interrelation(p),
+        k( GlobalProperty("permeability") ),
+        K( GlobalProperty("conductivity") ),
+        V( GlobalProperty("viscosity") )
+ {
+    Name(" ConductivityFromPerm");
+    ResultProperty("conductivity");
+    OutputConditions( K, PLAIN );
+ }
+.fi
+.PP
+
+.PP
+k, K, and V are associated with the global physical variables identified by their spelled out name, 'conductivity' is defined as the property which will be modified by the \fBInterrelation\fP, but only where it has the flag PLAIN\&. 
+.br
+
+.PP
+Thirdly, the user must overwrite the pure virtual method \fBCalculate()\fP of the \fBInterrelation\fP base class, defining the mathematical expression he wants to apply n order to compute the target variable:
+
+.PP
+.PP
+.nf
+inline void ConductivityFromPerm::Calculate()
+ {
+    K = 1\&.0 / viscosity;
+    K *= k;
+ }
+.fi
+.PP
+
+.PP
+Here \fBCalculate()\fP is defined as a C++ inline function (to reduce computation overhead), which first assigns 1/viscosity to the global physical variable conductivity\&. Then the latter is multiplied by the permeability according to Darcy's law: 
+.br
+
+.PP
+K = k/v
+
+.PP
+Please refer to the documentation of the \fBOperand\fP class to see how to write mathematical expressions involving \fBOperand\fP objects\&.
+.SH "Participants"
+.PP
+An \fBInterrelation\fP object always contains Operands and a reference to the \fBPropertyDatabase\fP in order to register and manage the physical variables\&.
+.SH "Collaborations"
+.PP
+The \fBInterrelation\fP collaborates with \fBModel\fP and \fBRegion\fP objects in order to compute the desired properties\&. To apply an \fBInterrelation\fP to a model just submitt it to the \fBModel\fP:
+
+.PP
+ConductivityFromPerm my_interrelation( var_database_reference ); model\&.Apply( my_interrelation );
+.SH "Consequences"
+.PP
+To make use of the \fBInterrelation\fP capability of CSP one must define and compile \fBInterrelation\fP subclasses\&. A small library of these is provided but the intend is to build a large moderated internet repository of \fBInterrelation\fP objects from which all CSP users can profit and to which they can submit their own \fBInterrelation\fP subclasses\&. 
+.br
+.SH "Implementation"
+.PP
+The \fBInterrelation\fP uses a conditional loop within its \fBApply()\fP interface to establish the input values for each calculation\&. It tests the calculation results with \fBResultWithinRange()\fP, before these are communicated back to the \fBModel\fP object\&.
+
+.PP
+If an interrelation subclass involves scalar, vector, and/or tensor variables simultaneously, you can access these variables directly by using the AssignTo() method of the \fBOperand\fP class\&. This allows you to make use of the rich interfaces of the Scalar-, Vector-, and \fBTensorVariable\fP classes\&.
+.SH "Application Examples"
+.PP
+As already discussed above, one must define and compile \fBInterrelation\fP subclasses to make use of the \fBInterrelation\fP capability of CSP\&. The steps involved in this process are described in more detail below:
+
+.PP
+.IP "1." 4
+\fBTest\fP the interrelation among variables that you would like to express\&. This may involve graphing and designing the \fBInterrelation\fP in matlab or Mathematica or doing a curve fit through some experimental data within Excel\&. You will also have to identify the value range for each of the involved variables\&. Within this value range your mathematical formulation must produce meaningful results\&. This value range should be at least as wide as the value range that you specified in the variable database text file from which the programm initializes its variable storage\&. This is extremely important since it is the only way of ascertaining that the CSP code produces correct results once your model becomes complex and contains several interrelations\&. 
+.br
+
+.IP "2." 4
+Define your notation and make each symbol a reference to an \fBOperand\fP object\&. These references should be private data members of your subclass which you define through public derivation from the \fBInterrelation\fP class\&. Importantly, if you don't make Operands references, you will create new variables and your calculation will either not read any of the variable values stored in the \fBModel\fP object, or your calculation result will not be transmitted back into the \fBModel\fP\&.
+.IP "3." 4
+Register your variables in the constructor of your derived class\&. In C++ all references must be initialized in the constructor\&. First, you construct the base class, then you use the base class method \fBGlobalProperty()\fP to register the involved variables and finally you define which of these variables will store the result of your calculation\&. This is done with the base class method DefineResultProperty()\&. You also have to provide the \fBInterrelation\fP with output conditions (use method OutputConditions()\&. 
+.br
+ The use of these conditions is to prevent the \fBInterrelation\fP from overwriting variable values that you have fixed (e\&.g\&. DIRICH conditions) or to read variables that have not yet a meaningful value\&. 
+.br
+
+.IP "4." 4
+Define your own version of the pure virtual member function \fBCalculate()\fP of the \fBInterrelation\fP base class\&. This method will contain your mathematical formulation of the interrelation written using a normal notation involving * / + - < > <= >= and other mathematical operations as are defined as overloaded operators of the \fBOperand\fP class\&. Avoid the construction of too many temporaries within this method\&. If you need many, make them static such that they do not get destructed when the method goes out of scope\&. Also, if you write something like: 
+.PP
+.nf
+K += b + c - d * 24\&.5;
+
+.fi
+.PP
+
+.PP
+
+.PP
+you will automatically create a 4 temporary Operands (why ? - make this a little exercise)\&. 
+.br
+
+.PP
+.IP "5." 4
+Decide where to apply your \fBInterrelation\fP and pass it to the \fBModel\fP which will call the \fBInterrelation\fP method \fBApply()\fP, that performs a range check on the values that your calculation produces\&. 
+.br
+
+.IP "6." 4
+You have to define the application domain, if you want to have your interrelation applied only to a group of elements rather than the \fBModel\fP\&. Use the method RestrictApplicationTo() to achieve this\&.
+.PP
+
+.PP
+The calculations that you can perform with \fBInterrelation\fP subclasses are limited\&. You can only calculate result variables that are on the same or a higher level in the \fBModel\fP storage hierarchy\&. For instance you can calculate an element property from node, or constraint point property, but not the other way around\&. Use a visitor and the Parent references of the \fBNode\fP or IntegrationPoint classes to do this\&. Also if you calculate an element property from node property values, the interrelation will use an average over the nodes rather than individual values in the calculation\&. 
+.br
+ If this is too limiting for you than you can overrule the baseclass methods with your own method\&. Before you do that, however, consider to do your calculation as postprocessng operations of an Algorithm or via a \fBVisitor\fP object\&. 
+.br
+
+.PP
+\fBTodo\fP
+.RS 4
+(1) Remove interrelations after porting functionality to \fBPropertyHandle\fP and visitors (A)
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::Interrelation\fP< dim >::Interrelation (const \fBPropertyDatabase\fP< dim > & p)\fR [explicit]\fP"
+Builds \fBInterrelation\fP instance and stores a reference to the variable database\&. The private variables of the \fBInterrelation\fP are set as follows\&. The application target is the \fBModel\fP, the application level is the element, and the name of the interrelation and the result property are 'unspecified'\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIp\fP A constant reference to the \fBPropertyDatabase\fP inside of the \fBModel\fP object\&. Use the \fBModel\fP method Database() to obtain this reference\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Is called inside each interrelation subclass\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBPLACEMENT\fP \fBcsmp::Interrelation\fP< dim >::ApplicationLevel () const\fR [inline]\fP"
+Tells you on what level in the \fBModel\fP hierarchy your interrelation is going to be applied\&. The default is ELEMENT\&. If you do however carry out a calculation that only involves node variables, the application level is set to NODE automatically, to avoid that averages of variable values are taken\&. 
+.br
+.SH "Input Arguments"
+.PP
+To modify the application level manually, supply the desired target object as first method argument\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+Without first argument, \fBApplicationLevel()\fP returns the current setting of the private variable that defines the application level\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The application level defines the target set of objects in the \fBModel\fP hierarchy through which the \fBInterrelation\fP will loop in order to carry out the calculation\&. The default level is ELEMENT, but if you define Interrelations that only use node variables, the application level is automatically set to NODE\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Interrelation\fP< dim >::Apply (\fBModel\fP< dim > & sg)"
+Method for the application of Interrelations to the entire model including subregions and boundaries\&.
+
+.PP
+If the result variable of an interrelation is placed on the REGION or the BOUNDARY, other variables that are involved in the calculation are volume integrated over each region, then the result is normalized by the region volume/surface/length\&. 
+.SS "template<uint32_t dim> template<template< uint32_t > class CELL> void \fBcsmp::Interrelation\fP< dim >::Apply (\fBModelSubDomain\fP< dim, CELL > & gref)"
+
+.PP
+a simplex is any geometrical association of points \fBApply()\fP loops over the elements, nodes, or constraint points in a subregion of the \fBModel\fP mesh which has been identified as a group\&. It collects the values of the input variables of the interrelation, calls the method \fBCalculate()\fP, checks the computed results, and maps these back into the \fBModel\fP, ie\&. the MemoryManager\&. The output variable is stored back into the \fBModel\fP, if and only if it has a flag equivalent to the output flag of the interrelation and under the proviso that its value is inside the legitimate range\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIgref\fP a pointer to the target group to which the interrelation shall be applied to\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+A few restrictions apply with regard to the placement of the output variable and the placement of the variables which can be employed in an interrelation:
+
+.PP
+If the output variable is a node or constraint point variable, the interrelation must only involve node or constraint point variables, respectively\&. To explain why, let's assume that one of the input variables was an element variable but the output variable would be a node variable\&. Since the node simultaneously belongs to several elements whose properties may vary greatly, it is undefined from which element the interrelation should attain the element property input value\&. For this reason this type of interrelation is not supported\&.
+
+.PP
+If the output variable is an element variable but the calculation employs node and/or constraint point variables, \fBApply()\fP uses the Average() interface of the \fBElement\fP to obtain a mean value of the node property\&. In many cases, this is legitimate but there are cases where this is not so\&. For instance, if you have a depth-dependent nodal property and two adjacent triangular elements that break up a square, one of the elements will have two nodes at the top of the square and the other one has two at the bottom\&. The computed mean value will be different in these two elements which may be reflected in the result property\&.
+
+.PP
+Importantly, interrelations are but one way of computing local interdependencies of physical variables\&. Please refer to the documentation of the \fBVisitor\fP base class to see how one can achieve more flexibility\&. Also, in a CSMP mesh each node or constraint point knows its parent elements which are stored in counterclockwise (righthandrule) fashion in a corresponding vector (see \fBNode\fP and IntegrationPoint documetation)\&. This knowledge may be employed to compute node properties from element properties\&.
+
+.PP
+Finally, since each element knows its neighbors, mesh sweeps may be instrumentalized via visitor objects if so desired\&.
+.SH "Application Examples"
+.PP
+Is called by the \fBModel\fP when the interrelation is passed to it using the \fBApply()\fP interface\&.
+.SH "Messages"
+.PP
+\fBApply()\fP will report an error if the target group cannot be accessed (it may not have been defined in this case) or if the output variable of the interrelation is a \fBNode\fP or ConstrainPoint property, but the calculation involves \fBElement\fP properties\&. If the result property value of an interrelation is outside the legitimate range another error is reported together with the name of the property which is concerned\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Interrelation\fP< dim >::Calculate ()\fR [inline]\fP, \fR [virtual]\fP"
+Pure virtual function that the user overrides to express the interrelation between variables mathematically\&. A more detailed description of this inheritance process is given in the introduction to the class above\&.
+.SH "Implementation"
+.PP
+Within \fBCalculate()\fP the user has access to Operands defined in the private data section of the \fBInterrelation\fP subclass\&. These Operands can be used in mathematical and logical expressions, or associated variables can be assigned to local variables of double, scalar, vector or tensor type\&. Please refer to the documentation of the \fBOperand\fP interface to learn about the overloaded operators\&. 
+.br
+.SH "Application Examples"
+.PP
+To calculate local (element-restricted) interdependencies of physical variables inside of the CSP model\&.
+.SH "Messages"
+.PP
+Use the method PrintValue() of the \fBOperand\fP class to output computed property values to screen\&. 
+.PP
+Reimplemented in \fBcsmp::ArithmeticMean< dim, var >\fP, \fBcsmp::ComputeSecondPhaseSaturation< dim >\fP, \fBcsmp::Concatenate< dim, operation >\fP, \fBcsmp::ConcentrationFluidVolumeSource< dim >\fP, \fBcsmp::ConstantFactor< dim, operation >\fP, \fBcsmp::ExtractTensorVariableComponent< dim >\fP, \fBcsmp::ExtractTensorVariableEigenvalue< dim >\fP, \fBcsmp::ExtractTensorVariableRow< dim >\fP, \fBcsmp::ExtractVectorVariableComponent< dim >\fP, \fBcsmp::ExtractVectorVariableLength< dim >\fP, \fBcsmp::FluidDensityFromConcentration< dim >\fP, \fBcsmp::GroundwaterDarcyVelocity< dim >\fP, \fBcsmp::GroundwaterDarcyVelocity< dim >\fP, \fBcsmp::GroundwaterDarcyVelocity< dim >\fP, \fBcsmp::HydraulicHead< dim >\fP, \fBcsmp::HydrostaticPressure< dim >\fP, \fBcsmp::IAPWS_H2O_Conductivity< dim >\fP, \fBcsmp::IAPWS_H2O_dVdT_Source< dim >\fP, \fBcsmp::IAPWS_H2O_HeatTransferVelocity< dim >\fP, \fBcsmp::IAPWS_H2O_Storativity< dim >\fP, \fBcsmp::Limiter< dim >\fP, \fBcsmp::MaximumDifference< dim >\fP, \fBcsmp::ModifyPropertyWhere< dim >\fP, \fBcsmp::MohrCoulombFailure< dim >\fP, \fBcsmp::PotentialSource< dim >\fP, \fBcsmp::QuartzPrecipitation< dim >\fP, \fBcsmp::QuartzSolubility< dim >\fP, \fBcsmp::QuartzSolubilityNaCl< dim >\fP, \fBcsmp::StokesEinsteinDiffusivity< dim >\fP, and \fBcsmp::TransportStepSize< dim >\fP\&.
+.SS "template<uint32_t dim> \fBOperand\fP< dim > & \fBcsmp::Interrelation\fP< dim >::GlobalProperty (const char * var)\fR [protected]\fP"
+Associates a reference to an \fBOperand\fP object with a globally known physical variable registered in the \fBPropertyDatabase\fP\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvar\fP The name of the property which shall be associated with the \fBOperand\fP\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A reference to an \fBOperand\fP which is stored inside an \fBOperand\fP map inside of the \fBInterrelation\fP object\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Looks for existing property in the database and assigns it to an \fBOperand\fP by storing the two as a pair in an \fBOperand\fP map\&. 
+.br
+.SH "Application Examples"
+.PP
+Call inside of the constructor of an \fBInterrelation\fP subclass to initialize the corresponding \fBOperand\fP reference\&. 
+.br
+.SH "Messages"
+.PP
+Errors will be reported if the target property is unknown to the \fBPropertyDatabase\fP or if the \fBOperand\fP already exists in the \fBOperand\fP map\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Interrelation\fP< dim >::Name (const char * s)"
+Sets the name of an \fBInterrelation\fP subclass such that it can be output in an error message of the base class\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the \fBInterrelation\fP subclass is input as first method argument\&. While one can input arbitrary names it will be easier to detect errors which may arise, if the name is exactly identical to the name of the \fBInterrelation\fP subclass\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Assign a name to an interrelation subclass inside of its constructor\&. 
+.SS "template<uint32_t dim> std::map< std::string, \fBOperand\fP< dim > >::const_iterator \fBcsmp::Interrelation\fP< dim >::OperandsBegin () const\fR [inline]\fP"
+Give constant STL iterators to the first and last elements of a map of Operands stored inside of the \fBInterrelation\fP\&. In this map, the name of the physical variable which is associated with the \fBOperand\fP is used as a key to the later\&. This implies that there may only be a single \fBOperand\fP per physical variable\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+A constant iterator to the \fBOperand\fP map\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Gives the \fBModel\fP access to the list of Operands inside an \fBInterrelation\fP\&. The constant iterators are also used inside of the \fBInterrelation\fP to avoid accidential modification of any property other than the result property\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Interrelation\fP< dim >::OutputCondition (\fBOperand\fP< dim > & var, \fBVARIABLE_FLAG\fP output)\fR [protected]\fP"
+\fBOutputCondition()\fP determines the flag of the locations in the mesh where the global physical variable which is modified by the \fBInterrelation\fP is allowed to be stored back into the \fBModel\fP object\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvar\fP a reference to the \fBOperand\fP which is associated with the output variable 
+.br
+\fIoutput\fP the output flag, controls at which locations the calculated variable value is output to the \fBModel\fP and where the flag differs from the local variable flag and output is therefore prohibited\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Calls the \fBOperand\fP class interface \fBOutputCondition()\fP\&.
+.SH "Application Examples"
+.PP
+\fBOutputCondition()\fP must be called inside the constructor of the \fBInterrelation\fP subclass\&. 
+.SS "template<uint32_t dim> std::map< std::string, \fBOperand\fP< dim > >::iterator \fBcsmp::Interrelation\fP< dim >::Result ()\fR [inline]\fP"
+Returns an iterator to the result \fBOperand\fP / property of a calculation\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+An iterator to an STL map where the name of each physical variable is used as a key to store the Operands\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Is used inside \fBApply()\fP to modify the result property\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Interrelation\fP< dim >::ResultProperty (const char * var)\fR [protected]\fP"
+Specifies which property will be written back to the \fBModel\fP once the calculation has been performed\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvar\fP the name of the physical variable which shall be modified by the calculation\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Method defines which \fBOperand\fP is associated with the result property of the calculation and sets the application level accordingly, ie\&. if the result property is an element variable the target level will be the element and so forth\&.
+.SH "Application Examples"
+.PP
+Call inside of the constructor of the \fBInterrelation\fP subclass to define which property shall be modified by the \fBInterrelation\fP\&.
+.SH "Messages"
+.PP
+Errors will be reported if the target property is unknown to the \fBPropertyDatabase\fP or if the \fBOperand\fP already exists in the \fBOperand\fP map\&. 
+.SS "template<uint32_t dim> bool \fBcsmp::Interrelation\fP< dim >::ResultWithinRange ()\fR [inline]\fP"
+Uses the value range that Operands get for the associated variable from the \fBPropertyDatabase\fP to test whether the calculated result is within range\&. To modify the range inside the \fBOperand\fP, call on the public interface of the \fBOperand\fP class inside the \fBInterrelation\fP subclass constructor to avoid redefining the range during each call to \fBCalculate()\fP\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The method returns the boolean variable 'true' if the value ofthe tested physical variable is within the specified range\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Calls the \fBOperand\fP method IsWithinRange()\&.
+.SH "Application Examples"
+.PP
+Is called inside the \fBInterrelation\fP method \fBApply()\fP on each computed variable value\&.
+.SH "Messages"
+.PP
+If the computed value is out of range, an error is reported\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

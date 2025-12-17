@@ -1,0 +1,46 @@
+\doxysection{CFL\+\_\+\+VVCase.\+h}
+\hypertarget{_c_f_l___v_v_case_8h_source}{}\label{_c_f_l___v_v_case_8h_source}\index{tests/integration/CFL\_VVCase.h@{tests/integration/CFL\_VVCase.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CFL\_TESTCASE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CFL\_TESTCASE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_c_f_l___test_data}{CFL\_TestData}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_f_l___test_case}{CFL\_TestCase}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ CFL\_TestCase();}
+\DoxyCodeLine{00015\ \ \ \ \ \string~CFL\_TestCase();}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{///\ Set\ model}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_c_f_l___test_case_a8ddfa19df1cd7a3155a3b0114007bd4b}{SetModel}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3>\&\ model,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mobilityRatio,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ velX,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phi\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputVTU(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3>\&\ model,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fileName,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ time\ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ SetFront(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3>\&\ model,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ satOil,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ xFront\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ Test(\ \mbox{\hyperlink{structcsmp_1_1_c_f_l___test_data}{CFL\_TestData}}\&\ data,\ \textcolor{keywordtype}{double}\ satOil,\ \textcolor{keywordtype}{double}\ tolFront\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ CFL\_TESTCASE\_H}}
+
+\end{DoxyCode}

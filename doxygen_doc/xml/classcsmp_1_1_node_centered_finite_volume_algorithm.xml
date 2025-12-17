@@ -1,0 +1,1301 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_node_centered_finite_volume_algorithm" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NodeCenteredFiniteVolumeAlgorithm</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a4699a8f11a2994ee9da4df3bc159f815" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        <definition>Region&lt;dim&gt;&amp; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::gref_</definition>
+        <argsstring></argsstring>
+        <name>gref_</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::gref_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="146" column="22" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad1ac872e3817bd1d994bcb7ae192e5d4" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref></type>
+        <definition>SparseMatrix csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::LHS</definition>
+        <argsstring></argsstring>
+        <name>LHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::LHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="147" column="28" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a85933acb4e5f72acd074db5ca0a78337" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::RHS</definition>
+        <argsstring></argsstring>
+        <name>RHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::RHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="148" column="20" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a50932be0524022cdf92381cfd7ff960c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::RESULT</definition>
+        <argsstring></argsstring>
+        <name>RESULT</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::RESULT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="148" column="24" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a012309d3ee290394cccf5c8165a0e12e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::DN</definition>
+        <argsstring></argsstring>
+        <name>DN</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::DN</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="149" column="20" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5b7f45763066a709161eebfcb7d6d59d" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::DNT</definition>
+        <argsstring></argsstring>
+        <name>DNT</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::DNT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="149" column="23" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a061c14544ded172e2fb8f579f5bac774" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> *</type>
+        <definition>Solver* csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::solver_</definition>
+        <argsstring></argsstring>
+        <name>solver_</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::solver_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="150" column="27" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a3aeb4b88e5df3173e9bae052bc1a9472" prot="private" static="no" mutable="no">
+        <type>const uint32_t</type>
+        <definition>const uint32_t csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::MAX_NODES_GAUSS_SOLVER</definition>
+        <argsstring></argsstring>
+        <name>MAX_NODES_GAUSS_SOLVER</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::MAX_NODES_GAUSS_SOLVER</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="151" column="28" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a1afc23449e04f68588ae21bc1718ecc8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::firstCall_</definition>
+        <argsstring></argsstring>
+        <name>firstCall_</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::firstCall_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="152" column="28" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a2e4345c8615ac801f4c7318fabbe97f9" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="153" column="28" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad2d8a8a72042a649e5e5585224c9cf96" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::NodeCenteredFiniteVolumeAlgorithm</definition>
+        <argsstring>(Region&lt; dim &gt; &amp;)</argsstring>
+        <name>NodeCenteredFiniteVolumeAlgorithm</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::NodeCenteredFiniteVolumeAlgorithm</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Initializes LHS, XVEC, and RHS arrays. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="21" column="14" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="24" bodyend="47"/>
+        <references refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad2d8a8a72042a649e5e5585224c9cf96" compoundref="_node_centered_finite_volume_algorithm_8cpp" startline="24" endline="47">csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::NodeCenteredFiniteVolumeAlgorithm</references>
+        <referencedby refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad2d8a8a72042a649e5e5585224c9cf96" compoundref="_node_centered_finite_volume_algorithm_8cpp" startline="24" endline="47">csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::NodeCenteredFiniteVolumeAlgorithm</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1aab7ade7a0a25d6bd8daf4bb7e8d121e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::~NodeCenteredFiniteVolumeAlgorithm</definition>
+        <argsstring>()</argsstring>
+        <name>~NodeCenteredFiniteVolumeAlgorithm</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::~NodeCenteredFiniteVolumeAlgorithm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="22" column="5" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="53" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a4fa47dcf893dff94acc50c3863780bc6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::ResetLHS</definition>
+        <argsstring>(size_t finite_volumes)</argsstring>
+        <name>ResetLHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::ResetLHS</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>finite_volumes</declname>
+          <defname>nodes</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes potential leftover entries from previous solution matrix or re-initializes the righthand <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> to zero. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The size of the computational problem = number of FVs. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="24" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="70" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5673b821fe484ad42a788c2c595e4287" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::ResetRHS</definition>
+        <argsstring>(size_t finite_volumes)</argsstring>
+        <name>ResetRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::ResetRHS</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>finite_volumes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="25" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="79" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a8daa2aa30e28d52ab52f011b57d92f46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::ResetRow</definition>
+        <argsstring>(size_t nid)</argsstring>
+        <name>ResetRow</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::ResetRow</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="26" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="93" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a4b1b71188f280b0e9177a8f05978093a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::ZeroRHS</definition>
+        <argsstring>(size_t nid)</argsstring>
+        <name>ZeroRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::ZeroRHS</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="27" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a914b392e17a52abc974135465a1625aa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AddToLHS</definition>
+        <argsstring>(size_t i, size_t j, double addition)</argsstring>
+        <name>AddToLHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AddToLHS</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>addition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="29" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="158" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a0eee610dd17ee999f602ac7c86dd7eac" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AddToRHS</definition>
+        <argsstring>(size_t i, double addition)</argsstring>
+        <name>AddToRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AddToRHS</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>addition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="30" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="162" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a51403b08171910abf6d8d2a1b3c338b3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AddToRESULT</definition>
+        <argsstring>(size_t i, double addition)</argsstring>
+        <name>AddToRESULT</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AddToRESULT</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>addition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="31" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="166" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a84469e74aa20978efaf7d53fdc3b2790" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AssignRESULT</definition>
+        <argsstring>(size_t i, double result)</argsstring>
+        <name>AssignRESULT</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AssignRESULT</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="32" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="170" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5d8403471f0926b99e4f4dda82342f3d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::Result</definition>
+        <argsstring>(size_t i) const</argsstring>
+        <name>Result</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::Result</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="33" column="14" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="174" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a45be87905b072ab91b6701e5828f25a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; double &gt; &amp;</type>
+        <definition>std::vector&lt; double &gt; &amp; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::ResultVector</definition>
+        <argsstring>()</argsstring>
+        <name>ResultVector</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::ResultVector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="34" column="18" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="178" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a91937d66d3a8874f20c91ca9c3aedd9e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; double &gt; &amp;</type>
+        <definition>std::vector&lt; double &gt; &amp; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::RHSVector</definition>
+        <argsstring>()</argsstring>
+        <name>RHSVector</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::RHSVector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="35" column="18" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="182" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a13d1a157e50860bb99ec63bc3de6354a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::LHS_Value</definition>
+        <argsstring>(size_t i, size_t j) const</argsstring>
+        <name>LHS_Value</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::LHS_Value</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="37" column="13" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="194" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1aa3cea38faf26f919ba050e0acef9e871" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; double &gt;::iterator</type>
+        <definition>std::vector&lt; double &gt;::iterator csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::ResultsBegin</definition>
+        <argsstring>()</argsstring>
+        <name>ResultsBegin</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::ResultsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="40" column="38" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="186" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a6f3ffc97b7b64e18a72891d4fdf179c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; double &gt;::iterator</type>
+        <definition>std::vector&lt; double &gt;::iterator csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::ResultsEnd</definition>
+        <argsstring>()</argsstring>
+        <name>ResultsEnd</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::ResultsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="41" column="38" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="190" bodyend="191"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1ab4198a2950fed709aa52f763bfaaa7eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateLHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;es, double time_multiplier)</argsstring>
+        <name>AccumulateLHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateLHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <declname>es</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_multiplier</declname>
+        </param>
+        <briefdescription>
+<para>FV volume terms in diagonal &amp; first-order terms=inter-FV fluxes in off-diagonal. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Accumulates the volume over the time-increment and the outgoing facet- integrated fluxes into the diagonal of the solution matrix. <linebreak/>
+</para>
+<para>An upstream coupling is created by accumulating the fluxes that come into the finite-volumes sectors as off-diagonal elements. For each finite-volume facet, there are the nodes i (inside) and j(outside). <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The current <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> and uptodate FiniteVolumeProcessor are used to retrieve the variables of interest. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="44" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="322" bodyend="363"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a1e3c776119d37629157fa2eb6ef282c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateMatrix_NonlinearNewtonRaphson</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;SAT0, double time_multiplier)</argsstring>
+        <name>AccumulateMatrix_NonlinearNewtonRaphson</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateMatrix_NonlinearNewtonRaphson</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>SAT0</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_multiplier</declname>
+        </param>
+        <briefdescription>
+<para>Accumulation Process for Nonlinear Systems. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="48" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="373" bodyend="400"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1ab002c9b04c145a96cd33e91f718a6a37" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateResidual_NonlinearNewtonRaphson</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;SAT0, double time_multiplier)</argsstring>
+        <name>AccumulateResidual_NonlinearNewtonRaphson</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateResidual_NonlinearNewtonRaphson</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>SAT0</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_multiplier</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="51" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="414" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a641d17ca638c171e52ea428a7a2c1605" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateMatrixAtBoundary_NonlinearNewtonRaphson</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;SAT0, size_t nid, uint32_t pnid, double time_multiplier, const csmp::Index &amp;adv1_key)</argsstring>
+        <name>AccumulateMatrixAtBoundary_NonlinearNewtonRaphson</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateMatrixAtBoundary_NonlinearNewtonRaphson</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>SAT0</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>pnid</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_multiplier</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv1_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="54" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="440" bodyend="480"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a005a0df5dca76ed9d9a5825bdf9fcd8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateResidualAtBoundary_NonlinearNewtonRaphson</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;SAT0, size_t nid, uint32_t pnid, double time_multiplier, const csmp::Index &amp;adv1_key)</argsstring>
+        <name>AccumulateResidualAtBoundary_NonlinearNewtonRaphson</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateResidualAtBoundary_NonlinearNewtonRaphson</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>SAT0</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>pnid</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_multiplier</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv1_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="58" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="486" bodyend="505"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1af056277167749f6157eeec95cf51e731" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::CompensateInflowOutFlowBoundaries</definition>
+        <argsstring>(size_t nid, const double &amp;inflow, const double &amp;flux_balance)</argsstring>
+        <name>CompensateInflowOutFlowBoundaries</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::CompensateInflowOutFlowBoundaries</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nid</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>inflow</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>flux_balance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="62" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="509" bodyend="520"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1afc23bea8fa6e8b1b628fa78d92214fac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateRHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;es, double time_multiplier)</argsstring>
+        <name>AccumulateRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <declname>es</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_multiplier</declname>
+        </param>
+        <briefdescription>
+<para>Backward-Euler righthandside (psi at t0 * pore-volume) / dt for non-iterative computations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="67" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="556" bodyend="563"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a976b2461e257303f7248692d0bbf292a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateRHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;es, std::vector&lt; double &gt; &amp;SAT0, double time_multiplier)</argsstring>
+        <name>AccumulateRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <declname>es</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>SAT0</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_multiplier</declname>
+        </param>
+        <briefdescription>
+<para>for iterative computations </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Righthand side for Backward-Euler FD time stepping <linebreak/>
+ <verbatim>RHS = (FV-volume * sat_t0) / time-increment
+</verbatim></para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The current <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> and up-to-date FiniteVolumeProcessor are used to retrieve the variables of interest. The saturations from the current timelevel are supplied by the <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> SAT0. The time-multiplier is needed to divide the finite-volume sector volume by. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="70" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="540" bodyend="550"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a3e11b210d4ae1ffd5fa475168bdbdef9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateHigherOrderRHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;)</argsstring>
+        <name>AccumulateHigherOrderRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateHigherOrderRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <briefdescription>
+<para>higher-order solution is added from RHS (first order in time) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Higher-order fluxes are calculated from the slope-limited saturations at the current and previous time levels and the corresponding volume fluxes integrated over the facets dividing the finite-volume sectors. <linebreak/>
+</para>
+<para>The contributions from the two time levels are weighted using the theta limiter value computed for each facet. When theta=1 the scheme is fully implicit, i.e. only the contributions for the new time level are considered. Theta limiting attempts however the equally weight the contributions on the basis of their magnitude. If this is achieved, the scheme is second-order accurate in time and numerical diffusion is minimized. <linebreak/>
+</para>
+<para>The computed higher-order fluxes are subtracted from the righthand vector.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>To compute the higher-order fluxes, the method requires access to the current <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> and up-to-date finite volume processor object. <linebreak/>
+</para>
+<para>The method requires the facet-fluxes and the slope-limited interpolated values of the transported variable at the facet integration points. The temporal limiter value, theta, is supplied as a 7th method argument. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title></sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>In higher-order theta-limited transport scheme. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="73" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="598" bodyend="612"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad58cd8f8cc016851ae34854069a7533b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateHigherOrderRHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;, const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;FACETFLUXES0, const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;LTDSATS0)</argsstring>
+        <name>AccumulateHigherOrderRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateHigherOrderRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>FACETFLUXES0</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>LTDSATS0</declname>
+        </param>
+        <briefdescription>
+<para>higher-order solution is subtracted from RHS (second order in time) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="76" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="615" bodyend="635"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad5dede11e18c607d2bff7f9ba175cf66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AddToRHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;)</argsstring>
+        <name>AddToRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AddToRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <briefdescription>
+<para>first-order Backward Euler solution is added to RHS </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Add first-order Backward Euler solution to RHS (using upstream saturations). This integrates upstream sats over the segments by summing (flux * saturation) products over faces. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>References to the current element, finite-volume stencil processor, and the fluxes integrated over the facets inside the current element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="81" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="649" bodyend="668"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a3fb1d6cf60a34bf5a7841e8b696644d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AddToRHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;SAT0)</argsstring>
+        <name>AddToRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AddToRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>SAT0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="82" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="673" bodyend="692"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a9c44081645d4091ddb16bb280b4970fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::SubtractNonConservativeOutFluxesFromRHS</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;, const std::vector&lt; double &gt; &amp;FLUX_BALANCE, const csmp::Index &amp;ad_key)</argsstring>
+        <name>SubtractNonConservativeOutFluxesFromRHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::SubtractNonConservativeOutFluxesFromRHS</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>FLUX_BALANCE</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>ad_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>including potential point sources or sinks in the model.</para>
+<para>If the fluxbalance is negative, this means that there is outflow from a truncated boundary cell that only has inward pointing normals.</para>
+<para>This function compensates this negative balance.</para>
+<para><simplesect kind="warning"><para>THIS FUNCTION ACTUALLY ADDS CONTRIBUTIONS DUE TO NON_CONSERVATIVE OUTFLUXES To RHS </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="84" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="760" bodyend="789"/>
+        <references refid="group___c_s_m_pglobal_enums_1gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858" compoundref="_box_8h" startline="63">csmp::NOT</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1acb0e611e97f4fb51dbaea2031161d3b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateIntegral_DNT_op_DN_dV_LHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;es)</argsstring>
+        <name>AccumulateIntegral_DNT_op_DN_dV_LHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateIntegral_DNT_op_DN_dV_LHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <declname>es</declname>
+        </param>
+        <briefdescription>
+<para>diffusion and other divergent fluxes </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Uses the finite element method to add diffusion to the FV scheme.</para>
+<para><simplesect kind="attention"><para>this method relies on uptodate <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> indices. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="89" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="212" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a89da3cce82afd2c1683740b918cadcb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateIntegral_DN_op_dS_LHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;es)</argsstring>
+        <name>AccumulateIntegral_DN_op_dS_LHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateIntegral_DN_op_dS_LHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <declname>es</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="91" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="241" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a56055d50cd78bbb7a308f583cc59219f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateSectorSourceTermsInLHS</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;)</argsstring>
+        <name>AccumulateSectorSourceTermsInLHS</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateSectorSourceTermsInLHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <defname>es</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Source term per finite volume sector is added to the diagonal of the matrix. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="93" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="284" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a456c9b1b0d750757adbf12762aaacc26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateFluxUpwindSaturationProducts</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;es)</argsstring>
+        <name>AccumulateFluxUpwindSaturationProducts</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateFluxUpwindSaturationProducts</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <declname>es</declname>
+        </param>
+        <briefdescription>
+<para>accumulates FV volume terms and first-order terms=inter-FV fluxes </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The transport velocity values projected onto the facet normals and multiplied with the facet areas are multiplied with the upstream values of the transported variable at each facet integration point and accumulated into the solution <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> as the upstream weighted first-order fluxes. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>To assign the higher order fluxes, the method needs access to the current finite element and the associated FV stencil processor. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="96" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="137" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a7e14f1976459313bab42f3ee7f3d7376" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::AccumulateHigherOrderFluxSaturationProducts</definition>
+        <argsstring>(const StencilProcessor&lt; dim &gt; &amp;es)</argsstring>
+        <name>AccumulateHigherOrderFluxSaturationProducts</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::AccumulateHigherOrderFluxSaturationProducts</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_stencil_processor" kindref="compound">StencilProcessor</ref>&lt; dim &gt; &amp;</type>
+          <declname>es</declname>
+        </param>
+        <briefdescription>
+<para>higher-order version for the case when fractional flows are considered </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The transport velocity values projected onto the facet normals and multiplied with the facet areas are multiplied with the (limited) &apos;isat&apos; variable values at each facet integration point to define the higher order fluxes. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>To assign the higher order fluxes, the method needs access to the current finite element and the associated FV stencil processor. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="99" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="184" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a0759598c00e9283d0c5e803f89927e67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::SolveMatrixEquation</definition>
+        <argsstring>()</argsstring>
+        <name>SolveMatrixEquation</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::SolveMatrixEquation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The matrices and vectors are copied to condensed row storage and are then used by the AMG to find a solution. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="101" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="801" bodyend="818"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a0a419d46c8a564551974d05aa81743d4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::OutputResults</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const csmp::Index &amp;adv_key, bool show_range, uint32_t var_comp_nr=0) const</argsstring>
+        <name>OutputResults</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::OutputResults</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv_key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>var_comp_nr</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>results are stored back in the <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> where condition flag is PLAIN </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Where the condition flag is not DIRICH, results are mapped from solution <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> back to finite volume cells after performing a range cheque. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the result is out of range at more than 10 nodes, an error message is returned. If errors occur at more than 2 per cent of the nodes, an &apos;out_of_range&apos; exception is thrown. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="104" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="842" bodyend="959"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" compoundref="_c_s_m_p__global__enumerations_8h" startline="59">csmp::ANY</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a18d4907cb2fbcab5f3c1e2e56382936c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::OutputResults</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, size_t result_phase, const csmp::Index &amp;adv1_key, const csmp::Index &amp;adv2_key, bool show_range) const</argsstring>
+        <name>OutputResults</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::OutputResults</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>result_phase</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv1_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv2_key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <briefdescription>
+<para>multiphase version for range 0..1 (adv1=wetting phase=1) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates saturation water as well! - by default phase1 = wetting phase multiphase version - assumes range to be between 0 and 1 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="110" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="981" bodyend="1077"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1ae87a51acb36726ba4cbe9da909e0518b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::OutputResultsWithL2NormRes</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const csmp::Index &amp;adv_key, bool show_range) const</argsstring>
+        <name>OutputResultsWithL2NormRes</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::OutputResultsWithL2NormRes</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv_key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <briefdescription>
+<para>testing only: results are stored back in the <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> where condition flag is PLAIN </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000095"><xreftitle>Todo</xreftitle><xrefdescription><para>JM move these kinds of testing methods into the subclasses that are used for the testing: JM addition </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="118" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="1137" bodyend="1188"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5207672f7ec8fd564d09bc3e736b2ab6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::OutputResults_NonlinearNewtonRaphson</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, size_t result_phase, const csmp::Index &amp;adv1_key, const csmp::Index &amp;adv2_key, bool show_range)</argsstring>
+        <name>OutputResults_NonlinearNewtonRaphson</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::OutputResults_NonlinearNewtonRaphson</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>result_phase</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv1_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv2_key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <briefdescription>
+<para>multiphase version for range 0..1 (adv1=wetting phase=1) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000096"><xreftitle>Todo</xreftitle><xrefdescription><para>JM move these kinds of testing methods into the subclasses that are used for the testing:</para>
+</xrefdescription></xrefsect></para>
+<para>i.e., class NodeCenteredFiniteVolumeAlgorithm_Test : public <ref refid="classcsmp_1_1_node_centered_finite_volume_algorithm" kindref="compound">NodeCenteredFiniteVolumeAlgorithm</ref> { ...</para>
+<para>and do not just sloppily copy everything without cleaning up the parts that are no longer used or have changed.</para>
+<para><xrefsect id="todo_1_todo000097"><xreftitle>Todo</xreftitle><xrefdescription><para>SMK: Dear SKM (from JM): This method is needed by the Newton Raphson procedure. Please contact me directly if these things are important. It is NOT a testing method. I do my best to not perform any &quot;sloppy&quot; copying. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="121" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="1205" bodyend="1286"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a363d3a3afa77dc2706f6769837e5b0b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::OutputResults_NonlinearNewtonRaphson</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, size_t result_phase, const csmp::Index &amp;adv1_key, const csmp::Index &amp;adv2_key, bool show_range, std::vector&lt; double &gt; &amp;, std::vector&lt; double &gt; &amp;)</argsstring>
+        <name>OutputResults_NonlinearNewtonRaphson</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::OutputResults_NonlinearNewtonRaphson</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>result_phase</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv1_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv2_key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <defname>DS</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <defname>SN</defname>
+        </param>
+        <briefdescription>
+<para>multiphase version for range 0..1 (adv1=wetting phase=1) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Save results for saturation in order to use it on the next nonlinear iteration step. Updates saturation water as well! - by default phase1 = wetting phase multiphase version - assumes range to be between 0 and 1 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="128" column="13" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="1093" bodyend="1127"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a7a3c6c7dcd90a0e5edae4333d64f0e21" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS &amp;</type>
+        <definition>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS &amp; csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::GetSolverSettings</definition>
+        <argsstring>()</argsstring>
+        <name>GetSolverSettings</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::GetSolverSettings</qualifiedname>
+        <briefdescription>
+<para>interface to solver settings and instance </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns the settings object if SAMG is used to solve the matrix equations </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="137" column="42" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="107" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a59c102b3954ac7f4d19d69cd20e6551b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>CSMP_DEFAULT_LINEAR_SOLVER *</type>
+        <definition>CSMP_DEFAULT_LINEAR_SOLVER * csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::GetSolver</definition>
+        <argsstring>()</argsstring>
+        <name>GetSolver</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::GetSolver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>returns the solver object if SAMG is used to solve the matrix equations It is important to note that this, just like the old method above (GetSolverSettings), asks for an instance of <ref refid="classcsmp_1_1_s_a_m_g___solver" kindref="compound">SAMG_Solver</ref> that may not exist, given that if the problem is smaller than 50 nodes, a Gauss_Jordan solver is created by default. I believe this needs re-consideration. Rather , I would utilize <ref refid="classcsmp_1_1_s_a_m_g___solver" kindref="compound">SAMG_Solver</ref> even for small problems, with special settings. <ndash/> Julian 24-09.2013 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="138" column="32" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp" bodystart="119" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a6dd7e73c9a1bc8375ee1be2020d47d6b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::Verbose</definition>
+        <argsstring>(bool verbose)</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::Verbose</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="141" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a8d635b630c8fddb000819f1b4a20ac31" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::Verbose</definition>
+        <argsstring>()</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::Verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="142" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="142" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_centered_finite_volume_algorithm_1a77da4dd365e6549b862985d5833064c7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;::Verbose</definition>
+        <argsstring>() const</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::NodeCenteredFiniteVolumeAlgorithm::Verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="143" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="143" bodyend="143"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NodeCenteredFiniteVolumeAlgorithm&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_node_centered_finite_volume_algorithm"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" line="19" column="1" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h" bodystart="19" bodyend="154"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a456c9b1b0d750757adbf12762aaacc26" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateFluxUpwindSaturationProducts</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a7e14f1976459313bab42f3ee7f3d7376" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateHigherOrderFluxSaturationProducts</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a3e11b210d4ae1ffd5fa475168bdbdef9" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateHigherOrderRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad58cd8f8cc016851ae34854069a7533b" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateHigherOrderRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a89da3cce82afd2c1683740b918cadcb5" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateIntegral_DN_op_dS_LHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1acb0e611e97f4fb51dbaea2031161d3b8" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateIntegral_DNT_op_DN_dV_LHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ab4198a2950fed709aa52f763bfaaa7eb" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateLHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a1e3c776119d37629157fa2eb6ef282c7" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateMatrix_NonlinearNewtonRaphson</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a641d17ca638c171e52ea428a7a2c1605" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateMatrixAtBoundary_NonlinearNewtonRaphson</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ab002c9b04c145a96cd33e91f718a6a37" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateResidual_NonlinearNewtonRaphson</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a005a0df5dca76ed9d9a5825bdf9fcd8c" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateResidualAtBoundary_NonlinearNewtonRaphson</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1afc23bea8fa6e8b1b628fa78d92214fac" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a976b2461e257303f7248692d0bbf292a" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a56055d50cd78bbb7a308f583cc59219f" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AccumulateSectorSourceTermsInLHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a914b392e17a52abc974135465a1625aa" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AddToLHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a51403b08171910abf6d8d2a1b3c338b3" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AddToRESULT</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a0eee610dd17ee999f602ac7c86dd7eac" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AddToRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad5dede11e18c607d2bff7f9ba175cf66" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AddToRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a3fb1d6cf60a34bf5a7841e8b696644d3" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AddToRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a84469e74aa20978efaf7d53fdc3b2790" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>AssignRESULT</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1af056277167749f6157eeec95cf51e731" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>CompensateInflowOutFlowBoundaries</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a012309d3ee290394cccf5c8165a0e12e" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>DN</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5b7f45763066a709161eebfcb7d6d59d" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>DNT</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a1afc23449e04f68588ae21bc1718ecc8" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>firstCall_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a59c102b3954ac7f4d19d69cd20e6551b" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>GetSolver</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a7a3c6c7dcd90a0e5edae4333d64f0e21" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>GetSolverSettings</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a4699a8f11a2994ee9da4df3bc159f815" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>gref_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad1ac872e3817bd1d994bcb7ae192e5d4" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>LHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a13d1a157e50860bb99ec63bc3de6354a" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>LHS_Value</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a3aeb4b88e5df3173e9bae052bc1a9472" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>MAX_NODES_GAUSS_SOLVER</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ad2d8a8a72042a649e5e5585224c9cf96" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>NodeCenteredFiniteVolumeAlgorithm</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a0a419d46c8a564551974d05aa81743d4" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>OutputResults</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a18d4907cb2fbcab5f3c1e2e56382936c" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>OutputResults</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5207672f7ec8fd564d09bc3e736b2ab6" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>OutputResults_NonlinearNewtonRaphson</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a363d3a3afa77dc2706f6769837e5b0b2" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>OutputResults_NonlinearNewtonRaphson</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1ae87a51acb36726ba4cbe9da909e0518b" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>OutputResultsWithL2NormRes</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a4fa47dcf893dff94acc50c3863780bc6" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>ResetLHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5673b821fe484ad42a788c2c595e4287" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>ResetRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a8daa2aa30e28d52ab52f011b57d92f46" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>ResetRow</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a50932be0524022cdf92381cfd7ff960c" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>RESULT</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a5d8403471f0926b99e4f4dda82342f3d" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>Result</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1aa3cea38faf26f919ba050e0acef9e871" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>ResultsBegin</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a6f3ffc97b7b64e18a72891d4fdf179c9" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>ResultsEnd</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a45be87905b072ab91b6701e5828f25a9" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>ResultVector</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a85933acb4e5f72acd074db5ca0a78337" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>RHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a91937d66d3a8874f20c91ca9c3aedd9e" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>RHSVector</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a0759598c00e9283d0c5e803f89927e67" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>SolveMatrixEquation</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a061c14544ded172e2fb8f579f5bac774" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>solver_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a9c44081645d4091ddb16bb280b4970fd" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>SubtractNonConservativeOutFluxesFromRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a6dd7e73c9a1bc8375ee1be2020d47d6b" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a8d635b630c8fddb000819f1b4a20ac31" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a77da4dd365e6549b862985d5833064c7" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a2e4345c8615ac801f4c7318fabbe97f9" prot="private" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1a4b1b71188f280b0e9177a8f05978093a" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>ZeroRHS</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_algorithm_1aab7ade7a0a25d6bd8daf4bb7e8d121e9" prot="public" virt="non-virtual"><scope>csmp::NodeCenteredFiniteVolumeAlgorithm</scope><name>~NodeCenteredFiniteVolumeAlgorithm</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

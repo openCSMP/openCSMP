@@ -10,8 +10,8 @@ namespace csmp {
 */
 TensorVariable<2U>::TensorVariable()
   : flag{{ANY,ANY}},
-    data{numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),
-         numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN()}
+    data{ { {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN()},
+            {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN()}  } }
   {
   }
 
@@ -25,7 +25,7 @@ TensorVariable<2U>::TensorVariable()
 */
 TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, double val )
   : flag{{f,f}},
-    data{val,0.,0.,val}
+    data{ { {val,0.},{0.,val} } }
  {
  }
 
@@ -36,7 +36,7 @@ TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f,
                                     double v11, double v12,
                                     double v21, double v22 )
   : flag{{f,f}},
-    data{v11,v12,v21,v22}
+    data{ { {v11,v12},{v21,v22} } }
  {
  }
  
@@ -46,7 +46,7 @@ TensorVariable<2U>::TensorVariable( const VARIABLE_FLAG& f11, const VARIABLE_FLA
                                     const double&  v11, const double&  v12,
                                     const double&  v21, const double&  v22 )
   : flag{{f11,f22}},
-    data{v11,v12,v21,v22}
+    data{ { {v11,v12},{v21,v22} } }
  {
  }
 

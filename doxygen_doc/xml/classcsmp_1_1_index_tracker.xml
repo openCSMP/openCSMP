@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_index_tracker" kind="class" language="C++" prot="public">
+    <compoundname>csmp::IndexTracker</compoundname>
+    <includes refid="_index_tracker_8h" local="no">IndexTracker.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_index_tracker_1a0270b3c502a9687464f7bc3e2248a0aa" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> *, std::string &gt;</type>
+        <definition>std::map&lt;csmp::Index*,std::string&gt; csmp::IndexTracker::trackedIndices_</definition>
+        <argsstring></argsstring>
+        <name>trackedIndices_</name>
+        <qualifiedname>csmp::IndexTracker::trackedIndices_</qualifiedname>
+        <briefdescription>
+<para>Pointers to all indices and corresponding parameter name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="69" column="15" bodyfile="source/includes/model/IndexTracker.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1afb8a61a158005f8dc21a134693ad5fa7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IndexTracker::IndexTracker</definition>
+        <argsstring>()</argsstring>
+        <name>IndexTracker</name>
+        <qualifiedname>csmp::IndexTracker::IndexTracker</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="40" column="7" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="10" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a2838af55c8a3034bd58223e8310ce118" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IndexTracker::~IndexTracker</definition>
+        <argsstring>()</argsstring>
+        <name>~IndexTracker</name>
+        <qualifiedname>csmp::IndexTracker::~IndexTracker</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="41" column="7" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="16" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a67c554f250ba3fe2353434ca947e9046" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> *, std::string &gt;::const_iterator</type>
+        <definition>std::map&lt; csmp::Index *, std::string &gt;::const_iterator csmp::IndexTracker::IndicesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>IndicesBegin</name>
+        <qualifiedname>csmp::IndexTracker::IndicesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="43" column="33" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="23" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a64858ea9a5b722ec8e7a68a7d32f3339" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> *, std::string &gt;::const_iterator</type>
+        <definition>std::map&lt; csmp::Index *, std::string &gt;::const_iterator csmp::IndexTracker::IndicesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>IndicesEnd</name>
+        <qualifiedname>csmp::IndexTracker::IndicesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="44" column="33" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="29" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a16cc894f0e6e980b0b4adc7a002c0f06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IndexTracker::Attach</definition>
+        <argsstring>(csmp::Index *newIndex, std::string parameterName)</argsstring>
+        <name>Attach</name>
+        <qualifiedname>csmp::IndexTracker::Attach</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> *</type>
+          <declname>newIndex</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>parameterName</declname>
+        </param>
+        <briefdescription>
+<para>Called when a new <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> is issued. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="47" column="12" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="44" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a6cf491413a4fce44db086a25038727c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IndexTracker::Attach</definition>
+        <argsstring>(csmp::Index *newIndex, const csmp::Index *existingIndex)</argsstring>
+        <name>Attach</name>
+        <qualifiedname>csmp::IndexTracker::Attach</qualifiedname>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> *</type>
+          <declname>newIndex</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> *</type>
+          <declname>existingIndex</declname>
+        </param>
+        <briefdescription>
+<para>Called when a new <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> is copied using an existing <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Attaches an existing index object to a new index. Reports if the existing index object is orphan, i.e. has no name because it has not been tracked before.</para>
+<para>In this case, the parameter is called &apos;unspecified&apos;. This will be picked up by the property database at the next update attempt. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="50" column="12" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="60" bodyend="79"/>
+        <references refid="classcsmp_1_1_index_tracker_1a6cf491413a4fce44db086a25038727c4" compoundref="_index_tracker_8cpp" startline="60" endline="79">Attach</references>
+        <references refid="structcsmp_1_1_index_1a459d7e434854a790a303dcc20cc47949" compoundref="_index_8cpp" startline="385" endline="403">csmp::Index::Out</references>
+        <references refid="classcsmp_1_1_index_tracker_1aab0c0d4cbc7ccf5495c08f87e1909aeb" compoundref="_index_tracker_8cpp" startline="134" endline="142">Out</references>
+        <referencedby refid="classcsmp_1_1_index_tracker_1a6cf491413a4fce44db086a25038727c4" compoundref="_index_tracker_8cpp" startline="60" endline="79">Attach</referencedby>
+        <referencedby refid="structcsmp_1_1_index_1af455658d6684dec26653f1390da18ee3" compoundref="_index_8cpp" startline="181" endline="197">csmp::Index::Index</referencedby>
+        <referencedby refid="structcsmp_1_1_index_1a3d38adc8395a9ace450318dbe3ca2ecc" compoundref="_index_8cpp" startline="201" endline="217">csmp::Index::Index</referencedby>
+        <referencedby refid="structcsmp_1_1_index_1a67ca8bf26803f6322d5e4635a2da72d2" compoundref="_index_8cpp" startline="223" endline="250">csmp::Index::operator=</referencedby>
+        <referencedby refid="structcsmp_1_1_index_1a96e678d743121334a176ad4525a94fcd" compoundref="_index_8cpp" startline="255" endline="284">csmp::Index::operator=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a12c60cf0bf7c1f496809ca15b7f60e07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IndexTracker::Detach</definition>
+        <argsstring>(const csmp::Index *existingIndex)</argsstring>
+        <name>Detach</name>
+        <qualifiedname>csmp::IndexTracker::Detach</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> *</type>
+          <declname>existingIndex</declname>
+        </param>
+        <briefdescription>
+<para>Called when an existing <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> is destroyed. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Detach index object as identified by a (unique) pointer to it. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="53" column="12" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="86" bodyend="107"/>
+        <references refid="structcsmp_1_1_index_1a459d7e434854a790a303dcc20cc47949" compoundref="_index_8cpp" startline="385" endline="403">csmp::Index::Out</references>
+        <references refid="classcsmp_1_1_index_tracker_1aab0c0d4cbc7ccf5495c08f87e1909aeb" compoundref="_index_tracker_8cpp" startline="134" endline="142">Out</references>
+        <referencedby refid="structcsmp_1_1_index_1a4f25345b8d8bb3230dc0f84a0775dcee" compoundref="_index_8cpp" startline="368" endline="372">csmp::Index::Detach</referencedby>
+        <referencedby refid="structcsmp_1_1_index_1acbdfb5b45232eb3eab9bf18fc7e609ec" compoundref="_index_8cpp" startline="360" endline="364">csmp::Index::~Index</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a23df3b32dc0719508081ebf6fa85319f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IndexTracker::Detach</definition>
+        <argsstring>(std::string parameterName)</argsstring>
+        <name>Detach</name>
+        <qualifiedname>csmp::IndexTracker::Detach</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>parameterName</declname>
+        </param>
+        <briefdescription>
+<para>Called when an existing <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> is destroyed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="56" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1ac2c0883b5bfc8e41895be21c32b66006" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IndexTracker::DetachFromAll</definition>
+        <argsstring>()</argsstring>
+        <name>DetachFromAll</name>
+        <qualifiedname>csmp::IndexTracker::DetachFromAll</qualifiedname>
+        <briefdescription>
+<para>Detaches itself from all <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> objects; this method is called upon destruction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="59" column="12" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="35" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1aab0c0d4cbc7ccf5495c08f87e1909aeb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IndexTracker::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::IndexTracker::Out</qualifiedname>
+        <briefdescription>
+<para>print all currently registered <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> objects </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="62" column="12" bodyfile="source/modules/model/IndexTracker.cpp" bodystart="134" bodyend="142"/>
+        <referencedby refid="classcsmp_1_1_index_tracker_1a6cf491413a4fce44db086a25038727c4" compoundref="_index_tracker_8cpp" startline="60" endline="79">Attach</referencedby>
+        <referencedby refid="classcsmp_1_1_index_tracker_1a12c60cf0bf7c1f496809ca15b7f60e07" compoundref="_index_tracker_8cpp" startline="86" endline="107">Detach</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_index_tracker_1a6853b2d5067ff7319714d5c92467865f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IndexTracker::IndexTracker</definition>
+        <argsstring>(const IndexTracker &amp;)</argsstring>
+        <name>IndexTracker</name>
+        <qualifiedname>csmp::IndexTracker::IndexTracker</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_index_tracker" kindref="compound">IndexTracker</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IndexTracker.h" line="66" column="7"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Keeps track of all <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> objects once they have been registered. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Serves <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> to keep all existing <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> objects objects up to date, which is necessary when new variables are created at runtime.</para>
+<para><simplesect kind="note"><para>index tracking is necessary because some classes have indices as members. These objects can get invalidated when new variables of the same kind and place. are created. If so, for instance, the 5th scalar on the node might become the 10th.</para>
+</simplesect>
+By tracking all <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> objects that exist in a model, these can be updated by the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> everytime a variable is created or deleted.</para>
+<para><simplesect kind="note"><para>this implementation is based on the &quot;Observer&quot; design pattern.</para>
+</simplesect>
+<simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>9/25/2012</para>
+</simplesect>
+TODO: <xrefsect id="todo_1_todo000011"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM 2/2017 - The <ref refid="classcsmp_1_1_index_tracker" kindref="compound">IndexTracker</ref> -&gt; update methodology seems to fail if <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> objects of different length are created at runtime; fix or rethink approach.</para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/IndexTracker.h" line="38" column="1" bodyfile="source/includes/model/IndexTracker.h" bodystart="38" bodyend="70"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_index_tracker_1a16cc894f0e6e980b0b4adc7a002c0f06" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>Attach</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a6cf491413a4fce44db086a25038727c4" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>Attach</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a12c60cf0bf7c1f496809ca15b7f60e07" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>Detach</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a23df3b32dc0719508081ebf6fa85319f" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>Detach</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1ac2c0883b5bfc8e41895be21c32b66006" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>DetachFromAll</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1afb8a61a158005f8dc21a134693ad5fa7" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>IndexTracker</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a6853b2d5067ff7319714d5c92467865f" prot="protected" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>IndexTracker</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a67c554f250ba3fe2353434ca947e9046" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>IndicesBegin</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a64858ea9a5b722ec8e7a68a7d32f3339" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>IndicesEnd</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1aab0c0d4cbc7ccf5495c08f87e1909aeb" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a0270b3c502a9687464f7bc3e2248a0aa" prot="private" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>trackedIndices_</name></member>
+      <member refid="classcsmp_1_1_index_tracker_1a2838af55c8a3034bd58223e8310ce118" prot="public" virt="non-virtual"><scope>csmp::IndexTracker</scope><name>~IndexTracker</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

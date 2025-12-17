@@ -1,7 +1,7 @@
 #ifndef PARALLEL_PLATE_PERMEABILITY_FROM_CHANNEL_WIDTH_H
 #define PARALLEL_PLATE_PERMEABILITY_FROM_CHANNEL_WIDTH_H
 
-#include <iostream>
+#include "CSMP_definitions.h"
 
 namespace csmp {
 

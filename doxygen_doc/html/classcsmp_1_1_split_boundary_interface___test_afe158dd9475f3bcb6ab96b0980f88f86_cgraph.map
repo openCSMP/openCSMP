@@ -1,0 +1,6 @@
+<map id="csmp::SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Intersection" name="csmp::SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Intersection">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,22,303,78"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_a_n_s_y_s___model3_d.html#a6dd8acd46401cb127fe8440c7508efa6" title=" " alt="" coords="351,29,517,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="303,47,335,47,335,52,303,52"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="382,29,379,19,388,10,406,5,434,3,464,5,482,11,480,16,463,10,434,8,407,10,390,15,384,21,387,28"/>
+</map>

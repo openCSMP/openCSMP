@@ -1,0 +1,5 @@
+<map id="csmp::EOS_CO2H2ONaCl_Spycher04::densityAqueousPhase" name="csmp::EOS_CO2H2ONaCl_Spycher04::densityAqueousPhase">
+<area shape="rect" id="Node000001" title="Density of co2 saturated brine phase Garcia 2001, Density of aqueous solutions of co2,..." alt="" coords="271,5,499,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a6dbf0f5cc7ad412cbc7879218d198baa" title="density of aqueous phase with contained dissolved CO2" alt="" coords="5,5,223,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,28,223,28,223,23,255,23"/>
+</map>

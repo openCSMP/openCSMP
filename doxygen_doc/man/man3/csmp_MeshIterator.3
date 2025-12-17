@@ -1,0 +1,73 @@
+.TH "csmp::MeshIterator< dim, CELL >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::MeshIterator< dim, CELL >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <MeshIterator\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshIterator\fP (\fBNode\fP< dim > *mesh_node)"
+.br
+.RI "discovers interconnected mesh patch initiaising the member cells "
+.ti -1c
+.RI "std::set< CELL< dim > * >::const_iterator \fBCellsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::set< CELL< dim > * >::const_iterator \fBCellsEnd\fP () const"
+.br
+.ti -1c
+.RI "std::set< CELL< dim > * >::iterator \fBCellsBegin\fP ()"
+.br
+.ti -1c
+.RI "std::set< CELL< dim > * >::iterator \fBCellsEnd\fP ()"
+.br
+.ti -1c
+.RI "std::set< \fBcsmp::Node\fP< dim > * >::const_iterator \fBNodesBegin\fP () const"
+.br
+.ti -1c
+.RI "std::set< \fBcsmp::Node\fP< dim > * >::const_iterator \fBNodesEnd\fP () const"
+.br
+.ti -1c
+.RI "std::set< \fBcsmp::Node\fP< dim > * >::iterator \fBNodesBegin\fP ()"
+.br
+.ti -1c
+.RI "std::set< \fBcsmp::Node\fP< dim > * >::iterator \fBNodesEnd\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL>
+.br
+class csmp::MeshIterator< dim, CELL >"Interator to perform a breadth-first traversal of contiguous mesh patch during its construction and then contain cell and node sets that can be used to iterate over the mesh tree\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+15/3/2017
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+needs to be completed to become useful 
+
+.PP
+use this breadth-first graph traversal rather than any other method to discover patch of CELLs\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

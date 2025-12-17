@@ -1,0 +1,157 @@
+\doxysection{csmp\+::Region\+Boundary\+Flux\+Visitor\texorpdfstring{$<$}{<} dim, COMPUTATION\+\_\+\+DOMAIN \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_region_boundary_flux_visitor}{}\label{classcsmp_1_1_region_boundary_flux_visitor}\index{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$@{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$}}
+
+
+using the FVM this visitor computes the cumulative single-\/phase influx into the target region  
+
+
+
+
+{\ttfamily \#include $<$Region\+Boundary\+Flux\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Region\+Boundary\+Flux\+Visitor\texorpdfstring{$<$}{<} dim, COMPUTATION\+\_\+\+DOMAIN \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{classcsmp_1_1_region_boundary_flux_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Region\+Boundary\+Flux\+Visitor\texorpdfstring{$<$}{<} dim, COMPUTATION\+\_\+\+DOMAIN \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_region_boundary_flux_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_region_boundary_flux_visitor_a95ca5b17d452ed98b7ee5ba16d43370d}{Region\+Boundary\+Flux\+Visitor}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}target\+\_\+region, const char \texorpdfstring{$\ast$}{*}Darcy\+\_\+velocity)
+\begin{DoxyCompactList}\small\item\em choice between \doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} is desired \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_region_boundary_flux_visitor_a88fadf58e36c2bac7c00a7f077d9c52f}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em application target = node-\/centered finite volume \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_aae018a6023863c22010e6ff14562db09}\label{classcsmp_1_1_region_boundary_flux_visitor_aae018a6023863c22010e6ff14562db09} 
+double {\bfseries In\+Flux} () const
+\begin{DoxyCompactList}\small\item\em returns the flux through the region boundary \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_a43e7200d416bdea57d4a935c3df59d06}\label{classcsmp_1_1_region_boundary_flux_visitor_a43e7200d416bdea57d4a935c3df59d06} 
+void {\bfseries Reset\+Flux} ()
+\begin{DoxyCompactList}\small\item\em resets the internal flux counter to zero \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_a5bf59f12d8d3d720a590f4a19dfae932}\label{classcsmp_1_1_region_boundary_flux_visitor_a5bf59f12d8d3d720a590f4a19dfae932} 
+void {\bfseries Time\+Increment} (double)
+\begin{DoxyCompactList}\small\item\em use this to set the time interval over which the flux shall be integrated \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a1a3ed57d253eef9a0097232c7359627c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_ab7fd7c39400fedb9ae052e4a7c348af7}\label{classcsmp_1_1_region_boundary_flux_visitor_ab7fd7c39400fedb9ae052e4a7c348af7} 
+\mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_element}{Element}} $>$ \texorpdfstring{$\ast$}{*} {\bfseries domain\+\_\+ptr\+\_\+}
+\begin{DoxyCompactList}\small\item\em either of\+: \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_ad082efb163603adf6621af4adc020743}\label{classcsmp_1_1_region_boundary_flux_visitor_ad082efb163603adf6621af4adc020743} 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries flux\+\_\+key\+\_\+}
+\begin{DoxyCompactList}\small\item\em for the user-\/defined flux variable \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_af7a39fe4388bf845df4627f44dc58c10}\label{classcsmp_1_1_region_boundary_flux_visitor_af7a39fe4388bf845df4627f44dc58c10} 
+double {\bfseries FVinflux\+\_\+}
+\begin{DoxyCompactList}\small\item\em flux summation variable \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_a4d271347976e0aecdc93f1e4d610e919}\label{classcsmp_1_1_region_boundary_flux_visitor_a4d271347976e0aecdc93f1e4d610e919} 
+double {\bfseries delta\+\_\+t\+\_\+}
+\begin{DoxyCompactList}\small\item\em time increment used in the flux integration \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_a2fc827906d6be2829f7d42ea9096fcb9}\label{classcsmp_1_1_region_boundary_flux_visitor_a2fc827906d6be2829f7d42ea9096fcb9} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ {\bfseries vt\+\_\+}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class COMPUTATION\+\_\+\+DOMAIN$>$\newline
+class csmp\+::\+Region\+Boundary\+Flux\+Visitor$<$ dim, COMPUTATION\+\_\+\+DOMAIN $>$}
+using the FVM this visitor computes the cumulative single-\/phase influx into the target region 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_a95ca5b17d452ed98b7ee5ba16d43370d}\index{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$@{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$}!RegionBoundaryFluxVisitor@{RegionBoundaryFluxVisitor}}
+\index{RegionBoundaryFluxVisitor@{RegionBoundaryFluxVisitor}!csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$@{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$}}
+\doxysubsubsection{\texorpdfstring{RegionBoundaryFluxVisitor()}{RegionBoundaryFluxVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_region_boundary_flux_visitor_a95ca5b17d452ed98b7ee5ba16d43370d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class COMPUTATION\+\_\+\+DOMAIN$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_region_boundary_flux_visitor}{csmp\+::\+Region\+Boundary\+Flux\+Visitor}}$<$ dim, COMPUTATION\+\_\+\+DOMAIN $>$\+::\+Region\+Boundary\+Flux\+Visitor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{target\+\_\+region}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{Darcy\+\_\+velocity}{}\end{DoxyParamCaption})}
+
+
+
+choice between \doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} is desired 
+
+\begin{DoxyAttention}{Attention}
+EXPERIMENTAL CODE
+\end{DoxyAttention}
+After construction this visitor should be passed to the region of interest 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_region_boundary_flux_visitor_a88fadf58e36c2bac7c00a7f077d9c52f}\index{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$@{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$@{csmp::RegionBoundaryFluxVisitor$<$ dim, COMPUTATION\_DOMAIN $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_region_boundary_flux_visitor_a88fadf58e36c2bac7c00a7f077d9c52f} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class COMPUTATION\+\_\+\+DOMAIN$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_region_boundary_flux_visitor}{csmp\+::\+Region\+Boundary\+Flux\+Visitor}}$<$ dim, COMPUTATION\+\_\+\+DOMAIN $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{nd}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+application target = node-\/centered finite volume 
+
+Sitting on a boundary node of the target \doxylink{classcsmp_1_1_region}{Region} We look at the surrounding finite volume sectors that do not form part of this region and calculate the incoming fluxes into the region using the user-\/supplied flux variable. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/single\+\_\+phase\+\_\+flow/Region\+Boundary\+Flux\+Visitor.\+h\item 
+source/modules/thmc/single\+\_\+phase\+\_\+flow/Region\+Boundary\+Flux\+Visitor.\+cpp\end{DoxyCompactItemize}

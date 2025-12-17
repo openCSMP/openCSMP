@@ -35,50 +35,44 @@ namespace csmp
       p_iA(0.0),
       p_iB(0.0),
       p_iC(0.0),
-    p_iD(0.0),
-    value_iA(0.0),
-    value_iB(0.0),
-    value_iC(0.0),
-    value_iD(0.0),
-    value_before(0.0),
-    value_behind(0.0),
-    value_bottom(0.0),
-    value_top(0.0),
-    value_interpolated(0.0),
-    value_vlh(0.0),
-    value_vlh_behind(0.0),
-    value_vlh_before(0.0),
-    tcrit(0.0),
-    tvlh(0.0),
-    x_high(0.0),
-    vlh_pmax(vlh_liquid.Pmax()),
-    vlh_tmax(vlh_liquid.Tmax()),
-    it(0),
-    ip(0),
-    t_dim(0),
-    p_dim(0),
-    iA(0),
-    iB(0),
-    iC(0),
-    iD(0),
-    i_dummy(0),
-    it_p_max(0),
-    ip_p_max(0),
-    state(none),
-    state_iA(none),
-    state_iB(none),
-    state_iC(none),
-    state_iD(none),
-    vlh_liquid(tdummy), 
-    naclmelt_liquid(tdummy,pdummy),
-    csmp_error( ErrorHandler::Instance() )
+      p_iD(0.0),
+      value_iA(0.0),
+      value_iB(0.0),
+      value_iC(0.0),
+      value_iD(0.0),
+      value_before(0.0),
+      value_behind(0.0),
+      value_bottom(0.0),
+      value_top(0.0),
+      value_interpolated(0.0),
+      value_vlh(0.0),
+      value_vlh_behind(0.0),
+      value_vlh_before(0.0),
+      tcrit(0.0),
+      tvlh(0.0),
+      x_high(0.0),
+      vlh_liquid(tdummy),
+      vlh_tmax([&](){ return vlh_liquid.Tmax(); }()),
+      vlh_pmax([&](){ return vlh_liquid.Pmax(); }()),
+      it(0),
+      ip(0),
+      t_dim(0),
+      p_dim(0),
+      iA(0),
+      iB(0),
+      iC(0),
+      iD(0),
+      i_dummy(0),
+      it_p_max(0),
+      ip_p_max(0),
+      state(none),
+      state_iA(none),
+      state_iB(none),
+      state_iC(none),
+      state_iD(none),
+      naclmelt_liquid(tdummy,pdummy),
+      csmp_error( ErrorHandler::Instance() )
   {
-    // Prepare values that are necessary to identify cases where we are very close to Tmax,Pmax of the VLH surface
-    GetTemperatureIndex(vlh_tmax);
-    it_p_max          = it;
-    GetPressureIndex(vlh_pmax);
-    ip_p_max          = ip;
-      
     // Setup table dimensions and rescale stroage vector sizes
     GetTemperatureIndex(1000.0001);
     t_dim = it+1;
@@ -446,7 +440,7 @@ namespace csmp
     //     | _/       V\     |
     //     |/           L\   |
     //   _/|              H\ |  
-    //  /  |       VH          \ 
+    //  /  |       VH          \
     //     |                 | \
     //   --A-----------------B-- ip_p_max // needs: -1
     //     |                 |
@@ -624,8 +618,8 @@ namespace csmp
             //      (4)                              (2)
             //                                                               
             //   P                                P
-            //   ^    vlhcurve                    ^
-            //   |   /                            |         |   vlhcurve
+            //   ^    vlhcurve                   ^
+            //   |   /                            |         |   meltcurve
             //  -D--/------C-                    -D---------C__/
             // --|x/-------|------ pcurrent       |     ___/| 
             //   |/        |                    --|-x__/----|------ pcurrent
@@ -641,6 +635,7 @@ namespace csmp
             value_vlh_before      = vlh_liquid.ValueOf(property_index); // (between A and D)
             tdummy            = tvlh;
             value_vlh             = vlh_liquid.ValueOf(property_index);
+	    
             value_before          =  value_iD + pnorm*( value_vlh_before - value_iD );
             tnorm             = (tcurrent-t_iD) / (tvlh-t_iD);
             value_interpolated    =  value_before + tnorm*(value_vlh-value_before);
@@ -662,7 +657,7 @@ namespace csmp
             //   P                        
             //   ^                        
             //   |                        
-            //  -D---------C ___  vlhcurve  
+            //  -D---------C ___  meltcurve  
             // --|-----x--_|/-----pcurrent           
             //   | _____/  |              
             // __|/        |              
@@ -691,7 +686,7 @@ namespace csmp
             //  (6)
             //
             //   P
-            //   ^            vlhcurve
+            //   ^            meltcurve
             //   |           /
             //  -D--------C-/
             //  -|--x-----|/--- pcurrent

@@ -5,8 +5,10 @@
 #include "InterFace.h"
 #include "Edge.h"
 #include "variableOperations.h"
+#include "ErrorHandler.h"
 #include "Exception.h"
 #include "CSMP_mathUtilities.h"
+#include "geometricCalculations.h"
 #include "Point.h"
 
 using namespace std;
@@ -55,7 +57,7 @@ FiniteElement* FiniteElementPolicy<dim,CELL>::FE() const noexcept
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const
+bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const noexcept
  {
     if constexpr ( dim == 3U ) return IsVolume();
     if constexpr ( dim == 2U ) return IsSurface();
@@ -67,7 +69,7 @@ bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool FiniteElementPolicy<dim,CELL>::IsLine() const
+bool FiniteElementPolicy<dim,CELL>::IsLine() const noexcept
   {
     if constexpr ( dim == 1U ) return true;
     assert( fptr_ != nullptr );
@@ -75,14 +77,14 @@ bool FiniteElementPolicy<dim,CELL>::IsLine() const
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool FiniteElementPolicy<dim,CELL>::IsSurface() const
+bool FiniteElementPolicy<dim,CELL>::IsSurface() const noexcept
   {
     assert( fptr_ != nullptr );
     return fptr_->IsSurface();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool FiniteElementPolicy<dim,CELL>::IsVolume() const
+bool FiniteElementPolicy<dim,CELL>::IsVolume() const noexcept
   {
     if constexpr ( dim != 3U ) return false;
     assert( fptr_ != nullptr );
@@ -90,14 +92,14 @@ bool FiniteElementPolicy<dim,CELL>::IsVolume() const
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-uint32_t  FiniteElementPolicy<dim,CELL>::Interpolation() const
+uint32_t  FiniteElementPolicy<dim,CELL>::Interpolation() const noexcept
   {
     assert( fptr_ != nullptr );
     return fptr_->Interpolation();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool   FiniteElementPolicy<dim,CELL>::UsesLocalCoordinates() const
+bool   FiniteElementPolicy<dim,CELL>::UsesLocalCoordinates() const noexcept
   {
     assert( fptr_ != nullptr );
     return fptr_->UsesLocalCoordinates();
@@ -105,7 +107,7 @@ bool   FiniteElementPolicy<dim,CELL>::UsesLocalCoordinates() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-uint32_t   FiniteElementPolicy<dim,CELL>::Segments() const
+uint32_t   FiniteElementPolicy<dim,CELL>::Segments() const noexcept
  {
     assert( fptr_ != nullptr );
     return fptr_->Segments();
@@ -115,7 +117,7 @@ uint32_t   FiniteElementPolicy<dim,CELL>::Segments() const
 
 /// Returns number of integration points per element, 0 if no FiniteElement assigned
 template<uint32_t dim, template<uint32_t> class CELL>
-uint32_t FiniteElementPolicy<dim,CELL>::IntegrationPoints() const
+uint32_t FiniteElementPolicy<dim,CELL>::IntegrationPoints() const noexcept
   {
     if( fptr_ != nullptr ) return fptr_->IntegrationPoints();
     return 0U;
@@ -306,7 +308,7 @@ double FiniteElementPolicy<dim,CELL>::dN_AtBaryCenter( DenseMatrix<DM_MIN>& M, u
 
 template<uint32_t dim, template<uint32_t> class CELL>
 double FiniteElementPolicy<dim,CELL>::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M,
-                                                                  uint32_t gp, uint32_t dof )  const
+                                                             uint32_t gp, uint32_t dof )  const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -736,6 +738,309 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csm
    return var;
   }
 
+
+
+
+/**
+  Compute gradient of a field variable at the barycentre of this element.
+ 
+  @param prop_key   csmp::Index describing the variable (SCALAR, VECTOR, TENSOR)
+  @param detJ          determinant of Jacobian at barycentre
+  @return Eigen::Matrix<double,dim,Eigen::Dynamic>
+          Convention:
+            - SCALAR: grad(row j, col 0) = ∂φ/∂x_j
+            - VECTOR: grad(row j, col k) = ∂φ_k/∂x_j
+            - TENSOR: grad(row j, col αβ) = ∂φ_αβ/∂x_j
+            
+  @attention if this is a linear simplex element, then detJ at the barycentre is all that is needed to compute the element volume / area or length.
+  
+      V = \det(J) \cdot V_{\text{ref}}.
+  
+  However, this is not unversally true. Even for simplex elements this depends of V_ref (finite element conventions).
+ 
+   TODO: add static_assert to prevent 1D use
+
+ */
+template<uint32_t dim, template<uint32_t> class CELL>
+Eigen::Matrix<double,dim,Eigen::Dynamic> FiniteElementPolicy<dim,CELL>::PropertyGradientAtBaryCenter( const csmp::Index& prop_key,
+                                                                                                      double& detJ ) const
+    {
+        ErrorHandler& csmp_error( ErrorHandler::Instance() );
+        
+        if ( prop_key.type == FLAGGEDARRAY ) {
+             csmp_error.Note( ERROR, "FiniteElementPolicy<dim,CELL>::PropertyGradientAtBaryCenter",
+                                     "Unsupported variable placement for gradient computation.");
+             return Eigen::Matrix<double,dim,Eigen::Dynamic>::Zero(dim,1);
+          }
+
+        const CELL<dim>* cell_ptr = static_cast<const CELL<dim>*>(this);
+        const uint32_t nnodes     = cell_ptr->Nodes();
+
+        // Shape function derivatives at barycentre
+        csmp::DenseMatrix<DM_MIN> DERIV;
+        const uint32_t dof = (prop_key.type == SCALAR) ? 1u :
+                             (prop_key.type == VECTOR) ? dim :
+                             (prop_key.type == TENSOR) ? dim * dim :
+                             (prop_key.type == ARRAY)  ? prop_key.dataDepth : 0u;
+
+        if (dof == 0u) {
+            csmp_error.Note(ERROR,
+                "FiniteElementPolicy<dim,CELL>::PropertyGradientAtBaryCenter",
+                "Unsupported variable type for gradient computation.");
+            return Eigen::Matrix<double,dim,Eigen::Dynamic>::Zero(dim,1);
+        }
+
+        detJ = cell_ptr->dN_AtBaryCenter(DERIV, dof);
+
+        Eigen::Matrix<double,dim,Eigen::Dynamic> grad =
+            Eigen::Matrix<double,dim,Eigen::Dynamic>::Zero(dim, dof);
+
+        switch (prop_key.place) {
+        case NODE: {
+            if (prop_key.type == SCALAR) {
+                for (uint32_t a = 0; a < nnodes; ++a) {
+                    double val = cell_ptr->N(a)->Read(prop_key);
+                    for (uint32_t j = 0; j < dim; ++j) {
+                        grad(j,0) += val * DERIV(j,a);
+                    }
+                }
+            }
+            else if (prop_key.type == VECTOR) {
+                for (uint32_t a = 0; a < nnodes; ++a) {
+                    csmp::VectorVariable<dim> vnod;
+                    cell_ptr->N(a)->Read(prop_key, vnod);
+                    for (uint32_t j = 0; j < dim; ++j) {
+                        for (uint32_t k = 0; k < dim; ++k) {
+                            grad(j,k) += vnod[k] * DERIV(j,a);
+                        }
+                    }
+                }
+            }
+            else if (prop_key.type == TENSOR) {
+                for (uint32_t a = 0; a < nnodes; ++a) {
+                    csmp::TensorVariable<dim> tnod;
+                    cell_ptr->N(a)->Read(prop_key, tnod);
+                    for (uint32_t j = 0; j < dim; ++j) {
+                        uint32_t col = 0;
+                        for (uint32_t a = 0; a < dim; ++a) {
+                            for (uint32_t b = 0; b < dim; ++b, ++col) {
+                                grad(j,col) += tnod(a,b) * DERIV(j,a);
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case ELEMENT:
+        case FACE:
+        case INTER_FACE:
+            // Constant per entity ⇒ gradient zero
+            grad.setZero();
+            break;
+
+        default:
+            csmp_error.Note(ERROR,
+                "FiniteElementPolicy<dim,CELL>::PropertyGradientAtBaryCenter",
+                "Unsupported variable placement for gradient computation.");
+            break;
+        }
+
+        return grad;
+    }
+
+
+
+
+
+/**
+        
+        @TODO: return the Eigen Matrix rather than having it in the argument list
+ */
+template<uint32_t dim, template<uint32_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::AccumulateGradient( Eigen::Matrix<double, dim, Eigen::Dynamic>& gradVar,
+                                                        const DenseMatrix<DM_MIN>& DERIV,
+                                                        const csmp::Index& prop_key,
+                                                        uint32_t ip ) const
+{
+    const CELL<dim>* cell_ptr( static_cast<const CELL<dim>*>(this) );
+    
+    switch (prop_key.type) {
+        case SCALAR: {
+            gradVar.resize(dim,1);
+            double value = 0.0;
+            if (prop_key.place == NODE) {
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i) {
+                    value = cell_ptr->N(i)->Read(prop_key);
+                    for (uint32_t j{0u}; j < dim; ++j)
+                        gradVar(j, 0) += value * (-DERIV(j, i));
+                }
+            } else {
+                if (prop_key.place == ELEMENT || prop_key.place == FACE || prop_key.place == INTER_FACE)
+                    value = cell_ptr->Read(prop_key);
+                else
+                    value = cell_ptr->Read(ip, prop_key);
+
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i)
+                  for (uint32_t j{0u}; j < dim; ++j)
+                    gradVar(j,0) += value * (-DERIV(j, i));
+            }
+            break;
+        }
+
+        case VECTOR: {
+            gradVar.resize(dim,dim);
+            VectorVariable<dim> vecVal;
+            if (prop_key.place == NODE) {
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i) {
+                    cell_ptr->N(i)->Read(prop_key, vecVal);
+                    for (uint32_t j{0u}; j < dim; ++j)
+                        for (uint32_t k{0u}; k < dim; ++k)
+                            gradVar(j, k) += vecVal[k] * (-DERIV(j, i));
+                }
+            } else {
+                if (prop_key.place == ELEMENT || prop_key.place == FACE || prop_key.place == INTER_FACE)
+                    cell_ptr->Read(prop_key, vecVal);
+                else
+                    cell_ptr->Read(ip, prop_key, vecVal);
+
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i)
+                  for (uint32_t j{0u}; j < dim; ++j)
+                    for (uint32_t k{0u}; k < dim; ++k)
+                        gradVar(j, k) += vecVal[k] * (-DERIV(j, i));
+            }
+            break;
+        }
+
+        case TENSOR: {
+            gradVar.resize(dim,dim);
+            TensorVariable<dim> tensorVal;
+            if (prop_key.place == NODE) {
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i) {
+                    cell_ptr->N(i)->Read(prop_key, tensorVal);
+                    for (uint32_t j{0u}; j < dim; ++j)
+                        for (uint32_t k{0u}; k < dim; ++k)
+                            for (uint32_t l{0u}; l < dim; ++l)
+                                gradVar(j, k * dim + l) += tensorVal(k, l) * (-DERIV(j, i));
+                }
+            } else {
+                if (prop_key.place == ELEMENT || prop_key.place == FACE || prop_key.place == INTER_FACE)
+                    cell_ptr->Read(prop_key, tensorVal);
+                else
+                    cell_ptr->Read(ip, prop_key, tensorVal);
+
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i)
+                  for (uint32_t j{0u}; j < dim; ++j)
+                    for (uint32_t k{0u}; k < dim; ++k)
+                      for (uint32_t l{0u}; l < dim; ++l)
+                        gradVar(j, k * dim + l) += tensorVal(k, l) * (-DERIV(j, i));
+            }
+            break;
+        }
+
+        case ARRAY: {
+            ArrayVariable arr;
+            if (prop_key.place == NODE) {
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i) {
+                    cell_ptr->N(i)->Read(prop_key, arr);
+                    gradVar.resize(dim,arr.Size());
+                    for (uint32_t j{0u}; j < dim; ++j)
+                        for (uint32_t k{0u}; k < arr.Size(); ++k)
+                          gradVar(j, k) += arr[k] * (-DERIV(j, i));
+                }
+            } else {
+                if (prop_key.place == ELEMENT || prop_key.place == FACE || prop_key.place == INTER_FACE)
+                    cell_ptr->Read(prop_key, arr);
+                else
+                    cell_ptr->Read(ip, prop_key, arr);
+
+                gradVar.resize(dim,arr.Size());
+                for (uint32_t i{0u}; i < cell_ptr->fptr_->Nodes(); ++i)
+                  for (uint32_t j{0u}; j < dim; ++j)
+                    for (uint32_t k{0u}; k < arr.Size(); ++k)
+                      gradVar(j,k) += arr[k] * (-DERIV(j, i));
+            }
+            break;
+        }
+
+        default:
+            throw std::runtime_error("Unsupported variable type in gradient computation.");
+    }
+}
+
+
+
+
+
+/**
+    Computes the gradient of the node property at the integration point of the element, face or interface (for scalar this is a vector for vector this is a matrix)
+    
+    \f[ \left[ \nabla \mathbf{u} \right]_{jk} = \sum_i u_j^{(i)} \, \frac{\partial N_i}{\partial x_k} \f]
+    
+    @param prop_key to gain access to a node, integration point or cell property
+    @param ip means integration_point for numerically integrated finite elements (those with a local coordinate system)
+    @param detJ the determinant of the Jacobian matrix that transforms the element from parametric to physical space
+
+    @attention if this is a linear simplex element, then detJ at the barycentre is all that is needed to compute the element volume / area or length.
+    
+        V = \det(J) \cdot V_{\text{ref}}.
+    
+    However, this is not unversally true. Even for simplex elements this depends of V_ref (finite element conventions).
+ */
+template<uint32_t dim, template<uint32_t> class CELL>
+Eigen::Matrix<double,dim,Eigen::Dynamic> FiniteElementPolicy<dim,CELL>::PropertyGradientAtIntegrationPoint( const Index& prop_key,
+                                                                                                            uint32_t ip,
+                                                                                                            double& detJ ) const
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance());
+    
+    DenseMatrix<DM_MIN> DERIV;
+    
+    // Determine degrees of freedom based on property type
+    uint32_t dof = 1u;
+    if (prop_key.type == VECTOR) dof = dim;
+    else if (prop_key.type == TENSOR) dof = dim * dim;
+    else if (prop_key.type == ARRAY) dof = prop_key.dataDepth;
+
+    Eigen::Matrix<double, dim, Eigen::Dynamic> gradVar(dim, dof);
+    gradVar.setZero();
+
+    const CELL<dim>* cell_ptr( static_cast<const CELL<dim>*>(this) );
+
+    // Dispatcher by placement
+    switch (prop_key.place) {
+        case NODE:
+            detJ = cell_ptr->dN_AtIntegrationPoint(DERIV, ip, dof);
+            AccumulateGradient(gradVar, DERIV, prop_key, ip );
+            break;
+
+        case ELEMENT:
+        case FACE:
+        case INTER_FACE:
+            detJ = cell_ptr->dN_AtBaryCenter(DERIV, dof);
+            AccumulateGradient(gradVar, DERIV, prop_key, ip );
+            break;
+
+        case ELEMENT_INTEGRATION_POINT:
+        case FACE_INTEGRATION_POINT:
+        case INTER_FACE_INTEGRATION_POINT:
+            detJ = cell_ptr->dN_AtIntegrationPoint(DERIV, ip, dof);
+            AccumulateGradient(gradVar, DERIV, prop_key, ip );
+            break;
+
+        default:
+            csmp_error.Note( ERROR, "FiniteElementPolicy<dim,CELL>::PropertyGradientAtIntegrationPoint",
+                                    "Unsupported variable placement for gradient computation.");
+    }
+
+    return gradVar;
+ 
+ } // end PropertyGradientAtIntegrationPoint
+
+
+
+
 /**
 
 Returns the ELEMENT_INTEGRATION_POINT variable values into the parameter
@@ -809,7 +1114,7 @@ set<Node<dim>*>  FiniteElementPolicy<dim,CELL>::CornerNodesOfFace( uint32_t face
     assert( fptr_ != nullptr );
     assert( face_id < fptr_->Faces() );
  
-    const CELL<dim>* const eptr( static_cast<const CELL<dim>* const>(this) );
+    const CELL<dim>* const eptr( static_cast<const CELL<dim>*>(this) );
 
     set<Node<dim>*>  temp;
     for ( const auto& nit : fptr_->CornerNodesOfFace(face_id) ) {
@@ -831,7 +1136,7 @@ set<Node<dim>*> FiniteElementPolicy<dim,CELL>::CornerNodesConnectedTo( uint32_t 
     assert( fptr_ != nullptr );
     assert( node_id < fptr_->Nodes() );
  
-    const CELL<dim>* const eptr( static_cast<const CELL<dim>* const>(this) );
+    const CELL<dim>* const eptr( static_cast<const CELL<dim>*>(this) );
 
     set<Node<dim>*>  temp;
     // NB: the midside nodes are always connected to corner nodes
@@ -1801,5 +2106,56 @@ template class FiniteElementPolicy<3U,Element>;
 template class FiniteElementPolicy<3U,Face>;
 template class FiniteElementPolicy<3U,InterFace>;
 template class FiniteElementPolicy<3U,Edge>;
+
+
+
+// ======================================================================================================
+//
+//           NON-MEMBER FUNCTIONS
+//
+// ======================================================================================================
+
+
+template<>
+double faceArea( const Element<1>&, uint32_t ) { return 1.; }
+
+template<>
+double faceArea( const Element<2>& elmt, uint32_t face ) {
+    if ( elmt.IsLine() ) return 1.;
+    std::set<Node<2>*> node_set = elmt.CornerNodesOfFace( face );
+    if ( node_set.size() == 2 )
+      return distance( (*next(node_set.begin(),0))->Coordinate(), (*next(node_set.begin(),1))->Coordinate() );
+    throw csmp::Exception( ERROR, "faceArea<2>:", "could not parse input data");
+}
+
+/**
+        Handling line and surface faces with 3 or 4 nodes.
+ */
+template<>
+double faceArea( const Element<3>& elmt, uint32_t face ) {
+    std::set<Node<3>*> node_set = elmt.CornerNodesOfFace( face );
+    switch( node_set.size() ) {
+         // line element
+         case 1:
+             assert( elmt.IsLine() );
+           return 1.;
+         // surface elements
+         case 2:
+           return distance( (*next(node_set.begin(),0))->Coordinate(), (*next(node_set.begin(),1))->Coordinate() );
+         // triangular elements
+         case 3:
+           return unsignedArea( (*next(node_set.begin(),0))->Coordinate(), (*next(node_set.begin(),1))->Coordinate(), (*next(node_set.begin(),2))->Coordinate() );
+         // quadrilaterals
+         case 4: {
+             vector<Point<3>> cnr_points;
+             cnr_points.reserve(4);
+             for ( const auto& nit : elmt.FE()->CornerNodesOfFace(face) ) cnr_points.push_back( elmt.N(nit)->Coordinate() );
+             return unsignedArea( cnr_points[0], cnr_points[1], cnr_points[2], cnr_points[3] );
+           }
+         default:
+           throw csmp::Exception( ERROR, "faceArea<2>:", "number of corner nodes does not match any known Element face element type");
+      }
+   return std::numeric_limits<double>::quiet_NaN();
+}
 
 } // end csmp

@@ -17,7 +17,7 @@ namespace csmp {
 	{
 		SetTitle("EclipseMeshInterface_Example");
 		SetDifficulty(1);
-		SetCategory("Software Interfaces");
+		SetCategory("Input / Output Interfaces");
 		AddAuthor("Roman Manasipov");
 		AddDescription("source in: EclipseMeshInterface_Example.cpp");
 		AddDescription("Example show's how to use EclispeModel constructor.");

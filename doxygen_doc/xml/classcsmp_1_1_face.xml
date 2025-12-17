@@ -1,0 +1,1633 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_face" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Face</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element_policy" prot="public" virt="non-virtual">csmp::FiniteElementPolicy&lt; dim, Face &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_finite_volume_policy" prot="public" virt="non-virtual">csmp::FiniteVolumePolicy&lt; dim, Face &gt;</basecompoundref>
+    <basecompoundref refid="classcsmp_1_1_local_variable_storage" prot="public" virt="non-virtual">csmp::LocalVariableStorage&lt; dim, Face &gt;</basecompoundref>
+    <includes refid="_face_8h" local="no">Face.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_face_1a5432c6513839ff9cf850ed24aa43a4df" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class MeshManager</definition>
+        <argsstring></argsstring>
+        <name>MeshManager</name>
+        <qualifiedname>csmp::Face::MeshManager</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref></type>
+        </param>
+        <briefdescription>
+<para>for exclusive use by <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="233" column="28" bodyfile="source/includes/model/Face.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_face_1a2a9a74f66b9ee264e7677d767a52cf43" prot="private" static="no" mutable="yes">
+        <type>size_t</type>
+        <definition>size_t csmp::Face&lt; dim &gt;::idx_</definition>
+        <argsstring></argsstring>
+        <name>idx_</name>
+        <qualifiedname>csmp::Face::idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="244" column="30" bodyfile="source/includes/model/Face.h" bodystart="244" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_1ac84d70edaca1a5ae2fdee9b9c864dc7a" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::inner_parent_face_id_</definition>
+        <argsstring></argsstring>
+        <name>inner_parent_face_id_</name>
+        <qualifiedname>csmp::Face::inner_parent_face_id_</qualifiedname>
+        <initializer>= std::numeric_limits&lt;uint32_t&gt;::max()</initializer>
+        <briefdescription>
+<para>face number of inside higher-dimensional parent element, segm id if <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is line element in 3D </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="245" column="30" bodyfile="source/includes/model/Face.h" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_1a53aa69c7cdf95aa0b961e42dfcda5953" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::outer_parent_face_id_</definition>
+        <argsstring></argsstring>
+        <name>outer_parent_face_id_</name>
+        <qualifiedname>csmp::Face::outer_parent_face_id_</qualifiedname>
+        <initializer>= std::numeric_limits&lt;uint32_t&gt;::max()</initializer>
+        <briefdescription>
+<para>face number of outside higher-dimensional parent element, segm id if <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is line element in 3D </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="246" column="30" bodyfile="source/includes/model/Face.h" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_1a327cea5ceb9875591032f25ecb3ba9dd" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+        <definition>Element&lt;dim&gt;* csmp::Face&lt; dim &gt;::innerParent_</definition>
+        <argsstring></argsstring>
+        <name>innerParent_</name>
+        <qualifiedname>csmp::Face::innerParent_</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional neighbor in opposite direction of unit normal (always there) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="247" column="24" bodyfile="source/includes/model/Face.h" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_1a5618909f3d5643d1bda83fbdea54be01" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+        <definition>Element&lt;dim&gt;* csmp::Face&lt; dim &gt;::outerParent_</definition>
+        <argsstring></argsstring>
+        <name>outerParent_</name>
+        <qualifiedname>csmp::Face::outerParent_</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional neighbor element in direction of interface normal </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="248" column="24" bodyfile="source/includes/model/Face.h" bodystart="248" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_1a289f8d4afa124f99ce5db053297ee56d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::vector&lt;Node&lt;dim&gt;*&gt; csmp::Face&lt; dim &gt;::node_connector_</definition>
+        <argsstring></argsstring>
+        <name>node_connector_</name>
+        <qualifiedname>csmp::Face::node_connector_</qualifiedname>
+        <briefdescription>
+<para>pointers to the nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="249" column="18" bodyfile="source/includes/model/Face.h" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_face_1ab01d57ebe4f71e3a2dcf509d6b783c28" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::vector&lt;Face&lt;dim&gt;*&gt; csmp::Face&lt; dim &gt;::face_connector_</definition>
+        <argsstring></argsstring>
+        <name>face_connector_</name>
+        <qualifiedname>csmp::Face::face_connector_</qualifiedname>
+        <briefdescription>
+<para>the (equidimensional) neighbors of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="250" column="18" bodyfile="source/includes/model/Face.h" bodystart="250" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_face_1abcee3971b8dc7159c935bf02d9f3eba1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>()=delete</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="55" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a7b0f8e1ecbff934f015850030e41929b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;dim_minus1_element, Element&lt; dim &gt; *const inner_parent, Element&lt; dim &gt; *const outer_parent, uint32_t inner_parent_face_id, uint32_t outer_parent_face_id, const LocalVariables &amp;, const IntegrationPointVariables &amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>dim_minus1_element</declname>
+          <defname>elmt</defname>
+          <briefdescription><para>supplies finite element policy &amp; finite volume stencil information </para>
+</briefdescription>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>inner_parent</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>outer_parent</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>inner_parent_face_id</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>outer_parent_face_id</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <defname>ep</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <defname>ip</defname>
+        </param>
+        <briefdescription>
+<para>constructs model-interior face as an exact copy of the supplied lower-dimensional element; no neighbor faces yet </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs face as exact copy of a lower-dimensional element from which it is constructed.</para>
+<para>custom constructor which:</para>
+<para><itemizedlist>
+<listitem><para>builds variable storage</para>
+</listitem><listitem><para>connects face to its nodes</para>
+</listitem><listitem><para>connects face to its higher-dimensiona parent elements</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="note"><para>nodes and node numbering will be exactly that of the original lower-dimensional ELement object. It is assumed that this Elemen is numbered correctly in terms of the overall mesh when the model imported from a third-party tool.</para>
+</simplesect>
+<simplesect kind="note"><para>for models imported from professional meshing tools, use available &apos;surface orientation&apos; checks to ascertain that the nodes of lower-dimensional elements are numbered in a consistent way.</para>
+</simplesect>
+<simplesect kind="attention"><para>the costly part of this constructor is the determination of the indices of the faces of the higher dimensional elements that match this face</para>
+</simplesect>
+<simplesect kind="note"><para>used by <ref refid="classcsmp_1_1_mesh_manager_1a41ee34302cf5de2522281423b8900fd4" kindref="member">MeshManager::ReplaceElementByFace</ref></para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>1/4/2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="62" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="44" bodyend="108"/>
+        <references refid="classcsmp_1_1_face_1a7b0f8e1ecbff934f015850030e41929b" compoundref="_face_8cpp" startline="44" endline="108">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1a7b0f8e1ecbff934f015850030e41929b" compoundref="_face_8cpp" startline="44" endline="108">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1af4928e7ca3e21113810f49a30d34e876" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(Element&lt; dim &gt; &amp;inner_parent, csmp::FiniteElement *FE_type_of_boundary_face, const FiniteVolumeStencilManager&lt; dim &gt; *, uint32_t n_boundary_face, const LocalVariables &amp;, const IntegrationPointVariables &amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>inner_parent</declname>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_element" kindref="compound">csmp::FiniteElement</ref> *</type>
+          <declname>FE_type_of_boundary_face</declname>
+          <defname>FE_type_for_face</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil_manager" kindref="compound">FiniteVolumeStencilManager</ref>&lt; dim &gt; *</type>
+          <defname>fvm_manager</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_boundary_face</declname>
+          <defname>boundary_face</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <defname>ep</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <defname>ip</defname>
+        </param>
+        <briefdescription>
+<para>constructs model-boundary face as n-th (external) boundary face of the supplied higher dimensional parent element; no neighbor faces yet </para>
+        </briefdescription>
+        <detaileddescription>
+<para>constructs <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> object as an exact match of the target face of the supplied inner parent element</para>
+<para><simplesect kind="note"><para>boundary element from which face is constructed may have multiple boundary faces, therefore the nth_boundary face variable is required</para>
+</simplesect>
+<simplesect kind="note"><para>used by <ref refid="classcsmp_1_1_mesh_manager_1acd00d9a4dbb65cce84e8a8f9733cddcb" kindref="member">MeshManager::AddBoundaryFace</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="71" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="278" bodyend="316"/>
+        <references refid="classcsmp_1_1_face_1af4928e7ca3e21113810f49a30d34e876" compoundref="_face_8cpp" startline="278" endline="316">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1af4928e7ca3e21113810f49a30d34e876" compoundref="_face_8cpp" startline="278" endline="316">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a8dd7bcc2eb6f3c36f445258a78853009" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(const FiniteElementManager &amp;, const FiniteVolumeStencilManager&lt; dim &gt; *, Element&lt; dim &gt; *const inner_parent, Element&lt; dim &gt; *const outer_parent, uint32_t inner_parent_face_id, uint32_t outer_parent_face_id, const LocalVariables &amp;, const IntegrationPointVariables &amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_element_manager" kindref="compound">FiniteElementManager</ref> &amp;</type>
+          <defname>fem_manager</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil_manager" kindref="compound">FiniteVolumeStencilManager</ref>&lt; dim &gt; *</type>
+          <defname>fvm_manager</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>inner_parent</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>outer_parent</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>inner_parent_face_id</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>outer_parent_face_id</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <defname>ep</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <defname>ip</defname>
+        </param>
+        <briefdescription>
+<para>constructs face shared by the two volumetric elements inside of the model </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>used by <ref refid="classcsmp_1_1_mesh_manager_1a9548c9fc86a44d5ee40bf1463a5999ac" kindref="member">MeshManager::AddFace</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="79" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="215" bodyend="261"/>
+        <references refid="classcsmp_1_1_face_1a8dd7bcc2eb6f3c36f445258a78853009" compoundref="_face_8cpp" startline="215" endline="261">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1a8dd7bcc2eb6f3c36f445258a78853009" compoundref="_face_8cpp" startline="215" endline="261">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a2b9d920aa244e640e4b897426d1a476e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(const FiniteElementManager &amp;, const FiniteVolumeStencilManager&lt; dim &gt; *, Element&lt; dim &gt; *const inner_parent, Element&lt; dim &gt; *const outer_parent, const LocalVariables &amp;, const IntegrationPointVariables &amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_element_manager" kindref="compound">FiniteElementManager</ref> &amp;</type>
+          <defname>fem_manager</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil_manager" kindref="compound">FiniteVolumeStencilManager</ref>&lt; dim &gt; *</type>
+          <defname>fvm_manager</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>inner_parent</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>outer_parent</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <defname>ep</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <defname>ip</defname>
+        </param>
+        <briefdescription>
+<para>constructs face shared by the two volumetric elements inside of the model auto-detecting shared faces and nodes </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs face on the inside of the model, auto detecting their common face ^^^^^^^^^^^^^ and shared nodes. Only a pointer to the finite element matching the face has to be supplied.</para>
+<para><simplesect kind="note"><para>the node numbering of the inner parent element will be adopted for the new <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>22/10.2021 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="89" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="125" bodyend="205"/>
+        <references refid="classcsmp_1_1_face_1a2b9d920aa244e640e4b897426d1a476e" compoundref="_face_8cpp" startline="125" endline="205">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1a2b9d920aa244e640e4b897426d1a476e" compoundref="_face_8cpp" startline="125" endline="205">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a369fc3634818d10ec64b97803e9156d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(csmp::FiniteElement *FE_type_of_boundary_face, const FiniteVolumeStencilManager&lt; dim &gt; *, Element&lt; dim &gt; *const parent_of_face1, Element&lt; dim &gt; *const parent_of_face2, uint32_t parent_elmt1_segm_id, uint32_t parent_elmt2_segm_id, const std::vector&lt; Node&lt; dim &gt; * &gt; &amp;edge_nodes, const LocalVariables &amp;, const IntegrationPointVariables &amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_element" kindref="compound">csmp::FiniteElement</ref> *</type>
+          <declname>FE_type_of_boundary_face</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil_manager" kindref="compound">FiniteVolumeStencilManager</ref>&lt; dim &gt; *</type>
+          <defname>fvm_manager</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>parent_of_face1</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>parent_of_face2</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>parent_elmt1_segm_id</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>parent_elmt2_segm_id</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt; &amp;</type>
+          <declname>edge_nodes</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <defname>ep</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <defname>ip</defname>
+        </param>
+        <briefdescription>
+<para>constructs model-edge line-element face connected with one or two <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects that share their edge nodes with the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> on the model boundary </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs model-edge line-element face connected with the two surface elements of model boundary sharing its nodes</para>
+<para>The higher-dimensional Faces have to share an edge with the line element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>edge_nodes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>contains node pointers in the sequence in which they appear on the edge of the inner volumetric element that is adjacent to the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="attention"><para>in this case, the higher-dimensional neighbors of the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> do not share faces, but edges with the lower-dimensional element. Therefore the face_node_id&apos;s are not assigned.</para>
+</simplesect>
+<simplesect kind="note"><para>used by <ref refid="classcsmp_1_1_mesh_manager_1ac81208d16c26d180ebda1a2010eb6c5f" kindref="member">MeshManager::AddEdgeFace</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="97" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="338" bodyend="368"/>
+        <references refid="classcsmp_1_1_face_1a369fc3634818d10ec64b97803e9156d1" compoundref="_face_8cpp" startline="338" endline="368">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1a369fc3634818d10ec64b97803e9156d1" compoundref="_face_8cpp" startline="338" endline="368">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aea5f16205fe3cd193b9064065c7b4ef0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(size_t index, csmp::FiniteElement *, const csmp::FiniteVolumeStencil&lt; dim &gt; *, const LocalVariables &amp;, const IntegrationPointVariables &amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_element" kindref="compound">csmp::FiniteElement</ref> *</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">csmp::FiniteVolumeStencil</ref>&lt; dim &gt; *</type>
+          <defname>fvs</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref> &amp;</type>
+          <defname>ep</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> &amp;</type>
+          <defname>ip</defname>
+        </param>
+        <briefdescription>
+<para>for (RE)CONSTRUCTION of model from binary file; with storage but without connectivity </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Re-constructor with storage but without connectivity.</para>
+<para><simplesect kind="note"><para>used to reconstruct model from <ref refid="classcsmp_1_1_v_data_1aa671d43d9a394cb97787580ca3395c5e" kindref="member">VSet::VData</ref> / native binary file (MeshManager::Initialise) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="108" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="381" bodyend="401"/>
+        <references refid="classcsmp_1_1_face_1aea5f16205fe3cd193b9064065c7b4ef0" compoundref="_face_8cpp" startline="381" endline="401">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1aea5f16205fe3cd193b9064065c7b4ef0" compoundref="_face_8cpp" startline="381" endline="401">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a0ba38b1785c0df2394a8c10cfc0b3a26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(const Face&lt; dim &gt; &amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; &amp;</type>
+          <defname>fc</defname>
+        </param>
+        <briefdescription>
+<para>copy constructor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="114" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="407" bodyend="421"/>
+        <references refid="classcsmp_1_1_face_1a0ba38b1785c0df2394a8c10cfc0b3a26" compoundref="_face_8cpp" startline="407" endline="421">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1a0ba38b1785c0df2394a8c10cfc0b3a26" compoundref="_face_8cpp" startline="407" endline="421">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aa5d7aa50bf688d4b574506b88f9e8d95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; &amp;</type>
+        <definition>Face&lt; dim &gt; &amp; csmp::Face&lt; dim &gt;::operator=</definition>
+        <argsstring>(const Face&lt; dim &gt; &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Face::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; &amp;</type>
+          <defname>fc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>private as there should never be a need to use it and the results are undefined in terms of the pointers to parent and neighbor elements</para>
+<para><simplesect kind="note"><para>assignment operator is used in container::find(Face) operations; why? </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="115" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="432" bodyend="451"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a5ff361aa399b3c239f6621e31289d06a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::Face</definition>
+        <argsstring>(Face&lt; dim &gt; &amp;&amp;)</argsstring>
+        <name>Face</name>
+        <qualifiedname>csmp::Face::Face</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; &amp;&amp;</type>
+          <defname>fc</defname>
+        </param>
+        <briefdescription>
+<para>move constructor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="117" column="5" bodyfile="source/modules/model/Face.cpp" bodystart="458" bodyend="474"/>
+        <references refid="classcsmp_1_1_face_1a5ff361aa399b3c239f6621e31289d06a" compoundref="_face_8cpp" startline="458" endline="474">csmp::Face&lt; dim &gt;::Face</references>
+        <referencedby refid="classcsmp_1_1_face_1a5ff361aa399b3c239f6621e31289d06a" compoundref="_face_8cpp" startline="458" endline="474">csmp::Face&lt; dim &gt;::Face</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a771b04837231839651622d07ced8b678" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; &amp;</type>
+        <definition>Face&lt; dim &gt; &amp; csmp::Face&lt; dim &gt;::operator=</definition>
+        <argsstring>(Face&lt; dim &gt; &amp;&amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Face::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; &amp;&amp;</type>
+          <defname>fc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="118" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="479" bodyend="500"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aaac43440dc7cb1cdcc3050a822fce930" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Face&lt; dim &gt;::~Face</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Face</name>
+        <qualifiedname>csmp::Face::~Face</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="120" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a7cf40fd6a1860c961e07f42727eb07f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::Assign</definition>
+        <argsstring>(uint32_t node, Node&lt; dim &gt; *const)</argsstring>
+        <name>Assign</name>
+        <qualifiedname>csmp::Face::Assign</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * const</type>
+          <defname>nd_ptr</defname>
+        </param>
+        <briefdescription>
+<para>connects face to the supplied node </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Connect <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> object with its nodes. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="123" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="511" bodyend="515"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a1c30463834b951c9d01cfc327341ea9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::Unassign</definition>
+        <argsstring>(const csmp::Node&lt; dim &gt; *const)</argsstring>
+        <name>Unassign</name>
+        <qualifiedname>csmp::Face::Unassign</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * const</type>
+          <defname>nd_ptr</defname>
+        </param>
+        <briefdescription>
+<para>disconnecting the <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> without deleting it; its pointer is set to nullptr </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="126" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="719" bodyend="727"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1ab109a5e4b59742ca141db4b535662b6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::Assign</definition>
+        <argsstring>(Element&lt; dim &gt; *const innerElement, Element&lt; dim &gt; *const outerElement)</argsstring>
+        <name>Assign</name>
+        <qualifiedname>csmp::Face::Assign</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>innerElement</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>outerElement</declname>
+        </param>
+        <briefdescription>
+<para>assign higher-dimensional neighbor elements to either side of face (outside is optional); needs nodes to be assigned first </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Connects face to the higher-dimensional parent elements which it may be sandwiched between. <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> pointers are reassigned if they were already pointing to other nodes.</para>
+<para><simplesect kind="note"><para>method assumes that the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> object already has valid node pointers</para>
+</simplesect>
+<simplesect kind="attention"><para>the nodes must be assigned to the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> before this method is called</para>
+</simplesect>
+<simplesect kind="attention"><para>The node numbering of the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> determines the direction of its normal. Here the convention is assumed that the first parent element is that on the inside of the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> with regard to the outward pointing normal and the second element is on the outside. It follows that the node sequences are the same. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="129" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="606" bodyend="713"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aeff2633c3de71a41d192d9aa49a7b31a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::Assign</definition>
+        <argsstring>(uint32_t nbor, Face&lt; dim &gt; *const)</argsstring>
+        <name>Assign</name>
+        <qualifiedname>csmp::Face::Assign</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nbor</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * const</type>
+          <defname>f_ptr</defname>
+        </param>
+        <briefdescription>
+<para>tell face about its face neighbors </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="132" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="520" bodyend="524"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a675a6c69d3f6cd833e00f7edf5ffc08d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Face&lt; dim &gt;::Unassign</definition>
+        <argsstring>(const Face&lt; dim &gt; *const)</argsstring>
+        <name>Unassign</name>
+        <qualifiedname>csmp::Face::Unassign</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; * const</type>
+          <defname>f_ptr</defname>
+        </param>
+        <briefdescription>
+<para>sets the pointer to given neighbor face to zero, reports whether removal was made </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes the first occurrence of the neighbor pointed to by f_ptr from the neighbor array. Any further occurrence is ignored.</para>
+<para><simplesect kind="return"><para>whether removal was successful</para>
+</simplesect>
+<simplesect kind="note"><para>call twice if there are multple occurrences. </para>
+</simplesect>
+<simplesect kind="note"><para>if called with a nullptr argument method will return false. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="135" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="537" bodyend="549"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1ae92442022e0c123b6b65f0c93d7eb857" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::UnassignNeighbor</definition>
+        <argsstring>(uint32_t nbor)</argsstring>
+        <name>UnassignNeighbor</name>
+        <qualifiedname>csmp::Face::UnassignNeighbor</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nbor</declname>
+        </param>
+        <briefdescription>
+<para>removal of anything attached to face neighbor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="137" column="8" bodyfile="source/modules/model/Face.cpp" bodystart="553" bodyend="557"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a8b42a041a80cbd043fba3ff8d2de4e30" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Face&lt; dim &gt;::operator==</definition>
+        <argsstring>(const Face&lt; dim &gt; &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Face::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; &amp;</type>
+          <defname>fc</defname>
+        </param>
+        <briefdescription>
+<para>compares faces with one-another </para>
+        </briefdescription>
+        <detaileddescription>
+<para>SKM revised 8/02/22 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="140" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="1245" bodyend="1259"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a22929687d6db25e5b186c729efb161e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; * &gt; &amp;</type>
+        <definition>std::vector&lt; csmp::Face&lt; dim &gt; * &gt; &amp; csmp::Face&lt; dim &gt;::NeighborElementVector</definition>
+        <argsstring>()</argsstring>
+        <name>NeighborElementVector</name>
+        <qualifiedname>csmp::Face::NeighborElementVector</qualifiedname>
+        <briefdescription>
+<para>for use in range loops </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="143" column="27" bodyfile="source/modules/model/Face.cpp" bodystart="820" bodyend="823"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a171dabf2c1216c99a3e337066764892d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::Face&lt; dim &gt;::Placement</definition>
+        <argsstring>() const</argsstring>
+        <name>Placement</name>
+        <qualifiedname>csmp::Face::Placement</qualifiedname>
+        <briefdescription>
+<para>Local variable storage interface; required by <ref refid="classcsmp_1_1_local_variable_storage" kindref="compound">LocalVariableStorage</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="151" column="15" bodyfile="source/includes/model/Face.h" bodystart="151" bodyend="151"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aca8ca9b8785f32662dfac183ac3ec283" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::Nodes</definition>
+        <argsstring>() const</argsstring>
+        <name>Nodes</name>
+        <qualifiedname>csmp::Face::Nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="153" column="15" bodyfile="source/modules/model/Face.cpp" bodystart="561" bodyend="564"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a593b3cbf8a1225dca8aa37a7784bb3a6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::Neighbors</definition>
+        <argsstring>() const</argsstring>
+        <name>Neighbors</name>
+        <qualifiedname>csmp::Face::Neighbors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="154" column="15" bodyfile="source/modules/model/Face.cpp" bodystart="569" bodyend="572"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1ab756d4ad1bbcf5146f0e94c089899890" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::ConnectedNeighbors</definition>
+        <argsstring>() const</argsstring>
+        <name>ConnectedNeighbors</name>
+        <qualifiedname>csmp::Face::ConnectedNeighbors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="155" column="13" bodyfile="source/modules/model/Face.cpp" bodystart="576" bodyend="582"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a45d927e3e87d9ec45b41b691d3f95f7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::Faces</definition>
+        <argsstring>() const</argsstring>
+        <name>Faces</name>
+        <qualifiedname>csmp::Face::Faces</qualifiedname>
+        <briefdescription>
+<para>sides of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> object by analogy with <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="158" column="15" bodyfile="source/modules/model/Face.cpp" bodystart="586" bodyend="589"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aacdb1c594fe45f9645eb5462a253b774" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::vector&lt; csmp::Node&lt; dim &gt; * &gt;::const_iterator csmp::Face&lt; dim &gt;::NodesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>NodesBegin</name>
+        <qualifiedname>csmp::Face::NodesBegin</qualifiedname>
+        <briefdescription>
+<para>only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>iterator to the element nodes </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="161" column="45" bodyfile="source/modules/model/Face.cpp" bodystart="734" bodyend="737"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a1e4aa7cac21bb9dddf7df035230830bf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::vector&lt; csmp::Node&lt; dim &gt; * &gt;::const_iterator csmp::Face&lt; dim &gt;::NodesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>NodesEnd</name>
+        <qualifiedname>csmp::Face::NodesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="162" column="45" bodyfile="source/modules/model/Face.cpp" bodystart="740" bodyend="743"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a90b8f6de4c30a55fc12b05b909d05ac7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>vector&lt; csmp::Node&lt; dim &gt; * &gt;::const_iterator csmp::Face&lt; dim &gt;::CornerNodesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodesBegin</name>
+        <qualifiedname>csmp::Face::CornerNodesBegin</qualifiedname>
+        <briefdescription>
+<para>assuming that the corner nodes are the first, the midside nodes the second, and the .. in the elements node set according to CSMP_FEM_conventions.pdf </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="164" column="45" bodyfile="source/modules/model/Face.cpp" bodystart="748" bodyend="751"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a24e233c165973990e104961fa961fede" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>vector&lt; csmp::Node&lt; dim &gt; * &gt;::const_iterator csmp::Face&lt; dim &gt;::CornerNodesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodesEnd</name>
+        <qualifiedname>csmp::Face::CornerNodesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="165" column="45" bodyfile="source/modules/model/Face.cpp" bodystart="754" bodyend="757"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a07d5c360adb1db636fb74f8386925a1d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::vector&lt; Face&lt; dim &gt; * &gt;::const_iterator csmp::Face&lt; dim &gt;::NeighborsBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>NeighborsBegin</name>
+        <qualifiedname>csmp::Face::NeighborsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="167" column="45" bodyfile="source/modules/model/Face.cpp" bodystart="762" bodyend="765"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a1b6116bcefed751a2b32f972efab98b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+        <definition>std::vector&lt; Face&lt; dim &gt; * &gt;::const_iterator csmp::Face&lt; dim &gt;::NeighborsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>NeighborsEnd</name>
+        <qualifiedname>csmp::Face::NeighborsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="168" column="45" bodyfile="source/modules/model/Face.cpp" bodystart="768" bodyend="771"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a59ffc4a28db70d425e87498e7ca09ace" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::Accept</definition>
+        <argsstring>(csmp::Visitor&lt; dim &gt; &amp;)</argsstring>
+        <name>Accept</name>
+        <qualifiedname>csmp::Face::Accept</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_visitor" kindref="compound">csmp::Visitor</ref>&lt; dim &gt; &amp;</type>
+          <defname>vis</defname>
+        </param>
+        <briefdescription>
+<para>to apply visitors whose application level is <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and target is <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>SKM temporary patch to get <ref refid="classcsmp_1_1_visitor" kindref="compound">Visitor</ref> objects to work on boundaries. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="171" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="780" bodyend="794"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a4cac6b04f851a2eb013a49962668c212" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_node" kindref="compound">csmp::Node</ref>&lt; dim &gt; *const</type>
+        <definition>csmp::Node&lt; dim &gt; *const csmp::Face&lt; dim &gt;::N</definition>
+        <argsstring>(uint32_t n_local) const</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::Face::N</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_local</declname>
+        </param>
+        <briefdescription>
+<para>access the nodes that are connected to the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="174" column="22" bodyfile="source/modules/model/Face.cpp" bodystart="827" bodyend="831"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a3c1775ffe4db4accc0c38710b154ccf1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_face" kindref="compound">csmp::Face</ref>&lt; dim &gt; *const</type>
+        <definition>csmp::Face&lt; dim &gt; *const csmp::Face&lt; dim &gt;::Neighbor</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>Neighbor</name>
+        <qualifiedname>csmp::Face::Neighbor</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+<para>access the neighbor faces of this face </para>
+        </briefdescription>
+        <detaileddescription>
+<para>watch out if there is no neighbor this returns a NULL pointer </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="177" column="22" bodyfile="source/modules/model/Face.cpp" bodystart="838" bodyend="842"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a93e6d269eac73da79101877fd86c76cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::Idx</definition>
+        <argsstring>(size_t) const</argsstring>
+        <name>Idx</name>
+        <qualifiedname>csmp::Face::Idx</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>idx_to_assign</defname>
+        </param>
+        <briefdescription>
+<para>on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns the current index of this face assuming that a meaningful value was assigned earlier </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="180" column="20" bodyfile="source/modules/model/Face.cpp" bodystart="807" bodyend="810"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a881e8a82566f426efd996908b0967856" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::Face&lt; dim &gt;::Idx</definition>
+        <argsstring>() const</argsstring>
+        <name>Idx</name>
+        <qualifiedname>csmp::Face::Idx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="181" column="20" bodyfile="source/modules/model/Face.cpp" bodystart="813" bodyend="816"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a34f7e31fc9f0b16494d782605aa36227" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+        <definition>Element&lt; dim &gt; *const csmp::Face&lt; dim &gt;::Parent</definition>
+        <argsstring>(INTERFACE_SIDE) const</argsstring>
+        <name>Parent</name>
+        <qualifiedname>csmp::Face::Parent</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga5d179634969d40eee2a383f783d570cb" kindref="member">INTERFACE_SIDE</ref></type>
+          <defname>side</defname>
+        </param>
+        <briefdescription>
+<para>access the higher dimensional elements on either side of face; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>returns nullptr if outside is not present</para>
+</simplesect>
+Returns either the INSIDE or OUTSIDE elements connected to this face if they exist. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="184" column="19" bodyfile="source/modules/model/Face.cpp" bodystart="850" bodyend="856"/>
+        <referencedby refid="classcsmp_1_1_face_1aacb7102f0e766287c0886d33ab2c4855" compoundref="_face_8cpp" startline="965" endline="969">csmp::Face&lt; dim &gt;::VectorToInnerElementBaryCenter</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a021069fdcd55ecbb4b4234601331f4cc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+        <definition>Element&lt; dim &gt; *const csmp::Face&lt; dim &gt;::InnerParent</definition>
+        <argsstring>() const</argsstring>
+        <name>InnerParent</name>
+        <qualifiedname>csmp::Face::InnerParent</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional element located on side opposite to where the unit normal points; will always be present </para>
+        </briefdescription>
+        <detaileddescription>
+<para>inner parent is always initialised for a valid face </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="187" column="19" bodyfile="source/modules/model/Face.cpp" bodystart="863" bodyend="867"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a7883707434ec8dd7d16b25572dfd6595" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+        <definition>Element&lt; dim &gt; *const csmp::Face&lt; dim &gt;::OuterParent</definition>
+        <argsstring>() const</argsstring>
+        <name>OuterParent</name>
+        <qualifiedname>csmp::Face::OuterParent</qualifiedname>
+        <briefdescription>
+<para>higher-dimensional element located on the side of the face to which the unit normal points; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>does not exist on model boundary</para>
+</simplesect>
+<simplesect kind="attention"><para>outer parent will not be initialised if the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> lies on the outside boundary of the model </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="190" column="19" bodyfile="source/modules/model/Face.cpp" bodystart="874" bodyend="877"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a2859c0774d7aee1aa81254e1370a3115" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::ParentFaceID</definition>
+        <argsstring>(INTERFACE_SIDE, uint32_t idx)</argsstring>
+        <name>ParentFaceID</name>
+        <qualifiedname>csmp::Face::ParentFaceID</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga5d179634969d40eee2a383f783d570cb" kindref="member">INTERFACE_SIDE</ref></type>
+          <defname>side</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+<para>assign face ID of inner or outer parent element depending on their local face numbering </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns which <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> of the higher dimensional inner neighbor element this <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> shares its nodes with local number of the face in the inner parent element, which borders against the interface </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="194" column="20" bodyfile="source/modules/model/Face.cpp" bodystart="930" bodyend="947"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1ad85871ca75d04149f2368fde5359513e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::InnerParentFaceID</definition>
+        <argsstring>() const</argsstring>
+        <name>InnerParentFaceID</name>
+        <qualifiedname>csmp::Face::InnerParentFaceID</qualifiedname>
+        <briefdescription>
+<para>return face ID of inner parent element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="195" column="20" bodyfile="source/modules/model/Face.cpp" bodystart="884" bodyend="888"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1add603056c0bd9fdbb2929c49a084ddd8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::OuterParentFaceID</definition>
+        <argsstring>() const</argsstring>
+        <name>OuterParentFaceID</name>
+        <qualifiedname>csmp::Face::OuterParentFaceID</qualifiedname>
+        <briefdescription>
+<para>return face ID of outer parent element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="196" column="20" bodyfile="source/modules/model/Face.cpp" bodystart="895" bodyend="899"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1ab9459cabbbfd020110f2c690cee7ac5f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::Face&lt; dim &gt;::ParentFaceID</definition>
+        <argsstring>(INTERFACE_SIDE side) const</argsstring>
+        <name>ParentFaceID</name>
+        <qualifiedname>csmp::Face::ParentFaceID</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga5d179634969d40eee2a383f783d570cb" kindref="member">INTERFACE_SIDE</ref></type>
+          <declname>side</declname>
+        </param>
+        <briefdescription>
+<para>return face ID of inner or outer parent element depending on index </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="197" column="20" bodyfile="source/modules/model/Face.cpp" bodystart="906" bodyend="923"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a89a99716075879dba50abe92b9c0986b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Face&lt; dim &gt;::Area</definition>
+        <argsstring>() const</argsstring>
+        <name>Area</name>
+        <qualifiedname>csmp::Face::Area</qualifiedname>
+        <briefdescription>
+<para>returns area of the face; method assumes same role as <ref refid="classcsmp_1_1_finite_element_policy_1ad8f1ad92fc4e66b0ccb44191228b0b45" kindref="member">Volume()</ref> for the element </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns area (3D) or length (2D) of face </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="204" column="18" bodyfile="source/modules/model/Face.cpp" bodystart="974" bodyend="977"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aacb7102f0e766287c0886d33ab2c4855" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::VectorToInnerElementBaryCenter</definition>
+        <argsstring>(VectorVariable&lt; dim &gt; &amp;) const</argsstring>
+        <name>VectorToInnerElementBaryCenter</name>
+        <qualifiedname>csmp::Face::VectorToInnerElementBaryCenter</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vectorToInner</defname>
+        </param>
+        <briefdescription>
+<para>not a face-normal vector, but the shortest path between the barycenters of face and element </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a vector (not a unit normal) connecting the barycenter of the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> with that of the higher-dimensional parent element on its inside. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="207" column="18" bodyfile="source/modules/model/Face.cpp" bodystart="965" bodyend="969"/>
+        <references refid="classcsmp_1_1_face_1abba92cf6bcc806c08668aa9cede84380" compoundref="_face_8cpp" startline="1048" endline="1056">csmp::Face&lt; dim &gt;::BaryCenter</references>
+        <references refid="classcsmp_1_1_face_1a34f7e31fc9f0b16494d782605aa36227" compoundref="_face_8cpp" startline="850" endline="856">csmp::Face&lt; dim &gt;::Parent</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1afb0417ba725e5804faaab989262f62ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::Face&lt; dim &gt;::NodePropertyVector</definition>
+        <argsstring>(const csmp::Index &amp;, std::vector&lt; Var &gt; &amp;) const</argsstring>
+        <name>NodePropertyVector</name>
+        <qualifiedname>csmp::Face::NodePropertyVector</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>idx</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; Var &gt; &amp;</type>
+          <defname>V</defname>
+        </param>
+        <briefdescription>
+<para>returns a vector of the property of interest discretized on the node </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns property values at the nodes </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="216" column="17" bodyfile="source/modules/model/Face.cpp" bodystart="1120" bodyend="1136"/>
+        <references refid="structcsmp_1_1_index_1a459d7e434854a790a303dcc20cc47949" compoundref="_index_8cpp" startline="385" endline="403">csmp::Index::Out</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1aaa38ddcffa2827c006b767f7dbd6fb81" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::NodeCoordinateMatrix</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;) const</argsstring>
+        <name>NodeCoordinateMatrix</name>
+        <qualifiedname>csmp::Face::NodeCoordinateMatrix</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>XY</defname>
+        </param>
+        <briefdescription>
+<para>inputs node coordinates into supplied matrix </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a matrix with &apos;nodes&apos;-rows and &apos;coordinate-directions&apos; columns. This matrix defines the positions of the elements nodes for the finite-element matrix assembly. Since the number of element nodes may vary among different elements types, the number of rows in XY may also vary from element to element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>XY</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A <ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref> class object (value type fT). This matrix is dynamically resized if necessary but must have been constructed with a finite size before passing it to <ref refid="classcsmp_1_1_finite_element_policy_1a8f08eac65fbebe1bf083a13e507d20d1" kindref="member">CoordinateMatrix()</ref>.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The node coordinates are returned into the supplied matrix.</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Finite-element forms of differential equations require the global node coordinates of the element to calculate the element constribution to the global solution matrix. If the element uses local coordinates, the global node coordinates will still be required to compute Jacobian (coordinate- transformation) matrix. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="219" column="17" bodyfile="source/modules/model/Face.cpp" bodystart="1007" bodyend="1014"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1abba92cf6bcc806c08668aa9cede84380" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;</type>
+        <definition>Point&lt; dim &gt; csmp::Face&lt; dim &gt;::BaryCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>BaryCenter</name>
+        <qualifiedname>csmp::Face::BaryCenter</qualifiedname>
+        <briefdescription>
+<para>the centre of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_face_1abba92cf6bcc806c08668aa9cede84380" kindref="member">BaryCenter()</ref> calculates the node coordinate average for the element. This coordinate value is equivalent to the center of gravity of the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> type.</para>
+<sect1 id="classcsmp_1_1_two_phase_file_based_1input">
+<title>Input Arguments</title><para>The barycentre is returned into a CSMP vector variable a reference to which is supplied as single argument.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The element barycentre could be used for instance to output element material properties from the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> as point data. This is done if you use the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> OutputToTextFile() methods.</para>
+<para><simplesect kind="return"><para>The <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> of the returned vector variable will not be changed by BaryCentre().</para>
+</simplesect>
+<simplesect kind="note"><para>could be madfe more</para>
+</simplesect>
+<xrefsect id="test_1_test000046"><xreftitle>Test</xreftitle><xrefdescription><para>O.K. SKM25/8/14 after refactoring loop</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="222" column="12" bodyfile="source/modules/model/Face.cpp" bodystart="1048" bodyend="1056"/>
+        <referencedby refid="classcsmp_1_1_face_1a57277f022d9476217a4cb5351b763037" compoundref="_face_8cpp" startline="1167" endline="1234">csmp::Face&lt; dim &gt;::Out</referencedby>
+        <referencedby refid="classcsmp_1_1_face_1aacb7102f0e766287c0886d33ab2c4855" compoundref="_face_8cpp" startline="965" endline="969">csmp::Face&lt; dim &gt;::VectorToInnerElementBaryCenter</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a62ca872a7981b72f22b291582e53b227" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Face&lt; dim &gt;::LengthInDirection</definition>
+        <argsstring>(const VectorVariable&lt; dim &gt; &amp;vecDirection) const</argsstring>
+        <name>LengthInDirection</name>
+        <qualifiedname>csmp::Face::LengthInDirection</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>vecDirection</declname>
+        </param>
+        <briefdescription>
+<para>projects node points onto line returning max distance between them; vec direction can have any length </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Measures the length of the element (in physical space) in a certain direction.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vecDirection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>direction in which the element is to be measured</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Length of the element.</para>
+</simplesect>
+@sectin implementation Implementation</para>
+<para>The main idea is to measure the height of the oriented bounding box (oriented by the direction of vecDirection) which surrounds the element. This is done by projecting each node onto the direction vector and calculating the difference between the largest and smallest magnitude. The distance between both projections will be given by the absolute value of this difference.</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The length of the element in a certain dimension is used to weigh the error of the element, when evaluating the quality of a certain mesh.</para>
+<para><xrefsect id="todo_1_todo000146"><xreftitle>Todo</xreftitle><xrefdescription><para>this method could be optimised if only the corner nodes would be used</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="225" column="15" bodyfile="source/modules/model/Face.cpp" bodystart="1085" bodyend="1110"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a57277f022d9476217a4cb5351b763037" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Face::Out</qualifiedname>
+        <briefdescription>
+<para>prints state of this object </para>
+        </briefdescription>
+        <detaileddescription>
+<para>outputs local variables of Face(Element) overriding corresponding method of base class </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="228" column="11" bodyfile="source/modules/model/Face.cpp" bodystart="1167" bodyend="1234"/>
+        <references refid="classcsmp_1_1_face_1abba92cf6bcc806c08668aa9cede84380" compoundref="_face_8cpp" startline="1048" endline="1056">csmp::Face&lt; dim &gt;::BaryCenter</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_face_1af307610a385d1aa2e34d244049b820ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void * csmp::Face&lt; dim &gt;::operator new</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>operator new</name>
+        <qualifiedname>csmp::Face::operator new</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="234" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="1265" bodyend="1270"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1a74d540fe3fa90eaf16da7c7ea558f6ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::operator delete</definition>
+        <argsstring>(void *p)</argsstring>
+        <name>operator delete</name>
+        <qualifiedname>csmp::Face::operator delete</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="235" column="10" bodyfile="source/modules/model/Face.cpp" bodystart="1274" bodyend="1279"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_face_1ab7f15f0fc89aaa5fc886fc69bb65046c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Face&lt; dim &gt;::AssignFaceID</definition>
+        <argsstring>(const std::vector&lt; Node&lt; dim &gt; * &gt; &amp;faceNodes)</argsstring>
+        <name>AssignFaceID</name>
+        <qualifiedname>csmp::Face::AssignFaceID</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt; &amp;</type>
+          <declname>faceNodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Face.h" line="238" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Lower dimensional surface (in 3D) or line (2D) elements serve as boundaries (<ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>) or connect disconnected mesh domains (<ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>). The <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is used for material interfaces that are welded together by sharing nodes. <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> objects of a CSMP model consist of <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects.</para>
+<para>The <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is rather similar in its functionality to the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> with many member functions sharing their names. As an important difference, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects know their higher-dimensional neighbor <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects. This means that <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects are not only connected to each other, but have an extra set of pointers that connect them to <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects.</para>
+<para><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects also have a unit normal that helps with the application of tractions etc. Since the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is not inherited from <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, it constitutes a separate type and can store unique variables, especially ones like tractions, influxes or transfer coefficients, which would unnecessarily consume storage if discretised evenly over a domain. <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> variables like permeability can still be accessed easily because the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> has pointers to its inner and outer <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> neighbors.</para>
+<para><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects have been designed to support operations on internal or external model boundaries. If a <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> is located at an external (<ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>) boundary its normal will point outward and only the inner higher-dimensional neighbor 0 will be initialised. Representing internal boundaries, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects provide access to both neighbors, also helping to distinguish inside from outside domains. This distinction is possible and indicated by to the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> normal that points to the outside. Thus, the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects that the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> normal points to are referred to as outside and the ones on the opposite side are the internal ones. This also means that the sense of node numbering of the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> matches that of the face of the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> on the inside.</para>
+<para><simplesect kind="note"><para>without a topology it is impossible to &quot;compute&quot; what the inside or outside of a surface in a boundary representation is. This info comes from CAD or geomodel into CSMP++ which can only perform consistency checks.</para>
+</simplesect>
+<simplesect kind="attention"><para>Since so much information is required to construct complete <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> objects, this is done in 2 steps: 1) the various constructors establish <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> connectivity with higher-dimensional neighbors, associated indices and policies. 2) separate operations assign idx, nodes, neighbors, etc.</para>
+</simplesect>
+<simplesect kind="author"><para>Stephan Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>3/3/2016 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::Face&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_face"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FiniteElementPolicy&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElementPolicy&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+      <node id="4">
+        <label>csmp::FiniteVolumePolicy&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="6">
+        <label>csmp::LocalVariableStorage&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Face&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_face"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FiniteElementPolicy&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElementPolicy&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_finite_element_policy"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+      <node id="4">
+        <label>csmp::FiniteVolumePolicy&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="6">
+        <label>csmp::LocalVariableStorage&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Face.h" line="49" column="1" bodyfile="source/includes/model/Face.h" bodystart="52" bodyend="251"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_face_1a59ffc4a28db70d425e87498e7ca09ace" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Accept</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ae81c2b297f4166821bc3de2856e055ae" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_face_1a89a99716075879dba50abe92b9c0986b" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Area</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a098d98840070560812b4983f70e3e3ee" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0f98d57cdb8354375492e1ecab895b05" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>AssertFiniteVolumeIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a5143bb03ae0bda92a0c01260dee54615" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>AssertIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4cc75be181f8519badea275810fe8275" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>AssertPlacement</name></member>
+      <member refid="classcsmp_1_1_face_1a7cf40fd6a1860c961e07f42727eb07f0" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_face_1ab109a5e4b59742ca141db4b535662b6c" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_face_1aeff2633c3de71a41d192d9aa49a7b31a" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a8a6b224d1d3482c35e577ffc3b9a1230" prot="public" virt="non-virtual" ambiguityscope="csmp::FiniteElementPolicy&lt; dim, Face &gt;::"><scope>csmp::Face</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_face_1ab7f15f0fc89aaa5fc886fc69bb65046c" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>AssignFaceID</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a77c9cbf8fea9ea9683280d459a384347" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>AssignFiniteElementNullPtr</name></member>
+      <member refid="classcsmp_1_1_face_1abba92cf6bcc806c08668aa9cede84380" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>BaryCenter</name></member>
+      <member refid="classcsmp_1_1_face_1ab756d4ad1bbcf5146f0e94c089899890" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>ConnectedNeighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a8f08eac65fbebe1bf083a13e507d20d1" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>CoordinateMatrix</name></member>
+      <member refid="classcsmp_1_1_face_1a90b8f6de4c30a55fc12b05b909d05ac7" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>CornerNodesBegin</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1acdaccbd7a5d2c7414b7313e73f29dd78" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>CornerNodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_face_1a24e233c165973990e104961fa961fede" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>CornerNodesEnd</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a060eafe8a4ad9ba2317bed9340c68b3a" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3b56bab7bc4a1db37bfc4d4176457349" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a60755a7783f5fa3e148bdebbc262e313" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>det_JINV_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a56a0f54fe5711fd30028e7aab917ac61" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ace23ba2a8014a0cf2608c57ff23971ca" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>dN_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a687f5a139fe956d5e4f77a395888665a" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a020acd46aa1d08723694e6999ecbf355" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a110040be6c3f197163729b7c4ea81069" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>EmptyLVS</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a1499c9885a547d55b3749ccf3321195f" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_face_1abcee3971b8dc7159c935bf02d9f3eba1" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1a7b0f8e1ecbff934f015850030e41929b" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1af4928e7ca3e21113810f49a30d34e876" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1a8dd7bcc2eb6f3c36f445258a78853009" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1a2b9d920aa244e640e4b897426d1a476e" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1a369fc3634818d10ec64b97803e9156d1" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1aea5f16205fe3cd193b9064065c7b4ef0" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1a0ba38b1785c0df2394a8c10cfc0b3a26" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1a5ff361aa399b3c239f6621e31289d06a" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Face</name></member>
+      <member refid="classcsmp_1_1_face_1ab01d57ebe4f71e3a2dcf509d6b783c28" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>face_connector_</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1af6c030a937fbfecd002756d67353271e" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>FaceBaryCenter</name></member>
+      <member refid="classcsmp_1_1_face_1a45d927e3e87d9ec45b41b691d3f95f7f" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>FE</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a37cbda0c98719c47bbf4104117b026f3" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>FE_Type</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ac67ae122f6fc20e8e3b9a6dc1bb864e0" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>FiniteElementPolicy</name></member>
+      <member refid="classcsmp_1_1_face_1a93e6d269eac73da79101877fd86c76cb" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Idx</name></member>
+      <member refid="classcsmp_1_1_face_1a881e8a82566f426efd996908b0967856" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Idx</name></member>
+      <member refid="classcsmp_1_1_face_1a2a9a74f66b9ee264e7677d767a52cf43" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>idx_</name></member>
+      <member refid="classcsmp_1_1_face_1ac84d70edaca1a5ae2fdee9b9c864dc7a" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>inner_parent_face_id_</name></member>
+      <member refid="classcsmp_1_1_face_1a021069fdcd55ecbb4b4234601331f4cc" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>InnerParent</name></member>
+      <member refid="classcsmp_1_1_face_1a327cea5ceb9875591032f25ecb3ba9dd" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>innerParent_</name></member>
+      <member refid="classcsmp_1_1_face_1ad85871ca75d04149f2368fde5359513e" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>InnerParentFaceID</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aedac4e85507af8472d150919bbdcd596" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1adb0e04d0ca6e1d778c7d661c712d8489" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ae0d1e7bd37d3df2466c6b19d19104861" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ab081bcacc1a48b61826173e6457d2de1" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a4e01522e7321abe783521bb9720134ee" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IntegrationPointPropertyVector</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ac5f3d16eb6043c3009d924142f10dc43" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a9eb9b6e65e131b645fd24a69d85bf882" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aa2437e1836f4fa229a5e24f71b5e6a3e" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IsEquidimensional</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a2fe99256fef0cd21787f1d1dbeffc88f" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a6191121afc6f9bf442f7fcc1dd24d901" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1abcab5f98eb7b23a5c94e508dfc7a236f" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa8f995011429356bfd7e7744794c9b9b" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_face_1a62ca872a7981b72f22b291582e53b227" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>LengthInDirection</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa711649557c9cd84c0a69e7e1ffe301b" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>LocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3568b1d87af863a457f038ca8982bcea" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>LVS</name></member>
+      <member refid="classcsmp_1_1_face_1a5432c6513839ff9cf850ed24aa43a4df" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>MeshManager</name></member>
+      <member refid="classcsmp_1_1_face_1a4cac6b04f851a2eb013a49962668c212" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a59be5ecef2c9588aee1dd0948b81b471" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>N_At</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1aa967d6caae742df669ff92562519c060" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a6a65623b4219d8f3da0aa5a33272ebea" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>N_AtGlobalPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a59c801ea0a73c350dfba1c62e8adee18" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_face_1a3c1775ffe4db4accc0c38710b154ccf1" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Neighbor</name></member>
+      <member refid="classcsmp_1_1_face_1a22929687d6db25e5b186c729efb161e2" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>NeighborElementVector</name></member>
+      <member refid="classcsmp_1_1_face_1a593b3cbf8a1225dca8aa37a7784bb3a6" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_face_1a07d5c360adb1db636fb74f8386925a1d" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>NeighborsBegin</name></member>
+      <member refid="classcsmp_1_1_face_1a1b6116bcefed751a2b32f972efab98b7" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>NeighborsEnd</name></member>
+      <member refid="classcsmp_1_1_face_1a289f8d4afa124f99ce5db053297ee56d" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>node_connector_</name></member>
+      <member refid="classcsmp_1_1_face_1aaa38ddcffa2827c006b767f7dbd6fb81" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>NodeCoordinateMatrix</name></member>
+      <member refid="classcsmp_1_1_face_1afb0417ba725e5804faaab989262f62ec" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>NodePropertyVector</name></member>
+      <member refid="classcsmp_1_1_face_1aca8ca9b8785f32662dfac183ac3ec283" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_face_1aacdb1c594fe45f9645eb5462a253b774" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>NodesBegin</name></member>
+      <member refid="classcsmp_1_1_face_1a1e4aa7cac21bb9dddf7df035230830bf" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>NodesEnd</name></member>
+      <member refid="classcsmp_1_1_face_1a74d540fe3fa90eaf16da7c7ea558f6ee" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>operator delete</name></member>
+      <member refid="classcsmp_1_1_face_1af307610a385d1aa2e34d244049b820ee" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>operator new</name></member>
+      <member refid="classcsmp_1_1_face_1aa5d7aa50bf688d4b574506b88f9e8d95" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_face_1a771b04837231839651622d07ced8b678" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1afd8da63bf06786e9891316717ef7c11e" prot="public" virt="non-virtual" ambiguityscope="csmp::FiniteElementPolicy&lt; dim, Face &gt;::"><scope>csmp::Face</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_face_1a8b42a041a80cbd043fba3ff8d2de4e30" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1add3acd9ec49db71e0e5bf4f8dda13744" prot="public" virt="non-virtual" ambiguityscope="csmp::LocalVariableStorage&lt; dim, Face &gt;::"><scope>csmp::Face</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_face_1a57277f022d9476217a4cb5351b763037" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_face_1a53aa69c7cdf95aa0b961e42dfcda5953" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>outer_parent_face_id_</name></member>
+      <member refid="classcsmp_1_1_face_1a7883707434ec8dd7d16b25572dfd6595" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>OuterParent</name></member>
+      <member refid="classcsmp_1_1_face_1a5618909f3d5643d1bda83fbdea54be01" prot="private" virt="non-virtual"><scope>csmp::Face</scope><name>outerParent_</name></member>
+      <member refid="classcsmp_1_1_face_1add603056c0bd9fdbb2929c49a084ddd8" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>OuterParentFaceID</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ade5ec5a8e9afb482c1619924cf8259b2" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>OutLVS</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a8ce0b33bbc4b521ed938adffd77cdd55" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>OutputPropertyToVTK</name></member>
+      <member refid="classcsmp_1_1_face_1a34f7e31fc9f0b16494d782605aa36227" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Parent</name></member>
+      <member refid="classcsmp_1_1_face_1a2859c0774d7aee1aa81254e1370a3115" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>ParentFaceID</name></member>
+      <member refid="classcsmp_1_1_face_1ab9459cabbbfd020110f2c690cee7ac5f" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>ParentFaceID</name></member>
+      <member refid="classcsmp_1_1_face_1a171dabf2c1216c99a3e337066764892d" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a1a3f3d3a4ab8c43e54b64f7491453d15" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>PropertyIntegral</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a97425cbfdb7e21eaa48d9fc455c73cb5" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>PropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a765acd90b4a49d2f309b31451f347bd2" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>PropertyValueAtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a9bb80abd0181bcc607f9fe6f76207b10" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>PropertyValueAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a15454666d6c782ff34dc7cbcd5654881" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>ReadArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a7a7f6185d60844c2f5acc1bcf475e215" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>ResizePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a77e05282a77bb85927eb55bdaaa68d2a" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>RstToXYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a20aa7fe21942056f9ef670b28bfadfa8" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>SegmentLength</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a39e2379c97598a8e6f33be8a6bfcf035" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>SegmentLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a043f97fcd42926600cb944592e40f075" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>SegmentMidPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ab1ecfed7e08324946dc91638abde4d0a" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a13c8a3dae3a8ba916f712f7e96d000d1" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a8642fe6f83bb6981e7c0d6ab5b2c0248" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0e9b7ddb382ce5e6bbb03158289dd5d4" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>StoreArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a482c445697287f2ae4d8b76319725d7a" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>StoreLocalState</name></member>
+      <member refid="classcsmp_1_1_face_1a1c30463834b951c9d01cfc327341ea9d" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Unassign</name></member>
+      <member refid="classcsmp_1_1_face_1a675a6c69d3f6cd833e00f7edf5ffc08d" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Unassign</name></member>
+      <member refid="classcsmp_1_1_face_1ae92442022e0c123b6b65f0c93d7eb857" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>UnassignNeighbor</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a27fe90e4049b19e610807f4e15186c78" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a202387b7bb52a9ff75f00ae354ba8ef2" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a48a4fcb34ff6390dce61d7bdb3f29f95" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_face_1aacb7102f0e766287c0886d33ab2c4855" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>VectorToInnerElementBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1ad8f1ad92fc4e66b0ccb44191228b0b45" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_policy_1a0de66f788ab5a4f42f68918243a2c993" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_face_1aaac43440dc7cb1cdcc3050a822fce930" prot="public" virt="non-virtual"><scope>csmp::Face</scope><name>~Face</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

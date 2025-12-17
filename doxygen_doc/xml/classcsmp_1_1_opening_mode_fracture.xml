@@ -1,0 +1,571 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_opening_mode_fracture" kind="class" language="C++" prot="public">
+    <compoundname>csmp::OpeningModeFracture</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_opening_mode_fracture_1aa04cfdda5797339905bddf23a2b7776d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::nu</definition>
+        <argsstring></argsstring>
+        <name>nu</name>
+        <qualifiedname>csmp::OpeningModeFracture::nu</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="59" column="19" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_opening_mode_fracture_1a5d7687450ea73afd4c506529f2e855d8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::E</definition>
+        <argsstring></argsstring>
+        <name>E</name>
+        <qualifiedname>csmp::OpeningModeFracture::E</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="60" column="21" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_opening_mode_fracture_1ab07d53a83be2ac3bdd78fad7cb4aba24" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::a</definition>
+        <argsstring></argsstring>
+        <name>a</name>
+        <qualifiedname>csmp::OpeningModeFracture::a</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="61" column="21" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_opening_mode_fracture_1a1759a17402580b2558fad43cef93ef47" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>csmp::OpeningModeFracture::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="62" column="21" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_opening_mode_fracture_1a67913ba2d9e85a3a2a8c19c5fb266ee8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::pos</definition>
+        <argsstring></argsstring>
+        <name>pos</name>
+        <qualifiedname>csmp::OpeningModeFracture::pos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="63" column="21" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_opening_mode_fracture_1a3a9ee88ce1df96f172a355c90e9208e7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::length</definition>
+        <argsstring></argsstring>
+        <name>length</name>
+        <qualifiedname>csmp::OpeningModeFracture::length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="64" column="21" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_opening_mode_fracture_1a3a239515a473aa0b5251cf098c0e0058" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::OpeningModeFracture::MINIMUM_APERTURE</definition>
+        <argsstring></argsstring>
+        <name>MINIMUM_APERTURE</name>
+        <qualifiedname>csmp::OpeningModeFracture::MINIMUM_APERTURE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="65" column="19" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a5ded6eb84dd7f1406cae7c29845e8863" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::OpeningModeFracture::OpeningModeFracture</definition>
+        <argsstring>()</argsstring>
+        <name>OpeningModeFracture</name>
+        <qualifiedname>csmp::OpeningModeFracture::OpeningModeFracture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="11" column="5" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="10" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a1ae435868ecae56ae89311476ab1ca1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::OpeningModeFracture::OpeningModeFracture</definition>
+        <argsstring>(const OpeningModeFracture &amp;)</argsstring>
+        <name>OpeningModeFracture</name>
+        <qualifiedname>csmp::OpeningModeFracture::OpeningModeFracture</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_opening_mode_fracture" kindref="compound">OpeningModeFracture</ref> &amp;</type>
+          <defname>of</defname>
+        </param>
+        <briefdescription>
+<para>copy-constructor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="12" column="5" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="28" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a7fffdb8d6c1c18829f5fadf7c3f61a20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::OpeningModeFracture::OpeningModeFracture</definition>
+        <argsstring>(double length, double Poissons_ratio, double Youngs_modulus)</argsstring>
+        <name>OpeningModeFracture</name>
+        <qualifiedname>csmp::OpeningModeFracture::OpeningModeFracture</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Poissons_ratio</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>Youngs_modulus</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="13" column="5" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="21" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1ae534bcc621f929874a7ab0bd918417f8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::OpeningModeFracture::~OpeningModeFracture</definition>
+        <argsstring>()</argsstring>
+        <name>~OpeningModeFracture</name>
+        <qualifiedname>csmp::OpeningModeFracture::~OpeningModeFracture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="14" column="5" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="14" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a236e54296e1385aee3e01a299508c467" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::OpeningModeFracture::Length</definition>
+        <argsstring>(double length)</argsstring>
+        <name>Length</name>
+        <qualifiedname>csmp::OpeningModeFracture::Length</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>length</declname>
+          <defname>len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>NB: also setting fracture half-length a ! </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="16" column="15" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="39" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a8f91575ba90f809eade33911d9a7312f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::Length</definition>
+        <argsstring>() const</argsstring>
+        <name>Length</name>
+        <qualifiedname>csmp::OpeningModeFracture::Length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="17" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="46" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1acf0c7bbb273554cafbeac8edebc7bd13" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::CenterAperture</definition>
+        <argsstring>(double pf, double syy) const</argsstring>
+        <name>CenterAperture</name>
+        <qualifiedname>csmp::OpeningModeFracture::CenterAperture</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <briefdescription>
+<para>convention syy, the fracture normal stress, is positive if compressive </para>
+        </briefdescription>
+        <detaileddescription>
+<para>normal stress is negative if tensile </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="20" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="54" bodyend="63"/>
+        <referencedby refid="classcsmp_1_1_opening_mode_fracture_1a5dce75783a8aefbb3d5fb0f3b4acb40e" compoundref="_opening_mode_fracture_8cpp" startline="78" endline="86">Transmissivity</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1ae94ee157d93ad32dabda12ecbe83d38b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::Aperture</definition>
+        <argsstring>(double pf, double syy, double cx) const</argsstring>
+        <name>Aperture</name>
+        <qualifiedname>csmp::OpeningModeFracture::Aperture</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <briefdescription>
+<para>calculates fracture aperture at some distance cx (0..length/2) from the fracture center </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="22" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="66" bodyend="75"/>
+        <referencedby refid="classcsmp_1_1_opening_mode_fracture_1ad6347bc79a48d20c98e3fd41b2068723" compoundref="_opening_mode_fracture_8cpp" startline="144" endline="261">SixteenPointConvexHull</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a5dce75783a8aefbb3d5fb0f3b4acb40e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::Transmissivity</definition>
+        <argsstring>(double pf, double syy, double visc) const</argsstring>
+        <name>Transmissivity</name>
+        <qualifiedname>csmp::OpeningModeFracture::Transmissivity</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>visc</declname>
+        </param>
+        <briefdescription>
+<para>returns (permeability/viscosity) * aperture product </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="24" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="78" bodyend="86"/>
+        <references refid="classcsmp_1_1_opening_mode_fracture_1acf0c7bbb273554cafbeac8edebc7bd13" compoundref="_opening_mode_fracture_8cpp" startline="54" endline="63">CenterAperture</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a844cd863d68a137b4dda7b94afd34891" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::Mode_I_Volume</definition>
+        <argsstring>(double pf, double syy) const</argsstring>
+        <name>Mode_I_Volume</name>
+        <qualifiedname>csmp::OpeningModeFracture::Mode_I_Volume</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <briefdescription>
+<para>joint volume (assuming unit thickness) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="27" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="92" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a9bba3205473a9a03770ec042df78bf41" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::Mode_II_Volume</definition>
+        <argsstring>(double sxy) const</argsstring>
+        <name>Mode_II_Volume</name>
+        <qualifiedname>csmp::OpeningModeFracture::Mode_II_Volume</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>sxy</declname>
+        </param>
+        <briefdescription>
+<para>volume of a joint in shear (assuming unit thickness) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="30" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="102" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1aefbba6bfc2576feccac82997fa7a4aa2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::MaximumVolume</definition>
+        <argsstring>(double pf, double syy, double sxy) const</argsstring>
+        <name>MaximumVolume</name>
+        <qualifiedname>csmp::OpeningModeFracture::MaximumVolume</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sxy</declname>
+        </param>
+        <briefdescription>
+<para>maximum volume in response to tensile and shear stresses </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="33" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="112" bodyend="119"/>
+        <referencedby refid="classcsmp_1_1_opening_mode_fracture_1a87af282351c73e38fe777233c0d9d4d2" compoundref="_opening_mode_fracture_8cpp" startline="125" endline="134">Dilatation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a87af282351c73e38fe777233c0d9d4d2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::OpeningModeFracture::Dilatation</definition>
+        <argsstring>(double frac_intensity, double pf, double syy, double sxy) const</argsstring>
+        <name>Dilatation</name>
+        <qualifiedname>csmp::OpeningModeFracture::Dilatation</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>frac_intensity</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sxy</declname>
+        </param>
+        <briefdescription>
+<para>dilatation of a square block of rock with fracture intensity (f/m), and dimensions = frac length^2 </para>
+        </briefdescription>
+        <detaileddescription>
+<para>dilatation of a square block of rock with fracture intensity (f/m), and dimensions = frac length^2 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="36" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="125" bodyend="134"/>
+        <references refid="classcsmp_1_1_opening_mode_fracture_1aefbba6bfc2576feccac82997fa7a4aa2" compoundref="_opening_mode_fracture_8cpp" startline="112" endline="119">MaximumVolume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1ad6347bc79a48d20c98e3fd41b2068723" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::OpeningModeFracture::SixteenPointConvexHull</definition>
+        <argsstring>(double pf, double syy, const mjl::Point &amp;a, const mjl::Point &amp;b, std::list&lt; mjl::Point &gt; &amp;chain)</argsstring>
+        <name>SixteenPointConvexHull</name>
+        <qualifiedname>csmp::OpeningModeFracture::SixteenPointConvexHull</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>std::list&lt; <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &gt; &amp;</type>
+          <declname>chain</declname>
+        </param>
+        <briefdescription>
+<para>2D construction routines for fracture polygons </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="39" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="144" bodyend="261"/>
+        <references refid="classcsmp_1_1_opening_mode_fracture_1ae94ee157d93ad32dabda12ecbe83d38b" compoundref="_opening_mode_fracture_8cpp" startline="66" endline="75">Aperture</references>
+        <references refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" compoundref="_m_j_l___edge_8cpp" startline="42" endline="51">mjl::Edge::Rot</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a6c0f86f205a333c9ce8de84691679800" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::OpeningModeFracture::BluntTenPointHull</definition>
+        <argsstring>(double pf, double syy, const mjl::Point &amp;b, const mjl::Point &amp;c, std::list&lt; mjl::Point &gt; &amp;chain)</argsstring>
+        <name>BluntTenPointHull</name>
+        <qualifiedname>csmp::OpeningModeFracture::BluntTenPointHull</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>std::list&lt; <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &gt; &amp;</type>
+          <declname>chain</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="44" column="13" bodyfile="source/modules/thmc/mechanics/OpeningModeFracture.cpp" bodystart="269" bodyend="365"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a65a5305720ca3c0068f1b9f1c61e1760" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::OpeningModeFracture::RectangleHull</definition>
+        <argsstring>(double pf, double syy, mjl::Point &amp;b, mjl::Point &amp;c, std::list&lt; mjl::Point &gt; &amp;chain)</argsstring>
+        <name>RectangleHull</name>
+        <qualifiedname>csmp::OpeningModeFracture::RectangleHull</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pf</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>syy</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>std::list&lt; <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &gt; &amp;</type>
+          <declname>chain</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="50" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_opening_mode_fracture_1a10f5c016fd6ff0539d6e6fb4ce90a6b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::OpeningModeFracture::RectangleHull</definition>
+        <argsstring>(double fixed_aperture, mjl::Point &amp;b, mjl::Point &amp;c, std::list&lt; mjl::Point &gt; &amp;chain)</argsstring>
+        <name>RectangleHull</name>
+        <qualifiedname>csmp::OpeningModeFracture::RectangleHull</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fixed_aperture</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>std::list&lt; <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &gt; &amp;</type>
+          <declname>chain</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="55" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::OpeningModeFracture</label>
+        <link refid="classcsmp_1_1_opening_mode_fracture"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/mechanics/OpeningModeFracture.h" line="9" column="1" bodyfile="source/includes/thmc/mechanics/OpeningModeFracture.h" bodystart="9" bodyend="66"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1ab07d53a83be2ac3bdd78fad7cb4aba24" prot="private" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>a</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1ae94ee157d93ad32dabda12ecbe83d38b" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>Aperture</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a6c0f86f205a333c9ce8de84691679800" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>BluntTenPointHull</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1acf0c7bbb273554cafbeac8edebc7bd13" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>CenterAperture</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a87af282351c73e38fe777233c0d9d4d2" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>Dilatation</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a5d7687450ea73afd4c506529f2e855d8" prot="private" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>E</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a236e54296e1385aee3e01a299508c467" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>Length</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a8f91575ba90f809eade33911d9a7312f" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>Length</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a3a9ee88ce1df96f172a355c90e9208e7" prot="private" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>length</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1aefbba6bfc2576feccac82997fa7a4aa2" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>MaximumVolume</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a3a239515a473aa0b5251cf098c0e0058" prot="private" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>MINIMUM_APERTURE</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a844cd863d68a137b4dda7b94afd34891" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>Mode_I_Volume</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a9bba3205473a9a03770ec042df78bf41" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>Mode_II_Volume</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1aa04cfdda5797339905bddf23a2b7776d" prot="private" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>nu</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a5ded6eb84dd7f1406cae7c29845e8863" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>OpeningModeFracture</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a1ae435868ecae56ae89311476ab1ca1a" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>OpeningModeFracture</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a7fffdb8d6c1c18829f5fadf7c3f61a20" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>OpeningModeFracture</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a67913ba2d9e85a3a2a8c19c5fb266ee8" prot="private" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>pos</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a65a5305720ca3c0068f1b9f1c61e1760" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>RectangleHull</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a10f5c016fd6ff0539d6e6fb4ce90a6b8" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>RectangleHull</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1ad6347bc79a48d20c98e3fd41b2068723" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>SixteenPointConvexHull</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a5dce75783a8aefbb3d5fb0f3b4acb40e" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>Transmissivity</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1a1759a17402580b2558fad43cef93ef47" prot="private" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>x</name></member>
+      <member refid="classcsmp_1_1_opening_mode_fracture_1ae534bcc621f929874a7ab0bd918417f8" prot="public" virt="non-virtual"><scope>csmp::OpeningModeFracture</scope><name>~OpeningModeFracture</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

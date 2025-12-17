@@ -1,0 +1,148 @@
+\doxysection{Polygon\+Cell.\+h}
+\hypertarget{_polygon_cell_8h_source}{}\label{_polygon_cell_8h_source}\index{source/includes/interfaces/Eclipse/PolygonCell.h@{source/includes/interfaces/Eclipse/PolygonCell.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{POLYGON\_CELL\_UOM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{POLYGON\_CELL\_UOM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_polygon_grid_8h}{"{}PolygonGrid.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{@class\ PolygonCell\ \ PolygonCell\ "{}PolygonCell.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@author\ R.\ Manasipov}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@date\ 2015}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{PolygonCell\ stores\ the\ cell\ topology.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{PolygonCell}}}
+\DoxyCodeLine{00019\ \{}
+\DoxyCodeLine{00020\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\ TODO:\ dependency\ is\ the\ wrong\ way\ around!}}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a26d4e9b41ba6b3ea173ad3082f4f7abe}{PolygonCell}}(\ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}\&\ pgm\ );}
+\DoxyCodeLine{00023\ \ \ \ \ PolygonCell(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{PolygonCell}}\&\ cell\ );}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{PolygonCell}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{PolygonCell}}\&\ cell\ );}
+\DoxyCodeLine{00025\ \ \ \ \ \string~PolygonCell();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ cell\ dim}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a411516bfd464880a23f0f8fa4c80c4bb}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a411516bfd464880a23f0f8fa4c80c4bb}{GetElementDim}}(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ elements\ info}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ad744641a66c59c617afcd03f85204fbd}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ad744641a66c59c617afcd03f85204fbd}{GetNumElements}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ size\_t\ GetNumElementNodes(\ size\_t\ eid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ GetElementPoint(\ size\_t\ eid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ GetElementNode(\ size\_t\ eid,\ size\_t\ nid\ );}
+\DoxyCodeLine{00035\ \ \ \ \ size\_t\ GetElementNodeGlobalId(\ size\_t\ eid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\&\ GetElementType(\ size\_t\ eid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ \ \ \ \ size\_t\ GetElementDim(\ size\_t\ eid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ faces\ info}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_acc3b3f082a6e09b8f277fe4b72cf2029}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_acc3b3f082a6e09b8f277fe4b72cf2029}{GetNumFaces}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{///\ returns\ into\ how\ many\ faces\ a\ particular\ face\ is\ split?}}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a940562555f4a003114960227842c24e8}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a940562555f4a003114960227842c24e8}{GetNumSubFaces}}(\ size\_t\ fid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ should\ this\ be\ GetNumSubFaceNodes()\ where\ subfaces\ only\ exist\ when\ a\ quadrilateral\ faces\ is\ split\ into\ triangles?}}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a43386b5c6232e841d84e03a0e2cd6d94}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a43386b5c6232e841d84e03a0e2cd6d94}{GetNumFaceNodes}}(\ size\_t\ fid,\ size\_t\ sfid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ GetFacePoint(\ size\_t\ fid,\ size\_t\ sfid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ GetFaceNode(\ size\_t\ fid,\ size\_t\ sfid,\ size\_t\ nid\ );}
+\DoxyCodeLine{00047\ \ \ \ \ size\_t\ GetFaceNodeGlobalId(\ size\_t\ fid,\ size\_t\ sfid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\&\ GetFaceType(\ size\_t\ fid,\ size\_t\ sfid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ \ \ \ \ size\_t\ GetFaceDim(\ size\_t\ fid,\ size\_t\ sfid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ nodes\ info}}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_abb53e3c5b855a40d3df9a14764b3c525}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_abb53e3c5b855a40d3df9a14764b3c525}{GetNumNodes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ size\_t\ GetNodeGlobalIdOriginalOrder(\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ \ \ \ \ size\_t\ GetNodeGlobalIdCustomOrder(\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ GetPointOriginalOrder(\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ GetPointCustomOrder(\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ GetNodeOriginalOrder(\ size\_t\ nid\ );}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ GetNodeCustomOrder(\ size\_t\ nid\ );}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ extra\ nodes\ info}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a09d064634dc9dc259c5b3a1c60867133}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a09d064634dc9dc259c5b3a1c60867133}{GetNumExtraNodes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ GetExtraPoint(\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ GetExtraNode(\ size\_t\ nid\ );}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ AddExtraNode(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ pt\ );}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ cell\ centroid\ (\ if\ exist:\ by\ convention\ it's\ a\ first\ node\ of\ extra\ nodes\ arrays\ )}}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a04c4e357113dd7ef6ddc267615d0e33c}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a04c4e357113dd7ef6ddc267615d0e33c}{GetCellCentroidGlobalId}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ GetCellCentroidPoint()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ GetCellCentroidNode();}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ face\ and\ node\ id's}}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_adab31b02a5232d4e428d84bec48031a1}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_adab31b02a5232d4e428d84bec48031a1}{GetOriginalNodeId}}(\ size\_t\ custom\_nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ \ \ \ \ size\_t\ GetCustomNodeId(\ size\_t\ custom\_nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00074\ \ \ \ \ size\_t\ GetOriginalFaceId(\ size\_t\ custom\_fid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \ \ size\_t\ GetCustomFaceId(\ size\_t\ custom\_fid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ polygon\ faces\ info}}
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ab655dd078ee57273e321b900b79a8aff}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ab655dd078ee57273e321b900b79a8aff}{GetNumPolygonFaceNodes}}(\ size\_t\ fid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ \ \ \ \ size\_t\ GetPolygonFaceNodeLocalId(\ size\_t\ fid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ \ \ \ \ size\_t\ GetPolygonFaceNodeGlobalId(\ size\_t\ fid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ GetPolygonFacePoint(\ size\_t\ fid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_grid_node}{GridNode}}*\ \textcolor{keyword}{const}\ GetPolygonFaceNode(\ size\_t\ fid,\ size\_t\ nid\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///\ print\ object\ state\ to\ screen}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ad260ad8304797694c5492378b9fa8cae}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ PolygonCell();}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{///\ polygon\ faces\ info}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_aaffd1215a6518891142e41adf965e17d}{AssignPolygonFaceNode}}(\ size\_t\ fid,\ size\_t\ lnid,\ size\_t\ cell\_nid\ );}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ AddPolygonFaceNode(\ size\_t\ fid,\ size\_t\ cell\_nid\ );}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{void}\ ClearPolygonFaceNodes(\ size\_t\ fid\ );}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ ResizePolygonFaceNodes(\ size\_t\ fid,\ size\_t\ size\ );}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{///\ nodes}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a5393e54ecc9619be4a541b748d0b0168}{InitializeNodeOrder}}(\ size\_t\ num\_nodes\ );}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ AssignNodeOrder(\ size\_t\ cnid,\ size\_t\ onid\ );}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ elements}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{AddCell}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{pair}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{GridNode}}*>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a2de697d7a8636a59f88cae336d879f89}{cell}}\ );}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ EraseCell(\ size\_t\ position\ );}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ ClearCells();}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{///\ faces}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_aebaf4bb415f9dca60b58dcd19c524ce1}{InitializeFaceOrder}}(\ size\_t\ num\_faces\ );}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ AssignFaceOrder(\ size\_t\ cfid,\ size\_t\ ofid\ );}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ AddFace(\ size\_t\ fid,\ \textcolor{keyword}{const}\ std::pair<csmp::CSMP\_FEM\_TYPE,std::vector<GridNode*>\ >\&\ face\ );}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ EraseFace(\ size\_t\ fid\ );}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{void}\ EraseFace(\ size\_t\ fid,\ size\_t\ position\ );}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ ClearFaces(\ size\_t\ fid\ );}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ ClearFaces();}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{///\ grid\ manager\ TODO:\ this\ class\ is\ only\ used\ by\ AddExtraNode(),\ not\ clear\ why\ a\ pointer\ to\ it\ is\ needed}}
+\DoxyCodeLine{00118\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_grid_manager}{PolygonGridManager}}*\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_a4fc085391a89d8d94f9d9fec2fc828fa}{grid\_}};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{///\ cell\ nodes\ data}}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ac6bef48480192941a37c7bc475560373}{size\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ac6bef48480192941a37c7bc475560373}{num\_nodes\_}};}
+\DoxyCodeLine{00122\ \ \ \ \ std::vector<GridNode*>\ \ \ extra\_nodes\_;}
+\DoxyCodeLine{00123\ \ \ \ \ std::vector<GridNode*>\ \ \ nodes\_;}
+\DoxyCodeLine{00124\ \ \ \ \ std::vector<GridNode*>\ \ \ nodes\_in\_custom\_order\_;}
+\DoxyCodeLine{00125\ \ \ \ \ std::vector<size\_t>\ \ \ \ \ \ custom\_node\_order\_;}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{///\ cells\ TODO:\ what\ is\ the\ physical\ meaning\ of\ this\ data\ structure?}}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{pair}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{GridNode}}*>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{elements\_}};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{///\ faces}}
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ab5d170e35a7517c06bc24d5b815b39cf}{size\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell_ab5d170e35a7517c06bc24d5b815b39cf}{num\_faces\_}};}
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{size\_t}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{face\_nodes\_}};}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{size\_t}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{face\_nodes\_in\_custom\_order\_}};}
+\DoxyCodeLine{00134\ \ \ \ \ std::vector<size\_t>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ custom\_face\_order\_;}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{///\ faces[i][j]\ is\ a\ 6\ x\ 5\ matrix\ of\ faces\ defined\ by\ face-\/type\ and\ corresponding\ node\ pointers\ as\ entries\ (type-\/value\ pairs)}}
+\DoxyCodeLine{00137\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{pair}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{CSMP\_FEM\_TYPE}},\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{std}}::\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{vector}}<\mbox{\hyperlink{classcsmp_1_1_polygon_cell}{GridNode}}*>\ >\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_polygon_cell}{faces\_}};}
+\DoxyCodeLine{00138\ \};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \}\textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

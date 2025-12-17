@@ -1,0 +1,774 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_command_line_parser" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CommandLineParser</compoundname>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_command_line_parser_1abc57840c8cab8395ef09c27a388530ff" prot="private" static="no">
+        <type>std::map&lt; string, string &gt;::const_iterator</type>
+        <definition>typedef std::map&lt;string,string&gt;::const_iterator csmp::CommandLineParser::optIterator</definition>
+        <argsstring></argsstring>
+        <name>optIterator</name>
+        <qualifiedname>csmp::CommandLineParser::optIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="36" column="35" bodyfile="source/includes/run_control/CommandLineParser.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_command_line_parser_1aea2a3fb4441b83e6065bedfeeaec436d" prot="private" static="no" mutable="no">
+        <type>const char **</type>
+        <definition>const char** csmp::CommandLineParser::argv_</definition>
+        <argsstring></argsstring>
+        <name>argv_</name>
+        <qualifiedname>csmp::CommandLineParser::argv_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="60" column="12" bodyfile="source/includes/run_control/CommandLineParser.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_command_line_parser_1a16dc8ac5b83c9a8bce669034882c2932" prot="private" static="no" mutable="no">
+        <type>const int</type>
+        <definition>const int csmp::CommandLineParser::argc_</definition>
+        <argsstring></argsstring>
+        <name>argc_</name>
+        <qualifiedname>csmp::CommandLineParser::argc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="61" column="11" bodyfile="source/includes/run_control/CommandLineParser.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_command_line_parser_1a9c8402743bca0060cb625896e1c55457" prot="private" static="no" mutable="no">
+        <type>string</type>
+        <definition>string csmp::CommandLineParser::operands_</definition>
+        <argsstring></argsstring>
+        <name>operands_</name>
+        <qualifiedname>csmp::CommandLineParser::operands_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="62" column="8" bodyfile="source/includes/run_control/CommandLineParser.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_command_line_parser_1ab2f9a14de2907a72f4e2752888da759d" prot="private" static="no" mutable="no">
+        <type>std::map&lt; string, string &gt;</type>
+        <definition>std::map&lt;string, string&gt; csmp::CommandLineParser::options_</definition>
+        <argsstring></argsstring>
+        <name>options_</name>
+        <qualifiedname>csmp::CommandLineParser::options_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="63" column="10" bodyfile="source/includes/run_control/CommandLineParser.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a926c75210aaa840bb8a83d590ec197c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CommandLineParser::CommandLineParser</definition>
+        <argsstring>(int argc, const char **argv)</argsstring>
+        <name>CommandLineParser</name>
+        <qualifiedname>csmp::CommandLineParser::CommandLineParser</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>const char **</type>
+          <declname>argv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="17" column="1" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="7" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a46422f275d9b2492ba7cb8b04e3a5894" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>template double csmp::CommandLineParser::get</definition>
+        <argsstring>(string shortOption, string longOption)</argsstring>
+        <name>get</name>
+        <qualifiedname>csmp::CommandLineParser::get</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>shortOption</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>longOption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="20" column="3" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="40" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a8c1db1837b637a0f19fe60e8fabd5d1b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T csmp::CommandLineParser::get</definition>
+        <argsstring>(string shortOption, string longOption, const T defaultValue)</argsstring>
+        <name>get</name>
+        <qualifiedname>csmp::CommandLineParser::get</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>shortOption</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>longOption</declname>
+        </param>
+        <param>
+          <type>const T</type>
+          <declname>defaultValue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="22" column="3" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="57" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a8241f25f6e905742cd0ad2a76c526c85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>template double csmp::CommandLineParser::get</definition>
+        <argsstring>(string option)</argsstring>
+        <name>get</name>
+        <qualifiedname>csmp::CommandLineParser::get</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>option</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="24" column="3" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="73" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a54d485058a65c6f70a0f42c93dce3edb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T csmp::CommandLineParser::get</definition>
+        <argsstring>(string option, const T defaultValue)</argsstring>
+        <name>get</name>
+        <qualifiedname>csmp::CommandLineParser::get</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>option</declname>
+        </param>
+        <param>
+          <type>const T</type>
+          <declname>defaultValue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="26" column="3" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="88" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a2d9fe02b0765e2919b66b3c5d6d77bcd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::operands</definition>
+        <argsstring>() const</argsstring>
+        <name>operands</name>
+        <qualifiedname>csmp::CommandLineParser::operands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="28" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="102" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a4f22f6f12f706d93336d79b70dae590b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>string</type>
+        <definition>string csmp::CommandLineParser::getOperands</definition>
+        <argsstring>() const</argsstring>
+        <name>getOperands</name>
+        <qualifiedname>csmp::CommandLineParser::getOperands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="29" column="8" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="106" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1aca9c038f48fef1ea352a42e7fc1cedf7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::unused</definition>
+        <argsstring>() const</argsstring>
+        <name>unused</name>
+        <qualifiedname>csmp::CommandLineParser::unused</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="30" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="110" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a604049c2d15e370c355c7fcf77271bf6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>string</type>
+        <definition>string csmp::CommandLineParser::getUnused</definition>
+        <argsstring>() const</argsstring>
+        <name>getUnused</name>
+        <qualifiedname>csmp::CommandLineParser::getUnused</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="31" column="8" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="114" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1ae5bcdc8405e7cea25d63b5a5a191573a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CommandLineParser::print</definition>
+        <argsstring>(std::ostream &amp;os) const</argsstring>
+        <name>print</name>
+        <qualifiedname>csmp::CommandLineParser::print</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>os</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="33" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="128" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1acbd65ea728475324f9c549e4443a9bcd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>int</type>
+        <definition>int csmp::CommandLineParser::convertArgument</definition>
+        <argsstring>(string arg)</argsstring>
+        <name>convertArgument</name>
+        <qualifiedname>csmp::CommandLineParser::convertArgument</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/CommandLineParser.cpp" line="197" column="5" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="197" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a874719ba24aae28dfb4402b8822208e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double csmp::CommandLineParser::convertArgument</definition>
+        <argsstring>(string arg)</argsstring>
+        <name>convertArgument</name>
+        <qualifiedname>csmp::CommandLineParser::convertArgument</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/CommandLineParser.cpp" line="202" column="8" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="202" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a84e2882444674fb69682a9dd610729b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>const char *</type>
+        <definition>const char * csmp::CommandLineParser::convertArgument</definition>
+        <argsstring>(string arg)</argsstring>
+        <name>convertArgument</name>
+        <qualifiedname>csmp::CommandLineParser::convertArgument</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/CommandLineParser.cpp" line="207" column="12" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="207" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a5ebc31a0082dd5399334841aef6b7add" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::convertArgument</definition>
+        <argsstring>(string arg)</argsstring>
+        <name>convertArgument</name>
+        <qualifiedname>csmp::CommandLineParser::convertArgument</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/CommandLineParser.cpp" line="214" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="214" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a46adb5f76b99f9ed0bf27b726d9e4561" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template const char * csmp::CommandLineParser::get</definition>
+        <argsstring>(string shortOption, string longOption)</argsstring>
+        <name>get</name>
+        <qualifiedname>csmp::CommandLineParser::get</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>shortOption</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>longOption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/CommandLineParser.cpp" line="235" column="1" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="235" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1abebb07658b3728d7dfc3fcec48f17e12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>template const char * csmp::CommandLineParser::get</definition>
+        <argsstring>(string option)</argsstring>
+        <name>get</name>
+        <qualifiedname>csmp::CommandLineParser::get</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>option</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/CommandLineParser.cpp" line="240" column="1" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="240" bodyend="242"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a845682b63020b12d5add1a004d483a6e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CommandLineParser::CommandLineParser</definition>
+        <argsstring>(const CommandLineParser &amp;)</argsstring>
+        <name>CommandLineParser</name>
+        <qualifiedname>csmp::CommandLineParser::CommandLineParser</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_command_line_parser" kindref="compound">CommandLineParser</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a1f9590ef3a141e9f1e4c4909278654a4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_command_line_parser" kindref="compound">CommandLineParser</ref> &amp;</type>
+        <definition>CommandLineParser &amp; csmp::CommandLineParser::operator=</definition>
+        <argsstring>(const CommandLineParser &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::CommandLineParser::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_command_line_parser" kindref="compound">CommandLineParser</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="40" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a4fb6948abacd1a5994b8fe2c684fa245" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::containsOption</definition>
+        <argsstring>(string opt) const</argsstring>
+        <name>containsOption</name>
+        <qualifiedname>csmp::CommandLineParser::containsOption</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>opt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="42" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="140" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1af8a2d31a09569e1c0ece03c9346eaf2d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::containsShortOption</definition>
+        <argsstring>(string opt) const</argsstring>
+        <name>containsShortOption</name>
+        <qualifiedname>csmp::CommandLineParser::containsShortOption</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>opt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="43" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="144" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a2eb1a2cefdab6f966f7079b7b108433f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::isOption</definition>
+        <argsstring>(string opt) const</argsstring>
+        <name>isOption</name>
+        <qualifiedname>csmp::CommandLineParser::isOption</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>opt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="45" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="148" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1aaf04a2c95158d6c4f18ce7e78547270f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::isShortOption</definition>
+        <argsstring>(string opt) const</argsstring>
+        <name>isShortOption</name>
+        <qualifiedname>csmp::CommandLineParser::isShortOption</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>opt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="46" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="152" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a2b31356e8f763e1f2f545a7022682bac" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::isLongOption</definition>
+        <argsstring>(string opt) const</argsstring>
+        <name>isLongOption</name>
+        <qualifiedname>csmp::CommandLineParser::isLongOption</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>opt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="47" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="156" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a68a1fecca021e83c8c656d623c1ee1ae" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::CommandLineParser::isEndMarker</definition>
+        <argsstring>(string str) const</argsstring>
+        <name>isEndMarker</name>
+        <qualifiedname>csmp::CommandLineParser::isEndMarker</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="49" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="160" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1aa2b53d410105d0c05aba40172419c09f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CommandLineParser::store</definition>
+        <argsstring>(string opt, string arg)</argsstring>
+        <name>store</name>
+        <qualifiedname>csmp::CommandLineParser::store</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>opt</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="51" column="6" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="164" bodyend="169"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a623b1bbf4441dc8f66e6f280f73cd15e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>optIterator</type>
+        <definition>CommandLineParser::optIterator csmp::CommandLineParser::findArgument</definition>
+        <argsstring>(string opt) const</argsstring>
+        <name>findArgument</name>
+        <qualifiedname>csmp::CommandLineParser::findArgument</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>opt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="52" column="13" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="184" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1ab58e546c68e64bce3b4fe2c8840a0bec" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>optIterator</type>
+        <definition>CommandLineParser::optIterator csmp::CommandLineParser::findArgument</definition>
+        <argsstring>(string shortOpt, string longOpt) const</argsstring>
+        <name>findArgument</name>
+        <qualifiedname>csmp::CommandLineParser::findArgument</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>shortOpt</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>longOpt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="53" column="13" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="171" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a2c12f7102ab833b57ec564d24f53cf3d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T csmp::CommandLineParser::processArgument</definition>
+        <argsstring>(optIterator it)</argsstring>
+        <name>processArgument</name>
+        <qualifiedname>csmp::CommandLineParser::processArgument</qualifiedname>
+        <param>
+          <type>optIterator</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="56" column="5" bodyfile="source/modules/run_control/CommandLineParser.cpp" bodystart="189" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_command_line_parser_1a2a0bc44e2bedbb01a1d0b575674083c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T csmp::CommandLineParser::convertArgument</definition>
+        <argsstring>(string arg)</argsstring>
+        <name>convertArgument</name>
+        <qualifiedname>csmp::CommandLineParser::convertArgument</qualifiedname>
+        <param>
+          <type>string</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/CommandLineParser.h" line="58" column="3"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>A. Burri </para>
+</simplesect>
+<simplesect kind="date"><para>2003</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Command line parser which allows for type-safe Unix-like command line parsing.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>The command line parser makes command line parsing safer and easier. Beside alleviating the need to do error-prone string parsing it offers sophisticated error handling capabilities through exception handling.</para>
+<para>Most Unix-like command line parsing feature are supported, like:<itemizedlist>
+<listitem><para>long and/or short options (like &quot;-d&quot; and &quot;--double&quot;)</para>
+</listitem><listitem><para>type-safe retrieval</para>
+</listitem><listitem><para>optional arguments</para>
+</listitem><listitem><para>listing of unused options</para>
+</listitem><listitem><para>listing of non-arguments</para>
+</listitem></itemizedlist>
+</para>
+<para>For a more complete overview of the functionality see the unit-test class of the <ref refid="classcsmp_1_1_command_line_parser" kindref="compound">CommandLineParser</ref> class.</para>
+<para>One specialty is that boolean options (i.e. command line flags) aren&apos;t allowed to take arguments, since they wouldn&apos;t be used anyway. So you are forced to use the end of options marker if you want to pass non- option arguments after a flag.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>Parsing of command lines in the main function of a program.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Stand-alone class. Member template methods used. The command line is parsed in the constructor and the items can be retrieved using get functions.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para><programlisting><codeline><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>main(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>argv)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>CommandLineParser<sp/>parser(argc,<sp/>argv);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Retrieving<sp/>arguments</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>!<sp/>Note<sp/>that<sp/>you<sp/>have<sp/>to<sp/>specify<sp/>the<sp/>template<sp/>parameter<sp/>(return</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>value<sp/>parametrization)<sp/>!</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">try</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d<sp/>=<sp/>parser.get&lt;</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;(</highlight><highlight class="stringliteral">&quot;-d&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>mandatory<sp/>argument</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>s<sp/>=<sp/>parser.get&lt;</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*&gt;(</highlight><highlight class="stringliteral">&quot;-s&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Default&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>optional<sp/>argument</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>parser.get&lt;</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&gt;(</highlight><highlight class="stringliteral">&quot;-i&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;--int&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>choice<sp/>between<sp/>long<sp/>and</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>short<sp/>option</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>b<sp/>=<sp/>parser.get&lt;</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&gt;(</highlight><highlight class="stringliteral">&quot;-b&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">catch</highlight><highlight class="normal"><sp/>(std::runtime_error&amp;<sp/>e)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>e.what()<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>exit(1);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Display<sp/>if<sp/>there<sp/>are<sp/>arguments<sp/>which<sp/>don&apos;t<sp/>belong<sp/>to<sp/>an<sp/>option</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(parser.operands())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Non-arguments:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>parser.getOperands()<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Display<sp/>if<sp/>there<sp/>are<sp/>unused<sp/>arguments</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(parser.unused())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Unused:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>parser.getUnused()<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Output<sp/>command<sp/>line<sp/>to<sp/>screen</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>(could<sp/>be<sp/>redirected<sp/>to<sp/>a<sp/>file<sp/>stream<sp/>as<sp/>well,<sp/>as<sp/>long<sp/>as<sp/>the<sp/>file</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>stream<sp/>is<sp/>opened<sp/>before)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;<sp/>parser;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}<sp/><sp/></highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CommandLineParser</label>
+        <link refid="classcsmp_1_1_command_line_parser"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/CommandLineParser.h" line="15" column="3" bodyfile="source/includes/run_control/CommandLineParser.h" bodystart="15" bodyend="64"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_command_line_parser_1a16dc8ac5b83c9a8bce669034882c2932" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>argc_</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1aea2a3fb4441b83e6065bedfeeaec436d" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>argv_</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a926c75210aaa840bb8a83d590ec197c6" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>CommandLineParser</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a845682b63020b12d5add1a004d483a6e" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>CommandLineParser</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a4fb6948abacd1a5994b8fe2c684fa245" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>containsOption</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1af8a2d31a09569e1c0ece03c9346eaf2d" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>containsShortOption</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a2a0bc44e2bedbb01a1d0b575674083c2" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>convertArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1acbd65ea728475324f9c549e4443a9bcd" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>convertArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a874719ba24aae28dfb4402b8822208e8" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>convertArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a84e2882444674fb69682a9dd610729b0" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>convertArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a5ebc31a0082dd5399334841aef6b7add" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>convertArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a623b1bbf4441dc8f66e6f280f73cd15e" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>findArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1ab58e546c68e64bce3b4fe2c8840a0bec" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>findArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a46422f275d9b2492ba7cb8b04e3a5894" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>get</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a8c1db1837b637a0f19fe60e8fabd5d1b" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>get</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a8241f25f6e905742cd0ad2a76c526c85" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>get</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a54d485058a65c6f70a0f42c93dce3edb" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>get</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a46adb5f76b99f9ed0bf27b726d9e4561" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>get</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1abebb07658b3728d7dfc3fcec48f17e12" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>get</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a4f22f6f12f706d93336d79b70dae590b" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>getOperands</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a604049c2d15e370c355c7fcf77271bf6" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>getUnused</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a68a1fecca021e83c8c656d623c1ee1ae" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>isEndMarker</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a2b31356e8f763e1f2f545a7022682bac" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>isLongOption</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a2eb1a2cefdab6f966f7079b7b108433f" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>isOption</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1aaf04a2c95158d6c4f18ce7e78547270f" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>isShortOption</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a2d9fe02b0765e2919b66b3c5d6d77bcd" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>operands</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a9c8402743bca0060cb625896e1c55457" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>operands_</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a1f9590ef3a141e9f1e4c4909278654a4" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1ab2f9a14de2907a72f4e2752888da759d" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>options_</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1abc57840c8cab8395ef09c27a388530ff" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>optIterator</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1ae5bcdc8405e7cea25d63b5a5a191573a" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>print</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1a2c12f7102ab833b57ec564d24f53cf3d" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>processArgument</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1aa2b53d410105d0c05aba40172419c09f" prot="private" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>store</name></member>
+      <member refid="classcsmp_1_1_command_line_parser_1aca9c038f48fef1ea352a42e7fc1cedf7" prot="public" virt="non-virtual"><scope>csmp::CommandLineParser</scope><name>unused</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

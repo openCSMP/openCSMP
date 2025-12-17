@@ -1,0 +1,76 @@
+.TH "csmp::CSRMatrix" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CSRMatrix
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <CSRMatrix\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCSRMatrix\fP (const \fBcsmp::SparseMatrix\fP &)"
+.br
+.ti -1c
+.RI "\fBCSRMatrix\fP (const \fBCSRMatrix\fP &)"
+.br
+.ti -1c
+.RI "\fBCSRMatrix\fP & \fBoperator=\fP (const \fBCSRMatrix\fP &)"
+.br
+.ti -1c
+.RI "double \fBoperator()\fP (uint32_t, uint32_t) const"
+.br
+.ti -1c
+.RI "void \fBInitialize\fP (const \fBcsmp::SparseMatrix\fP &)"
+.br
+.ti -1c
+.RI "void \fBInitializePointBased\fP (const \fBSparseMatrix\fP &, size_t nsys)"
+.br
+.ti -1c
+.RI "size_t \fBRows\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBTotalExistingEntries\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< int32_t > \fBia\fP"
+.br
+.RI "refer to SAMG's documentation "
+.ti -1c
+.RI "std::vector< int32_t > \fBja\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBa\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+CSR matrix class created to emulate \fBCompressedRowMatrix\fP class when using OpenMP
+
+.PP
+\fBAuthor\fP
+.RS 4
+Julian Mindel 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::CSRMatrix::InitializePointBased (const \fBSparseMatrix\fP & A, size_t nsys)"
+Initialises the public \fBCSRMatrix\fP vectors ia, ja, a for given \fBSparseMatrix\fP in case the Point-based approach is selected\&. 
+.SS "void csmp::CSRMatrix::Out () const"
+Outputs matrix to screen\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

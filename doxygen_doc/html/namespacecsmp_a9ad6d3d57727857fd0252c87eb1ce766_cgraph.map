@@ -1,0 +1,7 @@
+<map id="csmp::readTextPixelData" name="csmp::readTextPixelData">
+<area shape="rect" id="Node000001" title="reads pixel&#45;based text input file and use triangulator to generate VSet" alt="" coords="5,46,174,72"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_text_interface.html#a6d560187e62ad65b4a6d24c40be5698e" title=" " alt="" coords="227,5,398,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,44,211,38,212,43,174,49"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_triangulator.html#ab420a7832700c821881b3916a4bf6021" title=" " alt="" coords="222,71,403,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,68,206,73,206,78,174,74"/>
+</map>

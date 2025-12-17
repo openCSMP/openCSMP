@@ -757,8 +757,8 @@ bool InputDataManager<dim>
 {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
-    size_t line_length( 256 );
-    char   text_line[256];
+    long line_length( 256 );
+    char text_line[256];
 
     // 1. Reading Region specifications
     if ( region_specifications ) {

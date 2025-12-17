@@ -1,0 +1,46 @@
+.TH "csmp::GridFace" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::GridFace
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGridFace\fP (const \fBGridFace\fP &)"
+.br
+.ti -1c
+.RI "\fBGridFace\fP & \fBoperator=\fP (const \fBGridFace\fP &)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBGridFace\fP &)"
+.br
+.ti -1c
+.RI "const \fBcsmp::CSMP_FEM_TYPE\fP & \fBGetType\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBGetNumNodes\fP () const"
+.br
+.ti -1c
+.RI "\fBGridNode\fP * \fBGetNode\fP (size_t nid)"
+.br
+.ti -1c
+.RI "\fBGridNode\fP *const \fBGetNode\fP (size_t nid) const"
+.br
+.ti -1c
+.RI "void \fBAssignIdx\fP (size_t)"
+.br
+.ti -1c
+.RI "void \fBAssignType\fP (const \fBcsmp::CSMP_FEM_TYPE\fP &)"
+.br
+.ti -1c
+.RI "void \fBAddNode\fP (\fBGridNode\fP *)"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

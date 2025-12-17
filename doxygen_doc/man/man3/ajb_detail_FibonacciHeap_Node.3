@@ -1,0 +1,77 @@
+.TH "ajb::detail::FibonacciHeap_Node< K, V >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ajb::detail::FibonacciHeap_Node< K, V >
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP (const \fBFibonacciHeap_Node\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP (\fBFibonacciHeap_Node\fP &&)=delete"
+.br
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP & \fBoperator=\fP (const \fBFibonacciHeap_Node\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP (K key, V value)"
+.br
+.ti -1c
+.RI "bool \fBsingleton\fP () const"
+.br
+.ti -1c
+.RI "void \fBlink\fP (\fBFibonacciHeap_Node\fP *n)"
+.br
+.ti -1c
+.RI "void \fBunlink\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_child\fP (\fBFibonacciHeap_Node\fP *n)"
+.br
+.ti -1c
+.RI "void \fBremove_child\fP (\fBFibonacciHeap_Node\fP *n)"
+.br
+.ti -1c
+.RI "V \fBgetV\fP ()"
+.br
+.ti -1c
+.RI "K \fBgetK\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "K \fBkey_\fP"
+.br
+.ti -1c
+.RI "V \fBvalue_\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBdegree_\fP"
+.br
+.ti -1c
+.RI "bool \fBmark_\fP"
+.br
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP * \fBprev_\fP"
+.br
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP * \fBnext_\fP"
+.br
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP * \fBchild_\fP"
+.br
+.ti -1c
+.RI "\fBFibonacciHeap_Node\fP * \fBparent_\fP"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

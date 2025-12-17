@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_63772b626f2709090f0bdca0f40827b4" kind="dir">
+    <compoundname>build/CMakeFiles</compoundname>
+    <innerdir refid="dir_8c8edcbe681aa67bc40891faf218f6e2">build/CMakeFiles/4.0.2</innerdir>
+    <innerdir refid="dir_11684cd87d07abfa8176e91bab1ec5e4">build/CMakeFiles/_CMakeLTOTest-CXX</innerdir>
+    <innerdir refid="dir_fa7b8610280d3219e896fcc06f4a4358">build/CMakeFiles/iaps_h2o_eos.dir</innerdir>
+    <innerdir refid="dir_1bb58e51dbf8b222700864b1f6c7b704">build/CMakeFiles/jpeg.dir</innerdir>
+    <innerdir refid="dir_3254adfa878a9a84dd25dc02fc231862">build/CMakeFiles/open-csmp-core.dir</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/"/>
+  </compounddef>
+</doxygen>

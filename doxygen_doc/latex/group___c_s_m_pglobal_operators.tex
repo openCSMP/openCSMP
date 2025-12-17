@@ -1,0 +1,61 @@
+\doxysection{Global CSMP Operators }
+\hypertarget{group___c_s_m_pglobal_operators}{}\label{group___c_s_m_pglobal_operators}\index{Global CSMP Operators@{Global CSMP Operators}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+ostream \& \mbox{\hyperlink{group___c_s_m_pglobal_operators_gae1fe2ad541d773a29dff540d90244d66}{csmp\+::operator$<$$<$}} (ostream \&stream, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&o)
+\item 
+istream \& \mbox{\hyperlink{group___c_s_m_pglobal_operators_gae01569532eec2fe03ebaeac0197e4150}{csmp\+::operator$>$$>$}} (istream \&stream, \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&o)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Operators available globally in the csmp Namespace
+
+\label{doc-func-members}
+\Hypertarget{group___c_s_m_pglobal_operators_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{group___c_s_m_pglobal_operators_gae1fe2ad541d773a29dff540d90244d66}\index{Global CSMP Operators@{Global CSMP Operators}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Global CSMP Operators@{Global CSMP Operators}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily \label{group___c_s_m_pglobal_operators_gae1fe2ad541d773a29dff540d90244d66} 
+ostream \& csmp\+::operator$<$$<$ (\begin{DoxyParamCaption}\item[{ostream \&}]{stream}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{o}{}\end{DoxyParamCaption})}
+
+Custom global ostream operator
+
+\begin{DoxyAttention}{Attention}
+Does not output \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables} / \doxylink{structcsmp_1_1_local_variables}{Local\+Variables}
+\end{DoxyAttention}
+Writes human-\/readable variable characteristics to given output stream (use Out() to get all)
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & The output stream \\
+\hline
+{\em o} & The \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} object to output \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted output 
+\end{DoxyReturn}
+\Hypertarget{group___c_s_m_pglobal_operators_gae01569532eec2fe03ebaeac0197e4150}\index{Global CSMP Operators@{Global CSMP Operators}!operator$>$$>$@{operator$>$$>$}}
+\index{operator$>$$>$@{operator$>$$>$}!Global CSMP Operators@{Global CSMP Operators}}
+\doxysubsubsection{\texorpdfstring{operator$>$$>$()}{operator>>()}}
+{\footnotesize\ttfamily \label{group___c_s_m_pglobal_operators_gae01569532eec2fe03ebaeac0197e4150} 
+istream \& csmp\+::operator$>$$>$ (\begin{DoxyParamCaption}\item[{istream \&}]{stream}{, }\item[{\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{o}{}\end{DoxyParamCaption})}
+
+Custom global istream operator
+
+\begin{DoxyAttention}{Attention}
+Does not instantiate \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables} / \doxylink{structcsmp_1_1_local_variables}{Local\+Variables}
+\end{DoxyAttention}
+Provides formatted input to a given stream 
+\begin{DoxyParams}{Parameters}
+{\em stream} & The input stream \\
+\hline
+{\em o} & The \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} object to intput \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted intput 
+\end{DoxyReturn}

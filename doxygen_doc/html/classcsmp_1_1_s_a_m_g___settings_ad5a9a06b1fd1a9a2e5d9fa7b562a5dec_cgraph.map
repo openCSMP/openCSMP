@@ -1,0 +1,5 @@
+<map id="csmp::SAMG_Settings::Set_ncgtyp" name="csmp::SAMG_Settings::Set_ncgtyp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,161,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_s_a_m_g___settings.html#a2b169597e6d88b23a8ae6da35494e15d" title="if this is not set &#39;true&#39; all attempts to set secondary parameters will fail (default=false)" alt="" coords="209,5,364,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,23,193,23,193,28,161,28"/>
+</map>

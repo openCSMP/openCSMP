@@ -1,0 +1,63 @@
+\doxysection{Boundary\+Interface\+\_\+\+Test.\+h}
+\hypertarget{_boundary_interface___test_8h_source}{}\label{_boundary_interface___test_8h_source}\index{tests/unit/BoundaryInterface\_Test.h@{tests/unit/BoundaryInterface\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ BoundaryInterface\_Test.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 23/03/2016.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Copyright\ ©\ 2016\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BOUNDARY\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BOUNDARY\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ @brief\ tests\ refactored\ functionality\ related\ to\ boundaries.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ Input\ models:}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ \ -\/\ fault\_boundary\_test\ \ \ -\/\ normal\ fault\ offsetting\ central\ reservoir\ layer\ creating\ complex\ intersection\ relationships}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ \ \ \ uses\ the\ mesh\ stored\ in\ FaultBoundaryTest}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_boundary_interface___test}{BoundaryInterface\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ testing\ "{}"{}fault\_boundary\_test"{}\ creation\ of\ a\ segmented\ boundary\ from\ region\ 'fault'}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_boundary_interface___test_a3842888782da98946dcd3dd1f8285bba}{run}}();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{///\ can\ Box-\/shaped\ model\ creation\ be\ accomplished\ and\ how\ fast}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_boundary_interface___test_a4568104d1b6d4bdc5fa348149ee91222}{TestBoxShapedModel}}();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ contact\ surface\ of\ 2\ contacting\ regions\ is\ recovered\ correctly}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{bool}\ TestRegionContactDetection(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{///<\ turn\ off\ to\ supress\ output\ of\ files\ etc.}}
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{///\ finding\ substrings\ in\ boundary\ name;\ returns\ '\(\backslash\)0'\ if\ unsuccessful;\ use\ model.Boundary(findBoundary(...))\ to\ recover\ boundary\ after\ search}}
+\DoxyCodeLine{00041\ \mbox{\hyperlink{namespacecsmp_ad87ed44e4235d56041819fb7daf9858e}{std}}::\mbox{\hyperlink{namespacecsmp_ad87ed44e4235d56041819fb7daf9858e}{string}}\ \ \mbox{\hyperlink{namespacecsmp_ad87ed44e4235d56041819fb7daf9858e}{findBoundary}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model,\ \textcolor{keyword}{const}\ std::set<std::string>\&\ intersected\_regions\ );}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{///\ assuming\ a\ dim-\/1\ region,\ label\ and\ count\ material\ juxtaposition\ relationships}}
+\DoxyCodeLine{00044\ \mbox{\hyperlink{namespacecsmp_a9c3abab418ce616932f820f47cc4eaea}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a9c3abab418ce616932f820f47cc4eaea}{countAndLabelRegions}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&,\ std::vector<std::string>\&\ region\_names\ );}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{comment}{///\ discerning\ patches\ by\ values\ for\ the\ region\ in\ terms\ of\ the\ diagnostic\ element\ variable}}
+\DoxyCodeLine{00047\ \mbox{\hyperlink{namespacecsmp_a192f6f2037db799e6b86072011acf2ca}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a192f6f2037db799e6b86072011acf2ca}{labelRegionPatches}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ dim\_1\_region,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diagnostic\_elmt\_variable,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ region\_names\ );}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{comment}{///\ establishes\ neighbors\ of\ lower\ dimensional\ element}}
+\DoxyCodeLine{00051\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a6cc2e9d001d2cba3e35a025e2a616063}{higherDimensionalNeighbors}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ e,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ mtrl\_key,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<size\_t,size\_t>\&\ nbors,\ std::pair<\textcolor{keywordtype}{long},\textcolor{keywordtype}{long}>\&\ materials\ );}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ SKM\_BOUNDARY\_FUNCTIONALITY\_TEST\_H\ */}}
+
+\end{DoxyCode}

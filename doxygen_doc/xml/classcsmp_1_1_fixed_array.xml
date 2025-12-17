@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_fixed_array" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FixedArray</compoundname>
+    <templateparamlist>
+      <param>
+        <type>unsigned int</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_fixed_array_1a1d89d55cf571725d699fc401dc707c11" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FixedArray&lt; dim &gt;::v_[dim]</definition>
+        <argsstring>[dim]</argsstring>
+        <name>v_</name>
+        <qualifiedname>csmp::FixedArray::v_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="46" column="14" bodyfile="source/includes/math/FixedArray.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1acf9a7f9e470e16bb5390be62f8cbd05b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FixedArray&lt; dim &gt;::FixedArray</definition>
+        <argsstring>()</argsstring>
+        <name>FixedArray</name>
+        <qualifiedname>csmp::FixedArray::FixedArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="14" column="7" bodyfile="source/includes/math/FixedArray.h" bodystart="14" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1a71791ec488ec66c060e8eb83bb16116c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FixedArray&lt; dim &gt;::~FixedArray</definition>
+        <argsstring>()</argsstring>
+        <name>~FixedArray</name>
+        <qualifiedname>csmp::FixedArray::~FixedArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="15" column="7" bodyfile="source/includes/math/FixedArray.h" bodystart="15" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1a2982576afab90ae7bccfd01458c608a7" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FixedArray&lt; dim &gt;::FixedArray</definition>
+        <argsstring>(const double &amp;a)</argsstring>
+        <name>FixedArray</name>
+        <qualifiedname>csmp::FixedArray::FixedArray</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="16" column="16" bodyfile="source/includes/math/FixedArray.h" bodystart="16" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1a87d64641f8e95b8b903a880b833f684a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FixedArray&lt; dim &gt;::FixedArray</definition>
+        <argsstring>(const FixedArray &amp;a)</argsstring>
+        <name>FixedArray</name>
+        <qualifiedname>csmp::FixedArray::FixedArray</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_fixed_array" kindref="compound">FixedArray</ref> &amp;</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="19" column="7" bodyfile="source/includes/math/FixedArray.h" bodystart="19" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1aab8432a0a55502869d189cc6aa332f05" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_fixed_array" kindref="compound">FixedArray</ref> &amp;</type>
+        <definition>FixedArray &amp; csmp::FixedArray&lt; dim &gt;::operator=</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FixedArray::operator=</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="22" column="18" bodyfile="source/includes/math/FixedArray.h" bodystart="22" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1aa493096c2efb1c0e5be30f525b846006" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_fixed_array" kindref="compound">FixedArray</ref> &amp;</type>
+        <definition>FixedArray &amp; csmp::FixedArray&lt; dim &gt;::operator=</definition>
+        <argsstring>(const double &amp;val)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FixedArray::operator=</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="29" column="18" bodyfile="source/includes/math/FixedArray.h" bodystart="29" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1a372d0e36bf915bc3c47ea1640f857004" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FixedArray&lt; dim &gt;::operator[]</definition>
+        <argsstring>(unsigned int i) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::FixedArray::operator[]</qualifiedname>
+        <param>
+          <type>unsigned int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="33" column="15" bodyfile="source/includes/math/FixedArray.h" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1ab2f1410312ea2f066e8fb8a9716f4ca8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::FixedArray&lt; dim &gt;::operator[]</definition>
+        <argsstring>(unsigned int i)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::FixedArray::operator[]</qualifiedname>
+        <param>
+          <type>unsigned int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="34" column="14" bodyfile="source/includes/math/FixedArray.h" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1a66295b7a5f8b56a09f8c07cd6e191f4c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>unsigned int</type>
+        <definition>unsigned int csmp::FixedArray&lt; dim &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>csmp::FixedArray::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="35" column="20" bodyfile="source/includes/math/FixedArray.h" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1abd877466ed09b292c11a53f14c8d739e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FixedArray&lt; dim &gt;::Out</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FixedArray::Out</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="36" column="12" bodyfile="source/includes/math/FixedArray.h" bodystart="36" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fixed_array_1a87c84e543b27a2b7e24bc6f0d03ae539" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FixedArray&lt; dim &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FixedArray::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/FixedArray.h" line="39" column="12" bodyfile="source/includes/math/FixedArray.h" bodystart="39" bodyend="43"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FixedArray&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fixed_array"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/math/FixedArray.h" line="12" column="1" bodyfile="source/includes/math/FixedArray.h" bodystart="12" bodyend="47"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_fixed_array_1acf9a7f9e470e16bb5390be62f8cbd05b" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>FixedArray</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1a2982576afab90ae7bccfd01458c608a7" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>FixedArray</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1a87d64641f8e95b8b903a880b833f684a" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>FixedArray</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1aab8432a0a55502869d189cc6aa332f05" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1aa493096c2efb1c0e5be30f525b846006" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1a372d0e36bf915bc3c47ea1640f857004" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1ab2f1410312ea2f066e8fb8a9716f4ca8" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1abd877466ed09b292c11a53f14c8d739e" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1a87c84e543b27a2b7e24bc6f0d03ae539" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1a66295b7a5f8b56a09f8c07cd6e191f4c" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>size</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1a1d89d55cf571725d699fc401dc707c11" prot="private" virt="non-virtual"><scope>csmp::FixedArray</scope><name>v_</name></member>
+      <member refid="classcsmp_1_1_fixed_array_1a71791ec488ec66c060e8eb83bb16116c" prot="public" virt="non-virtual"><scope>csmp::FixedArray</scope><name>~FixedArray</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

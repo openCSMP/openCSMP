@@ -1,0 +1,1314 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_halite_liquidus_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::HaliteLiquidusLookup</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a63ac9ba10a2dead25688d9984586a9a6" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::HaliteLiquidusLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="40" column="32" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a56d5bb1bc3932795ab874d0291d256d7" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::HaliteLiquidusLookup::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="41" column="32" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a155e1b2d3e2c7a8b27d3b2f74541ad59" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::tcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="43" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a35744b9b2d07a1a7d6cf016f798260a4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::pcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="44" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ac08760fb8294b410422e496a9ad13acc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::xcurrent</definition>
+        <argsstring></argsstring>
+        <name>xcurrent</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::xcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="45" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a7526c96f3fec57571ab23d20a32b89f6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::tdummy</definition>
+        <argsstring></argsstring>
+        <name>tdummy</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::tdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="46" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a4214011d40da3f63271b33d8e0d78f64" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::pdummy</definition>
+        <argsstring></argsstring>
+        <name>pdummy</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::pdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="47" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ad60238799710dd4d0fa0202563772e83" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="48" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a39f1b5332441c12186b33dc3ad823992" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::p_res</definition>
+        <argsstring></argsstring>
+        <name>p_res</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::p_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="49" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a0a03a5be6bb28c4dd29c8df1a1a5bcc4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="50" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a74c784420bf011599b1e7e24e0cb9cbd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="51" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1aa784c88f05fa193c023cc03e42374f9d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::pvlh</definition>
+        <argsstring></argsstring>
+        <name>pvlh</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::pvlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="52" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1afe0572dc7508f9b4e4608d45aeb7bfc4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::t_iA</definition>
+        <argsstring></argsstring>
+        <name>t_iA</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::t_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="53" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1af35f5f5be83a231201fcfbbef85a9e5b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::t_iB</definition>
+        <argsstring></argsstring>
+        <name>t_iB</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::t_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="54" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ab7956a20c5bc8fd811686303dac6b2b7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::t_iC</definition>
+        <argsstring></argsstring>
+        <name>t_iC</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::t_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="55" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a32bbc172880023fdf0ff70a8d1837037" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::t_iD</definition>
+        <argsstring></argsstring>
+        <name>t_iD</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::t_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="56" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a64c14f2440a1916fdcf07e1ac605f01d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::p_iA</definition>
+        <argsstring></argsstring>
+        <name>p_iA</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::p_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="57" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ad275c4308c694d641265e96af0efc094" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::p_iB</definition>
+        <argsstring></argsstring>
+        <name>p_iB</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::p_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="58" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a95c0a9e442093d31dbdaa101713db8e5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::p_iC</definition>
+        <argsstring></argsstring>
+        <name>p_iC</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::p_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="59" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a66c0376de32f17ef387474ad68e21ecc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::p_iD</definition>
+        <argsstring></argsstring>
+        <name>p_iD</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::p_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="60" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a38b725d6bd7b22d575e0c4e8bb2f4537" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_iA</definition>
+        <argsstring></argsstring>
+        <name>value_iA</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="61" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1aeff67d83cb94e274e84331962197e921" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_iB</definition>
+        <argsstring></argsstring>
+        <name>value_iB</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="62" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a7d4b330be7782d5ab68a26c2fb30a0e5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_iC</definition>
+        <argsstring></argsstring>
+        <name>value_iC</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="63" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a0b494a04574be0f6a4fe04d3e804c279" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_iD</definition>
+        <argsstring></argsstring>
+        <name>value_iD</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="64" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1afcf438eb0ce64cfcbd23c88f34ab200c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_before</definition>
+        <argsstring></argsstring>
+        <name>value_before</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_before</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="65" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a4eff2e743cc72f429a396d7b7e814aff" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_behind</definition>
+        <argsstring></argsstring>
+        <name>value_behind</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="66" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a0c059f39c509f81c21f5e5658619b159" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_bottom</definition>
+        <argsstring></argsstring>
+        <name>value_bottom</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_bottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="67" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a63e3900e9ab0d82be0700b0169411394" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_top</definition>
+        <argsstring></argsstring>
+        <name>value_top</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_top</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="68" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a2f960847043170e10153427862f293c6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_interpolated</definition>
+        <argsstring></argsstring>
+        <name>value_interpolated</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_interpolated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="69" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a1242259ef234f9fa9037882b23edf3d8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_vlh</definition>
+        <argsstring></argsstring>
+        <name>value_vlh</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_vlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="70" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a6148c832c594909574af62b7d3a657d4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_vlh_behind</definition>
+        <argsstring></argsstring>
+        <name>value_vlh_behind</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_vlh_behind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="71" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a63fc81fee19620343f9312b599d31596" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::value_vlh_before</definition>
+        <argsstring></argsstring>
+        <name>value_vlh_before</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::value_vlh_before</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="72" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a30b7003c7666502415fe4f3f2467dbe9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::tcrit</definition>
+        <argsstring></argsstring>
+        <name>tcrit</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::tcrit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="73" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a5642dafff0f9d5430604c9ab6b430012" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::tvlh</definition>
+        <argsstring></argsstring>
+        <name>tvlh</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::tvlh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="74" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a84b3439eed12828aa4fe2e6e6e87240a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::x_high</definition>
+        <argsstring></argsstring>
+        <name>x_high</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::x_high</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="75" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a6157f3adff1832d689cfa4ea9d6c751e" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::HaliteLiquidusLookup::vlh_tmax</definition>
+        <argsstring></argsstring>
+        <name>vlh_tmax</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::vlh_tmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="76" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ae89ec45c0a83e738366899381b8e8585" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::HaliteLiquidusLookup::vlh_pmax</definition>
+        <argsstring></argsstring>
+        <name>vlh_pmax</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::vlh_pmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="77" column="33" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a12fd207b7930b2a590c87fcd7c49dafd" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="79" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ab52d156f2472f3e65276c7212e0c0c98" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::ip</definition>
+        <argsstring></argsstring>
+        <name>ip</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::ip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="80" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a5b6adc52b37f27505bb920d44ba7aa14" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="81" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1af98c45456223b398b68b13fd5dd252dd" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::p_dim</definition>
+        <argsstring></argsstring>
+        <name>p_dim</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::p_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="82" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ab2bbf863aa1abcf9ff6a86fe59ba0266" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::iA</definition>
+        <argsstring></argsstring>
+        <name>iA</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="83" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ab9508ba1ab41a8f2bc400b98e9da4ffb" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::iB</definition>
+        <argsstring></argsstring>
+        <name>iB</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="84" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ab2ebf6d758c89726df9fef3e42ee0d18" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::iC</definition>
+        <argsstring></argsstring>
+        <name>iC</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="85" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1aff2cf0bec71dd7fb9aaa982d10a6ea90" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::iD</definition>
+        <argsstring></argsstring>
+        <name>iD</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="86" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a3cdfbb5abec2dca079bcf68bf50e5dc6" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::i_dummy</definition>
+        <argsstring></argsstring>
+        <name>i_dummy</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::i_dummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="87" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a46ac996293a1980c790cfb92507e35bf" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::it_p_max</definition>
+        <argsstring></argsstring>
+        <name>it_p_max</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::it_p_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="88" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a388d056b4c9a533af391a0974f6d5494" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::HaliteLiquidusLookup::ip_p_max</definition>
+        <argsstring></argsstring>
+        <name>ip_p_max</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::ip_p_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="89" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1aa72417c401db3b86d80fa5df20b9eeee" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::HaliteLiquidusLookup::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="91" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a147115f07e3c3534acf8af4ab9824f74" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::HaliteLiquidusLookup::state_iA</definition>
+        <argsstring></argsstring>
+        <name>state_iA</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::state_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="92" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ac581352e693227877f61591dd912a539" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::HaliteLiquidusLookup::state_iB</definition>
+        <argsstring></argsstring>
+        <name>state_iB</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::state_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="93" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1aea2c76ba33984254eec265dd81d4c04c" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::HaliteLiquidusLookup::state_iC</definition>
+        <argsstring></argsstring>
+        <name>state_iC</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::state_iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="94" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a176273a7fbbe71fd44f149f77431118a" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::HaliteLiquidusLookup::state_iD</definition>
+        <argsstring></argsstring>
+        <name>state_iD</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::state_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="95" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a25c7c96a231dfa84b131699b43a04cf1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::HaliteLiquidusLookup::storage_vector</definition>
+        <argsstring></argsstring>
+        <name>storage_vector</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::storage_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="97" column="25" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a2005331041b4c2f22c0d9d11f74558b6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; States &gt;</type>
+        <definition>std::vector&lt;States&gt; csmp::HaliteLiquidusLookup::state_vector</definition>
+        <argsstring></argsstring>
+        <name>state_vector</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::state_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="98" column="27" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1ad6f39da09082d5d9ca07d6aded622122" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_v_l_h___liquid_lookup" kindref="compound">VLH_LiquidLookup</ref></type>
+        <definition>VLH_LiquidLookup csmp::HaliteLiquidusLookup::vlh_liquid</definition>
+        <argsstring></argsstring>
+        <name>vlh_liquid</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::vlh_liquid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="111" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1a984d9b8ae3a8fe736aad9ebc3dc2e5eb" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_na_cl_melting_curve_liquid_lookup" kindref="compound">NaClMeltingCurveLiquidLookup</ref></type>
+        <definition>NaClMeltingCurveLiquidLookup csmp::HaliteLiquidusLookup::naclmelt_liquid</definition>
+        <argsstring></argsstring>
+        <name>naclmelt_liquid</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::naclmelt_liquid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="112" column="35" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_halite_liquidus_lookup_1abe5d8bc83bbe7bae3a9469ac8bd081cd" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_error_handler" kindref="compound">ErrorHandler</ref> &amp;</type>
+        <definition>ErrorHandler&amp; csmp::HaliteLiquidusLookup::csmp_error</definition>
+        <argsstring></argsstring>
+        <name>csmp_error</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::csmp_error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="114" column="34" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a763a8696930f95df802b335d6a9d518e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HaliteLiquidusLookup::HaliteLiquidusLookup</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>HaliteLiquidusLookup</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::HaliteLiquidusLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="18" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="17" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1adeb017470a07cf1ea47c5392ef617842" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::HaliteLiquidusLookup::~HaliteLiquidusLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~HaliteLiquidusLookup</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::~HaliteLiquidusLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="20" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="216" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a14d5d30d6381e89495d485de613618f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::Temperature</definition>
+        <argsstring>()</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="22" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="250" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1ac95ee0d124489668ea3209711bdc4187" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="23" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="251" bodyend="251"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1abf24ab7498a95c72ecd09cf955d365fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="24" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="252" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a7054a048b305227138aa719a78a36b5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="26" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="253" bodyend="253"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1ac738971fe73531865841af70174426de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="27" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="254" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1afeab5eaf6135393ce3a3afe1326d7125" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="28" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="255" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1aca98ce5251019035cd0b42cdfa8b5391" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="29" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="256" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a963eb797c3a969f8de267592e2b9b88d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="30" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="257" bodyend="257"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a30b959f054a9102f54e4b596b9a9e31c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::DCompositionDT</definition>
+        <argsstring>()</argsstring>
+        <name>DCompositionDT</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::DCompositionDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="31" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="267" bodyend="275"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a28e819d2a4d7f6d26dd00344e672ba56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::DEnthalpyDT</definition>
+        <argsstring>()</argsstring>
+        <name>DEnthalpyDT</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::DEnthalpyDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="32" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="277" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1ae0c8b9849a57fd53cc92f38543f303e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::DSaltMassFractionDT</definition>
+        <argsstring>()</argsstring>
+        <name>DSaltMassFractionDT</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::DSaltMassFractionDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="33" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="287" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1aa44c91fd4cf880cdb1ef51c847733dc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::ReportComposition</definition>
+        <argsstring>()</argsstring>
+        <name>ReportComposition</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::ReportComposition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="34" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="259" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a4047b36bdddcacd10df064b3839945cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::ReportEnthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>ReportEnthalpy</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::ReportEnthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="35" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="260" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a86e1896247ff3cdd5c0dbf685a0a25ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::ValueOf</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>ValueOf</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::ValueOf</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="36" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="299" bodyend="394"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a636c0c00ae980814df848ea7d7256474" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::NormalInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NormalInterpolation</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::NormalInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="100" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="397" bodyend="421"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a887ebdc5d3e7cf85f09e1e8444d9ad01" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::NearVLHInterpolationLowT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationLowT</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::NearVLHInterpolationLowT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="101" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="576" bodyend="718"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a1cffac2fa5b3e550956bffe1d26ba904" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::NearVLHInterpolationHighT</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHInterpolationHighT</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::NearVLHInterpolationHighT</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="102" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="723" bodyend="856"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a5f42a9818893dd13ef4b914f2beb6c0f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::NearNaClMeltInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearNaClMeltInterpolation</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::NearNaClMeltInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="103" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="860" bodyend="1003"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1abbdf5d506e49a901f55d146ef5c316ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::HaliteLiquidusLookup::NearVLHMaxInterpolation</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>NearVLHMaxInterpolation</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::NearVLHMaxInterpolation</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="104" column="33" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="423" bodyend="574"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a0864f3737877d3e8ef1386e8cc7017b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLiquidusLookup::SetTemperatureAndPressure</definition>
+        <argsstring>()</argsstring>
+        <name>SetTemperatureAndPressure</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::SetTemperatureAndPressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="106" column="35" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="220" bodyend="231"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a291d0905620214cca6441d81747577bb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLiquidusLookup::GetIndex_iA</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>GetIndex_iA</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::GetIndex_iA</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="107" column="35" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="235" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a73131679b07af8d40d9c7953baa8abc3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLiquidusLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="108" column="35" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="1006" bodyend="1023"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_halite_liquidus_lookup_1a59b81a14f33529922d43b8c51790c051" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::HaliteLiquidusLookup::GetPressureIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>GetPressureIndex</name>
+        <qualifiedname>csmp::HaliteLiquidusLookup::GetPressureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/HaliteLiquidusLookup.h" line="109" column="35" bodyfile="source/modules/eos/h2o_nacl_lookup/HaliteLiquidusLookup.cpp" bodystart="1025" bodyend="1042"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::HaliteLiquidusLookup</label>
+        <link refid="classcsmp_1_1_halite_liquidus_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/HaliteLiquidusLookup.h" line="14" column="3" bodyfile="source/includes/eos/HaliteLiquidusLookup.h" bodystart="15" bodyend="115"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1aca98ce5251019035cd0b42cdfa8b5391" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1abe5d8bc83bbe7bae3a9469ac8bd081cd" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>csmp_error</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a30b959f054a9102f54e4b596b9a9e31c" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>DCompositionDT</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a7054a048b305227138aa719a78a36b5c" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a28e819d2a4d7f6d26dd00344e672ba56" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>DEnthalpyDT</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ae0c8b9849a57fd53cc92f38543f303e0" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>DSaltMassFractionDT</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ac738971fe73531865841af70174426de" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a291d0905620214cca6441d81747577bb" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>GetIndex_iA</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a59b81a14f33529922d43b8c51790c051" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>GetPressureIndex</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a73131679b07af8d40d9c7953baa8abc3" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a763a8696930f95df802b335d6a9d518e" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>HaliteLiquidusLookup</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1afeab5eaf6135393ce3a3afe1326d7125" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a3cdfbb5abec2dca079bcf68bf50e5dc6" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>i_dummy</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ab2bbf863aa1abcf9ff6a86fe59ba0266" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>iA</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ab9508ba1ab41a8f2bc400b98e9da4ffb" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>iB</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ab2ebf6d758c89726df9fef3e42ee0d18" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>iC</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1aff2cf0bec71dd7fb9aaa982d10a6ea90" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>iD</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ab52d156f2472f3e65276c7212e0c0c98" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>ip</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a388d056b4c9a533af391a0974f6d5494" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>ip_p_max</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a12fd207b7930b2a590c87fcd7c49dafd" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a46ac996293a1980c790cfb92507e35bf" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>it_p_max</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1abf24ab7498a95c72ecd09cf955d365fa" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a984d9b8ae3a8fe736aad9ebc3dc2e5eb" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>naclmelt_liquid</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a5f42a9818893dd13ef4b914f2beb6c0f" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>NearNaClMeltInterpolation</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a1cffac2fa5b3e550956bffe1d26ba904" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>NearVLHInterpolationHighT</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a887ebdc5d3e7cf85f09e1e8444d9ad01" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>NearVLHInterpolationLowT</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1abbdf5d506e49a901f55d146ef5c316ac" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>NearVLHMaxInterpolation</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a636c0c00ae980814df848ea7d7256474" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>NormalInterpolation</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1af98c45456223b398b68b13fd5dd252dd" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>p_dim</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a64c14f2440a1916fdcf07e1ac605f01d" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>p_iA</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ad275c4308c694d641265e96af0efc094" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>p_iB</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a95c0a9e442093d31dbdaa101713db8e5" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>p_iC</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a66c0376de32f17ef387474ad68e21ecc" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>p_iD</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a39f1b5332441c12186b33dc3ad823992" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>p_res</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a35744b9b2d07a1a7d6cf016f798260a4" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a4214011d40da3f63271b33d8e0d78f64" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>pdummy</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a74c784420bf011599b1e7e24e0cb9cbd" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ac95ee0d124489668ea3209711bdc4187" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a56d5bb1bc3932795ab874d0291d256d7" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>pressure</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1aa784c88f05fa193c023cc03e42374f9d" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>pvlh</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1aa44c91fd4cf880cdb1ef51c847733dc0" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>ReportComposition</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a4047b36bdddcacd10df064b3839945cc" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>ReportEnthalpy</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a0864f3737877d3e8ef1386e8cc7017b1" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>SetTemperatureAndPressure</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1aa72417c401db3b86d80fa5df20b9eeee" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>state</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a147115f07e3c3534acf8af4ab9824f74" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>state_iA</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ac581352e693227877f61591dd912a539" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>state_iB</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1aea2c76ba33984254eec265dd81d4c04c" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>state_iC</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a176273a7fbbe71fd44f149f77431118a" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>state_iD</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a2005331041b4c2f22c0d9d11f74558b6" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>state_vector</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a25c7c96a231dfa84b131699b43a04cf1" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>storage_vector</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a5b6adc52b37f27505bb920d44ba7aa14" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1afe0572dc7508f9b4e4608d45aeb7bfc4" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>t_iA</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1af35f5f5be83a231201fcfbbef85a9e5b" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>t_iB</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ab7956a20c5bc8fd811686303dac6b2b7" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>t_iC</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a32bbc172880023fdf0ff70a8d1837037" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>t_iD</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ad60238799710dd4d0fa0202563772e83" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a30b7003c7666502415fe4f3f2467dbe9" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>tcrit</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a155e1b2d3e2c7a8b27d3b2f74541ad59" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a7526c96f3fec57571ab23d20a32b89f6" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>tdummy</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a14d5d30d6381e89495d485de613618f6" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a63ac9ba10a2dead25688d9984586a9a6" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a0a03a5be6bb28c4dd29c8df1a1a5bcc4" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a5642dafff0f9d5430604c9ab6b430012" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>tvlh</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1afcf438eb0ce64cfcbd23c88f34ab200c" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_before</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a4eff2e743cc72f429a396d7b7e814aff" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_behind</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a0c059f39c509f81c21f5e5658619b159" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_bottom</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a38b725d6bd7b22d575e0c4e8bb2f4537" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_iA</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1aeff67d83cb94e274e84331962197e921" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_iB</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a7d4b330be7782d5ab68a26c2fb30a0e5" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_iC</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a0b494a04574be0f6a4fe04d3e804c279" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_iD</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a2f960847043170e10153427862f293c6" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_interpolated</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a63e3900e9ab0d82be0700b0169411394" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_top</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a1242259ef234f9fa9037882b23edf3d8" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_vlh</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a63fc81fee19620343f9312b599d31596" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_vlh_before</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a6148c832c594909574af62b7d3a657d4" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>value_vlh_behind</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a86e1896247ff3cdd5c0dbf685a0a25ca" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>ValueOf</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a963eb797c3a969f8de267592e2b9b88d" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ad6f39da09082d5d9ca07d6aded622122" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>vlh_liquid</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ae89ec45c0a83e738366899381b8e8585" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>vlh_pmax</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a6157f3adff1832d689cfa4ea9d6c751e" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>vlh_tmax</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1a84b3439eed12828aa4fe2e6e6e87240a" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>x_high</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1ac08760fb8294b410422e496a9ad13acc" prot="private" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>xcurrent</name></member>
+      <member refid="classcsmp_1_1_halite_liquidus_lookup_1adeb017470a07cf1ea47c5392ef617842" prot="public" virt="non-virtual"><scope>csmp::HaliteLiquidusLookup</scope><name>~HaliteLiquidusLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,198 @@
+\doxysection{csmp\+::DES2\+Phase\+Slightly\+Compressible\+Transport\texorpdfstring{$<$}{<} dim, FLOW\+\_\+\+FUNCTIONS \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport}{}\label{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport}\index{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$@{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$}}
+
+
+Inheritance diagram for csmp\+::DES2\+Phase\+Slightly\+Compressible\+Transport\texorpdfstring{$<$}{<} dim, FLOW\+\_\+\+FUNCTIONS \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::DES2\+Phase\+Slightly\+Compressible\+Transport\texorpdfstring{$<$}{<} dim, FLOW\+\_\+\+FUNCTIONS \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_a327d3863d4534893e88b06b74d7caf3b}\label{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_a327d3863d4534893e88b06b74d7caf3b} 
+typedef \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{ajb\+::detail\+::\+Fibonacci\+Heap\+\_\+\+Node}}$<$ double, size\+\_\+t $>$ {\bfseries Heap\+\_\+\+Node}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_transport}{csmp\+::\+DES2\+Phase\+Transport$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{ajb\+::detail\+::\+Fibonacci\+Heap\+\_\+\+Node}}$<$ double, size\+\_\+t $>$ {\bfseries Heap\+\_\+\+Node}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_a81e7a082a0c4b3146397c390256a1c2c}\label{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_a81e7a082a0c4b3146397c390256a1c2c} 
+{\bfseries DES2\+Phase\+Slightly\+Compressible\+Transport} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}target\+\_\+region, bool with\+\_\+gravity\+\_\+forces, bool with\+\_\+capillary\+\_\+spreading, double cfl\+\_\+multiplier, double PEP\+\_\+multiplier, double relaxing\+\_\+factor, bool tensor\+\_\+k, bool second\+\_\+order\+\_\+in\+\_\+space, FLOW\+\_\+\+FUNCTIONS$<$ dim $>$ \&)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_adf87f423268659bba590eb8c7b8354f4}{Advect\+Variable\+\_\+\+TDS}} (double time\+\_\+interval, size\+\_\+t num\+\_\+threads)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_a437e65c0a75acef3f9d3d1036a841d7c}{Advect\+Variable\+\_\+\+DES}} (double time\+\_\+increment, double model\+\_\+time, size\+\_\+t num\+\_\+threads)
+\item 
+\Hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_acec6b1669e37ac10f148e1dfcbe10b96}\label{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_acec6b1669e37ac10f148e1dfcbe10b96} 
+void {\bfseries Set\+Second\+Order\+In\+Space} (bool second\+\_\+order)
+\item 
+\Hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_aaecf61959d0d904a49f3f00326176063}\label{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_aaecf61959d0d904a49f3f00326176063} 
+void {\bfseries Reinitialize\+Events} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_transport}{csmp\+::\+DES2\+Phase\+Transport$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries DES2\+Phase\+Transport} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&m, const char \texorpdfstring{$\ast$}{*}target\+\_\+region, bool with\+\_\+gravity\+\_\+forces, bool with\+\_\+capillary\+\_\+spreading, double cfl\+\_\+multiplier, double PEP\+\_\+multiplier, double relaxing\+\_\+factor, bool tensor\+\_\+k, FLOW\+\_\+\+FUNCTIONS$<$ dim $>$ \&ff)
+\item 
+void {\bfseries Set\+No\+Flow\+Boundary\+Condition} (bool no\+\_\+flow\+\_\+boundary)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_transport}{csmp\+::\+DES2\+Phase\+Transport$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Initialize\+Basic\+Variabls\+And\+Keys} ()
+\item 
+void {\bfseries Initialize\+Finite\+Volume\+Properties} ()
+\item 
+void {\bfseries Reset\+CFLMultiplier} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_transport}{csmp\+::\+DES2\+Phase\+Transport$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \& {\bfseries sg\+\_\+}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \& {\bfseries gref\+\_\+}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries db\+\_\+}
+\item 
+double {\bfseries upper\+\_\+limit\+\_\+}
+\item 
+double {\bfseries lower\+\_\+limit\+\_\+}
+\begin{DoxyCompactList}\small\item\em range in which the result is allowed to vary \end{DoxyCompactList}\item 
+double {\bfseries CFL\+\_\+multiplier\+\_\+}
+\item 
+double {\bfseries PEP\+\_\+multiplier\+\_\+}
+\item 
+bool {\bfseries tensor\+\_\+k\+\_\+} = false
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_event}{Event}}$<$ dim $>$ $>$ {\bfseries Full\+List}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_event}{Event}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries PEPList}
+\item 
+\mbox{\hyperlink{classajb_1_1_fibonacci_heap}{ajb\+::\+Fibonacci\+Heap}}$<$ double, size\+\_\+t $>$ {\bfseries Event\+Heap}
+\item 
+size\+\_\+t {\bfseries rate\+\_\+count\+\_\+}
+\item 
+size\+\_\+t {\bfseries update\+\_\+count\+\_\+}
+\item 
+double {\bfseries T\+\_\+\+Rate\+Of\+Change\+\_\+}
+\item 
+double {\bfseries T\+\_\+\+Schedule\+\_\+}
+\item 
+double {\bfseries T\+\_\+\+Insert\+To\+Heap\+\_\+}
+\item 
+double {\bfseries T\+\_\+\+Update\+\_\+}
+\item 
+double {\bfseries T\+\_\+\+Synchronize\+\_\+}
+\item 
+double {\bfseries T\+\_\+\+Remove\+From\+Heap\+\_\+}
+\item 
+double {\bfseries T\+\_\+\+Advect\+Variable\+\_\+}
+\item 
+FLOW\+\_\+\+FUNCTIONS$<$ dim $>$ \& {\bfseries flowfunctions\+\_\+}
+\item 
+bool {\bfseries with\+\_\+capillary\+\_\+spreading\+\_\+}
+\item 
+bool {\bfseries with\+\_\+gravity\+\_\+forces\+\_\+}
+\item 
+double {\bfseries relaxing\+\_\+factor\+\_\+}
+\item 
+bool {\bfseries no\+\_\+flow\+\_\+boundary\+\_\+} = true
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+\+Event\+Index}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+update}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+rate}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+schedule}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+synchronize}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+fv\+PV}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+s\+CO2}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+s\+H2O}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+cut}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+\+CFL}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+pf}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ {\bfseries key\+\_\+fv}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, ELEMENT $>$ {\bfseries key\+\_\+phi}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, ELEMENT $>$ {\bfseries key\+\_\+thi}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, ELEMENT $>$ {\bfseries key\+\_\+ss\+H2O}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, ELEMENT $>$ {\bfseries key\+\_\+k}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, FACET\+\_\+\+INTEGRATION\+\_\+\+POINT $>$ {\bfseries key\+\_\+fA}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, FACET\+\_\+\+INTEGRATION\+\_\+\+POINT $>$ {\bfseries key\+\_\+fn}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, ELEMENT $>$ {\bfseries key\+\_\+grad\+Sn}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ VECTOR, ELEMENT $>$ {\bfseries key\+\_\+gradP}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, SECTOR\+\_\+\+INTEGRATION\+\_\+\+POINT $>$ {\bfseries key\+\_\+s\+PV}
+\item 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_element}{csmp\+::\+Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries halo\+\_\+stencils\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ ARRAY, NODE $>$ {\bfseries key\+\_\+time}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_a437e65c0a75acef3f9d3d1036a841d7c}\index{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$@{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$}!AdvectVariable\_DES@{AdvectVariable\_DES}}
+\index{AdvectVariable\_DES@{AdvectVariable\_DES}!csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$@{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$}}
+\doxysubsubsection{\texorpdfstring{AdvectVariable\_DES()}{AdvectVariable\_DES()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_a437e65c0a75acef3f9d3d1036a841d7c} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class FLOW\+\_\+\+FUNCTIONS$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport}{csmp\+::\+DES2\+Phase\+Slightly\+Compressible\+Transport}}$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$\+::\+Advect\+Variable\+\_\+\+DES (\begin{DoxyParamCaption}\item[{double}]{time\+\_\+increment}{, }\item[{double}]{model\+\_\+time}{, }\item[{size\+\_\+t}]{num\+\_\+threads}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_transport}{csmp\+::\+DES2\+Phase\+Transport$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$}}.
+
+\Hypertarget{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_adf87f423268659bba590eb8c7b8354f4}\index{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$@{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$}!AdvectVariable\_TDS@{AdvectVariable\_TDS}}
+\index{AdvectVariable\_TDS@{AdvectVariable\_TDS}!csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$@{csmp::DES2PhaseSlightlyCompressibleTransport$<$ dim, FLOW\_FUNCTIONS $>$}}
+\doxysubsubsection{\texorpdfstring{AdvectVariable\_TDS()}{AdvectVariable\_TDS()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport_adf87f423268659bba590eb8c7b8354f4} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class FLOW\+\_\+\+FUNCTIONS$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_slightly_compressible_transport}{csmp\+::\+DES2\+Phase\+Slightly\+Compressible\+Transport}}$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$\+::\+Advect\+Variable\+\_\+\+TDS (\begin{DoxyParamCaption}\item[{double}]{time\+\_\+interval}{, }\item[{size\+\_\+t}]{num\+\_\+threads}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_transport}{csmp\+::\+DES2\+Phase\+Transport$<$ dim, FLOW\+\_\+\+FUNCTIONS $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/\+DES\+\_\+transport\+\_\+scheme/DES2\+Phase\+Slightly\+Compressible\+Transport.\+h\item 
+source/modules/integration/finite\+\_\+volumes/\+DES\+\_\+transport\+\_\+scheme/DES2\+Phase\+Slightly\+Compressible\+Transport.\+cpp\end{DoxyCompactItemize}

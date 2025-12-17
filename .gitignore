@@ -93,6 +93,9 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 build/
+bin/
+Debug/
+Release/
 
 # CLion IDE project files
 .idea/
@@ -100,4 +103,8 @@ build/
 #build directory 
 thebuild/
 thebuild_dbg/
+build/
+build*/
+*-build/
+
 

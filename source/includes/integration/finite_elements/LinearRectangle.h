@@ -23,7 +23,7 @@ class LinearRectangle : public FiniteElement {
 		virtual void N(std::vector<double>& N, const std::vector<double>& xyz);
 		virtual void dN(DenseMatrix<DM_MIN>& DN);
 		virtual void N_AtBaryCenter(std::vector<double>& N);
-		virtual void UnitNormal(std::vector<double>& vc) const;
+		virtual std::vector<double> UnitNormal() const;
 		virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t) const { return LINEAR_BAR; };
 		virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t) const { return LINEAR_BAR; };
 

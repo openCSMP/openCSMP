@@ -1,0 +1,5 @@
+<map id="csmp::EffectiveStressDilatation2D_Example" name="csmp::EffectiveStressDilatation2D_Example">
+<area shape="rect" id="Node000001" title="gas flow into a horizontal well drilled into overpressured &quot;shale&quot; layer" alt="" coords="5,440,208,577"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_example.html" title=" " alt="" coords="14,5,200,392"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,407,109,440,104,440,104,407"/>
+</map>

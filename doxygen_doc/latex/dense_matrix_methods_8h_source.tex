@@ -1,0 +1,29 @@
+\doxysection{dense\+Matrix\+Methods.\+h}
+\hypertarget{dense_matrix_methods_8h_source}{}\label{dense_matrix_methods_8h_source}\index{source/includes/math/denseMatrixMethods.h@{source/includes/math/denseMatrixMethods.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ denseMatrixMethods.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_API\_library2014}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 17/08/2015.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ (c)\ 2015\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_DENSE\_MATRIX\_METHODS\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DENSE\_MATRIX\_METHODS\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{///\ turns\ the\ original\ matrix\ into\ upper\ diagonal\ form}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a9708f27aed70eed9e07956a10acab7db}{LU\_Decomposition}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<dim>\&\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keywordtype}{void}\ LU\_BackSubstitution(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<dim>\&,\ std::vector<\textcolor{keywordtype}{double}>\&\ solution\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ defined(CSMP\_DENSE\_MATRIX\_METHODS\_H)\ */}}
+
+\end{DoxyCode}

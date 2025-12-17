@@ -64,14 +64,14 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          
          if ( piecewise_constant_material )
            {
-             for ( auto j{0U}; j<n_nodes; j++ )
-               MathOperatorRHS<dim,CELL>::RHS[j] = 
+             for ( uint32_t j{0U}; j<n_nodes; j++ )
+               MathOperatorRHS<dim,CELL>::RHS[j] =
                  (MathOperatorRHS<dim,CELL>::MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
            {
-             for ( auto j{0U}; j<n_nodes; j++ )
+             for ( uint32_t j{0U}; j<n_nodes; j++ )
                MathOperatorRHS<dim,CELL>::RHS[j] = 
                  (MathOperatorRHS<dim,CELL>::MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
@@ -94,14 +94,14 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
               // forming NT * mtrl
               NT_.Resize(n_nodes,1U);
               if ( piecewise_constant_material )
-                for ( auto j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
+                for ( uint32_t j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
               else {// node or integration point
-                  for ( auto i{0}; i < n_ipoints; i++ )
-                    for ( auto j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
+                  for ( uint32_t i{0u}; i < n_ipoints; i++ )
+                    for ( uint32_t j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
                 }
               // forming Wj * detJ * N
               N_.Resize(1U,n_nodes);
-              for ( auto j{0U}; j<n_nodes; j++ )
+              for ( uint32_t j{0U}; j<n_nodes; j++ )
                 N_(0U,j) = e.FE()->NRST[j] * detJ * e.WeightAtIntegrationPoint(0);
               
               // forming the mass matrix NT op N
@@ -111,19 +111,19 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 
 
          // if the element is not a simplex
-         for ( auto i{0}; i < n_ipoints; i++ )
+         for ( uint32_t i{0u}; i < n_ipoints; i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det(e.det_JINV_AtIntegrationPoint( i ));
               // forming NT * mtrl
               NT_.Resize(n_nodes,1U);
               if ( piecewise_constant_material )
-                for ( auto j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
+                for ( uint32_t j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
               else // node or integration point                            ^^^
-                for ( auto j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
+                for ( uint32_t j{0U}; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
               // forming Wj * detJ * N                                                     ^^^
               N_.Resize(1U,n_nodes);
-              for ( auto j{0U}; j<n_nodes; j++ ) N_(0U,j) = e.FE()->NRST[j] * det *
+              for ( uint32_t j{0U}; j<n_nodes; j++ ) N_(0U,j) = e.FE()->NRST[j] * det *
                                                            e.WeightAtIntegrationPoint(i);
               
               // forming the mass matrix NT op N
@@ -132,8 +132,8 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 
          // row-sum diagonalisation of matrix RHS_TEMP and addition to righthand vector
          fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
-         for ( auto j{0U}; j<n_nodes; j++ )
-           for ( auto k=0; k<n_nodes; k++ )
+         for ( uint32_t j{0U}; j<n_nodes; j++ )
+           for ( uint32_t k=0u; k<n_nodes; k++ )
              MathOperatorRHS<dim,CELL>::RHS[j] += RHS_TEMP_(j,k);
       }
    

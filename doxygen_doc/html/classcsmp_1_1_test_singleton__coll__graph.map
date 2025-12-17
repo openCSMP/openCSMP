@@ -1,0 +1,7 @@
+<map id="csmp::TestSingleton" name="csmp::TestSingleton">
+<area shape="rect" id="Node000001" title=" " alt="" coords="15,329,145,395"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_generic_singleton.html" title=" " alt="" coords="5,178,155,280"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,295,83,329,78,329,78,295"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_generic_singleton.html" title="references based generic singleton base class template" alt="" coords="5,5,155,107"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="83,122,83,178,78,178,78,122"/>
+</map>

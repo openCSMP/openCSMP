@@ -1,0 +1,41 @@
+\doxysection{csmp\+::Binary\+File\+Section\+Read Class Reference}
+\hypertarget{classcsmp_1_1_binary_file_section_read}{}\label{classcsmp_1_1_binary_file_section_read}\index{csmp::BinaryFileSectionRead@{csmp::BinaryFileSectionRead}}
+
+
+{\ttfamily \#include $<$binary\+Read\+Write.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Binary\+File\+Section\+Read\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classcsmp_1_1_binary_file_section_read__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_binary_file_section_read_a314b4701377e2c7ab973deab07a5cb79}\label{classcsmp_1_1_binary_file_section_read_a314b4701377e2c7ab973deab07a5cb79} 
+{\bfseries Binary\+File\+Section\+Read} (std\+::fstream \&fp, const char \texorpdfstring{$\ast$}{*}header)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Helper class for reading fixed-\/size strings from binary files
+
+defines strings that are used to read the possible datablocks that are abbreviated as VSETCORD VSETPELT VSETPLST VSETPFVT VSETBFLG VSETHEDR VSETCONN VSETFOTR VSETMTRL -\/ new for pmtrl record
+
+\doxylink{classcsmp_1_1_boundary_interface}{Boundary\+Interface} BNDFHEDR -\/ file header BOUNDARY -\/ object description ONE\+\_\+\+BDRY BOUNDVAR -\/ variable datablock BNDFFOTR -\/ file footer
+
+\doxylink{classcsmp_1_1_split_boundary_interface}{Split\+Boundary\+Interface} SBDFHEDR SPLITBDRY ONE\+\_\+\+BDRY SBDRYVAR SBDFFOTR
+
+\doxylink{classcsmp_1_1_region_interface}{Region\+Interface} REGGHEDR UNIQREGN ONE\+\_\+\+REGN NONUREGN MODELVARS REGFFOTR
+
+Node\+Manifolds NDMFHEDR MANIFLDS 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/\mbox{\hyperlink{binary_read_write_8h}{binary\+Read\+Write.\+h}}\item 
+source/modules/model/binary\+Read\+Write.\+cpp\end{DoxyCompactItemize}

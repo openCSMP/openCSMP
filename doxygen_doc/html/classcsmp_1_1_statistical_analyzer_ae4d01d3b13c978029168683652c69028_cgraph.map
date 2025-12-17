@@ -1,0 +1,5 @@
+<map id="csmp::StatisticalAnalyzer::RegionPropertyHistogramsElement" name="csmp::StatisticalAnalyzer::RegionPropertyHistogramsElement">
+<area shape="rect" id="Node000001" title="analyzes properties element by element interpolating variables to barycenter if necessary" alt="" coords="5,5,240,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="288,5,432,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,23,272,23,272,28,240,28"/>
+</map>

@@ -16,9 +16,7 @@ class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim,CELL> {
                               const char* basic, 
                               const char* test );
     
-    virtual ~NumIntegral_NT_dNi_dV_sc();
-    
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );
@@ -26,7 +24,7 @@ class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim,CELL> {
     /// to transposed the element matrix that will get accumulated; default is false
     void Transposed();
   
-    virtual NumIntegral_NT_dNi_dV_sc<dim,CELL>* clone() const { return new NumIntegral_NT_dNi_dV_sc<dim,CELL> (*this); }
+    NumIntegral_NT_dNi_dV_sc<dim,CELL>* clone() const override final { return new NumIntegral_NT_dNi_dV_sc<dim,CELL> (*this); }
   
   private:
     NumIntegral_NT_dNi_dV_sc();

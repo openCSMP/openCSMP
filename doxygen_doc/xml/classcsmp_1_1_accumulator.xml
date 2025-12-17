@@ -1,0 +1,315 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_accumulator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Accumulator</compoundname>
+    <includes refid="_accumulator_8h" local="no">Accumulator.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>USER</declname>
+        <defname>USER</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1ac95550d4f06c4da996bd0d9319db88ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Accumulator&lt; dim, USER &gt;::SetUp</definition>
+        <argsstring>()</argsstring>
+        <name>SetUp</name>
+        <qualifiedname>csmp::Accumulator::SetUp</qualifiedname>
+        <briefdescription>
+<para>initalises sparse matrix and vector, taking into account how many solution variables there are </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Should use information from equation to define computational problem (solution variables etc.) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="33" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Accumulator.cpp" bodystart="16" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1a8ca97b7f3f89dcaf4587af73d2bba464" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Accumulator&lt; dim, USER &gt;::Accumulate</definition>
+        <argsstring>(double time_increment=1.)</argsstring>
+        <name>Accumulate</name>
+        <qualifiedname>csmp::Accumulator::Accumulate</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time_increment</declname>
+          <defval>1.</defval>
+        </param>
+        <briefdescription>
+<para>accumuates finite volume / hybride FVM _ FEM transport equation into global system </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Default sequence<orderedlist>
+<listitem><para>pore volume in diagonal of LHS</para>
+</listitem><listitem><para>upwinded flows coupling diagonal with off-diagonal and outgoing flows into diagonal</para>
+</listitem><listitem><para>pore volume times concentration into rhs</para>
+</listitem><listitem><para>sources and sinks into rhs</para>
+</listitem></orderedlist>
+</para>
+<para>Inside of the domain and for the halo stencils, accumulation by stencil is used, while truncated boundary FVs need to be accumulated finite volume by finite volume (only certain terms) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="36" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Accumulator.cpp" bodystart="41" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1a6c2d4a41cb8e0ac047ff9ee329053dbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Accumulator&lt; dim, USER &gt;::BalanceFlowsThroughTruncatedBoundaryFiniteVolumes</definition>
+        <argsstring>(SparseMatrix &amp;lhs, std::vector&lt; double &gt; &amp;rhs, double time_increment=1.)</argsstring>
+        <name>BalanceFlowsThroughTruncatedBoundaryFiniteVolumes</name>
+        <qualifiedname>csmp::Accumulator::BalanceFlowsThroughTruncatedBoundaryFiniteVolumes</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_increment</declname>
+          <defval>1.</defval>
+        </param>
+        <briefdescription>
+<para>compensate (+) balance at inflow boundaries, (-) balance at outflow boundaries, and any potential divergence of flow at no-flow boundaries </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="39" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Accumulator.cpp" bodystart="93" bodyend="103"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1a34ed481fcafed3c2412deda8edcbd1a7" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Accumulator&lt; dim, USER &gt;::AccumulateByStencil</definition>
+        <argsstring>(typename std::vector&lt; Element&lt; dim &gt; * &gt;::const_iterator begin, typename std::vector&lt; Element&lt; dim &gt; * &gt;::const_iterator end, const MatrixOperator&lt; dim &gt; *const, SparseMatrix &amp;lhs) const</argsstring>
+        <name>AccumulateByStencil</name>
+        <qualifiedname>csmp::Accumulator::AccumulateByStencil</qualifiedname>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix_operator" kindref="compound">MatrixOperator</ref>&lt; dim &gt; * const</type>
+          <defname>mat_op</defname>
+          <briefdescription><para>modified to contain operation information </para>
+</briefdescription>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <briefdescription>
+<para>accumulates individual finite element - finite volume stencils for interior and halo elements </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Accumulates lefthand-side = matrix A of the equation A x = b </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="43" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Accumulator.cpp" bodystart="114" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1a07ff2edce9824476e6eedb4aa8524bb4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Accumulator&lt; dim, USER &gt;::AccumulateByStencil</definition>
+        <argsstring>(typename std::vector&lt; Element&lt; dim &gt; * &gt;::const_iterator begin, typename std::vector&lt; Element&lt; dim &gt; * &gt;::const_iterator end, const VectorOperator&lt; dim &gt; *const, std::vector&lt; double &gt; &amp;rhs) const</argsstring>
+        <name>AccumulateByStencil</name>
+        <qualifiedname>csmp::Accumulator::AccumulateByStencil</qualifiedname>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_operator" kindref="compound">VectorOperator</ref>&lt; dim &gt; * const</type>
+          <defname>vec_op</defname>
+          <briefdescription><para>modified to contain operation information </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>accumulates individual finite element - finite volume stencils for interior and halo elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="49" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Accumulator.cpp" bodystart="131" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1af4fca0e3235f48c54608601aa572f3dd" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Accumulator&lt; dim, USER &gt;::AccumulateByFiniteVolume</definition>
+        <argsstring>(typename std::vector&lt; Node&lt; dim &gt; * &gt;::const_iterator begin, typename std::vector&lt; Node&lt; dim &gt; * &gt;::const_iterator end, const MatrixOperator&lt; dim &gt; *const, SparseMatrix &amp;lhs) const</argsstring>
+        <name>AccumulateByFiniteVolume</name>
+        <qualifiedname>csmp::Accumulator::AccumulateByFiniteVolume</qualifiedname>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix_operator" kindref="compound">MatrixOperator</ref>&lt; dim &gt; * const</type>
+          <defname>mat_op</defname>
+          <briefdescription><para>modified to contain operation information </para>
+</briefdescription>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <briefdescription>
+<para>accumulates individual finite volumes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="55" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Accumulator.cpp" bodystart="149" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1a875bd4f4860eed1776141b3319167f77" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Accumulator&lt; dim, USER &gt;::AccumulateByFiniteVolume</definition>
+        <argsstring>(typename std::vector&lt; Node&lt; dim &gt; * &gt;::const_iterator begin, typename std::vector&lt; Node&lt; dim &gt; * &gt;::const_iterator end, const VectorOperator&lt; dim &gt; *const, std::vector&lt; double &gt; &amp;rhs) const</argsstring>
+        <name>AccumulateByFiniteVolume</name>
+        <qualifiedname>csmp::Accumulator::AccumulateByFiniteVolume</qualifiedname>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;::const_iterator</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_operator" kindref="compound">VectorOperator</ref>&lt; dim &gt; * const</type>
+          <defname>vec_op</defname>
+          <briefdescription><para>modified to contain operation information </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="60" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Accumulator.cpp" bodystart="164" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1a39bf746ead39a7217d580e2a39d33bae" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; *</type>
+        <definition>USER&lt; dim &gt; * csmp::Accumulator&lt; dim, USER &gt;::User</definition>
+        <argsstring>()</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::Accumulator::User</qualifiedname>
+        <briefdescription>
+<para>shorthand for accessing the class that this is a policy of </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="67" column="10" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_accumulator_1afd8fb972919bf08c74c162bcd3ffe935" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; const *</type>
+        <definition>USER&lt; dim &gt; const  * csmp::Accumulator&lt; dim, USER &gt;::User</definition>
+        <argsstring>() const</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::Accumulator::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="68" column="16" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" bodystart="68" bodyend="68"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classcsmp_1_1_accumulator" kindref="compound">Accumulator</ref> Operations<itemizedlist>
+<listitem><para>SetupSystem()</para>
+</listitem><listitem><para>AccumulateInteriorByFV( operator, operation )</para>
+</listitem><listitem><para>AccumulateInteriorByFE( range )</para>
+</listitem><listitem><para>LateAccumulateInteriorByFV()</para>
+</listitem><listitem><para>LateAccumulateInteriorByFE()</para>
+</listitem><listitem><para>AccumulatePerimeterByFV( operator, operation )</para>
+</listitem><listitem><para>AccumulatePerimeterByFE( range )</para>
+</listitem><listitem><para>LateAccumulatePerimeterByFV()</para>
+</listitem><listitem><para>LateAccumulatePerimeterByFE()= Attributes</para>
+</listitem><listitem><para>halo elements</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="attention"><para>the <ref refid="classcsmp_1_1_accumulator" kindref="compound">Accumulator</ref> uses stencil accumulation for the interior and finite volume accumulation for its perimeter. </para>
+</simplesect>
+<simplesect kind="attention"><para>the order in which LHS and RHS are accumulated is defined in <ref refid="classcsmp_1_1_operation" kindref="compound">Operation</ref> </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::Accumulator&lt; dim, ImplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_accumulator"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, ImplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Accumulator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_accumulator"/>
+      </node>
+      <node id="3">
+        <label>csmp::ImplicitTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_implicit_transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Accumulator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_accumulator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" line="29" column="1" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Accumulator.h" bodystart="29" bodyend="69"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_accumulator_1a8ca97b7f3f89dcaf4587af73d2bba464" prot="public" virt="non-virtual"><scope>csmp::Accumulator</scope><name>Accumulate</name></member>
+      <member refid="classcsmp_1_1_accumulator_1af4fca0e3235f48c54608601aa572f3dd" prot="private" virt="non-virtual"><scope>csmp::Accumulator</scope><name>AccumulateByFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_accumulator_1a875bd4f4860eed1776141b3319167f77" prot="private" virt="non-virtual"><scope>csmp::Accumulator</scope><name>AccumulateByFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_accumulator_1a34ed481fcafed3c2412deda8edcbd1a7" prot="private" virt="non-virtual"><scope>csmp::Accumulator</scope><name>AccumulateByStencil</name></member>
+      <member refid="classcsmp_1_1_accumulator_1a07ff2edce9824476e6eedb4aa8524bb4" prot="private" virt="non-virtual"><scope>csmp::Accumulator</scope><name>AccumulateByStencil</name></member>
+      <member refid="classcsmp_1_1_accumulator_1a6c2d4a41cb8e0ac047ff9ee329053dbf" prot="public" virt="non-virtual"><scope>csmp::Accumulator</scope><name>BalanceFlowsThroughTruncatedBoundaryFiniteVolumes</name></member>
+      <member refid="classcsmp_1_1_accumulator_1ac95550d4f06c4da996bd0d9319db88ad" prot="public" virt="non-virtual"><scope>csmp::Accumulator</scope><name>SetUp</name></member>
+      <member refid="classcsmp_1_1_accumulator_1a39bf746ead39a7217d580e2a39d33bae" prot="private" virt="non-virtual"><scope>csmp::Accumulator</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_accumulator_1afd8fb972919bf08c74c162bcd3ffe935" prot="private" virt="non-virtual"><scope>csmp::Accumulator</scope><name>User</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,71 @@
+.TH "io::error::duplicated_column_in_header" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+io::error::duplicated_column_in_header
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBio::error::base\fP, \fBio::error::with_file_name\fP, and \fBio::error::with_column_name\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBformat_error_message\fP () const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBio::error::base\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBwhat\fP () const  throw ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBio::error::with_file_name\fP
+.in +1c
+.ti -1c
+.RI "void \fBset_file_name\fP (const char *file_name)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBio::error::with_column_name\fP
+.in +1c
+.ti -1c
+.RI "void \fBset_column_name\fP (const char *column_name)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Public Attributes inherited from \fBio::error::base\fP
+.in +1c
+.ti -1c
+.RI "char \fBerror_message_buffer\fP [256]"
+.br
+.in -1c
+
+Public Attributes inherited from \fBio::error::with_file_name\fP
+.in +1c
+.ti -1c
+.RI "char \fBfile_name\fP [max_file_name_length+1]"
+.br
+.in -1c
+
+Public Attributes inherited from \fBio::error::with_column_name\fP
+.in +1c
+.ti -1c
+.RI "char \fBcolumn_name\fP [max_column_name_length+1]"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void io::error::duplicated_column_in_header::format_error_message () const\fR [inline]\fP, \fR [virtual]\fP"
+
+.PP
+Implements \fBio::error::base\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

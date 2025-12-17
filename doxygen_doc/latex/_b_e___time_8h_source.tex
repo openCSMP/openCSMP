@@ -1,0 +1,103 @@
+\doxysection{BE\+\_\+\+Time.\+h}
+\hypertarget{_b_e___time_8h_source}{}\label{_b_e___time_8h_source}\index{source/includes/utilities/BE\_Time.h@{source/includes/utilities/BE\_Time.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BRUCE\_ECKEL\_TIMER\_UTILITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BRUCE\_ECKEL\_TIMER\_UTILITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdlib}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{ctime}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstring}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/**\ Bruce\ Eckel's\ Time\ class\ from\ "{}Thinking\ in\ C++"{}\ p.\ 314}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_b_e___time}{BE\_Time}}\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{///\ constructor\ records\ current\ system\ time}}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{class_b_e___time_a1d73898d6b7555c543eda0895893c947}{BE\_Time}}()\ \{\ mark();\ \}}
+\DoxyCodeLine{00015\ \ \ \ \ \string~BE\_Time()\ \{\}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ mark()\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ lflag\ =\ aflag\ =\ 0;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ std::time(\&time);}
+\DoxyCodeLine{00019\ \ \ \ \ \}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{///\ time\ as\ a\ day/month/year\ string}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_b_e___time_a27088bca1654c8230adf49a4a150de2a}{ascii}}()\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ updateAscii();}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Ascii;}
+\DoxyCodeLine{00024\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ difference\ in\ seconds}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_b_e___time_ab43dc97444cd3ec1d1d0cf6ce75f7993}{delta}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_b_e___time}{BE\_Time}}\&\ dt\ )\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::difftime(\ time,\ dt.time\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{int}\ DaylightSavings()\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_isdst;}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ days\ since\ January\ 1}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_b_e___time_ae544c4f38782d9dcacd3f112ce121373}{DayOfYear}}()\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_yday;}
+\DoxyCodeLine{00037\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ days\ since\ Sunday}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_b_e___time_a42585dd421d0f66f93973160e90fab28}{DayOfWeek}}()\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_wday;}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ years\ since\ 1/1/1900}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_b_e___time_aceab4d2b80de5ccb5464378bc4c8eaf9}{Since1900}}()\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_year;}
+\DoxyCodeLine{00047\ \ \ \ \ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{///\ since\ January}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_b_e___time_ad4fd1158a23743768fe974fb044b856a}{Month}}()\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_mon;}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{int}\ DayOfMonth()\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_mday;}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{///\ since\ midnight\ (24\ hour\ clock)}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_b_e___time_a4f91d8c62fb2c19df27aa0e19b109896}{Hour}}()\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_hour;}
+\DoxyCodeLine{00061\ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{int}\ Minute()\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_min;}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{int}\ Second()\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ local.tm\_sec;}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{///\ gets\ ascii\ hours,minutes,\ seconds\ and\ tenth's\ of\ seconds\ out\ of\ the\ time-\/string}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_b_e___time_a0ebcfcf0a7e64e973890627dff8200dd}{Time}}(\ \textcolor{keywordtype}{long}\&\ yr,\ \textcolor{keywordtype}{long}\&\ hr,\ \textcolor{keywordtype}{long}\&\ mi,\ \textcolor{keywordtype}{long}\&\ sec\ );}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ Time(\ \textcolor{keywordtype}{long}\&\ year,\ \textcolor{keywordtype}{long}\&\ month,\ \textcolor{keywordtype}{long}\&\ day\ );}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00075\ \ \ \ \ std::time\_t\ \ \ \ time;}
+\DoxyCodeLine{00076\ \ \ \ \ std::tm\ \ \ \ \ \ \ \ local;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ \ \ Ascii[26];}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \ lflag,\ aflag;}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ copy\ time\ into\ local\ time\ buffer}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ updateLocal()\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!lflag)\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ local\ =\ *std::localtime(\&time);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ lflag++;}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{///\ stores\ asctime\ results\ in\ local\ variable}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ updateAscii()\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!aflag)\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ updateLocal();}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ std::strcpy(\ Ascii,\ asctime(\&local)\ );}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ aflag++;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ \ \};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

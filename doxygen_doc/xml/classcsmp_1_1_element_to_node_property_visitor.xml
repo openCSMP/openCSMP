@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_element_to_node_property_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ElementToNodePropertyVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <includes refid="_element_to_node_property_visitor_8h" local="no">ElementToNodePropertyVisitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>typename Var</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_element_to_node_property_visitor_1a43cd14716154a282a35d1bde86b824d3" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::eprop_key_</definition>
+        <argsstring></argsstring>
+        <name>eprop_key_</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::eprop_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="31" column="23" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_element_to_node_property_visitor_1a81cc3ecd6b12af34b0c5533ab67628cc" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::nprop_key_</definition>
+        <argsstring></argsstring>
+        <name>nprop_key_</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::nprop_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="31" column="34" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_element_to_node_property_visitor_1ac18e6e47e8803e11100a19133d40a2c9" prot="private" static="no" mutable="no">
+        <type>Var</type>
+        <definition>Var csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::evariable_</definition>
+        <argsstring></argsstring>
+        <name>evariable_</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::evariable_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="32" column="23" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_element_to_node_property_visitor_1a5bfc11eba5e00e7e0aabdda608fbc9f7" prot="private" static="no" mutable="no">
+        <type>Var</type>
+        <definition>Var csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::nvariable_</definition>
+        <argsstring></argsstring>
+        <name>nvariable_</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::nvariable_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="32" column="34" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_element_to_node_property_visitor_1a7a473898265f99cc5df9e83858715788" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; Var &gt;</type>
+        <definition>std::vector&lt;Var&gt; csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::vars_vector_</definition>
+        <argsstring></argsstring>
+        <name>vars_vector_</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::vars_vector_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="33" column="18" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_element_to_node_property_visitor_1a5edcda2d08128aad75e9081c3d8baca8" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::summed_weights_</definition>
+        <argsstring></argsstring>
+        <name>summed_weights_</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::summed_weights_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="34" column="19" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_element_to_node_property_visitor_1ac5527242e7ca0f3e5af76a72e53df9ce" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_bool_vector" kindref="compound">BoolVector</ref></type>
+        <definition>BoolVector csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::weighting_completed_</definition>
+        <argsstring></argsstring>
+        <name>weighting_completed_</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::weighting_completed_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="35" column="23" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_element_to_node_property_visitor_1a03a2ee308fc8d5ede80c2ab6ff242eae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::ElementToNodePropertyVisitor</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;p, const char *elmt_prop, const char *node_prop, size_t nodes)</argsstring>
+        <name>ElementToNodePropertyVisitor</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::ElementToNodePropertyVisitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>elmt_prop</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>node_prop</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nodes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Steps:</para>
+<para><itemizedlist>
+<listitem><para><ref refid="classcsmp_1_1_visitor" kindref="compound">Visitor</ref> requires all nodes in the mesh to be numbered consecutively</para>
+</listitem><listitem><para>the target node property has to be set to zero prior to the accumulation</para>
+</listitem><listitem><para>Values are interpolated to nodes where these are accumulated</para>
+</listitem><listitem><para>the nodal contributions are weighted by the distance of the element barycenter to each node (all weights are summed so that the absolute value can be rectified once the accumulation is complete). </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="18" column="5" bodyfile="source/modules/model/ElementToNodePropertyVisitor.cpp" bodystart="32" bodyend="43"/>
+        <references refid="classcsmp_1_1_element_to_node_property_visitor_1a03a2ee308fc8d5ede80c2ab6ff242eae" compoundref="_element_to_node_property_visitor_8cpp" startline="32" endline="43">csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::ElementToNodePropertyVisitor</references>
+        <referencedby refid="classcsmp_1_1_element_to_node_property_visitor_1a03a2ee308fc8d5ede80c2ab6ff242eae" compoundref="_element_to_node_property_visitor_8cpp" startline="32" endline="43">csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::ElementToNodePropertyVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_to_node_property_visitor_1abcdda6f73d27c1b821f696a97daae29e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::~ElementToNodePropertyVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~ElementToNodePropertyVisitor</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::~ElementToNodePropertyVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="23" column="13" bodyfile="source/modules/model/ElementToNodePropertyVisitor.cpp" bodystart="61" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_to_node_property_visitor_1ab5866420246629ee7d269eb4c61806be" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <defname>nptr</defname>
+        </param>
+        <briefdescription>
+<para>second application cycle (weighting) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="25" column="18" bodyfile="source/modules/model/ElementToNodePropertyVisitor.cpp" bodystart="94" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_to_node_property_visitor_1a19fd6af6adf383da7d46876b965c9b1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+<para>first application cycle (extrapolation) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="26" column="18" bodyfile="source/modules/model/ElementToNodePropertyVisitor.cpp" bodystart="68" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_element_to_node_property_visitor_1a63749e3d01a6cb44c6e58ca3674c3484" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;::ApplyWeightingToExtrapolatedValues</definition>
+        <argsstring>()</argsstring>
+        <name>ApplyWeightingToExtrapolatedValues</name>
+        <qualifiedname>csmp::ElementToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="28" column="10" bodyfile="source/modules/model/ElementToNodePropertyVisitor.cpp" bodystart="48" bodyend="57"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>replaces value of property a with propery b </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_element_to_node_property_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ElementToNodePropertyVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_element_to_node_property_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/ElementToNodePropertyVisitor.h" line="16" column="1" bodyfile="source/includes/model/ElementToNodePropertyVisitor.h" bodystart="16" bodyend="36"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a63749e3d01a6cb44c6e58ca3674c3484" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>ApplyWeightingToExtrapolatedValues</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a03a2ee308fc8d5ede80c2ab6ff242eae" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>ElementToNodePropertyVisitor</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a43cd14716154a282a35d1bde86b824d3" prot="private" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>eprop_key_</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1ac18e6e47e8803e11100a19133d40a2c9" prot="private" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>evariable_</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a81cc3ecd6b12af34b0c5533ab67628cc" prot="private" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>nprop_key_</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a5bfc11eba5e00e7e0aabdda608fbc9f7" prot="private" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>nvariable_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a5edcda2d08128aad75e9081c3d8baca8" prot="private" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>summed_weights_</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a7a473898265f99cc5df9e83858715788" prot="private" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>vars_vector_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1ab5866420246629ee7d269eb4c61806be" prot="public" virt="virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1a19fd6af6adf383da7d46876b965c9b1e" prot="public" virt="virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1ac5527242e7ca0f3e5af76a72e53df9ce" prot="private" virt="non-virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>weighting_completed_</name></member>
+      <member refid="classcsmp_1_1_element_to_node_property_visitor_1abcdda6f73d27c1b821f696a97daae29e" prot="public" virt="virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>~ElementToNodePropertyVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::ElementToNodePropertyVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -587,38 +587,6 @@ VectorVariable<3U>  VectorVariable<3U>::operator/( const VectorVariable<3U>& v )
 
 
 
-VectorVariable<3U>  VectorVariable<3U>::operator+( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] + val, data[1] + val, data[2] + val );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator-( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] - val, data[1] - val, data[2] - val );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator*( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] * val, data[1] * val, data[2] * val );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator/( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] / val, data[1] / val, data[2] / val );
-}
-
-
-
 
 VectorVariable<3U>  VectorVariable<3U>::operator^( double val ) const
 {
@@ -725,7 +693,7 @@ void  VectorVariable<3U>::In()
 {
   string  status;
 
-  for ( auto i = 0; i<3U; i++ ) {
+  for ( uint32_t i{0u}; i<3U; i++ ) {
     if ( i == 0 )      cout << "\nEnter status for x-component of variable: ";
     else if ( i == 1 ) cout << "\nEnter status for y-component of variable: ";
     else               cout << "\nEnter status for z-component of variable: ";
@@ -736,7 +704,7 @@ void  VectorVariable<3U>::In()
 
   cout << "\nEnter 3 vector elements: ";
   cout.flush();
-  for ( auto i = 0; i<3U; i++ ) cin >> data[i];
+  for ( uint32_t i{0u}; i<3U; i++ ) cin >> data[i];
 
 } // end In
 
@@ -745,13 +713,139 @@ void  VectorVariable<3U>::In()
 void  VectorVariable<3U>::Out() const
 {
   cout << "\nStatus: " << endl;
-  for ( auto i = 0; i<3U; i++ )
+  for ( uint32_t i{0u}; i<3U; i++ )
     cout << parseStatus( flag[i] ) << "\t\t";
   cout << endl;
-  for ( auto i = 0; i<3U; i++ ) cout << data[i] << "\t\t";
+  for ( uint32_t i{0u}; i<3U; i++ ) cout << data[i] << "\t\t";
   cout << endl;
 
 } // end Out
+
+
+// =======================================================================
+// Binary operators (SKM 31/5/2025)
+// =======================================================================
+
+// interaction with double
+
+VectorVariable<1U> operator+( const VectorVariable<1U>& a, double b ) {
+  return VectorVariable<1U>( a.Flag(0), a(0) + b );
+}
+
+VectorVariable<1U> operator-(const VectorVariable<1U>& a, double b) {
+    return VectorVariable<1U>(a.Flag(0), a(0) - b);
+}
+
+VectorVariable<1U> operator*(const VectorVariable<1U>& a, double b) {
+    return VectorVariable<1U>(a.Flag(0), a(0) * b);
+}
+
+VectorVariable<1U> operator/(const VectorVariable<1U>& a, double b) {
+    return VectorVariable<1U>(a.Flag(0), a(0) / b);
+}
+
+
+// 2D
+VectorVariable<2U> operator+(const VectorVariable<2U>& a, double b) {
+    return VectorVariable<2U>(
+        a.Flag(0), a.Flag(1),
+        a(0) + b, a(1) + b
+    );
+}
+
+VectorVariable<2U> operator-(const VectorVariable<2U>& a, double b) {
+    return VectorVariable<2U>(
+        a.Flag(0), a.Flag(1),
+        a(0) - b, a(1) - b
+    );
+}
+
+VectorVariable<2U> operator*(const VectorVariable<2U>& a, double b) {
+    return VectorVariable<2U>(
+        a.Flag(0), a.Flag(1),
+        a(0) * b, a(1) * b
+    );
+}
+
+VectorVariable<2U> operator/(const VectorVariable<2U>& a, double b) {
+    return VectorVariable<2U>(
+        a.Flag(0), a.Flag(1),
+        a(0) / b, a(1) / b
+    );
+}
+
+// 3D
+VectorVariable<3U> operator+(const VectorVariable<3U>& a, double b) {
+    return VectorVariable<3U>(
+        a.Flag(0), a.Flag(1), a.Flag(2),
+        a(0) + b, a(1) + b, a(2) + b
+    );
+}
+
+VectorVariable<3U> operator-(const VectorVariable<3U>& a, double b) {
+    return VectorVariable<3U>(
+        a.Flag(0), a.Flag(1), a.Flag(2),
+        a(0) - b, a(1) - b, a(2) - b
+    );
+}
+
+VectorVariable<3U> operator*(const VectorVariable<3U>& a, double b) {
+    return VectorVariable<3U>(
+        a.Flag(0), a.Flag(1), a.Flag(2),
+        a(0) * b, a(1) * b, a(2) * b
+    );
+}
+
+VectorVariable<3U> operator/(const VectorVariable<3U>& a, double b) {
+    return VectorVariable<3U>(
+        a.Flag(0), a.Flag(1), a.Flag(2),
+        a(0) / b, a(1) / b, a(2) / b
+    );
+}
+
+// ScalarVariable
+
+// 2D
+VectorVariable<2U> operator+(const VectorVariable<2U>& a, const ScalarVariable& b ) {
+    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) + b(), a(1) + b()
+    );
+}
+
+VectorVariable<2U> operator-(const VectorVariable<2U>& a, const ScalarVariable& b) {
+    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) - b(), a(1) - b()
+    );
+}
+
+VectorVariable<2U> operator*(const VectorVariable<2U>& a, const ScalarVariable& b) {
+    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) * b(), a(1) * b()
+    );
+}
+
+VectorVariable<2U> operator/(const VectorVariable<2U>& a, const ScalarVariable& b) {
+    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) / b(), a(1) / b()
+    );
+}
+
+// 3D
+VectorVariable<3U> operator+(const VectorVariable<3U>& a, const ScalarVariable& b) {
+    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) + b(), a(1) + b(), a(2) + b()
+    );
+}
+
+VectorVariable<3U> operator-(const VectorVariable<3U>& a, const ScalarVariable& b) {
+    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) - b(), a(1) - b(), a(2) - b()
+    );
+}
+
+VectorVariable<3U> operator*(const VectorVariable<3U>& a, const ScalarVariable& b) {
+    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) * b(), a(1) * b(), a(2) * b()
+    );
+}
+
+VectorVariable<3U> operator/(const VectorVariable<3U>& a, const ScalarVariable& b) {
+    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) / b(), a(1) / b(), a(2) / b()
+    );
+}
 
 
 template ostream&  operator<< <1U>(ostream& stream, const VectorVariable<1U>& o);

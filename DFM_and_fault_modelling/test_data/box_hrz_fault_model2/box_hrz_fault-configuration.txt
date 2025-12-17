@@ -1,0 +1,11 @@
+box_hrz_fault-configuration.txt
+
+#matrix properties
+permeability	1.0E-21
+porosity	0.1
+thickness	1.
+
+#fractures
+FRACTURE	complete	permeability	8.33E-08
+FRACTURE	complete	thickness	0.001
+FRACTURE	complete	porosity	1.

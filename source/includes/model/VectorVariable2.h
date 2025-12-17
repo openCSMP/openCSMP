@@ -25,10 +25,6 @@ class VectorVariable<2U> {
     void           Component( uint32_t, double );
     double         Component( uint32_t i ) const;
 
-    VectorVariable   operator+( double val ) const; 
-    VectorVariable   operator-( double val ) const;
-    VectorVariable   operator*( double val ) const; 
-    VectorVariable   operator/( double val ) const;
     VectorVariable   operator^( double val ) const;
 
     VectorVariable&  operator+=( double val );

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="indexpage" kind="page">
+    <compoundname>index</compoundname>
+    <title>About</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>The Complex Systems Modeling Platform (Open CSMP++) is an application programmer interface (API) for the simulation of THMC processes and their interactions in complex space and time domains. It primarily relies on combinations of finite element (FEM) and finite volue (FVM) methods for this purpose. Open CSMP++ was created as CSP in 1995 by Stephan K. Matthai and Stephen G. Roberts at Stanford University.</para>
+<para>Open CSMP++ has been designed for the simulation of complex physics in geometrically complex and scale-variant domains. Its modular structure aims to support analysis of the emergent properties of the studied system via mathematical simulations. Governing PDEs are integrated using FEM and FVM methods and combinations thereof.</para>
+<para>This core library of Open CSMP++ is distributed under the L-GPL license for general and including commercial use. Until Dezember 2021, CSMP++ had to be licensed and the official contact point was the Technology Transfer of the ETHZ, Switzerland (&quot;Meyns Silke (F&amp;W)&quot; <ulink url="mailto:silke.meyns@sl.ethz.ch">silke.meyns@sl.ethz.ch</ulink>). </para>
+    </detaileddescription>
+    <location file="source/includes/model/CSMP_definitions.h"/>
+  </compounddef>
+</doxygen>

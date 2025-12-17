@@ -1,0 +1,504 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_f_v___parameter" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FV_Parameter</compoundname>
+    <includes refid="_f_v___parameter_8h" local="no">FV_Parameter.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___parameter_1a460b5dfbe0dee7fcc6a38a482b8c4a52" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::FV_Parameter::sector_volume_</definition>
+        <argsstring></argsstring>
+        <name>sector_volume_</name>
+        <qualifiedname>csmp::FV_Parameter::sector_volume_</qualifiedname>
+        <briefdescription>
+<para>&lt; velocites projected on facet normals and facet areas </para>
+        </briefdescription>
+        <detaileddescription>
+<para>velocites projected on facet normals and facet areas </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="41" column="37" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___parameter_1a44c73f9894ce3b25e25154de53d27c2f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; double, double &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;double,double&gt; &gt; csmp::FV_Parameter::facet_v_and_A_</definition>
+        <argsstring></argsstring>
+        <name>facet_v_and_A_</name>
+        <qualifiedname>csmp::FV_Parameter::facet_v_and_A_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="43" column="18" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_v___parameter_1a25666901b493a1bb2cf99d692c375be3" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::FV_Parameter::facet_unit_normal_</definition>
+        <argsstring></argsstring>
+        <name>facet_unit_normal_</name>
+        <qualifiedname>csmp::FV_Parameter::facet_unit_normal_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="44" column="23" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1acd5b30518d18e1c7064775035fc64c7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FV_Parameter::FV_Parameter</definition>
+        <argsstring>()</argsstring>
+        <name>FV_Parameter</name>
+        <qualifiedname>csmp::FV_Parameter::FV_Parameter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="12" column="5" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="12" bodyend="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1afbe34e5eb681afdfc347ac563511ccad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FV_Parameter::FV_Parameter</definition>
+        <argsstring>(size_t sectors, size_t facets, uint32_t dim, bool with_normals=false)</argsstring>
+        <name>FV_Parameter</name>
+        <qualifiedname>csmp::FV_Parameter::FV_Parameter</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>sectors</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>facets</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dim</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_normals</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="13" column="5" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.cpp" bodystart="8" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1ae4453ac0719e17fb0388cf3f7a3cd0ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_Parameter::Resize</definition>
+        <argsstring>(size_t sectors, size_t facets, uint32_t dim, bool with_normals=false)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::FV_Parameter::Resize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>sectors</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>facets</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dim</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_normals</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="16" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.cpp" bodystart="25" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1ac03e8b2ce38d5af854e7b0d99ec2f3cb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_Parameter::SectorVolume</definition>
+        <argsstring>(size_t sector, double vol)</argsstring>
+        <name>SectorVolume</name>
+        <qualifiedname>csmp::FV_Parameter::SectorVolume</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>sector</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>vol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="17" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="49" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a6f248a3b099ec1424b1cc637542df15b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_Parameter::FacetArea</definition>
+        <argsstring>(size_t facet, double area)</argsstring>
+        <name>FacetArea</name>
+        <qualifiedname>csmp::FV_Parameter::FacetArea</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>area</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="18" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="57" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1ae8ab6db4fb8b57df26671e3df7b27a51" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_Parameter::FacetNormal</definition>
+        <argsstring>(size_t facet, const std::vector&lt; double &gt; &amp;fnxyz)</argsstring>
+        <name>FacetNormal</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormal</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>fnxyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="19" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="62" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a3473b5e5ba5bb0382c37a8aa44600c23" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_Parameter::FacetNormalVelocity</definition>
+        <argsstring>(size_t facet, double flux)</argsstring>
+        <name>FacetNormalVelocity</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormalVelocity</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>flux</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="20" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="53" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1ad9b0abfd4eaf8035f0a6d84d108a9e98" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_Parameter::Initialize</definition>
+        <argsstring>(size_t facet, double flux, double area)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::FV_Parameter::Initialize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>flux</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>area</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="21" column="10" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="67" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1aa877b915384ad43ddcf4244451cf8beb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FV_Parameter::Sectors</definition>
+        <argsstring>() const</argsstring>
+        <name>Sectors</name>
+        <qualifiedname>csmp::FV_Parameter::Sectors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="24" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="74" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1ac0a046176fe7f27bf60f767c2496a5cd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FV_Parameter::Facets</definition>
+        <argsstring>() const</argsstring>
+        <name>Facets</name>
+        <qualifiedname>csmp::FV_Parameter::Facets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="25" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="78" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1af962ae5b3d96057aca4c000764f91b96" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::SectorVolume</definition>
+        <argsstring>(size_t sector) const</argsstring>
+        <name>SectorVolume</name>
+        <qualifiedname>csmp::FV_Parameter::SectorVolume</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>sector</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="26" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="82" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a305cbb571da598b4a2e5f65608012892" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::FacetArea</definition>
+        <argsstring>(size_t facet) const</argsstring>
+        <name>FacetArea</name>
+        <qualifiedname>csmp::FV_Parameter::FacetArea</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="27" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="117" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1addab75921a86a51bb25e7eb0d2ed066f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::FacetNormalVelocity</definition>
+        <argsstring>(size_t facet) const</argsstring>
+        <name>FacetNormalVelocity</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormalVelocity</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="28" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="86" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a04642199a9b884211316c991be905a67" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::FacetNormalComponent</definition>
+        <argsstring>(size_t facet, size_t x_or_y_or_z) const</argsstring>
+        <name>FacetNormalComponent</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormalComponent</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>x_or_y_or_z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="29" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::FacetNormalProjection</definition>
+        <argsstring>(size_t facet, const std::vector&lt; double &gt; &amp;cxyz) const</argsstring>
+        <name>FacetNormalProjection</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormalProjection</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>cxyz</declname>
+        </param>
+        <briefdescription>
+<para>dot product fn . vc </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="30" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.cpp" bodystart="56" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a9c5be6ece7227e4e45b510b6cf4c5b1f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::FacetNormalProjection</definition>
+        <argsstring>(size_t facet, const VectorVariable&lt; 1U &gt; &amp;cxyz) const</argsstring>
+        <name>FacetNormalProjection</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormalProjection</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 1U &gt; &amp;</type>
+          <declname>cxyz</declname>
+        </param>
+        <briefdescription>
+<para>universal versions of projection functions </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="32" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="97" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a1e912ef00d0bca64d585cce4eadc7628" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::FacetNormalProjection</definition>
+        <argsstring>(size_t facet, const VectorVariable&lt; 2U &gt; &amp;cxyz) const</argsstring>
+        <name>FacetNormalProjection</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormalProjection</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>cxyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="33" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="103" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a5310e0ea05b127e4a11f669f4d28fc8f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FV_Parameter::FacetNormalProjection</definition>
+        <argsstring>(size_t facet, const VectorVariable&lt; 3U &gt; &amp;cxyz) const</argsstring>
+        <name>FacetNormalProjection</name>
+        <qualifiedname>csmp::FV_Parameter::FacetNormalProjection</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>facet</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <declname>cxyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="34" column="12" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="109" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1afe5b5392d6cb1eabc952745af9a55cfd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FV_Parameter::Bytes</definition>
+        <argsstring>() const</argsstring>
+        <name>Bytes</name>
+        <qualifiedname>csmp::FV_Parameter::Bytes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="36" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.cpp" bodystart="46" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_v___parameter_1a0a4e12c44e633568fa27a8ced59f0d53" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FV_Parameter::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FV_Parameter::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="37" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.cpp" bodystart="92" bodyend="114"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>storage for the sector volumes, facet area and projected velocities so that these do not have to be recompute each timecrement </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FV_Parameter</label>
+        <link refid="classcsmp_1_1_f_v___parameter"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" line="10" column="1" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h" bodystart="10" bodyend="45"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_f_v___parameter_1afe5b5392d6cb1eabc952745af9a55cfd" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>Bytes</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a25666901b493a1bb2cf99d692c375be3" prot="private" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>facet_unit_normal_</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a44c73f9894ce3b25e25154de53d27c2f" prot="private" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>facet_v_and_A_</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a6f248a3b099ec1424b1cc637542df15b" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetArea</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a305cbb571da598b4a2e5f65608012892" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetArea</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1ae8ab6db4fb8b57df26671e3df7b27a51" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormal</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a04642199a9b884211316c991be905a67" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormalComponent</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormalProjection</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a9c5be6ece7227e4e45b510b6cf4c5b1f" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormalProjection</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a1e912ef00d0bca64d585cce4eadc7628" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormalProjection</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a5310e0ea05b127e4a11f669f4d28fc8f" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormalProjection</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a3473b5e5ba5bb0382c37a8aa44600c23" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormalVelocity</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1addab75921a86a51bb25e7eb0d2ed066f" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FacetNormalVelocity</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1ac0a046176fe7f27bf60f767c2496a5cd" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>Facets</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1acd5b30518d18e1c7064775035fc64c7f" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FV_Parameter</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1afbe34e5eb681afdfc347ac563511ccad" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>FV_Parameter</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1ad9b0abfd4eaf8035f0a6d84d108a9e98" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a0a4e12c44e633568fa27a8ced59f0d53" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1ae4453ac0719e17fb0388cf3f7a3cd0ac" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1a460b5dfbe0dee7fcc6a38a482b8c4a52" prot="private" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>sector_volume_</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1aa877b915384ad43ddcf4244451cf8beb" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>Sectors</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1ac03e8b2ce38d5af854e7b0d99ec2f3cb" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>SectorVolume</name></member>
+      <member refid="classcsmp_1_1_f_v___parameter_1af962ae5b3d96057aca4c000764f91b96" prot="public" virt="non-virtual"><scope>csmp::FV_Parameter</scope><name>SectorVolume</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

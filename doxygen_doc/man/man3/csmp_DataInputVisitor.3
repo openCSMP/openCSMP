@@ -1,0 +1,169 @@
+.TH "csmp::DataInputVisitor< Var, dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::DataInputVisitor< Var, dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <DataInputVisitor\&.h>\fP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDataInputVisitor\fP (\fBModel\fP< dim > &sg, const char *input_prop, const std::vector< double > &input_data)"
+.br
+.RI "visitor for input of variables placed on the node, element and elsewhere "
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "void \fBReset\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Var, uint32_t dim>
+.br
+class csmp::DataInputVisitor< Var, dim >"Use this visitor to input raw data into model which is assumed to be ordered in input vector by variable components (for example vector v1x, v1y, v1z, v2x\&.\&.\&.) visitor will renumber elements or nodes\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&. K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2006 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::DataInputVisitor\fP< Var, dim >::Visit (\fBElement\fP< dim > * eptr)\fR [virtual]\fP"
+TODO: 
+.PP
+\fBTodo\fP
+.RS 4
+SKM: other placements like FV integration points are not considered here yet 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::DataInputVisitor\fP< Var, dim >::Visit (\fBFace\fP< dim > * f)\fR [virtual]\fP"
+The key method of the visitor design pattern\&. Visit() must be defined for the target object (for instance \fBNode\fP objects, or \fBElement\fP objects)\&. Since the argument is the actual object, its entire interface is accessible to the visitor in order to carry out operations\&. Overload this method in the derived class to gain access to target objects and perform the actions that are desired for the visitation\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIf\fP is a pointer to the target \fBFace\fP (forming part of a boundary)\&. 
+.RE
+.PP
+TODO: 
+.PP
+\fBTodo\fP
+.RS 4
+SKM: other placements like FV integration points are not considered here yet 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::DataInputVisitor\fP< Var, dim >::Visit (\fBInterFace\fP< dim > * eptr)\fR [virtual]\fP"
+TODO: 
+.PP
+\fBTodo\fP
+.RS 4
+SKM: other placements like FV integration points are not considered here yet 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::DataInputVisitor\fP< Var, dim >::Visit (\fBModel\fP< dim > * gptr)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::DataInputVisitor\fP< Var, dim >::Visit (\fBNode\fP< dim > * nptr)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::DataInputVisitor\fP< Var, dim >::Visit (\fBRegion\fP< dim > * gptr)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

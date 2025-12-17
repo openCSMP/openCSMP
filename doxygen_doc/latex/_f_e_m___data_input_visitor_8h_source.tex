@@ -1,0 +1,47 @@
+\doxysection{FEM\+\_\+\+Data\+Input\+Visitor.\+h}
+\hypertarget{_f_e_m___data_input_visitor_8h_source}{}\label{_f_e_m___data_input_visitor_8h_source}\index{source/includes/model/FEM\_DataInputVisitor.h@{source/includes/model/FEM\_DataInputVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_FEM\_DATA\_INPUT\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_FEM\_DATA\_INPUT\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ to\ be\ applied\ to\ entire\ model}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_f_e_m___data}{FEM\_Data}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Var,\ uint32\_t\ dim>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_f_e_m___data_input_visitor}{FEM\_DataInputVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ FEM\_DataInputVisitor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ input\_prop,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_e_m___data}{FEM\_Data}}<Var>\&\ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~FEM\_DataInputVisitor();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>*\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ Reset();}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_e_m___data}{FEM\_Data}}<Var>\&\ \ input\_data\_ref\_;}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ prop\_key\_;}
+\DoxyCodeLine{00035\ \ \ \ \ Var\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_;}
+\DoxyCodeLine{00036\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ counter\_;}
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

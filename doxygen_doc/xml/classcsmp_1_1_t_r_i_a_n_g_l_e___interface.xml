@@ -1,0 +1,580 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TRIANGLE_Interface</compoundname>
+    <includes refid="_t_r_i_a_n_g_l_e___interface_8h" local="no">TRIANGLE_Interface.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1ae897c63afc42e1443c7c26b4745030d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::TRIANGLE_Interface::ReadTriangle2DMesh&lt; 2U &gt;</definition>
+        <argsstring>(const char *fname, VSet&lt; dim &gt; &amp;, bool isoparametric=false, bool perform_extra_checks=false)</argsstring>
+        <name>ReadTriangle2DMesh</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::ReadTriangle2DMesh</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isoparametric</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>perform_extra_checks</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads the series of mesh output files from Setchuk&apos;s triangle mesher. The data from the text files are used to build a <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> which holds all the necessary information to initialize a CSMP mesh, including property data and boundary flags.</para>
+<para>However, Setchuk&apos;s mesher numbers nodes and elements from 1..n and CSMP wants them numbered 0..n-1. Therefore a conversion is performed to adjust this numbering before the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> is returned.</para>
+<para>The methods expects x files with the extensions &apos;.edge&apos;, &apos;ele&apos;, &apos;.neigh&apos;, &apos;.node&apos; and &apos;.poly&apos;. The neighbor element file (&apos;.neigh&apos;) is not generated automatically by triangle, but must be prompted for by using the &apos;-n&apos; command line option. It contains a list of neighboring elements for each triangle.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The name of the file series without extension, and a <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> into which the data shall be stored.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file data are returned into the second method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To read set of input files (.poly, .node, .ele, .neigh) from J. Setchuk&apos;s 2D meshing programm &apos;Triangle&apos; and puts the results into the supplied <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If one of the files cannot be found the method will report this as error and terminate. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="13" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="49" bodyend="142"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a3c743b904653f2334ba311bbec18216a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures&lt; 2U &gt;</definition>
+        <argsstring>(const char *fname, VSet&lt; dim &gt; &amp;vset, double kfrac, bool perform_extra_checks=false)</argsstring>
+        <name>ReadTriangle2DMeshAndCreateDiscreteFractures</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>kfrac</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>perform_extra_checks</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>not ported to new numbering of elements and nodes yet </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="16" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="156" bodyend="272"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a27fab924f3b82548271b5b7e0fd75f95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::CheckTriangleOutput</definition>
+        <argsstring>(const char *file, size_t &amp;nodes_per_element, size_t &amp;nodes, size_t &amp;elements, int &amp;node_attributes, int &amp;elmt_attributes)</argsstring>
+        <name>CheckTriangleOutput</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::CheckTriangleOutput</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>nodes_per_element</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>nodes</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>elements</declname>
+        </param>
+        <param>
+          <type>int &amp;</type>
+          <declname>node_attributes</declname>
+        </param>
+        <param>
+          <type>int &amp;</type>
+          <declname>elmt_attributes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="19" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="277" bodyend="336"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a5fb882c94e27c8dd6d15fdacd87cff3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::ReadNodeDataFile</definition>
+        <argsstring>(const char *file, std::deque&lt; double &gt; &amp;x, std::deque&lt; double &gt; &amp;y, std::deque&lt; double &gt; &amp;z, std::map&lt; size_t, int8_t &gt; &amp;bflags, std::map&lt; size_t, double &gt; &amp;bvalues)</argsstring>
+        <name>ReadNodeDataFile</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::ReadNodeDataFile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>z</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, int8_t &gt; &amp;</type>
+          <declname>bflags</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, double &gt; &amp;</type>
+          <declname>bvalues</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="26" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="341" bodyend="396"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a0d23761be3a5ceaec14fced30e626cd6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::ReadElementDataFile</definition>
+        <argsstring>(const char *file, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::vector&lt; double &gt; &amp;evalues)</argsstring>
+        <name>ReadElementDataFile</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::ReadElementDataFile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>evalues</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="31" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="402" bodyend="461"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a44a4f73b1caf8f454cabf73dd321c8e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::ReadPolyDataFile</definition>
+        <argsstring>(const char *file, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist)</argsstring>
+        <name>ReadPolyDataFile</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::ReadPolyDataFile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="35" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="470" bodyend="519"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a11c6bc27da9d6e9fdff5643cd33fa0a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::ReadNeighborDataFile</definition>
+        <argsstring>(const char *file, std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;pfverts)</argsstring>
+        <name>ReadNeighborDataFile</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::ReadNeighborDataFile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;</type>
+          <declname>pfverts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="38" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="549" bodyend="586"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1abe3e9d7471c85a15bcb7f8925c216060" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::FindNeighborsForFractureElements</definition>
+        <argsstring>(std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;pfverts)</argsstring>
+        <name>FindNeighborsForFractureElements</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::FindNeighborsForFractureElements</qualifiedname>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;</type>
+          <declname>pfverts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="40" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="525" bodyend="543"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1aed5485c2464ffc4dfffbd501c5ae4e6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::FlagBoundaryElements</definition>
+        <argsstring>(std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;pfverts, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::deque&lt; double &gt; &amp;x, std::deque&lt; double &gt; &amp;y)</argsstring>
+        <name>FlagBoundaryElements</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::FlagBoundaryElements</qualifiedname>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;</type>
+          <declname>pfverts</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Private method used by <ref refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1ae897c63afc42e1443c7c26b4745030d7" kindref="member">ReadTriangle2DMesh()</ref>. This function flags the boundaries of the Mesh using the enum <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref>. For this purpose, missing neighbor elements which are flagged -1 in the &apos;.neigh&apos; file are used as indicator for elements which lie at the model boundary. <linebreak/>
+</para>
+<para>Is used when a 2D mesh created with the Triangle mesher is read from file. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="43" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="602" bodyend="664"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a3ac4918c2c3af8f8bf61c3b53eebc6be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::FlagBoundaryNodes</definition>
+        <argsstring>(std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;pfverts, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::map&lt; size_t, int8_t &gt; &amp;bflags)</argsstring>
+        <name>FlagBoundaryNodes</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::FlagBoundaryNodes</qualifiedname>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;</type>
+          <declname>pfverts</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, int8_t &gt; &amp;</type>
+          <declname>bflags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Private method used by <ref refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1ae897c63afc42e1443c7c26b4745030d7" kindref="member">ReadTriangle2DMesh()</ref>.</para>
+<para>Nodes are flagged according to their parent faces across which the face- vert vectors point. Thus, nodes 2,3 correspond to facevert 1, nodes 3,1 to facevert 2, and nodes 1,2 to facevert 3. The method does not identify corner points of the model. This task is left to FlagCornerNodes(). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="47" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="680" bodyend="708"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a026c03678096ec4e8b149d71684a3cac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::SplitSingleCornerElements</definition>
+        <argsstring>(std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;pfverts, std::vector&lt; double &gt; &amp;evalues)</argsstring>
+        <name>SplitSingleCornerElements</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::SplitSingleCornerElements</qualifiedname>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt; &amp;</type>
+          <declname>pfverts</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>evalues</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>If a 2D triangular finite element has two of its sides on the boundary of the model, this poses problems when boundary conditions are assigned because one always first has to identify the correct model side and secondly because elements rarely are compliant enough to satisfactorily handle the different conditions. <linebreak/>
+</para>
+<para>The remedy used here, is to find the elements element neighbor and to create a segment from the corner node and the node diametrically opposite. This segment then separates two new elements which are created by flipping the two adjacent elements, example lower left corner: <linebreak/>
+</para>
+<para>o--<mdash/>o o--<mdash/>o element 2 also becomes a corner element | \ 2 | | 1 / | | \ | --&gt; | / | | 1 \ | | / 2 | o--<mdash/>o o--<mdash/>o</para>
+<para>If element properties were assigned before, these are averaged between the two flipped elements and then re-assigned. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method uses the &apos;plist&apos;, &apos;pfverts&apos;, and potential element property values in the process of flipping the nodes. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><orderedlist>
+<listitem><para>In the pfverts array those elements are singled out which have only one neighbor. These elements must lie at the mesh corners.</para>
+</listitem><listitem><para>If such an element is found, its neighbor is found as well in the plist. The element ID&apos;s are remembered.</para>
+</listitem><listitem><para>A segment (MJL_Edge) is constructed from the corner node to the node diametrically opposite in the triangle.</para>
+</listitem><listitem><para>Depending which mesh corner we are in, the two remaining nodes left and right of the new segment form corner nodes of the new triangles (MJL_Triangle).</para>
+</listitem><listitem><para>The new triangles are reassigned to the plist and the properties, if present are averaged and mapped back onto the elements. If both property values were the same, nothing is done.</para>
+</listitem><listitem><para>The elements pfverts are re-assigned according to the new connectivity.</para>
+</listitem><listitem><para>The elements adjacent to the flipped elements must be updated with regard to their neighbor lists.</para>
+</listitem></orderedlist>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The method is applied before the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> is output from the 2D mesh reading method above. <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method reports how many edge flips were performed and whether and which property values were averaged at which mesh corner. <linebreak/>
+ <verbatim>    @todo (3) Messes up neighbor connectivity SKM12/5/02
+    O.K. for trianglePatch8 retested by SKM 27/11/02 (previously reported error must be in Triangle mesher)
+</verbatim> </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="51" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="881" bodyend="1085"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a36eeabe8f26d7ab6085232d081294f75" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::TRIANGLE_Interface::FindFaceBoundary</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;face_node1, std::vector&lt; double &gt; &amp;face_node2, std::vector&lt; double &gt; &amp;opposite_node, bool verbose=false)</argsstring>
+        <name>FindFaceBoundary</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::FindFaceBoundary</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>face_node1</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>face_node2</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>opposite_node</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>function finds out whether the face of a triangle, the coordinates of which are provided as arguments, faces to the TOP, BOTTOM, LEFT or or right in an x(horizontal increasing to the right) y(vertical, increasing
+to the left) coordinate system. if the boundary is 45o the function will fail, return NOT and a cout message. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="55" column="14" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="1101" bodyend="1152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a866f38f6017bc5ca2d1e9e3e723712d3" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TRIANGLE_Interface::VerifyConsecutiveNodeNumbering</definition>
+        <argsstring>(std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist) const</argsstring>
+        <name>VerifyConsecutiveNodeNumbering</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::VerifyConsecutiveNodeNumbering</qualifiedname>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Loops through plist making a map of node numbers. If this map has jumps in the numbering, these are detected when looping through it again. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="60" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="778" bodyend="805"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a1f523996025c55d87feb4464771fbebd" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::ListZeroPropertyValueElements</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;evalues, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::deque&lt; double &gt; &amp;x, std::deque&lt; double &gt; &amp;y) const</argsstring>
+        <name>ListZeroPropertyValueElements</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::ListZeroPropertyValueElements</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>evalues</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="62" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="1241" bodyend="1265"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a48a7bd06e86371516b51368fa796181f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::FlagBoundaryNodesAccordingTo</definition>
+        <argsstring>(unsigned int fvert, std::int8_t bflag, const std::vector&lt; size_t &gt; &amp;nds, std::map&lt; size_t, int8_t &gt; &amp;bflags)</argsstring>
+        <name>FlagBoundaryNodesAccordingTo</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::FlagBoundaryNodesAccordingTo</qualifiedname>
+        <param>
+          <type>unsigned int</type>
+          <declname>fvert</declname>
+        </param>
+        <param>
+          <type>std::int8_t</type>
+          <declname>bflag</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>nds</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, int8_t &gt; &amp;</type>
+          <declname>bflags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Given the flagging and number (0...2) of boundary face, flag boundary nodes accordingly using the flagging enumeration <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref>. The faceverts are required to lie opposite to the nodes with the same numbers. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="67" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="722" bodyend="765"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a6bea5c09b3e52196e954dd3b8ded9bcf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TRIANGLE_Interface::FlagCornerNodes</definition>
+        <argsstring>(std::map&lt; size_t, int8_t &gt; &amp;bflags, std::deque&lt; double &gt; &amp;x, std::deque&lt; double &gt; &amp;y, std::deque&lt; double &gt; &amp;z)</argsstring>
+        <name>FlagCornerNodes</name>
+        <qualifiedname>csmp::TRIANGLE_Interface::FlagCornerNodes</qualifiedname>
+        <param>
+          <type>std::map&lt; size_t, int8_t &gt; &amp;</type>
+          <declname>bflags</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; double &gt; &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Using the bflags map, the min-max x, y, z values are found in the Vdata and, assuming, that the model is rectrangular, the corners are flagged such that the 2D model has, counting from the bottom up in counter- clockwise fashion, the corners 1, 2, 3, 4.</para>
+<para><simplesect kind="attention"><para>this coordinate-based method only works if the model is strictly rectangular.</para>
+</simplesect>
+<simplesect kind="note"><para>In 3D CSMP models the front rectangle in (z-direction) has the corresponding corners 4, 5, 6, 7, 8. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="71" column="10" bodyfile="source/modules/interfaces/TRIANGLE_Interface.cpp" bodystart="1171" bodyend="1235"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>interface to J. Setchuk&apos;s (UC Berkeley&apos;s) Triangle mesh generator </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TRIANGLE_Interface</label>
+        <link refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/TRIANGLE_Interface.h" line="10" column="1" bodyfile="source/includes/interfaces/TRIANGLE_Interface.h" bodystart="10" bodyend="73"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a27fab924f3b82548271b5b7e0fd75f95" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>CheckTriangleOutput</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a36eeabe8f26d7ab6085232d081294f75" prot="private" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>FindFaceBoundary</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1abe3e9d7471c85a15bcb7f8925c216060" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>FindNeighborsForFractureElements</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1aed5485c2464ffc4dfffbd501c5ae4e6d" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>FlagBoundaryElements</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a3ac4918c2c3af8f8bf61c3b53eebc6be" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>FlagBoundaryNodes</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a48a7bd06e86371516b51368fa796181f" prot="private" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>FlagBoundaryNodesAccordingTo</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a6bea5c09b3e52196e954dd3b8ded9bcf" prot="private" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>FlagCornerNodes</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a1f523996025c55d87feb4464771fbebd" prot="private" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>ListZeroPropertyValueElements</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a0d23761be3a5ceaec14fced30e626cd6" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>ReadElementDataFile</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a11c6bc27da9d6e9fdff5643cd33fa0a5" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>ReadNeighborDataFile</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a5fb882c94e27c8dd6d15fdacd87cff3a" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>ReadNodeDataFile</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a44a4f73b1caf8f454cabf73dd321c8e7" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>ReadPolyDataFile</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1ae897c63afc42e1443c7c26b4745030d7" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>ReadTriangle2DMesh</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a3c743b904653f2334ba311bbec18216a" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>ReadTriangle2DMeshAndCreateDiscreteFractures</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a026c03678096ec4e8b149d71684a3cac" prot="public" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>SplitSingleCornerElements</name></member>
+      <member refid="classcsmp_1_1_t_r_i_a_n_g_l_e___interface_1a866f38f6017bc5ca2d1e9e3e723712d3" prot="private" virt="non-virtual"><scope>csmp::TRIANGLE_Interface</scope><name>VerifyConsecutiveNodeNumbering</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,40 @@
+\doxysection{Fracture\+Capillary\+Pressure\+Visitor.\+h}
+\hypertarget{_fracture_capillary_pressure_visitor_8h_source}{}\label{_fracture_capillary_pressure_visitor_8h_source}\index{source/includes/thmc/fractures/FractureCapillaryPressureVisitor.h@{source/includes/thmc/fractures/FractureCapillaryPressureVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FRACTURECAPILLARYPRESSUREVISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FRACTURECAPILLARYPRESSUREVISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}};}
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00014\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_fracture_capillary_pressure_visitor}{FractureCapillaryPressureVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_fracture_capillary_pressure_visitor}{Visitor}}<\mbox{\hyperlink{classcsmp_1_1_fracture_capillary_pressure_visitor}{dim}}>}
+\DoxyCodeLine{00015\ \ \ \{}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ FractureCapillaryPressureVisitor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fracApTag,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fracPcTag,\ \textcolor{keywordtype}{double}\ pd,\ \textcolor{keywordtype}{double}\ ift,\ \textcolor{keywordtype}{double}\ ca);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~FractureCapillaryPressureVisitor()\ \{\}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(Element<dim>*\ element);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\_;}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ fracApKey\_,\ fracPcKey\_;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ Pd\_matrix\_,\ ift\_,\ ca\_;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{double}\ fracPc\_;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \}\ \textcolor{comment}{//csmp}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ FRACTURECAPILLARYPRESSUREVISITOR\_H}}
+
+\end{DoxyCode}

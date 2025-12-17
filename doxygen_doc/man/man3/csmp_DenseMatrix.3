@@ -1,0 +1,352 @@
+.TH "csmp::DenseMatrix< mn_max >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::DenseMatrix< mn_max >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <DenseMatrix\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDenseMatrix\fP ()"
+.br
+.RI "default constructor "
+.ti -1c
+.RI "\fBDenseMatrix\fP (const std::initializer_list< std::initializer_list< double > > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP (uint32_t m, uint32_t n)"
+.br
+.RI "constructor (i,j) "
+.ti -1c
+.RI "\fBDenseMatrix\fP (uint32_t m, uint32_t n, double val)"
+.br
+.ti -1c
+.RI "uint32_t \fBRows\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBCols\fP () const"
+.br
+.ti -1c
+.RI "void \fBResize\fP (uint32_t m, uint32_t n)"
+.br
+.ti -1c
+.RI "double & \fBoperator()\fP (uint32_t m, uint32_t n)"
+.br
+.RI "accessors M(i,j) "
+.ti -1c
+.RI "const double & \fBoperator()\fP (uint32_t m, uint32_t n) const"
+.br
+.RI "operator (i,j) const "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator=\fP (double)"
+.br
+.RI "assignment "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator+=\fP (const \fBDenseMatrix\fP &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator\-=\fP (const \fBDenseMatrix\fP &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP \fBoperator+\fP (const \fBDenseMatrix\fP &) const"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP \fBoperator\-\fP (const \fBDenseMatrix\fP &) const"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBDenseMatrix\fP &)"
+.br
+.RI "matrix - matrix multiplication -> M(A\&.rows,B\&.cols) (NB: creates temporary M) "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const std::vector< double > &)"
+.br
+.RI "matrix vector multiplication "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const double *)"
+.br
+.RI "rhs is a C-array "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (double)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP \fBoperator*\fP (const \fBDenseMatrix\fP &) const"
+.br
+.RI "C = A B, matrix - matrix multiplication -> M(A\&.rows,B\&.cols) returns temporary matrix\&. "
+.ti -1c
+.RI "void \fBIdentity\fP ()"
+.br
+.RI "creates identify matrix (Kronecker-Delta) with ones in the diagonal and zeros everywhere else "
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (double val)"
+.br
+.RI "assigns 'value' to the i=j elements o fmatrix "
+.ti -1c
+.RI "void \fBAssignToDiagonalAndZeroOffDiagonal\fP (uint32_t diag_elmts, double val)"
+.br
+.RI "resizes matrix to 'diag_elmts', assigns 'value' to the diagonal elements matrix diagonal while zeroing out all other values "
+.ti -1c
+.RI "void \fBRowCondenseTo\fP (std::vector< double > &) const"
+.br
+.RI "returns vec = Mat * unity vector "
+.ti -1c
+.RI "void \fBZero\fP ()"
+.br
+.ti -1c
+.RI "void \fBZeroRow\fP (uint32_t row)"
+.br
+.ti -1c
+.RI "void \fBZeroCol\fP (uint32_t col)"
+.br
+.ti -1c
+.RI "void \fBFill\fP (double val)"
+.br
+.ti -1c
+.RI "void \fBFillRow\fP (uint32_t row, double val)"
+.br
+.ti -1c
+.RI "void \fBFillCol\fP (uint32_t col, double val)"
+.br
+.ti -1c
+.RI "void \fBTransposed\fP (\fBDenseMatrix\fP &) const"
+.br
+.RI "RES = M^T into its argument\&. "
+.ti -1c
+.RI "void \fBTransposedProduct\fP (\fBDenseMatrix\fP &) const"
+.br
+.RI "RES = M^T M\&. "
+.ti -1c
+.RI "void \fBMultiplyWithTransposedOf\fP (const \fBDenseMatrix\fP &, \fBDenseMatrix\fP &) const"
+.br
+.RI "RES = A B^T\&. "
+.ti -1c
+.RI "void \fBMultiplyTransposedOfWith\fP (const \fBDenseMatrix\fP &, \fBDenseMatrix\fP &) const"
+.br
+.RI "RES = A^T B\&. "
+.ti -1c
+.RI "double \fBRowSum\fP (uint32_t row) const"
+.br
+.ti -1c
+.RI "double \fBColSum\fP (uint32_t col) const"
+.br
+.ti -1c
+.RI "double \fBNormL1\fP () const"
+.br
+.RI "unscaled L1 matrix norm "
+.ti -1c
+.RI "double \fBNormL_Infinity\fP () const"
+.br
+.RI "L_infinity matrix norm\&. "
+.ti -1c
+.RI "void \fBIn\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP (long digits=5L) const"
+.br
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBPoint\fP< 1U > &)"
+.br
+.RI "assignment of point coordinates to matrix rows or columns "
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBPoint\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBPoint\fP< 1U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBPoint\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBPoint\fP< 1U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBPoint\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBPoint\fP< 1U > &)"
+.br
+.RI "matrix point multiplication "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBPoint\fP< 2U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (uint32_t diag_elmts, const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBVectorVariable\fP< 1U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBVectorVariable\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBVectorVariable\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBVectorVariable\fP< 1U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBVectorVariable\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBVectorVariable\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBVectorVariable\fP< 1U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBVectorVariable\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBVectorVariable\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBVectorVariable\fP< 1U > &)"
+.br
+.RI "matrix vector multiplication "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBVectorVariable\fP< 2U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBVectorVariable\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBArrayVariable\fP &)"
+.br
+.RI "matrix array multiplication "
+.ti -1c
+.RI "void \fBAssignRow\fP (uint32_t i, const \fBFlaggedArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "void \fBAssignCol\fP (uint32_t j, const \fBFlaggedArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "void \fBAssignToDiagonal\fP (const \fBFlaggedArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBFlaggedArrayVariable\fP &)"
+.br
+.RI "matrix FlaggedArray multiplication "
+.ti -1c
+.RI "void \fBExportTo\fP (\fBTensorVariable\fP< 1U > &) const"
+.br
+.ti -1c
+.RI "void \fBExportTo\fP (\fBTensorVariable\fP< 2U > &) const"
+.br
+.ti -1c
+.RI "void \fBExportTo\fP (\fBTensorVariable\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator=\fP (const \fBTensorVariable\fP< 1U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator=\fP (const \fBTensorVariable\fP< 2U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator=\fP (const \fBTensorVariable\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBTensorVariable\fP< 1U > &)"
+.br
+.RI "matrix tensor multiplication "
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBTensorVariable\fP< 2U > &)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP & \fBoperator*=\fP (const \fBTensorVariable\fP< 3U > &)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t mn_max>
+.br
+class csmp::DenseMatrix< mn_max >"Fixed-size full-storage matrix template as a workhorse for finite element integral computations and accumulation of contributions to the global solution matrix\&.
+
+.PP
+Involves: M = dense matrix, v = vector, _T = transposed,
+
+.PP
+Interoperable with with basic CSMP variable types T = tensor matrix(dim,dim), default vector is a column vector (v = { c0,c2\&.\&.cn-1 }, vc = \fBvector(dim)\fP )
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&. K\&. Matthai 
+
+.PP
+S\&. Geiger 
+
+.PP
+S\&. G\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2001 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t mn_max> double \fBcsmp::DenseMatrix\fP< mn_max >::NormL1 () const"
+
+.PP
+unscaled L1 matrix norm computes unscaled L1 matrix norm ||A1|| = max_j * sum_i |aij| 
+.SS "template<uint32_t mn_max> double \fBcsmp::DenseMatrix\fP< mn_max >::NormL_Infinity () const"
+
+.PP
+L_infinity matrix norm\&. unscaled L_infinity matrix norm ||A||inf = max_i * sum_j |aij| 
+.SS "template<uint32_t mn_max> double & \fBcsmp::DenseMatrix\fP< mn_max >::operator() (uint32_t m, uint32_t n)"
+
+.PP
+accessors M(i,j) operator (i,j) 
+.SS "template<uint32_t mn_max> \fBDenseMatrix\fP< mn_max > & \fBcsmp::DenseMatrix\fP< mn_max >::operator*= (const \fBDenseMatrix\fP< mn_max > & mat)"
+
+.PP
+matrix - matrix multiplication -> M(A\&.rows,B\&.cols) (NB: creates temporary M) operator*= matrix multiplication 
+.SS "template<uint32_t mn_max> \fBDenseMatrix\fP< mn_max > & \fBcsmp::DenseMatrix\fP< mn_max >::operator*= (const double * vecT)"
+
+.PP
+rhs is a C-array Clearly, all hell will break loose if the C-array has not been initialized properly\&. 
+.SS "template<uint32_t mn_max> void \fBcsmp::DenseMatrix\fP< mn_max >::Resize (uint32_t m, uint32_t n)"
+Resizes \fBDenseMatrix\fP without allocation of new memory\&. If the capacitiy is exceeded an exception is thrown, but only if the code is compiled in debug mode\&. 
+.SS "template<uint32_t mn_max> void \fBcsmp::DenseMatrix\fP< mn_max >::RowCondenseTo (std::vector< double > & vec) const"
+
+.PP
+returns vec = Mat * unity vector vec = Mat * unity vector 
+.SS "template<uint32_t mn_max> void \fBcsmp::DenseMatrix\fP< mn_max >::TransposedProduct (\fBDenseMatrix\fP< mn_max > & RES) const"
+
+.PP
+RES = M^T M\&. RES = A^T A\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,72 @@
+\doxysection{csmp\+::Event\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_event}{}\label{classcsmp_1_1_event}\index{csmp::Event$<$ dim $>$@{csmp::Event$<$ dim $>$}}
+
+
+Collaboration diagram for csmp\+::Event\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{classcsmp_1_1_event__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_event_a3895ad02c9adf6471156b230ca6bc114}\label{classcsmp_1_1_event_a3895ad02c9adf6471156b230ca6bc114} 
+typedef \mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{ajb\+::detail\+::\+Fibonacci\+Heap\+\_\+\+Node}}$<$ double, size\+\_\+t $>$ {\bfseries Heap\+\_\+\+Node}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_event_a51ab57254010a6ba4874e4161cddf701}\label{classcsmp_1_1_event_a51ab57254010a6ba4874e4161cddf701} 
+{\bfseries Event} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}nd)
+\item 
+\Hypertarget{classcsmp_1_1_event_ac7fd30d364c44146cb969609691c8cfe}\label{classcsmp_1_1_event_ac7fd30d364c44146cb969609691c8cfe} 
+\mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+Node} () const
+\item 
+\Hypertarget{classcsmp_1_1_event_a852521f0fc487b52e04a3bffc84375ec}\label{classcsmp_1_1_event_a852521f0fc487b52e04a3bffc84375ec} 
+bool {\bfseries valid} () const
+\item 
+\Hypertarget{classcsmp_1_1_event_ac09c8624a4c0ece806221693871deba2}\label{classcsmp_1_1_event_ac09c8624a4c0ece806221693871deba2} 
+void {\bfseries valid} (bool validity)
+\item 
+\Hypertarget{classcsmp_1_1_event_a038fed5bb5db614aa8870449254abe5f}\label{classcsmp_1_1_event_a038fed5bb5db614aa8870449254abe5f} 
+bool {\bfseries in\+PEPStack} () const
+\item 
+\Hypertarget{classcsmp_1_1_event_a161011b5bdefbc6484f3e3322e45b8f0}\label{classcsmp_1_1_event_a161011b5bdefbc6484f3e3322e45b8f0} 
+void {\bfseries in\+PEPStack} (bool boolean)
+\item 
+\Hypertarget{classcsmp_1_1_event_ac89f0fa35077aad732d2c66f3dff383e}\label{classcsmp_1_1_event_ac89f0fa35077aad732d2c66f3dff383e} 
+bool {\bfseries in\+Queue} () const
+\item 
+\Hypertarget{classcsmp_1_1_event_a8ed24da2a5689bb619218daaf1df3b91}\label{classcsmp_1_1_event_a8ed24da2a5689bb619218daaf1df3b91} 
+void {\bfseries in\+Queue} (bool boolean)
+\item 
+\Hypertarget{classcsmp_1_1_event_a3f8b7f52e821073e9634ecab146f6a72}\label{classcsmp_1_1_event_a3f8b7f52e821073e9634ecab146f6a72} 
+double {\bfseries t\+\_\+schedule} () const
+\item 
+\Hypertarget{classcsmp_1_1_event_a1e687c0eb2c3509b17ef94aaa4abac38}\label{classcsmp_1_1_event_a1e687c0eb2c3509b17ef94aaa4abac38} 
+void {\bfseries t\+\_\+schedule} (double time)
+\item 
+\Hypertarget{classcsmp_1_1_event_a2c6298bb4c4ea2c9de7cbc0f1dfaf2cd}\label{classcsmp_1_1_event_a2c6298bb4c4ea2c9de7cbc0f1dfaf2cd} 
+void {\bfseries set\+Heap\+Node} (\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{Heap\+\_\+\+Node}} \texorpdfstring{$\ast$}{*}heap\+\_\+node)
+\item 
+\Hypertarget{classcsmp_1_1_event_a24391278d176c996b0a2fd6eb36f389b}\label{classcsmp_1_1_event_a24391278d176c996b0a2fd6eb36f389b} 
+\mbox{\hyperlink{structajb_1_1detail_1_1_fibonacci_heap___node}{Heap\+\_\+\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries get\+Heap\+Node} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_event_a227b55f2fa77ab2a87be09c278788c01}\label{classcsmp_1_1_event_a227b55f2fa77ab2a87be09c278788c01} 
+std\+::vector$<$ double $>$ {\bfseries facet\+Area\+Collection}
+\item 
+\Hypertarget{classcsmp_1_1_event_a849ec5626ecc5751691346ba5afdd3d7}\label{classcsmp_1_1_event_a849ec5626ecc5751691346ba5afdd3d7} 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ $>$ {\bfseries facet\+Normal\+Collection}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/\+DES\+\_\+transport\+\_\+scheme/Event.\+h\item 
+source/modules/integration/finite\+\_\+volumes/\+DES\+\_\+transport\+\_\+scheme/Event.\+cpp\end{DoxyCompactItemize}

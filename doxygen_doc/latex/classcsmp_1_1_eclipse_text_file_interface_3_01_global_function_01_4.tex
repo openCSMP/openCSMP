@@ -1,0 +1,85 @@
+\doxysection{csmp\+::Eclipse\+Text\+File\+Interface\texorpdfstring{$<$}{<} Global\+Function \texorpdfstring{$>$}{>} Class Reference}
+\hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4}{}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4}\index{csmp::EclipseTextFileInterface$<$ GlobalFunction $>$@{csmp::EclipseTextFileInterface$<$ GlobalFunction $>$}}
+
+
+Inheritance diagram for csmp\+::Eclipse\+Text\+File\+Interface\texorpdfstring{$<$}{<} Global\+Function \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Eclipse\+Text\+File\+Interface\texorpdfstring{$<$}{<} Global\+Function \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a7c9ec43679b6997ad8ba8ec9a2ae541f}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a7c9ec43679b6997ad8ba8ec9a2ae541f} 
+{\bfseries Eclipse\+Text\+File\+Interface} (size\+\_\+t max\+\_\+line\+\_\+length=256)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a5e3b56b67f7aad46bdc1f34f489f4a72}{Read\+File}} (std\+::ifstream \&ifs, bool(\texorpdfstring{$\ast$}{*}Is\+Comment\+Line\+Function)(char \texorpdfstring{$\ast$}{*}), bool(\texorpdfstring{$\ast$}{*}Read\+Function)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t, std\+::set$<$ std\+::string $>$ \&, std\+::string \&, std\+::vector$<$ std\+::string $>$ \&), bool fail\+\_\+for\+\_\+unknown\+\_\+keyword=true)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a49e01a3dfff84dd2e59b04696632c9ad}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a49e01a3dfff84dd2e59b04696632c9ad} 
+bool {\bfseries Read\+File} (std\+::ifstream \&ifs, bool(\texorpdfstring{$\ast$}{*}Is\+Comment\+Line\+Function)(char \texorpdfstring{$\ast$}{*}), bool(\texorpdfstring{$\ast$}{*}Read\+Function)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t))
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_ae19d42ae7f8194da920ebcb5375d6c1b}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_ae19d42ae7f8194da920ebcb5375d6c1b} 
+bool {\bfseries Find\+Keyword} (const std\+::string \&)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a20ce65722644b990054cc46e1cf715c4}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a20ce65722644b990054cc46e1cf715c4} 
+void {\bfseries Add\+Keyword} (const std\+::string \&)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_ada0652fa1b8a84d452d011a00700e431}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_ada0652fa1b8a84d452d011a00700e431} 
+void {\bfseries Add\+Keywords} (const std\+::set$<$ std\+::string $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a872c9cc770d063b41790395cf36ae6c4}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a872c9cc770d063b41790395cf36ae6c4} 
+void {\bfseries Clear\+Keywords} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a42df7a6e11bc4d7a49d85b37f8c9a622}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a42df7a6e11bc4d7a49d85b37f8c9a622} 
+std\+::set$<$ std\+::string $>$ {\bfseries keywords\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_ac2209afedb96dc07b23846d58614c6db}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_ac2209afedb96dc07b23846d58614c6db} 
+std\+::string {\bfseries keyword\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a78bfde74b77ec18ba6d51cbf458329f2}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a78bfde74b77ec18ba6d51cbf458329f2} 
+std\+::vector$<$ std\+::string $>$ {\bfseries keyword\+\_\+parameters\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a9c6005ca321b95b2a18e87bc38bb22eb}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a9c6005ca321b95b2a18e87bc38bb22eb} 
+size\+\_\+t {\bfseries line\+\_\+length\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a4f586166c719b21229f1213c9dbb7a98}\label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a4f586166c719b21229f1213c9dbb7a98} 
+char \texorpdfstring{$\ast$}{*} {\bfseries text\+\_\+line\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a5e3b56b67f7aad46bdc1f34f489f4a72}\index{csmp::EclipseTextFileInterface$<$ GlobalFunction $>$@{csmp::EclipseTextFileInterface$<$ GlobalFunction $>$}!ReadFile@{ReadFile}}
+\index{ReadFile@{ReadFile}!csmp::EclipseTextFileInterface$<$ GlobalFunction $>$@{csmp::EclipseTextFileInterface$<$ GlobalFunction $>$}}
+\doxysubsubsection{\texorpdfstring{ReadFile()}{ReadFile()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_a5e3b56b67f7aad46bdc1f34f489f4a72} 
+bool \mbox{\hyperlink{classcsmp_1_1_eclipse_text_file_interface}{csmp\+::\+Eclipse\+Text\+File\+Interface}}$<$ Global\+Function $>$\+::\+Read\+File (\begin{DoxyParamCaption}\item[{std\+::ifstream \&}]{ifs}{, }\item[{bool(\texorpdfstring{$\ast$}{*}}]{Is\+Comment\+Line\+Function~}{)(char \texorpdfstring{$\ast$}{*}), }\item[{bool(\texorpdfstring{$\ast$}{*}}]{Read\+Function~}{)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t, std\+::set$<$ std\+::string $>$ \&, std\+::string \&, std\+::vector$<$ std\+::string $>$ \&), }\item[{bool}]{fail\+\_\+for\+\_\+unknown\+\_\+keyword}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+Reading block data marked by keywords
+
+\begin{DoxyAuthor}{Author}
+Roman, 2014 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Eclipse/Eclipse\+Text\+File\+Interface.\+h\item 
+source/modules/interfaces/\+Eclipse/Eclipse\+Text\+File\+Interface.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,35 @@
+\doxysection{Integral\+\_\+op\+\_\+\+NT\+\_\+d\+N\+\_\+orthogonal\+\_\+d\+V.\+h}
+\hypertarget{_integral__op___n_t__d_n__orthogonal__d_v_8h_source}{}\label{_integral__op___n_t__d_n__orthogonal__d_v_8h_source}\index{source/includes/integration/pde\_operators/analytical/Integral\_op\_NT\_dN\_orthogonal\_dV.h@{source/includes/integration/pde\_operators/analytical/Integral\_op\_NT\_dN\_orthogonal\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{Integral\_op\_NT\_dN\_orthogonal\_dV\_h}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{Integral\_op\_NT\_dN\_orthogonal\_dV\_h}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{///\ streamfunction\ operand\ for\ the\ RHS}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v}{Integral\_op\_NT\_dN\_orthogonal\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ Integral\_op\_NT\_dN\_orthogonal\_dV(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ e.g.,\ fluid\ pressure}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ streamfunction}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v_a7c677371eec624c1ac45afa98dfa0ed5}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integral__op___n_t__d_n__orthogonal__d_v_a73743f0832bb230c9ce2d53746583f18}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ M,\ DNORTHO,\ NT;}
+\DoxyCodeLine{00023\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ NPROP,\ IPOL,\ UNITY,\ RES;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ zero,\ one;}
+\DoxyCodeLine{00025\ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

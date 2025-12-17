@@ -1,0 +1,616 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CVFEM_1D_VVCase</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <includes refid="_c_v_f_e_m__1_d___v_v_case_8h" local="no">CVFEM_1D_VVCase.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a3bc2705f55977569f343e41c9467976d" prot="private" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* csmp::CVFEM_1D_VVCase::geometry_name_</definition>
+        <argsstring></argsstring>
+        <name>geometry_name_</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::geometry_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="67" column="22" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a151d991664c12dc5b1a78d081fd66770" prot="private" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* csmp::CVFEM_1D_VVCase::config_file_name_</definition>
+        <argsstring></argsstring>
+        <name>config_file_name_</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::config_file_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="68" column="22" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a002cf0f0554fa068c403495e95541aa2" prot="private" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* csmp::CVFEM_1D_VVCase::vars_name_</definition>
+        <argsstring></argsstring>
+        <name>vars_name_</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::vars_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="69" column="22" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a71ba79ef96d8a5596d04969a07273e87" prot="private" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* csmp::CVFEM_1D_VVCase::system_file_list_name_</definition>
+        <argsstring></argsstring>
+        <name>system_file_list_name_</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::system_file_list_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="70" column="22" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a1cf7d4fdcda418d192afd0510111bc3b" prot="private" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* csmp::CVFEM_1D_VVCase::recipes_file_list_name_</definition>
+        <argsstring></argsstring>
+        <name>recipes_file_list_name_</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::recipes_file_list_name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="71" column="22" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a9908e5fbf1f1c353738cb18cc6961ba2" prot="private" static="no" mutable="no">
+        <type>list&lt; string &gt;</type>
+        <definition>list&lt;string&gt; csmp::CVFEM_1D_VVCase::output_props_</definition>
+        <argsstring></argsstring>
+        <name>output_props_</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::output_props_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="72" column="16" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a9003677f3a2ccb88cf2f3bbff38075f2" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 1U &gt; *</type>
+        <definition>Model&lt;1U&gt;* csmp::CVFEM_1D_VVCase::model</definition>
+        <argsstring></argsstring>
+        <name>model</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::model</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="74" column="17" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1adfb37393d8857483aa69ab4450737ea7" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; 1U &gt; *</type>
+        <definition>PropertyDatabase&lt;1U&gt;* csmp::CVFEM_1D_VVCase::pd_ref</definition>
+        <argsstring></argsstring>
+        <name>pd_ref</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::pd_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="75" column="29" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1aaf1fd864624148182a1e7f419543cc2b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_v_t_u___interface" kindref="compound">VTU_Interface</ref>&lt; 1U &gt; *</type>
+        <definition>VTU_Interface&lt;1U&gt;* csmp::CVFEM_1D_VVCase::vtu</definition>
+        <argsstring></argsstring>
+        <name>vtu</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::vtu</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="76" column="25" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1ab3d00aa46a0902134212c9386169568c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_computational_settings" kindref="compound">ComputationalSettings</ref></type>
+        <definition>ComputationalSettings csmp::CVFEM_1D_VVCase::run_settings</definition>
+        <argsstring></argsstring>
+        <name>run_settings</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::run_settings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="77" column="34" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1aa90e5a5f84dde8b317c46bdcd4993432" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_c_v_f_e_m___p_h_x___scheme" kindref="compound">CVFEM_PHX_Scheme</ref>&lt; 1U &gt; *</type>
+        <definition>CVFEM_PHX_Scheme&lt;1U&gt;* csmp::CVFEM_1D_VVCase::CVFEM_PHX</definition>
+        <argsstring></argsstring>
+        <name>CVFEM_PHX</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::CVFEM_PHX</qualifiedname>
+        <briefdescription>
+<para>CVFEM instance. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="80" column="28" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1aa5c769066fcfe6d6aadcab90e97b43f8" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_p_d_e___integrator" kindref="compound">PDE_Integrator</ref>&lt; 1U, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> &gt; * &gt;</type>
+        <definition>std::vector&lt;PDE_Integrator&lt;1U, Element&gt;*&gt; csmp::CVFEM_1D_VVCase::diffusion</definition>
+        <argsstring></argsstring>
+        <name>diffusion</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::diffusion</qualifiedname>
+        <briefdescription>
+<para>Chemical diffusion operators and variables. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="83" column="38" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a8ae3754f4302c0800ce6cafe86cb322f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_num_integral___n_t__lhsop___n__d_v" kindref="compound">NumIntegral_NT_lhsop_N_dV</ref>&lt; 1U &gt; * &gt;</type>
+        <definition>std::vector&lt;NumIntegral_NT_lhsop_N_dV&lt;1U&gt;*&gt; csmp::CVFEM_1D_VVCase::diff_cap_lhs</definition>
+        <argsstring></argsstring>
+        <name>diff_cap_lhs</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::diff_cap_lhs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="84" column="24" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a5bbbc14dfc3353a1b982f0915c372427" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_num_integral___n_t__op___n__d_v" kindref="compound">NumIntegral_NT_op_N_dV</ref>&lt; 1U &gt; * &gt;</type>
+        <definition>std::vector&lt;NumIntegral_NT_op_N_dV&lt;1U&gt;*&gt; csmp::CVFEM_1D_VVCase::diff_cap_rhs</definition>
+        <argsstring></argsstring>
+        <name>diff_cap_rhs</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::diff_cap_rhs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="85" column="27" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a22ebca802103afcbe3344e001ca3419c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v" kindref="compound">NumIntegral_dNT_op_dN_dV</ref>&lt; 1U &gt; * &gt;</type>
+        <definition>std::vector&lt;NumIntegral_dNT_op_dN_dV&lt;1U&gt;*&gt; csmp::CVFEM_1D_VVCase::diffusivity</definition>
+        <argsstring></argsstring>
+        <name>diffusivity</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::diffusivity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="86" column="24" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a5160780577d6e7bd6536ce4b5d1301f1" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::CVFEM_1D_VVCase::pore_diff_key</definition>
+        <argsstring></argsstring>
+        <name>pore_diff_key</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::pore_diff_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="87" column="17" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a6f9626d592ac0ce30dbfc1b18f3bac0d" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::CVFEM_1D_VVCase::eff_diff_key</definition>
+        <argsstring></argsstring>
+        <name>eff_diff_key</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::eff_diff_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="87" column="31" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a59f7db592049d93de97647e30af72fc1" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::CVFEM_1D_VVCase::porosity_key</definition>
+        <argsstring></argsstring>
+        <name>porosity_key</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::porosity_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="87" column="44" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a97593ebc9d1db4b8f0c9d684a4a1a309" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::CVFEM_1D_VVCase::diff_coeff</definition>
+        <argsstring></argsstring>
+        <name>diff_coeff</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::diff_coeff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="88" column="26" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a30a3d79db7e2fec88413e8372d66a316" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::CVFEM_1D_VVCase::porosity</definition>
+        <argsstring></argsstring>
+        <name>porosity</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::porosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="88" column="37" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a94a2017d24a0b23e7df132d5f27ee8db" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_1D_VVCase::model_time</definition>
+        <argsstring></argsstring>
+        <name>model_time</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::model_time</qualifiedname>
+        <briefdescription>
+<para>time variables </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="91" column="18" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a05680ea9f0a80990ade5e4056ab5a2ba" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_1D_VVCase::dt</definition>
+        <argsstring></argsstring>
+        <name>dt</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::dt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="91" column="29" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a41fade6a87c1e7231befd7c93b91eb00" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_1D_VVCase::max_time</definition>
+        <argsstring></argsstring>
+        <name>max_time</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::max_time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="91" column="32" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a73b021aa4650512813111513173340e9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CVFEM_1D_VVCase::vtu_dt</definition>
+        <argsstring></argsstring>
+        <name>vtu_dt</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::vtu_dt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="91" column="41" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1ae347a555bfac35c21c73d74a4936e803" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CVFEM_1D_VVCase::timestep</definition>
+        <argsstring></argsstring>
+        <name>timestep</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::timestep</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="92" column="18" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a1da7721973bc4d1d4e9512075bf2468e" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::CVFEM_1D_VVCase::output_counter</definition>
+        <argsstring></argsstring>
+        <name>output_counter</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::output_counter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="92" column="27" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a75287725a37e6823686e144aa7078939" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_1D_VVCase::CVFEM_1D_VVCase</definition>
+        <argsstring>(const char *prefix)</argsstring>
+        <name>CVFEM_1D_VVCase</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::CVFEM_1D_VVCase</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Create a 1D model</para>
+<para>assign the gravity flag from the config file</para>
+<para>read time increment from config file</para>
+<para>create new CVFEM PHX Scheme object</para>
+<para>vtu interface fro output</para>
+<para>output main variables</para>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="62" column="11" bodyfile="tests/integration/CVFEM_1D_VVCase.cpp" bodystart="22" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1abde9f6ed3805dbd6b7719503bbc75375" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_1D_VVCase::~CVFEM_1D_VVCase</definition>
+        <argsstring>()</argsstring>
+        <name>~CVFEM_1D_VVCase</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::~CVFEM_1D_VVCase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="63" column="11" bodyfile="tests/integration/CVFEM_1D_VVCase.cpp" bodystart="96" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1afe070ca8718d2210324cd9b7a0a23efc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::CVFEM_1D_VVCase::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Calculate linear pressure gradient, initialize fluid properties from PTX, initial output to vtu</para>
+<para>setup time variables</para>
+<para>main time loop</para>
+<para>output to vtk</para>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="64" column="16" bodyfile="tests/integration/CVFEM_1D_VVCase.cpp" bodystart="282" bodyend="320"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1ae2f8ff262dbb6c4fe387ad6a6d3c730f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::CVFEM_1D_VVCase::CalculateMassConductivity</definition>
+        <argsstring>()</argsstring>
+        <name>CalculateMassConductivity</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::CalculateMassConductivity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="94" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a7ab334b51d2910b73f48de834fe719b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::CVFEM_1D_VVCase::CalculateMassGravityTerm</definition>
+        <argsstring>()</argsstring>
+        <name>CalculateMassGravityTerm</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::CalculateMassGravityTerm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="95" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a6884f02ae2732a4b23777255af408e3b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::CVFEM_1D_VVCase::CalculateSteadyStatePressure</definition>
+        <argsstring>()</argsstring>
+        <name>CalculateSteadyStatePressure</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::CalculateSteadyStatePressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>steady state pressure</para>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="96" column="15" bodyfile="tests/integration/CVFEM_1D_VVCase.cpp" bodystart="104" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a71fb753192e8ab39464038c36c5c79a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::CVFEM_1D_VVCase::CalculateSteadyStateTemperature</definition>
+        <argsstring>()</argsstring>
+        <name>CalculateSteadyStateTemperature</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::CalculateSteadyStateTemperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="97" column="15" bodyfile="tests/integration/CVFEM_1D_VVCase.cpp" bodystart="175" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a761b04a9978c7420b3754b56d5afb52f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::CVFEM_1D_VVCase::InitializeFluidPropertiesLinearPressure</definition>
+        <argsstring>()</argsstring>
+        <name>InitializeFluidPropertiesLinearPressure</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::InitializeFluidPropertiesLinearPressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>calculate and assign initial pressure gradient</para>
+<para>Initialize fluid properties from PTX</para>
+<para>initial output</para>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="98" column="15" bodyfile="tests/integration/CVFEM_1D_VVCase.cpp" bodystart="197" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a5d5a6fd79e82b1cd2317f3501c6440a5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::CVFEM_1D_VVCase::InitializeFluidProperties</definition>
+        <argsstring>()</argsstring>
+        <name>InitializeFluidProperties</name>
+        <qualifiedname>csmp::CVFEM_1D_VVCase::InitializeFluidProperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Calculate steady state pressure with gravity</para>
+<para>Initialize fluid properties from PTX</para>
+<para>initial output</para>
+        </inbodydescription>
+        <location file="tests/integration/CVFEM_1D_VVCase.h" line="99" column="15" bodyfile="tests/integration/CVFEM_1D_VVCase.cpp" bodystart="256" bodyend="279"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<sect1 id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1autotoc_md11">
+<title>CVFEM_1D_VVCase : 1D Test Case</title><para>Mesh: Not needed <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>: 1D <ref refid="classcsmp_1_1_test" kindref="compound">Test</ref>: PHX_Scheme BC: TBC </para>
+</sect1>
+<sect1 id="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1autotoc_md12">
+<title>Criterion:</title></sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::CVFEM_1D_VVCase</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CVFEM_1D_VVCase</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/integration/CVFEM_1D_VVCase.h" line="59" column="1" bodyfile="tests/integration/CVFEM_1D_VVCase.h" bodystart="60" bodyend="101"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1ae2f8ff262dbb6c4fe387ad6a6d3c730f" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>CalculateMassConductivity</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a7ab334b51d2910b73f48de834fe719b6" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>CalculateMassGravityTerm</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a6884f02ae2732a4b23777255af408e3b" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>CalculateSteadyStatePressure</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a71fb753192e8ab39464038c36c5c79a6" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>CalculateSteadyStateTemperature</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a151d991664c12dc5b1a78d081fd66770" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>config_file_name_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a75287725a37e6823686e144aa7078939" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>CVFEM_1D_VVCase</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1aa90e5a5f84dde8b317c46bdcd4993432" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>CVFEM_PHX</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a8ae3754f4302c0800ce6cafe86cb322f" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>diff_cap_lhs</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a5bbbc14dfc3353a1b982f0915c372427" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>diff_cap_rhs</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a97593ebc9d1db4b8f0c9d684a4a1a309" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>diff_coeff</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1aa5c769066fcfe6d6aadcab90e97b43f8" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>diffusion</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a22ebca802103afcbe3344e001ca3419c" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>diffusivity</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a05680ea9f0a80990ade5e4056ab5a2ba" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>dt</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a6f9626d592ac0ce30dbfc1b18f3bac0d" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>eff_diff_key</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a3bc2705f55977569f343e41c9467976d" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>geometry_name_</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a5d5a6fd79e82b1cd2317f3501c6440a5" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>InitializeFluidProperties</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a761b04a9978c7420b3754b56d5afb52f" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>InitializeFluidPropertiesLinearPressure</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a41fade6a87c1e7231befd7c93b91eb00" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>max_time</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a9003677f3a2ccb88cf2f3bbff38075f2" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>model</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a94a2017d24a0b23e7df132d5f27ee8db" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>model_time</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a1da7721973bc4d1d4e9512075bf2468e" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>output_counter</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a9908e5fbf1f1c353738cb18cc6961ba2" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>output_props_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1adfb37393d8857483aa69ab4450737ea7" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>pd_ref</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a5160780577d6e7bd6536ce4b5d1301f1" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>pore_diff_key</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a30a3d79db7e2fec88413e8372d66a316" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>porosity</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a59f7db592049d93de97647e30af72fc1" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>porosity_key</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a1cf7d4fdcda418d192afd0510111bc3b" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>recipes_file_list_name_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1afe070ca8718d2210324cd9b7a0a23efc" prot="public" virt="virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1ab3d00aa46a0902134212c9386169568c" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>run_settings</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a71ba79ef96d8a5596d04969a07273e87" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>system_file_list_name_</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1ae347a555bfac35c21c73d74a4936e803" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>timestep</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a002cf0f0554fa068c403495e95541aa2" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>vars_name_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1aaf1fd864624148182a1e7f419543cc2b" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>vtu</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1a73b021aa4650512813111513173340e9" prot="private" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>vtu_dt</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_1abde9f6ed3805dbd6b7719503bbc75375" prot="public" virt="non-virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>~CVFEM_1D_VVCase</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::CVFEM_1D_VVCase</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

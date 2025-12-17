@@ -1,0 +1,113 @@
+\doxysection{csmp\+::Eclipse\+Text\+File\+Interface\texorpdfstring{$<$}{<} STREAM \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_eclipse_text_file_interface}{}\label{classcsmp_1_1_eclipse_text_file_interface}\index{csmp::EclipseTextFileInterface$<$ STREAM $>$@{csmp::EclipseTextFileInterface$<$ STREAM $>$}}
+
+
+parses the ECLIPSE text file(s) into streams  
+
+
+
+
+{\ttfamily \#include $<$Eclipse\+Text\+File\+Interface.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Eclipse\+Text\+File\+Interface\texorpdfstring{$<$}{<} STREAM \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_eclipse_text_file_interface__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Eclipse\+Text\+File\+Interface\texorpdfstring{$<$}{<} STREAM \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_eclipse_text_file_interface__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_ade73aab0c2105585ab8f3b0217e21f3e}\label{classcsmp_1_1_eclipse_text_file_interface_ade73aab0c2105585ab8f3b0217e21f3e} 
+{\bfseries Eclipse\+Text\+File\+Interface} (size\+\_\+t max\+\_\+line\+\_\+length=256)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_eclipse_text_file_interface_aa04530cef7315005bf30c1947b7748c8}{Read\+File}} (std\+::ifstream \&ifs, STREAM \texorpdfstring{$\ast$}{*}, bool(STREAM\+::\texorpdfstring{$\ast$}{*}Is\+Comment\+Line\+Function)(char \texorpdfstring{$\ast$}{*}), bool(STREAM\+::\texorpdfstring{$\ast$}{*}Read\+Function)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t, std\+::set$<$ std\+::string $>$ \&, std\+::string \&, std\+::vector$<$ std\+::string $>$ \&), bool fail\+\_\+for\+\_\+unknown\+\_\+keyword=true)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_ae49b7238cd18e353672f5fa45ff19b33}\label{classcsmp_1_1_eclipse_text_file_interface_ae49b7238cd18e353672f5fa45ff19b33} 
+bool {\bfseries Read\+File} (std\+::ifstream \&ifs, STREAM \texorpdfstring{$\ast$}{*}, bool(\texorpdfstring{$\ast$}{*}Is\+Comment\+Line\+Function)(char \texorpdfstring{$\ast$}{*}), bool(STREAM\+::\texorpdfstring{$\ast$}{*}Read\+Function)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t, std\+::set$<$ std\+::string $>$ \&, std\+::string \&, std\+::vector$<$ std\+::string $>$ \&), bool fail\+\_\+for\+\_\+unknown\+\_\+keyword=true)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_a7095375516941ab8622ad52fdb793b7b}\label{classcsmp_1_1_eclipse_text_file_interface_a7095375516941ab8622ad52fdb793b7b} 
+bool {\bfseries Read\+File} (std\+::ifstream \&ifs, STREAM \texorpdfstring{$\ast$}{*}, bool(STREAM\+::\texorpdfstring{$\ast$}{*}Is\+Comment\+Line\+Function)(char \texorpdfstring{$\ast$}{*}), bool(STREAM\+::\texorpdfstring{$\ast$}{*}Read\+Function)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t))
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_abb47a3d0cf94b4fd45af93230d8cb894}\label{classcsmp_1_1_eclipse_text_file_interface_abb47a3d0cf94b4fd45af93230d8cb894} 
+bool {\bfseries Read\+File} (std\+::ifstream \&ifs, STREAM \texorpdfstring{$\ast$}{*}, bool(\texorpdfstring{$\ast$}{*}Is\+Comment\+Line\+Function)(char \texorpdfstring{$\ast$}{*}), bool(STREAM\+::\texorpdfstring{$\ast$}{*}Read\+Function)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t))
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_ab28a62755eeada6571f791510b30f550}\label{classcsmp_1_1_eclipse_text_file_interface_ab28a62755eeada6571f791510b30f550} 
+bool {\bfseries Find\+Keyword} (const std\+::string \&)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_aaca28e0492722b848eeae450ad16c038}\label{classcsmp_1_1_eclipse_text_file_interface_aaca28e0492722b848eeae450ad16c038} 
+void {\bfseries Add\+Keyword} (const std\+::string \&)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_a737a3901b62bde297aae0b247e6d181a}\label{classcsmp_1_1_eclipse_text_file_interface_a737a3901b62bde297aae0b247e6d181a} 
+void {\bfseries Add\+Keywords} (const std\+::set$<$ std\+::string $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_a80f82a56334ffe3dc128dfcfe43e6893}\label{classcsmp_1_1_eclipse_text_file_interface_a80f82a56334ffe3dc128dfcfe43e6893} 
+void {\bfseries Clear\+Keywords} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_a0cf69480c7fc7953563eddb032248a3c}\label{classcsmp_1_1_eclipse_text_file_interface_a0cf69480c7fc7953563eddb032248a3c} 
+std\+::set$<$ std\+::string $>$ {\bfseries keywords\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_ad5984ccc2b0e668569449c6ac2fba6aa}\label{classcsmp_1_1_eclipse_text_file_interface_ad5984ccc2b0e668569449c6ac2fba6aa} 
+std\+::string {\bfseries keyword\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_a7d35af87ca02142ef59d318c00baf047}\label{classcsmp_1_1_eclipse_text_file_interface_a7d35af87ca02142ef59d318c00baf047} 
+std\+::vector$<$ std\+::string $>$ {\bfseries keyword\+\_\+parameters\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_a88b79b25c40315a2d625d1d03714f35b}\label{classcsmp_1_1_eclipse_text_file_interface_a88b79b25c40315a2d625d1d03714f35b} 
+size\+\_\+t {\bfseries line\+\_\+length\+\_\+}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_afbf8c941f6576d515d1ebc57bb7954ad}\label{classcsmp_1_1_eclipse_text_file_interface_afbf8c941f6576d515d1ebc57bb7954ad} 
+char \texorpdfstring{$\ast$}{*} {\bfseries text\+\_\+line\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class STREAM$>$\newline
+class csmp\+::\+Eclipse\+Text\+File\+Interface$<$ STREAM $>$}
+parses the ECLIPSE text file(s) into streams 
+
+\begin{DoxyAuthor}{Author}
+R. Manasipov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2014
+\end{DoxyDate}
+Text file parser that separates out comments and finds data blocks on the basis of keywords. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_eclipse_text_file_interface_aa04530cef7315005bf30c1947b7748c8}\index{csmp::EclipseTextFileInterface$<$ STREAM $>$@{csmp::EclipseTextFileInterface$<$ STREAM $>$}!ReadFile@{ReadFile}}
+\index{ReadFile@{ReadFile}!csmp::EclipseTextFileInterface$<$ STREAM $>$@{csmp::EclipseTextFileInterface$<$ STREAM $>$}}
+\doxysubsubsection{\texorpdfstring{ReadFile()}{ReadFile()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_eclipse_text_file_interface_aa04530cef7315005bf30c1947b7748c8} 
+template$<$class STREAM$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_eclipse_text_file_interface}{csmp\+::\+Eclipse\+Text\+File\+Interface}}$<$ STREAM $>$\+::\+Read\+File (\begin{DoxyParamCaption}\item[{std\+::ifstream \&}]{ifs}{, }\item[{STREAM \texorpdfstring{$\ast$}{*}}]{stream}{, }\item[{bool(STREAM\+::\texorpdfstring{$\ast$}{*}}]{Is\+Comment\+Line\+Function~}{)(char \texorpdfstring{$\ast$}{*}), }\item[{bool(STREAM\+::\texorpdfstring{$\ast$}{*}}]{Read\+Function~}{)(std\+::ifstream \&, char \texorpdfstring{$\ast$}{*}, size\+\_\+t, std\+::set$<$ std\+::string $>$ \&, std\+::string \&, std\+::vector$<$ std\+::string $>$ \&), }\item[{bool}]{fail\+\_\+for\+\_\+unknown\+\_\+keyword}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+Reading block data marked by keywords
+
+\begin{DoxyAuthor}{Author}
+Roman, 2014 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Eclipse/Eclipse\+Text\+File\+Interface.\+h\end{DoxyCompactItemize}

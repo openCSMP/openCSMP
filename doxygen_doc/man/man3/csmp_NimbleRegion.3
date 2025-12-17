@@ -1,0 +1,553 @@
+.TH "csmp::NimbleRegion< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NimbleRegion< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <NimbleRegion\&.h>\fP
+.PP
+Inherits \fBcsmp::ModelSubDomain< dim, Element >\fP, and \fBcsmp::LocalVariableStorage< dim, Region >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNimbleRegion\fP (const \fBPropertyDatabase\fP< dim > &, typename std::vector< \fBNode\fP< dim > * >::const_iterator first, typename std::vector< \fBNode\fP< dim > * >::const_iterator last)"
+.br
+.RI "construction of region from nodes, relying on existing node-parent-element connectivity to identify elements "
+.ti -1c
+.RI "virtual \fBPLACEMENT\fP \fBPlacement\fP () const"
+.br
+.RI "Local variable storage interface\&. "
+.ti -1c
+.RI "size_t \fBNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBInteriorNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBPerimeterNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBCells\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBRenumberNodes\fP () const"
+.br
+.ti -1c
+.RI "\fBElement\fP< dim > *const \fBE\fP (size_t)"
+.br
+.ti -1c
+.RI "\fBNode\fP< dim > *const \fBN\fP (size_t)"
+.br
+.ti -1c
+.RI "const \fBElement\fP< dim > *const \fBE\fP (size_t) const"
+.br
+.ti -1c
+.RI "const \fBNode\fP< dim > *const \fBN\fP (size_t) const"
+.br
+.ti -1c
+.RI "void \fBClear\fP ()"
+.br
+.RI "resize to zero while keeping the memory "
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.RI "removing storage "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "writes the current element and node memberships to the console "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::ModelSubDomain< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "\fBModelSubDomain\fP (const std::string &subdomain_name, const \fBPropertyDatabase\fP< dim > &)"
+.br
+.RI "constructs incomplete subdomain for later initialisation with suitable methods in subclasses "
+.ti -1c
+.RI "\fBModelSubDomain\fP< dim, \fBElement\fP > & \fBoperator=\fP (const \fBModelSubDomain\fP &)"
+.br
+.ti -1c
+.RI "std::string \fBName\fP () const"
+.br
+.ti -1c
+.RI "virtual bool \fBValidVariable\fP (const char *variableName) const"
+.br
+.ti -1c
+.RI "virtual void \fBAccept\fP (\fBVisitor\fP< dim > &)"
+.br
+.RI "support of the \fBVisitor\fP pattern "
+.ti -1c
+.RI "void \fBApply\fP (\fBInterrelation\fP< dim > &)"
+.br
+.RI "modification via Operand-based relations between discretised properties that only modify a single result variable "
+.ti -1c
+.RI "void \fBRebuildSubDomainAfterChangeOfCellVector\fP ()"
+.br
+.RI "deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells "
+.ti -1c
+.RI "void \fBRebuildSubDomainAfterChangeOfNodeVector\fP ()"
+.br
+.RI "rebuilds node vector, sorts everything and re-establishes interior and perimeter "
+.ti -1c
+.RI "void \fBUpdateCellMembershipApplyingConstraints\fP (typename std::vector< \fBElement\fP< dim > * >::const_iterator master_domain_start, typename std::vector< \fBElement\fP< dim > * >::const_iterator master_domain_end, const \fBPropertyConstraints\fP &)"
+.br
+.RI "rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints "
+.ti -1c
+.RI "void \fBIdentifyPerimeter\fP ()"
+.br
+.RI "distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls PartitionElementVector() "
+.ti -1c
+.RI "void \fBCreateNodePointerVector\fP ()"
+.br
+.RI "creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms "
+.ti -1c
+.RI "void \fBSortVectors\fP (size_t interior_cells, size_t interior_nodes)"
+.br
+.RI "sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations) "
+.ti -1c
+.RI "void \fBBuildPerimeterFaceVector\fP (int64_t interior_cells)"
+.br
+.RI "assuming that a partitioned (and sorted) cell vector is in place, constructs the bd_face_vec_ by checking whether neighbor cells belong to the domain or not "
+.ti -1c
+.RI "void \fBScheduleForRebuild\fP ()"
+.br
+.RI "for rebuilding subdomains when nodes or cells changed: flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector "
+.ti -1c
+.RI "bool \fBNeedsRebuild\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBRebuildCellAndPerimeterFaceVector\fP ()"
+.br
+.RI "deletes 'nullptr' cells from cell vector, retaining the sorting into interior and perimeter elements, and rebuilding perimeter faces as necessary "
+.ti -1c
+.RI "size_t \fBRebuildNodeVector\fP ()"
+.br
+.RI "deletes 'nullptr' nodes from \fBNode\fP vector, retaining the sorting into interior and perimeter nodes "
+.ti -1c
+.RI "int32_t \fBDomainIndex\fP () const"
+.br
+.RI "reference counting-based unique domain identifier (0\&.\&.n-1) "
+.ti -1c
+.RI "size_t \fBRenumberNodes\fP () const"
+.br
+.RI "renumbers nodes in domain 0\&.\&.n-1 "
+.ti -1c
+.RI "size_t \fBRenumberCells\fP () const"
+.br
+.RI "renumbers cells in domain 0\&.\&.n-1 "
+.ti -1c
+.RI "void \fBUpdateMemberIndexes\fP () const"
+.br
+.RI "renumber cells and nodes consecutively from 0\&.\&.n-1 "
+.ti -1c
+.RI "std::vector< size_t > \fBMemberCellIndexes\fP () const"
+.br
+.RI "output current indices to vector "
+.ti -1c
+.RI "const std::vector< \fBElement\fP< dim > * > & \fBCellVector\fP () const"
+.br
+.RI "reference to container of finite cell pointers to either \fBElement\fP, \fBFace\fP or \fBInterFace\fP objects; "
+.ti -1c
+.RI "const std::vector< \fBNode\fP< dim > * > & \fBNodeVector\fP () const"
+.br
+.RI "reference to const \fBNode\fP pointer vector "
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator \fBNodesBegin\fP () const"
+.br
+.RI "const iterators (cell and node pointers cannot be modified but the nodes and cells can!) "
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator \fBPerimeterNodesBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator \fBNodesEnd\fP () const"
+.br
+.ti -1c
+.RI "std::vector< \fBElement\fP< dim > * >::const_iterator \fBCellsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< \fBElement\fP< dim > * >::const_iterator \fBPerimeterCellsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< \fBElement\fP< dim > * >::const_iterator \fBCellsEnd\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSharedPerimeterNodes\fP (typename std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator start, typename std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator end) const"
+.br
+.RI "returns how many of the nodes in the supplied iterator range also form part of the current subdomain's perimeter "
+.ti -1c
+.RI "bool \fBEmpty\fP () const"
+.br
+.RI "check whether subdomain conatains any cells "
+.ti -1c
+.RI "size_t \fBNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBInteriorNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBPerimeterNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBIntegrationPoints\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSectorIntegrationPoints\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBFacetIntegrationPoints\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBCells\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBInteriorCells\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBPerimeterCells\fP () const"
+.br
+.ti -1c
+.RI "bool \fBContains\fP (const \fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "bool \fBIsPerimeterNode\fP (const \fBcsmp::Node\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "bool \fBIsPerimeterCell\fP (const \fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "uint32_t \fBPerimeterFaces\fP (size_t eid) const"
+.br
+.RI "for looping over the perimeter faces of perimeter cell with #eid, method is used to travel across subdomain surface / outline "
+.ti -1c
+.RI "uint32_t \fBPerimeterFace\fP (size_t eid, uint32_t face) const"
+.br
+.RI "returns local face id of face #face that lies on perimeter of model subdomain "
+.ti -1c
+.RI "\fBcsmp::Node\fP< dim > * \fBN\fP (size_t n) const"
+.br
+.RI "pointer to node #n in subdomain; "
+.ti -1c
+.RI "\fBElement\fP< dim > * \fBE\fP (size_t n) const"
+.br
+.RI "pointer to cell #n of model subdomain "
+.ti -1c
+.RI "bool \fBIsContiguous\fP () const"
+.br
+.RI "checks whether all cells within the subdomain are interconnected (if the domain has multi-dimensional cells this is never the case) "
+.ti -1c
+.RI "std::pair< \fBCELL_SHAPE\fP, bool > \fBSingleCellShapeDomain\fP () const"
+.br
+.RI "if the model subdomain consists of a single cell shape (line, surface, volume) this method returns true revealing the type "
+.ti -1c
+.RI "std::pair< int32_t, int32_t > \fBSpatialDimensions\fP () const"
+.br
+.RI "returns 1) cells of how many different spatial dimensions are contained, and 2) the highest cell spatial dimension in subdomain "
+.ti -1c
+.RI "void \fBMinMaxCoordinates\fP (\fBPoint\fP< dim > &xyz_min, \fBPoint\fP< dim > &xyz_max) const"
+.br
+.RI "returns diagonally opposite points of bounding box "
+.ti -1c
+.RI "void \fBAssignNodeCoordinatesTo\fP (const char *vector_prop)"
+.br
+.RI "output coordinates to user-defined vector variable [x1,y1,z1,\&.\&.\&.xn,yn,zn] "
+.ti -1c
+.RI "void \fBAssignCellCharacteristicsTo\fP (const char *characteristic, const char *var)"
+.br
+.RI "characteristics like 'length', 'area', 'volume' , 'aspect ratio', 'inner radius' are assigned to user-defined variable "
+.ti -1c
+.RI "void \fBNodeAttributesToCSV\fP ()"
+.br
+.RI "writes a CSV (comma delimited ascii text) file with point coordinates, node-idx, \fBBOX_BOUNDARY\fP flags, and interior vs perimeter information "
+.ti -1c
+.RI "void \fBInputPropertyValue\fP (const char *input_prop, const Var &new_value, \fBSUBDOMAIN_PART\fP sd=COMPLETE)"
+.br
+.RI "assigns uniform (single) variable value to either the entire subdomain or its interior or perimeter "
+.ti -1c
+.RI "void \fBChangePropertyStatus\fP (const char *property, \fBVARIABLE_FLAG\fP new_status_of_scalar, \fBSUBDOMAIN_PART\fP=COMPLETE)"
+.br
+.RI "changes the flag of the scalar variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter "
+.ti -1c
+.RI "void \fBChangePropertyStatusWhere\fP (const char *property, \fBVARIABLE_FLAG\fP new_status_of_scalar, double min_value_to_change, double max_value_to_change)"
+.br
+.RI "changes the flag of the scalar variable 'property' to new value if the scalar variable is withing the specified range "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBPropertyStatus\fP (const char *\fBvariable\fP, \fBSUBDOMAIN_PART\fP flag=COMPLETE, uint32_t i=0) const"
+.br
+.RI "by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned "
+.ti -1c
+.RI "void \fBMinMaxOf\fP (const char *property, double &gmin, double &gmax) const"
+.br
+.RI "min/max property values (length of vectors and eigenvalues of tensors) "
+.ti -1c
+.RI "void \fBInterpolateNodeToCellProperty\fP (const char *nprop, const char *eprop)"
+.br
+.ti -1c
+.RI "void \fBInterpolateNodeToIntegrationPointProperty\fP (const char *nprop, const char *eprop)"
+.br
+.ti -1c
+.RI "void \fBInterpolateIntegrationPointToCellProperty\fP (const char *cprop, const char *eprop)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateCellToIntegrationPointProperty\fP (const char *eprop, const char *cprop)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateCellToFacetIntegrationPointProperty\fP (const char *eprop, const char *fipprop)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateCellToNodeProperty\fP (const char *eprop, const char *nprop, bool by_distance=true)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateIntegrationPointToNodeProperty\fP (const char *cprop, const char *nprop)"
+.br
+.ti -1c
+.RI "double \fBAverage\fP (const char *property) const"
+.br
+.RI "arithmetic (number as opposed to volume weighted) average "
+.ti -1c
+.RI "bool \fBCopyGradientOfProperty_A_To_B\fP (const char *node_prop, const char *cell_prop)"
+.br
+.ti -1c
+.RI "void \fBCopyReplace\fP (const char *from, const char *to)"
+.br
+.ti -1c
+.RI "void \fBWriteDomainIndexesToBinaryFile\fP (std::fstream &) const"
+.br
+.RI "writes complete \fBModelSubDomain\fP specifications in terms of unique indices as block to binary file "
+.ti -1c
+.RI "void \fBOutputVariableToScreen\fP (const char *prop) const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::LocalVariableStorage< dim, Region >\fP
+.in +1c
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBLocalVariableStorage\fP< dim, \fBRegion\fP > &) const"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBResizePropertyStorage\fP (const \fBLocalVariables\fP &)"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBAddProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Creates an empty space in the storage preserving the original variable values\&. \fBLocalVariables\fP in \fBIndex\fP have to reflect NEW state (incl added) "
+.ti -1c
+.RI "void \fBDeleteProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Deletes data and flags of property \fBLocalVariables\fP in \fBIndex\fP have to reflect CURRENT state (incl property to be removed) "
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (const \fBcsmp::Index\fP &, double, double) const"
+.br
+.ti -1c
+.RI "double \fBRead\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar variable value\&. "
+.ti -1c
+.RI "void \fBStore\fP (const \fBcsmp::Index\fP &, const \fBScalarVariable\fP &)"
+.br
+.RI "Scalar variable\&. "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBStatus\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar & Array variable flag\&. "
+.ti -1c
+.RI "void \fBStoreArrayEntry\fP (const \fBcsmp::Index\fP &, double array_elmt_value, int_type)"
+.br
+.ti -1c
+.RI "double \fBReadArrayEntry\fP (const \fBcsmp::Index\fP &, int_type array_elmt) const"
+.br
+.RI "reads single double element inside of the target array "
+.ti -1c
+.RI "bool \fBEmptyLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBOutLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBAssertPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertFiniteVolumeIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBStoreLocalState\fP (const \fBLocalVariables\fP &lv)"
+.br
+.RI "We store in debug only\&. "
+.ti -1c
+.RI "void \fBLVS\fP (const Data &data)"
+.br
+.RI "copy or move supplied data into storage "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBNimbleRegion_Test\fP"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::ModelSubDomain< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "size_t \fBPartitionCellVector\fP ()"
+.br
+.RI "establishes interior vs\&. exterior simplices and nodes; returns index of first boundary cell "
+.ti -1c
+.RI "size_t \fBPartitionCellVectorForBoundary\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBPartitionCellVectorForSplitBoundary\fP ()"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::ModelSubDomain< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBpref_\fP"
+.br
+.ti -1c
+.RI "std::string \fBsubdomain_name_\fP"
+.br
+.RI "passed down when domain is created so that it can be referred to "
+.ti -1c
+.RI "std::vector< \fBElement\fP< dim > * > \fBcell_vec_\fP"
+.br
+.RI "doubly sorted, interior cells first "
+.ti -1c
+.RI "std::vector< std::vector< uint32_t > > \fBbd_face_vec_\fP"
+.br
+.RI "matching second sorted range of cell_vec_ "
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * > \fBnode_vec_\fP"
+.br
+.RI "doubly sorted, interior nodes first "
+.ti -1c
+.RI "size_t \fBfirst_bd_node_\fP"
+.br
+.RI "begin of the perimeter nodes "
+.ti -1c
+.RI "int32_t \fBdomain_idx_\fP"
+.br
+.RI "created during construction from domain_count_ "
+.ti -1c
+.RI "bool \fBrebuilt_needed_\fP"
+.br
+.RI "parameter set when mesh gets modified by \fBMeshManager\fP so that update can be prompted "
+.in -1c
+
+Static Protected Attributes inherited from \fBcsmp::ModelSubDomain< dim, Element >\fP
+.in +1c
+.ti -1c
+.RI "static int32_t \fBdomain_count_\fP"
+.br
+.RI "reference-counting to get unique identifier for subdomains "
+.ti -1c
+.RI "static constexpr bool \fBverbose_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::NimbleRegion< dim >"Flexible collection of \fBElement\fP and \fBNode\fP object pointers to be used by the \fBPDE_Integrator\fP, which also requires access to ranges of (perimeter) nodes\&.
+
+.PP
+\fBNimbleRegion\fP is a light (non-unique) version of \fBRegion\fP that can grow or shrink, retaining the knowledge of its perimeter\&.
+
+.PP
+Like \fBRegion\fP, \fBNimbleRegion\fP keeps track of its perimeter, which always includes a halo that comes about as all elements that contain user-supplied nodes (and additional ones) will be included into the contructed region\&.
+
+.PP
+The region is based on the STL vector and operated under a high-memory policy\&. This means that the Update() and other functions retain previous vector storage allocations, just resizing these vectors to zero when a reconstruction is performed, to avoid costly memory allocations\&. To delete both elements and the internal storage of the vectors, delete and create a new \fBNimbleRegion\fP object\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+\fBNimbleRegion\fP does not have a name or properties of its own and it is not managed by the \fBRegionInterface\fP, create it using its constructor and manage it with DES or any other parallel algorithm\&.
+
+.PP
+Grow(), Shrink() and ChangeShape() operations rely on the connectivity between equidimensional elements and nodes\&.
+
+.PP
+Thus far, Nimbleregion only works with linear elements\&.
+.RE
+.PP
+Design specifications in detail: \fBNimbleRegion\fP for use in PDE_Integrators?
+
+.PP
+.IP "0." 4
+Must be a template with integral parameter uint32_t dim
+.IP "1." 4
+Be a suitable plugin into the \fBPDE_Integrator\fP, meaning that it has the methods:
+
+.PP
+1\&.1 Must have a contructor that accepts iterators to node pointers 1\&.2 Should be able to change shape at low computational cost 1\&.3 Have the interfaces needed by the \fBPDE_Integrator\fP to function:
+.IP "  \(bu" 4
+Must be based on vectors,
+.IP "  \(bu" 4
+Know its perimeter nodes / have nodes sorted into interior and perimeter ranges so that boundary conditions can be applied\&.
+.PP
+
+.IP "2." 4
+\fBInterFace\fP / task share with DES algorithm to convey update information\&. 
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::NimbleRegion\fP< dim >::NimbleRegion (const \fBPropertyDatabase\fP< dim > & p, typename std::vector< \fBNode\fP< dim > * >::const_iterator first, typename std::vector< \fBNode\fP< dim > * >::const_iterator last)"
+
+.PP
+construction of region from nodes, relying on existing node-parent-element connectivity to identify elements construction from nodes only, relying on existing node-parent-element connectivity to identify elements
+
+.PP
+the assumption is made that the node pointers are unique\&.
+
+.PP
+the element vector is also sorted for searching\&.
+
+.PP
+the elements are identified by looping over the parents of the nodes, then additional nodes are added where necessary to capture a halo for the pressure equation\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::NimbleRegion\fP< dim >::Clear ()"
+
+.PP
+resize to zero while keeping the memory When you do not want to call the destructor yet\&. 
+.SS "template<uint32_t dim> void \fBcsmp::NimbleRegion\fP< dim >::Erase ()"
+
+.PP
+removing storage Deleting everything including the storage\&. 
+.SS "template<uint32_t dim> void \fBcsmp::NimbleRegion\fP< dim >::Out () const"
+
+.PP
+writes the current element and node memberships to the console Print the \fBNimbleRegion\fP to screen\&. 
+.SS "template<uint32_t dim> virtual \fBPLACEMENT\fP \fBcsmp::NimbleRegion\fP< dim >::Placement () const\fR [inline]\fP, \fR [virtual]\fP"
+
+.PP
+Local variable storage interface\&. 
+.PP
+Implements \fBcsmp::ModelSubDomain< dim, Element >\fP\&.
+.SS "template<uint32_t dim> size_t \fBcsmp::NimbleRegion\fP< dim >::RenumberNodes () const"
+Consecutive numbering, interior nodes first, perimeter nodes second\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

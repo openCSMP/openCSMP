@@ -1,0 +1,76 @@
+\doxysection{variable\+Operations.\+h}
+\hypertarget{variable_operations_8h_source}{}\label{variable_operations_8h_source}\index{source/includes/model/variableOperations.h@{source/includes/model/variableOperations.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{VARIABLE\_OPERATIONS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{VARIABLE\_OPERATIONS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_vector_variable_8h}{"{}VectorVariable.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_tensor_variable_8h}{"{}TensorVariable.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{///\ generic\ dot\ product\ for\ vectors}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00013\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_a5dbd62dd7458a7b07c0e3a051350f762}{dotProduct}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ v1,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ v2\ );}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{///\ Point\ class\ related\ operators}}
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00017\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \mbox{\hyperlink{namespacecsmp_ac725844ed9a6fb4adff9fad64a72c941}{operator}}+(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ operator-\/(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00023\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ operator*(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00026\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ operator/(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{double}\ dotProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \textcolor{keywordtype}{double}\ dotProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{comment}{///\ this\ function\ treats\ the\ dot\ product\ of\ two\ scalars\ as\ if\ they\ were\ 1D\ vectors,\ hence\ the\ formula\ below.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{//double\ DotProduct(\ const\ ScalarVariable\&\ s1,\ const\ ScalarVariable\&\ s2)\ \{return\ (s1.Data()*s2.Data())*s2.Data()/(s2.Data()*s2.Data());\}}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\ \mbox{\hyperlink{namespacecsmp_af90c28df664967511e85d797e6c53d1f}{crossProduct}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ );}
+\DoxyCodeLine{00038\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\ crossProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<2U>\&\ );}
+\DoxyCodeLine{00039\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\ crossProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ );}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\ crossProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ );}
+\DoxyCodeLine{00042\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\ crossProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\&\ );}
+\DoxyCodeLine{00043\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\ crossProduct(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\&\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00046\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \mbox{\hyperlink{namespacecsmp_a2b5722dcea1d3634789ac9120ec91dc8}{multiplyTensorByVector}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00049\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \mbox{\hyperlink{namespacecsmp_a5c640ab1f2ce8769f2c7a17fecca3d4a}{multiplyHorizontalVectorByTensor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ \ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00052\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ multiplyTensorByTensor(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{bool}\ isDiagonalTensor(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ ts\ );}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_afaad11a76a23c4669deec35930d4be87}{minMaxEigenValues}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ ts,\ \textcolor{keywordtype}{double}\&\ tmin,\ \textcolor{keywordtype}{double}\&\ tmax\ );}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00061\ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{namespacecsmp_a152a4a97e75b6232979a999d5559ac70}{angleBetween}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{///\ applies\ any\ of\ the\ standard\ math\ library\ functions\ to\ each\ element\ of\ the\ variable}}
+\DoxyCodeLine{00064\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp_a1f1a9c4dc062968680ada058765082de}{size\_t}},\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ Var>}
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a1f1a9c4dc062968680ada058765082de}{applyFunction}}();}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \ \textcolor{comment}{//VARIABLE\_OPERATIONS\_H}}
+
+\end{DoxyCode}

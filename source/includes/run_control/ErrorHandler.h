@@ -208,7 +208,7 @@ class ErrorHandler : public GenericSingleton<ErrorHandler> {
     long               errors_;       ///< errors incurred where something actually went wrong as opposed to a problem with- or without consequences
     long               warnings_;     ///< problems incurred
     long               total_;        ///< total issues logged
-    const size_t       error_limit_;  ///< number of errors that are allowed to occur before program terminates
+    const long         error_limit_;  ///< number of errors that are allowed to occur before program terminates
 
     //       originator & message      
     std::multimap<std::string,std::string>  minfos_;          ///< log of info messages

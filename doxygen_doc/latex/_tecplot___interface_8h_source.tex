@@ -1,0 +1,91 @@
+\doxysection{Tecplot\+\_\+\+Interface.\+h}
+\hypertarget{_tecplot___interface_8h_source}{}\label{_tecplot___interface_8h_source}\index{source/includes/interfaces/Tecplot/Tecplot\_Interface.h@{source/includes/interfaces/Tecplot/Tecplot\_Interface.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_TECPLOT\_INTERFACE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_TECPLOT\_INTERFACE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_set_8h}{"{}VSet.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{Tecplot\_Interface}}\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputDataToTecplotFile(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputDataToTecplotFile(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ group\_name,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputGridToTecplotFile(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep\ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputGridToTecplotFile(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ group\_name,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputDataToTecplotFile(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ OutputGridToTecplotFile(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ timestep\ );}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//VSet<dim>\ \ vset;}}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{map}}<\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{size\_t}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{plist\_}},\ \mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{transformed\_plist\_}};}
+\DoxyCodeLine{00050\ \ \ \ \ std::map<size\_t,size\_t>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ node\_mapping\_;}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{map}}<\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{vector}}<\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_tecplot___interface}{pxyz\_data\_}};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ NodeBasedTopology(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<size\_t>\&\ elmt\_ids,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,std::vector<size\_t>\ >\&\ \ \ plist,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,size\_t>\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ node\_nums\ );}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ PointBasedTopology(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<size\_t>\&\ elmt\_ids,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,std::vector<size\_t>\ >\&\ \ \ plist,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,size\_t>\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ node\_nums\ );}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ TransformPlist(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<size\_t,std::vector<size\_t>\ >\&\ plist,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,std::vector<size\_t>\ >\&\ tplist\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ XyzData(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<size\_t,size\_t>\&\ node\_nums,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,std::vector<\textcolor{keywordtype}{double}>\ >\&\ pxyz\_data\ );}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ NodeData(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ \ \ \ \ prop\_key,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<size\_t,size\_t>\&\ node\_nums,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,std::vector<\textcolor{keywordtype}{double}>\ >\&\ pxyz\_data\ );}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ ElementPointData(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ \ \ \ \ prop\_key,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<size\_t,size\_t>\&\ node\_nums,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::map<size\_t,std::vector<\textcolor{keywordtype}{double}>\ >\&\ pxyz\_data\ );}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

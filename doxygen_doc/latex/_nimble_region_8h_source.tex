@@ -1,0 +1,132 @@
+\doxysection{Nimble\+Region.\+h}
+\hypertarget{_nimble_region_8h_source}{}\label{_nimble_region_8h_source}\index{source/includes/model/NimbleRegion.h@{source/includes/model/NimbleRegion.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_NIMBLE\_REGION\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_NIMBLE\_REGION\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_sub_domain_8h}{"{}ModelSubDomain.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ Flexible\ collection\ of\ Element\ and\ Node\ object\ pointers}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ to\ be\ used\ by\ the\ PDE\_Integrator,\ which\ also\ requires\ access}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ to\ ranges\ of\ (perimeter)\ nodes.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ NimbleRegion\ is\ a\ light\ (non-\/unique)\ version\ of\ Region\ that\ can\ grow\ or\ shrink,}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ retaining\ the\ knowledge\ of\ its\ perimeter.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ Like\ Region,\ NimbleRegion\ keeps\ track\ of\ its\ perimeter,\ which}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ always\ includes\ a\ halo\ that\ comes\ about\ as\ all\ elements\ that}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ contain\ user-\/supplied\ nodes\ (and\ additional\ ones)\ will}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ be\ included\ into\ the\ contructed\ region.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ The\ region\ is\ based\ on\ the\ STL\ vector\ and\ operated\ under\ a\ high-\/memory\ policy.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ This\ means\ that\ the\ Update()\ and\ other\ functions\ retain\ previous\ vector\ storage}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ allocations,\ just\ resizing\ these\ vectors\ to\ zero\ when\ a\ reconstruction\ is\ performed,}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ to\ avoid\ costly\ memory\ allocations.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ To\ delete\ both\ elements\ and\ the\ internal\ storage\ of\ the\ vectors,\ delete\ and\ create\ a\ new}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ NimbleRegion\ object.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ @attention\ NimbleRegion\ does\ not\ have\ a\ name\ or\ properties\ of\ its\ own\ and}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ it\ is\ not\ managed\ by\ the\ RegionInterface,}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ create\ it\ using\ its\ constructor\ and\ manage\ it\ with\ DES\ or\ any\ other\ parallel\ algorithm.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ @attention\ Grow(),\ Shrink()\ and\ ChangeShape()\ operations\ rely\ on\ the\ connectivity}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ between\ equidimensional\ elements\ and\ nodes.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ @attention\ Thus\ far,\ Nimbleregion\ only\ works\ with\ linear\ elements.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ Design\ specifications\ in\ detail:\ NimbleRegion\ for\ use\ in\ PDE\_Integrators?}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ 0.\ Must\ be\ a\ template\ with\ integral\ parameter\ uint32\_t\ dim}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ 1.\ Be\ a\ suitable\ plugin\ into\ the\ PDE\_Integrator,\ meaning\ that\ it\ has\ the\ methods:}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ \ 1.1\ Must\ have\ a\ contructor\ that\ accepts\ iterators\ to\ node\ pointers}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ \ 1.2\ Should\ be\ able\ to\ change\ shape\ at\ low\ computational\ cost}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ \ 1.3\ Have\ the\ interfaces\ needed\ by\ the\ PDE\_Integrator\ to\ function:}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ -\/\ Must\ be\ based\ on\ vectors,}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ -\/\ Know\ its\ perimeter\ nodes\ /\ have\ nodes\ sorted\ into\ interior\ and\ perimeter\ ranges}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ so\ that\ boundary\ conditions\ can\ be\ applied.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ 2.\ InterFace\ /\ task\ share\ with\ DES\ algorithm\ to\ convey\ update\ information.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00056\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00057\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region}{NimbleRegion}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region}{ModelSubDomain}}<\mbox{\hyperlink{classcsmp_1_1_nimble_region}{dim}},\mbox{\hyperlink{classcsmp_1_1_nimble_region}{Element}}>,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region}{LocalVariableStorage}}<\mbox{\hyperlink{classcsmp_1_1_nimble_region}{dim}},\mbox{\hyperlink{classcsmp_1_1_nimble_region}{Region}}>\ \{}
+\DoxyCodeLine{00059\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ construction\ of\ region\ from\ nodes,\ relying\ on\ existing\ node-\/parent-\/element\ connectivity\ to\ identify\ elements}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{NimbleRegion}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{std}}::\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{vector}}<\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{Node}}<\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{first}},}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{std}}::\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{vector}}<\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{Node}}<\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a9ad5a05703fc85e0107cd02f52aa56f9}{last}}\ );}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{comment}{/*\ TODO:\ ANALYSE\ WHETHER\ THESE\ INTERFACES\ ARE\ WORTH\ IMPLEMENTING}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ ///\ adjust\ to\ arbitrary\ yet\ small\ shape\ modifications,\ where\ most\ of\ the\ region\ stays\ the\ same;\ argument\ new\ current\ nodes}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ void\ ChangeShape(\ typename\ std::vector<Node<dim>*>::iterator\ first,\ typename\ std::vector<Node<dim>*>::iterator\ last\ );}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ void\ ChangeShape(\ typename\ std::set<Node<dim>*>\&\ nodes\_to\_remove,\ typename\ std::set<Node<dim>*>\&\ nodes\_to\_add\ );}}
+\DoxyCodeLine{00070\ \textcolor{comment}{}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ ///\ adds\ multiple\ nodes\ and\ potential\ extra\ elements\ to\ region,\ does\ not\ remove\ any\ nodes\ or\ elements}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ void\ Grow(\ typename\ std::vector<Node<dim>*>::iterator\ first,\ typename\ std::vector<Node<dim>*>::iterator\ last\ );}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ ///\ removes\ nodes\ and\ elements\ that\ might\ have\ become\ disconnected\ from\ the\ region}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ void\ Shrink(\ std::vector<Node<dim>*>\&\ );}}
+\DoxyCodeLine{00076\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ Local\ variable\ storage\ interface}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a2e7585d219687bb26639680178349c51}{Placement}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ REGION;\ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//\ retrieving\ information}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ size\_t\ Nodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ \ \ \ \ size\_t\ InteriorNodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ \ \ \ \ size\_t\ PerimeterNodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ \ \ \ \ size\_t\ Cells()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_nimble_region_ad11ec3a555e158b285590f3da3566dea}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_ad11ec3a555e158b285590f3da3566dea}{RenumberNodes}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ accessors}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ E(size\_t);}
+\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ N(size\_t);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ E(size\_t)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ N(size\_t)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{///\ resize\ to\ zero\ while\ keeping\ the\ memory}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a54273171f80314c9bd0e3c74cf918077}{Clear}}();}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{///\ removing\ storage}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_a2d450a034207185f0edd788569bee754}{Erase}}();}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{///\ writes\ the\ current\ element\ and\ node\ memberships\ to\ the\ console}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region_ac810cf1901509b73a8468d901051a935}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00107\ \ \ \ \ NimbleRegion()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{///\ constructs\ region\ from\ supplied\ nodes,\ relying\ on\ existing\ node-\/parent-\/element\ connectivity\ to\ identify\ elements\ and\ perimeter\ nodes}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ Update(\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ first,\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ last\ );}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{///\ as\ above,\ but\ with\ different\ way\ to\ find\ perimeter\ (FAIL:\ perimeter\ incorrect\ for\ discontiguous\ patches)}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ Update2(\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ first,\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ last\ );}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ Update3(\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ first,\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ last\ );}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{//\ current\ implementation\ based\ on\ idea\ that\ vectors\ are\ resized\ with\ little\ overhead\ as\ long\ as\ their\ capacity\ is\ not\ changed}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};\ \ \ \ \textcolor{comment}{///<\ flag\ for\ testing\ and\ reporting}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_nimble_region___test}{NimbleRegion\_Test}};}
+\DoxyCodeLine{00122\ \};}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \}\ \textcolor{comment}{//\ csmp\ \ \ }}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_NIMBLE\_REGION\_H\ */}}
+
+\end{DoxyCode}

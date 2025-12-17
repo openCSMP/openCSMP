@@ -1,0 +1,1541 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_isoparametric_linear_hexahedron" kind="class" language="C++" prot="public">
+    <compoundname>csmp::IsoparametricLinearHexahedron</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element" prot="public" virt="non-virtual">csmp::FiniteElement</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a7a02ab66a83ee46ee22755f0afdc0e40" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearHexahedron::W</definition>
+        <argsstring></argsstring>
+        <name>W</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::W</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="81" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1aaa19b5a75a0c844562a3d75fb3daae5c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearHexahedron::Vx_</definition>
+        <argsstring></argsstring>
+        <name>Vx_</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::Vx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="81" column="21" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a5d10415b32a7ef67658cc26fd2c9f02f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearHexahedron::Vy_</definition>
+        <argsstring></argsstring>
+        <name>Vy_</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::Vy_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="81" column="25" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a478f7952b97c553f7c00151bb4e4e9a5" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearHexahedron::Vz_</definition>
+        <argsstring></argsstring>
+        <name>Vz_</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::Vz_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="81" column="29" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a1667103ca3e02af2ddd23d212cbdb310" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::IsoparametricLinearHexahedron::V_</definition>
+        <argsstring></argsstring>
+        <name>V_</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::V_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="81" column="33" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1af1c7ec7d51ad7f4e0d569bdc5ee18809" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearHexahedron::DN</definition>
+        <argsstring></argsstring>
+        <name>DN</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::DN</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="82" column="19" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a87c76d75df3c4751618937bea23f8f93" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearHexahedron::NXYZ</definition>
+        <argsstring></argsstring>
+        <name>NXYZ</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::NXYZ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="82" column="22" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a0c774105256d4c4db5239b7f64954ff8" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearHexahedron::IP</definition>
+        <argsstring></argsstring>
+        <name>IP</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::IP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="82" column="27" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ad3efdf680ea02827ebf7c5aafc34927f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearHexahedron::B</definition>
+        <argsstring></argsstring>
+        <name>B</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::B</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="82" column="30" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a3799860bd3dde472eafed0aee96e6800" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::IsoparametricLinearHexahedron::BT</definition>
+        <argsstring></argsstring>
+        <name>BT</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::BT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="82" column="32" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1aaff4750efa496169de51a069c1034dcc" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IsoparametricLinearHexahedron::IsoparametricLinearHexahedron</definition>
+        <argsstring>(uint32_t integrationPoints=8)</argsstring>
+        <name>IsoparametricLinearHexahedron</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::IsoparametricLinearHexahedron</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>integrationPoints</declname>
+          <defval>8</defval>
+        </param>
+        <briefdescription>
+<para>options are 1, 4, or 8 integration points </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="13" column="14" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="13" bodyend="134"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aaff4750efa496169de51a069c1034dcc" compoundref="_isoparametric_linear_hexahedron_8cpp" startline="13" endline="134">IsoparametricLinearHexahedron</references>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aaff4750efa496169de51a069c1034dcc" compoundref="_isoparametric_linear_hexahedron_8cpp" startline="13" endline="134">IsoparametricLinearHexahedron</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a0e7f5c3497b38e4fc72908fc01efd1d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::Volume</definition>
+        <argsstring>()</argsstring>
+        <name>Volume</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::Volume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a16025c5d7f2ac217d2dbedad5d561a06">Volume</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes Integral N dA = sum_1...n Wi Ji Ni. This formulation also gives a meaningful area if the element boundaries are curved. For a description of numerical integration of isoparametric quadratic triangular elements, refer to Cook et al. (1989) 3rd Ed., p. 183.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The finite element which supplies the nodal coordinates from which the area is computed.</para>
+<para><simplesect kind="return"><para>The area (m2) of the finite element. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="15" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1379" bodyend="1402"/>
+        <referencedby refid="namespacecsmp_1a454b86bd00b667e07e864d97e187fcde" compoundref="_v_set_8cpp" startline="1017" endline="1179">csmp::extrapolateElementToNodeProperty</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a0264ae8c672419fed9237868036bc707" compoundref="_isoparametric_linear_hexahedron_8cpp" startline="1518" endline="1532">InnerRadius</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a075fa6b9bfa4ab2bb3feb36659f33060" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::AspectRatio</definition>
+        <argsstring>()</argsstring>
+        <name>AspectRatio</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::AspectRatio</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c6148f7a38b639b721013dbd8f8d3f5">AspectRatio</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the element aspect ratio as the ratio between the longest and the shortest boundary segment.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> is consulted for its global coordinates. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="16" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1262" bodyend="1277"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a0264ae8c672419fed9237868036bc707" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::InnerRadius</definition>
+        <argsstring>()</argsstring>
+        <name>InnerRadius</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::InnerRadius</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3ad8c30e7136d47df5ca95907647c538">InnerRadius</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method attempts to calculate the inner radius of the curved-sided quad by talking 1/6 of the perimeter and dividing this measure by the area of the quad.</para>
+<para>The procedure is empirically based giving a good match if the quadss are relatively even-sided and have straight edges.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent element is queried for its node coordinates. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="17" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1518" bodyend="1532"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a0e7f5c3497b38e4fc72908fc01efd1d0" compoundref="_isoparametric_linear_hexahedron_8cpp" startline="1379" endline="1402">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ac68a12abfb1a1df7bfaeedce66202dc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::EdgeLengths</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>EdgeLengths</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::EdgeLengths</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac2348fa774457d4adde9354189277d9e">EdgeLengths</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+          <defname>len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Segment length is calculated directly as the length of linear segments.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>len</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lengths of the 12 segments will be returned into the vector which is the second method argument.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The segment lengths are computed as simple Euclidian distance between corner vertices of the edge. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="18" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1295" bodyend="1360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a8a14a378a95952e862048e6e7697cb47" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::CornerNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae3f0ae4a9ad3424ccc4553ff270b155e">CornerNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns local node ids of the 4 nodes located at the corners of the quadratic tetrahedral element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an unsigned integer vector with the 4 local corner node ID numbers for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="19" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="211" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a728ce4d5da19d0ef1af6588eab0247ea" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricLinearHexahedron::CornerNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1abf2597e5cf0563435169689ee94d57a1">CornerNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="20" column="23" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="20" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a0075efcc78a7959293fb288d088e9366" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::MidSideNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a8149423046e10426a7eb520164ad3a38">MidSideNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns 0 local node ids of the nodes located at the midsides of the element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an unsigned integer vector with the 4 local midside-node ID numbers for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="21" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1542" bodyend="1546"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a5478677be6a1f3cbcddac6c54dff160f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::CounterClockwiseNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CounterClockwiseNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::CounterClockwiseNodes</qualifiedname>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns local node numbers.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ids</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an unsigned integer vector with the 4 local corner node ID numbers for the element. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="22" column="23" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="235" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a3769fb20921d05d5e82183548133ca1d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::IsoparametricLinearHexahedron::MidSideNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>MidSideNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::MidSideNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aec5a871df4af8c883e496f6283872780">MidSideNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="23" column="24" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a3555b2bd51565d8cc7bd118c406f61cc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::IsoparametricLinearHexahedron::ElementTypeOfFace</definition>
+        <argsstring>(uint32_t face) const</argsstring>
+        <name>ElementTypeOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::ElementTypeOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a066cbd92cd983a3c2e73859286280587">ElementTypeOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000069"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="25" column="28" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="374" bodyend="377"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a85a4657a97d7ffd9316f5e7781dd3c41" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>virtual CSMP_FEM_TYPE csmp::IsoparametricLinearHexahedron::ElementTypeOfSegment</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>ElementTypeOfSegment</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::ElementTypeOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a136f53aa9d4cd295a984ca46c0864ff7">ElementTypeOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segment</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding segment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000070"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="26" column="28" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a00d448ef2326542739fef4f32f115297" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::NodesOfSegment</definition>
+        <argsstring>(uint32_t segm_id, std::vector&lt; uint32_t &gt; &amp;snids) const</argsstring>
+        <name>NodesOfSegment</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::NodesOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a443213e98dc0cc9692bd3eef5a168295">NodesOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segm_id</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>snids</declname>
+        </param>
+        <briefdescription>
+<para>reports the egde nodes (0..nodes-1) which can be more than 2 in higher-order elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="28" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="251" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ae85152eee885a4126cfe05af65b73773" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricLinearHexahedron::NodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>NodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::NodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a32fc14575277846326041fe914209f9a">NodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> numbering in counter-clockwise order from the outside looking in</para>
+<para><xrefsect id="test_1_test000005"><xreftitle>Test</xreftitle><xrefdescription><para>SKM 2/3/2016</para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="30" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="315" bodyend="329"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ab26d9330c5f24b9c7bc71c7d2c3ee117" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricLinearHexahedron::CornerNodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>CornerNodesOfFace</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::CornerNodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a9614d03193a707898a0b26336a61d9d9">CornerNodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the corner nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="32" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="336" bodyend="348"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a5854eab12458a5a0ad76fc431f6b5f85" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::IsoparametricLinearHexahedron::NodesConnectedTo</definition>
+        <argsstring>(uint32_t node_id) const</argsstring>
+        <name>NodesConnectedTo</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::NodesConnectedTo</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ab7196476d9fb740d91384c6c4521b0f5">NodesConnectedTo</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>node_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the nodes at the other end of the sgment that the argument node is on </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="34" column="26" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="353" bodyend="369"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1aad8f27693e0e261f7228202f48002711" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::UnitNormalToFace</definition>
+        <argsstring>(uint32_t face, std::vector&lt; double &gt; &amp;unrml) const</argsstring>
+        <name>UnitNormalToFace</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::UnitNormalToFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a39eb6d5a1827783a679870277b4c68b8">UnitNormalToFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>unrml</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Uses the <ref refid="classcsmp_1_1_quadrilateral_facet" kindref="compound">QuadrilateralFacet</ref> to compute the normals to its faces. Based of the face nodes as specified in <ref refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ae85152eee885a4126cfe05af65b73773" kindref="member">NodesOfFace()</ref>.</para>
+<para><simplesect kind="author"><para>SKM 15/2/2016</para>
+</simplesect>
+<xrefsect id="test_1_test000006"><xreftitle>Test</xreftitle><xrefdescription><para>OK </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="36" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1179" bodyend="1249"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ac69730372e01e96b50ffd7b3b41f391e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::N</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::N</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aac8b400d7e198282e0b8196df3338858">N</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs the shape functions at the point &apos;xyz&apos; which must lie within the Hexahedron. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="38" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="828" bodyend="839"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ad14bed4d528a779322240d36e5c5421e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::N_AtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip, std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::N_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac1168c0c1cc280d1a1ecba676877d13b">N_AtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the interpolation function values at the specified integration point &apos;ip&apos;.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the number of the integration point.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the interpolation function values are returned into the third argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="39" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1416" bodyend="1423"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ac1d93d5f30293258732ebb992057609c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::N_AtBaryCenter</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtBaryCenter</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::N_AtBaryCenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6df28d2a7b4bcaff49cb726d6ef0890b">N_AtBaryCenter</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+<para>reports the values of the interpolation functions at the center of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="40" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1491" bodyend="1502"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a11dad4148037da7535ca80768e1d85b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::JacobianAtIntegrationPoint</definition>
+        <argsstring>(uint32_t ip)</argsstring>
+        <name>JacobianAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::JacobianAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac6a31722bbf25abad86ccea3b653953e">JacobianAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+<para>initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="41" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1480" bodyend="1487"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1aa0f7dbf2547965b2cc6b3d7f565b2a8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::JacobianAt</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;rst)</argsstring>
+        <name>JacobianAt</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::JacobianAt</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a246043f81c66c9f65e08c6a5190ea381">JacobianAt</reimplements>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <briefdescription>
+<para>initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="42" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1717" bodyend="1726"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1af03b04f49d21152149aef4cb1e98384d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::dN_At</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;dn, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>dN_At</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dN_At</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1adb4103981ca8a56bbea237ef71c0cdc1">dN_At</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>dn</declname>
+          <defname>DN2</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes derivatives of shape functions at a point XY given in global coordinates within the element (also given in global coordinates).</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global shape of the triangle and the interpolation function derivatives at the point XY are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><simplesect kind="return"><para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="44" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="788" bodyend="819"/>
+        <references refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a36cfa0622d52fe96b32bc9fc53c98aab" compoundref="_isoparametric_linear_hexahedron_8cpp" startline="738" endline="771">dN</references>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a36cfa0622d52fe96b32bc9fc53c98aab" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;DN8)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3bf543b54ba24535aced15598495730f">dN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DN8</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Compute derivatives of shape functions at corresponding nodes with respect to the global coordinate system.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global shape of the triangle and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DN8</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the interpolation-function derivative matrix is returned into the second method argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="45" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="738" bodyend="771"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_hexahedron_1af03b04f49d21152149aef4cb1e98384d" compoundref="_isoparametric_linear_hexahedron_8cpp" startline="788" endline="819">dN_At</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a02ecdac25cb8c396e40575a5b842d2af" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::dN_AtNode</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t node)</argsstring>
+        <name>dN_AtNode</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dN_AtNode</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a89d6f320e17b4cfe1f9ddbeade1c9255">dN_AtNode</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>BMAT</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+          <defname>nd</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0...i=gauss points-1).</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="46" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="865" bodyend="891"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a0c7c0c1752ca1e6a8220eb54b7e5280e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::dN_AtIntegrationPoint</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t gauss_point)</argsstring>
+        <name>dN_AtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dN_AtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a885bb35784705f295c5f8ad9aa47f227">dN_AtIntegrationPoint</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>BMAT</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gauss_point</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the gauss point i (i=0...i=gauss points-1).</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="47" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1449" bodyend="1477"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1aae8bf6e56ca82a1a623f7b3ba6243f49" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::dN_AtBarycenter</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>dN_AtBarycenter</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dN_AtBarycenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a703b7ce9d818248bbd9864dffee30b7c">dN_AtBarycenter</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>DM</defname>
+        </param>
+        <briefdescription>
+<para>returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="48" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1551" bodyend="1576"/>
+        <references refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" compoundref="_finite_element_8cpp" startline="893" endline="975">csmp::FiniteElement::JacobianInverse</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a4ef2eb111409de57fd03aafd3f4d0a76" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::Nrst</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;nrst) const</argsstring>
+        <name>Nrst</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::Nrst</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a34bd4d39b1a026b1de15f028e9692bd8">Nrst</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>nrst</declname>
+          <defname>N</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the value of the element interpolation functions at the point &apos;rst&apos; in local coordinates.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The floating point coordinates &apos;r&apos;, &apos;s&apos; and &apos;t&apos; of the point at which the interpolation shall be carried out.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>N</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the fourth method argument is the vector into which the values of the n=nodes interpolation functions at the point &apos;rst&apos; will be returned.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>See in source code header file.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Method is used to compute property values at the integration points of the element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="50" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="546" bodyend="569"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a4605a85e94c6f3bbf653dfe4224c3c8a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::Nrst</definition>
+        <argsstring>(double r, double s, double t, double *nrst) const</argsstring>
+        <name>Nrst</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::Nrst</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>nrst</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="51" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="571" bodyend="593"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a2bf2ff87acdee8e2a63a48ebb77ff5a4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::dNr</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNr) const</argsstring>
+        <name>dNr</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dNr</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a5b77ad8925c75b096867822e83bed7cd">dNr</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>dNr</declname>
+          <defname>DNR</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This method and the complementary method <ref refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a32f1b79d4ab49b98290b15aa4d5b4d18" kindref="member">dNs()</ref> compute the shape function derivates with respect to the local coordinate axis &apos;r&apos;, and &apos;s&apos;.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes the local coordinates of the point at which the shape function derivatives shall be evaluated as third argument.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DNR</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shape function derivatives are returned into the second method argument which is a floating point vector of the size n=nodes per element.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><programlisting><codeline><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ri<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>si<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ti</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[0]<sp/>=<sp/>-1./8.<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>t);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[1]<sp/>=<sp/><sp/>1./8.<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>t);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[2]<sp/>=<sp/><sp/>1./8.<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>t);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[3]<sp/>=<sp/>-1./8.<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>t);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[4]<sp/>=<sp/>-1./8.<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>t);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[5]<sp/>=<sp/><sp/>1./8.<sp/>*<sp/>(1.<sp/>+<sp/>-1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>t);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[6]<sp/>=<sp/><sp/>1./8.<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>t);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" kindref="member">DNR</ref>[7]<sp/>=<sp/>-1./8.<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>s)<sp/>*<sp/>(1.<sp/>+<sp/><sp/>1.<sp/>*<sp/>t);</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The shape function derivatives are needed in most integration procedures for elements. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="52" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="631" bodyend="651"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a32f1b79d4ab49b98290b15aa4d5b4d18" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::dNs</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNs) const</argsstring>
+        <name>dNs</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dNs</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a1c5cfe76807ea0d685c8e22d74c5582e">dNs</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>dNs</declname>
+          <defname>DNS</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>full form si ri ti DNS[0] = -1./8. * (1. + -1. * r) * (1. + -1. * t); DNS[1] = -1./8. * (1. + 1. * r) * (1. + -1. * t); DNS[2] = 1./8. * (1. + 1. * r) * (1. + -1. * t); DNS[3] = 1./8. * (1. + -1. * r) * (1. + -1. * t); DNS[4] = -1./8. * (1. + -1. * r) * (1. + 1. * t); DNS[5] = -1./8. * (1. + 1. * r) * (1. + 1. * t); DNS[6] = 1./8. * (1. + 1. * r) * (1. + 1. * t); DNS[7] = 1./8. * (1. + -1. * r) * (1. + 1. * t); </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="53" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="666" bodyend="686"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a189223d67689c91d533e7d62202c8ded" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::dNt</definition>
+        <argsstring>(double r, double s, double t, std::vector&lt; double &gt; &amp;dNt) const</argsstring>
+        <name>dNt</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::dNt</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c22543bd89563413954beb8697fa914">dNt</reimplements>
+        <param>
+          <type>double</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>dNt</declname>
+          <defname>DNT</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>full form ti ri si DNT[0] = -1./8. * (1. + -1. * r) * (1. + -1. * s); DNT[1] = -1./8. * (1. + 1. * r) * (1. + -1. * s); DNT[2] = -1./8. * (1. + 1. * r) * (1. + 1. * s); DNT[3] = -1./8. * (1. + -1. * r) * (1. + 1. * s); DNT[4] = 1./8. * (1. + -1. * r) * (1. + -1. * s); DNT[5] = 1./8. * (1. + 1. * r) * (1. + -1. * s); DNT[6] = 1./8. * (1. + 1. * r) * (1. + 1. * s); DNT[7] = 1./8. * (1. + -1. * r) * (1. + 1. * s); </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="54" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="700" bodyend="720"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1af413239e30bc576c790fa800a60225f7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::WeightAtIntegrationPoint</definition>
+        <argsstring>(uint32_t i) const</argsstring>
+        <name>WeightAtIntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::WeightAtIntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac224265aa216deebfcf44b54d2689d1d">WeightAtIntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>returns the integration weight of the desired quadrature point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="56" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="381" bodyend="381"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ab3d011d9c008289703521551df6937d8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::IntegrationPoint</definition>
+        <argsstring>(uint32_t i, std::vector&lt; double &gt; &amp;xyz) const</argsstring>
+        <name>IntegrationPoint</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::IntegrationPoint</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aef00dcb02705580693988e47924a055d">IntegrationPoint</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+<para>returns the global coordinates of the element integration point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="57" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="916" bodyend="930"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1adcd7740af0a1cf8888643a1bfbfa90d5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::ExtrapolateIntegrationPointVariableToNodes</definition>
+        <argsstring>(uint32_t nvars, const std::vector&lt; double &gt; &amp;IVAR, std::vector&lt; double &gt; &amp;NVAR) const</argsstring>
+        <name>ExtrapolateIntegrationPointVariableToNodes</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::ExtrapolateIntegrationPointVariableToNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae7ea6940dcaa8403c7c35e70db4ba21c">ExtrapolateIntegrationPointVariableToNodes</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>nvars</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>IVAR</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>NVAR</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Because, in the local coordinate system, the quadrilateral is always straight sided, and the derivatives of the interpolation functions are bilinear, variable values computed at integration points can simply be extrapolated to the nodes. This involves the steps:</para>
+<para><orderedlist>
+<listitem><para>Compute the interpolation function coefficients for the quad which is defined by the four integration points.</para>
+</listitem><listitem><para>For each node point compute the values of the interpolation functions and use these to extrapolate the values of the variables at the nodes. </para>
+</listitem></orderedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="59" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1617" bodyend="1711"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a02d13cd91b7495a487093a598fda59fe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::ReferenceCoordinates</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;matCoords) const</argsstring>
+        <name>ReferenceCoordinates</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::ReferenceCoordinates</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a34a5c030987c7e9842af332f5ed0d61b">ReferenceCoordinates</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>matCoords</declname>
+        </param>
+        <briefdescription>
+<para>output node coordinates from parametric space to physical space </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="64" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1596" bodyend="1601"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1aed5aed7458a1fa11d3c1ce89b8e54cd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::IntegrationPointsFromParToPhys</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;IPPHYS)</argsstring>
+        <name>IntegrationPointsFromParToPhys</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::IntegrationPointsFromParToPhys</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>IPPHYS</declname>
+        </param>
+        <briefdescription>
+<para>project integration points from parametric space to physical the IPs </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="67" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1580" bodyend="1592"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a765afb6197077abfce62260c5ce0f124" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::ReferenceCubeParametricToPhysical</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>ReferenceCubeParametricToPhysical</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::ReferenceCubeParametricToPhysical</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+<para>generic projection from cube space to physical space ... </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="70" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="935" bodyend="953"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ab71387c18eb1d65de67cda4e1979ee80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::OutputElementToRhino</definition>
+        <argsstring>(const char *file_name, bool NodesOn, bool IP_PointsVolOn, bool IP_PointsFaceOn)</argsstring>
+        <name>OutputElementToRhino</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::OutputElementToRhino</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>NodesOn</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>IP_PointsVolOn</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>IP_PointsFaceOn</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="72" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="411" bodyend="520"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1aeaa63c891acea3659cee4176a273e4fc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::OutputNodeDataToVTK</definition>
+        <argsstring>(const char *file_name, const char *var_name, DenseMatrix&lt; DM_MIN &gt; &amp;DATA) const</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::OutputNodeDataToVTK</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a67341585f83bc9d941c67e7a84801248">OutputNodeDataToVTK</reimplements>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DATA</declname>
+        </param>
+        <briefdescription>
+<para>prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="74" column="25" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1733" bodyend="1740"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ad7e494fea61632f308bd6bcfbe7ac5b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::Integral_dNT_K_dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, DenseMatrix&lt; DM_MIN &gt; &amp;K)</argsstring>
+        <name>Integral_dNT_K_dN</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::Integral_dNT_K_dN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aa5c7e3d4b60cdaa863b70edad755b09a">Integral_dNT_K_dN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>K</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="77" column="16" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="1746" bodyend="1783"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a9c6337a48521d69383e61e1a75197a30" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::VolumeOfTetra</definition>
+        <argsstring>(uint32_t verticeIndex1, uint32_t verticeIndex2, uint32_t verticeIndex3, uint32_t verticeIndex4)</argsstring>
+        <name>VolumeOfTetra</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::VolumeOfTetra</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>verticeIndex1</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>verticeIndex2</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>verticeIndex3</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>verticeIndex4</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Volume of terahedron - analytic composition of tet volumes For degenerate configurations?</para>
+<para>Uses My coordinate system: z| <table rows="2" cols="1"><row>
+<entry thead="yes"><para></para>
+</entry></row>
+<row>
+<entry thead="no"><para></para>
+</entry></row>
+</table>
+</para>
+<para>/ \ / \ / \ x y csp csp csp to transfer to CSP: x==Z, y==X, z==Y 0=&gt;2 1=&gt;0 2==1 Coordinate axes mapped, but work for cube at COFC?? </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="84" column="12" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="159" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a84b9e2f4f803a5802b447eaf8c15cc4c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::IsoparametricLinearHexahedron::VolumeOfHexa</definition>
+        <argsstring>()</argsstring>
+        <name>VolumeOfHexa</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::VolumeOfHexa</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Function gives analytic volume of Hex, based on summ of six consistuting elements of the Tets Indexing of ANSYS is correct? </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="92" column="12" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="392" bodyend="406"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1a088e3ad5cabc74519dbfb6d22f6c1d5b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::ParametricToPhysical</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>ParametricToPhysical</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::ParametricToPhysical</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="95" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="897" bodyend="912"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_isoparametric_linear_hexahedron_1ab6cf8822496195169302865e1e5762f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IsoparametricLinearHexahedron::PhysicalToParametric</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;rst, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>PhysicalToParametric</name>
+        <qualifiedname>csmp::IsoparametricLinearHexahedron::PhysicalToParametric</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Newton-Raphson iterations</para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="96" column="10" bodyfile="source/modules/integration/finite_elements/IsoparametricLinearHexahedron.cpp" bodystart="964" bodyend="1166"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="date"><para>1998 </para>
+</simplesect>
+<simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricLinearHexahedron</label>
+        <link refid="classcsmp_1_1_isoparametric_linear_hexahedron"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="3">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#M</edgelabel>
+          <edgelabel>+JAC</edgelabel>
+          <edgelabel>+JINV</edgelabel>
+          <edgelabel>+XY</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::IsoparametricLinearHexahedron</label>
+        <link refid="classcsmp_1_1_isoparametric_linear_hexahedron"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" line="8" column="1" bodyfile="source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h" bodystart="8" bodyend="98"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a075fa6b9bfa4ab2bb3feb36659f33060" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ad3efdf680ea02827ebf7c5aafc34927f" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>B</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a3799860bd3dde472eafed0aee96e6800" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>BT</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab4ad41c705b9691a4d01ee979b6214cc" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>cne</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a8a14a378a95952e862048e6e7697cb47" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a728ce4d5da19d0ef1af6588eab0247ea" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ab26d9330c5f24b9c7bc71c7d2c3ee117" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a5478677be6a1f3cbcddac6c54dff160f" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>CounterClockwiseNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9831bfb64a8fa07f20eb7024fc5a22f2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab44758c4df00ff2cac338fbf7580b8d0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a93be3242020acc01e32f26ee56c5d487" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Dim</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dim</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1af1c7ec7d51ad7f4e0d569bdc5ee18809" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>DN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a36cfa0622d52fe96b32bc9fc53c98aab" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1af03b04f49d21152149aef4cb1e98384d" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dN_At</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aae8bf6e56ca82a1a623f7b3ba6243f49" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dN_AtBarycenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a0c7c0c1752ca1e6a8220eb54b7e5280e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a02ecdac25cb8c396e40575a5b842d2af" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>DNR</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a2bf2ff87acdee8e2a63a48ebb77ff5a4" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84befa0a4da0b4b8469ec5e7be89860e" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af159e5f99a0281ae603ca6ddde9bf6bf" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1a9d9ee7a3326164b35a523273dc54c9" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>DNS</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a32f1b79d4ab49b98290b15aa4d5b4d18" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6d2fb4557b0681959501365138c9d3c3" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a203a9d019620abee39fdbe7847ee8df0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>DNT</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a189223d67689c91d533e7d62202c8ded" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>dNt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ac68a12abfb1a1df7bfaeedce66202dc1" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>EdgeLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac2a37f7440f83acbcda169280fcb84b0" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac0a98e18654722a181c17a7e01b67e56" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a3555b2bd51565d8cc7bd118c406f61cc" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ElementTypeOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a85a4657a97d7ffd9316f5e7781dd3c41" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ElementTypeOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5684660784d3f15adffb485e8f47d9f3" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>epe</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1adcd7740af0a1cf8888643a1bfbfa90d5" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9666661fa30a04d97f6c04a059a6bba6" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a746f7ba1b4acf8dd74f39e3962f0707f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa7a383bc5d1c0ee8f71ecb6c604db2ec" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa61e202519a3523f70da1f1854170c64" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a36972113f6f8351c891431038f8514bd" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>fpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a0729a0486b6febb96160f3e184c3f33f" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>gpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a564e0da11c00c28430fb146d5597c6ce" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IDX</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4aaeb22c3a8da44a33361057ef2097f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>InitialID</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a0264ae8c672419fed9237868036bc707" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ad7e494fea61632f308bd6bcfbe7ac5b3" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d79c3309e261dd0939e5b733aac83d9" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IntegraldNdN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84a69958fd3567565d4dc83037664d97" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ab3d011d9c008289703521551df6937d8" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a35ee85b7635207926c97d4bf0bec7d1d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aed5aed7458a1fa11d3c1ce89b8e54cd7" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IntegrationPointsFromParToPhys</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8439ec45c22a2741b8782de67de98862" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2d45ffc4fd8598af124125bfe93a2597" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae2d5d559efe7f2b27dc5ec5e271c9b68" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a0c774105256d4c4db5239b7f64954ff8" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IP</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4390186773409c6a5e30feb449e55f17" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d0543e1e432fdf65177495d72e4d51c" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac57108260f93ab6ef491448def2e9c50" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aaff4750efa496169de51a069c1034dcc" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IsoparametricLinearHexahedron</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aca610ffda39cad1d959db0ec403c3019" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IsSimplex</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a09d0c59e19d2cd5a6e46b7dc60fd5f07" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7ffd856e7bb1b9c1009d572775925c8d" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac8f4f6ea8649710e01ea018c61d93a30" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>itp</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5de71dcc5e56c2e814d31d798969f437" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>JAC</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae62e0c447141f0e2b7f7a4eb8412278b" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a81d93860f25ffe781837581f45caac4c" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af63fe74d4b20b02d72574d8380f5e41a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aa0f7dbf2547965b2cc6b3d7f565b2a8e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>JacobianAt</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a11dad4148037da7535ca80768e1d85b3" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>JacobianAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae758e82d3b214e9f9c5bda10cd20b515" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>JacobianDeterminant</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>JacobianInverse</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5c3fd117b986587599dcb441feeb000a" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>JINV</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac3204e22e57b8658797037802003c490" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>LineElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a64381c8d0e2f4840551c2da986fb9a25" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>M</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a0075efcc78a7959293fb288d088e9366" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a3769fb20921d05d5e82183548133ca1d" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ac69730372e01e96b50ffd7b3b41f391e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ac1d93d5f30293258732ebb992057609c" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ad14bed4d528a779322240d36e5c5421e" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad75cb0ef9bea852c900e58b74662b0d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2509e6d8ab556b6a65a9036a62485df4" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>nne</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad1e29de6aed41fb434a485b875d7d8d4" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a5854eab12458a5a0ad76fc431f6b5f85" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>NodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ae85152eee885a4126cfe05af65b73773" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>NodesOfFace</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a00d448ef2326542739fef4f32f115297" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>NodesOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3cb7bc938ad00c9f4dbfbfa94c13e781" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>NodesPerFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>npe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9d9ced72fa35fd6a9fc755a219590820" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>npf</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af583becda82f4fef39bbe2d4c3b41cea" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Nr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb2baab01a52b040d73c10623a0605b2" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Nrs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa13754bef9eb502c77561f216d0258e7" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>NRST</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a4ef2eb111409de57fd03aafd3f4d0a76" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a4605a85e94c6f3bbf653dfe4224c3c8a" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a87c76d75df3c4751618937bea23f8f93" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>NXYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1aa0c4f0fabe88be0c254f121d5a483b" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a698633a6c268ac88c82929093cd65cc1" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a94820d970b7a970757c91dac9934b424" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>OrderOfShapeFunctions</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae963674dc3ef25ce0e7bd8d2937c75ee" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ab71387c18eb1d65de67cda4e1979ee80" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>OutputElementToRhino</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aeaa63c891acea3659cee4176a273e4fc" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a088e3ad5cabc74519dbfb6d22f6c1d5b" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ParametricToPhysical</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1ab6cf8822496195169302865e1e5762f3" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>PhysicalToParametric</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a02d13cd91b7495a487093a598fda59fe" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ReferenceCoordinates</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a765afb6197077abfce62260c5ce0f124" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>ReferenceCubeParametricToPhysical</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7f488b707067cb6d1ee0b25a97c883a2" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>spe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a930e53402dc4847a3084e38853d3bfd6" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>SurfaceElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1dedbd91a6e8765f57dfdaf999494b76" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae600307171225f53a2615aaffd5afb18" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>UnitNormalAtFaceBarycenter</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aad8f27693e0e261f7228202f48002711" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4d20a792255fd2b0984b255ec3e6817" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8211ac6a7c8734f142eaa51f459d25af" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a1667103ca3e02af2ddd23d212cbdb310" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>V_</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a0e7f5c3497b38e4fc72908fc01efd1d0" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad92268835407ea5fc1df04583a754637" prot="protected" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>VolumeElement</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a84b9e2f4f803a5802b447eaf8c15cc4c" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>VolumeOfHexa</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a9c6337a48521d69383e61e1a75197a30" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>VolumeOfTetra</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1aaa19b5a75a0c844562a3d75fb3daae5c" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Vx_</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a5d10415b32a7ef67658cc26fd2c9f02f" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Vy_</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a478f7952b97c553f7c00151bb4e4e9a5" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>Vz_</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1a7a02ab66a83ee46ee22755f0afdc0e40" prot="private" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>W</name></member>
+      <member refid="classcsmp_1_1_isoparametric_linear_hexahedron_1af413239e30bc576c790fa800a60225f7" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>XY</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae4bd0bcbccb811f852c26668f6959f14" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a56c5bc7db73c50f4448380eeee48fa3f" prot="public" virt="non-virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4e65701c3dcf1f2c98688d3204bccb6d" prot="public" virt="virtual"><scope>csmp::IsoparametricLinearHexahedron</scope><name>~FiniteElement</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

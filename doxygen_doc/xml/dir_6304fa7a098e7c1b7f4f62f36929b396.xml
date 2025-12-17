@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_6304fa7a098e7c1b7f4f62f36929b396" kind="dir">
+    <compoundname>source/includes/integration</compoundname>
+    <innerdir refid="dir_b80f5fb035b5c3d25411329adcf3c13b">source/includes/integration/cvfe_hydrothermal</innerdir>
+    <innerdir refid="dir_077d0da913803c005456e784880730bf">source/includes/integration/finite_elements</innerdir>
+    <innerdir refid="dir_01344b407346140afbd897e85242f3f4">source/includes/integration/finite_volumes</innerdir>
+    <innerdir refid="dir_33b8d6c6502f506ca7b4a86eecbab16d">source/includes/integration/pde_integrators</innerdir>
+    <innerdir refid="dir_73fa904606b8ebf412e04f7d32b8188e">source/includes/integration/pde_operators</innerdir>
+    <innerdir refid="dir_bda0054bbf5551074ce0d5c2f9de0dc7">source/includes/integration/solver</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/integration/"/>
+  </compounddef>
+</doxygen>

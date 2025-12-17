@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structio_1_1set__to__max__on__overflow" kind="struct" language="C++" prot="public">
+    <compoundname>io::set_to_max_on_overflow</compoundname>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structio_1_1set__to__max__on__overflow_1a770dee97a1ee55131163e6be8d4c0d9d" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void io::set_to_max_on_overflow::on_overflow</definition>
+        <argsstring>(T &amp;x)</argsstring>
+        <name>on_overflow</name>
+        <qualifiedname>io::set_to_max_on_overflow::on_overflow</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="607" column="29" bodyfile="source/csv.h" bodystart="607" bodyend="609"/>
+      </memberdef>
+      <memberdef kind="function" id="structio_1_1set__to__max__on__overflow_1a812d316e2b23247df19ca83bfda90a59" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void io::set_to_max_on_overflow::on_underflow</definition>
+        <argsstring>(T &amp;x)</argsstring>
+        <name>on_underflow</name>
+        <qualifiedname>io::set_to_max_on_overflow::on_underflow</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/csv.h" line="612" column="29" bodyfile="source/csv.h" bodystart="612" bodyend="614"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>io::set_to_max_on_overflow</label>
+        <link refid="structio_1_1set__to__max__on__overflow"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/csv.h" line="605" column="9" bodyfile="source/csv.h" bodystart="605" bodyend="615"/>
+    <listofallmembers>
+      <member refid="structio_1_1set__to__max__on__overflow_1a770dee97a1ee55131163e6be8d4c0d9d" prot="public" virt="non-virtual"><scope>io::set_to_max_on_overflow</scope><name>on_overflow</name></member>
+      <member refid="structio_1_1set__to__max__on__overflow_1a812d316e2b23247df19ca83bfda90a59" prot="public" virt="non-virtual"><scope>io::set_to_max_on_overflow</scope><name>on_underflow</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

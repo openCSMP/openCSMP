@@ -1,0 +1,36 @@
+\doxysection{IAPWS\+\_\+\+H2\+O\+\_\+\+Heat\+Transfer\+Velocity.\+h}
+\hypertarget{_i_a_p_w_s___h2_o___heat_transfer_velocity_8h_source}{}\label{_i_a_p_w_s___h2_o___heat_transfer_velocity_8h_source}\index{source/includes/eos/IAPWS\_H2O\_HeatTransferVelocity.h@{source/includes/eos/IAPWS\_H2O\_HeatTransferVelocity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{IAPWS\_H2O\_HEAT\_TRANSFER\_VELOCITY}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{IAPWS\_H2O\_HEAT\_TRANSFER\_VELOCITY}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___heat_transfer_velocity}{IAPWS\_H2O\_HeatTransferVelocity}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ V;}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ VH;}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ P;}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ CPF;}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ RF;}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ CPR;}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ RR;}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ cpf,\ rf,\ phi,\ \ rr,\ cpr;}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ vel;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{double}\ factor;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00023\ \ \ \ \ IAPWS\_H2O\_HeatTransferVelocity(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p\ );}
+\DoxyCodeLine{00024\ \ \ \ \ \string~IAPWS\_H2O\_HeatTransferVelocity()\ \{\};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___heat_transfer_velocity_a0a66d47d3492d5594fabf4b6fa2ae1a9}{Calculate}}();}
+\DoxyCodeLine{00026\ \};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

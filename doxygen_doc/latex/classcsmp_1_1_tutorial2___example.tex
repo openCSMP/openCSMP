@@ -1,0 +1,144 @@
+\doxysection{csmp\+::Tutorial2\+\_\+\+Example Class Reference}
+\hypertarget{classcsmp_1_1_tutorial2___example}{}\label{classcsmp_1_1_tutorial2___example}\index{csmp::Tutorial2\_Example@{csmp::Tutorial2\_Example}}
+
+
+Classic advection -\/ diffusion equation (ADE) solver.  
+
+
+
+
+{\ttfamily \#include $<$Tutorial2\+\_\+\+Example.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Tutorial2\+\_\+\+Example\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classcsmp_1_1_tutorial2___example__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Tutorial2\+\_\+\+Example\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classcsmp_1_1_tutorial2___example__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_tutorial2___example_a04e3e6d5cf907fea9fc93e697952b77c}{Run}} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_tutorial2___example_a6ac06cd4f1866e1120e5af851beb4366}{Specifications}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Example} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+void {\bfseries Set\+Title} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em Reporting interface. \end{DoxyCompactList}\item 
+void {\bfseries Set\+Category} (const std\+::string \&text)
+\item 
+void {\bfseries Set\+Difficulty} (const int \&difficulty)
+\begin{DoxyCompactList}\small\item\em set function, takes care that 0 \texorpdfstring{$<$}{<} difficulty \texorpdfstring{$<$}{<} 4 \end{DoxyCompactList}\item 
+void {\bfseries Add\+Description} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add a descrtiption to an example \end{DoxyCompactList}\item 
+void {\bfseries Add\+Requirement} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add a requirement to an example (files etc..) \end{DoxyCompactList}\item 
+void {\bfseries Add\+Author} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em allows to add an author to an example \end{DoxyCompactList}\item 
+std\+::string {\bfseries Get\+Title} () const
+\begin{DoxyCompactList}\small\item\em example title return function \end{DoxyCompactList}\item 
+int {\bfseries Get\+Difficulty} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::string {\bfseries Get\+Category} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Descriptions\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Descriptions\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Authors\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Authors\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Requirements\+Begin} ()
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\item 
+std\+::list$<$ std\+::string $>$\+::const\+\_\+iterator {\bfseries Get\+Requirements\+End} () const
+\begin{DoxyCompactList}\small\item\em return function \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Initialize} ()
+\begin{DoxyCompactList}\small\item\em assures db to contain data \end{DoxyCompactList}\item 
+std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries Get\+Stream} ()
+\item 
+void {\bfseries Set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}ostream)
+\item 
+std\+::string {\bfseries Get\+Example\+File\+Name} (const char \texorpdfstring{$\ast$}{*}path)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_example_ac926ad8eb6de45710b9076c8f6304880}{Create\+Working\+Directory\+And\+Copy\+Input\+Model\+Files}} (std\+::string \&example\+\_\+name, std\+::string \&model\+\_\+name, std\+::string \&variable\+\_\+file, std\+::string config\+\_\+file="{}"{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Classic advection -\/ diffusion equation (ADE) solver. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_tutorial2___example_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_tutorial2___example_a04e3e6d5cf907fea9fc93e697952b77c}\index{csmp::Tutorial2\_Example@{csmp::Tutorial2\_Example}!Run@{Run}}
+\index{Run@{Run}!csmp::Tutorial2\_Example@{csmp::Tutorial2\_Example}}
+\doxysubsubsection{\texorpdfstring{Run()}{Run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_tutorial2___example_a04e3e6d5cf907fea9fc93e697952b77c} 
+void csmp\+::\+Tutorial2\+\_\+\+Example\+::\+Run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\DoxyHorRuler{0}
+
+
+ADE solver that first solves the steady state pressure diffusion equation using a fully implicit FE discretisation and computes the velocity field afterwards. This velocity field is then used to compute the advection of a non-\/reacting chemical species with the FV method (explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from which the \doxylink{classcsmp_1_1_model}{Model} is built. Output is written to VTK and Matlab files.
+
+Tasks and exercises\+:
+
+
+\begin{DoxyEnumerate}
+\item Change the permeability and/or porosity of the central \doxylink{classcsmp_1_1_region}{Region} and observe how solute transport behaviour varies.
+\item Compare different time-\/stepping schemes
+\item Use tutorial 1 as a template and generate a transient FE algorithm that solves the diffusion of the solute.
+\item Generate a simple mesh that is only 1 FE high, use a uniform permeability and apply boundary conditions such that you can compare numerical results for advection and diffusion with an analytical solution. Vary the different Peclet number (ratio of advection over diffusion) and investigate different time-\/stepping and spatial approximation schemes.
+\end{DoxyEnumerate}
+
+TODO\+: SKM implicit version produces artifacts at edges; fix needed TODO\+: SKM remove right-\/hand side fixed concentration boundary condition 
+
+Implements \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_tutorial2___example_a04e3e6d5cf907fea9fc93e697952b77c_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_tutorial2___example_a6ac06cd4f1866e1120e5af851beb4366}\index{csmp::Tutorial2\_Example@{csmp::Tutorial2\_Example}!Specifications@{Specifications}}
+\index{Specifications@{Specifications}!csmp::Tutorial2\_Example@{csmp::Tutorial2\_Example}}
+\doxysubsubsection{\texorpdfstring{Specifications()}{Specifications()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_tutorial2___example_a6ac06cd4f1866e1120e5af851beb4366} 
+void csmp\+::\+Tutorial2\+\_\+\+Example\+::\+Specifications (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_example}{csmp\+::\+Example}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+examples/source/Tutorial2\+\_\+\+Example.\+h\item 
+examples/source/Tutorial2\+\_\+\+Example.\+cpp\end{DoxyCompactItemize}

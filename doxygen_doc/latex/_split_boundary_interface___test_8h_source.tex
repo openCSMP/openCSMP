@@ -1,0 +1,90 @@
+\doxysection{Split\+Boundary\+Interface\+\_\+\+Test.\+h}
+\hypertarget{_split_boundary_interface___test_8h_source}{}\label{_split_boundary_interface___test_8h_source}\index{tests/unit/SplitBoundaryInterface\_Test.h@{tests/unit/SplitBoundaryInterface\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SPLIT\_BOUNDARY\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SPLIT\_BOUNDARY\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_split_boundary_interface_8h}{"{}SplitBoundaryInterface.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_face}{Face}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_inter_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_inter_face}{InterFace}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ utility\ functions}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ shiftSplitBoundary(\ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{SplitBoundary}}<dim>\&\ splitboundary,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\_SIDE}}\ side,\ \textcolor{keywordtype}{double}\ xShift,\ \textcolor{keywordtype}{double}\ yShift,\ \textcolor{keywordtype}{double}\ zShift\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{void}\ shiftSplitBoundary(\ \mbox{\hyperlink{classcsmp_1_1_split_boundary}{SplitBoundary}}<dim>\&\ splitboundary,\ \textcolor{keywordtype}{double}\ shift\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{void}\ shiftInterfaceTips(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region,\ \textcolor{keywordtype}{double}\ shift\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{void}\ shiftRegion(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region,\ \textcolor{keywordtype}{double}\ xShift,\ \textcolor{keywordtype}{double}\ yShift,\ \textcolor{keywordtype}{double}\ zShift\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{void}\ shiftRegionAboveLine(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region,\ size\_t\ x\_or\_y\_or\_z,\ \textcolor{keywordtype}{double}\ line\_coordinate,\ \textcolor{keywordtype}{double}\ shift,\ \textcolor{keywordtype}{double}\ eps\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \textcolor{keywordtype}{void}\ shiftRegionBelowLine(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region,\ size\_t\ x\_or\_y\_or\_z,\ \textcolor{keywordtype}{double}\ line\_coordinate,\ \textcolor{keywordtype}{double}\ shift,\ \textcolor{keywordtype}{double}\ eps\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{void}\ scaleRegionSymmetricOverZero(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region,\ \textcolor{keywordtype}{double}\ xScale,\ \textcolor{keywordtype}{double}\ yScale,\ \textcolor{keywordtype}{double}\ zScale\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00038\ \textcolor{keywordtype}{void}\ scaleRegion(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ region,\ \textcolor{keywordtype}{double}\ xScale,\ \textcolor{keywordtype}{double}\ yScale,\ \textcolor{keywordtype}{double}\ zScale\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ SplitBoundaryInterface\_Test\ unit\ test\ tests\ all\ functionality\ related\ to\ the\ creation\ and\ destruction\ of\ SplitBoundary\ objects.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ Refer\ to\ SplitBoundary\_Test\ for\ tests\ of\ the\ functionality\ of\ the\ SplitBoundary\ itself.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ @author\ Revised\ testst\ originally\ conceived\ by\ Roman\ Manasipov\ in\ 2013,}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ @author\ refactored\ by\ Junchul\ Kim\ (2019).}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ @author\ refactored\ by\ Edoardo\ Pezzulli\ (2022)}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ @date\ ported\ to\ 2016\ version\ by\ SKM.}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00054\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test}{SplitBoundaryInterface\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00055\ \ \ \ \ \{}
+\DoxyCodeLine{00056\ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test_a1c1acbf61cece63ce7d87d73adb2312c}{run}}();}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \textcolor{comment}{//\ CURRENTLY\ RUNNING:}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_splitboundary\_from\_lower\_dim\_region();\ \textcolor{comment}{//E.P\ Implemented\ and\ Tested\ -\/\ Contains\ RIGOROUS\ checking\ of\ nodes,\ elements,\ and\ interfaces\ correctly\ calibrated}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{comment}{//RUNNING,\ BUT\ WITH\ NO\ DIAGNOSTICS:\ Just\ checks\ methods\ dont\ crash\ -\/\ TODO:\ Add\ quantitative\ checks/tests\ to\ each\ of\ these}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test_a5defb03c4573c4eab2e6b3cc0c455e22}{Test\_splitboundary\_between\_regions}}(\ \textcolor{keyword}{const}\ std::string\&\ model\_name\ );}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test_a1fb04e2b374cb5d00d6512f8d519bc51}{Detect\_and\_create\_splitboundaries}}(\ \textcolor{keyword}{const}\ std::string\&\ model\_name\ );}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Detect\_and\_create\_splitboundaries\_from\_constructor(\ \textcolor{keyword}{const}\ std::string\&\ model\_name\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \textcolor{comment}{//Visualisation\ functions}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ VisualiseSplitBoundaries(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ std::string\&test\_name\ \ );}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \textcolor{comment}{//\ CreateFromRegion\ Test\ Added\ by\ E.P}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test_ab50d74514faa8ad33ce6fa74f23974dc}{Test\_NodeCorrespondance\_2D}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_file\ );}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test_a534a5f4a4693ffaf0bd19af9de11b5a1}{Test\_NodeAndElementsCorrespondance\_3D}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_file\ );}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test_afe158dd9475f3bcb6ab96b0980f88f86}{Test\_NodeAndElementsCorrespondance\_3D\_X\_Intersection}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_file);}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface___test_ad8ec075bcd7bc54372a8771782bb0a42}{Test\_NodeAndElementsCorrespondance\_3D\_X\_Intersection\_Reverse}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_file);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00080\ \ \ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ SPLIT\_BOUNDARY\_INTERFACE\_TEST\_H\ */}}
+
+\end{DoxyCode}

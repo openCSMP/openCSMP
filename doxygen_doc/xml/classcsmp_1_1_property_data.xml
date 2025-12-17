@@ -1,0 +1,925 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_property_data" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PropertyData</compoundname>
+    <includes refid="_property_data_8h" local="no">PropertyData.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_property_data_1af40fb2714d8e9bace3e03d553875fc8c" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::PropertyData::place_</definition>
+        <argsstring></argsstring>
+        <name>place_</name>
+        <qualifiedname>csmp::PropertyData::place_</qualifiedname>
+        <initializer>= ELEMENT</initializer>
+        <briefdescription>
+<para>placement of variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="151" column="32" bodyfile="source/includes/model/PropertyData.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_data_1ac69b245d8f08abca6eb7a720ae3d000b" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::PropertyData::type_</definition>
+        <argsstring></argsstring>
+        <name>type_</name>
+        <qualifiedname>csmp::PropertyData::type_</qualifiedname>
+        <initializer>= SCALAR</initializer>
+        <briefdescription>
+<para>any of scalar..flagged array </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="152" column="32" bodyfile="source/includes/model/PropertyData.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_data_1a7ee6371176565fb022c74bee6917707b" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::PropertyData::dim_</definition>
+        <argsstring></argsstring>
+        <name>dim_</name>
+        <qualifiedname>csmp::PropertyData::dim_</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+<para>spatial dimension </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="153" column="32" bodyfile="source/includes/model/PropertyData.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_data_1a6dde43e7c6b41fe2e3c0cb01eca8294b" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::PropertyData::flag_stride_</definition>
+        <argsstring></argsstring>
+        <name>flag_stride_</name>
+        <qualifiedname>csmp::PropertyData::flag_stride_</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>variable to variable offset (e.g. dim in a vector var) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="154" column="32" bodyfile="source/includes/model/PropertyData.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_data_1a7cfc0e72096b8ae235f270e8d2ab4850" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::PropertyData::data_stride_</definition>
+        <argsstring></argsstring>
+        <name>data_stride_</name>
+        <qualifiedname>csmp::PropertyData::data_stride_</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>variable to variable offset (e.g. dim in a vector var) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="155" column="32" bodyfile="source/includes/model/PropertyData.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_data_1ad8157f57a6da1de6937b9a55f6371d25" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &gt;</type>
+        <definition>std::vector&lt;VARIABLE_FLAG&gt; csmp::PropertyData::flags_</definition>
+        <argsstring></argsstring>
+        <name>flags_</name>
+        <qualifiedname>csmp::PropertyData::flags_</qualifiedname>
+        <briefdescription>
+<para>variable flags </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="156" column="17" bodyfile="source/includes/model/PropertyData.h" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_data_1a1eed0c2e05d3fa9b380c64b65ac03a51" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::PropertyData::data_</definition>
+        <argsstring></argsstring>
+        <name>data_</name>
+        <qualifiedname>csmp::PropertyData::data_</qualifiedname>
+        <briefdescription>
+<para>variable values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="157" column="24" bodyfile="source/includes/model/PropertyData.h" bodystart="157" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a865879f690f42d28e1236f5801d4e89a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyData::PropertyData</definition>
+        <argsstring>(PLACEMENT, VARIABLE_TYPE, uint32_t dim, uint32_t array_length=0U)</argsstring>
+        <name>PropertyData</name>
+        <qualifiedname>csmp::PropertyData::PropertyData</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+          <defname>place</defname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+          <defname>type</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dim</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>array_length</declname>
+          <defval>0U</defval>
+        </param>
+        <briefdescription>
+<para>custom constructor (but not initializer) for csmp variable types; array length gives the number of elements in array or flagged array variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="70" column="5" bodyfile="source/modules/model/PropertyData.cpp" bodystart="68" bodyend="75"/>
+        <references refid="classcsmp_1_1_property_data_1a865879f690f42d28e1236f5801d4e89a" compoundref="_property_data_8cpp" startline="68" endline="75">PropertyData</references>
+        <referencedby refid="classcsmp_1_1_property_data_1a865879f690f42d28e1236f5801d4e89a" compoundref="_property_data_8cpp" startline="68" endline="75">PropertyData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a00c6240da40e2e9306445284a3f85905" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyData::operator==</definition>
+        <argsstring>(const PropertyData &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::PropertyData::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> &amp;</type>
+          <defname>d</defname>
+        </param>
+        <briefdescription>
+<para>compare to another dataset of this sort </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="73" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="539" bodyend="549"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a57669f2017d273611b931e3ae0b1ef32" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::PropertyData::Placement</definition>
+        <argsstring>() const</argsstring>
+        <name>Placement</name>
+        <qualifiedname>csmp::PropertyData::Placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="75" column="19" bodyfile="source/includes/model/PropertyData.h" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1ae36f4493b4a106c299185d90ac07d638" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::PropertyData::Type</definition>
+        <argsstring>() const</argsstring>
+        <name>Type</name>
+        <qualifiedname>csmp::PropertyData::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="76" column="19" bodyfile="source/includes/model/PropertyData.h" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a1f9a96512c9baad47b20e99f15299d25" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::PropertyData::Dim</definition>
+        <argsstring>() const</argsstring>
+        <name>Dim</name>
+        <qualifiedname>csmp::PropertyData::Dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="77" column="19" bodyfile="source/includes/model/PropertyData.h" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1ab067d96291a61fb451e9e41d1faff125" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyData::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::PropertyData::Size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="78" column="19" bodyfile="source/includes/model/PropertyData.h" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a13d2570bdc4a02ac3d49490429794d47" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::PropertyData::Components</definition>
+        <argsstring>() const</argsstring>
+        <name>Components</name>
+        <qualifiedname>csmp::PropertyData::Components</qualifiedname>
+        <briefdescription>
+<para>number of value entries stored in the variable (=size of array) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="80" column="19" bodyfile="source/includes/model/PropertyData.h" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a6677a39d83f72a7d878cda244351e036" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::Clear</definition>
+        <argsstring>()</argsstring>
+        <name>Clear</name>
+        <qualifiedname>csmp::PropertyData::Clear</qualifiedname>
+        <briefdescription>
+<para>changing container size </para>
+        </briefdescription>
+        <detaileddescription>
+<para>you may only reset using a key of the same (i.e., ELEMENT ) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="83" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="230" bodyend="234"/>
+        <referencedby refid="classcsmp_1_1_property_data_1a3d47ce3a5c14576b43c08310494faafe" compoundref="_property_data_8cpp" startline="287" endline="341">ReduceTo</referencedby>
+        <referencedby refid="classcsmp_1_1_property_data___test_1a7d7443087d0052da7dc5e009941dc5b9" compoundref="_property_data___test_8cpp" startline="20" endline="221">csmp::PropertyData_Test::run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a6b3ac048510eb250adb510040f99ab8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::Reserve</definition>
+        <argsstring>(size_t n_objects)</argsstring>
+        <name>Reserve</name>
+        <qualifiedname>csmp::PropertyData::Reserve</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>n_objects</declname>
+        </param>
+        <briefdescription>
+<para>for a user-defined number of objects of the type the property data was constructed for </para>
+        </briefdescription>
+        <detaileddescription>
+<para>reserves storage for n-objects as opposed to determining the size of the sheer storage which is what the <ref refid="classcsmp_1_1_property_data_1a6b3ac048510eb250adb510040f99ab8f" kindref="member">Reserve()</ref> method with 2 arguments does. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="86" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="242" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a0613f79874149630ce5f198a8c07150b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::Reserve</definition>
+        <argsstring>(size_t flag_capacity, size_t value_capacity)</argsstring>
+        <name>Reserve</name>
+        <qualifiedname>csmp::PropertyData::Reserve</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>flag_capacity</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>value_capacity</declname>
+        </param>
+        <briefdescription>
+<para>sheer storage not considering types of variables </para>
+        </briefdescription>
+        <detaileddescription>
+<para>if extra values are created they will be initialised to ANY and not-a-number (NaN) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="89" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="252" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a89e8485e10066602dbc876f7843efa06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::Resize</definition>
+        <argsstring>(size_t n_objects)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::PropertyData::Resize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>n_objects</declname>
+        </param>
+        <briefdescription>
+<para>for a user-defined number of objects of the type the property data was constructed for </para>
+        </briefdescription>
+        <detaileddescription>
+<para>reserves storage for n-objects as opposed to determining the size of the sheer storage which is what the <ref refid="classcsmp_1_1_property_data_1a6b3ac048510eb250adb510040f99ab8f" kindref="member">Reserve()</ref> method with 2 arguments does. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="92" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="265" bodyend="269"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a4b47f4fb493dee7381b82b2899db953f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::Resize</definition>
+        <argsstring>(size_t n_flags, size_t n_values)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::PropertyData::Resize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>n_flags</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>n_values</declname>
+        </param>
+        <briefdescription>
+<para>sheer storage size not considering types of variables </para>
+        </briefdescription>
+        <detaileddescription>
+<para>if extra values are created they will be initialised to ANY and not-a-number (NaN) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="95" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="275" bodyend="279"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a3d47ce3a5c14576b43c08310494faafe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::ReduceTo</definition>
+        <argsstring>(const std::map&lt; size_t, size_t &gt; &amp;o_n_elmt_ids)</argsstring>
+        <name>ReduceTo</name>
+        <qualifiedname>csmp::PropertyData::ReduceTo</qualifiedname>
+        <param>
+          <type>const std::map&lt; size_t, size_t &gt; &amp;</type>
+          <declname>o_n_elmt_ids</declname>
+        </param>
+        <briefdescription>
+<para>change the size if this required by parent container, e.g., <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>keeps only those values with the indices stored in the map</para>
+<para>indices are assumed to range between 0..n-1 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="98" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="287" bodyend="341"/>
+        <references refid="classcsmp_1_1_property_data_1a6677a39d83f72a7d878cda244351e036" compoundref="_property_data_8cpp" startline="230" endline="234">Clear</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1ac744a416927ff51be7cfe4636fc1ec4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::PushBack</definition>
+        <argsstring>(VARIABLE_FLAG)</argsstring>
+        <name>PushBack</name>
+        <qualifiedname>csmp::PropertyData::PushBack</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <defname>flag</defname>
+        </param>
+        <briefdescription>
+<para>&apos;raw&apos; inserter for flags (user must ascertain that stride is correct); use <ref refid="namespacecsmp_1ae8b31696d9894a90cc531500d1088572" kindref="member">pushBack()</ref> for objects </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>use <ref refid="namespacecsmp_1ac76d03a8153fa83afdc1758b9bdc9507" kindref="member">read()</ref> and <ref refid="namespacecsmp_1a7e1fb631510192d4a0bb05c36cbf14ec" kindref="member">store()</ref> from above to retrieve entire csmp variables </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="104" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="82" bodyend="82"/>
+        <referencedby refid="namespacecsmp_1ae8b31696d9894a90cc531500d1088572" compoundref="_property_data_8cpp" startline="553" endline="557">csmp::pushBack</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1ab7debc3c38d32ccccd943ca61c42d024" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::PushBack</definition>
+        <argsstring>(double)</argsstring>
+        <name>PushBack</name>
+        <qualifiedname>csmp::PropertyData::PushBack</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>&apos;raw&apos; inserter for values (user must ascertain that stride is correct); use <ref refid="namespacecsmp_1ae8b31696d9894a90cc531500d1088572" kindref="member">pushBack()</ref> for objects </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="107" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="84" bodyend="84"/>
+        <referencedby refid="namespacecsmp_1ae8b31696d9894a90cc531500d1088572" compoundref="_property_data_8cpp" startline="553" endline="557">csmp::pushBack</referencedby>
+        <referencedby refid="classcsmp_1_1_s_k_u_a___finite_element_mesh_interface_1a4db54bfa2ffe9688cd62414e404e7248" compoundref="_s_k_u_a___finite_element_mesh_interface_8cpp" startline="1200" endline="1321">csmp::SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a46a23d9e0bf89c073a69d0ef7e3a1316" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::PushBackFrom</definition>
+        <argsstring>(const PropertyData &amp;data, size_t nth_value)</argsstring>
+        <name>PushBackFrom</name>
+        <qualifiedname>csmp::PropertyData::PushBackFrom</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <briefdescription>
+<para>inserter from another <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="110" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="87" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a7b4d6cda76a21d4fc09f69ef1c7c7acd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::PropertyData::Flag</definition>
+        <argsstring>(size_t nth_value)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::PropertyData::Flag</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <briefdescription>
+<para>scalars </para>
+        </briefdescription>
+        <detaileddescription>
+<para>accessors / mutators for flags scalars </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="114" column="19" bodyfile="source/modules/model/PropertyData.cpp" bodystart="104" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1aa1074f383697f4bf2ea379d7aecc8951" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::PropertyData::Flag</definition>
+        <argsstring>(size_t nth_value) const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::PropertyData::Flag</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <briefdescription>
+<para>scalars </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="115" column="20" bodyfile="source/modules/model/PropertyData.cpp" bodystart="113" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1afef58fdb70341e997f2d2d7cc3f20a41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::PropertyData::Flag</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_dim)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::PropertyData::Flag</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_dim</declname>
+        </param>
+        <briefdescription>
+<para>vectors and array variables </para>
+        </briefdescription>
+        <detaileddescription>
+<para>set flags: vectors and array variables </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="117" column="19" bodyfile="source/modules/model/PropertyData.cpp" bodystart="122" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1ae57154253ada7526df9c04e1bb6e2ebd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::PropertyData::Flag</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_dim) const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::PropertyData::Flag</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_dim</declname>
+        </param>
+        <briefdescription>
+<para>read flags: vectors and array variables </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="118" column="20" bodyfile="source/modules/model/PropertyData.cpp" bodystart="132" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1af53bd010f3cad7f23fc3b863826826b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::PropertyData::Flag</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_row, uint32_t jth_col)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::PropertyData::Flag</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_row</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>jth_col</declname>
+        </param>
+        <briefdescription>
+<para>tensors </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="120" column="19" bodyfile="source/modules/model/PropertyData.cpp" bodystart="142" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a81deef1b096e45cbbf03bd23416528a1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::PropertyData::Flag</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_row, uint32_t jth_col) const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::PropertyData::Flag</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_row</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>jth_col</declname>
+        </param>
+        <briefdescription>
+<para>tensors (only their diagonal elements have flags) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="121" column="20" bodyfile="source/modules/model/PropertyData.cpp" bodystart="155" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a890b42c600b15f43dd3e84b362a13e00" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::PropertyData::Value</definition>
+        <argsstring>(size_t nth_value)</argsstring>
+        <name>Value</name>
+        <qualifiedname>csmp::PropertyData::Value</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <briefdescription>
+<para>scalars </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="124" column="17" bodyfile="source/modules/model/PropertyData.cpp" bodystart="170" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a9134d6bcafeeabfd4573e6865ae6c8bb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PropertyData::Value</definition>
+        <argsstring>(size_t nth_value) const</argsstring>
+        <name>Value</name>
+        <qualifiedname>csmp::PropertyData::Value</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="125" column="18" bodyfile="source/modules/model/PropertyData.cpp" bodystart="178" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a1ed5e1a202e7686c624a7504bbb6711e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::PropertyData::Value</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_dim)</argsstring>
+        <name>Value</name>
+        <qualifiedname>csmp::PropertyData::Value</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_dim</declname>
+        </param>
+        <briefdescription>
+<para>vectors and array variables </para>
+        </briefdescription>
+        <detaileddescription>
+<para>assign values: vectors and array variables </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="127" column="17" bodyfile="source/modules/model/PropertyData.cpp" bodystart="187" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a18d9ec5a488d740fa6149d3eff5ea26e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PropertyData::Value</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_dim) const</argsstring>
+        <name>Value</name>
+        <qualifiedname>csmp::PropertyData::Value</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_dim</declname>
+        </param>
+        <briefdescription>
+<para>retrieve values: vectors and array variables </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="128" column="18" bodyfile="source/modules/model/PropertyData.cpp" bodystart="196" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a80320046cf21d1c86a8dd80401f5116f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::PropertyData::Value</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_row, uint32_t jth_col)</argsstring>
+        <name>Value</name>
+        <qualifiedname>csmp::PropertyData::Value</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_row</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>jth_col</declname>
+        </param>
+        <briefdescription>
+<para>tensors </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="130" column="17" bodyfile="source/modules/model/PropertyData.cpp" bodystart="206" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1af888ee5b4edde51390a4bf2b435a61f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PropertyData::Value</definition>
+        <argsstring>(size_t nth_value, uint32_t ith_row, uint32_t jth_col) const</argsstring>
+        <name>Value</name>
+        <qualifiedname>csmp::PropertyData::Value</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>nth_value</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ith_row</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>jth_col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="131" column="18" bodyfile="source/modules/model/PropertyData.cpp" bodystart="216" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a400079960fab770440da35d102d1d3e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::MinMaxOf</definition>
+        <argsstring>(double &amp;tmin, double &amp;tmax) const</argsstring>
+        <name>MinMaxOf</name>
+        <qualifiedname>csmp::PropertyData::MinMaxOf</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>tmin</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>tmax</declname>
+        </param>
+        <briefdescription>
+<para>checks range; all values included </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="134" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="346" bodyend="350"/>
+        <referencedby refid="classcsmp_1_1_property_data___test_1a7d7443087d0052da7dc5e009941dc5b9" compoundref="_property_data___test_8cpp" startline="20" endline="221">csmp::PropertyData_Test::run</referencedby>
+        <referencedby refid="classcsmp_1_1_property_data_1a6126b9ecb9ad1426b85b679cb0bedd50" compoundref="_property_data_8cpp" startline="354" endline="380">ScaleRangeTo</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a6126b9ecb9ad1426b85b679cb0bedd50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::ScaleRangeTo</definition>
+        <argsstring>(double tmin, double tmax)</argsstring>
+        <name>ScaleRangeTo</name>
+        <qualifiedname>csmp::PropertyData::ScaleRangeTo</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tmax</declname>
+        </param>
+        <briefdescription>
+<para>scales the current variable range to the new one; all values are scaled </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="137" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="354" bodyend="380"/>
+        <references refid="classcsmp_1_1_property_data_1a400079960fab770440da35d102d1d3e7" compoundref="_property_data_8cpp" startline="346" endline="350">MinMaxOf</references>
+        <referencedby refid="classcsmp_1_1_property_data___test_1a7d7443087d0052da7dc5e009941dc5b9" compoundref="_property_data___test_8cpp" startline="20" endline="221">csmp::PropertyData_Test::run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a43730b1cb8f1d6870e16ead968ee8979" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::OffsetRangeBy</definition>
+        <argsstring>(double offset_value)</argsstring>
+        <name>OffsetRangeBy</name>
+        <qualifiedname>csmp::PropertyData::OffsetRangeBy</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>offset_value</declname>
+          <defname>offset</defname>
+        </param>
+        <briefdescription>
+<para>add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds offset to all data values in the container</para>
+<para>TODO: make sure that this is done only where it makes sense! </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="140" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="389" bodyend="393"/>
+        <referencedby refid="classcsmp_1_1_property_data___test_1a7d7443087d0052da7dc5e009941dc5b9" compoundref="_property_data___test_8cpp" startline="20" endline="221">csmp::PropertyData_Test::run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a7ca06e800e251f0cd15df40f05c38557" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::TransformValues</definition>
+        <argsstring>(double(*f)(double))</argsstring>
+        <name>TransformValues</name>
+        <qualifiedname>csmp::PropertyData::TransformValues</qualifiedname>
+        <param>
+          <type>double(*)(double)</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+<para>takes a pointer to a typical math function like double sqrt(double) as argument; applied this function to all values </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Applies any kind of function with the syntax double f(double) to the double entries of the stored data.</para>
+<para>TODO: make sure that this is done only where it makes sense! </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="143" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="403" bodyend="406"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a45ad6ffda2416e4dce7b82b929284781" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyData::OutBinary</definition>
+        <argsstring>(std::fstream &amp;fp) const</argsstring>
+        <name>OutBinary</name>
+        <qualifiedname>csmp::PropertyData::OutBinary</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+<para>writing stored flag and data values to file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Out binary.</para>
+<para>const <ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref> place_; ///&lt; placement of variable const <ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref> type_; ///&lt; any of scalar..flagged array const size_t dim_; ///&lt; spatial dimension const size_t flag_stride_; ///&lt; variable to variable offset (e.g. dim in a vector var) const size_t data_stride_; ///&lt; variable to variable offset (e.g. dim in a vector var) std::vector&lt;VARIABLE_FLAG&gt; flags_; ///&lt; variable flags std::vector&lt;double&gt; data_; ///&lt; variable values </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="146" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="425" bodyend="456"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_data_1a018100a269162fd6a8085784c6542735" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyData::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::PropertyData::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyData.h" line="148" column="10" bodyfile="source/modules/model/PropertyData.cpp" bodystart="518" bodyend="535"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>flexible-size container for CSMP data types, providing range-check and conversion functions </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>8/4/2016</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Efficient data transfer object with an efficient binary interface to store variables to disk.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>More disk storage-size efficient alternative to <ref refid="classcsmp_1_1_f_e_m___data" kindref="compound">FEM_Data</ref> in <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> to streamline variable exchange and storage to disk; make it possible to read variables selectively from file.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>Create contained for 1000 arrays, initialize it and write it to disk, for example:</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_property_data_1a865879f690f42d28e1236f5801d4e89a" kindref="member">PropertyData</ref><sp/>data(<sp/>NODE,<sp/>ARRAY,<sp/>DIM3,<sp/>21<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">data.Reserve(1000);</highlight></codeline>
+<codeline><highlight class="normal">ArrayVariable<sp/><sp/>array(1000);</highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">for(<sp/>a<sp/>:<sp/>1000<sp/>)<sp/><sp/>data.PushBack(<sp/>array<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">data.OutBinary(<sp/>FILE<sp/>);<sp/><sp/></highlight></codeline>
+</programlisting></para>
+<para><simplesect kind="attention"><para>use <ref refid="namespacecsmp_1ac76d03a8153fa83afdc1758b9bdc9507" kindref="member">read()</ref> and <ref refid="namespacecsmp_1a7e1fb631510192d4a0bb05c36cbf14ec" kindref="member">store()</ref> from above to retrieve entire csmp variables, there are no member accessors Read() or Store() </para>
+</simplesect>
+</para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PropertyData</label>
+        <link refid="classcsmp_1_1_property_data"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/PropertyData.h" line="66" column="1" bodyfile="source/includes/model/PropertyData.h" bodystart="66" bodyend="158"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_property_data_1a6677a39d83f72a7d878cda244351e036" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Clear</name></member>
+      <member refid="classcsmp_1_1_property_data_1a13d2570bdc4a02ac3d49490429794d47" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Components</name></member>
+      <member refid="classcsmp_1_1_property_data_1a1eed0c2e05d3fa9b380c64b65ac03a51" prot="private" virt="non-virtual"><scope>csmp::PropertyData</scope><name>data_</name></member>
+      <member refid="classcsmp_1_1_property_data_1a7cfc0e72096b8ae235f270e8d2ab4850" prot="private" virt="non-virtual"><scope>csmp::PropertyData</scope><name>data_stride_</name></member>
+      <member refid="classcsmp_1_1_property_data_1a1f9a96512c9baad47b20e99f15299d25" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Dim</name></member>
+      <member refid="classcsmp_1_1_property_data_1a7ee6371176565fb022c74bee6917707b" prot="private" virt="non-virtual"><scope>csmp::PropertyData</scope><name>dim_</name></member>
+      <member refid="classcsmp_1_1_property_data_1a7b4d6cda76a21d4fc09f69ef1c7c7acd" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_property_data_1aa1074f383697f4bf2ea379d7aecc8951" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_property_data_1afef58fdb70341e997f2d2d7cc3f20a41" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_property_data_1ae57154253ada7526df9c04e1bb6e2ebd" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_property_data_1af53bd010f3cad7f23fc3b863826826b8" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_property_data_1a81deef1b096e45cbbf03bd23416528a1" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_property_data_1a6dde43e7c6b41fe2e3c0cb01eca8294b" prot="private" virt="non-virtual"><scope>csmp::PropertyData</scope><name>flag_stride_</name></member>
+      <member refid="classcsmp_1_1_property_data_1ad8157f57a6da1de6937b9a55f6371d25" prot="private" virt="non-virtual"><scope>csmp::PropertyData</scope><name>flags_</name></member>
+      <member refid="classcsmp_1_1_property_data_1a400079960fab770440da35d102d1d3e7" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>MinMaxOf</name></member>
+      <member refid="classcsmp_1_1_property_data_1a43730b1cb8f1d6870e16ead968ee8979" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>OffsetRangeBy</name></member>
+      <member refid="classcsmp_1_1_property_data_1a00c6240da40e2e9306445284a3f85905" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_property_data_1a018100a269162fd6a8085784c6542735" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_property_data_1a45ad6ffda2416e4dce7b82b929284781" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>OutBinary</name></member>
+      <member refid="classcsmp_1_1_property_data_1af40fb2714d8e9bace3e03d553875fc8c" prot="private" virt="non-virtual"><scope>csmp::PropertyData</scope><name>place_</name></member>
+      <member refid="classcsmp_1_1_property_data_1a57669f2017d273611b931e3ae0b1ef32" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_property_data_1a865879f690f42d28e1236f5801d4e89a" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>PropertyData</name></member>
+      <member refid="classcsmp_1_1_property_data_1ac744a416927ff51be7cfe4636fc1ec4e" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>PushBack</name></member>
+      <member refid="classcsmp_1_1_property_data_1ab7debc3c38d32ccccd943ca61c42d024" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>PushBack</name></member>
+      <member refid="classcsmp_1_1_property_data_1a46a23d9e0bf89c073a69d0ef7e3a1316" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>PushBackFrom</name></member>
+      <member refid="classcsmp_1_1_property_data_1a3d47ce3a5c14576b43c08310494faafe" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>ReduceTo</name></member>
+      <member refid="classcsmp_1_1_property_data_1a6b3ac048510eb250adb510040f99ab8f" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Reserve</name></member>
+      <member refid="classcsmp_1_1_property_data_1a0613f79874149630ce5f198a8c07150b" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Reserve</name></member>
+      <member refid="classcsmp_1_1_property_data_1a89e8485e10066602dbc876f7843efa06" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_property_data_1a4b47f4fb493dee7381b82b2899db953f" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_property_data_1a6126b9ecb9ad1426b85b679cb0bedd50" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>ScaleRangeTo</name></member>
+      <member refid="classcsmp_1_1_property_data_1ab067d96291a61fb451e9e41d1faff125" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_property_data_1a7ca06e800e251f0cd15df40f05c38557" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>TransformValues</name></member>
+      <member refid="classcsmp_1_1_property_data_1ae36f4493b4a106c299185d90ac07d638" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Type</name></member>
+      <member refid="classcsmp_1_1_property_data_1ac69b245d8f08abca6eb7a720ae3d000b" prot="private" virt="non-virtual"><scope>csmp::PropertyData</scope><name>type_</name></member>
+      <member refid="classcsmp_1_1_property_data_1a890b42c600b15f43dd3e84b362a13e00" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Value</name></member>
+      <member refid="classcsmp_1_1_property_data_1a9134d6bcafeeabfd4573e6865ae6c8bb" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Value</name></member>
+      <member refid="classcsmp_1_1_property_data_1a1ed5e1a202e7686c624a7504bbb6711e" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Value</name></member>
+      <member refid="classcsmp_1_1_property_data_1a18d9ec5a488d740fa6149d3eff5ea26e" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Value</name></member>
+      <member refid="classcsmp_1_1_property_data_1a80320046cf21d1c86a8dd80401f5116f" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Value</name></member>
+      <member refid="classcsmp_1_1_property_data_1af888ee5b4edde51390a4bf2b435a61f1" prot="public" virt="non-virtual"><scope>csmp::PropertyData</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

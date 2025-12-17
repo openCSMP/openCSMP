@@ -1,0 +1,69 @@
+\doxysection{XML\+\_\+\+Document.\+h}
+\hypertarget{_x_m_l___document_8h_source}{}\label{_x_m_l___document_8h_source}\index{source/includes/interfaces/XML\_Document.h@{source/includes/interfaces/XML\_Document.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{XML\_DOCUMENT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{XML\_DOCUMENT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{@brief\ trivial\ class\ to\ provide\ an\ interface\ for\ creating\ and\ parsing\ XML\ documents.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{@author\ P.\ Lang}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@date\ Jan\ 2011}}
+\DoxyCodeLine{00013\ \textcolor{comment}{}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@todo\ (3)\ Range\ check\ current\ level\ up/down}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@todo\ (3)\ Integrate\ reading/parsing\ features}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@todo\ (3)\ Implement\ vector\ to\ hold\ node\ names\ per\ level\ to\ allow\ for\ auto\ closing\ etc...}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document}{XML\_Document}}}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_a8b0acb8bab7fc07d1494522376f2ac51}{XML\_Document}}();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document}{XML\_Document}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document}{XML\_Document}}\&\ src\ )\{\ data\_\ =\ src.data\_;\ currentLevel\_\ =\ src.currentLevel\_;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_a905e5705752a4c7d4c3b99551dd36d14}{OpenNode}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodeLabel\ );}
+\DoxyCodeLine{00027\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_abd3d10c80f0fc0eb484f792da9e1a5ca}{CloseNode}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodeName\ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_a895a44848243f27139822943d3509cde}{AddComment}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ comment\ );}
+\DoxyCodeLine{00030\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_aa5cc6ae5393c48c35824f8565d6516c6}{AddInfo}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ comment\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_a4dba5b7c51f6c921606bb5eec440228e}{InsertData}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ data\ );}
+\DoxyCodeLine{00033\ \ \ \textcolor{keywordtype}{void}\ LineBreak(\ size\_t\ n\ =\ 1\ )\ \{\ \textcolor{keywordflow}{for}(\ size\_t\ i\ =\ 0;\ i\ <\ n;\ ++i\ )\ WriteToData(\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ );\ \}}
+\DoxyCodeLine{00034\ \ \ \textcolor{keywordtype}{void}\ Tab(\ size\_t\ n\ =\ 1\ )\ \{\ \textcolor{keywordflow}{for}(\ size\_t\ i\ =\ 0;\ i\ <\ n;\ ++i\ )\ WriteToData(\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}}\ );\ \}}
+\DoxyCodeLine{00035\ \ \ \textcolor{keywordtype}{void}\ BringToLevel()\ \{\ \textcolor{keywordflow}{for}(\ size\_t\ i\ =\ 0;\ i\ <\ Level();\ ++i\ )\ WriteToData(\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}});\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{comment}{///\ returns\ the\ number\ of\ characters\ in\ current\ line}}
+\DoxyCodeLine{00038\ \ \ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_a7a5e62d4fe9d33febea62ce8b7d80054}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_a7a5e62d4fe9d33febea62ce8b7d80054}{CurrentLineCharacterCount}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.size()\ -\/\ data\_.rfind(\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ );\ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document_aa644acf91ca431d07af179a4c52c5942}{WriteToFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fileName\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00043\ \ \ \textcolor{comment}{//\ disabled}}
+\DoxyCodeLine{00044\ \ \ XML\_Document\ (\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_x_m_l___document}{XML\_Document}}\&\ src\ );}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \textcolor{comment}{//\ indentation\ level}}
+\DoxyCodeLine{00047\ \ \ size\_t\ Up(\ size\_t\ n\ =\ 1\ )\ \{\ currentLevel\_\ +=\ n;\ \textcolor{keywordflow}{return}\ currentLevel\_;\ \}}
+\DoxyCodeLine{00048\ \ \ size\_t\ Down(\ size\_t\ n\ =\ 1\ )\ \{\ currentLevel\_\ -\/=\ n;\ \textcolor{keywordflow}{return}\ currentLevel\_;\ \}}
+\DoxyCodeLine{00049\ \ \ \textcolor{keywordtype}{void}\ \ \ Level(\ size\_t\ level\ )\ \{\ currentLevel\_\ =\ level;\ \}}
+\DoxyCodeLine{00050\ \ \ size\_t\ Level()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ currentLevel\_;\ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{comment}{//\ append\ to\ data}}
+\DoxyCodeLine{00053\ \ \ \textcolor{keywordtype}{void}\ WriteToData(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ content\ )\ \{\ data\_\ +=\ content;\ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00056\ \ \ std::string\ data\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ stl\ string\ to\ hold\ document\ data}}
+\DoxyCodeLine{00057\ \ \ std::string\ sCache\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ working\ string}}
+\DoxyCodeLine{00058\ \ \ size\_t\ currentLevel\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ current\ level\ of\ indentation/node}}
+\DoxyCodeLine{00059\ \};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ XML\_DOCUMENT\_H}}
+
+\end{DoxyCode}

@@ -184,7 +184,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     bool operator<( const Element<dim>& ) const;
  
     /// Local variable storage interface
-    PLACEMENT Placement() const { return ELEMENT; }
+    PLACEMENT Placement() const noexcept { return ELEMENT; }
 
     void Accept( csmp::Visitor<dim>& );
 
@@ -209,52 +209,52 @@ class Element : public FiniteElementPolicy<dim, Element>,
     // ------------------------------------------------------------------------
 
     /// number of nodes of this element
-    uint32_t  Nodes() const;
+    uint32_t  Nodes() const noexcept;
 
     /// number of equidimensional neighbor elements of this element (not necessarily connected)
-    uint32_t  Neighbors() const;
+    uint32_t  Neighbors() const noexcept;
 
     /// number of equidimensional neighbor elements of this element (necessarily connected)
-    uint32_t  ConnectedNeighbors() const;
+    uint32_t  ConnectedNeighbors() const noexcept;
 
     /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
-    uint32_t  Faces() const;
+    uint32_t  Faces() const noexcept;
 
     /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager); thus, nodes and element neighbors can be manipulated but not the pointers to them
-    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin() const noexcept;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd() const noexcept;
 
     /// assuming that the corner nodes are the first, the midside nodes the second, and the .. in the elements node set according to CSMP_FEM_conventions.pdf
-    typename std::vector<csmp::Node<dim>*>::const_iterator      CornerNodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator      CornerNodesEnd() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      CornerNodesBegin() const noexcept;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      CornerNodesEnd() const noexcept;
 
-    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
-    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd() const;
+    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsBegin() const noexcept;
+    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd() const noexcept;
 
-    typename  std::vector<csmp::Node<dim>*>&                    NodeVector();
-    typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();
+    typename  std::vector<csmp::Node<dim>*>&                    NodeVector() noexcept;
+    typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector() noexcept;
 
     /// accessor of the nodes of the current finite element
-    csmp::Node<dim>* const N( uint32_t n_local ) const;
+    csmp::Node<dim>* const N( uint32_t n_local ) const noexcept;
 
     /// accessor of the equidimensional neighbor elements of the current element (volume->volume, surface->surfaces element etc.)
-    const csmp::Element<dim>* const Neighbor( uint32_t ) const;
-    csmp::Element<dim>* const Neighbor( uint32_t );
+    const csmp::Element<dim>* const Neighbor( uint32_t ) const noexcept;
+    csmp::Element<dim>* const Neighbor( uint32_t ) noexcept;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
-    void         Idx( size_t ) const;
-    size_t       Idx() const;
+    void         Idx( size_t ) const noexcept;
+    size_t       Idx() const noexcept;
 
     /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
     BOX_BOUNDARY AtBoundary( uint32_t boundary_face ) const;
     
     /// unique material identifier used to store 'rocktype' or ModelSubDomain::domain_idx_
-    int32_t Material_ID() const;
-    void Material_ID( int32_t id );
+    int32_t Material_ID() const noexcept;
+    void Material_ID( int32_t id ) noexcept;
 
     /// unique region identifier to be set to minus ModelSubDomain::domain_idx_ for non-unique regions
-    int32_t Region_ID() const;
-    void Region_ID( int32_t id );
+    int32_t Region_ID() const noexcept;
+    void Region_ID( int32_t id ) noexcept;
 
     // ------------------------------------------------------------------------
     // Functionality
@@ -265,7 +265,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     void        NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const;
 
     /// inputs node coordinates into supplied matrix
-    void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
+    void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const;
 
     /// the centre of gravity of the elemt
     Point<dim>  BaryCenter() const;

@@ -1,0 +1,125 @@
+\doxysection{vset\+Makers\+\_\+\+Test.\+h}
+\hypertarget{vset_makers___test_8h_source}{}\label{vset_makers___test_8h_source}\index{tests/unit/vsetMakers\_Test.h@{tests/unit/vsetMakers\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ vsetMakers\_Test.hpp}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Open\ CSMP++SAMG}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 29/5/2024.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2024\ The\ University\ of\ Melbourne.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_VSET\_MAKERS\_TEST\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_VSET\_MAKERS\_TEST\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ Tests\ the\ suite\ of\ \ meshes/boundary\ flags,\ data\ etc.\ that\ serve\ as\ the\ input\ for\ many\ of\ the\ unit\ tests\ created\ for\ the\ CSMP\ library.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ TODO:\ test\ prism\_test\ for\ 'invalid'\ elements\ using\ geometric\ calculations}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ TODO:\ test\ whether\ the\ faces\ are\ in\ the\ expected\ place}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{vsetMakers\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test_a0af6b26f5fbd7bda998878a8c0924953}{run}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ test\ numbering/faces/neighbors/segments\ compliance\ of\ single\ element\ meshes\ with\ element\ numbering\ etc.\ for\ CSMP\_FEM\_conventions.pdf}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test_a6d3a611d978efaaf7956b2e94c0cbbb4}{TestConsistencyWithCSMP\_Conventions}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{private}:\ \textcolor{comment}{//\ auxiliary\ functions}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ returns\ node-\/sets\ (node\ idx\ using\ global\ numbering)\ of\ element\ faces,\ in\ the\ form\ of\ a\ vector}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1vset_makers___test}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{dim}}>}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{std}}::\mbox{\hyperlink{classcsmp_1_1vset_makers___test}{vector}}<\mbox{\hyperlink{classcsmp_1_1vset_makers___test}{std}}::\mbox{\hyperlink{classcsmp_1_1vset_makers___test}{vector}}<\mbox{\hyperlink{classcsmp_1_1vset_makers___test}{uint32\_t}}>>\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{NodesOfElementFaces}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{VSet}}<\mbox{\hyperlink{classcsmp_1_1vset_makers___test}{dim}}>\&\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{vset}},\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1vset_makers___test}{elmt}}\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ as\ determined\ using\ the\ nodes\ that\ make\ up\ the\ faces;\ tests\ also\ whether\ nodes\ are\ correctly\ assigned\ to\ faces}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ FaceNumbersMatch\_CSMP\_Conventions();}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{bool}\ doNodeNumbersMatchCSMP\_Conventions();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ tests\ 'pfverts'\ record\ in\ supplied\ vset\ for\ whether\ the\ assigned\ neighbor\ Element\ objects\ are\ contained\ in\ \ overall\ element\ range\ and\ match\ element\ type}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{/*\ useful\ checks:}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ \ Loop\ through\ each\ element:\ For\ each\ element,\ retrieve\ its\ neighbors\ and\ iterate\ through\ each\ face.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ \ 2.\ \ \ \ Check\ Opposite\ Face:\ For\ each\ face,\ look\ up\ the\ corresponding\ opposite\ face\ for\ the\ neighboring\ element.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ \ 3.\ \ \ \ Symmetry\ Validation:\ Ensure\ that\ the\ neighboring\ element\ also\ lists\ the\ current\ element\ on\ the\ expected\ opposite\ face.\ If\ not,\ print\ an\ error\ message\ and\ mark\ the\ consistency\ check\ as\ failed.}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ \ 4.\ \ \ \ Boundary\ and\ Outside\ Conditions:\ OUTSIDE\ markers\ are\ skipped,\ as\ they\ represent\ boundaries\ rather\ than\ element\ neighbors.}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ TestConnectedElementNeighborNumbering(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ );}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ TODO:\ to\ test\ for\ consistency\ with\ 2024\ CSMP\ conventions}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ ///\ quadratic\ quadrilateral\ single-\/element\ mesh}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ VSet<2U>\ \ test\_CreateVSet();}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ void\ create\_TrianglePatch\_VSet(\ VSet<2U>\&\ );}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ void\ create\_One\_Square\_VSet(VSet<2U>\&,\ double\ length\_of\_sides,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ void\ create\_Square\_VSet(\ VSet<2U>\&,\ size\_t\ size\_sides,\ double\ dimension,\ bool\ skewed=false\ );}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ void\ create\_SlitRectangle\_VSet(VSet<2U>\&,\ size\_t\ x\_dimension,\ size\_t\ y\_dimension,\ double\ x\_length,\ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ double\ y\_length,\ size\_t\ depth\_of\_slit,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ 2D\ poly-\/element\ sets\ and\ topology\ info}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ ///\ \ Rectangle-\/shaped\ MODEL\_TINY,\ consisting\ of\ 1\ line\ element\ two\ triangles,\ 1\ quadrilateral\ and\ 6\ face\ object\ marking\ the\ box\ boundary.}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ ModelTopology\ \ test\_CreateSimplestPolyElement2DModel(\ VSet<2U>\&\ );}}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ ///\ Rectangle\ shaped\ mixed\ model\ with\ 2\ intersecting\ line\ element\ regions\ (USED\ IN\ UNIT\ TESTS)}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ ModelTopology\ \ create\_MeshPatchWithLineElements\_VSet(\ VSet<2U>\&\ );}}
+\DoxyCodeLine{00080\ \textcolor{comment}{}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ ///\ model\ SPLIT22\_BASIC\ with\ box\ boundaries\ (Faces)\ and\ one\ through-\/going\ and\ one\ internal\ crossing\ split\ boundary\ (USED\ IN\ UNIT\ TESTS)}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ ModelTopology\ \ create\_BoundarySplitBoundaryPatch(\ VSet<2U>\&\ );}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//\ 3D\ meshes\ of\ a\ single\ element\ type}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ ///\ 6\ tets\ from\ a\ cube,\ no\ midside\ nodes}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ void\ testCreateTetra\_VSet(\ VSet<3U>\&\ );}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ void\ create\_Pyramid\_VSet(\ VSet<3U>\&,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ void\ create\_One\_Hexahedra\_VSet(\ VSet<3U>\&,\ bool\ bSkewed\ =\ false\ );}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ void\ create\_Hexahedra\_VSet(\ VSet<3U>\&,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ void\ create\_One\_Prism\_VSet(\ VSet<3U>\&,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ void\ create\_Prism\_VSet(\ VSet<3U>\&,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//\ 3D\ element\ sets\ with\ different\ types\ of\ elements}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{/*\ USED\ IN\ 3D\ UNIT\ TESTS}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ void\ create\_Pyramid\_Hexa\_VSet(\ VSet<3U>\&,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00106\ \textcolor{comment}{}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ void\ create\_Prism\_Hexa\_VSet(\ VSet<3U>\&,\ bool\ bSkewed=false\ );}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ //\ more\ complex\ models\ created\ externally\ but\ available\ as\ VSets}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ //\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ //\ USED\ IN\ UNIT\ TEST}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ void\ create\_FracBox(\ ModelTopology\&,\ VSet<3U>\&\ );}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00114\ \};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_VSET\_MAKERS\_TEST\_H\ */}}
+
+\end{DoxyCode}

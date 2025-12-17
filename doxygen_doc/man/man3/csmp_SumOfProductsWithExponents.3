@@ -1,0 +1,68 @@
+.TH "csmp::SumOfProductsWithExponents" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SumOfProductsWithExponents
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSumOfProductsWithExponents\fP (const \fBSumOfProductsWithExponents\fP &s)"
+.br
+.ti -1c
+.RI "\fBSumOfProductsWithExponents\fP & \fBoperator=\fP (const \fBSumOfProductsWithExponents\fP &s)"
+.br
+.ti -1c
+.RI "void \fBAddProduct\fP (int32_t coeff_idx, double coeff, const std::map< int32_t, std::pair< double, double > > &product)"
+.br
+.ti -1c
+.RI "double \fBSum\fP (double a[]) const"
+.br
+.ti -1c
+.RI "double \fBDerivativeWithRespectTo\fP (int32_t spec_idx, double a[]) const"
+.br
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "double \fBSign\fP (double a) const"
+.br
+.ti -1c
+.RI "std::vector< sumofproducts_pair >::iterator \fBBegin\fP ()"
+.br
+.ti -1c
+.RI "std::vector< sumofproducts_pair >::iterator \fBEnd\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.IP "\(bu" 2
+Sum of products must has storage for constant product terms and their exponents\&. The indices for such constant terms should be set to <0, since they are not dependent variables\&. const term, exponent
+.PP
+
+.PP
+.PP
+.nf
+idea: pair<pair<int,double>,map<int,pair<double,double>,less<int> > >  sumofproducts_pair;
+.fi
+.PP
+
+.PP
+when derivatives are taken and the spec\&.index, idx < 0, the constants are used rather than the values supplied through a[]\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::SumOfProductsWithExponents::AddProduct (int32_t coeff_idx, double coeff, const std::map< int32_t, std::pair< double, double > > & product)"
+const valued product terms must have negative exponents, such that when derivatives are taken they are not input from the supplied a[] vector\&. 
+.SS "double csmp::SumOfProductsWithExponents::DerivativeWithRespectTo (int32_t spec_idx, double a[]) const"
+go through all products and enlist all terms that contain requested species index while omitting respective species from product\&. 'a' is the vector that contains the multiplication factors for each component of the product 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

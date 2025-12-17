@@ -1,0 +1,5 @@
+<map id="csmp::MeshManager::Duplicate" name="csmp::MeshManager::Duplicate">
+<area shape="rect" id="Node000001" title="duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold typ..." alt="" coords="5,5,157,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_mesh_manager.html#a024be54eba6607493d418fe6ae6d655e" title="by location only, no parent element gets connected" alt="" coords="205,5,356,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,23,189,23,189,28,157,28"/>
+</map>

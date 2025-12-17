@@ -1,0 +1,118 @@
+\doxysection{csmp\+::Coordinate\+Transformer\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_coordinate_transformer}{}\label{classcsmp_1_1_coordinate_transformer}\index{csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}}
+
+
+utility to convert between coordinate systems and flip axes  
+
+
+
+
+{\ttfamily \#include $<$Coordinate\+Transformer.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Coordinate\+Transformer\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classcsmp_1_1_coordinate_transformer__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_coordinate_transformer_a63a9373ba7a65ddbbf0f2f72d8e13013}{Coordinate\+Transformer}} ()
+\begin{DoxyCompactList}\small\item\em no translation, scaling nor inversion of coordinate axis \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer_a382ca50cd25b154b2269661951447065}{Transform}} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em transform point coordinates using all specified operations, \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer_a1e15ade48c9ae7af979a9e6d80497159}{Transform}} (const std\+::vector$<$ double $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_coordinate_transformer_a0ccbdb1efc850b17cbbe02c0b81b7a3b}\label{classcsmp_1_1_coordinate_transformer_a0ccbdb1efc850b17cbbe02c0b81b7a3b} 
+void {\bfseries Translate} (uint32\+\_\+t axis, double distance\+\_\+meters)
+\begin{DoxyCompactList}\small\item\em translation along the specified axis \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_coordinate_transformer_a7b49f93ba9c434b6d95a83958785229b}\label{classcsmp_1_1_coordinate_transformer_a7b49f93ba9c434b6d95a83958785229b} 
+void {\bfseries Flip\+Axis} (uint32\+\_\+t axis)
+\begin{DoxyCompactList}\small\item\em multiplies coordinates of specified axis by -\/1 \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer_ad625c113924aace86485851054ebea54}{Exchange\+Axes}} (uint32\+\_\+t axis\+\_\+a, uint32\+\_\+t axis\+\_\+b)
+\begin{DoxyCompactList}\small\item\em exchange of axis \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer_a51806b93bc6b311b7126f04203ee5cda}{Reset}} ()
+\begin{DoxyCompactList}\small\item\em returns settings to ones which preserve value of input coordinate \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Coordinate\+Transformer$<$ dim $>$}
+utility to convert between coordinate systems and flip axes 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_coordinate_transformer_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_coordinate_transformer_a63a9373ba7a65ddbbf0f2f72d8e13013}\index{csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}!CoordinateTransformer@{CoordinateTransformer}}
+\index{CoordinateTransformer@{CoordinateTransformer}!csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{CoordinateTransformer()}{CoordinateTransformer()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_coordinate_transformer_a63a9373ba7a65ddbbf0f2f72d8e13013} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_coordinate_transformer}{csmp\+::\+Coordinate\+Transformer}}$<$ dim $>$\+::\+Coordinate\+Transformer (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+no translation, scaling nor inversion of coordinate axis 
+
+initialises translations to zero and flip vector to 1 \texorpdfstring{$<$}{<} in x,y,z direction
+
+\texorpdfstring{$<$}{<} coordinate multiplier
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_coordinate_transformer_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_coordinate_transformer_ad625c113924aace86485851054ebea54}\index{csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}!ExchangeAxes@{ExchangeAxes}}
+\index{ExchangeAxes@{ExchangeAxes}!csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ExchangeAxes()}{ExchangeAxes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_coordinate_transformer_ad625c113924aace86485851054ebea54} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer}{csmp\+::\+Coordinate\+Transformer}}$<$ dim $>$\+::\+Exchange\+Axes (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{axis\+\_\+a}{, }\item[{uint32\+\_\+t}]{axis\+\_\+b}{}\end{DoxyParamCaption})}
+
+
+
+exchange of axis 
+
+classical swap \Hypertarget{classcsmp_1_1_coordinate_transformer_a51806b93bc6b311b7126f04203ee5cda}\index{csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}!Reset@{Reset}}
+\index{Reset@{Reset}!csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Reset()}{Reset()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_coordinate_transformer_a51806b93bc6b311b7126f04203ee5cda} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer}{csmp\+::\+Coordinate\+Transformer}}$<$ dim $>$\+::\+Reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+returns settings to ones which preserve value of input coordinate 
+
+sets to preserve input coordinate \Hypertarget{classcsmp_1_1_coordinate_transformer_a1e15ade48c9ae7af979a9e6d80497159}\index{csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}!Transform@{Transform}}
+\index{Transform@{Transform}!csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Transform()}{Transform()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_coordinate_transformer_a1e15ade48c9ae7af979a9e6d80497159} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer}{csmp\+::\+Coordinate\+Transformer}}$<$ dim $>$\+::\+Transform (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+processes translations etc. returning the point \Hypertarget{classcsmp_1_1_coordinate_transformer_a382ca50cd25b154b2269661951447065}\index{csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}!Transform@{Transform}}
+\index{Transform@{Transform}!csmp::CoordinateTransformer$<$ dim $>$@{csmp::CoordinateTransformer$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Transform()}{Transform()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_coordinate_transformer_a382ca50cd25b154b2269661951447065} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer}{csmp\+::\+Coordinate\+Transformer}}$<$ dim $>$\+::\+Transform (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&}]{p}{}\end{DoxyParamCaption}) const}
+
+
+
+transform point coordinates using all specified operations, 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000050}{Todo}}]make sure that specified sequence is honored \end{DoxyRefDesc}
+
+
+processes translations etc. returning the point 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/utilities/Coordinate\+Transformer.\+h\item 
+source/modules/utilities/Coordinate\+Transformer.\+cpp\end{DoxyCompactItemize}

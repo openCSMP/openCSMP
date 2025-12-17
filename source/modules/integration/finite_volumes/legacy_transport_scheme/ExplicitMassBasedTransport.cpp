@@ -97,6 +97,9 @@ void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions( uint32_t
         }
 } // end AssignFluxBoundaryConditions
 
+
+
+
 template<uint32_t dim,template<uint32_t> class STP>
 double  ExplicitMassBasedTransport<dim, STP>::AnisotropicCourantIncrement()
 {
@@ -164,41 +167,8 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProducts()
     }
 }
 
-template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector<double>& RESULT)
-{
-#if defined(_OPENMP )
-    size_t tid = omp_get_thread_num();
-    Element<dim>* ep = this->gref_.E(this->thread_stencil_processor_[tid]->eidx_);
 
-    // for all finite-volume facets
-    for ( auto i{0U}; i<ep->FV()->Facets(); i++ )
-    {
-        // identifying the finite volumes to which the flux will be distributed
-        ep->FV()->FacetEdgeNodes( i, this->thread_stencil_processor_[tid]->inside_node_, this->thread_stencil_processor_[tid]->outside_node_ );
 
-        // for the "inside" node
-        if ( this->thread_stencil_processor_[tid]->facet_flux_[i] < 0. ) {
-            // 1. fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
-            //    (outside node = upstream)
-            // -------------------------------------------------------------------------------------------------
-            RESULT[ ep->N(this->thread_stencil_processor_[tid]->inside_node_)->Idx() ]  +=
-                    this->thread_stencil_processor_[tid]->facet_flux_[i] * this->thread_stencil_processor_[tid]->psi2_[this->thread_stencil_processor_[tid]->outside_node_];
-            // 2. outgoing fluxes are subtracted
-            // ---------------------------------
-            RESULT[ ep->N(this->thread_stencil_processor_[tid]->outside_node_)->Idx() ] -=
-                    this->thread_stencil_processor_[tid]->facet_flux_[i] * this->thread_stencil_processor_[tid]->psi2_[this->thread_stencil_processor_[tid]->outside_node_];
-        }
-        else {
-            RESULT[ ep->N(this->thread_stencil_processor_[tid]->inside_node_)->Idx() ]  +=
-                    this->thread_stencil_processor_[tid]->facet_flux_[i] * this->thread_stencil_processor_[tid]->psi2_[this->thread_stencil_processor_[tid]->inside_node_]; // out
-            RESULT[ ep->N(this->thread_stencil_processor_[tid]->outside_node_)->Idx() ] -=
-                    this->thread_stencil_processor_[tid]->facet_flux_[i] * this->thread_stencil_processor_[tid]->psi2_[this->thread_stencil_processor_[tid]->inside_node_];
-        }
-
-    }
-#endif
-} // end AccumulateFluxUpwindProductsOMP
 
 template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double time_interval, uint32_t var_comp_nr )
@@ -240,41 +210,47 @@ void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double time_interval, 
     }
 } // end ComposeSolution (passive advection case)
 
+
+
+// SKM_FIX: made function compliant with virtual function in the base class but some of the extra arguments are not used; TODO: needs testing
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::AdvectVariable( double time_interval)
+double ExplicitMassBasedTransport<dim,STP>::AdvectVariable( double time_interval,
+                                                            double /* cfl_multiplication_factor */,
+                                                            bool /* apply_flux_balance_correction */,
+                                                            bool update_pore_volumes )
 {
-    //TODO if porevolume changes -> updateporevolumes
     this->gref_.RenumberNodes();
 
-    //if (true) // update pore volumes
-    //  {
-    //  this->InitializeSectorPoreVolumeData (true);
-    //  this->InitializeArraysForFirstOrderMethod();
-    //  }
+    if ( update_pore_volumes ) // update pore volumes
+      {
+        this->InitializeSectorPoreVolumeData (true);
+        this->InitializeArraysForFirstOrderMethod();
+      }
 
     this->UpdateProjectedVelocitiesAndFluxBalances();
     bool output_result_range(false);
     // explicit 1st-order solution of advection equation
     this->AdvectVariable1stOrder( time_interval, output_result_range );
+    
+    return time_interval;
 
 } // end AdvectVariable
 
+
+
+
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
-        double time_increment, bool output_result_range )
+void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder( double time_increment, bool output_result_range )
 {
     for ( uint32_t ncom{0u}; ncom < this->var_ncomponents_;ncom++){
         if (this->Verbose()) cout<<" Advecting component (mass based): "<<ncom<<" time increment used: "<<time_increment<<endl;
         std::fill( this->RESULT.begin(), this->RESULT.end(), static_cast<double>(0.) );
 
-#if !defined(_OPENMP)
         /// IMPORTANT NOTE: If you every change/improve this loop, make sure you
         /// input the equivalent changes in the openmp section below. Otherwise
         /// your changes/improvements will only be evident in serial simulations.
         std::vector<FV_Parameter>::const_iterator  fvt = this->STENCIL_DATA.begin();
-        for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.CellsBegin();
-              eit!=this->gref_.CellsEnd(); eit++, fvt++ )
+        for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
         {
             this->stencil_.eidx_ = (*eit)->Idx();
 
@@ -284,58 +260,6 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
             AccumulateFluxUpwindProducts();
 
         } // end of accumulation
-#else
-        vector<vector<double> > RESULT(omp_get_max_threads());
-        for (size_t tid = 0 ; tid < omp_get_max_threads();tid++){
-            RESULT[tid].resize(this->gref_.Nodes());
-            std::fill( RESULT[tid].begin(), RESULT[tid].end(), static_cast<double>(0.) );
-        }
-
-#pragma omp parallel
-        {
-
-            Element<dim>* ep;
-            size_t tid = omp_get_thread_num();
-            /// OPENMP note: given the likely small size of ncom vs the number of elements,
-            /// only the inner loop was parallelized as it was assumed to be the most efficient way.
-            /// Perhaps an outer dynamic scheduled for loop instead of the inner one should be tried
-            /// Julian - 02/09/2015
-
-#pragma omp for
-            for ( int32_t e = 0 ; e < this->gref_.Cells(); e++ )
-            {
-                ep = this->gref_.E(e);
-                this->thread_stencil_processor_[tid]->eidx_ = ep->Idx();
-
-                //----------------------------------------------------
-                //change the element stencil to one for this thread, temporarily.
-                FiniteElement* fe_tmp=ep->FE();
-                // change pointer here
-                ep->Assign(this->femgrs_[tid].E(ep->FE_Type()));
-                //----------------------------------------------------
-
-                //reassign fv stencil here (to put it back later, at the end of the loop.
-                const FiniteVolumeStencil<dim>* tmp_fvstencil= ep->FV();
-                ep->Assign(this->fvmgrs_[tid].Stencil( ep->FE_Type()));
-
-                // getting all necessary data for the construction of the result vector from the element
-                this->thread_stencil_processor_[tid]->InitializeFirstOrder( this->STENCIL_DATA[e], *ep ,this->adv1_key_.type,ncom);
-                // starting accumulation with in and out fluxes which are temporarily stored in result vector
-
-                AccumulateFluxUpwindProductsOMP(RESULT[tid]);
-                //put the stencil back
-                ep->Assign(tmp_fvstencil);
-
-                // put the FEM back here
-                ep->Assign(fe_tmp);
-
-            } // end of accumulation
-        }
-        for  (size_t tid = 0 ; tid < omp_get_max_threads();tid++){
-            for (auto i = 0 ; i < this->gref_.Nodes();i++)
-                this->RESULT[i]+=RESULT[tid][i];
-        }
-#endif
 
         // compensate for the inflow and the outflow boundaries
         this->AssignFluxBoundaryConditions(ncom);
@@ -351,8 +275,9 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
         this->OutputResults( this->pref_, this->adv1_key_, output_result_range,ncom);
     }
 
-
 } // end AdvectVariable1stOrder
+
+
 
 /**
   @author: Julian E. Mindel (23-09-2013)
@@ -394,7 +319,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariableSingleStep( double time_
 
     // 2. compute solution
     // -------------------
-    if (this->Verbose()) std::cout <<"\n\n\ExplicitMassBasedTransport<"<< dim;
+    if (this->Verbose()) std::cout <<"\n\n"<<"ExplicitMassBasedTransport<"<< dim;
     if (this->Verbose()) std::cout <<">::AdvectVariableSingleStep: Advecting transport variable";
         if ( !this->SecondOrderInSpace() )
         if ( this->diff_key_ != csmp::Index() )

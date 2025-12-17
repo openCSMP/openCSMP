@@ -1,0 +1,108 @@
+\doxysection{csmp\+::Gauss\+Jordan\+\_\+\+Solver Class Reference}
+\hypertarget{classcsmp_1_1_gauss_jordan___solver}{}\label{classcsmp_1_1_gauss_jordan___solver}\index{csmp::GaussJordan\_Solver@{csmp::GaussJordan\_Solver}}
+
+
+{\ttfamily \#include $<$Gauss\+Jordan\+\_\+\+Solver.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Gauss\+Jordan\+\_\+\+Solver\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=209pt]{classcsmp_1_1_gauss_jordan___solver__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Gauss\+Jordan\+\_\+\+Solver\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_gauss_jordan___solver__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_gauss_jordan___solver_af3fb776a09e01d35a3221c2949d5f0b8}{Solve\+Matrix\+Equation}} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&A, std\+::vector$<$ double $>$ \&b, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_gauss_jordan___solver_a7b514ef0591ac7c61b97dd6f40c0569c}{Solve\+Matrix\+Equation}} (\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&A, std\+::vector$<$ double $>$ \&b, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_solver_a331d12fc9b8cb28b1d9614fdd1059a48}{Solver}} ()
+\item 
+{\bfseries Solver} (\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*}settings)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a7707a8bf03e9dde6396aecc144730c68}{Verbose}} (bool verb)
+\item 
+bool {\bfseries Verbose} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a00f2d834fa620f56e50a8cf37808c466}{Solve}} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&G, std\+::vector$<$ double $>$ \&rh, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns=1U)
+\item 
+void {\bfseries Solve} (\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&G, std\+::vector$<$ double $>$ \&rh, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns=1U)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}{Out}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&mat, const char \texorpdfstring{$\ast$}{*}fname="{}Sparse\+Matrix"{}) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a38054ec4ca8ea1fca61e4e32abf82c0e}{Out}} (const std\+::vector$<$ double $>$ \&vec, const char \texorpdfstring{$\ast$}{*}fname="{}CSP\+\_\+\+Vec"{}) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_solver_a352359e5ec450c03b8cf8b4fa2d06c2a}{Calculate\+Residual}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&A, const std\+::vector$<$ double $>$ \&b, const std\+::vector$<$ double $>$ \&x) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_solver_aa134b5de63e32e0a305f9ed4c660a16c}{Input\+Solver\+Settings}} (\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \&settings)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Solver\+Settings} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*} {\bfseries solver\+\_\+settings\+\_\+} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Trivial Gauss \doxylink{classcsmp_1_1_solver}{Solver}
+
+Basic Gauss-\/\+Jordan solver adapted to comply with \doxylink{classcsmp_1_1_sparse_matrix}{csmp\+::\+Sparse\+Matrix}, STL and according functionality
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2010 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_gauss_jordan___solver_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_gauss_jordan___solver_a7b514ef0591ac7c61b97dd6f40c0569c}\index{csmp::GaussJordan\_Solver@{csmp::GaussJordan\_Solver}!SolveMatrixEquation@{SolveMatrixEquation}}
+\index{SolveMatrixEquation@{SolveMatrixEquation}!csmp::GaussJordan\_Solver@{csmp::GaussJordan\_Solver}}
+\doxysubsubsection{\texorpdfstring{SolveMatrixEquation()}{SolveMatrixEquation()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_gauss_jordan___solver_a7b514ef0591ac7c61b97dd6f40c0569c} 
+void csmp\+::\+Gauss\+Jordan\+\_\+\+Solver\+::\+Solve\+Matrix\+Equation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&}]{A}{, }\item[{std\+::vector$<$ double $>$ \&}]{b}{, }\item[{std\+::vector$<$ double $>$ \&}]{x}{, }\item[{size\+\_\+t}]{no\+\_\+unknowns}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}.
+
+\Hypertarget{classcsmp_1_1_gauss_jordan___solver_af3fb776a09e01d35a3221c2949d5f0b8}\index{csmp::GaussJordan\_Solver@{csmp::GaussJordan\_Solver}!SolveMatrixEquation@{SolveMatrixEquation}}
+\index{SolveMatrixEquation@{SolveMatrixEquation}!csmp::GaussJordan\_Solver@{csmp::GaussJordan\_Solver}}
+\doxysubsubsection{\texorpdfstring{SolveMatrixEquation()}{SolveMatrixEquation()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_gauss_jordan___solver_af3fb776a09e01d35a3221c2949d5f0b8} 
+void csmp\+::\+Gauss\+Jordan\+\_\+\+Solver\+::\+Solve\+Matrix\+Equation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{A}{, }\item[{std\+::vector$<$ double $>$ \&}]{b}{, }\item[{std\+::vector$<$ double $>$ \&}]{x}{, }\item[{size\+\_\+t}]{no\+\_\+unknowns}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+Function to solve Ax = b with single column RHS 
+
+Implements \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/solver/Gauss\+Jordan\+\_\+\+Solver.\+h\item 
+source/modules/integration/solver/Gauss\+Jordan\+\_\+\+Solver.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,37 @@
+\doxysection{Stokes\+Einstein\+Diffusivity.\+h}
+\hypertarget{_stokes_einstein_diffusivity_8h_source}{}\label{_stokes_einstein_diffusivity_8h_source}\index{source/includes/thmc/single\_phase\_flow/StokesEinsteinDiffusivity.h@{source/includes/thmc/single\_phase\_flow/StokesEinsteinDiffusivity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_STOKES\_EINSTEIN\_DIFFUSIVITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_STOKES\_EINSTEIN\_DIFFUSIVITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_stokes_einstein_diffusivity}{StokesEinsteinDiffusivity}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ T;\ \ \ \ \ \ \textcolor{comment}{///\ <\ temperature\ \ \ \ \ \ \ [oC]}}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ E;\ \ \ \ \ \ \textcolor{comment}{///\ <\ dynamic\ viscosity\ [Pa\ s-\/1]}}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ D;\ \ \ \ \ \ \textcolor{comment}{///\ <\ diffusivity\ \ \ \ \ \ \ [m2\ s-\/1]}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ Bo,\ \ \ \ \ \textcolor{comment}{///\ <\ Boltzman's\ constant\ (1.380662e-\/23\ J\ K-\/1)}}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ diffus,\ \textcolor{comment}{///\ <\ basic\ diffusivity}}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sixPi,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ omega;\ \ \textcolor{comment}{///\ <\ porous\ medium\ reduction\ factor}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ R0;\ \ \ \ \ \textcolor{comment}{///\ <\ solute\ radius}}
+\DoxyCodeLine{00018\ \ \ \ \ std::string\ \ \ \ solute;\ \textcolor{comment}{///\ <\ diffusing\ species}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ eta,\ Tc;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ StokesEinsteinDiffusivity(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ species,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ diffusivity,\ \textcolor{keywordtype}{double}\ Omega\ );}
+\DoxyCodeLine{00025\ \ \ \ \ \string~StokesEinsteinDiffusivity()\ \{\};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stokes_einstein_diffusivity_abb198ff1032b943111b3ef6a4abe7b19}{Calculate}}();}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ CSMP\_STOKES\_EINSTEIN\_DIFFUSIVITY\_H}}
+
+\end{DoxyCode}

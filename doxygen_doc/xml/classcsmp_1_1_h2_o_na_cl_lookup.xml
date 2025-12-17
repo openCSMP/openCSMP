@@ -1,0 +1,2127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_h2_o_na_cl_lookup" kind="class" language="C++" prot="public">
+    <compoundname>csmp::H2ONaClLookup</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aac214085f454483da8b0c935acb91ad5" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::t_dim</definition>
+        <argsstring></argsstring>
+        <name>t_dim</name>
+        <qualifiedname>csmp::H2ONaClLookup::t_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="47" column="10" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1adfb9dee77066b7105e4c5a2b5c028dda" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::p_dim</definition>
+        <argsstring></argsstring>
+        <name>p_dim</name>
+        <qualifiedname>csmp::H2ONaClLookup::p_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="48" column="10" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a288b0269625cebc76fb32997868c45b0" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::x_dim</definition>
+        <argsstring></argsstring>
+        <name>x_dim</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_dim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="49" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aa521471d8d81f0a7301f711fa188e2ef" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::x_dim200</definition>
+        <argsstring></argsstring>
+        <name>x_dim200</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_dim200</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="50" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae269b8180c0ed91cc891441ae37197ba" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::x_dim400</definition>
+        <argsstring></argsstring>
+        <name>x_dim400</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_dim400</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="51" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1adcb83e54bfe19917f5e4c8dd61eb34f1" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::x_dim600</definition>
+        <argsstring></argsstring>
+        <name>x_dim600</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_dim600</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="52" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a2cdb2400b2016b678b8652c59ba389a5" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::x_dim700</definition>
+        <argsstring></argsstring>
+        <name>x_dim700</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_dim700</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="53" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a41249025ee893c19b8328f2c7ea82544" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::it_200</definition>
+        <argsstring></argsstring>
+        <name>it_200</name>
+        <qualifiedname>csmp::H2ONaClLookup::it_200</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="54" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a522674535799d669d48a15160386d886" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::it_400</definition>
+        <argsstring></argsstring>
+        <name>it_400</name>
+        <qualifiedname>csmp::H2ONaClLookup::it_400</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="55" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a5e4d4b9f6d075efda7ed842965889522" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::it_600</definition>
+        <argsstring></argsstring>
+        <name>it_600</name>
+        <qualifiedname>csmp::H2ONaClLookup::it_600</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="56" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1afe2015ea1185da440491122e301e971c" prot="private" static="no" mutable="no">
+        <type>const long</type>
+        <definition>const long csmp::H2ONaClLookup::it_700</definition>
+        <argsstring></argsstring>
+        <name>it_700</name>
+        <qualifiedname>csmp::H2ONaClLookup::it_700</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="57" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ad8e59a38e155f7903e6789f3f94793f0" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::n_tables</definition>
+        <argsstring></argsstring>
+        <name>n_tables</name>
+        <qualifiedname>csmp::H2ONaClLookup::n_tables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="59" column="11" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae87ce4bc72641ff53cc805281e71d80a" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::table_id</definition>
+        <argsstring></argsstring>
+        <name>table_id</name>
+        <qualifiedname>csmp::H2ONaClLookup::table_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="59" column="20" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aa3add9693b8b7e940a5a01a8cd19c05b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::i</definition>
+        <argsstring></argsstring>
+        <name>i</name>
+        <qualifiedname>csmp::H2ONaClLookup::i</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="11" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a04efa68b140f90e5f0c9757bf64344fc" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::it</definition>
+        <argsstring></argsstring>
+        <name>it</name>
+        <qualifiedname>csmp::H2ONaClLookup::it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="12" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a1518b5e326285d60da7e83d7bf6e00eb" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ip</definition>
+        <argsstring></argsstring>
+        <name>ip</name>
+        <qualifiedname>csmp::H2ONaClLookup::ip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="14" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a909cbcaf44c14237a86ffc14a0afbe28" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ix</definition>
+        <argsstring></argsstring>
+        <name>ix</name>
+        <qualifiedname>csmp::H2ONaClLookup::ix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a0569be0a35b6266c0e10a4dfe98b8cf3" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iA</definition>
+        <argsstring></argsstring>
+        <name>iA</name>
+        <qualifiedname>csmp::H2ONaClLookup::iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="18" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1af3f8779b70e2fe7eb8c1cdc0bf805731" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iB</definition>
+        <argsstring></argsstring>
+        <name>iB</name>
+        <qualifiedname>csmp::H2ONaClLookup::iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="20" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1afbc9a92183229e2cf898ff255bdfa7cf" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iC</definition>
+        <argsstring></argsstring>
+        <name>iC</name>
+        <qualifiedname>csmp::H2ONaClLookup::iC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="22" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae432eceb83835cbe392b74d967984618" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iD</definition>
+        <argsstring></argsstring>
+        <name>iD</name>
+        <qualifiedname>csmp::H2ONaClLookup::iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="24" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a6e342d957707169d27e60e00384a0686" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iE</definition>
+        <argsstring></argsstring>
+        <name>iE</name>
+        <qualifiedname>csmp::H2ONaClLookup::iE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="26" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a2c5923ba4c865403de4289b1e7368fbb" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iF</definition>
+        <argsstring></argsstring>
+        <name>iF</name>
+        <qualifiedname>csmp::H2ONaClLookup::iF</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="28" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a066c66b01692b04d8d545cde7163df6a" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iG</definition>
+        <argsstring></argsstring>
+        <name>iG</name>
+        <qualifiedname>csmp::H2ONaClLookup::iG</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="30" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a7b73def90531a847718fc06fa88f8cd3" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iH</definition>
+        <argsstring></argsstring>
+        <name>iH</name>
+        <qualifiedname>csmp::H2ONaClLookup::iH</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="32" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a2b095498b14674a7cde3f790a2b20013" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::block_id</definition>
+        <argsstring></argsstring>
+        <name>block_id</name>
+        <qualifiedname>csmp::H2ONaClLookup::block_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="60" column="34" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a77425bb4e6b22982ea1013b7689c571d" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iA_t</definition>
+        <argsstring></argsstring>
+        <name>iA_t</name>
+        <qualifiedname>csmp::H2ONaClLookup::iA_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="61" column="11" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ada090ed033d119df664caa6b86ba1d26" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iB_t</definition>
+        <argsstring></argsstring>
+        <name>iB_t</name>
+        <qualifiedname>csmp::H2ONaClLookup::iB_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="61" column="16" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3d58020ef2471313f11a01737b180fac" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iA_p</definition>
+        <argsstring></argsstring>
+        <name>iA_p</name>
+        <qualifiedname>csmp::H2ONaClLookup::iA_p</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="61" column="21" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a4cb2beacf1fc397d0d7f23d3ac2d72c0" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iD_p</definition>
+        <argsstring></argsstring>
+        <name>iD_p</name>
+        <qualifiedname>csmp::H2ONaClLookup::iD_p</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="61" column="26" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a60f41678403aa3d9ec15d9b3164956ae" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iA_x</definition>
+        <argsstring></argsstring>
+        <name>iA_x</name>
+        <qualifiedname>csmp::H2ONaClLookup::iA_x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="61" column="31" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a234e2df8728518f2cdd549253df2e4e4" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::iE_x</definition>
+        <argsstring></argsstring>
+        <name>iE_x</name>
+        <qualifiedname>csmp::H2ONaClLookup::iE_x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="61" column="36" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a5c815fa9eb710725e02ba695de86e527" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::storage_index</definition>
+        <argsstring></argsstring>
+        <name>storage_index</name>
+        <qualifiedname>csmp::H2ONaClLookup::storage_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="62" column="11" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ad9d9aabe7b80ed0026ed282ee5f51620" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ip_boiling</definition>
+        <argsstring></argsstring>
+        <name>ip_boiling</name>
+        <qualifiedname>csmp::H2ONaClLookup::ip_boiling</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="63" column="11" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a56be7c708805c7967974ebfbbb55c95d" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::storageindex_lowp1</definition>
+        <argsstring></argsstring>
+        <name>storageindex_lowp1</name>
+        <qualifiedname>csmp::H2ONaClLookup::storageindex_lowp1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="63" column="21" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a7cca24fbebc4a9f4c46a4310e431436b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::storageindex_lowp2</definition>
+        <argsstring></argsstring>
+        <name>storageindex_lowp2</name>
+        <qualifiedname>csmp::H2ONaClLookup::storageindex_lowp2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="63" column="39" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ab4b7e88ea219ee0ea04d71df0267c76b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::storageindex_highp1</definition>
+        <argsstring></argsstring>
+        <name>storageindex_highp1</name>
+        <qualifiedname>csmp::H2ONaClLookup::storageindex_highp1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="63" column="57" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a1861d72af2c62c136566a29d86d8723c" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::storageindex_highp2</definition>
+        <argsstring></argsstring>
+        <name>storageindex_highp2</name>
+        <qualifiedname>csmp::H2ONaClLookup::storageindex_highp2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="63" column="76" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae2527c8202cd6bcd889d52221e7e7c04" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ix_twophase</definition>
+        <argsstring></argsstring>
+        <name>ix_twophase</name>
+        <qualifiedname>csmp::H2ONaClLookup::ix_twophase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="64" column="11" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a1b32cf74aa1b972d716112b35ea149e1" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::storage_index_left</definition>
+        <argsstring></argsstring>
+        <name>storage_index_left</name>
+        <qualifiedname>csmp::H2ONaClLookup::storage_index_left</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="64" column="23" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a596efb9653f590f583c6ca99cf4d7b1b" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ix_old</definition>
+        <argsstring></argsstring>
+        <name>ix_old</name>
+        <qualifiedname>csmp::H2ONaClLookup::ix_old</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="64" column="42" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a6acdc810486afef27589dcbfdb13aebd" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ip_low</definition>
+        <argsstring></argsstring>
+        <name>ip_low</name>
+        <qualifiedname>csmp::H2ONaClLookup::ip_low</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="64" column="48" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aed7777f880ef354ab3afd3e10b0bd068" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ip_high</definition>
+        <argsstring></argsstring>
+        <name>ip_high</name>
+        <qualifiedname>csmp::H2ONaClLookup::ip_high</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="64" column="54" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a49cf31d7188312b374b47856e8a835ec" prot="private" static="no" mutable="no">
+        <type>States</type>
+        <definition>States csmp::H2ONaClLookup::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>csmp::H2ONaClLookup::state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="66" column="14" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae2e3360514b58dc47cc9c82a4af49f71" prot="private" static="no" mutable="no">
+        <type>char</type>
+        <definition>char csmp::H2ONaClLookup::filename[6][60]</definition>
+        <argsstring>[6][60]</argsstring>
+        <name>filename</name>
+        <qualifiedname>csmp::H2ONaClLookup::filename</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="67" column="11" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1af314e20803f100ae63df8c80a623d77e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::H2ONaClLookup::file_found</definition>
+        <argsstring></argsstring>
+        <name>file_found</name>
+        <qualifiedname>csmp::H2ONaClLookup::file_found</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="71" column="10" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ad8038aba2044200e79c2b21c57890408" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClLookup::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::H2ONaClLookup::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="73" column="18" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1adc5421d507c282b342db12946a44b4a6" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClLookup::pressure</definition>
+        <argsstring></argsstring>
+        <name>pressure</name>
+        <qualifiedname>csmp::H2ONaClLookup::pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="74" column="18" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a0f05d5e4898dea9233b4eeda653a842c" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::H2ONaClLookup::composition</definition>
+        <argsstring></argsstring>
+        <name>composition</name>
+        <qualifiedname>csmp::H2ONaClLookup::composition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="75" column="18" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aafc307b1a88d92be3729c3d522d050af" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::tcurrent</definition>
+        <argsstring></argsstring>
+        <name>tcurrent</name>
+        <qualifiedname>csmp::H2ONaClLookup::tcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="15" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aa82d97c1c293e7906e3e4b9b7d9e45c1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::pcurrent</definition>
+        <argsstring></argsstring>
+        <name>pcurrent</name>
+        <qualifiedname>csmp::H2ONaClLookup::pcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="23" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ac0c1c53a87bf10cfce501d66ecf91d15" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::xcurrent</definition>
+        <argsstring></argsstring>
+        <name>xcurrent</name>
+        <qualifiedname>csmp::H2ONaClLookup::xcurrent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="31" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1acf68152499a7fbd05678b8b017948b7a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::xdummy</definition>
+        <argsstring></argsstring>
+        <name>xdummy</name>
+        <qualifiedname>csmp::H2ONaClLookup::xdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="39" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1af4423ed01682b50e1e50c330ed2e5585" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::pdummy</definition>
+        <argsstring></argsstring>
+        <name>pdummy</name>
+        <qualifiedname>csmp::H2ONaClLookup::pdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="45" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aa58cee2f2be1a4ffb9e4a51897bd7fd5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::tdummy</definition>
+        <argsstring></argsstring>
+        <name>tdummy</name>
+        <qualifiedname>csmp::H2ONaClLookup::tdummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="51" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1adaf89ead1a0c9b384ca6fc4311d12a4e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::t_res</definition>
+        <argsstring></argsstring>
+        <name>t_res</name>
+        <qualifiedname>csmp::H2ONaClLookup::t_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="57" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ad630560a8b5a5664cb605101336ae05d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::p_res</definition>
+        <argsstring></argsstring>
+        <name>p_res</name>
+        <qualifiedname>csmp::H2ONaClLookup::p_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="62" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ac452e41dcdabe39e63ab2fadb10e2273" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::x_res</definition>
+        <argsstring></argsstring>
+        <name>x_res</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_res</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="77" column="67" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a7aca108edced115ead1730ca21eab316" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::t_iA</definition>
+        <argsstring></argsstring>
+        <name>t_iA</name>
+        <qualifiedname>csmp::H2ONaClLookup::t_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="78" column="15" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a42f59b33c5a587a69eb66b3b004d73e4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::t_iB</definition>
+        <argsstring></argsstring>
+        <name>t_iB</name>
+        <qualifiedname>csmp::H2ONaClLookup::t_iB</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="78" column="20" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ad219be8f7616202815192ead6b454c15" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::p_iA</definition>
+        <argsstring></argsstring>
+        <name>p_iA</name>
+        <qualifiedname>csmp::H2ONaClLookup::p_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="78" column="25" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a9acc3efc9f7b161266001fdd58d2cd50" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::p_iD</definition>
+        <argsstring></argsstring>
+        <name>p_iD</name>
+        <qualifiedname>csmp::H2ONaClLookup::p_iD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="78" column="30" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a21b9918b80e80ffd87921f2b5196bb96" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::x_iA</definition>
+        <argsstring></argsstring>
+        <name>x_iA</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_iA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="78" column="35" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a10d431a84cf452be97b13ad6996cb55e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::x_iE</definition>
+        <argsstring></argsstring>
+        <name>x_iE</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_iE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="78" column="40" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a4ffb8ffc3a2047d490b0079bd058afb4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::tnorm</definition>
+        <argsstring></argsstring>
+        <name>tnorm</name>
+        <qualifiedname>csmp::H2ONaClLookup::tnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="79" column="15" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1acd3eee61c13dd916453f0806e7cafbe3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::pnorm</definition>
+        <argsstring></argsstring>
+        <name>pnorm</name>
+        <qualifiedname>csmp::H2ONaClLookup::pnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="79" column="20" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1af017da195d23a2fb1f34dabbb3c1d00e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::xnorm</definition>
+        <argsstring></argsstring>
+        <name>xnorm</name>
+        <qualifiedname>csmp::H2ONaClLookup::xnorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="79" column="25" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a01351e3c965d82723190081ecedb4c95" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::v_bottom</definition>
+        <argsstring></argsstring>
+        <name>v_bottom</name>
+        <qualifiedname>csmp::H2ONaClLookup::v_bottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="80" column="15" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a4602afaa7e821e6340051242276a30b0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::v_top</definition>
+        <argsstring></argsstring>
+        <name>v_top</name>
+        <qualifiedname>csmp::H2ONaClLookup::v_top</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="80" column="23" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1afc454b82d99b893b6cb2e27fa64b17f7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::v_right</definition>
+        <argsstring></argsstring>
+        <name>v_right</name>
+        <qualifiedname>csmp::H2ONaClLookup::v_right</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="80" column="28" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a796244c85ee134745f3bfe94288f2d40" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::v_left</definition>
+        <argsstring></argsstring>
+        <name>v_left</name>
+        <qualifiedname>csmp::H2ONaClLookup::v_left</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="80" column="35" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a048554dc4feaf50f7f6e93344a31b756" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::v_point</definition>
+        <argsstring></argsstring>
+        <name>v_point</name>
+        <qualifiedname>csmp::H2ONaClLookup::v_point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="80" column="41" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a7d086deb9d337defbb49200969325db2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::dh</definition>
+        <argsstring></argsstring>
+        <name>dh</name>
+        <qualifiedname>csmp::H2ONaClLookup::dh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="81" column="15" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a5db6b213d69a81d981c03a8d2142e7dd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DP_extrapol</definition>
+        <argsstring></argsstring>
+        <name>DP_extrapol</name>
+        <qualifiedname>csmp::H2ONaClLookup::DP_extrapol</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="15" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1addfeee8c92ebd0988fa21d0c60c1f7c7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DP_lowp</definition>
+        <argsstring></argsstring>
+        <name>DP_lowp</name>
+        <qualifiedname>csmp::H2ONaClLookup::DP_lowp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="26" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1adc8eb8aa35f979f226f363ccc29d47e7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DDensityDP</definition>
+        <argsstring></argsstring>
+        <name>DDensityDP</name>
+        <qualifiedname>csmp::H2ONaClLookup::DDensityDP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="33" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a8ca5afce6ee4dabd314ba47a760e2000" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DEnthalpyDP</definition>
+        <argsstring></argsstring>
+        <name>DEnthalpyDP</name>
+        <qualifiedname>csmp::H2ONaClLookup::DEnthalpyDP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="43" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae8b67d95d837a9709808dc64badd9e36" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DHeatCapacityDP</definition>
+        <argsstring></argsstring>
+        <name>DHeatCapacityDP</name>
+        <qualifiedname>csmp::H2ONaClLookup::DHeatCapacityDP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="54" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a33b2486d2edf5f36a8f80f94af9d0302" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DCompressibilityDP</definition>
+        <argsstring></argsstring>
+        <name>DCompressibilityDP</name>
+        <qualifiedname>csmp::H2ONaClLookup::DCompressibilityDP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="69" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ac6647b7a9ffddd0d11298caf21430227" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DViscosityDP</definition>
+        <argsstring></argsstring>
+        <name>DViscosityDP</name>
+        <qualifiedname>csmp::H2ONaClLookup::DViscosityDP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="87" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a0a2d9a41e5be197ca2c463bb94a25029" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::DP_highp</definition>
+        <argsstring></argsstring>
+        <name>DP_highp</name>
+        <qualifiedname>csmp::H2ONaClLookup::DP_highp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="82" column="99" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1abeb63254fe4d35f1cc9042c220d088fc" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::p_boil</definition>
+        <argsstring></argsstring>
+        <name>p_boil</name>
+        <qualifiedname>csmp::H2ONaClLookup::p_boil</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="83" column="15" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ade338b8c74bf9c33d39294b28b8c8dbd" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::table0</definition>
+        <argsstring></argsstring>
+        <name>table0</name>
+        <qualifiedname>csmp::H2ONaClLookup::table0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="84" column="19" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1aa433b8fdd08a6992748fd179874b355e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::table1</definition>
+        <argsstring></argsstring>
+        <name>table1</name>
+        <qualifiedname>csmp::H2ONaClLookup::table1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="84" column="25" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a05b74e87b4d7812af2475e8f683eb2b3" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::table2</definition>
+        <argsstring></argsstring>
+        <name>table2</name>
+        <qualifiedname>csmp::H2ONaClLookup::table2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="84" column="31" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1adfb589557947b2166390064e9b4725bc" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::table3</definition>
+        <argsstring></argsstring>
+        <name>table3</name>
+        <qualifiedname>csmp::H2ONaClLookup::table3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="84" column="37" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a090bb0ab94da446f5b537d30f87b6c64" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::table4</definition>
+        <argsstring></argsstring>
+        <name>table4</name>
+        <qualifiedname>csmp::H2ONaClLookup::table4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="84" column="43" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1acc9090f3ee79c50c3a182771ae84efb8" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::table5</definition>
+        <argsstring></argsstring>
+        <name>table5</name>
+        <qualifiedname>csmp::H2ONaClLookup::table5</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="84" column="49" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a6af3dbe2bd5b6680c6f3285170643165" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::t_min_table</definition>
+        <argsstring></argsstring>
+        <name>t_min_table</name>
+        <qualifiedname>csmp::H2ONaClLookup::t_min_table</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="85" column="19" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3d4495c9478ba5f083f9be3bbd448322" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::H2ONaClLookup::t_max_table</definition>
+        <argsstring></argsstring>
+        <name>t_max_table</name>
+        <qualifiedname>csmp::H2ONaClLookup::t_max_table</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="85" column="31" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a1c28d403f2188157a2fc519db2b5bfc8" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; long &gt;</type>
+        <definition>std::vector&lt;long&gt; csmp::H2ONaClLookup::ip_vl</definition>
+        <argsstring></argsstring>
+        <name>ip_vl</name>
+        <qualifiedname>csmp::H2ONaClLookup::ip_vl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="86" column="24" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a1bbdfff2573bfcb3af7d562ca357e872" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; long &gt;</type>
+        <definition>std::vector&lt;long&gt; csmp::H2ONaClLookup::it_max_table</definition>
+        <argsstring></argsstring>
+        <name>it_max_table</name>
+        <qualifiedname>csmp::H2ONaClLookup::it_max_table</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="86" column="29" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1af6627cd664fa37625d81744f85692823" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; long &gt;</type>
+        <definition>std::vector&lt;long&gt; csmp::H2ONaClLookup::it_offset</definition>
+        <argsstring></argsstring>
+        <name>it_offset</name>
+        <qualifiedname>csmp::H2ONaClLookup::it_offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="87" column="24" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1ac45dd6bea922e8ae59f6d03b5c9492b6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; long &gt;</type>
+        <definition>std::vector&lt;long&gt; csmp::H2ONaClLookup::x_dim_block</definition>
+        <argsstring></argsstring>
+        <name>x_dim_block</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_dim_block</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="87" column="33" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a7b79b3b7be76b5a43e6a59698ca3c0e0" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; long &gt;</type>
+        <definition>std::vector&lt;long&gt; csmp::H2ONaClLookup::t_dim_table</definition>
+        <argsstring></argsstring>
+        <name>t_dim_table</name>
+        <qualifiedname>csmp::H2ONaClLookup::t_dim_table</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="87" column="44" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3bfe033cdb0acceb6d0adaf20258fcbe" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; long &gt;</type>
+        <definition>std::vector&lt;long&gt; csmp::H2ONaClLookup::x_dim_table</definition>
+        <argsstring></argsstring>
+        <name>x_dim_table</name>
+        <qualifiedname>csmp::H2ONaClLookup::x_dim_table</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="87" column="55" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_h2_o_na_cl_lookup_1af85700af95bb0015272d991552b8f9cc" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; long &gt;</type>
+        <definition>std::vector&lt;long&gt; csmp::H2ONaClLookup::tablesize</definition>
+        <argsstring></argsstring>
+        <name>tablesize</name>
+        <qualifiedname>csmp::H2ONaClLookup::tablesize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="87" column="66" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a1920fbc4cb2beb844543589281ad0c54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::H2ONaClLookup::H2ONaClLookup</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure, const double &amp;externalcomposition)</argsstring>
+        <name>H2ONaClLookup</name>
+        <qualifiedname>csmp::H2ONaClLookup::H2ONaClLookup</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalcomposition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="16" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="29" bodyend="196"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1af96aaded3fc43218276290df4d387872" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::H2ONaClLookup::~H2ONaClLookup</definition>
+        <argsstring>()</argsstring>
+        <name>~H2ONaClLookup</name>
+        <qualifiedname>csmp::H2ONaClLookup::~H2ONaClLookup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="19" column="5" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="201" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a9cdd6a593651ea75447afdad8d604b12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::Temperature</definition>
+        <argsstring>()</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::H2ONaClLookup::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="21" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="206" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a9c00c8f9cac40acf3cfc09b180e67217" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::H2ONaClLookup::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="22" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="207" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae0ca2b3cfd41856d17722ddfb83cf5f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::H2ONaClLookup::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="23" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="208" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a686a125bdf06c35f69a56dd1e18d26d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::Density</definition>
+        <argsstring>()</argsstring>
+        <name>Density</name>
+        <qualifiedname>csmp::H2ONaClLookup::Density</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="24" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="209" bodyend="209"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a805a26537ca26e3a175a578cf43f386e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::Enthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>Enthalpy</name>
+        <qualifiedname>csmp::H2ONaClLookup::Enthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="25" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="210" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ac1b0a568e79775b964ee804332232041" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::HeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>HeatCapacity</name>
+        <qualifiedname>csmp::H2ONaClLookup::HeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="26" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="211" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a9571ced17f309458eb638079ba480efe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::Compressibility</definition>
+        <argsstring>()</argsstring>
+        <name>Compressibility</name>
+        <qualifiedname>csmp::H2ONaClLookup::Compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="27" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="212" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3c8ebb5cb2ffab9d14e9610e5eeae54e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::Viscosity</definition>
+        <argsstring>()</argsstring>
+        <name>Viscosity</name>
+        <qualifiedname>csmp::H2ONaClLookup::Viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="28" column="14" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="213" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3a6c6c87d54bb2119f67abe59eb95430" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::PrintAll</definition>
+        <argsstring>()</argsstring>
+        <name>PrintAll</name>
+        <qualifiedname>csmp::H2ONaClLookup::PrintAll</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="30" column="17" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="1753" bodyend="1764"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a5a8e8c6659f8efae79646f73b13178d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalVaporDensity</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalVaporDensity</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalVaporDensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="32" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="215" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a5c555c4c9c4e97f8b0e2958b38ee127a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalVaporEnthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalVaporEnthalpy</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalVaporEnthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="33" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="216" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a8b4e13380f5f8720c53e98e31322e9f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalVaporHeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalVaporHeatCapacity</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalVaporHeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="34" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="217" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a7b47b8e183063b975b1ecefbab997ca0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalVaporCompressibility</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalVaporCompressibility</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalVaporCompressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="35" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="218" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3b5102d42fabbe3c7f3a0983232702ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalVaporViscosity</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalVaporViscosity</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalVaporViscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="36" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="219" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3ccca83d87bf2165e7b18b1b34e1c620" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalLiquidDensity</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalLiquidDensity</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalLiquidDensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="38" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="221" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a3abab60d3e08914de25436ac3a2db915" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalLiquidEnthalpy</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalLiquidEnthalpy</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalLiquidEnthalpy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="39" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="226" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ad382dcf81dcf5cb6559640555c349285" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalLiquidHeatCapacity</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalLiquidHeatCapacity</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalLiquidHeatCapacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="40" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="231" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae0464ead7e86c26a3aaeac270682485c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalLiquidCompressibility</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalLiquidCompressibility</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalLiquidCompressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="41" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="236" bodyend="240"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1aa777168f20c4c2711452c741d21694c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::SubcriticalLiquidViscosity</definition>
+        <argsstring>()</argsstring>
+        <name>SubcriticalLiquidViscosity</name>
+        <qualifiedname>csmp::H2ONaClLookup::SubcriticalLiquidViscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="42" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="241" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a658436ef93e9a4a8424876f899bcd55f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::GetTableID</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTableID</name>
+        <qualifiedname>csmp::H2ONaClLookup::GetTableID</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="44" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a711bb831b7a0bcb1aa4d8ff741e884b9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::H2ONaClLookup::BinaryOut</definition>
+        <argsstring>(const char *bin_name, long table_id) const</argsstring>
+        <name>BinaryOut</name>
+        <qualifiedname>csmp::H2ONaClLookup::BinaryOut</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_name</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>table_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="69" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a27af1cbdc70b6855ab11e06c17a1a56a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::H2ONaClLookup::BinaryIn</definition>
+        <argsstring>(const char *fname, long dimension, long table_id)</argsstring>
+        <name>BinaryIn</name>
+        <qualifiedname>csmp::H2ONaClLookup::BinaryIn</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>dimension</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>table_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="70" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a97aafa8775921788537e9f6d398eea82" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::BuildTable0</definition>
+        <argsstring>()</argsstring>
+        <name>BuildTable0</name>
+        <qualifiedname>csmp::H2ONaClLookup::BuildTable0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="89" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="1533" bodyend="1750"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1af7debbbeb76cd3ac17b5d176a6d40c35" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::BuildTable1</definition>
+        <argsstring>()</argsstring>
+        <name>BuildTable1</name>
+        <qualifiedname>csmp::H2ONaClLookup::BuildTable1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="91" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="903" bodyend="1146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1abc32b317900586e97184f6ef81cc4ee2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::BuildTable2</definition>
+        <argsstring>()</argsstring>
+        <name>BuildTable2</name>
+        <qualifiedname>csmp::H2ONaClLookup::BuildTable2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="92" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="1151" bodyend="1527"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ae0896ed2fa94a3cbd4489c59b16fae6c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::BuildSimpleTable</definition>
+        <argsstring>(const long &amp;i, std::vector&lt; double &gt; &amp;table)</argsstring>
+        <name>BuildSimpleTable</name>
+        <qualifiedname>csmp::H2ONaClLookup::BuildSimpleTable</qualifiedname>
+        <param>
+          <type>const long &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>table</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="93" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="806" bodyend="899"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a8b629b4e7a6dbf346083763d5a8e7662" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::GetTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>GetTemperatureIndex</name>
+        <qualifiedname>csmp::H2ONaClLookup::GetTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="96" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="258" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a7300c15b5751934317b6fdba36e479be" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::GetPressureIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>GetPressureIndex</name>
+        <qualifiedname>csmp::H2ONaClLookup::GetPressureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="97" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="276" bodyend="292"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a4913acd953fc15a786465a842fb17b84" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::H2ONaClLookup::GetCompositionIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>GetCompositionIndex</name>
+        <qualifiedname>csmp::H2ONaClLookup::GetCompositionIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="98" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="340" bodyend="349"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ab8a63c89cd317c65869e206dc7f19598" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ComputeTemperatureIndex</definition>
+        <argsstring>(const double &amp;t)</argsstring>
+        <name>ComputeTemperatureIndex</name>
+        <qualifiedname>csmp::H2ONaClLookup::ComputeTemperatureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="100" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="295" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a5b8f6a698be3475727730ef12e283b29" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ComputePressureIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>ComputePressureIndex</name>
+        <qualifiedname>csmp::H2ONaClLookup::ComputePressureIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="101" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="317" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ab376988ed61dc6b3255ca9ede5e1344c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long</type>
+        <definition>long csmp::H2ONaClLookup::ComputeCompositionIndex</definition>
+        <argsstring>(const double &amp;p)</argsstring>
+        <name>ComputeCompositionIndex</name>
+        <qualifiedname>csmp::H2ONaClLookup::ComputeCompositionIndex</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="102" column="10" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="351" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1a4e90829aad97b5f044ee45bd01951488" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::Interpolate</definition>
+        <argsstring>(const double &amp;t, const int &amp;property_index)</argsstring>
+        <name>Interpolate</name>
+        <qualifiedname>csmp::H2ONaClLookup::Interpolate</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="103" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="247" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1aa30ec6017dddd6a6933aa210c5f3d318" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::TrilinearInterpolation</definition>
+        <argsstring>(const long &amp;table_id, const std::vector&lt; double &gt; &amp;storage_vector, const int &amp;property_index)</argsstring>
+        <name>TrilinearInterpolation</name>
+        <qualifiedname>csmp::H2ONaClLookup::TrilinearInterpolation</qualifiedname>
+        <param>
+          <type>const long &amp;</type>
+          <declname>table_id</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>storage_vector</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="105" column="12" bodyfile="source/modules/eos/h2o_nacl_lookup/H2ONaClLookup.cpp" bodystart="366" bodyend="586"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_h2_o_na_cl_lookup_1ab7c21173a738a7cf722b96c224e9601d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::H2ONaClLookup::PropertyAtPointH</definition>
+        <argsstring>(const int &amp;property_index)</argsstring>
+        <name>PropertyAtPointH</name>
+        <qualifiedname>csmp::H2ONaClLookup::PropertyAtPointH</qualifiedname>
+        <param>
+          <type>const int &amp;</type>
+          <declname>property_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/H2ONaClLookup.h" line="108" column="12"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::H2ONaClLookup</label>
+        <link refid="classcsmp_1_1_h2_o_na_cl_lookup"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/H2ONaClLookup.h" line="12" column="3" bodyfile="source/includes/eos/H2ONaClLookup.h" bodystart="13" bodyend="111"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a27af1cbdc70b6855ab11e06c17a1a56a" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>BinaryIn</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a711bb831b7a0bcb1aa4d8ff741e884b9" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>BinaryOut</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a2b095498b14674a7cde3f790a2b20013" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>block_id</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae0896ed2fa94a3cbd4489c59b16fae6c" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>BuildSimpleTable</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a97aafa8775921788537e9f6d398eea82" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>BuildTable0</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af7debbbeb76cd3ac17b5d176a6d40c35" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>BuildTable1</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1abc32b317900586e97184f6ef81cc4ee2" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>BuildTable2</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a0f05d5e4898dea9233b4eeda653a842c" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>composition</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a9571ced17f309458eb638079ba480efe" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>Compressibility</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ab376988ed61dc6b3255ca9ede5e1344c" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ComputeCompositionIndex</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a5b8f6a698be3475727730ef12e283b29" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ComputePressureIndex</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ab8a63c89cd317c65869e206dc7f19598" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ComputeTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a33b2486d2edf5f36a8f80f94af9d0302" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DCompressibilityDP</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1adc8eb8aa35f979f226f363ccc29d47e7" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DDensityDP</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a686a125bdf06c35f69a56dd1e18d26d4" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>Density</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a8ca5afce6ee4dabd314ba47a760e2000" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DEnthalpyDP</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a7d086deb9d337defbb49200969325db2" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>dh</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae8b67d95d837a9709808dc64badd9e36" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DHeatCapacityDP</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a5db6b213d69a81d981c03a8d2142e7dd" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DP_extrapol</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a0a2d9a41e5be197ca2c463bb94a25029" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DP_highp</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1addfeee8c92ebd0988fa21d0c60c1f7c7" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DP_lowp</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ac6647b7a9ffddd0d11298caf21430227" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>DViscosityDP</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a805a26537ca26e3a175a578cf43f386e" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>Enthalpy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af314e20803f100ae63df8c80a623d77e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>file_found</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae2e3360514b58dc47cc9c82a4af49f71" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>filename</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a4913acd953fc15a786465a842fb17b84" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>GetCompositionIndex</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a7300c15b5751934317b6fdba36e479be" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>GetPressureIndex</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a658436ef93e9a4a8424876f899bcd55f" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>GetTableID</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a8b629b4e7a6dbf346083763d5a8e7662" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>GetTemperatureIndex</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a1920fbc4cb2beb844543589281ad0c54" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>H2ONaClLookup</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ac1b0a568e79775b964ee804332232041" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>HeatCapacity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aa3add9693b8b7e940a5a01a8cd19c05b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>i</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a0569be0a35b6266c0e10a4dfe98b8cf3" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iA</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3d58020ef2471313f11a01737b180fac" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iA_p</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a77425bb4e6b22982ea1013b7689c571d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iA_t</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a60f41678403aa3d9ec15d9b3164956ae" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iA_x</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af3f8779b70e2fe7eb8c1cdc0bf805731" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iB</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ada090ed033d119df664caa6b86ba1d26" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iB_t</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1afbc9a92183229e2cf898ff255bdfa7cf" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iC</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae432eceb83835cbe392b74d967984618" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iD</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a4cb2beacf1fc397d0d7f23d3ac2d72c0" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iD_p</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a6e342d957707169d27e60e00384a0686" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iE</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a234e2df8728518f2cdd549253df2e4e4" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iE_x</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a2c5923ba4c865403de4289b1e7368fbb" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iF</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a066c66b01692b04d8d545cde7163df6a" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iG</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a7b73def90531a847718fc06fa88f8cd3" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>iH</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a4e90829aad97b5f044ee45bd01951488" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>Interpolate</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a1518b5e326285d60da7e83d7bf6e00eb" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ip</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ad9d9aabe7b80ed0026ed282ee5f51620" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ip_boiling</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aed7777f880ef354ab3afd3e10b0bd068" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ip_high</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a6acdc810486afef27589dcbfdb13aebd" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ip_low</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a1c28d403f2188157a2fc519db2b5bfc8" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ip_vl</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a04efa68b140f90e5f0c9757bf64344fc" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>it</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a41249025ee893c19b8328f2c7ea82544" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>it_200</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a522674535799d669d48a15160386d886" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>it_400</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a5e4d4b9f6d075efda7ed842965889522" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>it_600</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1afe2015ea1185da440491122e301e971c" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>it_700</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a1bbdfff2573bfcb3af7d562ca357e872" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>it_max_table</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af6627cd664fa37625d81744f85692823" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>it_offset</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a909cbcaf44c14237a86ffc14a0afbe28" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ix</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a596efb9653f590f583c6ca99cf4d7b1b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ix_old</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae2527c8202cd6bcd889d52221e7e7c04" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>ix_twophase</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae0ca2b3cfd41856d17722ddfb83cf5f6" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ad8e59a38e155f7903e6789f3f94793f0" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>n_tables</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1abeb63254fe4d35f1cc9042c220d088fc" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>p_boil</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1adfb9dee77066b7105e4c5a2b5c028dda" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>p_dim</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ad219be8f7616202815192ead6b454c15" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>p_iA</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a9acc3efc9f7b161266001fdd58d2cd50" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>p_iD</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ad630560a8b5a5664cb605101336ae05d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>p_res</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aa82d97c1c293e7906e3e4b9b7d9e45c1" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>pcurrent</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af4423ed01682b50e1e50c330ed2e5585" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>pdummy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1acd3eee61c13dd916453f0806e7cafbe3" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>pnorm</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a9c00c8f9cac40acf3cfc09b180e67217" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1adc5421d507c282b342db12946a44b4a6" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>pressure</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3a6c6c87d54bb2119f67abe59eb95430" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>PrintAll</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ab7c21173a738a7cf722b96c224e9601d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>PropertyAtPointH</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a49cf31d7188312b374b47856e8a835ec" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>state</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a5c815fa9eb710725e02ba695de86e527" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>storage_index</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a1b32cf74aa1b972d716112b35ea149e1" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>storage_index_left</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ab4b7e88ea219ee0ea04d71df0267c76b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>storageindex_highp1</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a1861d72af2c62c136566a29d86d8723c" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>storageindex_highp2</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a56be7c708805c7967974ebfbbb55c95d" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>storageindex_lowp1</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a7cca24fbebc4a9f4c46a4310e431436b" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>storageindex_lowp2</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae0464ead7e86c26a3aaeac270682485c" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalLiquidCompressibility</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3ccca83d87bf2165e7b18b1b34e1c620" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalLiquidDensity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3abab60d3e08914de25436ac3a2db915" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalLiquidEnthalpy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ad382dcf81dcf5cb6559640555c349285" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalLiquidHeatCapacity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aa777168f20c4c2711452c741d21694c5" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalLiquidViscosity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a7b47b8e183063b975b1ecefbab997ca0" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalVaporCompressibility</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a5a8e8c6659f8efae79646f73b13178d8" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalVaporDensity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a5c555c4c9c4e97f8b0e2958b38ee127a" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalVaporEnthalpy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a8b4e13380f5f8720c53e98e31322e9f0" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalVaporHeatCapacity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3b5102d42fabbe3c7f3a0983232702ce" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>SubcriticalVaporViscosity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aac214085f454483da8b0c935acb91ad5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>t_dim</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a7b79b3b7be76b5a43e6a59698ca3c0e0" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>t_dim_table</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a7aca108edced115ead1730ca21eab316" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>t_iA</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a42f59b33c5a587a69eb66b3b004d73e4" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>t_iB</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3d4495c9478ba5f083f9be3bbd448322" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>t_max_table</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a6af3dbe2bd5b6680c6f3285170643165" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>t_min_table</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1adaf89ead1a0c9b384ca6fc4311d12a4e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>t_res</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ade338b8c74bf9c33d39294b28b8c8dbd" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>table0</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aa433b8fdd08a6992748fd179874b355e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>table1</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a05b74e87b4d7812af2475e8f683eb2b3" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>table2</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1adfb589557947b2166390064e9b4725bc" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>table3</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a090bb0ab94da446f5b537d30f87b6c64" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>table4</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1acc9090f3ee79c50c3a182771ae84efb8" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>table5</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae87ce4bc72641ff53cc805281e71d80a" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>table_id</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af85700af95bb0015272d991552b8f9cc" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>tablesize</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aafc307b1a88d92be3729c3d522d050af" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>tcurrent</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aa58cee2f2be1a4ffb9e4a51897bd7fd5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>tdummy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a9cdd6a593651ea75447afdad8d604b12" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ad8038aba2044200e79c2b21c57890408" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a4ffb8ffc3a2047d490b0079bd058afb4" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>tnorm</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aa30ec6017dddd6a6933aa210c5f3d318" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>TrilinearInterpolation</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a01351e3c965d82723190081ecedb4c95" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>v_bottom</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a796244c85ee134745f3bfe94288f2d40" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>v_left</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a048554dc4feaf50f7f6e93344a31b756" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>v_point</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1afc454b82d99b893b6cb2e27fa64b17f7" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>v_right</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a4602afaa7e821e6340051242276a30b0" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>v_top</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3c8ebb5cb2ffab9d14e9610e5eeae54e" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>Viscosity</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a288b0269625cebc76fb32997868c45b0" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_dim</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1aa521471d8d81f0a7301f711fa188e2ef" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_dim200</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ae269b8180c0ed91cc891441ae37197ba" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_dim400</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1adcb83e54bfe19917f5e4c8dd61eb34f1" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_dim600</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a2cdb2400b2016b678b8652c59ba389a5" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_dim700</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ac45dd6bea922e8ae59f6d03b5c9492b6" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_dim_block</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a3bfe033cdb0acceb6d0adaf20258fcbe" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_dim_table</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a21b9918b80e80ffd87921f2b5196bb96" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_iA</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1a10d431a84cf452be97b13ad6996cb55e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_iE</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ac452e41dcdabe39e63ab2fadb10e2273" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>x_res</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1ac0c1c53a87bf10cfce501d66ecf91d15" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>xcurrent</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1acf68152499a7fbd05678b8b017948b7a" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>xdummy</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af017da195d23a2fb1f34dabbb3c1d00e" prot="private" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>xnorm</name></member>
+      <member refid="classcsmp_1_1_h2_o_na_cl_lookup_1af96aaded3fc43218276290df4d387872" prot="public" virt="non-virtual"><scope>csmp::H2ONaClLookup</scope><name>~H2ONaClLookup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,69 @@
+\doxysection{csmp\+::Mesh\+Iterator\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_mesh_iterator}{}\label{classcsmp_1_1_mesh_iterator}\index{csmp::MeshIterator$<$ dim, CELL $>$@{csmp::MeshIterator$<$ dim, CELL $>$}}
+
+
+{\ttfamily \#include $<$Mesh\+Iterator.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Mesh\+Iterator\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=173pt]{classcsmp_1_1_mesh_iterator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_a834e1862083b9d121f0d785a13881a20}\label{classcsmp_1_1_mesh_iterator_a834e1862083b9d121f0d785a13881a20} 
+{\bfseries Mesh\+Iterator} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}mesh\+\_\+node)
+\begin{DoxyCompactList}\small\item\em discovers interconnected mesh patch initiaising the member cells \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_a6e5c022f189cb5df3e65824afb153a29}\label{classcsmp_1_1_mesh_iterator_a6e5c022f189cb5df3e65824afb153a29} 
+std\+::set$<$ CELL$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Cells\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_ab7d4c41f7577ac4cc65b2794ca9d736e}\label{classcsmp_1_1_mesh_iterator_ab7d4c41f7577ac4cc65b2794ca9d736e} 
+std\+::set$<$ CELL$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Cells\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_ab35359d00eecc4a386dd027fe5f3f531}\label{classcsmp_1_1_mesh_iterator_ab35359d00eecc4a386dd027fe5f3f531} 
+std\+::set$<$ CELL$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator {\bfseries Cells\+Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_ac3dd64effdb72c91049f5577109c6ee2}\label{classcsmp_1_1_mesh_iterator_ac3dd64effdb72c91049f5577109c6ee2} 
+std\+::set$<$ CELL$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator {\bfseries Cells\+End} ()
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_a93ec318af29cfd6cf1b803b1e921204f}\label{classcsmp_1_1_mesh_iterator_a93ec318af29cfd6cf1b803b1e921204f} 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+Begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_a848b922fc133cfa5bcdf1786c0ffef4a}\label{classcsmp_1_1_mesh_iterator_a848b922fc133cfa5bcdf1786c0ffef4a} 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::const\+\_\+iterator {\bfseries Nodes\+End} () const
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_af8368a9826995e443b24114197759bbf}\label{classcsmp_1_1_mesh_iterator_af8368a9826995e443b24114197759bbf} 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator {\bfseries Nodes\+Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_mesh_iterator_a3340d8446a7abbd92a20cbfefd29b472}\label{classcsmp_1_1_mesh_iterator_a3340d8446a7abbd92a20cbfefd29b472} 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{csmp\+::\+Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator {\bfseries Nodes\+End} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$\newline
+class csmp\+::\+Mesh\+Iterator$<$ dim, CELL $>$}
+Interator to perform a breadth-\/first traversal of contiguous mesh patch during its construction and then contain cell and node sets that can be used to iterate over the mesh tree.
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+15/3/2017
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000157}{Todo}}]needs to be completed to become useful 
+
+use this breadth-\/first graph traversal rather than any other method to discover patch of CELLs. \end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Mesh\+Iterator.\+h\item 
+source/modules/model/Mesh\+Iterator.\+cpp\end{DoxyCompactItemize}

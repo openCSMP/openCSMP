@@ -1,0 +1,480 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_threephase_h_l_v" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ThreephaseHLV</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a928187e60a9779a3dfeabc4221de99ba" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::ThreephaseHLV::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::ThreephaseHLV::temperature_</qualifiedname>
+        <briefdescription>
+<para>const ref to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="32" column="22" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1afabbf106f9f193d6b938b92411052a4d" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f0</definition>
+        <argsstring></argsstring>
+        <name>f0</name>
+        <qualifiedname>csmp::ThreephaseHLV::f0</qualifiedname>
+        <briefdescription>
+<para>parameter f0 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="34" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1afd36aacf41525b19c61f0c443071b25a" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f1</definition>
+        <argsstring></argsstring>
+        <name>f1</name>
+        <qualifiedname>csmp::ThreephaseHLV::f1</qualifiedname>
+        <briefdescription>
+<para>parameter f1 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="35" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a6290a143dfeb933f02266f19b0c75b44" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f2</definition>
+        <argsstring></argsstring>
+        <name>f2</name>
+        <qualifiedname>csmp::ThreephaseHLV::f2</qualifiedname>
+        <briefdescription>
+<para>parameter f2 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="36" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a9f78812dd42f151671b3b9292b44493e" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f3</definition>
+        <argsstring></argsstring>
+        <name>f3</name>
+        <qualifiedname>csmp::ThreephaseHLV::f3</qualifiedname>
+        <briefdescription>
+<para>parameter f3 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="37" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a15845f0b08fad4e35dfccc002734b4b5" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f4</definition>
+        <argsstring></argsstring>
+        <name>f4</name>
+        <qualifiedname>csmp::ThreephaseHLV::f4</qualifiedname>
+        <briefdescription>
+<para>parameter f4 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="38" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1aeefcbe3222127f1d208687f0b7b9a493" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f5</definition>
+        <argsstring></argsstring>
+        <name>f5</name>
+        <qualifiedname>csmp::ThreephaseHLV::f5</qualifiedname>
+        <briefdescription>
+<para>parameter f5 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="39" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1af8dcc03e6665a1ef49424e018e1089d1" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f6</definition>
+        <argsstring></argsstring>
+        <name>f6</name>
+        <qualifiedname>csmp::ThreephaseHLV::f6</qualifiedname>
+        <briefdescription>
+<para>parameter f6 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="40" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1aacd4de850173f9ea9692cda527e77b32" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f7</definition>
+        <argsstring></argsstring>
+        <name>f7</name>
+        <qualifiedname>csmp::ThreephaseHLV::f7</qualifiedname>
+        <briefdescription>
+<para>parameter f7 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="41" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a88088b39c1a384f7be808bd14fbab8be" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f8</definition>
+        <argsstring></argsstring>
+        <name>f8</name>
+        <qualifiedname>csmp::ThreephaseHLV::f8</qualifiedname>
+        <briefdescription>
+<para>parameter f8 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="42" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a10f3bbf49fd4a8d28976c65cc3191fd9" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f9</definition>
+        <argsstring></argsstring>
+        <name>f9</name>
+        <qualifiedname>csmp::ThreephaseHLV::f9</qualifiedname>
+        <briefdescription>
+<para>parameter f9 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="43" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a137e4e8ff6cfc98c00efa57c10f02bbd" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::ThreephaseHLV::f10</definition>
+        <argsstring></argsstring>
+        <name>f10</name>
+        <qualifiedname>csmp::ThreephaseHLV::f10</qualifiedname>
+        <briefdescription>
+<para>parameter f10 for eq. 10 in Driesner&amp;Heinrich (2007) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="44" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a4f46025455f2345911583aa4489632c8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::ThreephaseHLV::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>temperature [C] for internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="46" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1af76838ff477270e3271271d5c50723b6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::myt_</definition>
+        <argsstring></argsstring>
+        <name>myt_</name>
+        <qualifiedname>csmp::ThreephaseHLV::myt_</qualifiedname>
+        <briefdescription>
+<para>tcurrent_/nacl_triple.Temperature() both in [C] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="47" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1afe519f260c5714b96465bdcc98d1bb62" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::ThreephaseHLV::pressure_</qualifiedname>
+        <briefdescription>
+<para>pressure [bar], internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="48" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1ad34deb5e6dbb50fb8d60b7d0f36339e1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::dpressuredt_</definition>
+        <argsstring></argsstring>
+        <name>dpressuredt_</name>
+        <qualifiedname>csmp::ThreephaseHLV::dpressuredt_</qualifiedname>
+        <briefdescription>
+<para>pressure [bar] derivative w.r.t. temperature, internal use </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="49" column="23" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_threephase_h_l_v_1a3aa1ec41d5930a602b6b4a372dc37cad" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_triple_point_na_cl" kindref="compound">TriplePointNaCl</ref></type>
+        <definition>TriplePointNaCl csmp::ThreephaseHLV::nacl_triple</definition>
+        <argsstring></argsstring>
+        <name>nacl_triple</name>
+        <qualifiedname>csmp::ThreephaseHLV::nacl_triple</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="55" column="25" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1a423662bc313dbfac0fcf4e5edd3ea0de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ThreephaseHLV::ThreephaseHLV</definition>
+        <argsstring>(const double &amp;externaltemperature)</argsstring>
+        <name>ThreephaseHLV</name>
+        <qualifiedname>csmp::ThreephaseHLV::ThreephaseHLV</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <briefdescription>
+<para>Pressure-temperature coordinates of threephase Halite+Liquid+Vapor coexistence. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="19" column="5" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="7" bodyend="25"/>
+        <referencedby refid="classcsmp_1_1_brine_1a3ab834697c85d10e2dd3dab232ba3171" compoundref="_brine_8cpp" startline="16" endline="86">csmp::Brine::Brine</referencedby>
+        <referencedby refid="classcsmp_1_1_twophase_liquid_1acbc78de0d42d3c379186195beb7672a2" compoundref="_twophase_liquid_8cpp" startline="15" endline="54">csmp::TwophaseLiquid::TwophaseLiquid</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1a3169159ac3006e8d71200cd9bfd11f27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ThreephaseHLV::~ThreephaseHLV</definition>
+        <argsstring>()</argsstring>
+        <name>~ThreephaseHLV</name>
+        <qualifiedname>csmp::ThreephaseHLV::~ThreephaseHLV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="20" column="5" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="28" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1ae28a69d7dfaef526360bc8a3d62f810c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::Temperature</definition>
+        <argsstring>() const</argsstring>
+        <name>Temperature</name>
+        <qualifiedname>csmp::ThreephaseHLV::Temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="22" column="23" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1ad1bcaa8705f9f8550b2da08c88dbaa3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::Pressure</definition>
+        <argsstring>()</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::ThreephaseHLV::Pressure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="23" column="23" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1a9fd2dfe0e08b9ed43677382dc57e5f74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::DPressureDT</definition>
+        <argsstring>()</argsstring>
+        <name>DPressureDT</name>
+        <qualifiedname>csmp::ThreephaseHLV::DPressureDT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="24" column="23" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1aa7bcd0584282cdbbd23fa20009ec21e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::Tmax</definition>
+        <argsstring>()</argsstring>
+        <name>Tmax</name>
+        <qualifiedname>csmp::ThreephaseHLV::Tmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="25" column="23" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="64" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1a95d2ec630d397d77bbb4fc476943255a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::Pmax</definition>
+        <argsstring>()</argsstring>
+        <name>Pmax</name>
+        <qualifiedname>csmp::ThreephaseHLV::Pmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="26" column="23" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="70" bodyend="74"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1a36fe1f6969c7d70f84dbbd6a2a9f945b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ThreephaseHLV::ThreephaseHLV</definition>
+        <argsstring>()</argsstring>
+        <name>ThreephaseHLV</name>
+        <qualifiedname>csmp::ThreephaseHLV::ThreephaseHLV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="30" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1a003d49657fcf83023808dfb1d3dfad60" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ThreephaseHLV::CheckStatus</definition>
+        <argsstring>()</argsstring>
+        <name>CheckStatus</name>
+        <qualifiedname>csmp::ThreephaseHLV::CheckStatus</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="51" column="25" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="40" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1ad18922ef44a4631120c6e2bcdedb6b02" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::Pressure</definition>
+        <argsstring>(const double &amp;myt)</argsstring>
+        <name>Pressure</name>
+        <qualifiedname>csmp::ThreephaseHLV::Pressure</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>myt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="52" column="23" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="50" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_threephase_h_l_v_1a5e338878c8f7539e1ea95301d1067367" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ThreephaseHLV::DPressureDT</definition>
+        <argsstring>(const double &amp;myt, const double &amp;t)</argsstring>
+        <name>DPressureDT</name>
+        <qualifiedname>csmp::ThreephaseHLV::DPressureDT</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>myt</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/ThreephaseHLV.h" line="53" column="23" bodyfile="source/modules/eos/h2o_nacl/ThreephaseHLV.cpp" bodystart="58" bodyend="62"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ThreephaseHLV</label>
+        <link refid="classcsmp_1_1_threephase_h_l_v"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/ThreephaseHLV.h" line="13" column="3" bodyfile="source/includes/eos/ThreephaseHLV.h" bodystart="14" bodyend="56"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a003d49657fcf83023808dfb1d3dfad60" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>CheckStatus</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a9fd2dfe0e08b9ed43677382dc57e5f74" prot="public" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>DPressureDT</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a5e338878c8f7539e1ea95301d1067367" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>DPressureDT</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1ad34deb5e6dbb50fb8d60b7d0f36339e1" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>dpressuredt_</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1afabbf106f9f193d6b938b92411052a4d" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f0</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1afd36aacf41525b19c61f0c443071b25a" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f1</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a137e4e8ff6cfc98c00efa57c10f02bbd" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f10</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a6290a143dfeb933f02266f19b0c75b44" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f2</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a9f78812dd42f151671b3b9292b44493e" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f3</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a15845f0b08fad4e35dfccc002734b4b5" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f4</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1aeefcbe3222127f1d208687f0b7b9a493" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f5</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1af8dcc03e6665a1ef49424e018e1089d1" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f6</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1aacd4de850173f9ea9692cda527e77b32" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f7</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a88088b39c1a384f7be808bd14fbab8be" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f8</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a10f3bbf49fd4a8d28976c65cc3191fd9" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>f9</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1af76838ff477270e3271271d5c50723b6" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>myt_</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a3aa1ec41d5930a602b6b4a372dc37cad" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>nacl_triple</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a95d2ec630d397d77bbb4fc476943255a" prot="public" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>Pmax</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1ad1bcaa8705f9f8550b2da08c88dbaa3a" prot="public" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1ad18922ef44a4631120c6e2bcdedb6b02" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>Pressure</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1afe519f260c5714b96465bdcc98d1bb62" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a4f46025455f2345911583aa4489632c8" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1ae28a69d7dfaef526360bc8a3d62f810c" prot="public" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>Temperature</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a928187e60a9779a3dfeabc4221de99ba" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a423662bc313dbfac0fcf4e5edd3ea0de" prot="public" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>ThreephaseHLV</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a36fe1f6969c7d70f84dbbd6a2a9f945b" prot="private" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>ThreephaseHLV</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1aa7bcd0584282cdbbd23fa20009ec21e3" prot="public" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>Tmax</name></member>
+      <member refid="classcsmp_1_1_threephase_h_l_v_1a3169159ac3006e8d71200cd9bfd11f27" prot="public" virt="non-virtual"><scope>csmp::ThreephaseHLV</scope><name>~ThreephaseHLV</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

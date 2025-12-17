@@ -1,0 +1,963 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_property_at_point_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PropertyAtPointVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1abfed8db0b93373ad9181098a42c0464a" prot="private" static="no" mutable="no">
+        <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        <definition>const PropertyDatabase&lt;dim&gt;&amp; csmp::PropertyAtPointVisitor&lt; dim &gt;::pref_</definition>
+        <argsstring></argsstring>
+        <name>pref_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::pref_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="47" column="43" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a805c548a8782a9f0e243e2dcf66b69d2" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::PropertyAtPointVisitor&lt; dim &gt;::prop_idx_</definition>
+        <argsstring></argsstring>
+        <name>prop_idx_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::prop_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="48" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1abfb6ebb8501417f89ec55165d4fb15f4" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::PropertyAtPointVisitor&lt; dim &gt;::bc_idx_</definition>
+        <argsstring></argsstring>
+        <name>bc_idx_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::bc_idx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="49" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a104dbb27b4b3cf5cf7256f6ece3e8364" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyAtPointVisitor&lt; dim &gt;::NumberOfElementNodes_</definition>
+        <argsstring></argsstring>
+        <name>NumberOfElementNodes_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::NumberOfElementNodes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="50" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a26540bddac1609fe53a657d3524bd930" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyAtPointVisitor&lt; dim &gt;::maxElementsInTheMesh_</definition>
+        <argsstring></argsstring>
+        <name>maxElementsInTheMesh_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::maxElementsInTheMesh_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="51" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a50d5f6783eb7abf6868df928c448525f" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyAtPointVisitor&lt; dim &gt;::numberOfPoints_</definition>
+        <argsstring></argsstring>
+        <name>numberOfPoints_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::numberOfPoints_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="52" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a49c3c016aca39185a04f196e20a6a431" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyAtPointVisitor&lt; dim &gt;::numberOfPointsFound_</definition>
+        <argsstring></argsstring>
+        <name>numberOfPointsFound_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::numberOfPointsFound_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="53" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a5a84ace1234925293098d60a9041cc12" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, size_t &gt;</type>
+        <definition>std::map&lt;size_t,size_t&gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::elements_ids_found_</definition>
+        <argsstring></argsstring>
+        <name>elements_ids_found_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::elements_ids_found_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="55" column="34" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a19df40772baf950d7db422b2d88c71e2" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::map&lt;size_t, Element&lt;dim&gt;* &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::elements_found_</definition>
+        <argsstring></argsstring>
+        <name>elements_found_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::elements_found_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="56" column="25" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a6c6db82471f291caa7f0508715c21a3c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::props_</definition>
+        <argsstring></argsstring>
+        <name>props_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::props_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="57" column="39" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1ab1c9cbc7013690554da6ebf905d9c215" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::map&lt;size_t, ScalarVariable &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::propS_</definition>
+        <argsstring></argsstring>
+        <name>propS_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::propS_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="58" column="24" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a276e504405113504612182b841330c35" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::map&lt;size_t, VectorVariable&lt;dim&gt; &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::propV_</definition>
+        <argsstring></argsstring>
+        <name>propV_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::propV_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="59" column="19" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a5cde4d3bb76e1a48ddba7aaa32d74bc7" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::map&lt;size_t, TensorVariable&lt;dim&gt; &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::propT_</definition>
+        <argsstring></argsstring>
+        <name>propT_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::propT_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="60" column="19" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a993bf31e2841e660daf92fa00227e9e0" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &gt;</type>
+        <definition>std::map&lt;size_t, ArrayVariable &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::propA_</definition>
+        <argsstring></argsstring>
+        <name>propA_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::propA_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="61" column="25" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1ad7388f2e8321453641b38f379a965bca" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &gt;</type>
+        <definition>std::map&lt;size_t, FlaggedArrayVariable &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::propFA_</definition>
+        <argsstring></argsstring>
+        <name>propFA_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::propFA_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="62" column="18" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a1d2d362c3eaf87a2145c0b733fcf21d6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::NPS_</definition>
+        <argsstring></argsstring>
+        <name>NPS_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::NPS_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="63" column="32" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a1c8d26c9203e3c014bccbfc71cb4f3f1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;VectorVariable&lt;dim&gt; &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::NPV_</definition>
+        <argsstring></argsstring>
+        <name>NPV_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::NPV_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="64" column="27" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1ac8e0ff42521cccf530dab4d5388b14ff" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::vector&lt;TensorVariable&lt;dim&gt; &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::NPT_</definition>
+        <argsstring></argsstring>
+        <name>NPT_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::NPT_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="65" column="27" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a611bb0ceea8e6cbb405cebed15155ed2" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ArrayVariable &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::NPA_</definition>
+        <argsstring></argsstring>
+        <name>NPA_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::NPA_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="66" column="33" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a6fb496ff7482c65799d63e24cf485e2e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &gt;</type>
+        <definition>std::vector&lt;FlaggedArrayVariable &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::NPFA_</definition>
+        <argsstring></argsstring>
+        <name>NPFA_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::NPFA_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="67" column="26" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a00359ebec5480e93fa132ab73d0637eb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::NI_</definition>
+        <argsstring></argsstring>
+        <name>NI_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::NI_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="70" column="39" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1aea5caab3dd4be9f75c28f0effc4b124c" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt;</type>
+        <definition>std::map&lt;size_t, std::vector&lt;double&gt; &gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::xyz_</definition>
+        <argsstring></argsstring>
+        <name>xyz_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::xyz_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="71" column="17" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a385a741c5f0e52b6a7dba6ca02794714" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PropertyAtPointVisitor&lt; dim &gt;::debug_</definition>
+        <argsstring></argsstring>
+        <name>debug_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::debug_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="74" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a4c407aac3956b5e4248b5fbc992f5b2c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PropertyAtPointVisitor&lt; dim &gt;::continueSearch_</definition>
+        <argsstring></argsstring>
+        <name>continueSearch_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::continueSearch_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="75" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a6b8ab6ef4102546b6bb3479aa0b65da3" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::PropertyAtPointVisitor&lt; dim &gt;::bruteforce_</definition>
+        <argsstring></argsstring>
+        <name>bruteforce_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::bruteforce_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="76" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a44498e1acf5d3627b158c77b4a7f197d" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+        <definition>Element&lt;dim&gt;* csmp::PropertyAtPointVisitor&lt; dim &gt;::TargetElement_</definition>
+        <argsstring></argsstring>
+        <name>TargetElement_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::TargetElement_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="78" column="43" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1af5d86fc3812c59a03c72596484baac5e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+        <definition>Element&lt;dim&gt;* csmp::PropertyAtPointVisitor&lt; dim &gt;::CurrentElement_</definition>
+        <argsstring></argsstring>
+        <name>CurrentElement_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::CurrentElement_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="79" column="43" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a5b3274ffacec4bec7fc2263708bdc281" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyAtPointVisitor&lt; dim &gt;::startPoint_</definition>
+        <argsstring></argsstring>
+        <name>startPoint_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::startPoint_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="80" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a64a061f4c3e2698fb2f9dbea8760d2b5" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyAtPointVisitor&lt; dim &gt;::maxIterations_</definition>
+        <argsstring></argsstring>
+        <name>maxIterations_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::maxIterations_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="81" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1ac172b681d2ccb7a50fab99d5e093e35f" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::PropertyAtPointVisitor&lt; dim &gt;::currIteration_</definition>
+        <argsstring></argsstring>
+        <name>currIteration_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::currIteration_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="82" column="49" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1a6e6243d66d3a0aa2b0155600ca914a5c" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, double &gt;</type>
+        <definition>std::map&lt;size_t, double&gt; csmp::PropertyAtPointVisitor&lt; dim &gt;::rangingOfCloud_</definition>
+        <argsstring></argsstring>
+        <name>rangingOfCloud_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::rangingOfCloud_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="83" column="31" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_property_at_point_visitor_1ac450a0005fcb419a779d47dc14421850" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PropertyAtPointVisitor&lt; dim &gt;::precision_</definition>
+        <argsstring></argsstring>
+        <name>precision_</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::precision_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="84" column="47" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a049ccec529fe1710edd14aa1d63e703d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyAtPointVisitor</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;points_to_search, const char *node_property_name)</argsstring>
+        <name>PropertyAtPointVisitor</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::PropertyAtPointVisitor</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>points_to_search</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>node_property_name</declname>
+        </param>
+        <briefdescription>
+<para>attempts to retrieve the value of the property at the point in the mesh </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="author"><para>Andrey Mezentsev (10/2004) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="17" column="5" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="13" bodyend="61"/>
+        <references refid="classcsmp_1_1_property_at_point_visitor_1a049ccec529fe1710edd14aa1d63e703d" compoundref="_property_at_point_visitor_8cpp" startline="13" endline="61">csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyAtPointVisitor</references>
+        <referencedby refid="classcsmp_1_1_property_at_point_visitor_1a049ccec529fe1710edd14aa1d63e703d" compoundref="_property_at_point_visitor_8cpp" startline="13" endline="61">csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyAtPointVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1ab685575ff647d0080b814d6f5c02a40b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PropertyAtPointVisitor&lt; dim &gt;::~PropertyAtPointVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~PropertyAtPointVisitor</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::~PropertyAtPointVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="21" column="5" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1ad713c8cf371c38ab1033379d7c677f1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Processing of the properties for output</para>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="24" column="18" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="470" bodyend="620"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a6a0f87fa8b130276fb22d1464dd72fcc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Model&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+          <defname>m</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="25" column="18" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="627" bodyend="633"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a54024fa88cb2473d0f5f05ce1b425d51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; size_t, size_t &gt; &amp;</type>
+        <definition>map&lt; size_t, size_t &gt; &amp; csmp::PropertyAtPointVisitor&lt; dim &gt;::TargetFound</definition>
+        <argsstring>()</argsstring>
+        <name>TargetFound</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::TargetFound</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="27" column="14" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="135" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1ab9896fbfb90b80cb1cd19cb54ca33f83" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+        <definition>Element&lt; dim &gt; * csmp::PropertyAtPointVisitor&lt; dim &gt;::ElementThatContains</definition>
+        <argsstring>(size_t point) const</argsstring>
+        <name>ElementThatContains</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::ElementThatContains</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>returns a pointer to the element that contains the point of interest </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns NULL pointer if the element cannot be found </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="30" column="14" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="127" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1afbba0ae7b20773a818907dd7d6e76e45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyValueAt</definition>
+        <argsstring>(size_t point, ScalarVariable &amp;outProperty)</argsstring>
+        <name>PropertyValueAt</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::PropertyValueAt</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <declname>outProperty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="32" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="141" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a9e4bb50eaf5ccf5d63a81785c9a28b05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyValueAt</definition>
+        <argsstring>(size_t point, VectorVariable&lt; dim &gt; &amp;outProperty)</argsstring>
+        <name>PropertyValueAt</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::PropertyValueAt</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>outProperty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="33" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="153" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1aa10c436fb5baad9e3f263c05a752de6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyValueAt</definition>
+        <argsstring>(size_t point, TensorVariable&lt; dim &gt; &amp;outProperty)</argsstring>
+        <name>PropertyValueAt</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::PropertyValueAt</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt; &amp;</type>
+          <declname>outProperty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="34" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="165" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a3f6e3051230dc1c8d825d524f54a4d94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyValueAt</definition>
+        <argsstring>(size_t point, ArrayVariable &amp;outProperty)</argsstring>
+        <name>PropertyValueAt</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::PropertyValueAt</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <declname>outProperty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="35" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="177" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1ad8152b43840b8790599b5e8a05387346" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::PropertyValueAt</definition>
+        <argsstring>(size_t point, FlaggedArrayVariable &amp;outProperty)</argsstring>
+        <name>PropertyValueAt</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::PropertyValueAt</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <declname>outProperty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="36" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="190" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a0513e882cdbf3575610a76fe1c706c1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::SetPropertyKeys</definition>
+        <argsstring>(const char *propS_)</argsstring>
+        <name>SetPropertyKeys</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::SetPropertyKeys</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>propS_</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="38" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="95" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a3960fc2f1eb5d2d01412bd0db3855c36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::SetDebugOn</definition>
+        <argsstring>()</argsstring>
+        <name>SetDebugOn</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::SetDebugOn</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="39" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a20aa2d99d3f5f4f6ba75db7bf16fc19f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::SetContinueSearchOff</definition>
+        <argsstring>()</argsstring>
+        <name>SetContinueSearchOff</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::SetContinueSearchOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="40" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a90b7c930fab05c91b9601c3ec63f1ba6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::SetBruteForceOff</definition>
+        <argsstring>()</argsstring>
+        <name>SetBruteForceOff</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::SetBruteForceOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="41" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="83" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1ab27a70437c5e06bc14f53db704479139" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PropertyAtPointVisitor&lt; dim &gt;::SetBruteForceOn</definition>
+        <argsstring>()</argsstring>
+        <name>SetBruteForceOn</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::SetBruteForceOn</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="42" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="89" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a26107518f8f010aa2113032093e27f67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyAtPointVisitor&lt; dim &gt;::CheckResults</definition>
+        <argsstring>()</argsstring>
+        <name>CheckResults</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::CheckResults</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="44" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="109" bodyend="121"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a844e2f47d12458d629da7a4dd41e460a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyAtPointVisitor&lt; dim &gt;::isCloseToBarycenter</definition>
+        <argsstring>(const std::vector&lt; double &gt; currXyz, Element&lt; dim &gt; *e, VectorVariable&lt; dim &gt; bc)</argsstring>
+        <name>isCloseToBarycenter</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::isCloseToBarycenter</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt;</type>
+          <declname>currXyz</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+          <declname>bc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="86" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="208" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1a03b199ecddf529cf689a306eadaf7b10" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyAtPointVisitor&lt; dim &gt;::FindPoint_BruteForceSearch</definition>
+        <argsstring>(const std::vector&lt; double &gt; currXyz, Element&lt; dim &gt; *e, VectorVariable&lt; dim &gt; bc)</argsstring>
+        <name>FindPoint_BruteForceSearch</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::FindPoint_BruteForceSearch</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt;</type>
+          <declname>currXyz</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+          <declname>bc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="87" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="241" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_property_at_point_visitor_1ad265f80d0996d4356a23c4bd5d79d345" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PropertyAtPointVisitor&lt; dim &gt;::FindPoint_NeighborSearch</definition>
+        <argsstring>(const std::vector&lt; double &gt; currXyz, Element&lt; dim &gt; *e, VectorVariable&lt; dim &gt; bc)</argsstring>
+        <name>FindPoint_NeighborSearch</name>
+        <qualifiedname>csmp::PropertyAtPointVisitor::FindPoint_NeighborSearch</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt;</type>
+          <declname>currXyz</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+          <declname>bc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/PropertyAtPointVisitor.h" line="88" column="10" bodyfile="source/modules/model/PropertyAtPointVisitor.cpp" bodystart="304" bodyend="462"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::PropertyAtPointVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_property_at_point_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PropertyAtPointVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_property_at_point_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/PropertyAtPointVisitor.h" line="13" column="1" bodyfile="source/includes/model/PropertyAtPointVisitor.h" bodystart="13" bodyend="90"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1abfb6ebb8501417f89ec55165d4fb15f4" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>bc_idx_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a6b8ab6ef4102546b6bb3479aa0b65da3" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>bruteforce_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a26107518f8f010aa2113032093e27f67" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>CheckResults</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a4c407aac3956b5e4248b5fbc992f5b2c" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>continueSearch_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1af5d86fc3812c59a03c72596484baac5e" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>CurrentElement_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ac172b681d2ccb7a50fab99d5e093e35f" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>currIteration_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a385a741c5f0e52b6a7dba6ca02794714" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>debug_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a19df40772baf950d7db422b2d88c71e2" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>elements_found_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a5a84ace1234925293098d60a9041cc12" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>elements_ids_found_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ab9896fbfb90b80cb1cd19cb54ca33f83" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>ElementThatContains</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a03b199ecddf529cf689a306eadaf7b10" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>FindPoint_BruteForceSearch</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ad265f80d0996d4356a23c4bd5d79d345" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>FindPoint_NeighborSearch</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a844e2f47d12458d629da7a4dd41e460a" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>isCloseToBarycenter</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a26540bddac1609fe53a657d3524bd930" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>maxElementsInTheMesh_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a64a061f4c3e2698fb2f9dbea8760d2b5" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>maxIterations_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a00359ebec5480e93fa132ab73d0637eb" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>NI_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a611bb0ceea8e6cbb405cebed15155ed2" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>NPA_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a6fb496ff7482c65799d63e24cf485e2e" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>NPFA_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a1d2d362c3eaf87a2145c0b733fcf21d6" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>NPS_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ac8e0ff42521cccf530dab4d5388b14ff" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>NPT_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a1c8d26c9203e3c014bccbfc71cb4f3f1" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>NPV_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a104dbb27b4b3cf5cf7256f6ece3e8364" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>NumberOfElementNodes_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a50d5f6783eb7abf6868df928c448525f" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>numberOfPoints_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a49c3c016aca39185a04f196e20a6a431" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>numberOfPointsFound_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ac450a0005fcb419a779d47dc14421850" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>precision_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1abfed8db0b93373ad9181098a42c0464a" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>pref_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a805c548a8782a9f0e243e2dcf66b69d2" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>prop_idx_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a993bf31e2841e660daf92fa00227e9e0" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>propA_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a049ccec529fe1710edd14aa1d63e703d" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>PropertyAtPointVisitor</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1afbba0ae7b20773a818907dd7d6e76e45" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>PropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a9e4bb50eaf5ccf5d63a81785c9a28b05" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>PropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1aa10c436fb5baad9e3f263c05a752de6a" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>PropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a3f6e3051230dc1c8d825d524f54a4d94" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>PropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ad8152b43840b8790599b5e8a05387346" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>PropertyValueAt</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ad7388f2e8321453641b38f379a965bca" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>propFA_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ab1c9cbc7013690554da6ebf905d9c215" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>propS_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a6c6db82471f291caa7f0508715c21a3c" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>props_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a5cde4d3bb76e1a48ddba7aaa32d74bc7" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>propT_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a276e504405113504612182b841330c35" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>propV_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a6e6243d66d3a0aa2b0155600ca914a5c" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>rangingOfCloud_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a90b7c930fab05c91b9601c3ec63f1ba6" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>SetBruteForceOff</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ab27a70437c5e06bc14f53db704479139" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>SetBruteForceOn</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a20aa2d99d3f5f4f6ba75db7bf16fc19f" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>SetContinueSearchOff</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a3960fc2f1eb5d2d01412bd0db3855c36" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>SetDebugOn</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a0513e882cdbf3575610a76fe1c706c1c" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>SetPropertyKeys</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a5b3274ffacec4bec7fc2263708bdc281" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>startPoint_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a44498e1acf5d3627b158c77b4a7f197d" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>TargetElement_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a54024fa88cb2473d0f5f05ce1b425d51" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>TargetFound</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ad713c8cf371c38ab1033379d7c677f1c" prot="public" virt="virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1a6a0f87fa8b130276fb22d1464dd72fcc" prot="public" virt="virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::PropertyAtPointVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1aea5caab3dd4be9f75c28f0effc4b124c" prot="private" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>xyz_</name></member>
+      <member refid="classcsmp_1_1_property_at_point_visitor_1ab685575ff647d0080b814d6f5c02a40b" prot="public" virt="non-virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>~PropertyAtPointVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::PropertyAtPointVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

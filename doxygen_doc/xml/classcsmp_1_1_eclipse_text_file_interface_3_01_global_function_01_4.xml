@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4" kind="class" language="C++" prot="public">
+    <compoundname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</compoundname>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a42df7a6e11bc4d7a49d85b37f8c9a622" prot="protected" static="no" mutable="no">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>std::set&lt;std::string&gt; csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::keywords_</definition>
+        <argsstring></argsstring>
+        <name>keywords_</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::keywords_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="103" column="20" bodyfile="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1ac2209afedb96dc07b23846d58614c6db" prot="protected" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::keyword_</definition>
+        <argsstring></argsstring>
+        <name>keyword_</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::keyword_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="104" column="33" bodyfile="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a78bfde74b77ec18ba6d51cbf458329f2" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::keyword_parameters_</definition>
+        <argsstring></argsstring>
+        <name>keyword_parameters_</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::keyword_parameters_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="105" column="20" bodyfile="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a9c6005ca321b95b2a18e87bc38bb22eb" prot="protected" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::line_length_</definition>
+        <argsstring></argsstring>
+        <name>line_length_</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::line_length_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="107" column="33" bodyfile="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a4f586166c719b21229f1213c9dbb7a98" prot="protected" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::text_line_</definition>
+        <argsstring></argsstring>
+        <name>text_line_</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::text_line_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="108" column="32" bodyfile="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a7c9ec43679b6997ad8ba8ec9a2ae541f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::EclipseTextFileInterface</definition>
+        <argsstring>(size_t max_line_length=256)</argsstring>
+        <name>EclipseTextFileInterface</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::EclipseTextFileInterface</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>max_line_length</declname>
+          <defval>256</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="83" column="5" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="10" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a66c6bca78fa09df3b098725187379aa8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::~EclipseTextFileInterface</definition>
+        <argsstring>()</argsstring>
+        <name>~EclipseTextFileInterface</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::~EclipseTextFileInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="84" column="5" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="18" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a5e3b56b67f7aad46bdc1f34f489f4a72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::ReadFile</definition>
+        <argsstring>(std::ifstream &amp;ifs, bool(*IsCommentLineFunction)(char *), bool(*ReadFunction)(std::ifstream &amp;, char *, size_t, std::set&lt; std::string &gt; &amp;, std::string &amp;, std::vector&lt; std::string &gt; &amp;), bool fail_for_unknown_keyword=true)</argsstring>
+        <name>ReadFile</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::ReadFile</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>bool(*)(char *)</type>
+          <declname>IsCommentLineFunction</declname>
+        </param>
+        <param>
+          <type>bool(*)(std::ifstream &amp;, char *, size_t, std::set&lt; std::string &gt; &amp;, std::string &amp;, std::vector&lt; std::string &gt; &amp;)</type>
+          <declname>ReadFunction</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>fail_for_unknown_keyword</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reading block data marked by keywords</para>
+<para><simplesect kind="author"><para>Roman, 2014 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="86" column="10" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="58" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a49e01a3dfff84dd2e59b04696632c9ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::ReadFile</definition>
+        <argsstring>(std::ifstream &amp;ifs, bool(*IsCommentLineFunction)(char *), bool(*ReadFunction)(std::ifstream &amp;, char *, size_t))</argsstring>
+        <name>ReadFile</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::ReadFile</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <param>
+          <type>bool(*)(char *)</type>
+          <declname>IsCommentLineFunction</declname>
+        </param>
+        <param>
+          <type>bool(*)(std::ifstream &amp;, char *, size_t)</type>
+          <declname>ReadFunction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="92" column="10" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="135" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1ae19d42ae7f8194da920ebcb5375d6c1b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::FindKeyword</definition>
+        <argsstring>(const std::string &amp;)</argsstring>
+        <name>FindKeyword</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::FindKeyword</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <defname>keyword</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="96" column="10" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a20ce65722644b990054cc46e1cf715c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::AddKeyword</definition>
+        <argsstring>(const std::string &amp;)</argsstring>
+        <name>AddKeyword</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::AddKeyword</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <defname>keyword</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="97" column="10" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="31" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1ada0652fa1b8a84d452d011a00700e431" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::AddKeywords</definition>
+        <argsstring>(const std::set&lt; std::string &gt; &amp;)</argsstring>
+        <name>AddKeywords</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::AddKeywords</qualifiedname>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <defname>keywords</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="98" column="10" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="37" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a872c9cc770d063b41790395cf36ae6c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::ClearKeywords</definition>
+        <argsstring>()</argsstring>
+        <name>ClearKeywords</name>
+        <qualifiedname>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;::ClearKeywords</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="99" column="10" bodyfile="source/modules/interfaces/Eclipse/EclipseTextFileInterface.cpp" bodystart="46" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::EclipseTextFileInterface&lt; STREAM &gt;</label>
+        <link refid="classcsmp_1_1_eclipse_text_file_interface"/>
+      </node>
+      <node id="1">
+        <label>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</label>
+        <link refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; GlobalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::EclipseTextFileInterface&lt; STREAM &gt;</label>
+        <link refid="classcsmp_1_1_eclipse_text_file_interface"/>
+      </node>
+      <node id="1">
+        <label>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</label>
+        <link refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; GlobalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" line="79" column="1" bodyfile="source/includes/interfaces/Eclipse/EclipseTextFileInterface.h" bodystart="79" bodyend="110"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a20ce65722644b990054cc46e1cf715c4" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>AddKeyword</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1ada0652fa1b8a84d452d011a00700e431" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>AddKeywords</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a872c9cc770d063b41790395cf36ae6c4" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>ClearKeywords</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a7c9ec43679b6997ad8ba8ec9a2ae541f" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>EclipseTextFileInterface</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1ae19d42ae7f8194da920ebcb5375d6c1b" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>FindKeyword</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1ac2209afedb96dc07b23846d58614c6db" prot="protected" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>keyword_</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a78bfde74b77ec18ba6d51cbf458329f2" prot="protected" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>keyword_parameters_</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a42df7a6e11bc4d7a49d85b37f8c9a622" prot="protected" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>keywords_</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a9c6005ca321b95b2a18e87bc38bb22eb" prot="protected" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>line_length_</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a5e3b56b67f7aad46bdc1f34f489f4a72" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>ReadFile</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a49e01a3dfff84dd2e59b04696632c9ad" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>ReadFile</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a4f586166c719b21229f1213c9dbb7a98" prot="protected" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>text_line_</name></member>
+      <member refid="classcsmp_1_1_eclipse_text_file_interface_3_01_global_function_01_4_1a66c6bca78fa09df3b098725187379aa8" prot="public" virt="non-virtual"><scope>csmp::EclipseTextFileInterface&lt; GlobalFunction &gt;</scope><name>~EclipseTextFileInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

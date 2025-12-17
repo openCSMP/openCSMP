@@ -1,0 +1,1256 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_array_variable" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ArrayVariable</compoundname>
+    <includes refid="_array_variable_8h" local="no">ArrayVariable.h</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_array_variable_1a22b2ee3c50e98112c0bf7fce21ac4e68" prot="public" static="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>typedef std::vector&lt;double&gt; csmp::ArrayVariable::ArrayContainer</definition>
+        <argsstring></argsstring>
+        <name>ArrayContainer</name>
+        <qualifiedname>csmp::ArrayVariable::ArrayContainer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="72" column="27" bodyfile="source/includes/model/ArrayVariable.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_array_variable_1a2b7441f1e2bb91cdf527a15f5ac5d601" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::ArrayVariable::VariableType</definition>
+        <argsstring></argsstring>
+        <name>VariableType</name>
+        <qualifiedname>csmp::ArrayVariable::VariableType</qualifiedname>
+        <initializer>= ARRAY</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="70" column="38" bodyfile="source/includes/model/ArrayVariable.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_array_variable_1a20b7c2454d4449b3498d55d4d227d1a4" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::ArrayVariable::flag_</definition>
+        <argsstring></argsstring>
+        <name>flag_</name>
+        <qualifiedname>csmp::ArrayVariable::flag_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="170" column="22" bodyfile="source/includes/model/ArrayVariable.h" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_array_variable_1ae0dc3bd7d6d5735d201de76cb099bf8c" prot="private" static="no" mutable="no">
+        <type>ArrayContainer</type>
+        <definition>ArrayContainer csmp::ArrayVariable::data_</definition>
+        <argsstring></argsstring>
+        <name>data_</name>
+        <qualifiedname>csmp::ArrayVariable::data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="171" column="22" bodyfile="source/includes/model/ArrayVariable.h" bodystart="171" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a3e913afed0c2bbc2cd16964d2761905f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ArrayVariable::ArrayVariable</definition>
+        <argsstring>()</argsstring>
+        <name>ArrayVariable</name>
+        <qualifiedname>csmp::ArrayVariable::ArrayVariable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="74" column="7" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="27" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a94de49b3df36ecce89fc3703f8018e1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>csmp::ArrayVariable::ArrayVariable</definition>
+        <argsstring>(const char *arrayPropertyName, const PropertyDatabase&lt; dim &gt; &amp;, double defaultValue=std::numeric_limits&lt; double &gt;::quiet_NaN(), VARIABLE_FLAG flag=ANY)</argsstring>
+        <name>ArrayVariable</name>
+        <qualifiedname>csmp::ArrayVariable::ArrayVariable</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>arrayPropertyName</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pd</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>defaultValue</declname>
+          <defval>std::numeric_limits&lt; double &gt;::quiet_NaN()</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+          <defval><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" kindref="member">ANY</ref></defval>
+        </param>
+        <briefdescription>
+<para>Automatically sets size to corresponding index, flag to ANY. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="76" column="7" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="11" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1af5b0d404dba4df7b08200acc1dbae7bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ArrayVariable::ArrayVariable</definition>
+        <argsstring>(uint32_t arraySize, double defaultValue=0., VARIABLE_FLAG flag=ANY)</argsstring>
+        <name>ArrayVariable</name>
+        <qualifiedname>csmp::ArrayVariable::ArrayVariable</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>arraySize</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>defaultValue</declname>
+          <defval>0.</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+          <defval><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" kindref="member">ANY</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="81" column="7" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="32" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a5c10162b2eb9333f2e2893da188211ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ArrayVariable::ArrayVariable</definition>
+        <argsstring>(const Index &amp;arrayKey, double defaultValue=0., VARIABLE_FLAG flag=ANY)</argsstring>
+        <name>ArrayVariable</name>
+        <qualifiedname>csmp::ArrayVariable::ArrayVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>arrayKey</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>defaultValue</declname>
+          <defval>0.</defval>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+          <defval><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" kindref="member">ANY</ref></defval>
+        </param>
+        <briefdescription>
+<para>As <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> ctor, but using index right away. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="85" column="7" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="22" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a90a2cd5ad4f66a320b4f825d522cdd6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ArrayVariable::ArrayVariable</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>ArrayVariable</name>
+        <qualifiedname>csmp::ArrayVariable::ArrayVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="89" column="7" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="37" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a9500b9686a63485d0dd3e6d9fe9eee99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::ArrayVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>assigments </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="92" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="129" bodyend="136"/>
+        <referencedby refid="classcsmp_1_1_operand_1ac0789c557287e37c95397ebd41f4c6bd" compoundref="_operand_8cpp" startline="328" endline="347">csmp::Operand&lt; dim &gt;::operator=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1ad37a907a93dae8588b428ea264a2be68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ArrayVariable::CopyValuesOnly</definition>
+        <argsstring>(FlaggedArrayVariable &amp;)</argsstring>
+        <name>CopyValuesOnly</name>
+        <qualifiedname>csmp::ArrayVariable::CopyValuesOnly</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <defname>fav</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="93" column="12" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="139" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a6bcd11d4ecca29c6a6d5c9ce7e00878d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::ArrayVariable::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="94" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="146" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1aab9c7bb43495f5cd899b0d4f1aa4aead" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::ArrayVariable::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="95" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="152" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a9ebb6922d9080efc9fa0e3b8169ea5a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator+</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::ArrayVariable::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>standard operations </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Standart Operations with temporary object. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="98" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="160" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a3b82a5d47ef4ea7d725a06a6da8a216e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator-</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::ArrayVariable::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="99" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="168" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a8b3203549da712c62ab5cd43fc9d23ae" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator*</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::ArrayVariable::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="100" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="176" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a94f76477c4ed7875a3596f27398cc086" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator/</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::ArrayVariable::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="101" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="184" bodyend="190"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a097f486bb9d0d8998020302ad44cc96b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator^</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator^</name>
+        <qualifiedname>csmp::ArrayVariable::operator^</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="102" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="192" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1aaa61fe7923f28de7adf847eeac94d05c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator+=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::ArrayVariable::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>Standart Operations with current object. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="104" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="202" bodyend="206"/>
+        <referencedby refid="classcsmp_1_1_operand_1a3aae09b80758842342bf5225c87ddd06" compoundref="_operand_8cpp" startline="752" endline="761">csmp::Operand&lt; dim &gt;::operator+=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a97e566fa49eeb71a15125f2efd543c5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator-=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::ArrayVariable::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="105" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="208" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a52cbe7a34b97684dcfa4d038608d0d89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator*=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::ArrayVariable::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="106" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="214" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a47713574138804ce949d0d1daa38bac4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator/=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::ArrayVariable::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="107" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="220" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1af894e2cac20e792eadf4483192c35a9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator+=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::ArrayVariable::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+<para>Standart Operations with current object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Operations with ScalarVariables </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="109" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="229" bodyend="233"/>
+        <referencedby refid="classcsmp_1_1_operand_1a600887200a8af809db443ae60b90ad72" compoundref="_operand_8cpp" startline="834" endline="843">csmp::Operand&lt; dim &gt;::operator+=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a102670c864d01426f91cbfe828d1a46e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator-=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::ArrayVariable::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="110" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="235" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1afb56cba686f64700524df24ec81cd421" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator*=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::ArrayVariable::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="111" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="241" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a22b7ba88c01fd8791078a234d6b86325" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator/=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::ArrayVariable::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="112" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="247" bodyend="251"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a949a97887ed84660ddf86eda34567c0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator+=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::ArrayVariable::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>arr</defname>
+        </param>
+        <briefdescription>
+<para>value by value operations </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Operations with ArrayVariables. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="115" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="254" bodyend="258"/>
+        <referencedby refid="classcsmp_1_1_operand_1a278a52f89e123896f7b147287eab8476" compoundref="_operand_8cpp" startline="1003" endline="1020">csmp::Operand&lt; dim &gt;::operator+=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a74679aabb44ef88057377d741228d64e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator-=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::ArrayVariable::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>arr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="116" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="260" bodyend="264"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a047b4a87dbf40ff0ea5289b4b5778de1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator*=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::ArrayVariable::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>arr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="117" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="266" bodyend="270"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1af79f9c7949675788ee46f5d2c223480a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+        <definition>ArrayVariable &amp; csmp::ArrayVariable::operator/=</definition>
+        <argsstring>(const ArrayVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::ArrayVariable::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>arr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="118" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="272" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a8c3a2c23f95cf1fed730d2f7ee780f48" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator-</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::ArrayVariable::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>element-by-element operations </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="121" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="279" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a1422deee2adf6dba62295f00f3711ff3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator*</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::ArrayVariable::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="122" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="295" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1aaccbc16284737c75a36f874e5a44d0c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator+</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::ArrayVariable::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="123" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="287" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1ab0fb53bbdc148bd7ab9d7334b5225770" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>ArrayVariable csmp::ArrayVariable::operator/</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::ArrayVariable::operator/</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="124" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="304" bodyend="310"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1ad7130f025f50fd2736c79d2582f43c30" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::operator==</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::ArrayVariable::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>comparison of flags and values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="127" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="92" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1ac00f752f98ffca61c2020d0e6f9294ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::operator!=</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::ArrayVariable::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="128" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="103" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a4869d2736cbdc403d339b603dd1136e1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::operator&lt;</definition>
+        <argsstring>(const ArrayVariable &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::ArrayVariable::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <defname>av</defname>
+        </param>
+        <briefdescription>
+<para>comparison of length (to allow ordering in containers) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="131" column="7" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="109" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1af19ffd265e1e57fae184ecc45dc7b6d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::ArrayVariable::operator()</definition>
+        <argsstring>(uint32_t)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::ArrayVariable::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+<para>accessors to the data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="134" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="42" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a61ef6af2aa06384bc5f26228a733afaa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ArrayVariable::operator[]</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::ArrayVariable::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="135" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="48" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a5b89320aaf1954216acf3cb317dd0c52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ArrayVariable::Component</definition>
+        <argsstring>(uint32_t, double)</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::ArrayVariable::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>functions needed to make CSMP variables interoperable; do not delete </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="138" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="54" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a0c785d4e15facab4b9f8cdcce65f5c08" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ArrayVariable::Component</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::ArrayVariable::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="139" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="60" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a416ecf28e0b2b46f965c39e1d958b29d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::ArrayVariable::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::ArrayVariable::Size</qualifiedname>
+        <briefdescription>
+<para>returns number of array elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="142" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a76f357ad2d0fdad67f789790c1c1cd9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ArrayVariable::Resize</definition>
+        <argsstring>(uint32_t newSize, double newValue=std::numeric_limits&lt; double &gt;::quiet_NaN())</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::ArrayVariable::Resize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>newSize</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>newValue</declname>
+          <defval>std::numeric_limits&lt; double &gt;::quiet_NaN()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="143" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a8d484dbe81624a615aa9bd421d59beec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::ArrayVariable::Flag</definition>
+        <argsstring>() const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::ArrayVariable::Flag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="144" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a06ab034c2b91fd9f83de5348835f4811" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::ArrayVariable::Flag</definition>
+        <argsstring>()</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::ArrayVariable::Flag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="145" column="21" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a8edbc7a4b490bf03c30f6fe1830fa8cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ArrayVariable::Flag</definition>
+        <argsstring>(VARIABLE_FLAG flag)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::ArrayVariable::Flag</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="146" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="87" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a83691b3d9e9b5a80239656e72628657f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::IsWithinRange</definition>
+        <argsstring>(double min, double max) const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::ArrayVariable::IsWithinRange</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="147" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="313" bodyend="320"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1ada5ab20c4318cc307c75ef134ff72c77" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::Has_NaN_Values</definition>
+        <argsstring>() const</argsstring>
+        <name>Has_NaN_Values</name>
+        <qualifiedname>csmp::ArrayVariable::Has_NaN_Values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="148" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="324" bodyend="329"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a9a97e3b3fe53fc22ed4100a11de314c6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ArrayVariable::MinMax</definition>
+        <argsstring>(double &amp;min, double &amp;max) const</argsstring>
+        <name>MinMax</name>
+        <qualifiedname>csmp::ArrayVariable::MinMax</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+<para>returns the minimum and maximum of the values stored in the array variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="149" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="334" bodyend="338"/>
+        <referencedby refid="classcsmp_1_1_model_1ae98b627c7aa1d3422044856e211fdf96" compoundref="_model_8cpp" startline="2787" endline="2899">csmp::Model&lt; dim &gt;::MinMaxOf</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a3d6ad794611b35b3754b91d9bd9c7731" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ArrayVariable::Sort</definition>
+        <argsstring>()</argsstring>
+        <name>Sort</name>
+        <qualifiedname>csmp::ArrayVariable::Sort</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="150" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="508" bodyend="511"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1affcda14da2f24f099b2f4a9ae8e476f3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ArrayVariable::Out</definition>
+        <argsstring>(long digits=3) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ArrayVariable::Out</qualifiedname>
+        <param>
+          <type>long</type>
+          <declname>digits</declname>
+          <defval>3</defval>
+        </param>
+        <briefdescription>
+<para>printing array values to screen </para>
+        </briefdescription>
+        <detaileddescription>
+<para>outputs values to screen up to 10 values per row </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="153" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="346" bodyend="371"/>
+        <referencedby refid="classcsmp_1_1_operand_1ab6f1b0fc42a00c4d288a275d7510e0ce" compoundref="_operand_8cpp" startline="2008" endline="2016">csmp::Operand&lt; dim &gt;::PrintValue</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a280128f36594f31fa29b1a9e3bfba2b6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::Out</definition>
+        <argsstring>(const char *filename, long precision=9) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ArrayVariable::Out</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>precision</declname>
+          <defval>9</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="154" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="375" bodyend="385"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a4e0f758de8f8c5e56ee05d876343609a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::Out</definition>
+        <argsstring>(std::fstream &amp;) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::ArrayVariable::Out</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <defname>fp</defname>
+        </param>
+        <briefdescription>
+<para>filestream I/O used for domain variables (not recommended because padding creates large storage overhead; use <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> instead) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Outs the array to given file pointer (binary format)</para>
+<para>Order:<orderedlist>
+<listitem><para>Flag</para>
+</listitem><listitem><para>Size</para>
+</listitem><listitem><para>Data</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>9/28/2012</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">fp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If non-null, the fp.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if it succeeds, false if it fails. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="157" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="405" bodyend="428"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a17ea44f38e41ed94d7da666057da68fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::In</definition>
+        <argsstring>(std::fstream &amp;)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::ArrayVariable::In</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <defname>fp</defname>
+        </param>
+        <briefdescription>
+<para>Reads the array from given file pointer (binary format) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>See bool <ref refid="classcsmp_1_1_array_variable_1a4e0f758de8f8c5e56ee05d876343609a" kindref="member">ArrayVariable::Out( std::fstream&amp; fp ) const</ref></para>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>9/28/2012</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">fp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If non-null, the fp.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if it succeeds, false if it fails. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="158" column="22" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="446" bodyend="479"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a2d736f3d53d72dcbf941aa53d546e07d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ArrayContainer::const_iterator</type>
+        <definition>ArrayVariable::ArrayContainer::const_iterator csmp::ArrayVariable::Begin</definition>
+        <argsstring>() const</argsstring>
+        <name>Begin</name>
+        <qualifiedname>csmp::ArrayVariable::Begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="160" column="38" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="514" bodyend="517"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a2a4020ea95908d01f282158998d0ba8a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ArrayContainer::const_iterator</type>
+        <definition>ArrayVariable::ArrayContainer::const_iterator csmp::ArrayVariable::End</definition>
+        <argsstring>() const</argsstring>
+        <name>End</name>
+        <qualifiedname>csmp::ArrayVariable::End</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="161" column="38" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="520" bodyend="523"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a2bd58c37267e90c5395cb58030834774" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::ArrayVariable::Front</definition>
+        <argsstring>()</argsstring>
+        <name>Front</name>
+        <qualifiedname>csmp::ArrayVariable::Front</qualifiedname>
+        <briefdescription>
+<para>Julian 17-07-2014 - This is to allow passing of array variables to GEMS. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="164" column="14" bodyfile="source/includes/model/ArrayVariable.h" bodystart="164" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a12f2e25c3862e5c4d7a0dd35485b9d27" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::ArrayVariable::NextLargestEntry</definition>
+        <argsstring>(double) const</argsstring>
+        <name>NextLargestEntry</name>
+        <qualifiedname>csmp::ArrayVariable::NextLargestEntry</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>fromValue</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="166" column="14" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="494" bodyend="498"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_array_variable_1a1b9f341e6fb28eee3400c0bd34e7a89a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ArrayVariable::HasLargerEntry</definition>
+        <argsstring>(double) const</argsstring>
+        <name>HasLargerEntry</name>
+        <qualifiedname>csmp::ArrayVariable::HasLargerEntry</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>fromValue</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/ArrayVariable.h" line="167" column="16" bodyfile="source/modules/model/ArrayVariable.cpp" bodystart="501" bodyend="505"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Storage for an arbitrary number of variables with a single flag; array size is not predefined or dependent on model dimensions, but can be determined at runtime. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>2012</para>
+</simplesect>
+In order to support arbitrary sized variables to be discretized in CSMP.</para>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>If used to read/store arrays from/on entities featuring a VariableStorage, the size of the <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> has to equal that specified in the variables file, since in the current version (9/4/2012) runtime changes regarding the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> and ArrayVariables are not supported.</para>
+<para>To instantiate an <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> of arbitrary size:</para>
+<para><programlisting><codeline><highlight class="normal">ArrayVariable<sp/>av;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>0<sp/>entries,<sp/>flag<sp/>set<sp/>to<sp/>Plain</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">ArrayVariable<sp/>av(4,<sp/>10.,<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" kindref="member">DIRICH</ref><sp/>);<sp/></highlight><highlight class="comment">//<sp/>4<sp/>entries<sp/>with<sp/>value<sp/>10.,<sp/>flag<sp/>set<sp/>to<sp/>Dirichlet</highlight></codeline>
+</programlisting></para>
+<para>When using <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> in Store/Read operations, we need to first create an instance of appropriate size, i.e. the same size as provided in the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. A ctor which does exactly this is:</para>
+<para><programlisting><codeline><highlight class="normal">ArrayVariable<sp/>av(<sp/></highlight><highlight class="stringliteral">&quot;element<sp/>array&quot;</highlight><highlight class="normal">,<sp/>model.Database()<sp/>);<sp/></highlight><highlight class="comment">//<sp/>size<sp/>as<sp/>specified<sp/>in<sp/>PropertyDatabase,<sp/>values<sp/>=<sp/>0.,<sp/>flag<sp/>=<sp/>plain</highlight></codeline>
+</programlisting></para>
+<para>Again, the alternative would be to manually initiate the correct size. With an <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> of appropriate size, you may use functions like</para>
+<para><programlisting><codeline><highlight class="normal">model.InputPropertyValue(<sp/></highlight><highlight class="stringliteral">&quot;element<sp/>array&quot;</highlight><highlight class="normal">,<sp/>av<sp/>);</highlight></codeline>
+</programlisting></para>
+<para>Or something low level in the likes of</para>
+<para><programlisting><codeline><highlight class="normal">Index<sp/>eaKey(<sp/>model.Database().StorageKey(</highlight><highlight class="stringliteral">&quot;element<sp/>array&quot;</highlight><highlight class="normal">)<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(<sp/>vector&lt;Element&lt;3&gt;*&gt;::const_iterator<sp/>it(<sp/>model.Region(</highlight><highlight class="stringliteral">&quot;Model&quot;</highlight><highlight class="normal">).CellsBegin()<sp/>);<sp/>it<sp/>!=<sp/>model.Region(</highlight><highlight class="stringliteral">&quot;Model&quot;</highlight><highlight class="normal">).CellsEnd();<sp/>++it<sp/>)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>(*it)-&gt;Read(<sp/>eaKey,<sp/>av<sp/>);</highlight></codeline>
+</programlisting></para>
+<para><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> operations are possible as defined through the interface</para>
+<para>TODO: why can this not be of a size that is known at compile time TODO: check whether &lt;array&gt; may be a good basis for refactoring TODO: why - as this is essentially a vector - is it not inherited from a vector? </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ArrayVariable</label>
+        <link refid="classcsmp_1_1_array_variable"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/ArrayVariable.h" line="67" column="3" bodyfile="source/includes/model/ArrayVariable.h" bodystart="68" bodyend="172"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_array_variable_1a22b2ee3c50e98112c0bf7fce21ac4e68" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>ArrayContainer</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a3e913afed0c2bbc2cd16964d2761905f" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>ArrayVariable</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a94de49b3df36ecce89fc3703f8018e1c" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>ArrayVariable</name></member>
+      <member refid="classcsmp_1_1_array_variable_1af5b0d404dba4df7b08200acc1dbae7bb" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>ArrayVariable</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a5c10162b2eb9333f2e2893da188211ea" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>ArrayVariable</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a90a2cd5ad4f66a320b4f825d522cdd6f" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>ArrayVariable</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a2d736f3d53d72dcbf941aa53d546e07d" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Begin</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a5b89320aaf1954216acf3cb317dd0c52" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a0c785d4e15facab4b9f8cdcce65f5c08" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_array_variable_1ad37a907a93dae8588b428ea264a2be68" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>CopyValuesOnly</name></member>
+      <member refid="classcsmp_1_1_array_variable_1ae0dc3bd7d6d5735d201de76cb099bf8c" prot="private" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>data_</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a2a4020ea95908d01f282158998d0ba8a" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>End</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a8d484dbe81624a615aa9bd421d59beec" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a06ab034c2b91fd9f83de5348835f4811" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a8edbc7a4b490bf03c30f6fe1830fa8cb" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a20b7c2454d4449b3498d55d4d227d1a4" prot="private" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>flag_</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a2bd58c37267e90c5395cb58030834774" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Front</name></member>
+      <member refid="classcsmp_1_1_array_variable_1ada5ab20c4318cc307c75ef134ff72c77" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Has_NaN_Values</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a1b9f341e6fb28eee3400c0bd34e7a89a" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>HasLargerEntry</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a17ea44f38e41ed94d7da666057da68fa" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a83691b3d9e9b5a80239656e72628657f" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a9a97e3b3fe53fc22ed4100a11de314c6" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>MinMax</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a12f2e25c3862e5c4d7a0dd35485b9d27" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>NextLargestEntry</name></member>
+      <member refid="classcsmp_1_1_array_variable_1ac00f752f98ffca61c2020d0e6f9294ec" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1af19ffd265e1e57fae184ecc45dc7b6d7" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a8b3203549da712c62ab5cd43fc9d23ae" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a1422deee2adf6dba62295f00f3711ff3" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a52cbe7a34b97684dcfa4d038608d0d89" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1afb56cba686f64700524df24ec81cd421" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a047b4a87dbf40ff0ea5289b4b5778de1" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a9ebb6922d9080efc9fa0e3b8169ea5a3" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_array_variable_1aaccbc16284737c75a36f874e5a44d0c3" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_array_variable_1aaa61fe7923f28de7adf847eeac94d05c" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1af894e2cac20e792eadf4483192c35a9c" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a949a97887ed84660ddf86eda34567c0a" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a3b82a5d47ef4ea7d725a06a6da8a216e" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a8c3a2c23f95cf1fed730d2f7ee780f48" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a97e566fa49eeb71a15125f2efd543c5b" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a102670c864d01426f91cbfe828d1a46e" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a74679aabb44ef88057377d741228d64e" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a94f76477c4ed7875a3596f27398cc086" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_array_variable_1ab0fb53bbdc148bd7ab9d7334b5225770" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a47713574138804ce949d0d1daa38bac4" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a22b7ba88c01fd8791078a234d6b86325" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1af79f9c7949675788ee46f5d2c223480a" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a4869d2736cbdc403d339b603dd1136e1" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a9500b9686a63485d0dd3e6d9fe9eee99" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a6bcd11d4ecca29c6a6d5c9ce7e00878d" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1aab9c7bb43495f5cd899b0d4f1aa4aead" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_array_variable_1ad7130f025f50fd2736c79d2582f43c30" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a61ef6af2aa06384bc5f26228a733afaa" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a097f486bb9d0d8998020302ad44cc96b" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>operator^</name></member>
+      <member refid="classcsmp_1_1_array_variable_1affcda14da2f24f099b2f4a9ae8e476f3" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a280128f36594f31fa29b1a9e3bfba2b6" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a4e0f758de8f8c5e56ee05d876343609a" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a76f357ad2d0fdad67f789790c1c1cd9c" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a416ecf28e0b2b46f965c39e1d958b29d" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a3d6ad794611b35b3754b91d9bd9c7731" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>Sort</name></member>
+      <member refid="classcsmp_1_1_array_variable_1a2b7441f1e2bb91cdf527a15f5ac5d601" prot="public" virt="non-virtual"><scope>csmp::ArrayVariable</scope><name>VariableType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

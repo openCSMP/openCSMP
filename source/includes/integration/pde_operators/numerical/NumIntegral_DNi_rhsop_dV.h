@@ -28,17 +28,17 @@ class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim,CELL> {
                               const char* oper,
                               const char* test );
     
-    virtual ~NumIntegral_DNi_rhsop_dV();
+    ~NumIntegral_DNi_rhsop_dV();
   
     /// reads the operand values from the nodes and stores them in a vector
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
   
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );
   
-    virtual NumIntegral_DNi_rhsop_dV<dim,CELL>* clone() const { return new NumIntegral_DNi_rhsop_dV<dim,CELL> (*this); }
+    NumIntegral_DNi_rhsop_dV<dim,CELL>* clone() const override final { return new NumIntegral_DNi_rhsop_dV<dim,CELL> (*this); }
   
   private:
     NumIntegral_DNi_rhsop_dV();

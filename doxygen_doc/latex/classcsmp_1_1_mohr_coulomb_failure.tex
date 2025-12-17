@@ -1,0 +1,212 @@
+\doxysection{csmp\+::Mohr\+Coulomb\+Failure\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_mohr_coulomb_failure}{}\label{classcsmp_1_1_mohr_coulomb_failure}\index{csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Mohr\+Coulomb\+Failure.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Mohr\+Coulomb\+Failure\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_mohr_coulomb_failure__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Mohr\+Coulomb\+Failure\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_mohr_coulomb_failure__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_mohr_coulomb_failure_a837332cc269327506a41ca20be9d2dc8}\label{classcsmp_1_1_mohr_coulomb_failure_a837332cc269327506a41ca20be9d2dc8} 
+{\bfseries Mohr\+Coulomb\+Failure} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, double friction\+\_\+angle)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a2742855b607aa3cd67a4559a1751368f}{Calculate}} ()
+\begin{DoxyCompactList}\small\item\em computes the local value of result property "{}failure"{} which gets written back to the model \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_interrelation}{csmp\+::\+Interrelation$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_interrelation_a69421dcd403100425c104e19c448ae6a}{Interrelation}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_a290d8ce61bb80667f6f4c4e47ce2a1d7}{Name}} (const char \texorpdfstring{$\ast$}{*}s)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_interrelation_a282f351fcc2c460d9deeda7c4b81fd7e}{Application\+Level}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_a406a9abb7bfe1f137609706b7d284ced}{Apply}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&)
+\item 
+{\footnotesize template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_interrelation_aa3ba0fda284bd8e8770a5528c07d78e4}{Apply}} (\mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, CELL $>$ \&)
+\begin{DoxyCompactList}\small\item\em a simplex is any geometrical association of points \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_interrelation_a33099fc5e139eae825e6e7af735942e9}{Result\+Within\+Range}} ()
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::const\+\_\+iterator \mbox{\hyperlink{classcsmp_1_1_interrelation_aee9a4e21075825121c1b8cbbee320ec0}{Operands\+Begin}} () const
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::const\+\_\+iterator {\bfseries Operands\+End} () const
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::iterator \mbox{\hyperlink{classcsmp_1_1_interrelation_a96b1dd64d8110e5b7909aa2c444d68b5}{Result}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_af8f1c17bf254acd57cae1691d9d877b5}{Mean\+Stress}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em average of the magnitude of the principal stress \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a2efccb8eeaf32ae18a70692415b0cade}{Deviatoric\+Stress}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&, double \&t\+\_\+stress\+\_\+invariant)
+\begin{DoxyCompactList}\small\item\em computes the shear-\/stress related stress invariant, returning into second argument; method difference between sigma1 and sigma3 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a85347f24d95fd1a11df23e797f46a0d4}{Theta}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&, double t\+\_\+stress\+\_\+invariant)
+\begin{DoxyCompactList}\small\item\em computes stress state invariance theta (Smith \& Griffith, 2014, p. 236 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a760d3677232b206e5fa290700d79d499}{G\+\_\+\+Of\+Theta}} (double theta)
+\begin{DoxyCompactList}\small\item\em computes stress state invariance, see Zienkiewitz II, p. 89 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_interrelation}{csmp\+::\+Interrelation$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_interrelation_a77c4acf6321b0f95825bb662931bfd93}{Global\+Property}} (const char \texorpdfstring{$\ast$}{*}var)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_a306872fe3c804c1db1c5da34a6e84fdc}{Result\+Property}} (const char \texorpdfstring{$\ast$}{*}var)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_ae028ae8c308556d78a6632b322207aba}{Output\+Condition}} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \&var, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} output)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_interrelation}{csmp\+::\+Interrelation$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries p\+\_\+ref}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\item 
+std\+::string {\bfseries result\+\_\+property\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$ {\bfseries operand\+\_\+list\+\_\+}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::iterator {\bfseries result\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Mohr\+Coulomb\+Failure$<$ dim $>$}
+Using the current local stress state stored on the model in the variable "{}stress"{}, this \doxylink{classcsmp_1_1_interrelation}{Interrelation} subclass computes the failure criterion \textquotesingle{}failure\textquotesingle{} performing a Mohr Coulomb analysis, but without consideration of the fluid pressure.
+
+To apply this interrelation the following discretised variables need to be defined\+:
+
+"{}stress"{}, "{}mean stress"{}, "{}cohesion"{}, "{}failure"{}. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_mohr_coulomb_failure_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_mohr_coulomb_failure_a2742855b607aa3cd67a4559a1751368f}\index{csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}!Calculate@{Calculate}}
+\index{Calculate@{Calculate}!csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Calculate()}{Calculate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mohr_coulomb_failure_a2742855b607aa3cd67a4559a1751368f} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure}{csmp\+::\+Mohr\+Coulomb\+Failure}}$<$ dim $>$\+::\+Calculate (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+computes the local value of result property "{}failure"{} which gets written back to the model 
+
+Zienkiewicz II, p. 89, modified Mohr-\/\+Coulomb envelope with smooth boundaries.
+
+Yielding can occur when F \texorpdfstring{$>$}{>}= 0, the material is described only in terms of its friction angle and cohesion. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_interrelation_a416837f708198b42b157be411d01ec96}{csmp\+::\+Interrelation$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_mohr_coulomb_failure_a2742855b607aa3cd67a4559a1751368f_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_mohr_coulomb_failure_a2efccb8eeaf32ae18a70692415b0cade}\index{csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}!DeviatoricStress@{DeviatoricStress}}
+\index{DeviatoricStress@{DeviatoricStress}!csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{DeviatoricStress()}{DeviatoricStress()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mohr_coulomb_failure_a2efccb8eeaf32ae18a70692415b0cade} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure}{csmp\+::\+Mohr\+Coulomb\+Failure}}$<$ dim $>$\+::\+Deviatoric\+Stress (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&}]{ts}{, }\item[{double \&}]{t\+\_\+stress\+\_\+invariant}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+computes the shear-\/stress related stress invariant, returning into second argument; method difference between sigma1 and sigma3 
+
+Zienkiewitz II, p. 61 bottom, p. 62 top, sigma-\/dash = deviatoric stress. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_mohr_coulomb_failure_a2efccb8eeaf32ae18a70692415b0cade_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_mohr_coulomb_failure_a760d3677232b206e5fa290700d79d499}\index{csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}!G\_OfTheta@{G\_OfTheta}}
+\index{G\_OfTheta@{G\_OfTheta}!csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{G\_OfTheta()}{G\_OfTheta()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mohr_coulomb_failure_a760d3677232b206e5fa290700d79d499} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure}{csmp\+::\+Mohr\+Coulomb\+Failure}}$<$ dim $>$\+::\+G\+\_\+\+Of\+Theta (\begin{DoxyParamCaption}\item[{double}]{theta}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+computes stress state invariance, see Zienkiewitz II, p. 89 
+
+Zienkiewitz II, p. 89. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_mohr_coulomb_failure_a760d3677232b206e5fa290700d79d499_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_mohr_coulomb_failure_af8f1c17bf254acd57cae1691d9d877b5}\index{csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}!MeanStress@{MeanStress}}
+\index{MeanStress@{MeanStress}!csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{MeanStress()}{MeanStress()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mohr_coulomb_failure_af8f1c17bf254acd57cae1691d9d877b5} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure}{csmp\+::\+Mohr\+Coulomb\+Failure}}$<$ dim $>$\+::\+Mean\+Stress (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&}]{ts}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+average of the magnitude of the principal stress 
+
+Smith \& Griffiths, p. 233. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_mohr_coulomb_failure_af8f1c17bf254acd57cae1691d9d877b5_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_mohr_coulomb_failure_a85347f24d95fd1a11df23e797f46a0d4}\index{csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}!Theta@{Theta}}
+\index{Theta@{Theta}!csmp::MohrCoulombFailure$<$ dim $>$@{csmp::MohrCoulombFailure$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Theta()}{Theta()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_mohr_coulomb_failure_a85347f24d95fd1a11df23e797f46a0d4} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure}{csmp\+::\+Mohr\+Coulomb\+Failure}}$<$ dim $>$\+::\+Theta (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&}]{ts}{, }\item[{double}]{t\+\_\+stress\+\_\+invariant}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+computes stress state invariance theta (Smith \& Griffith, 2014, p. 236 
+
+calculate lode angle, Smith \& Griffiths, p. 233, computed in radians Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_mohr_coulomb_failure_a85347f24d95fd1a11df23e797f46a0d4_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/mechanics/Mohr\+Coulomb\+Failure.\+h\item 
+source/modules/thmc/mechanics/Mohr\+Coulomb\+Failure.\+cpp\end{DoxyCompactItemize}

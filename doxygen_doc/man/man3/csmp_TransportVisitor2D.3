@@ -1,0 +1,96 @@
+.TH "csmp::TransportVisitor2D" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TransportVisitor2D
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <TransportVisitor2D\&.h>\fP
+.PP
+Inherits \fBcsmp::Visitor< 2U >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTransportVisitor2D\fP (\fBModel\fP< 2U > &, const char *advected_prop, const char *advecting_prop)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< 2U > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< 2U > *)"
+.br
+.ti -1c
+.RI "bool \fBAdvectUntil\fP (\fBModel\fP< 2U > &, double final_time)"
+.br
+.ti -1c
+.RI "size_t \fBMaximumIncrements\fP () const"
+.br
+.ti -1c
+.RI "void \fBMaximumIncrements\fP (size_t maxi)"
+.br
+.ti -1c
+.RI "void \fBInterpolateOnlyWithinGrid\fP (bool interpolate_just_within_grid)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< 2U >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< 2U >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+
+.PP
+S\&. Geiger 
+
+.PP
+S\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2002 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -388,6 +388,12 @@ template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::str
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,unsigned long,bool);
 template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,unsigned long,bool);
 
+#ifdef _WIN64
+template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,size_t,bool);
+template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,size_t,bool);
+template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,size_t,bool);
+#endif
+
 template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,double,bool);
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,double,bool);
 template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,double,bool);
@@ -677,6 +683,12 @@ template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::str
 template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,const std::string&,unsigned long,bool);
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,const std::string&,unsigned long,bool);
 template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,const std::string&,unsigned long,bool);
+
+#ifdef _WIN64
+template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,const std::string&,size_t,bool);
+template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,const std::string&,size_t,bool);
+template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,const std::string&,size_t,bool);
+#endif
 
 template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,const std::string&,double,bool);
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,const std::string&,double,bool);

@@ -297,13 +297,6 @@ void VData_Test::run()
   std::ifstream inVDataText;
   inVDataText.open( "ASCII-vdata.txt" );
   _test( inVDataText.is_open() );
-  /* TODO: DOES NOT WORK(ASSERTION), PROBABLY DUE TO INCOMPATIBILITY OF OutASCII and InText formatting
-  VData orphanVDataCopy3 = orphanVData;
-  orphanVDataCopy3.Erase();
-  orphanVDataCopy3.InText( inVDataText );
-  inVDataText.close();
-  _test( orphanVDataCopy3 == orphanVDataCopy2 );
-  */
   
   // TESTING ADVANCED FUNCTIONALITY
   // ==============================
@@ -314,6 +307,11 @@ void VData_Test::run()
   
   // using handcrafted model 'MeshPatchWithLineElements' as input
   Test_CreateConsistentLineElementOrientations2D();
+
+  // 2D
+  // ======================================================
+  Test_RecreateConnectivityOfTriangularMesh();
+  Test_RecreateConnectivityOfQuadrilateralMesh();
   
   // 3D
   // ======================================================
@@ -322,9 +320,11 @@ void VData_Test::run()
 
   // testing whether the consistent numbering of faces/neighbors can be reproduced for all-hexahedral model Rubik cube
   Test_RecreateConnectivityOfHexahedralMesh();
-  
+
+  Test_RecreateConnectivityOfPrismMesh();
+
   // SKM tests of VData mesh-fix functions
-  // TODO:  TestReplacementOfCornerTetrahedra();
+  // TODO: does not work yet:  TestReplacementOfCornerTetrahedra();
 
 // extra tests (stand-alone functions etc.)
   Test_InitialiseNodeTopologyIdentifiers();
@@ -361,7 +361,6 @@ void VData_Test::TestBinaryIO()
 // test model FracBox
 bool VData_Test::TestReplacementOfCornerTetrahedra()
   {
-     ;
      VSet<3U>      vset;
      ModelTopology topology = create_FracBox( vset );
      
@@ -459,6 +458,57 @@ void VData_Test::Test_CreateConsistentLineElementOrientations2D()
 
 
 
+void VData_Test::Test_RecreateConnectivityOfTriangularMesh()
+ {
+    VSet<2U> vset, vset_backup;
+    {
+      // single square test to check boundary conditions if there are no sides
+      create_2_Triangle_VSet( vset );
+      vset_backup = vset;
+      vset.EstablishElementConnectivity2D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfTriangularMesh: 2-triangle model: testing 'bflags'..."<< endl;
+      _test( vset == vset_backup );
+    }
+
+    // triangular mesh, OK 10/7/24
+    create_TrianglePatch_VSet( vset );
+    vset_backup = vset;
+    vset.EstablishElementConnectivity2D();
+    if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfTriangularMesh: 2-triangle model: testing connectivity..."<< endl;
+    _test( vset == vset_backup );
+ }
+
+
+
+/**
+     Mesh patch for inter-element connectivity
+     Single element test for neighbor connectivity.
+*/
+void VData_Test::Test_RecreateConnectivityOfQuadrilateralMesh()
+ {
+    // 2D test cases
+    {
+      VSet<2U> vset;
+      // quadrilateral mesh
+      const int    size_sides{1}; // one square VSet
+      const double dimension{5.};
+      const bool   skewed=false;
+      create_Square_VSet( vset, size_sides, dimension, skewed );
+      VSet<2U> vset_backup = vset;
+      vset.EstablishElementConnectivity2D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: 1-square model: testing model 'bflags'..."<< endl;
+      _test( vset == vset_backup );
+      // 4 quads
+      vset = create_Quadrilateral_VSet();
+      vset_backup = vset;
+      vset.EstablishElementConnectivity2D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: 4 quad model: testing connectivity..."<< endl;
+      _test( vset == vset_backup );
+    }
+ }
+
+
+
     /// reestablishes neighbor connectivity for 3D model Rubik cube
 void VData_Test::Test_RecreateConnectivityOfTetrahedralMesh()
  {
@@ -475,48 +525,78 @@ void VData_Test::Test_RecreateConnectivityOfTetrahedralMesh()
     /// reestablishes neighbor connectivity for 3D model Rubik cube
 void VData_Test::Test_RecreateConnectivityOfHexahedralMesh()
  {
-    // 2D test cases
+    // single hexahedron
     {
-      VSet<2U> vset;
-      // quadrilateral mesh
-      const int    size_sides{1}; // one square VSet
-      const double dimension{5.};
-      const bool   skewed=false;
-      create_Square_VSet( vset, size_sides, dimension, skewed );
-      VSet<2U> vset_backup = vset;
-      vset.EstablishElementConnectivity2D();
-      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Square(quadrilaterals)'..."<< endl;
+      VSet<3U> vset;
+      create_1Hexahedron_VSet( vset );
+      VSet<3U> vset_backup = vset;
+      vset.EstablishElementConnectivity3D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model '1Hexahedron_VSet'..."<< endl;
       _test( vset == vset_backup );
-      // triangular mesh, OK 10/7/24
-      VSet<2U> vset2;
-      create_TrianglePatch_VSet( vset2 );
-      vset_backup = vset2;
-      vset2.EstablishElementConnectivity2D();
-      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Triangle(triangles)'..."<< endl;
-      _test( vset2 == vset_backup );
     }
-    // 3D test cases
+    // all hexahedral model
     {
-      // all hexahedral model
-      {
-        VSet<3U> vset;
-        create_Hexahedra_VSet( vset );
-        VSet<3U> vset_backup = vset;
-        vset.EstablishElementConnectivity3D();
-        if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Hexahedra'..."<< endl;
-        _test( vset == vset_backup );
-      }
-      // mixed pyramids and hexahedra
-      {
-        VSet<3U> vset;
-        create_Pyramid_Hexa_VSet( vset );
-        VSet<3U> vset_backup = vset;
-        vset.EstablishElementConnectivity3D();
-        if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Pyramid_Hexa'..."<< endl;
-        _test( vset == vset_backup );
-      }
+      VSet<3U> vset;
+      create_Hexahedra_VSet( vset );
+      VSet<3U> vset_backup = vset;
+      vset.EstablishElementConnectivity3D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Hexahedra_VSet'..."<< endl;
+      _test( vset == vset_backup );
+    }
+    // pyramids forming a cube
+    {
+      VSet<3U> vset;
+      create_Pyramid_VSet( vset );
+      VSet<3U> vset_backup = vset;
+      vset.EstablishElementConnectivity3D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Pyramid_VSet'..."<< endl;
+      _test( vset == vset_backup );
+    }
+    // mixed pyramids and hexahedra
+    {
+      VSet<3U> vset;
+      create_Pyramid_Hexa_VSet( vset );
+      VSet<3U> vset_backup = vset;
+      vset.EstablishElementConnectivity3D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Pyramid_Hexa_VSet'..."<< endl;
+      _test( vset == vset_backup );
+    }
+    // mixed prisms and hexahedra
+    {
+      VSet<3U> vset;
+      create_Prism_Hexa_VSet( vset );
+      VSet<3U> vset_backup = vset;
+      vset.EstablishElementConnectivity3D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'create_Prism_Hexa_VSet'..."<< endl;
+      _test( vset == vset_backup );
     }
  }
+
+
+
+    /// reestablishes neighbor connectivity for 3D model Rubik cube
+void VData_Test::Test_RecreateConnectivityOfPrismMesh()
+ {
+    // single prism
+    {
+      VSet<3U> vset;
+      create_1Prism_VSet( vset );
+      VSet<3U> vset_backup = vset;
+      vset.EstablishElementConnectivity3D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfPrismMesh: testing model '1Prism_VSet'..."<< endl;
+      _test( vset == vset_backup );
+    }
+    // prism stack
+    {
+      VSet<3U> vset;
+      create_Prism_VSet( vset );
+      VSet<3U> vset_backup = vset;
+      vset.EstablishElementConnectivity3D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfPrismMesh: testing model 'Prism_VSet' (54 prisms)..."<< endl;
+      _test( vset == vset_backup );
+      }
+ }
+
 
 
 

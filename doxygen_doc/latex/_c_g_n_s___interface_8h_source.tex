@@ -1,0 +1,117 @@
+\doxysection{CGNS\+\_\+\+Interface.\+h}
+\hypertarget{_c_g_n_s___interface_8h_source}{}\label{_c_g_n_s___interface_8h_source}\index{source/includes/interfaces/CGNS/CGNS\_Interface.h@{source/includes/interfaces/CGNS/CGNS\_Interface.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CGNS\_INTERFACE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CGNS\_INTERFACE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_set_8h}{"{}VSet.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_topology_8h}{"{}ModelTopology.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_g_n_s___element_specifications_8h}{"{}CGNS\_ElementSpecifications.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p___element_specifications_8h}{"{}CSMP\_ElementSpecifications.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{@brief\ CFD\ General\ Notation\ System\ (CGNS\ cfd\ data\ standard,\ NASA)\ interface\ to\ CSMP}}
+\DoxyCodeLine{00016\ \textcolor{comment}{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{cgns.org.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ R.\ Manasipov}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@date\ 2015}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{CGNS\_Interface}}\ \{}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{explicit}\ CGNS\_Interface(\ \textcolor{keywordtype}{bool}\ isoparametric\_mesh\ =\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \string~CGNS\_Interface();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface_ad12246d75d536c7124cb198762dd01cd}{Write\_CGNS\_Mesh}}(\ \textcolor{keyword}{const}\ std::string\&\ \ \ \ filename,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface_a5efa6117c2b2aa6ff9f567af814136ff}{Read\_CGNS\_Mesh}}(\ \textcolor{keyword}{const}\ std::string\&\ \ \ \ \ filename,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ \ \ \ \ \ \ vset,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ \ \ mesh\_topology\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface_a251999fb27ac9c618022f0e343dfbce5}{SetFileType}}(\ \textcolor{keywordtype}{int}\ );}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ \ GetFileType(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ AssignMaterialPropertiesInteractively(\ \textcolor{keywordtype}{bool}\ assign\ =\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ writing\ mesh\ file}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{int}\ \ WriteUnstructMesh(\ \textcolor{keyword}{const}\ std::string\&\ filename,\textcolor{keywordtype}{int}\ cgfile,\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\ );}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteBase(\ \textcolor{keyword}{const}\ std::string\&\ filename,\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keywordtype}{int}\&\ cgbase\ );}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteZone(\ \textcolor{keyword}{const}\ std::string\&\ filename,\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keywordtype}{int}\ cgbase,\ \textcolor{keywordtype}{int}\&\ cgzone,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\ );}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteCoords(\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keywordtype}{int}\ cgbase,\ \textcolor{keywordtype}{int}\ cgzone,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\ );}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteSubDomains(\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keywordtype}{int}\ cgbase,\ \textcolor{keywordtype}{int}\ cgzone,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\ );}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}\ <uint32\_t>\ \textcolor{keyword}{class}\ SIMPLEX>}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteElements(\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keywordtype}{int}\ cgbase,\ \textcolor{keywordtype}{int}\ cgzone,\ \textcolor{keyword}{const}\ csmp::ModelSubDomain<dim,SIMPLEX>\&\ subDomain\ );}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{///\ reading\ mesh\ file}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{int}\ \ ReadUnstructMesh(\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keyword}{const}\ std::string\&\ filename,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ \ \ mesh\_topology\ );}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ ReadCoords(\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keywordtype}{int}\ cgbase,\ \textcolor{keywordtype}{int}\ cgzone,\ \textcolor{keywordtype}{int}\ total\_num\_coords,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ \ \ mesh\_topology\ );}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ ReadElements(\ \textcolor{keywordtype}{int}\ cgfile,\ \textcolor{keywordtype}{int}\ cgbase,\ \textcolor{keywordtype}{int}\ cgzone,\ \textcolor{keywordtype}{int}\ total\_num\_elements,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&\ vset,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ \ \ mesh\_topology\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ Clear();}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ one\ of\ avaliable\ formats:\ CG\_FILE\_HDF5,\ CG\_FILE\_ADF2,\ CG\_FILE\_ADF}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{int}\ file\_type\_;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ property\ assignment}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{bool}\ interactive\_property\_assignment\_;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ element\ specs}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ isoparametric\_;}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___element_specifications}{CGNS\_ElementSpecifications}}\ \ elmt\_specs\_;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{using}\ csmp\_elmt\_specs\_\ =\ \mbox{\hyperlink{classcsmp_1_1_c_s_m_p___element_specifications}{CSMP\_ElementSpecifications}};\ \ \textcolor{comment}{///<\ this\ is\ a\ static\ object}}
+\DoxyCodeLine{00081\ \ \ \ \ size\_t\ global\_eid\_;}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ element\ nodes\ \ \ \ \ \ \ element\ type\ \ element\ id}}
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{map}}<\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{vector}}<\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{uint32\_t}}>,\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{pair}}<\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{size\_t}}>\ >\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{element\_ids\_}};}
+\DoxyCodeLine{00084\ \};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{comment}{///\ CGNS\ -\/\ to\ -\/\ CSMP\ FE's}}
+\DoxyCodeLine{00087\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a7f6c70f0d0d68e899be623cfb5301651}{Convert\_CGNS\_To\_CSMP\_FiniteElementTypes}}(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings}{CGNS\_ModelSettings}}}
+\DoxyCodeLine{00091\ \{}
+\DoxyCodeLine{00092\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ CGNS\_ModelSettings(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_prefix\ );}
+\DoxyCodeLine{00095\ \ \ \ \ \string~CGNS\_ModelSettings();}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ CGNS\_ModelSettings(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings}{CGNS\_ModelSettings}}\&\ );}
+\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings}{CGNS\_ModelSettings}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings}{CGNS\_ModelSettings}}\&\ );}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ MeshSetup(\ \textcolor{keyword}{const}\ std::string\&\ regions\_file\_prefix\ );}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ MeshSetup(\ \textcolor{keyword}{const}\ std::set<std::string>\&\ regions\ );}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_ada3cb4526744a00fcc22634598d62f29}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_ada3cb4526744a00fcc22634598d62f29}{string}}\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_ada3cb4526744a00fcc22634598d62f29}{mesh\_file\_prefix\_}};\ \ \ \ \textcolor{comment}{///<\ name\ of\ model\ or\ main\ mesh\ file}}
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_a38825b07bdd9e81d48d90754603fc59e}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_a38825b07bdd9e81d48d90754603fc59e}{set}}<\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_a38825b07bdd9e81d48d90754603fc59e}{std}}::\mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_a38825b07bdd9e81d48d90754603fc59e}{string}}>\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_settings_a38825b07bdd9e81d48d90754603fc59e}{regions\_}};\ \ \ \textcolor{comment}{///<\ name\ of\ regions\ to\ be\ used}}
+\DoxyCodeLine{00107\ \};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

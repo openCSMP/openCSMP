@@ -1,0 +1,107 @@
+\doxysection{source/includes/model/binary\+Read\+Write.h File Reference}
+\hypertarget{binary_read_write_8h}{}\label{binary_read_write_8h}\index{source/includes/model/binaryReadWrite.h@{source/includes/model/binaryReadWrite.h}}
+{\ttfamily \#include "{}CSMP\+\_\+definitions.\+h"{}}\newline
+{\ttfamily \#include "{}Property\+Database.\+h"{}}\newline
+{\ttfamily \#include "{}Array\+Variable.\+h"{}}\newline
+{\ttfamily \#include "{}Flagged\+Array\+Variable.\+h"{}}\newline
+Include dependency graph for binary\+Read\+Write.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{binary_read_write_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{binary_read_write_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcsmp_1_1_binary_file_section_read}{csmp\+::\+Binary\+File\+Section\+Read}}
+\item 
+class \mbox{\hyperlink{classcsmp_1_1_binary_file_section_write}{csmp\+::\+Binary\+File\+Section\+Write}}
+\begin{DoxyCompactList}\small\item\em Helper class to write sections to a binary file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecsmp}{csmp}}
+\begin{DoxyCompactList}\small\item\em Complex System Modeling Platform. \end{DoxyCompactList}\item 
+namespace \mbox{\hyperlink{namespacecsmp_1_1fem_data_output_dispatch}{csmp\+::fem\+Data\+Output\+Dispatch}}
+\begin{DoxyCompactList}\small\item\em additions by P. Lang (2012); SKM \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacecsmp_a5d30db672393689f193fb85cfe707d8e}\label{namespacecsmp_a5d30db672393689f193fb85cfe707d8e} 
+constexpr size\+\_\+t {\bfseries csmp\+::\+CSMP\+\_\+\+BINARY\+\_\+\+FILE\+\_\+\+HDR\+\_\+\+SIZE} (8+1)
+\item 
+size\+\_\+t \mbox{\hyperlink{namespacecsmp_af7250249e89b01e108f2bd068a0a53da}{csmp\+::read\+Container\+Size}} (std\+::fstream \&fp)
+\begin{DoxyCompactList}\small\item\em checks whether the integer value fits within the range of a size\+\_\+t and returns it \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a78408a68c035874daa7357ac9797041f}{csmp\+::binary\+File\+Write}} (std\+::fstream \&fp, const std\+::vector$<$ T $>$ \&stl\+\_\+ctner)
+\item 
+{\footnotesize template$<$class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a07feee7483c197b7b6c1c5e789bdc756}{csmp\+::binary\+File\+Read}} (std\+::fstream \&fp, std\+::vector$<$ T $>$ \&stl\+\_\+ctner)
+\item 
+\Hypertarget{namespacecsmp_a09f15b7fb2c16f06035e575ae7adce4a}\label{namespacecsmp_a09f15b7fb2c16f06035e575ae7adce4a} 
+{\footnotesize template$<$typename T$>$ }\\bool {\bfseries csmp\+::binary\+File\+Write} (std\+::fstream \&fp, const std\+::deque$<$ T $>$ \&stl\+\_\+ctner)
+\begin{DoxyCompactList}\small\item\em deque version \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a4084dd74088c6d30d26be4d24289b7e5}\label{namespacecsmp_a4084dd74088c6d30d26be4d24289b7e5} 
+{\footnotesize template$<$typename T$>$ }\\bool {\bfseries csmp\+::binary\+File\+Read} (std\+::fstream \&fp, std\+::deque$<$ T $>$ \&stl\+\_\+ctner)
+\begin{DoxyCompactList}\small\item\em deque version \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a39587cb0cc8b662f39d9587d6fedb66f}{csmp\+::binary\+File\+Write}} (std\+::fstream \&fp, const std\+::deque$<$ std\+::vector$<$ T $>$ $>$ \&stl\+\_\+ctner)
+\item 
+{\footnotesize template$<$class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_ac180c67087c123e62951128892ad0a06}{csmp\+::binary\+File\+Read}} (std\+::fstream \&fp, std\+::deque$<$ std\+::vector$<$ T $>$ $>$ \&stl\+\_\+ctner)
+\item 
+{\footnotesize template$<$class M, class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a00dea565b4cc369d30c529140c23e648}{csmp\+::binary\+File\+Write}} (std\+::fstream \&fp, const std\+::map$<$ M, T $>$ \&stl\+\_\+ctner)
+\item 
+{\footnotesize template$<$class M, class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_af351f0d40b205993f14bd5d8d157f01d}{csmp\+::binary\+File\+Write}} (std\+::fstream \&fp, const std\+::unordered\+\_\+map$<$ M, T $>$ \&stl\+\_\+ctner)
+\item 
+{\footnotesize template$<$class M, class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a342053ccefeeed279073a1542f4884da}{csmp\+::binary\+File\+Read}} (std\+::fstream \&fp, std\+::map$<$ M, T $>$ \&stl\+\_\+ctner)
+\item 
+{\footnotesize template$<$class M, class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_ac95b6a49363c4a33733d04d4cfa18817}{csmp\+::binary\+File\+Write}} (std\+::fstream \&fp, const std\+::map$<$ M, std\+::vector$<$ T $>$ $>$ \&stl\+\_\+ctner)
+\item 
+{\footnotesize template$<$class M, class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a40eb05f4d9692e7d3a8d4912a985c629}{csmp\+::binary\+File\+Read}} (std\+::fstream \&fp, std\+::map$<$ M, std\+::vector$<$ T $>$ $>$ \&stl\+\_\+ctner)
+\item 
+\Hypertarget{namespacecsmp_ac76aa40ac24c7130187a1324290ca5d2}\label{namespacecsmp_ac76aa40ac24c7130187a1324290ca5d2} 
+bool {\bfseries csmp\+::binary\+File\+Write} (std\+::fstream \&fp, const std\+::string \&)
+\item 
+\Hypertarget{namespacecsmp_a1c78ea88c3aa8f311e6973793f3a39f3}\label{namespacecsmp_a1c78ea88c3aa8f311e6973793f3a39f3} 
+bool {\bfseries csmp\+::binary\+File\+Read} (std\+::fstream \&fp, std\+::string \&)
+\item 
+\Hypertarget{namespacecsmp_ae79f0876b090562ead49766f0ca9b3cb}\label{namespacecsmp_ae79f0876b090562ead49766f0ca9b3cb} 
+bool {\bfseries csmp\+::binary\+File\+Write} (std\+::fstream \&fp, const char \texorpdfstring{$\ast$}{*}str)
+\item 
+\Hypertarget{namespacecsmp_ad92166f8f9c10cdfec0a8ad6ae22ad89}\label{namespacecsmp_ad92166f8f9c10cdfec0a8ad6ae22ad89} 
+bool {\bfseries csmp\+::binary\+File\+Read} (std\+::fstream \&fp, char str\mbox{[}$\,$\mbox{]})
+\item 
+\Hypertarget{namespacecsmp_1_1fem_data_output_dispatch_ad4f43cdd38b3bb87087f25dd51462787}\label{namespacecsmp_1_1fem_data_output_dispatch_ad4f43cdd38b3bb87087f25dd51462787} 
+{\footnotesize template$<$class Var$>$ }\\void {\bfseries csmp\+::fem\+Data\+Output\+Dispatch\+::init\+Variable} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}}, Var \&)
+\item 
+\Hypertarget{namespacecsmp_1_1fem_data_output_dispatch_a92c2cdc7c1f861dd458263021cca39f6}\label{namespacecsmp_1_1fem_data_output_dispatch_a92c2cdc7c1f861dd458263021cca39f6} 
+template$<$$>$ void {\bfseries csmp\+::fem\+Data\+Output\+Dispatch\+::init\+Variable} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} key, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&var)
+\item 
+\Hypertarget{namespacecsmp_1_1fem_data_output_dispatch_a8b3d9070957427e84261168956678f77}\label{namespacecsmp_1_1fem_data_output_dispatch_a8b3d9070957427e84261168956678f77} 
+template$<$$>$ void {\bfseries csmp\+::fem\+Data\+Output\+Dispatch\+::init\+Variable} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} key, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&var)
+\item 
+\Hypertarget{namespacecsmp_a72450befe9a30a9e5854713ee8bce6e9}\label{namespacecsmp_a72450befe9a30a9e5854713ee8bce6e9} 
+{\footnotesize template$<$class V, class D, uint32\+\_\+t dim$>$ }\\bool {\bfseries csmp\+::variables\+Out} (std\+::fstream \&fp, const D \&domain, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&pref, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} vtype)
+\begin{DoxyCompactList}\small\item\em domain (\doxylink{classcsmp_1_1_model}{Model}, \doxylink{classcsmp_1_1_region}{Region}...) variables binary IO \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a813857bf561da003e99d7dbeb9204002}\label{namespacecsmp_a813857bf561da003e99d7dbeb9204002} 
+{\footnotesize template$<$class V, class D, uint32\+\_\+t dim$>$ }\\bool {\bfseries csmp\+::variables\+In} (std\+::fstream \&fp, D \&domain, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&pref, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}})
+\item 
+\Hypertarget{namespacecsmp_ac0256e6f7b16a679d3e89d5371f38518}\label{namespacecsmp_ac0256e6f7b16a679d3e89d5371f38518} 
+{\footnotesize template$<$class D, uint32\+\_\+t dim$>$ }\\bool {\bfseries csmp\+::domain\+Variables\+Out} (std\+::fstream \&fp, const D \&domain, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&pref)
+\item 
+\Hypertarget{namespacecsmp_ad46c7ddd7197e515159a9cb2f982b15e}\label{namespacecsmp_ad46c7ddd7197e515159a9cb2f982b15e} 
+{\footnotesize template$<$class D, uint32\+\_\+t dim$>$ }\\bool {\bfseries csmp\+::domain\+Variables\+In} (std\+::fstream \&fp, D \&domain, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&pref)
+\item 
+{\footnotesize template$<$class V, class D, uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{namespacecsmp_aa36e60a8e5675833a8c625a542b4c0d4}{csmp\+::selected\+Variables\+In}} (std\+::fstream \&fp, D \&domain, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&pref, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, const std\+::set$<$ std\+::string $>$ \&selection)
+\item 
+{\footnotesize template$<$class D, uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a193eb0207bf8980dc7e82153e05274e1}{csmp\+::selected\+Domain\+Variables\+In}} (std\+::fstream \&fp, D \&domain, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&pref, const std\+::set$<$ std\+::string $>$ \&selection)
+\item 
+{\footnotesize template$<$class M, class T$>$ }\\bool \mbox{\hyperlink{namespacecsmp_a6550bbdd1a068b23d152df292d003d2c}{csmp\+::binary\+File\+Read}} (std\+::fstream \&fp, std\+::unordered\+\_\+map$<$ M, T $>$ \&stl\+\_\+ctner)
+\end{DoxyCompactItemize}

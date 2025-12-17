@@ -1,0 +1,104 @@
+\doxysection{csmp\+::Diffusion\+LHS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_diffusion_l_h_s}{}\label{classcsmp_1_1_diffusion_l_h_s}\index{csmp::DiffusionLHS$<$ dim $>$@{csmp::DiffusionLHS$<$ dim $>$}}
+
+
+accumulates finite-\/element stencils for diffusion into a sparse solution matrix.  
+
+
+
+
+{\ttfamily \#include $<$Diffusion\+LHS.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Diffusion\+LHS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_diffusion_l_h_s__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Diffusion\+LHS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_diffusion_l_h_s__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_diffusion_l_h_s_aeb50a9ecbe6d868474d070eca789fd64}\label{classcsmp_1_1_diffusion_l_h_s_aeb50a9ecbe6d868474d070eca789fd64} 
+{\bfseries Diffusion\+LHS} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}$<$ SCALAR, ELEMENT $>$ \&diffusivity\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}$<$ SCALAR, NODE $>$ \&transported\+\_\+variable\+\_\+key)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_diffusion_l_h_s_ae7f359a0e025455c892660756514527e}{Accumulate\+Finite\+Volume}} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&) const
+\begin{DoxyCompactList}\small\item\em not available for this Element-\/based stencil \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_diffusion_l_h_s_ae8256f488be4e3cdc4e36bc3b7830efc}{Accumulate\+Stencil}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&) const
+\begin{DoxyCompactList}\small\item\em element-\/by-\/element accumulation of matrix terms \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_matrix_operator}{csmp\+::\+Matrix\+Operator$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Multiply\+With\+Time\+Increment} (double dt)
+\begin{DoxyCompactList}\small\item\em includes the time increment in the multiplication factor for this operator \end{DoxyCompactList}\item 
+void {\bfseries Factor} (double value)
+\begin{DoxyCompactList}\small\item\em set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-\/1), multiplication or division (fac=1/value) \end{DoxyCompactList}\item 
+double {\bfseries Factor} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Diffusion\+LHS$<$ dim $>$}
+accumulates finite-\/element stencils for diffusion into a sparse solution matrix. 
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+6/12/2017 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_diffusion_l_h_s_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_diffusion_l_h_s_ae7f359a0e025455c892660756514527e}\index{csmp::DiffusionLHS$<$ dim $>$@{csmp::DiffusionLHS$<$ dim $>$}!AccumulateFiniteVolume@{AccumulateFiniteVolume}}
+\index{AccumulateFiniteVolume@{AccumulateFiniteVolume}!csmp::DiffusionLHS$<$ dim $>$@{csmp::DiffusionLHS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AccumulateFiniteVolume()}{AccumulateFiniteVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_diffusion_l_h_s_ae7f359a0e025455c892660756514527e} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_diffusion_l_h_s}{csmp\+::\+Diffusion\+LHS}}$<$ dim $>$\+::\+Accumulate\+Finite\+Volume (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&}]{}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+not available for this Element-\/based stencil 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_matrix_operator}{csmp\+::\+Matrix\+Operator$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_diffusion_l_h_s_ae8256f488be4e3cdc4e36bc3b7830efc}\index{csmp::DiffusionLHS$<$ dim $>$@{csmp::DiffusionLHS$<$ dim $>$}!AccumulateStencil@{AccumulateStencil}}
+\index{AccumulateStencil@{AccumulateStencil}!csmp::DiffusionLHS$<$ dim $>$@{csmp::DiffusionLHS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AccumulateStencil()}{AccumulateStencil()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_diffusion_l_h_s_ae8256f488be4e3cdc4e36bc3b7830efc} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_diffusion_l_h_s}{csmp\+::\+Diffusion\+LHS}}$<$ dim $>$\+::\+Accumulate\+Stencil (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&}]{fe}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{A}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+element-\/by-\/element accumulation of matrix terms 
+
+Uses the finite element framework of CSMP to compute the FE diffusion integral term and accumulate it into the solution matrix A of Ax=b. 
+
+Implements \mbox{\hyperlink{classcsmp_1_1_matrix_operator}{csmp\+::\+Matrix\+Operator$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/Diffusion\+LHS.\+h\item 
+source/modules/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/source/Diffusion\+LHS.\+cpp\end{DoxyCompactItemize}

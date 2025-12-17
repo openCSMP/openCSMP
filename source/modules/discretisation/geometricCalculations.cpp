@@ -34,7 +34,7 @@ void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, con
   pt2 = pt1;
   pt2 -= pt0;
   pt2[0] = csmp::dotProduct( pt2, e1 );
-  for ( auto i = 1; i < dim; ++i )
+  for ( uint32_t i = 1; i < dim; ++i )
     pt2[i] = 0.0;
 }
 
@@ -169,9 +169,9 @@ bool isPointInsideTheBar( const csmp::Point<3U>& pt, const csmp::Point<3U>& pt1,
 
 // TRIANGLES
 
-double unsignedArea( const csmp::Point<1U>& pt1,
-                     const csmp::Point<1U>& pt2,
-                     const csmp::Point<1U>& pt3 )
+double unsignedArea( const csmp::Point<1U>&,
+                     const csmp::Point<1U>&,
+                     const csmp::Point<1U>& )
 {
   return 0.0;
 }
@@ -198,9 +198,9 @@ A = det| pt2[0] pt2[1] 1 |
 | pt3[0] pt3[1] 1 |
 */
 
-double signedArea( const csmp::Point<1U>& pt1,
-                   const csmp::Point<1U>& pt2,
-                   const csmp::Point<1U>& pt3 )
+double signedArea( const csmp::Point<1U>&,
+                   const csmp::Point<1U>&,
+                   const csmp::Point<1U>& )
 {
   return 0.0;
 }
@@ -241,9 +241,9 @@ double signedArea( const csmp::Point<3U>& pt1,
   */
 }
 
-bool isCounterClockWiseOrientation( const csmp::Point<1U>& pt1,
-                                    const csmp::Point<1U>& pt2,
-                                    const csmp::Point<1U>& pt3 )
+bool isCounterClockWiseOrientation( const csmp::Point<1U>&,
+                                    const csmp::Point<1U>&,
+                                    const csmp::Point<1U>& )
 {
   return true;
 }
@@ -259,9 +259,9 @@ bool isCounterClockWiseOrientation( const csmp::Point<2U>& pt1,
   return (sarea > 0.0);
 }
 
-bool isCounterClockWiseOrientation( const csmp::Point<3U>& pt1,
-                                    const csmp::Point<3U>& pt2,
-                                    const csmp::Point<3U>& pt3 )
+bool isCounterClockWiseOrientation( const csmp::Point<3U>&,
+                                    const csmp::Point<3U>&,
+                                    const csmp::Point<3U>& )
 {
   return true;
 }
@@ -402,10 +402,10 @@ bool isSameSide( const csmp::Point<3U>& pt1,
 
 // TETRAHEDRON AND QUADRILATERAL
 
-double unsignedArea( const csmp::Point<1U>& pt1,
-                     const csmp::Point<1U>& pt2,
-                     const csmp::Point<1U>& pt3,
-                     const csmp::Point<1U>& pt4 )
+double unsignedArea( const csmp::Point<1U>&,
+                     const csmp::Point<1U>&,
+                     const csmp::Point<1U>&,
+                     const csmp::Point<1U>& )
 {
   return 0.0;
 }
@@ -436,10 +436,10 @@ double unsignedArea( const csmp::Point<3U>& pt1,
   return area;
 }
 
-double signedArea( const csmp::Point<1U>& pt1,
-                   const csmp::Point<1U>& pt2,
-                   const csmp::Point<1U>& pt3,
-                   const csmp::Point<1U>& pt4 )
+double signedArea( const csmp::Point<1U>&,
+                   const csmp::Point<1U>&,
+                   const csmp::Point<1U>&,
+                   const csmp::Point<1U>& )
 {
   return 0.0;
 }
@@ -489,15 +489,15 @@ double signedVolume( const csmp::Point<3U>& pt1,
   return  csmp::dotProduct( a, d );
 }
 
-bool isCounterClockWiseOrientation( const csmp::Point<1U>& pt1,
-                                    const csmp::Point<1U>& pt2,
-                                    const csmp::Point<1U>& pt3,
-                                    const csmp::Point<1U>& pt4 )
+bool isCounterClockWiseOrientation( const csmp::Point<1U>&,
+                                    const csmp::Point<1U>&,
+                                    const csmp::Point<1U>&,
+                                    const csmp::Point<1U>& )
 {
   return true;
 }
 
-bool isCounterClockWiseOrientation( const csmp::Point<2U>& pt1,
+bool isCounterClockWiseOrientation( const csmp::Point<2U>&,
                                     const csmp::Point<2U>& pt2,
                                     const csmp::Point<2U>& pt3,
                                     const csmp::Point<2U>& pt4 )
@@ -528,11 +528,11 @@ x
 pt2
 
 */
-double dihedralDegAngle( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4 )
+double dihedralDegAngle( const csmp::Point<1U>&, const csmp::Point<1U>&, const csmp::Point<1U>&, const csmp::Point<1U>& )
 {
   return 0.0;
 }
-double dihedralRadAngle( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4 )
+double dihedralRadAngle( const csmp::Point<1U>&, const csmp::Point<1U>&, const csmp::Point<1U>&, const csmp::Point<1U>& )
 {
   return 0.0;
 }
@@ -611,21 +611,21 @@ bool isTetra( const csmp::Point<3U>& pt1,
     Check whether provided 4 point create tetrahedron or quadrilateral.
     Return order of points which will give counter-clockwise numbering in a righthand-rule coordinate system.
 */
-static bool isTetra( const csmp::Point<1U>& pt1,
-                     const csmp::Point<1U>& pt2,
-                     const csmp::Point<1U>& pt3,
-                     const csmp::Point<1U>& pt4,
-                     std::map<size_t, size_t>& order )
+static bool isTetra( const csmp::Point<1U>&,
+                     const csmp::Point<1U>&,
+                     const csmp::Point<1U>&,
+                     const csmp::Point<1U>&,
+                     std::map<size_t, size_t>& )
 {
   // no tetra in 1D
   return false;
 }
 
-static bool isTetra( const csmp::Point<2U>& pt1,
-                     const csmp::Point<2U>& pt2,
-                     const csmp::Point<2U>& pt3,
-                     const csmp::Point<2U>& pt4,
-                     std::map<size_t, size_t>& order )
+static bool isTetra( const csmp::Point<2U>&,
+                     const csmp::Point<2U>&,
+                     const csmp::Point<2U>&,
+                     const csmp::Point<2U>&,
+                     std::map<size_t, size_t>& )
 {
   // no tetra in 1D
   return false;

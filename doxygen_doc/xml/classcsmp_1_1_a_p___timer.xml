@@ -1,0 +1,348 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_a_p___timer" kind="class" language="C++" prot="public">
+    <compoundname>csmp::AP_Timer</compoundname>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::AP_Timer::m_bTimerIsRunning</definition>
+        <argsstring></argsstring>
+        <name>m_bTimerIsRunning</name>
+        <qualifiedname>csmp::AP_Timer::m_bTimerIsRunning</qualifiedname>
+        <briefdescription>
+<para>true if the timer is running </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="53" column="8" bodyfile="source/includes/utilities/AP_Timer.h" bodystart="53" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a7018553dda2fd413e85c71061ca60020" compoundref="_a_p___timer_8cpp" startline="120" endline="135">AsString</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a158dc47643c57e3c9c2bb28e999b59c0" compoundref="_a_p___timer_8cpp" startline="91" endline="101">Continue</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a7d5e5d08c16787ad46c78ceadfd29548" compoundref="_a_p___timer_8cpp" startline="79" endline="86">ElapsedTime</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a9e03de48c3a9e5257092e1e27c2ebe97" compoundref="_a_p___timer_8cpp" startline="54" endline="61">Reset</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1af0dfaeb131dbf7a150b09706d9ef11c7" compoundref="_a_p___timer_8cpp" startline="107" endline="114">SetElapsedTime</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a0aeb70ea7b253f89cd028778a7cd1a38" compoundref="_a_p___timer_8cpp" startline="66" endline="74">Stop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_a_p___timer_1afa855cb8b896a0a103de1a6eae26cbd9" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AP_Timer::m_fStartTime</definition>
+        <argsstring></argsstring>
+        <name>m_fStartTime</name>
+        <qualifiedname>csmp::AP_Timer::m_fStartTime</qualifiedname>
+        <briefdescription>
+<para>the absolute time the timer was created or restarted </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="56" column="10" bodyfile="source/includes/utilities/AP_Timer.h" bodystart="56" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a158dc47643c57e3c9c2bb28e999b59c0" compoundref="_a_p___timer_8cpp" startline="91" endline="101">Continue</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a9e03de48c3a9e5257092e1e27c2ebe97" compoundref="_a_p___timer_8cpp" startline="54" endline="61">Reset</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1af0dfaeb131dbf7a150b09706d9ef11c7" compoundref="_a_p___timer_8cpp" startline="107" endline="114">SetElapsedTime</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AP_Timer::m_fElapsedTime</definition>
+        <argsstring></argsstring>
+        <name>m_fElapsedTime</name>
+        <qualifiedname>csmp::AP_Timer::m_fElapsedTime</qualifiedname>
+        <briefdescription>
+<para>the relative time since the timer was created or restarted </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="59" column="10" bodyfile="source/includes/utilities/AP_Timer.h" bodystart="59" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a7018553dda2fd413e85c71061ca60020" compoundref="_a_p___timer_8cpp" startline="120" endline="135">AsString</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a158dc47643c57e3c9c2bb28e999b59c0" compoundref="_a_p___timer_8cpp" startline="91" endline="101">Continue</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a7d5e5d08c16787ad46c78ceadfd29548" compoundref="_a_p___timer_8cpp" startline="79" endline="86">ElapsedTime</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a9e03de48c3a9e5257092e1e27c2ebe97" compoundref="_a_p___timer_8cpp" startline="54" endline="61">Reset</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1af0dfaeb131dbf7a150b09706d9ef11c7" compoundref="_a_p___timer_8cpp" startline="107" endline="114">SetElapsedTime</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_a_p___timer_1aa464b474c8055907522ec18fefefc3fa" prot="protected" static="yes" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::AP_Timer::m_secondsPerTick</definition>
+        <argsstring></argsstring>
+        <name>m_secondsPerTick</name>
+        <qualifiedname>csmp::AP_Timer::m_secondsPerTick</qualifiedname>
+        <briefdescription>
+<para>precision of the system clock </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="62" column="23" bodyfile="source/includes/utilities/AP_Timer.h" bodystart="62" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1ab044ad9abe5354ef5a51cbe44ba223b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::AP_Timer::AP_Timer</definition>
+        <argsstring>()</argsstring>
+        <name>AP_Timer</name>
+        <qualifiedname>csmp::AP_Timer::AP_Timer</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="19" column="3" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="21" bodyend="24"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a9e03de48c3a9e5257092e1e27c2ebe97" compoundref="_a_p___timer_8cpp" startline="54" endline="61">Reset</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1ac192ae9a0b57dd08d6a11d4f20072fd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::AP_Timer::~AP_Timer</definition>
+        <argsstring>()</argsstring>
+        <name>~AP_Timer</name>
+        <qualifiedname>csmp::AP_Timer::~AP_Timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="21" column="3" bodyfile="source/includes/utilities/AP_Timer.h" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1a9e03de48c3a9e5257092e1e27c2ebe97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_a_p___timer" kindref="compound">AP_Timer</ref> &amp;</type>
+        <definition>AP_Timer &amp; csmp::AP_Timer::Reset</definition>
+        <argsstring>()</argsstring>
+        <name>Reset</name>
+        <qualifiedname>csmp::AP_Timer::Reset</qualifiedname>
+        <briefdescription>
+<para>Reset the timer to zero and activate at the same time. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="24" column="13" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="54" bodyend="61"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" compoundref="_a_p___timer_8h" startline="53">m_bTimerIsRunning</references>
+        <references refid="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" compoundref="_a_p___timer_8h" startline="59">m_fElapsedTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1afa855cb8b896a0a103de1a6eae26cbd9" compoundref="_a_p___timer_8h" startline="56">m_fStartTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</references>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1ab044ad9abe5354ef5a51cbe44ba223b9" compoundref="_a_p___timer_8cpp" startline="21" endline="24">AP_Timer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1a0aeb70ea7b253f89cd028778a7cd1a38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_a_p___timer" kindref="compound">AP_Timer</ref> &amp;</type>
+        <definition>AP_Timer &amp; csmp::AP_Timer::Stop</definition>
+        <argsstring>()</argsstring>
+        <name>Stop</name>
+        <qualifiedname>csmp::AP_Timer::Stop</qualifiedname>
+        <briefdescription>
+<para>Stop the timer (and freeze the elapsed time). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="27" column="13" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="66" bodyend="74"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" compoundref="_a_p___timer_8h" startline="53">m_bTimerIsRunning</references>
+        <references refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1a158dc47643c57e3c9c2bb28e999b59c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_a_p___timer" kindref="compound">AP_Timer</ref> &amp;</type>
+        <definition>AP_Timer &amp; csmp::AP_Timer::Continue</definition>
+        <argsstring>()</argsstring>
+        <name>Continue</name>
+        <qualifiedname>csmp::AP_Timer::Continue</qualifiedname>
+        <briefdescription>
+<para>Continiue the timer from where <ref refid="classcsmp_1_1_a_p___timer_1a0aeb70ea7b253f89cd028778a7cd1a38" kindref="member">Stop()</ref> had frozen it. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="30" column="13" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="91" bodyend="101"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" compoundref="_a_p___timer_8h" startline="53">m_bTimerIsRunning</references>
+        <references refid="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" compoundref="_a_p___timer_8h" startline="59">m_fElapsedTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1afa855cb8b896a0a103de1a6eae26cbd9" compoundref="_a_p___timer_8h" startline="56">m_fStartTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1a7d5e5d08c16787ad46c78ceadfd29548" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::AP_Timer::ElapsedTime</definition>
+        <argsstring>()</argsstring>
+        <name>ElapsedTime</name>
+        <qualifiedname>csmp::AP_Timer::ElapsedTime</qualifiedname>
+        <briefdescription>
+<para>Return the currently elapsed time. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="33" column="10" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="79" bodyend="86"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" compoundref="_a_p___timer_8h" startline="53">m_bTimerIsRunning</references>
+        <references refid="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" compoundref="_a_p___timer_8h" startline="59">m_fElapsedTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1af0dfaeb131dbf7a150b09706d9ef11c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AP_Timer::SetElapsedTime</definition>
+        <argsstring>(const double &amp;elapsedTime)</argsstring>
+        <name>SetElapsedTime</name>
+        <qualifiedname>csmp::AP_Timer::SetElapsedTime</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>elapsedTime</declname>
+        </param>
+        <briefdescription>
+<para>Set the currently elapsed time. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="36" column="8" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="107" bodyend="114"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" compoundref="_a_p___timer_8h" startline="53">m_bTimerIsRunning</references>
+        <references refid="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" compoundref="_a_p___timer_8h" startline="59">m_fElapsedTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1afa855cb8b896a0a103de1a6eae26cbd9" compoundref="_a_p___timer_8h" startline="56">m_fStartTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1a7018553dda2fd413e85c71061ca60020" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::AP_Timer::AsString</definition>
+        <argsstring>()</argsstring>
+        <name>AsString</name>
+        <qualifiedname>csmp::AP_Timer::AsString</qualifiedname>
+        <briefdescription>
+<para>Returns the elapsed time as a string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="39" column="15" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="120" bodyend="135"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" compoundref="_a_p___timer_8h" startline="53">m_bTimerIsRunning</references>
+        <references refid="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" compoundref="_a_p___timer_8h" startline="59">m_fElapsedTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" compoundref="_a_p___timer_8cpp" startline="158" endline="175">UpdateTimes</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1a85e312a8a781e6f378e2b171b39b70b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::AP_Timer::AverageTimeAsString</definition>
+        <argsstring>(size_t uSteps)</argsstring>
+        <name>AverageTimeAsString</name>
+        <qualifiedname>csmp::AP_Timer::AverageTimeAsString</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>uSteps</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="41" column="15" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="141" bodyend="155"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1a9330b2827926135ff8ab1ba4e809afa4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::AP_Timer::GetSecondsPerClockTick</definition>
+        <argsstring>()</argsstring>
+        <name>GetSecondsPerClockTick</name>
+        <qualifiedname>csmp::AP_Timer::GetSecondsPerClockTick</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="43" column="17" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="28" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AP_Timer::UpdateTimes</definition>
+        <argsstring>()</argsstring>
+        <name>UpdateTimes</name>
+        <qualifiedname>csmp::AP_Timer::UpdateTimes</qualifiedname>
+        <briefdescription>
+<para>read the system time and then update m_elapsedTime accordingly </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="48" column="8" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="158" bodyend="175"/>
+        <references refid="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" compoundref="_a_p___timer_8h" startline="59">m_fElapsedTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1afa855cb8b896a0a103de1a6eae26cbd9" compoundref="_a_p___timer_8h" startline="56">m_fStartTime</references>
+        <references refid="classcsmp_1_1_a_p___timer_1aa464b474c8055907522ec18fefefc3fa" compoundref="_a_p___timer_8h" startline="62">m_secondsPerTick</references>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a7018553dda2fd413e85c71061ca60020" compoundref="_a_p___timer_8cpp" startline="120" endline="135">AsString</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a158dc47643c57e3c9c2bb28e999b59c0" compoundref="_a_p___timer_8cpp" startline="91" endline="101">Continue</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a7d5e5d08c16787ad46c78ceadfd29548" compoundref="_a_p___timer_8cpp" startline="79" endline="86">ElapsedTime</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a9e03de48c3a9e5257092e1e27c2ebe97" compoundref="_a_p___timer_8cpp" startline="54" endline="61">Reset</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1af0dfaeb131dbf7a150b09706d9ef11c7" compoundref="_a_p___timer_8cpp" startline="107" endline="114">SetElapsedTime</referencedby>
+        <referencedby refid="classcsmp_1_1_a_p___timer_1a0aeb70ea7b253f89cd028778a7cd1a38" compoundref="_a_p___timer_8cpp" startline="66" endline="74">Stop</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_a_p___timer_1a9257e2eeedac63febc218eeee4891f3e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;os, AP_Timer &amp;timer)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>csmp::AP_Timer::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>os</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_a_p___timer" kindref="compound">AP_Timer</ref> &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+<para>output to stream </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/AP_Timer.h" line="65" column="10" bodyfile="source/modules/utilities/AP_Timer.cpp" bodystart="177" bodyend="180"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::AP_Timer</label>
+        <link refid="classcsmp_1_1_a_p___timer"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/AP_Timer.h" line="16" column="1" bodyfile="source/includes/utilities/AP_Timer.h" bodystart="16" bodyend="67"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_a_p___timer_1ab044ad9abe5354ef5a51cbe44ba223b9" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>AP_Timer</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a7018553dda2fd413e85c71061ca60020" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>AsString</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a85e312a8a781e6f378e2b171b39b70b4" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>AverageTimeAsString</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a158dc47643c57e3c9c2bb28e999b59c0" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>Continue</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a7d5e5d08c16787ad46c78ceadfd29548" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>ElapsedTime</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a9330b2827926135ff8ab1ba4e809afa4" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>GetSecondsPerClockTick</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a82d878e34c2d3433bfe2016809085a4a" prot="protected" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>m_bTimerIsRunning</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a67732feb9044bcf523ba5f18a5c8aa03" prot="protected" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>m_fElapsedTime</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1afa855cb8b896a0a103de1a6eae26cbd9" prot="protected" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>m_fStartTime</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1aa464b474c8055907522ec18fefefc3fa" prot="protected" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>m_secondsPerTick</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a9257e2eeedac63febc218eeee4891f3e" prot="protected" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>operator&lt;&lt;</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a9e03de48c3a9e5257092e1e27c2ebe97" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>Reset</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1af0dfaeb131dbf7a150b09706d9ef11c7" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>SetElapsedTime</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1a0aeb70ea7b253f89cd028778a7cd1a38" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>Stop</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1aeaa150da62ee45e18b7ea4b01a76cceb" prot="protected" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>UpdateTimes</name></member>
+      <member refid="classcsmp_1_1_a_p___timer_1ac192ae9a0b57dd08d6a11d4f20072fd3" prot="public" virt="non-virtual"><scope>csmp::AP_Timer</scope><name>~AP_Timer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

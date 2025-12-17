@@ -1,0 +1,477 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_h2_o___c_o2___na_cl___flow_functions_8h" kind="file" language="C++">
+    <compoundname>H2O_CO2_NaCl_FlowFunctions.h</compoundname>
+    <includes refid="_c_s_m_p__definitions_8h" local="yes">CSMP_definitions.h</includes>
+    <includedby refid="_flow_functions_module_8h" local="yes">source/includes/thmc/two_phase_flow/FlowFunctionsModule.h</includedby>
+    <includedby refid="_h2_o___c_o2___na_cl___flow_functions_8cpp" local="yes">source/modules/thmc/two_phase_flow/H2O_CO2_NaCl_FlowFunctions.cpp</includedby>
+    <includedby refid="_s_k_m__unit__tests__main_8cpp" local="yes">tests/SKM_unit_tests_main.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/thmc/two_phase_flow/H2O_CO2_NaCl_FlowFunctions.h</label>
+        <link refid="_h2_o___c_o2___na_cl___flow_functions_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>algorithm</label>
+      </node>
+      <node id="15">
+        <label>array</label>
+      </node>
+      <node id="13">
+        <label>cassert</label>
+      </node>
+      <node id="8">
+        <label>cctype</label>
+      </node>
+      <node id="11">
+        <label>cfloat</label>
+      </node>
+      <node id="16">
+        <label>chrono</label>
+      </node>
+      <node id="12">
+        <label>climits</label>
+      </node>
+      <node id="3">
+        <label>cmath</label>
+      </node>
+      <node id="7">
+        <label>cstdarg</label>
+      </node>
+      <node id="6">
+        <label>cstddef</label>
+      </node>
+      <node id="45">
+        <label>cstdint</label>
+      </node>
+      <node id="4">
+        <label>cstdio</label>
+      </node>
+      <node id="5">
+        <label>cstdlib</label>
+      </node>
+      <node id="9">
+        <label>cstring</label>
+      </node>
+      <node id="10">
+        <label>ctime</label>
+      </node>
+      <node id="17">
+        <label>deque</label>
+      </node>
+      <node id="18">
+        <label>exception</label>
+      </node>
+      <node id="19">
+        <label>filesystem</label>
+      </node>
+      <node id="20">
+        <label>fstream</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="22">
+        <label>iomanip</label>
+      </node>
+      <node id="23">
+        <label>iostream</label>
+      </node>
+      <node id="24">
+        <label>istream</label>
+      </node>
+      <node id="25">
+        <label>iterator</label>
+      </node>
+      <node id="26">
+        <label>limits</label>
+      </node>
+      <node id="27">
+        <label>list</label>
+      </node>
+      <node id="28">
+        <label>map</label>
+      </node>
+      <node id="29">
+        <label>memory</label>
+      </node>
+      <node id="30">
+        <label>numeric</label>
+      </node>
+      <node id="31">
+        <label>ostream</label>
+      </node>
+      <node id="32">
+        <label>random</label>
+      </node>
+      <node id="33">
+        <label>set</label>
+      </node>
+      <node id="34">
+        <label>sstream</label>
+      </node>
+      <node id="35">
+        <label>stdexcept</label>
+      </node>
+      <node id="36">
+        <label>string</label>
+      </node>
+      <node id="38">
+        <label>type_traits</label>
+      </node>
+      <node id="37">
+        <label>typeinfo</label>
+      </node>
+      <node id="42">
+        <label>unordered_map</label>
+      </node>
+      <node id="41">
+        <label>unordered_set</label>
+      </node>
+      <node id="39">
+        <label>utility</label>
+      </node>
+      <node id="40">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>examples/source/DES2PhaseFlowWithSplitBoundary_Example.h</label>
+        <link refid="_d_e_s2_phase_flow_with_split_boundary___example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>examples/source/DES2PhaseSlightlyCompressibleFlow_Example.h</label>
+        <link refid="_d_e_s2_phase_slightly_compressible_flow___example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>examples/source/Examples.h</label>
+        <link refid="_examples_8h_source"/>
+      </node>
+      <node id="2">
+        <label>source/includes/thmc/two_phase_flow/FlowFunctionsModule.h</label>
+        <link refid="_flow_functions_module_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/thmc/two_phase_flow/H2O_CO2_NaCl_FlowFunctions.h</label>
+        <link refid="_h2_o___c_o2___na_cl___flow_functions_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions" prot="public">csmp::H2O_CO2_NaCl_FlowFunctions</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>H2O_CO2_NaCl_FlowFunctions.h</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>CSMP_GitHub</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>Created<sp/>by<sp/>Stephan<sp/>Matthai<sp/>and<sp/>Qi<sp/>Shao<sp/>on<sp/>07/January/2019.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>Copyright<sp/>©<sp/>2017<sp/>Stephan<sp/>Matthai.<sp/>All<sp/>rights<sp/>reserved.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>CSMP_H2O_CO2_NACl_FLOW_FUNCTIONS_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_H2O_CO2_NACl_FLOW_FUNCTIONS_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="comment">//<sp/>TODO:<sp/>use<sp/>these<sp/>to<sp/>generate<sp/>values<sp/>at<sp/>nodes<sp/>as<sp/>well<sp/>(no<sp/>interpolations<sp/>required!)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="comment">//<sp/>TODO:<sp/>does<sp/>the<sp/>capillary<sp/>diffusion<sp/>multiplier<sp/>need<sp/>multiplication<sp/>with<sp/>density</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="comment">//<sp/>TODO:<sp/>create<sp/>tensor<sp/>permeability<sp/>versions<sp/>of<sp/>these<sp/>functions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim,<sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">USER&gt;</highlight></codeline>
+<codeline lineno="46" refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions" kindref="compound">H2O_CO2_NaCl_FlowFunctions</ref><sp/>{</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>ELEMENT<sp/>BASED<sp/>CALCULATIONS<sp/>with<sp/>&apos;_at&apos;<sp/>versions<sp/>for<sp/>computations<sp/>involving<sp/>facet<sp/>and<sp/>sector<sp/>integration<sp/>point<sp/>saturations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1aa00cd636db46b34fcdfc6257aad99dd2" kindref="member">InterpolateAqueousPhase</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>sw,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>rhow,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>muw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a464b6fb337b0c1fcdb16f546f7d3723e" kindref="member">InterpolateCarbonicPhase</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>snw,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>rhon,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>mun<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a289bf1d39048d6bafef8bcdaddb86795" kindref="member">Sw</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>e<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a4d1cd069ad9d1464cc0c62c09e25fea5" kindref="member">Snw</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>e<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a751a829774354ce9b6bbea7dfac93d72" kindref="member">Mobility</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1ab0826a1c513cc3d19292b8fec113f9a5" kindref="member">Mobility_at</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a35a0c73785eb10bc4d2c91638a1e5920" kindref="member">MobilityDerivative</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a0cb73e52afc60dbf3f7b59491559f97e" kindref="member">MobilityDerivative_at</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a0975e6a55a120e8aa3cff8552819362c" kindref="member">TotalMobility</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a37262a459e53bf3045313cdaa14a1f36" kindref="member">TotalMobility_at</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a96113bb2fb9f05f18284552222c2e661" kindref="member">MobilityProduct</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a3f4a9b26a957b80b4c3f235f4f59ae96" kindref="member">MobilityProduct_at</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a593adc2a393242e31520addcbf893d8b" kindref="member">MobilityProductDerivative</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/>evaluate_numerically=</highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1af45b6af244e230265ed9cc4064db5704" kindref="member">MobilityProductDerivative_at</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a7991ea0aca533b5146ba1032435aacb2" kindref="member">f</ref>(<ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a67e49875f4c9858bbf8e2b707733797e" kindref="member">f_at</ref>(<ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="99" refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a703eb63c8751c115bcb691af9ec28b4e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a703eb63c8751c115bcb691af9ec28b4e" kindref="member">Permeability</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a4517188bf94b04433d0528d5a9f9920d" kindref="member">dfds</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1ad2a592d411c632badeb976115eabdbc7" kindref="member">dfds_at</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a277639491e2eea1875fbd65a73b021c9" kindref="member">MaxFractionalFlowDerivative</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1ac4d17d57cab18e02ca12088a123c5fb5" kindref="member">AdvectionMultiplier</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a55f190b7703e3c5ea28dc92666e27e70" kindref="member">ShockSpeed</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a1129a423b506e1758b9fd6a055d40f95" kindref="member">ShockHeight</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a56e04605d232797eda7ad17d31436d17" kindref="member">ShockSpeedAndHeight</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>speed,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>height<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a3c52b93a8d415ccde41b356356806076" kindref="member">ShockFrontVelocity</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a1968602579c72889ea11631c3efabf67" kindref="member">GravityTerm</ref>(<ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;dim&gt;</ref>&amp;<sp/>dip_vec<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1ab6d17f24ac6489c0ee2c6da3e27579c4" kindref="member">GravityMultiplier_phase</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;dim&gt;</ref>&amp;<sp/>dip_vec,<sp/>uint32_t<sp/>phase<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a583e29efef6c09b174f0254d69ad7ab2" kindref="member">GravityMultiplier_G</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;dim&gt;</ref>&amp;<sp/>dip_vec<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a3f9feb7393b64017879c912260d72c23" kindref="member">GravityMultiplier_dGds</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;dim&gt;</ref>&amp;<sp/>dip_vec<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1afab2f3608e028d43a996ebcff8d591cc" kindref="member">DiffusionMultiplier</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a6e139b0b228024acf00d52878a11906b" kindref="member">CapillaryDiffusionMultiplier</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1aa0c6c6d56708746c509247f21c79b6a7" kindref="member">CapillaryDiffusionMultiplier_at</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>Dpcds_at(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>used<sp/>when?<sp/>double<sp/>CapillaryDiffusionMultiplier_Phase(<sp/>Element&lt;dim&gt;*<sp/>const,<sp/>size_t<sp/>phase<sp/>)<sp/>const;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NODE-BASED<sp/>COMPUTATIONS<sp/>using<sp/>element<sp/>parameters,<sp/>but<sp/>saturations<sp/>and<sp/>fluid<sp/>properties<sp/>from<sp/>the<sp/>current<sp/>node</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a751a829774354ce9b6bbea7dfac93d72" kindref="member">Mobility</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a35a0c73785eb10bc4d2c91638a1e5920" kindref="member">MobilityDerivative</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a0975e6a55a120e8aa3cff8552819362c" kindref="member">TotalMobility</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a96113bb2fb9f05f18284552222c2e661" kindref="member">MobilityProduct</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a593adc2a393242e31520addcbf893d8b" kindref="member">MobilityProductDerivative</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>node,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/>evaluate_numerically=</highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a7991ea0aca533b5146ba1032435aacb2" kindref="member">f</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a4517188bf94b04433d0528d5a9f9920d" kindref="member">dfds</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1ac4d17d57cab18e02ca12088a123c5fb5" kindref="member">AdvectionMultiplier</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a1968602579c72889ea11631c3efabf67" kindref="member">GravityTerm</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>node,<sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;dim&gt;</ref>&amp;<sp/>dip_vec<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a6e139b0b228024acf00d52878a11906b" kindref="member">CapillaryDiffusionMultiplier</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>node<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"></highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>central<sp/>difference<sp/>derivatives<sp/>of<sp/>saturation<sp/>and<sp/>flow<sp/>functions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>dfds_Numerical(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/>uint32_t<sp/>phase,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>delta_s<sp/>=<sp/>0.001<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a68f3bdfd72c83966cf18845ab0517100" kindref="member">dfds_at_Numerical</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>delta_s<sp/>=<sp/>0.001<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>dGds_Numerical(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>delta_s<sp/>=<sp/>0.000001<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1a72530c31d19b6c31de7cfeb12b385300" kindref="member">dlwds_Numerical</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>delta_s<sp/>=<sp/>0.001<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_1ae137d680479a7846132a6295aff1665d" kindref="member">dlnds_Numerical</ref>(<sp/><ref refid="classcsmp_1_1_element" kindref="compound">Element&lt;dim&gt;</ref>*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>delta_s<sp/>=<sp/>0.001<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"></highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/>USER&lt;dim&gt;*<sp/>User()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">USER&lt;dim&gt;*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(</highlight><highlight class="keyword">this</highlight><highlight class="normal">);<sp/>}</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/>USER&lt;dim&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">*<sp/>User()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="keyword">const<sp/></highlight><highlight class="normal">USER&lt;dim&gt;*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(</highlight><highlight class="keyword">this</highlight><highlight class="normal">);<sp/>}</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NON-STANDARD<sp/>INTERFACES</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>ContinuousPhases(<sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>aqueous,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>carbonic,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>halite<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>InterpolateAqueousPhaseSaturation(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>InterpolateSaturations(<sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>sw,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>snw<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>InterpolateSystem(<sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>sw,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>rhow,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>muw,</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>snw,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>rhon,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>mun<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>InflectionPointSaturation(<sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>TangentPointSaturation(<sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>TangentOfFractionalFlowFunction(<sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>S)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FindRootSecantMethod(<sp/>Element&lt;dim&gt;*<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>S1,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>S2)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">mutable</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sw_,<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sn_,<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rhow_,<sp/></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rhon_,<sp/></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>muw_,<sp/><sp/></highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mun_;<sp/><sp/></highlight></codeline>
+<codeline lineno="235"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"></highlight></codeline>
+<codeline lineno="237"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="238"><highlight class="normal"></highlight></codeline>
+<codeline lineno="239"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>CSMP_H2O_CO2_NACl_FLOW_FUNCTIONS_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/thmc/two_phase_flow/H2O_CO2_NaCl_FlowFunctions.h"/>
+  </compounddef>
+</doxygen>

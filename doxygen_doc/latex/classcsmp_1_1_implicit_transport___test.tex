@@ -1,0 +1,125 @@
+\doxysection{csmp\+::Implicit\+Transport\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_implicit_transport___test}{}\label{classcsmp_1_1_implicit_transport___test}\index{csmp::ImplicitTransport\_Test@{csmp::ImplicitTransport\_Test}}
+
+
+{\ttfamily \#include $<$Implicit\+Transport\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Implicit\+Transport\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_implicit_transport___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Implicit\+Transport\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_implicit_transport___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_implicit_transport___test_a168831ae92252477a2dbc5831b304c0e}\label{classcsmp_1_1_implicit_transport___test_a168831ae92252477a2dbc5831b304c0e} 
+{\bfseries Implicit\+Transport\+\_\+\+Test} (const char \texorpdfstring{$\ast$}{*}test\+\_\+model, const char \texorpdfstring{$\ast$}{*}test\+\_\+variables)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_implicit_transport___test_a8730a305befd7a6f373cda901a15d214}{run}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Testing programme
+
+
+\begin{DoxyEnumerate}
+\item Conservation on the initialised model
+\begin{DoxyItemize}
+\item prescribed velocity
+\item computed velocity
+\item tracer transport in steady-\/state pressure field, 1st order
+\item tracer transport 2nd order
+\item transport for transient pressure case
+\item transport in the presence of sources and sinks 
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_implicit_transport___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_implicit_transport___test_a8730a305befd7a6f373cda901a15d214}\index{csmp::ImplicitTransport\_Test@{csmp::ImplicitTransport\_Test}!run@{run}}
+\index{run@{run}!csmp::ImplicitTransport\_Test@{csmp::ImplicitTransport\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_implicit_transport___test_a8730a305befd7a6f373cda901a15d214} 
+void csmp\+::\+Implicit\+Transport\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Tests performed\+:
+
+
+\begin{DoxyEnumerate}
+\item Verify that we have indeed the right porevolumes facet areas and facet normals
+\end{DoxyEnumerate}
+
+use Box\+Halves3D -\/ tetra model with 2 regions for tetra testing For poly-\/elemement mesh testing use model b25
+
+
+\begin{DoxyEnumerate}
+\item Flux balance test
+\item TVD test
+\item \doxylink{classcsmp_1_1_boundary}{Boundary} interaction tests 
+\end{DoxyEnumerate}
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/integration/Implicit\+Transport\+\_\+\+Test.\+h\item 
+tests/integration/Implicit\+Transport\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

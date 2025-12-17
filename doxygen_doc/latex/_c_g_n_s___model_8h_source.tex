@@ -1,0 +1,70 @@
+\doxysection{CGNS\+\_\+\+Model.\+h}
+\hypertarget{_c_g_n_s___model_8h_source}{}\label{_c_g_n_s___model_8h_source}\index{source/includes/interfaces/CGNS/CGNS\_Model.h@{source/includes/interfaces/CGNS/CGNS\_Model.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CGNS\_MODEL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CGNS\_MODEL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00007\ \{}
+\DoxyCodeLine{00008\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___interface}{CGNS\_Interface}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00011\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model}{CGNS\_Model}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>}
+\DoxyCodeLine{00012\ \ \ \ \ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \textcolor{comment}{///\ input\ from\ CGNS\ *.cgns,\ *.dat,\ *-\/variable.txt\ and\ *-\/regions.txt\ files.}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_ad596640ea9b66ab97b82df75a73d7955}{CGNS\_Model}}(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_set,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ regions\_file\_prefix,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ variable\_file,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ use\_regions\_file\ \ =\ \textcolor{keyword}{true},\ \ \ \textcolor{comment}{/*\ true\ =\ reduce\ regions\ according\ to\ regions\ file,\ false\ =\ does\ not\ redure\ regions\ */}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ create\_boundaries\ =\ \textcolor{keyword}{true}\ );\ \ \textcolor{comment}{/*\ true\ =\ creates\ boundaries\ around\ model,\ false\ =\ does\ not\ create\ boundaries\ */}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \textcolor{comment}{///\ input\ from\ CGNS\ *.cgns,\ *.dat,\ *-\/variable.txt\ and\ *-\/regions.txt\ files.}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_afd4055c6da73740f3a4eedca5f64e0ff}{CGNS\_Model}}(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_set,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ variable\_file,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ use\_regions\_file\ \ =\ \textcolor{keyword}{true},\ \ \ \textcolor{comment}{/*\ true\ =\ reduce\ regions\ according\ to\ regions\ file,\ false\ =\ does\ not\ redure\ regions\ */}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ create\_boundaries\ =\ \textcolor{keyword}{true}\ );\ \ \textcolor{comment}{/*\ true\ =\ creates\ boundaries\ around\ model,\ false\ =\ does\ not\ create\ boundaries\ */}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \textcolor{comment}{///\ input\ from\ CGNS\ *.cgns,\ *.dat\ and\ *-\/regions.txt\ files.}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \textcolor{comment}{///\ creates\ empty\ property\ database}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_a3bf4aed2e4df42b1f2d993521b681b58}{CGNS\_Model}}(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_set,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ use\_regions\_file\ \ =\ \textcolor{keyword}{true},\ \ \ \textcolor{comment}{/*\ true\ =\ reduce\ regions\ according\ to\ regions\ file,\ false\ =\ does\ not\ redure\ regions\ */}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ create\_boundaries\ =\ \textcolor{keyword}{true}\ );\ \ \textcolor{comment}{/*\ true\ =\ creates\ boundaries\ around\ model,\ false\ =\ does\ not\ create\ boundaries\ */}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{comment}{///\ input\ from\ CSMP\ binary\ *.vset\ *-\/regions.dat,\ *-\/boundaries.dat\ and\ *-\/variables.txt\ files}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_abc41ab1f5eb0f9c058e5d488d7e498eb}{CGNS\_Model}}(\ \textcolor{keyword}{const}\ std::string\&\ vset\_dat\_files,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ variable\_file\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \textcolor{comment}{///\ input\ from\ CSMP\ binary\ *.vset\ *-\/regions.dat,\ *-\/boundaries.dat\ files}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_g_n_s___model_a495ce916f528bfd26bcf7ce15bbc140c}{CGNS\_Model}}(\ \textcolor{keyword}{const}\ std::string\&\ vset\_dat\_files\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CGNS\_Model();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Write\_CGNS\_Mesh(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_set\ );}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Initialize(\ \textcolor{keyword}{const}\ std::string\&\ mesh\_file\_set,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ regions\_file\_prefix,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ use\_regions\_file,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ create\_boundaries\ );}
+\DoxyCodeLine{00052\ \ \ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ @class\ CGNS\_Model\ CGNS\_Model\ "{}interfaces/CGNS\_Model.h"{}}}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ @author\ R.\ Manasipov}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ @date\ 2015}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

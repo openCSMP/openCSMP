@@ -1,0 +1,74 @@
+\doxysection{Geothermal\+\_\+2\+D\+\_\+\+VVCase.\+h}
+\hypertarget{_geothermal__2_d___v_v_case_8h_source}{}\label{_geothermal__2_d___v_v_case_8h_source}\index{tests/integration/Geothermal\_2D\_VVCase.h@{tests/integration/Geothermal\_2D\_VVCase.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{GEOTHERMAL\_2D\_VVCASE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{GEOTHERMAL\_2D\_VVCASE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_t_u___interface_8h}{"{}VTU\_Interface.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_a_n_s_y_s___model3_d_8h}{"{}ANSYS\_Model3D.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__high_level_utilities_8h}{"{}CSMP\_highLevelUtilities.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_solver_8h}{"{}LinearSolver.h"{}}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_l_udcmp___solver_8h}{"{}LUdcmp\_Solver.h"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_global_verbose_8h}{"{}GlobalVerbose.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ finite\ volumes\ }}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_explicit_mass_based_transport_8h}{"{}ExplicitMassBasedTransport.h"{}}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_mass_based_stencil_processor_8h}{"{}MassBasedStencilProcessor.h"{}}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ finite\ elements}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_p_d_e___integrator_8h}{"{}PDE\_Integrator.h"{}}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral___n_t__op___n__d_v_8h}{"{}NumIntegral\_NT\_op\_N\_dV.h"{}}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral__d_n_t__op__d_n__d_v_8h}{"{}NumIntegral\_dNT\_op\_dN\_dV.h"{}}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral___n_t__lhsop___n__d_v_8h}{"{}NumIntegral\_NT\_lhsop\_N\_dV.h"{}}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral__d_n_t__op__d_v_8h}{"{}NumIntegral\_dNT\_op\_dV.h"{}}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral___set_r_h_s__to___zero_8h}{"{}NumIntegral\_SetRHS\_to\_Zero.h"{}}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_source__rhsop_8h}{"{}PointSource\_rhsop.h"{}}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_velocity_and_volume_flux_8h}{"{}VelocityAndVolumeFlux.h"{}}}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{//\ visitors}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_compute_gravity_term_visitor_8h}{"{}ComputeGravityTermVisitor.h"{}}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_thermal_visitor_8h}{"{}ThermalVisitor.h"{}}}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_source_visitor_8h}{"{}SourceVisitor.h"{}}}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conductivity_visitor_8h}{"{}ConductivityVisitor.h"{}}}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{comment}{//\ utilities\ and\ monitoring}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_input_data_manager_8h}{"{}InputDataManager.h"{}}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_computational_settings_8h}{"{}ComputationalSettings.h"{}}}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00040\ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00044\ \ \ \{}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \textcolor{comment}{/**\ Geothermal\ 2D\ Test\ Case}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ =================================}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ Mesh:\ \ \ \ \ \ \ Linear\ Triangles}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ Model:\ \ \ \ \ \ 2000x1000\ m\ 2D}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ Test:\ \ \ \ \ \ \ Temperature}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ BC:\ \ \ \ \ \ \ \ \ constant\ pressure,\ constant\ temperature}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ Criterion:}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ =================================}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00055\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_geothermal__2_d___v_v_case}{Geothermal\_2D\_VVCase}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00056\ \ \ \ \ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ Geothermal\_2D\_VVCase(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prefix);}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_geothermal__2_d___v_v_case_acef2e800286c936eea2180551148255b}{run}}();}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ outputToVTU(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model,std::string\ model\_name,\ \textcolor{keyword}{const}\ list<string>\&\ props,\ size\_t\ timestep\ );}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ ComputeMassConductivity\ (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model);}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ ComputeMassGravityTerm\ (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model);}
+\DoxyCodeLine{00064\ \ \ \ \ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ GEOTHERMAL\_2D\_VVCASE\_H}}
+
+\end{DoxyCode}

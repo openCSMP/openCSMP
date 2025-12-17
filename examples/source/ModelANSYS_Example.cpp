@@ -11,7 +11,7 @@ void ModelANSYS_Example::Specifications()
 {
   SetTitle( "ANSYS_Model3D: loading mesh created by ANSYS(ICEM CFD Engineering Tetra)" );
   SetDifficulty( 1 );
-  SetCategory( "Software Interfaces" );
+  SetCategory( "Meshing Interfaces" );
   AddAuthor( "P. Lang" );
   AddDescription( "how to use CSMP's ANSYS interface" );
   AddDescription( "source in: ModelANSYS_Example.cpp" );

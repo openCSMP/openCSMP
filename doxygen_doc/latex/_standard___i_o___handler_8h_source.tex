@@ -1,0 +1,73 @@
+\doxysection{Standard\+\_\+\+IO\+\_\+\+Handler.\+h}
+\hypertarget{_standard___i_o___handler_8h_source}{}\label{_standard___i_o___handler_8h_source}\index{source/includes/run\_control/Standard\_IO\_Handler.h@{source/includes/run\_control/Standard\_IO\_Handler.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_STANDARD\_IO\_HANDLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_STANDARD\_IO\_HANDLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**\ @brief\ Primitive\ handler\ for\ command\ line\ and\ file\ input/output\ }}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ of\ user-\/defined\ input\ parameters\ during\ runs\ (input\ may\ also\ be\ read\ from\ file)}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ @author\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ @date\ 1996}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00014\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler}{Standard\_IO\_Handler}}\ \{}
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{///\ constructs\ handler,\ specifying\ which\ file\ the\ collected\ information\ shall\ be\ written\ to}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_a8105cd4759bd140a390127a275cf6ec1}{Standard\_IO\_Handler}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ doc\_file\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_acf208c3bc8bf44a540fe4c2e300ebf20}{Standard\_IO\_Handler}}();}
+\DoxyCodeLine{00019\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_a163199ea92758f9dcef96eef1c013303}{Standard\_IO\_Handler}}();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{///\ prints\ question\ onto\ screen\ and\ collects\ input\ from\ user\ (stdin)}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_acdae7781bc4ba1f497baef59969a41a5}{YesNo}}(\ \textcolor{keyword}{const}\ std::string\&\ question,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ help\_message\ =\ \textcolor{keywordtype}{nullptr}\ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{///\ prompts\ user\ to\ enter\ a\ floating\ point\ value\ which\ is\ collected\ from\ stdin\ returned}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_a0c7eb82c59b5e03f551d04ae367d4bc4}{RecordChoice}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ question\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ prompts\ user\ to\ enter\ an\ integer\ value\ which\ is\ collected\ from\ stdin\ returned}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ad962fe1f66ca4ceb53058f3c869dd109}{RecordIntChoice}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ question\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ prompts\ user\ to\ make\ a\ binary\ choice\ which\ is\ collected\ from\ stdin\ returned}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_a5526bf3f6d3e2d6aab9b084fc474c334}{RecordLogicalChoice}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ question\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ prompts\ user\ to\ input\ a\ word\ of\ text\ in\ response\ to\ the\ posed\ question}}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ab868825d31b25f02163a92dc373e415c}{std}}::\mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ab868825d31b25f02163a92dc373e415c}{string}}\ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ab868825d31b25f02163a92dc373e415c}{RecordLiteralChoice}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ question\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{///\ prompts\ user\ to\ input\ a\ string\ of\ text\ in\ response\ to\ the\ posed\ question}}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ab12d3679c9e56fe69a3f4ea2b11f616a}{std}}::\mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ab12d3679c9e56fe69a3f4ea2b11f616a}{string}}\ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ab12d3679c9e56fe69a3f4ea2b11f616a}{RecordMultipleLiteralChoice}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ question\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ collects\ text\ from\ stdin\ and\ stores\ it\ in\ internal\ container\ of\ strings}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ac9e4a340c2bdec57c395093252e2890c}{RecordInformation}}(\ \textcolor{keyword}{const}\ std::string\&\ info\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ removes\ all\ logged\ information}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_a605327534a857f73d6dd3f6a7a117945}{Erase}}();}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ appends\ info\ string\ to\ doc\_file\ (specified\ during\ handler\ construction)}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_a6de91ef5a27592f868e2137241dc0928}{Protocol}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ info\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{///\ appends\ info\ string\ +\ numeric\ value\ to\ doc\_file}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_ad2511fabf2b743d1bcb9467f8c3a73f4}{Protocol}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ info,\ \textcolor{keywordtype}{double}\ parameter\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ prints\ all\ the\ recorded\ information\ to\ the\ output\ text\ file\ 'doc\_file'}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_af0c6c5b2725833937b5c92ef1a586cf3}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{///\ sets\ default\ help\ message\ fot\ this\ handler}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_standard___i_o___handler_a35bfc0de1077ece70ddcb1c79712c4e0}{SetDefaultHelp}}(\ \textcolor{keyword}{const}\ std::string\&\ default\_help\ );}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ protocol\_file\_;\ \ \textcolor{comment}{///<\ the\ ASCII\ text\ file\ to\ which\ the\ log\ will\ be\ written}}
+\DoxyCodeLine{00059\ \ \ \ \ std::list<std::string>\ \ input\_output;\ \ \ \ \textcolor{comment}{///<\ the\ collected\ information}}
+\DoxyCodeLine{00060\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ default\_help\_\{\ \textcolor{stringliteral}{"{}No\ available\ help..."{}}\ \};\ \textcolor{comment}{///\ default\ help\ message\ if\ none\ is\ provided}}
+\DoxyCodeLine{00061\ \};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \}\ \textcolor{comment}{//\ end\ namespace\ csp}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,65 @@
+\doxysection{Command\+Line\+Parser\+\_\+\+Test.\+h}
+\hypertarget{_command_line_parser___test_8h_source}{}\label{_command_line_parser___test_8h_source}\index{tests/unit/CommandLineParser\_Test.h@{tests/unit/CommandLineParser\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CommandLineParser\_Test\_h\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CommandLineParser\_Test\_h\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdlib}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{sstream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_command_line_parser_8h}{"{}CommandLineParser.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_command_line_parser___test}{CommandLineParser\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ CommandLineParser\_Test();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00017\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\ Basic\ tests}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ intArgumentTest();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ doubleArgumentTest();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{\_MSC\_VER}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ stringArgumentTest();}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ boolArgumentTest();}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ boolWithArgumentTest();}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ boolWithEndMarkerTest();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ unusedDefaultTest();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ Multiple\ argument\ test}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ sameArgumentTest();}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ longOptTest();}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ combinedTest();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ sequenceTest();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ Error\ tests}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ missingArgumentTest();}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ missingArgumentDefaultTest();}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ combinedMissingArgumentTest();}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ combinedMissingArgumentDefaultTest();}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ wrongOptionTest();}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ combinedWrongOptionTest();}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ endOfArgumentMarkerOptionTest();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Other\ functionality}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ nonSeparatedTest();}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ combinedNonSeparatedTest();}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ nonArgumentTest();}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ endOfOptionTest();}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ noNonArgumentsTest();}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ notUsedArgumentsTest();}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ outputTest();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \}\ \textcolor{comment}{//\ end\ csp}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

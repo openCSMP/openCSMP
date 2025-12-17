@@ -1,0 +1,772 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classmjl_1_1_edge" kind="class" language="C++" prot="public">
+    <compoundname>mjl::Edge</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classmjl_1_1_edge_1a7570f0f32a63ebc9ddc94b3b75a490a9" prot="public" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Edge::org_</definition>
+        <argsstring></argsstring>
+        <name>org_</name>
+        <qualifiedname>mjl::Edge::org_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="51" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_edge_1a57ad4099619d93e37e8455b45931b405" prot="public" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Edge::dest_</definition>
+        <argsstring></argsstring>
+        <name>dest_</name>
+        <qualifiedname>mjl::Edge::dest_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="51" column="21" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classmjl_1_1_edge_1a4f5831eb898410581e09bfa9d9bc33b7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Edge::Edge</definition>
+        <argsstring>()</argsstring>
+        <name>Edge</name>
+        <qualifiedname>mjl::Edge::Edge</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="11" column="5" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="63" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1af5dfa8eff77ce7f55232e0f1b7f94f0b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Edge::Edge</definition>
+        <argsstring>(const mjl::Point &amp;, const mjl::Point &amp;)</argsstring>
+        <name>Edge</name>
+        <qualifiedname>mjl::Edge::Edge</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>org</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>dest</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="12" column="5" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1ac6fdb6c565b9294ea025ae4b87fbe7f5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Edge::Edge</definition>
+        <argsstring>(const mjl::Edge &amp;)</argsstring>
+        <name>Edge</name>
+        <qualifiedname>mjl::Edge::Edge</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <defname>m</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="13" column="5" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="102" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1aa6fe6b142107107bae09bda1c6efaf37" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Edge::~Edge</definition>
+        <argsstring>()</argsstring>
+        <name>~Edge</name>
+        <qualifiedname>mjl::Edge::~Edge</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="14" column="5" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="14" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a9258c5fbfbe1b80e4e74f05653af36f9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+        <definition>Edge &amp; mjl::Edge::operator=</definition>
+        <argsstring>(const mjl::Edge &amp;m)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>mjl::Edge::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="15" column="11" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="69" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a083c2cf3e0388ba80c50d5890d821a7e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Edge::Set</definition>
+        <argsstring>(const mjl::Point &amp;, const mjl::Point &amp;)</argsstring>
+        <name>Set</name>
+        <qualifiedname>mjl::Edge::Set</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>org</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>dest</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="16" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="108" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a7183be9738a1705632b05cec5e367e7c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Edge::Set</definition>
+        <argsstring>(double x1, double y1, double x2, double y2)</argsstring>
+        <name>Set</name>
+        <qualifiedname>mjl::Edge::Set</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x1</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>y1</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>x2</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>y2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="17" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="115" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+        <definition>Edge &amp; mjl::Edge::Rot</definition>
+        <argsstring>()</argsstring>
+        <name>Rot</name>
+        <qualifiedname>mjl::Edge::Rot</qualifiedname>
+        <briefdescription>
+<para>pivots an edge 90o clockwise around it&apos;s midpoint </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="18" column="15" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="42" bodyend="51"/>
+        <referencedby refid="classmjl_1_1_edge_1a1b896c136d9135197195c914cb5dd410" compoundref="_m_j_l___edge_8h" startline="133" endline="136">Flip</referencedby>
+        <referencedby refid="classcsmp_1_1_opening_mode_fracture_1ad6347bc79a48d20c98e3fd41b2068723" compoundref="_opening_mode_fracture_8cpp" startline="144" endline="261">csmp::OpeningModeFracture::SixteenPointConvexHull</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_line_element_1a68007d4b65077a29c0f759a3a055feaa" compoundref="_isoparametric_linear_line_element_8cpp" startline="729" endline="762">csmp::IsoparametricLinearLineElement::UnitNormal</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_quadratic_line_element_1a9f2f72929c24c047b0b05851a21d0879" compoundref="_isoparametric_quadratic_line_element_8cpp" startline="567" endline="596">csmp::IsoparametricQuadraticLineElement::UnitNormal</referencedby>
+        <referencedby refid="classcsmp_1_1_linear_line_element_1a09d559393f0dd7ff9f7a505ca337167b" compoundref="_linear_line_element_8cpp" startline="392" endline="416">csmp::LinearLineElement::UnitNormal</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_quadrilateral_1af1436b632ba5fcba905ca22af955668d" compoundref="_isoparametric_linear_quadrilateral_8cpp" startline="1761" endline="1853">csmp::IsoparametricLinearQuadrilateral::UnitNormalToFace</referencedby>
+        <referencedby refid="classcsmp_1_1_isoparametric_linear_triangle_1adbc30ec60739948f58ea3729bbfb71ac" compoundref="_isoparametric_linear_triangle_8cpp" startline="1595" endline="1668">csmp::IsoparametricLinearTriangle::UnitNormalToFace</referencedby>
+        <referencedby refid="classcsmp_1_1_linear_triangle_1a8deb43a50229ce96f937fe6f5cc3f6f1" compoundref="_linear_triangle_8cpp" startline="405" endline="436">csmp::LinearTriangle::UnitNormalToFace</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a1b896c136d9135197195c914cb5dd410" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+        <definition>Edge &amp; mjl::Edge::Flip</definition>
+        <argsstring>()</argsstring>
+        <name>Flip</name>
+        <qualifiedname>mjl::Edge::Flip</qualifiedname>
+        <briefdescription>
+<para>flip the direction of an edge </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="19" column="15" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="133" bodyend="136"/>
+        <references refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" compoundref="_m_j_l___edge_8cpp" startline="42" endline="51">Rot</references>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1af13d7118ceb2e852b6eac2fcb6e64893" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Edge::Move</definition>
+        <argsstring>(double dx, double dy)</argsstring>
+        <name>Move</name>
+        <qualifiedname>mjl::Edge::Move</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="20" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="230" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a19742ebe7e9aac1b2dde1a4683a1fd9d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Edge::Scale</definition>
+        <argsstring>(double xfac, double yfac)</argsstring>
+        <name>Scale</name>
+        <qualifiedname>mjl::Edge::Scale</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>xfac</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yfac</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="21" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="237" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a988de5e9e5b14ec26c9deda68b881498" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Edge::NormalizeTo</definition>
+        <argsstring>(double n)</argsstring>
+        <name>NormalizeTo</name>
+        <qualifiedname>mjl::Edge::NormalizeTo</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="22" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="211" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a157a8b2a1693128000335c3ddd573a97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Edge::IfCloserThanMerge</definition>
+        <argsstring>(double tolerance, mjl::Point &amp;)</argsstring>
+        <name>IfCloserThanMerge</name>
+        <qualifiedname>mjl::Edge::IfCloserThanMerge</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="23" column="16" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="69" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a979074f4cc0a54b3f3c27bc8d287c665" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Edge::operator==</definition>
+        <argsstring>(const mjl::Edge &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>mjl::Edge::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <defname>m</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="25" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="78" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a1c6f86abebed7c6b020ad6aff0f25817" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Edge::operator!=</definition>
+        <argsstring>(const mjl::Edge &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>mjl::Edge::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <defname>m</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="26" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="83" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1aff9f38ef8990ca0b0e4a0384e30e085b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Edge::operator&lt;</definition>
+        <argsstring>(const mjl::Edge &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>mjl::Edge::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref> &amp;</type>
+          <defname>m</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="27" column="5" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="89" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1abed691a1c42c9bc7c0e5d8e96f998690" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Edge::Point</definition>
+        <argsstring>(double t) const</argsstring>
+        <name>Point</name>
+        <qualifiedname>mjl::Edge::Point</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="29" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="147" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1ab25f2c3f909a72b7dc69cefeb2e72726" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Edge::Y</definition>
+        <argsstring>(double x) const</argsstring>
+        <name>Y</name>
+        <qualifiedname>mjl::Edge::Y</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>for a given x value <ref refid="classmjl_1_1_edge_1ab25f2c3f909a72b7dc69cefeb2e72726" kindref="member">Y()</ref> returns the corresponding y value on the line defined by the <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="30" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="222" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1aa6e6bf7c1ef5a3896109691b89d247ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Edge::Origin</definition>
+        <argsstring>() const</argsstring>
+        <name>Origin</name>
+        <qualifiedname>mjl::Edge::Origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="31" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="156" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1adc5a183337f3632520d93dc25610cc9e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Edge::Destination</definition>
+        <argsstring>() const</argsstring>
+        <name>Destination</name>
+        <qualifiedname>mjl::Edge::Destination</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="32" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="160" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a9d4d6ec62261f87dea517514c8f4d072" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Edge::MidPoint</definition>
+        <argsstring>(mjl::Point &amp;) const</argsstring>
+        <name>MidPoint</name>
+        <qualifiedname>mjl::Edge::MidPoint</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>mp</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="33" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="164" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1acf7e7a4e2abe2e1afb47053532d5af2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point mjl::Edge::MidPoint</definition>
+        <argsstring>() const</argsstring>
+        <name>MidPoint</name>
+        <qualifiedname>mjl::Edge::MidPoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="34" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="171" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1af097eac0fd09d2f4db7fd95e7caf0549" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool mjl::Edge::IsVertical</definition>
+        <argsstring>() const</argsstring>
+        <name>IsVertical</name>
+        <qualifiedname>mjl::Edge::IsVertical</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="35" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="196" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a4367da33356c52e215a2bc1e39ccba85" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Edge::Slope</definition>
+        <argsstring>() const</argsstring>
+        <name>Slope</name>
+        <qualifiedname>mjl::Edge::Slope</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="36" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="202" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a752215e38347a92fc808e32afc1ef964" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Edge::DistanceFrom</definition>
+        <argsstring>(const mjl::Point &amp;) const</argsstring>
+        <name>DistanceFrom</name>
+        <qualifiedname>mjl::Edge::DistanceFrom</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="37" column="16" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="56" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a7246452d0e34fd0d6422ad4779709301" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Edge::Length</definition>
+        <argsstring>() const</argsstring>
+        <name>Length</name>
+        <qualifiedname>mjl::Edge::Length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="38" column="16" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="246" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1af805ffd94d60dfd23e4dfe07a23d0980" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>LOCATION</type>
+        <definition>mjl::LOCATION mjl::Edge::Classify</definition>
+        <argsstring>(const mjl::Point &amp;) const</argsstring>
+        <name>Classify</name>
+        <qualifiedname>mjl::Edge::Classify</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="40" column="19" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="140" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a977fdbbbeae30e368545c71835aa7fd9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>INTERSECTION</type>
+        <definition>INTERSECTION mjl::Edge::Intersect</definition>
+        <argsstring>(const Edge &amp;, double &amp;) const</argsstring>
+        <name>Intersect</name>
+        <qualifiedname>mjl::Edge::Intersect</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>SKEW if infinite lines defined by edges crossat a point p COLLINEAR if the lines are the same PARALLEL if the two lines defined by the edges are parallel</para>
+</simplesect>
+t is assigned the parametric value (along the line) of where the lines intersect if they do. t = x of the intersection </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="41" column="19" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="176" bodyend="189"/>
+        <referencedby refid="group___c_s_m_pglobal_functions_1ga85e8aa8dcc3d8d4c0dd5040561c42762" compoundref="_m_j_l__functions_8cpp" startline="377" endline="400">mjl::clipEdgeToPolygon</referencedby>
+        <referencedby refid="classmjl_1_1_edge_1a95c95b8e922e8f7c2605df1906342dca" compoundref="_m_j_l___edge_8h" startline="184" endline="193">Cross</referencedby>
+        <referencedby refid="classmjl_1_1_edge_1ac8bf9ec6d584ddc112f3c8b9ecff4cc4" compoundref="_m_j_l___edge_8cpp" startline="95" endline="114">CrossingPoint</referencedby>
+        <referencedby refid="namespacemjl_1a32b3a8d58f823cb167c3f3c499f56224" compoundref="_m_j_l___edge_8cpp" startline="241" endline="267">mjl::crossingPoint</referencedby>
+        <referencedby refid="classmjl_1_1_edge_1a2eb063c4229dbbcb316e776ba7cc5b4e" compoundref="_m_j_l___edge_8cpp" startline="120" endline="135">SKM_CrossingPoint</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a95c95b8e922e8f7c2605df1906342dca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>INTERSECTION</type>
+        <definition>INTERSECTION mjl::Edge::Cross</definition>
+        <argsstring>(const Edge &amp;, double &amp;) const</argsstring>
+        <name>Cross</name>
+        <qualifiedname>mjl::Edge::Cross</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <defname>t</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>SKEW_CROSS if the line segments intersect (in constrast with the infinite lines) COLLINEAR, PARALLEL SKEW_NO_CROSS as appropriate t = x value of intersection if intersection occurs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="42" column="19" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="184" bodyend="193"/>
+        <references refid="classmjl_1_1_edge_1a977fdbbbeae30e368545c71835aa7fd9" compoundref="_m_j_l___edge_8cpp" startline="176" endline="189">Intersect</references>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1ac8bf9ec6d584ddc112f3c8b9ecff4cc4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>INTERSECTION</type>
+        <definition>INTERSECTION mjl::Edge::CrossingPoint</definition>
+        <argsstring>(double tolerance, const Edge &amp;, mjl::Point &amp;) const</argsstring>
+        <name>CrossingPoint</name>
+        <qualifiedname>mjl::Edge::CrossingPoint</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>includes start and end-point into the edge comparison. Thus if the intersection is within the tolerance of these nodes, <ref refid="classmjl_1_1_edge_1ac8bf9ec6d584ddc112f3c8b9ecff4cc4" kindref="member">CrossingPoint()</ref> will return SKEW_CROSS and it will snap the intersection point to that node. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="43" column="19" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="95" bodyend="114"/>
+        <references refid="classmjl_1_1_edge_1a977fdbbbeae30e368545c71835aa7fd9" compoundref="_m_j_l___edge_8cpp" startline="176" endline="189">Intersect</references>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a2eb063c4229dbbcb316e776ba7cc5b4e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>INTERSECTION</type>
+        <definition>INTERSECTION mjl::Edge::SKM_CrossingPoint</definition>
+        <argsstring>(double tolerance, const Edge &amp;, mjl::Point &amp;) const</argsstring>
+        <name>SKM_CrossingPoint</name>
+        <qualifiedname>mjl::Edge::SKM_CrossingPoint</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>as above but no snapping to points, the intersection point is returned into p. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="44" column="19" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="120" bodyend="135"/>
+        <references refid="classmjl_1_1_edge_1a977fdbbbeae30e368545c71835aa7fd9" compoundref="_m_j_l___edge_8cpp" startline="176" endline="189">Intersect</references>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a3f5aaefd4ce06b1c5ac0d1ce01df4310" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>EDGE_CLASSIFICATION</type>
+        <definition>EDGE_CLASSIFICATION mjl::Edge::Type</definition>
+        <argsstring>(const mjl::Point &amp;) const</argsstring>
+        <name>Type</name>
+        <qualifiedname>mjl::Edge::Type</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>classifies an edge relative to its location compared with the point p. Options are CROSSING, TOUCHING and INESSENTIAL </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="45" column="26" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="22" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1af5d187a055ed2e533e2fbe6a135e1d88" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Edge::AngleTo</definition>
+        <argsstring>(const Edge &amp;) const</argsstring>
+        <name>AngleTo</name>
+        <qualifiedname>mjl::Edge::AngleTo</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_edge" kindref="compound">Edge</ref> &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+<para>see &quot;Mathematische Formeln&quot; p. 170, Schnittwinkel... </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="46" column="13" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="140" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1a60e86d8713618aa4737516c7858e2de6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double mjl::Edge::DotProduct</definition>
+        <argsstring>(const mjl::Point &amp;, const mjl::Point &amp;) const</argsstring>
+        <name>DotProduct</name>
+        <qualifiedname>mjl::Edge::DotProduct</qualifiedname>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>p</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref> &amp;</type>
+          <defname>q</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="47" column="13" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="125" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_edge_1acf7decd2ca4a85df7b99cd51bba06092" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Edge::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>mjl::Edge::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Edge.h" line="49" column="10" bodyfile="source/modules/discretisation/MJL_Edge.cpp" bodystart="8" bodyend="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>mjl::Edge</label>
+        <link refid="classmjl_1_1_edge"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+dest_</edgelabel>
+          <edgelabel>+org_</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>mjl::Point</label>
+        <link refid="classmjl_1_1_point"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/MJL_Edge.h" line="9" column="1" bodyfile="source/includes/discretisation/MJL_Edge.h" bodystart="9" bodyend="52"/>
+    <listofallmembers>
+      <member refid="classmjl_1_1_edge_1af5d187a055ed2e533e2fbe6a135e1d88" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>AngleTo</name></member>
+      <member refid="classmjl_1_1_edge_1af805ffd94d60dfd23e4dfe07a23d0980" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Classify</name></member>
+      <member refid="classmjl_1_1_edge_1a95c95b8e922e8f7c2605df1906342dca" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Cross</name></member>
+      <member refid="classmjl_1_1_edge_1ac8bf9ec6d584ddc112f3c8b9ecff4cc4" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>CrossingPoint</name></member>
+      <member refid="classmjl_1_1_edge_1a57ad4099619d93e37e8455b45931b405" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>dest_</name></member>
+      <member refid="classmjl_1_1_edge_1adc5a183337f3632520d93dc25610cc9e" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Destination</name></member>
+      <member refid="classmjl_1_1_edge_1a752215e38347a92fc808e32afc1ef964" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>DistanceFrom</name></member>
+      <member refid="classmjl_1_1_edge_1a60e86d8713618aa4737516c7858e2de6" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>DotProduct</name></member>
+      <member refid="classmjl_1_1_edge_1a4f5831eb898410581e09bfa9d9bc33b7" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Edge</name></member>
+      <member refid="classmjl_1_1_edge_1af5dfa8eff77ce7f55232e0f1b7f94f0b" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Edge</name></member>
+      <member refid="classmjl_1_1_edge_1ac6fdb6c565b9294ea025ae4b87fbe7f5" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Edge</name></member>
+      <member refid="classmjl_1_1_edge_1a1b896c136d9135197195c914cb5dd410" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Flip</name></member>
+      <member refid="classmjl_1_1_edge_1a157a8b2a1693128000335c3ddd573a97" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>IfCloserThanMerge</name></member>
+      <member refid="classmjl_1_1_edge_1a977fdbbbeae30e368545c71835aa7fd9" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Intersect</name></member>
+      <member refid="classmjl_1_1_edge_1af097eac0fd09d2f4db7fd95e7caf0549" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>IsVertical</name></member>
+      <member refid="classmjl_1_1_edge_1a7246452d0e34fd0d6422ad4779709301" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Length</name></member>
+      <member refid="classmjl_1_1_edge_1a9d4d6ec62261f87dea517514c8f4d072" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>MidPoint</name></member>
+      <member refid="classmjl_1_1_edge_1acf7e7a4e2abe2e1afb47053532d5af2b" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>MidPoint</name></member>
+      <member refid="classmjl_1_1_edge_1af13d7118ceb2e852b6eac2fcb6e64893" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Move</name></member>
+      <member refid="classmjl_1_1_edge_1a988de5e9e5b14ec26c9deda68b881498" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>NormalizeTo</name></member>
+      <member refid="classmjl_1_1_edge_1a1c6f86abebed7c6b020ad6aff0f25817" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>operator!=</name></member>
+      <member refid="classmjl_1_1_edge_1aff9f38ef8990ca0b0e4a0384e30e085b" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>operator&lt;</name></member>
+      <member refid="classmjl_1_1_edge_1a9258c5fbfbe1b80e4e74f05653af36f9" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>operator=</name></member>
+      <member refid="classmjl_1_1_edge_1a979074f4cc0a54b3f3c27bc8d287c665" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>operator==</name></member>
+      <member refid="classmjl_1_1_edge_1a7570f0f32a63ebc9ddc94b3b75a490a9" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>org_</name></member>
+      <member refid="classmjl_1_1_edge_1aa6e6bf7c1ef5a3896109691b89d247ae" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Origin</name></member>
+      <member refid="classmjl_1_1_edge_1acf7decd2ca4a85df7b99cd51bba06092" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Out</name></member>
+      <member refid="classmjl_1_1_edge_1abed691a1c42c9bc7c0e5d8e96f998690" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Point</name></member>
+      <member refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Rot</name></member>
+      <member refid="classmjl_1_1_edge_1a19742ebe7e9aac1b2dde1a4683a1fd9d" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Scale</name></member>
+      <member refid="classmjl_1_1_edge_1a083c2cf3e0388ba80c50d5890d821a7e" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Set</name></member>
+      <member refid="classmjl_1_1_edge_1a7183be9738a1705632b05cec5e367e7c" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Set</name></member>
+      <member refid="classmjl_1_1_edge_1a2eb063c4229dbbcb316e776ba7cc5b4e" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>SKM_CrossingPoint</name></member>
+      <member refid="classmjl_1_1_edge_1a4367da33356c52e215a2bc1e39ccba85" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Slope</name></member>
+      <member refid="classmjl_1_1_edge_1a3f5aaefd4ce06b1c5ac0d1ce01df4310" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Type</name></member>
+      <member refid="classmjl_1_1_edge_1ab25f2c3f909a72b7dc69cefeb2e72726" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>Y</name></member>
+      <member refid="classmjl_1_1_edge_1aa6fe6b142107107bae09bda1c6efaf37" prot="public" virt="non-virtual"><scope>mjl::Edge</scope><name>~Edge</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

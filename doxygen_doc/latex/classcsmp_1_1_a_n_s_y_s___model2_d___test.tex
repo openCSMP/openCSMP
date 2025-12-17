@@ -1,0 +1,196 @@
+\doxysection{csmp\+::ANSYS\+\_\+\+Model2\+D\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test}{}\label{classcsmp_1_1_a_n_s_y_s___model2_d___test}\index{csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}}
+
+
+Inheritance diagram for csmp\+::ANSYS\+\_\+\+Model2\+D\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::ANSYS\+\_\+\+Model2\+D\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a0166c3db667a0bf477f9429c2b91ebe3}{run}} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a048890bc2c95d665c570b00808a2e6d8}{Test\+\_\+\+ANSYS\+\_\+\+Model\+Construction\+And\+Saving2D}} (const std\+::string \&input\+\_\+file\+\_\+name="{}Hor\+Fracs2\+D"{})
+\begin{DoxyCompactList}\small\item\em misc checks on boundary flags etc. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_a773aa1191bb59f36c9c679519652d199}\label{classcsmp_1_1_a_n_s_y_s___model2_d___test_a773aa1191bb59f36c9c679519652d199} 
+void {\bfseries Test\+\_\+print\+Line\+Element\+Region} ()
+\begin{DoxyCompactList}\small\item\em using line element \doxylink{classcsmp_1_1_v_set}{VSet} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_a800ca4db17e423ecea2d4efef5254513}\label{classcsmp_1_1_a_n_s_y_s___model2_d___test_a800ca4db17e423ecea2d4efef5254513} 
+void {\bfseries Test\+\_\+\+Create\+Consistent\+Line\+Element\+Orientations2D} ()
+\begin{DoxyCompactList}\small\item\em same test as in \doxylink{classcsmp_1_1_v_data___test}{VData\+\_\+\+Test}, but with a more realistic model created in ANSYS \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a2cab51f731582bc0cb8b89c6ddbdb1de}{Test\+\_\+\+Create\+Internal\+Boundary}} ()
+\begin{DoxyCompactList}\small\item\em tests the creation of an internal boundary from the line-\/element regions \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a6cbc9d20d490600765382c3c9fc6de63}{Test\+\_\+\+Create\+Split\+Boundaries}} ()
+\begin{DoxyCompactList}\small\item\em tests the creation of an internal split boundaries from the line-\/element region and between domains \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___model2_d___test_a97191dae5e4395146d0a2a626a3ca387}{Test\+\_\+\+Create\+Split\+Boundaries\+Between\+Unique\+Regions}} ()
+\begin{DoxyCompactList}\small\item\em tests creation of Split\+Boundaries between all regions of a model (\textquotesingle{}Fluid\+\_\+\+Flower\textquotesingle{}) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_a0166c3db667a0bf477f9429c2b91ebe3}\index{csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}!run@{run}}
+\index{run@{run}!csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___model2_d___test_a0166c3db667a0bf477f9429c2b91ebe3} 
+void csmp\+::\+ANSYS\+\_\+\+Model2\+D\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Using a whole suite of 2D Ansys models with boundaries and even split boundaries being created \+:
+
+
+\begin{DoxyItemize}
+\item Box\+Halfs2D
+\item Fluid\+\_\+\+Flower 
+\end{DoxyItemize}
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test_a0166c3db667a0bf477f9429c2b91ebe3_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_a048890bc2c95d665c570b00808a2e6d8}\index{csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}!Test\_ANSYS\_ModelConstructionAndSaving2D@{Test\_ANSYS\_ModelConstructionAndSaving2D}}
+\index{Test\_ANSYS\_ModelConstructionAndSaving2D@{Test\_ANSYS\_ModelConstructionAndSaving2D}!csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}}
+\doxysubsubsection{\texorpdfstring{Test\_ANSYS\_ModelConstructionAndSaving2D()}{Test\_ANSYS\_ModelConstructionAndSaving2D()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___model2_d___test_a048890bc2c95d665c570b00808a2e6d8} 
+void csmp\+::\+ANSYS\+\_\+\+Model2\+D\+\_\+\+Test\+::\+Test\+\_\+\+ANSYS\+\_\+\+Model\+Construction\+And\+Saving2D (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{input\+\_\+file\+\_\+name}{ = {\ttfamily "{}HorFracs2D"{}}}\end{DoxyParamCaption})}
+
+
+
+misc checks on boundary flags etc. 
+
+Default input is "{}\+Hor\+Fracs2\+D"{} Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test_a048890bc2c95d665c570b00808a2e6d8_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_a2cab51f731582bc0cb8b89c6ddbdb1de}\index{csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}!Test\_CreateInternalBoundary@{Test\_CreateInternalBoundary}}
+\index{Test\_CreateInternalBoundary@{Test\_CreateInternalBoundary}!csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}}
+\doxysubsubsection{\texorpdfstring{Test\_CreateInternalBoundary()}{Test\_CreateInternalBoundary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___model2_d___test_a2cab51f731582bc0cb8b89c6ddbdb1de} 
+void csmp\+::\+ANSYS\+\_\+\+Model2\+D\+\_\+\+Test\+::\+Test\+\_\+\+Create\+Internal\+Boundary (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+tests the creation of an internal boundary from the line-\/element regions 
+
+For model \textquotesingle{}three\+\_\+layers\textquotesingle{} converts the line-\/element regions INTERFACE1 and INTERFACE2 into internal boundaries Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test_a2cab51f731582bc0cb8b89c6ddbdb1de_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_a6cbc9d20d490600765382c3c9fc6de63}\index{csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}!Test\_CreateSplitBoundaries@{Test\_CreateSplitBoundaries}}
+\index{Test\_CreateSplitBoundaries@{Test\_CreateSplitBoundaries}!csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}}
+\doxysubsubsection{\texorpdfstring{Test\_CreateSplitBoundaries()}{Test\_CreateSplitBoundaries()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___model2_d___test_a6cbc9d20d490600765382c3c9fc6de63} 
+void csmp\+::\+ANSYS\+\_\+\+Model2\+D\+\_\+\+Test\+::\+Test\+\_\+\+Create\+Split\+Boundaries (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+tests the creation of an internal split boundaries from the line-\/element region and between domains 
+
+For model \textquotesingle{}three\+\_\+layers\textquotesingle{} converts the line-\/element regions INTERFACE1 and INTERFACE2 into internal boundaries Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test_a6cbc9d20d490600765382c3c9fc6de63_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___model2_d___test_a97191dae5e4395146d0a2a626a3ca387}\index{csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}!Test\_CreateSplitBoundariesBetweenUniqueRegions@{Test\_CreateSplitBoundariesBetweenUniqueRegions}}
+\index{Test\_CreateSplitBoundariesBetweenUniqueRegions@{Test\_CreateSplitBoundariesBetweenUniqueRegions}!csmp::ANSYS\_Model2D\_Test@{csmp::ANSYS\_Model2D\_Test}}
+\doxysubsubsection{\texorpdfstring{Test\_CreateSplitBoundariesBetweenUniqueRegions()}{Test\_CreateSplitBoundariesBetweenUniqueRegions()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___model2_d___test_a97191dae5e4395146d0a2a626a3ca387} 
+void csmp\+::\+ANSYS\+\_\+\+Model2\+D\+\_\+\+Test\+::\+Test\+\_\+\+Create\+Split\+Boundaries\+Between\+Unique\+Regions (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+tests creation of Split\+Boundaries between all regions of a model (\textquotesingle{}Fluid\+\_\+\+Flower\textquotesingle{}) 
+
+Direct creation of Split\+Boundaries between all the unique regions of the model. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test_a97191dae5e4395146d0a2a626a3ca387_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___model2_d___test_a97191dae5e4395146d0a2a626a3ca387_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/ANSYS\+\_\+\+Model2\+D\+\_\+\+Test.\+h\item 
+tests/unit/ANSYS\+\_\+\+Model2\+D\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

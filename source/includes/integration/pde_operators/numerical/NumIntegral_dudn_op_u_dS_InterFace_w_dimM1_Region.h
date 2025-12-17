@@ -32,17 +32,17 @@ class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region : public MathOperatorLHS
        Computes difference between the variable values at the topologically collocated nodes, including that in the intervening
        lower-dimensional region, using it to compute   the transfer coefficient (=coupling coefficient) at the time level t + delta t.
     */
-    virtual void GetOperands( const InterFace<dim>& ) override;
+    void GetOperands( const InterFace<dim>& ) override final;
     
-    virtual void ComputeContribution( const InterFace<dim>& ) override;
+    void ComputeContribution( const InterFace<dim>& ) override final;
     
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& ) override;
+    void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& ) override final;
     
     /// adjusting the time increment in case it changes during the transient calculation
     void UpdateTimeIncrement( double dt ) { delta_t_ = dt; }
     
-    virtual NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>* clone() const override
+    NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>* clone() const override
       { return new NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>(*this); }
       
     void ResetMinMaxTransferTerms() {

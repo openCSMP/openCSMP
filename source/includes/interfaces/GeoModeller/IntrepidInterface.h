@@ -2,6 +2,8 @@
 #define INTREPID_INTERFACE_H
 
 #include <iostream>
+#include <cmath>
+#include <cstdint>
 
 namespace csmp {
 

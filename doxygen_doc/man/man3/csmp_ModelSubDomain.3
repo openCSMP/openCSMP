@@ -1,0 +1,1007 @@
+.TH "csmp::ModelSubDomain< dim, CELL >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ModelSubDomain< dim, CELL > \- Storage of \fBNode\fP and \fBCell\fP pointers to subdomains of the overall computational model\&. Distinguishes interior from perimeter nodes (located on subdomain boundary) and interior and perimeter cells which have at least a single \fBFace\fP on the subdomain boundary\&. \fBBase\fP class to \fBRegion\fP, \fBBoundary\fP and \fBSplitBoundary\fP\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ModelSubDomain\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBModelSubDomain\fP (const std::string &subdomain_name, const \fBPropertyDatabase\fP< dim > &)"
+.br
+.RI "constructs incomplete subdomain for later initialisation with suitable methods in subclasses "
+.ti -1c
+.RI "\fBModelSubDomain\fP (const \fBModelSubDomain\fP &)"
+.br
+.ti -1c
+.RI "\fBModelSubDomain\fP (\fBModelSubDomain\fP &&)"
+.br
+.RI "move constructor; "
+.ti -1c
+.RI "\fBModelSubDomain\fP< dim, CELL > & \fBoperator=\fP (const \fBModelSubDomain\fP &)"
+.br
+.ti -1c
+.RI "\fBModelSubDomain\fP< dim, CELL > & \fBoperator=\fP (\fBModelSubDomain\fP &&)"
+.br
+.ti -1c
+.RI "std::string \fBName\fP () const"
+.br
+.ti -1c
+.RI "void \fBName\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual \fBPLACEMENT\fP \fBPlacement\fP () const =0"
+.br
+.RI "local variable storage interface "
+.ti -1c
+.RI "virtual bool \fBValidVariable\fP (const char *variableName) const"
+.br
+.ti -1c
+.RI "virtual void \fBAccept\fP (\fBVisitor\fP< dim > &)"
+.br
+.RI "support of the \fBVisitor\fP pattern "
+.ti -1c
+.RI "void \fBApply\fP (\fBInterrelation\fP< dim > &)"
+.br
+.RI "modification via Operand-based relations between discretised properties that only modify a single result variable "
+.ti -1c
+.RI "void \fBRebuildSubDomainAfterChangeOfCellVector\fP ()"
+.br
+.RI "deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells "
+.ti -1c
+.RI "void \fBRebuildSubDomainAfterChangeOfNodeVector\fP ()"
+.br
+.RI "rebuilds node vector, sorts everything and re-establishes interior and perimeter "
+.ti -1c
+.RI "void \fBUpdateCellMembershipApplyingConstraints\fP (typename std::vector< CELL< dim > * >::const_iterator master_domain_start, typename std::vector< CELL< dim > * >::const_iterator master_domain_end, const \fBPropertyConstraints\fP &)"
+.br
+.RI "rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints "
+.ti -1c
+.RI "void \fBIdentifyPerimeter\fP ()"
+.br
+.RI "distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls PartitionElementVector() "
+.ti -1c
+.RI "void \fBCreateNodePointerVector\fP ()"
+.br
+.RI "creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms "
+.ti -1c
+.RI "void \fBCreateNodePointerVector\fP (std::vector< std::pair< std::pair< CELL< dim > *, uint32_t >, std::pair< CELL< dim > *, uint32_t > > > &contacting_cells)"
+.br
+.RI "creates node pointer vector from the shared face nodes of the supplied range of contacting cells "
+.ti -1c
+.RI "void \fBSortVectors\fP (size_t interior_cells, size_t interior_nodes)"
+.br
+.RI "sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations) "
+.ti -1c
+.RI "void \fBBuildPerimeterFaceVector\fP (int64_t interior_cells)"
+.br
+.RI "assuming that a partitioned (and sorted) cell vector is in place, constructs the bd_face_vec_ by checking whether neighbor cells belong to the domain or not "
+.ti -1c
+.RI "void \fBScheduleForRebuild\fP ()"
+.br
+.RI "for rebuilding subdomains when nodes or cells changed: flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector "
+.ti -1c
+.RI "bool \fBNeedsRebuild\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBRebuildCellAndPerimeterFaceVector\fP ()"
+.br
+.RI "deletes 'nullptr' cells from cell vector, retaining the sorting into interior and perimeter elements, and rebuilding perimeter faces as necessary "
+.ti -1c
+.RI "size_t \fBRebuildNodeVector\fP ()"
+.br
+.RI "deletes 'nullptr' nodes from \fBNode\fP vector, retaining the sorting into interior and perimeter nodes "
+.ti -1c
+.RI "int32_t \fBDomainIndex\fP () const"
+.br
+.RI "reference counting-based unique domain identifier (0\&.\&.n-1) "
+.ti -1c
+.RI "size_t \fBRenumberNodes\fP () const"
+.br
+.RI "renumbers nodes in domain 0\&.\&.n-1 "
+.ti -1c
+.RI "size_t \fBRenumberCells\fP () const"
+.br
+.RI "renumbers cells in domain 0\&.\&.n-1 "
+.ti -1c
+.RI "void \fBUpdateMemberIndexes\fP () const"
+.br
+.RI "renumber cells and nodes consecutively from 0\&.\&.n-1 "
+.ti -1c
+.RI "std::vector< size_t > \fBMemberCellIndexes\fP () const"
+.br
+.RI "output current indices to vector "
+.ti -1c
+.RI "const std::vector< CELL< dim > * > & \fBCellVector\fP () const"
+.br
+.RI "reference to container of finite cell pointers to either \fBElement\fP, \fBFace\fP or \fBInterFace\fP objects; "
+.ti -1c
+.RI "std::vector< CELL< dim > * > & \fBCellVector\fP ()"
+.br
+.RI "do not remove!; used for boolean operations "
+.ti -1c
+.RI "const std::vector< \fBNode\fP< dim > * > & \fBNodeVector\fP () const"
+.br
+.RI "reference to const \fBNode\fP pointer vector "
+.ti -1c
+.RI "std::vector< \fBNode\fP< dim > * > & \fBNodeVector\fP ()"
+.br
+.RI "reference to \fBNode\fP pointer vector "
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator \fBNodesBegin\fP () const"
+.br
+.RI "const iterators (cell and node pointers cannot be modified but the nodes and cells can!) "
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator \fBPerimeterNodesBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator \fBNodesEnd\fP () const"
+.br
+.ti -1c
+.RI "std::vector< CELL< dim > * >::const_iterator \fBCellsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< CELL< dim > * >::const_iterator \fBPerimeterCellsBegin\fP () const"
+.br
+.ti -1c
+.RI "std::vector< CELL< dim > * >::const_iterator \fBCellsEnd\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSharedPerimeterNodes\fP (typename std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator start, typename std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator end) const"
+.br
+.RI "returns how many of the nodes in the supplied iterator range also form part of the current subdomain's perimeter "
+.ti -1c
+.RI "bool \fBEmpty\fP () const"
+.br
+.RI "check whether subdomain conatains any cells "
+.ti -1c
+.RI "size_t \fBNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBInteriorNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBPerimeterNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBIntegrationPoints\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSectorIntegrationPoints\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBFacetIntegrationPoints\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBCells\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBInteriorCells\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBPerimeterCells\fP () const"
+.br
+.ti -1c
+.RI "bool \fBContains\fP (const CELL< dim > *const) const"
+.br
+.ti -1c
+.RI "bool \fBContains\fP (const \fBNode\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "bool \fBIsPerimeterNode\fP (const \fBcsmp::Node\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "bool \fBIsPerimeterCell\fP (const CELL< dim > *const) const"
+.br
+.ti -1c
+.RI "uint32_t \fBPerimeterFaces\fP (size_t eid) const"
+.br
+.RI "for looping over the perimeter faces of perimeter cell with #eid, method is used to travel across subdomain surface / outline "
+.ti -1c
+.RI "uint32_t \fBPerimeterFace\fP (size_t eid, uint32_t face) const"
+.br
+.RI "returns local face id of face #face that lies on perimeter of model subdomain "
+.ti -1c
+.RI "\fBcsmp::Node\fP< dim > * \fBN\fP (size_t n) const"
+.br
+.RI "pointer to node #n in subdomain; "
+.ti -1c
+.RI "CELL< dim > * \fBE\fP (size_t n) const"
+.br
+.RI "pointer to cell #n of model subdomain "
+.ti -1c
+.RI "bool \fBIsPerimeterNode\fP (const size_t nidx) const"
+.br
+.RI "is the node located on the surface of the model subdomain? "
+.ti -1c
+.RI "bool \fBIsPerimeterCell\fP (const size_t eidx) const"
+.br
+.RI "does the cell have at least on face on the surface of the model subdomain? "
+.ti -1c
+.RI "bool \fBIsContiguous\fP () const"
+.br
+.RI "checks whether all cells within the subdomain are interconnected (if the domain has multi-dimensional cells this is never the case) "
+.ti -1c
+.RI "std::pair< \fBCELL_SHAPE\fP, bool > \fBSingleCellShapeDomain\fP () const"
+.br
+.RI "if the model subdomain consists of a single cell shape (line, surface, volume) this method returns true revealing the type "
+.ti -1c
+.RI "std::pair< int32_t, int32_t > \fBSpatialDimensions\fP () const"
+.br
+.RI "returns 1) cells of how many different spatial dimensions are contained, and 2) the highest cell spatial dimension in subdomain "
+.ti -1c
+.RI "void \fBMinMaxCoordinates\fP (\fBPoint\fP< dim > &xyz_min, \fBPoint\fP< dim > &xyz_max) const"
+.br
+.RI "returns diagonally opposite points of bounding box "
+.ti -1c
+.RI "void \fBAssignNodeCoordinatesTo\fP (const char *vector_prop)"
+.br
+.RI "output coordinates to user-defined vector variable [x1,y1,z1,\&.\&.\&.xn,yn,zn] "
+.ti -1c
+.RI "void \fBAssignNodeCoordinatesTo\fP (const char *scalar_prop, char coord)"
+.br
+.RI "assigment of coordinate component 'x','y','z' to scalar variable of choice "
+.ti -1c
+.RI "void \fBAssignCellCharacteristicsTo\fP (const char *characteristic, const char *var)"
+.br
+.RI "characteristics like 'length', 'area', 'volume' , 'aspect ratio', 'inner radius' are assigned to user-defined variable "
+.ti -1c
+.RI "void \fBNodeAttributesToCSV\fP ()"
+.br
+.RI "writes a CSV (comma delimited ascii text) file with point coordinates, node-idx, \fBBOX_BOUNDARY\fP flags, and interior vs perimeter information "
+.ti -1c
+.RI "template<typename Var> void \fBInputPropertyValue\fP (const char *input_prop, const Var &new_value, \fBSUBDOMAIN_PART\fP sd=COMPLETE)"
+.br
+.RI "assigns uniform (single) variable value to either the entire subdomain or its interior or perimeter "
+.ti -1c
+.RI "template<typename Var> void \fBInputPropertyValue\fP (const char *input_prop, const Var &new_value, \fBVARIABLE_FLAG\fP do_not_overwrite, \fBSUBDOMAIN_PART\fP sd=COMPLETE)"
+.br
+.RI "as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite' "
+.ti -1c
+.RI "void \fBChangePropertyStatus\fP (const char *property, \fBVARIABLE_FLAG\fP new_status_of_scalar, \fBSUBDOMAIN_PART\fP=COMPLETE)"
+.br
+.RI "changes the flag of the scalar variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter "
+.ti -1c
+.RI "void \fBChangePropertyStatusWhere\fP (const char *property, \fBVARIABLE_FLAG\fP new_status_of_scalar, double min_value_to_change, double max_value_to_change)"
+.br
+.RI "changes the flag of the scalar variable 'property' to new value if the scalar variable is withing the specified range "
+.ti -1c
+.RI "void \fBChangePropertyStatus\fP (const char *property, const std::vector< \fBVARIABLE_FLAG\fP > &new_status, \fBSUBDOMAIN_PART\fP=COMPLETE)"
+.br
+.RI "changes the flags of the vector variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter "
+.ti -1c
+.RI "void \fBChangePropertyStatusWhere\fP (const char *property, const std::vector< \fBVARIABLE_FLAG\fP > &new_status, double min_value_to_change, double max_value_to_change)"
+.br
+.RI "changes the flag of the vector variable 'property' to new value if the scalar variable is withing the specified range "
+.ti -1c
+.RI "void \fBChangePropertyStatus\fP (const char *property, uint32_t component, \fBVARIABLE_FLAG\fP new_status, \fBSUBDOMAIN_PART\fP=COMPLETE)"
+.br
+.RI "changes the flag of a particular variable component to new value; applied either in the entire subdomain or its interior or perimeter "
+.ti -1c
+.RI "void \fBChangePropertyStatusWhere\fP (const char *property, uint32_t component, \fBVARIABLE_FLAG\fP new_status, double min_value_to_change, double max_value_to_change)"
+.br
+.RI "changes the flag of a particular variable component to new value if the scalar variable is withing the specified range "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBPropertyStatus\fP (const char *\fBvariable\fP, \fBSUBDOMAIN_PART\fP flag=COMPLETE, uint32_t i=0) const"
+.br
+.RI "by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned "
+.ti -1c
+.RI "void \fBMinMaxOf\fP (const char *property, double &gmin, double &gmax) const"
+.br
+.RI "min/max property values (length of vectors and eigenvalues of tensors) "
+.ti -1c
+.RI "void \fBMinMaxOf\fP (const \fBcsmp::Index\fP &, double &gmin, double &gmax) const"
+.br
+.ti -1c
+.RI "void \fBInterpolateNodeToCellProperty\fP (const char *nprop, const char *eprop)"
+.br
+.ti -1c
+.RI "void \fBInterpolateNodeToIntegrationPointProperty\fP (const char *nprop, const char *eprop)"
+.br
+.ti -1c
+.RI "void \fBInterpolateIntegrationPointToCellProperty\fP (const char *cprop, const char *eprop)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateCellToIntegrationPointProperty\fP (const char *eprop, const char *cprop)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateCellToFacetIntegrationPointProperty\fP (const char *eprop, const char *fipprop)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateCellToNodeProperty\fP (const char *eprop, const char *nprop, bool by_distance=true)"
+.br
+.ti -1c
+.RI "void \fBExtrapolateIntegrationPointToNodeProperty\fP (const char *cprop, const char *nprop)"
+.br
+.ti -1c
+.RI "double \fBAverage\fP (const char *property) const"
+.br
+.RI "arithmetic (number as opposed to volume weighted) average "
+.ti -1c
+.RI "bool \fBCopyGradientOfProperty_A_To_B\fP (const char *node_prop, const char *cell_prop)"
+.br
+.ti -1c
+.RI "void \fBCopyReplace\fP (const char *from, const char *to)"
+.br
+.ti -1c
+.RI "void \fBWriteDomainIndexesToBinaryFile\fP (std::fstream &) const"
+.br
+.RI "writes complete \fBModelSubDomain\fP specifications in terms of unique indices as block to binary file "
+.ti -1c
+.RI "void \fBOutputVariableToScreen\fP (const char *prop) const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBPartitionCellVector\fP ()"
+.br
+.RI "establishes interior vs\&. exterior simplices and nodes; returns index of first boundary cell "
+.ti -1c
+.RI "size_t \fBPartitionCellVectorForBoundary\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBPartitionCellVectorForSplitBoundary\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBpref_\fP"
+.br
+.ti -1c
+.RI "std::string \fBsubdomain_name_\fP"
+.br
+.RI "passed down when domain is created so that it can be referred to "
+.ti -1c
+.RI "std::vector< CELL< dim > * > \fBcell_vec_\fP"
+.br
+.RI "doubly sorted, interior cells first "
+.ti -1c
+.RI "std::vector< std::vector< uint32_t > > \fBbd_face_vec_\fP"
+.br
+.RI "matching second sorted range of cell_vec_ "
+.ti -1c
+.RI "std::vector< \fBcsmp::Node\fP< dim > * > \fBnode_vec_\fP"
+.br
+.RI "doubly sorted, interior nodes first "
+.ti -1c
+.RI "size_t \fBfirst_bd_node_\fP = std::numeric_limits<size_t>::max()"
+.br
+.RI "begin of the perimeter nodes "
+.ti -1c
+.RI "int32_t \fBdomain_idx_\fP"
+.br
+.RI "created during construction from domain_count_ "
+.ti -1c
+.RI "bool \fBrebuilt_needed_\fP = false"
+.br
+.RI "parameter set when mesh gets modified by \fBMeshManager\fP so that update can be prompted "
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static int32_t \fBdomain_count_\fP = 0"
+.br
+.RI "reference-counting to get unique identifier for subdomains "
+.ti -1c
+.RI "static constexpr bool \fBverbose_\fP = false"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBModelSubDomain_Test\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL>
+.br
+class csmp::ModelSubDomain< dim, CELL >"Storage of \fBNode\fP and \fBCell\fP pointers to subdomains of the overall computational model\&. Distinguishes interior from perimeter nodes (located on subdomain boundary) and interior and perimeter cells which have at least a single \fBFace\fP on the subdomain boundary\&. \fBBase\fP class to \fBRegion\fP, \fBBoundary\fP and \fBSplitBoundary\fP\&. 
+
+
+.PP
+\fBAttention\fP
+.RS 4
+\fBRegion\fP, Bounday, \fBSplitBoundary\fP ARE AGNOSTIC ABOUT MESH CONNECTIVITY\&. \fBModelSubDomain\fP objects do not create Nodes, Elements, Faces or Interfaces\&. This is the role of the \fBMeshManager\fP that is agnostic about subdomains but maintains and updates the mesh\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+\fBBoundary\fP and SplitBoundare are \fBModelSubDomain\fP subclasses consisting of lower-dimensional \fBFace\fP and \fBInterFace\fP objects\&.
+.IP "\(bu" 2
+SplitBoundaries are Internal boundaries connecting node-matched but disconnected mesh patches
+.IP "\(bu" 2
+Boundaries tend to be external boundaries with names corresponding to the sides of box-shaped models or other unique names\&. 
+.PP
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBcsmp::ModelSubDomain\fP< dim, CELL >::ModelSubDomain (\fBModelSubDomain\fP< dim, CELL > && ed)"
+
+.PP
+move constructor; 
+.PP
+\fBAttention\fP
+.RS 4
+remove verbose output after testing 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::Accept (\fBcsmp::Visitor\fP< dim > & )\fR [virtual]\fP"
+
+.PP
+support of the \fBVisitor\fP pattern virtual function stub that will be overwritten by base classes 
+.PP
+Reimplemented in \fBcsmp::Boundary< dim >\fP, \fBcsmp::Region< dim >\fP, and \fBcsmp::SplitBoundary< dim >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::Apply (\fBInterrelation\fP< dim > & relation)"
+
+.PP
+modification via Operand-based relations between discretised properties that only modify a single result variable applies \fBInterrelation\fP to \fBModelSubDomain\fP 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::AssignCellCharacteristicsTo (const char * characteristic, const char * var)"
+
+.PP
+characteristics like 'length', 'area', 'volume' , 'aspect ratio', 'inner radius' are assigned to user-defined variable \fBAssignCellCharacteristicsTo()\fP allows to assign a number of \fBElement\fP characteristics as identified by strings (second argument) to scalar physical variables\&. These characteristics are:
+
+.PP
+"volume" (3D) "inner radius" "aspect ratio" (longest / shortest segment)
+.SH "Input Arguments"
+.PP
+The cell characteristic indicated by the first string argument is assigned to a property of the user's choice specified by the second method argument and as identified by its name in the variable database\&.
+.SH "Implementation"
+.PP
+The method was implemented mainly for two-dimensional calculations\&. Therefore, height and width only work in two-dimensional calculations\&. The characteristics are obtained from the \fBFiniteElement\fP which is bridged to the current \fBElement\fP that is queried\&.
+.SH "Application Examples"
+.PP
+The characteristic "inner radius" is commonly used to find the appropriate resolution for an advection or visualization grid on which a variable is to be mapped on\&.
+
+.PP
+\fBAssignCellCharacteristicsTo()\fP can be used to:
+.IP "\(bu" 2
+test the shape of cells in a mesh for their suitability for a computation (aspect ratio)\&.
+.IP "\(bu" 2
+testing how skewed the cells got by deformation
+.IP "\(bu" 2
+integrate cell properties in specific calculations, for instance, if a fracture is just one cell wide, the minimum height of these fracture cells may be equivalent to the fracture aperture\&.
+.PP
+.SH "Messages"
+.PP
+Firstly, the method will report an error and return, if the target property to which the cell characteristic shall be assigned to is not an cell variable\&.
+
+.PP
+Further errors may be reported if the user tries to use the characteristic area in a 3D computation, or volume in a 2D computation\&. Also, cell height and width are thus far only available in 2D\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::AssignNodeCoordinatesTo (const char * vector_variable)"
+
+.PP
+output coordinates to user-defined vector variable [x1,y1,z1,\&.\&.\&.xn,yn,zn] Assigns node coordinates to the supplied node variable which may be either of scalar or \fBvector<double>\fP type\&. If either the X, Y, or Z coordinate are to be assigned to a scalar variable an index from 0\&.\&.\&.dim-1 must be supplied to indicate which coordinate axis shall be mapped\&.
+.SH "Input Arguments"
+.PP
+The name of the physical variable to which the node coordinate shall be assigned to, and, if a scalar property shall be initialized with coordinate values, an int index to indicate which coordinate axis is desired (0=X, 1=Y, 2=Z)\&.
+.SH "Implementation"
+.PP
+Method uses the Coordinates() and X(), Y(), and Z() interfaces of the \fBNode\fP class\&.
+.SH "Application Examples"
+.PP
+To arrive at coordinate values for a model where topography is important etc\&.
+.SH "Messages"
+.PP
+The method will report a fatal error and terminate the computation, if the target variable is not placed on the node or if it is not of the correct type\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> double \fBcsmp::ModelSubDomain\fP< dim, CELL >::Average (const char * prop) const"
+
+.PP
+arithmetic (number as opposed to volume weighted) average Takes the arithmetic (not cell size weighted) average of all property values of nodes, integration points, or cells that belong to the region, depending on where the target property is placed\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIprop\fP The name of the property which shall be averaged\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::BuildPerimeterFaceVector (int64_t interior_cells)"
+
+.PP
+assuming that a partitioned (and sorted) cell vector is in place, constructs the bd_face_vec_ by checking whether neighbor cells belong to the domain or not Method for reconstruction of model subdomains from binary file\&. 
+.PP
+.nf
+@author  SKM
+@date 11/10/2019
+
+.fi
+.PP
+ 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> const std::vector< CELL< dim > * > & \fBcsmp::ModelSubDomain\fP< dim, CELL >::CellVector () const"
+
+.PP
+reference to container of finite cell pointers to either \fBElement\fP, \fBFace\fP or \fBInterFace\fP objects; 
+.PP
+\fBNote\fP
+.RS 4
+used for boolean operations 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::ChangePropertyStatus (const char * property, const std::vector< \fBVARIABLE_FLAG\fP > & new_status, \fBSUBDOMAIN_PART\fP group_flag = \fRCOMPLETE\fP)"
+
+.PP
+changes the flags of the vector variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter changes the variable flag to status for those group members which carry the group_flag\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::ChangePropertyStatus (const char * property, uint32_t component, \fBVARIABLE_FLAG\fP new_status, \fBSUBDOMAIN_PART\fP group_flag = \fRCOMPLETE\fP)"
+
+.PP
+changes the flag of a particular variable component to new value; applied either in the entire subdomain or its interior or perimeter changes the variable flag to status for those group members which carry the group_flag\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::ModelSubDomain\fP< dim, CELL >::Contains (const CELL< dim > * const eptr) const"
+Uses binary_search on both ranges of the sorted cell vector to find the cell in question\&. returns true or false\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::ModelSubDomain\fP< dim, CELL >::Contains (const \fBNode\fP< dim > * const nptr) const"
+Uses binary_search on both ranges of the sorted node vector to find the node in question\&. returns true or false\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::ModelSubDomain\fP< dim, CELL >::CopyGradientOfProperty_A_To_B (const char * a, const char * b)"
+Provided that property 'a' is a scalar node variable and property 'b' is a \fBvector<double>\fP variable placed on the cell, \fBCopyGradientOfProperty_A_To_B()\fP will calculate the gradient of property 'a' for each cell and assign the result to the cell variable 'b'\&.
+.SH "Input Arguments"
+.PP
+The method takes two name strings as arguments\&. The first string specifies the scalar node variable of which the gradient will be calculated and the second string identifies the \fBvector<double>\fP variable placed on the cell which will store the calculated gradient of property 'a'\&.
+.SH "Application Examples"
+.PP
+The definition of many geophysical or geochemical interrelations requires a knowledge of property gradients which can be calculated with this method, using the cell interpolation functions of type of finite cell which was used to build the mesh\&. The method can also be used for post-processing following the application of algorithms\&.
+.SH "Messages"
+.PP
+\fBCopyGradientOfProperty_A_To_B()\fP will return without completing any calculations, if the input variables do not comply with the specifications outlined above\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::CreateNodePointerVector ()"
+
+.PP
+creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms Uses vector to create unique node vector by pushing back all node of the elements including duplicates, then sorting it and eliminating the duplicates\&.
+
+.PP
+TODO: speed critical function\&. Perhaps refactor with unordered set as intermediate container for unique nodes because there will be so many duplicates\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::ExtrapolateCellToNodeProperty (const char * eprop, const char * nprop, bool by_distance = \fRtrue\fP)"
+Interpolates piecewise constant cell properties to the nodes\&. Since each node belongs to multiple cells their contributions to this node have to be weighted\&. This method offers two ways to do this\&.
+
+.PP
+'by-distance' is the default\&. In this approach, contributions are weighted by the inverse of the distance of each cell's barycentre from the node\&. Thus, small cells have a bigger role than big ones\&.
+
+.PP
+'default' the contributions are weighted by cell length/area/volume\&. This weighs bigger cells more than small ones\&. In many cases this is not what one wants, but it is still offered for some specific applications\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::ExtrapolateIntegrationPointToNodeProperty (const char * cprop, const char * nprop)"
+Using the cell interpolation functions, this method extrapolates the desired integration point property to the nodes\&. Constributions of adjacent cells are averaged but no weighting by cell size or proximity of barycentre to the node is applied\&.
+.SH "Input Arguments"
+.PP
+The names of the targeted integration point and node variables\&.
+
+.PP
+The result of the extrapolation is returned into the \fBModel\fP property storage\&.
+.SH "Implementation"
+.PP
+The method depends on a corresponding function of the \fBFiniteElement\fP which is for all numerically integrated cell types\&. For cells with quadratic inpterpolation functions, the method uses a linear extrapolation which is justified for solution variable derivatives as they define a trilinear field on the IntegrationPoints\&.
+.SH "Application Examples"
+.PP
+Use this for numerically integrated finite cells, in particular ones with an interpolation order greater than 1\&.
+.SH "Messages"
+.PP
+A consistency check on variable type and placement is performed\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::IdentifyPerimeter ()"
+
+.PP
+distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls PartitionElementVector() In order to use the region node/cell flags 'INTERIOR' or 'PERIMETER', boundary nodes and cells must be identified first\&. This is done every time when a new region is formed\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+convention: cells are considered 'PERIMETER' cells of a \fBRegion\fP only if they have at least one edge or face at the region boundary\&. This is the case irrespective of the dimensionality of such cells\&. In the extreme case of line cells inside a volume, they are flagged boundary, if they have one node on the perimeter of the volume region\&. Another way of looking at this is to consider all cells boundary cells, that share a face with the boundary\&.
+
+.PP
+convention: If a \fBRegion\fP consists of cells of different dimensionality, the highest dimensional ones define the position of the boundary, i\&.e\&. all lower-dimensional cells that stick out of the region (and including all their nodes) are flagged 'PERIMETER'\&. Lower-dimensional cells inside a higher dimensional region are considered 'INTERIOR'\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+\fBIdentifyPerimeter()\fP is called as part of the region-forming process\&. The perimeter flagging is used to access boundaries selectively\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+(1) Does not work for quadratic regions
+.RE
+.PP
+.SH "Implementation"
+.PP
+.IP "1." 4
+Perimeter cells and nodes are found looking for the absence of cell neighbors, but only the highest dimensionality cells inside the \fBRegion\fP
+.IP "  \(bu" 4
+all the nodes of the highest-dimensionality cells are stored in a set\&.
+.PP
+
+.IP "2." 4
+Lower-dimensional cells are found that do not share all of their nodes with the highest dimensional cells\&.
+.IP "  \(bu" 4
+These cells nodes must be outside of the highest dimensional region\&.
+.IP "  \(bu" 4
+These cells and their nodes are flagged 'PERIMETER'\&.
+.PP
+
+.IP "3." 4
+All lower dimensional cells that share all of their nodes with the highest dimensional cells AND have at least nodes flagged 'PERIMETER' on one edge (a single node for a line cell) will be flagged 'PERIMETER' cells\&.
+.PP
+
+.PP
+It follows that all lower-dimensional mesh that 'sticks out' of a higher dimensional region has cells and nodes flagged as PERIMETER\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> template<typename Var> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::InputPropertyValue (const char * input_prop, const Var & var, \fBSUBDOMAIN_PART\fP sdp = \fRCOMPLETE\fP)"
+
+.PP
+assigns uniform (single) variable value to either the entire subdomain or its interior or perimeter 
+.PP
+\fBTodo\fP
+.RS 4
+(3-D) Refactor!! This is a potential bug if wrong integration properties are used! 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> template<typename Var> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::InputPropertyValue (const char * input_prop, const Var & var, \fBVARIABLE_FLAG\fP do_not_overwrite, \fBSUBDOMAIN_PART\fP sdp = \fRCOMPLETE\fP)"
+
+.PP
+as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite' Helper function that checks a complex varboundary flags of a variable that shall be assigned and only transfers values to it if the variable has not got the specified flag\&. Assigns variable values to model subdomains, but only if the components of the variable do not have the flag identified as 'do_not_overwrite'\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+Since tensor variables only have one flag per row, the overwrite protection is applied on a row-by-row basis\&.
+
+.PP
+This special treatment is not applied to FV integration points\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::InterpolateIntegrationPointToCellProperty (const char * cprop, const char * eprop)"
+This method interpolates the specified constraint point property to the target cell property\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIcprop\fP The name of the constraint point property which shall be interpolated to the 
+.br
+\fIeprop\fP cell property (arg2)\&.
+.RE
+.PP
+The results are returned to the \fBModel\fP\&.
+.SH "Implementation"
+.PP
+Currently the method averages the IntegrationPoint variable values to find the cell property value\&.
+.SH "Application Examples"
+.PP
+To visualise constraint point properties as CELL_CENTERED variables in VTK they have to have a unique value in the cell = CELL\&.
+
+.PP
+Alternatively, one could integrate the property over the cell and divide the result value by the cell area\&. However, this would work only for scalar properties\&.
+.SH "Messages"
+.PP
+Consistency checks are performed on the placement and type of the input variables\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::InterpolateNodeToCellProperty (const char * nprop, const char * eprop)"
+InterpolateNodePropertyToCellProperty() interpolates node property to the 'barycenter' of the triangle\&. The resulting value is different from the result obtained by applying the interrelation subclass NodeToCellProperty\&. The Calculate() method of the latter assigns the average value of the 3 cell nodes to the cell property 'eprop'\&.
+.SH "Input Arguments"
+.PP
+The two string arguments define the name of the node property which is interpolated and the name of the cell property to which the interpolated value is written\&.
+.SH "Application Examples"
+.PP
+This method was developed for two-dimensional convection calculations where the fluid density as cell property must be exactly the same for in the two adjacent triangles which make up a square in regular-gridded meshes\&.
+.SH "Messages"
+.PP
+If the variable placement or type of the specified properties fails to match the specifications outlined above, InterpolateNodePropertyToCellProperty() will report an error and return without completing its task\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::ModelSubDomain\fP< dim, CELL >::IsContiguous () const"
+
+.PP
+checks whether all cells within the subdomain are interconnected (if the domain has multi-dimensional cells this is never the case) Tests whether the cells of the region are connected to each-other\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+This test cannot be performed if the region has cells of different spatial dimensions since these are not interconnected\&. Therefore, this method returns false if the region consists of cells from different spatial dimensions\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This method is based on the floofFill() algorithm implemented in CSMP\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::ModelSubDomain\fP< dim, CELL >::IsPerimeterCell (const size_t eidx) const"
+
+.PP
+does the cell have at least on face on the surface of the model subdomain? Returns true when the queried cell index (0\&.\&.n-1) is among those of the cells located on the boundary of the region; else false\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBvector\fP< size_t > \fBcsmp::ModelSubDomain\fP< dim, CELL >::MemberCellIndexes () const"
+
+.PP
+output current indices to vector Returns a \fBvector<double>\fP with the ID numbers of the Elements which belong to the \fBRegion\fP\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::MinMaxOf (const char * property, double & gmin, double & gmax) const"
+
+.PP
+min/max property values (length of vectors and eigenvalues of tensors) Returns min/max of property values inside a region into its arguments\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::MinMaxOf (const \fBcsmp::Index\fP & prop_key, double & vmin, double & vmax) const"
+Recovers ranges of variable values from regions, boundaries or split boundaries\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+for vector variables the length range is returned\&. 
+
+.PP
+for tensor variables the maximum Eigenvalue is recovered\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBcsmp::Node\fP< dim > * \fBcsmp::ModelSubDomain\fP< dim, CELL >::N (size_t n) const"
+
+.PP
+pointer to node #n in subdomain; 
+.PP
+\fBAttention\fP
+.RS 4
+node can vary from initialization to initialization 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::NodeAttributesToCSV ()"
+
+.PP
+writes a CSV (comma delimited ascii text) file with point coordinates, node-idx, \fBBOX_BOUNDARY\fP flags, and interior vs perimeter information Writes \fBNode\fP information to a text file for reading with Paraview (TableToPointData) or spreadsheet tools\&. The interior nodes are distinguished from the perimeter nodes by the keywords "INTERIOR" and "PERIMETER\&." 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::Out () const"
+prints state of the object manifest in:
+
+.PP
+subdomain_name_ - passed down when region is created so that it can be referred to
+
+.PP
+cell_vec_ - doubly sorted, interior cells first
+
+.PP
+bd_face_vec_ - face-IDs of cells at the domain boundary as in second segment of cell_vec_
+
+.PP
+node_vec_ - doubly sorted, interior nodes first
+
+.PP
+first_bd_node_ - first node in the boundary range
+
+.PP
+verbose_ - or not 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::OutputVariableToScreen (const char * prop) const"
+Prints the values and flags of the distributed variable of interest on stdout\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIprop\fP The name of the physical variable of interest\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+To check variable values in small test problems\&.
+.SH "Messages"
+.PP
+\fBOutputVariableToScreen()\fP will report the variable type, its placement, and property index\&. Then it will print the host object IDs followed by the variable flags and values\&. Roman, 2014 (\fBFace\fP&\fBInterFace\fP): Should \fBFace\fP contain AtBoundary flag?
+.SS "template<uint32_t dim, template< uint32_t > class CELL> size_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::PartitionCellVector ()\fR [protected]\fP"
+
+.PP
+establishes interior vs\&. exterior simplices and nodes; returns index of first boundary cell Distinguishes 'interior' from 'perimeter' cells of the model subdomain by checking for each cell face whether this face is located at a model boundary or has a neighbor that does not belong to the current region (=cell range of ModelSubdomain)\&.
+
+.PP
+Method also creates the bd_face_vector enlisting all faces of cells that are located on the region boundary\&.
+
+.PP
+Remarks on binary search:
+
+.PP
+.IP "\(bu" 2
+The sorted source range referenced must be valid; all pointers must be dereferenceable and, within the sequence, the last position must be reachable from the first by incrementation\&.
+.IP "\(bu" 2
+The sorted range must each be arranged as a precondition to the application of the binary_search algorithm in accordance with the same ordering as is to be used by the algorithm to sort the combined ranges\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+any lower-dimensional cells and their nodes that stick outside of a higher dimensional region will be flagged as boundary\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+due to the searching, this method is a speed bottleneck; can it be improved\&. 
+.RE
+.PP
+
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> uint32_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::PerimeterFace (size_t e, uint32_t face) const"
+
+.PP
+returns local face id of face #face that lies on perimeter of model subdomain 
+.PP
+\fBReturns\fP
+.RS 4
+returns cells local cell face number (0\&.\&.faces-1) for the n'th face that is on the subdomain boundary\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+the cell index that is supplied as a method argument has to range between e = interior cells and cells-1\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> uint32_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::PerimeterFaces (size_t cell_idx) const"
+
+.PP
+for looping over the perimeter faces of perimeter cell with #eid, method is used to travel across subdomain surface / outline To loop over the faces of the perimeter cells which lie on the subdomain boundary\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIcell_idx\fP marks the location of the cell in bd_face_vec_ and has to be in the range of InteriorCells() and total number of Cells in the subdomain-1U\&.
+.RE
+.PP
+To loop over all the boundary faces of a subdomain, use the following code snippet:
+
+.PP
+.PP
+.nf
+for ( size_t i{ subdomain\&.InteriorCells() }; i<subdomain\&.Cells(); i++ )
+  for ( auto j{0U}; j<subdomain\&.PerimeterFaces(i); j++ ) {
+       auto perim_face = subdomain\&.PerimeterFace(i,j);
+       // get a normal to the cell face
+       Point<dim> unrml = subdomain\&.E(i)\->FE()\->Point<dim> UnitNormalToFace(j);
+       \&.\&.\&.
+    }
+.fi
+.PP
+
+.PP
+\fBReturns\fP
+.RS 4
+returns how many faces of the target cell lie on the subdomain boundary
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+the cell index that is supplied as a method argument has to range between e = interior cells and cells-1\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> virtual \fBPLACEMENT\fP \fBcsmp::ModelSubDomain\fP< dim, CELL >::Placement () const\fR [pure virtual]\fP"
+
+.PP
+local variable storage interface 
+.PP
+Implemented in \fBcsmp::Boundary< dim >\fP, \fBcsmp::NimbleRegion< dim >\fP, \fBcsmp::Region< dim >\fP, and \fBcsmp::SplitBoundary< dim >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBVARIABLE_FLAG\fP \fBcsmp::ModelSubDomain\fP< dim, CELL >::PropertyStatus (const char * property, \fBSUBDOMAIN_PART\fP group_flag = \fRCOMPLETE\fP, uint32_t component = \fR0\fP) const"
+
+.PP
+by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned Returns status of whole or parts of model subdomain if there is a single flag value; else ANY is returned\&. For scalars, a only a single variable flag can be returned, while for vectors and tensors the flag from component 0 is provided by default, unless any other component number is asked for\&. Note: no matter which component is asked for in a vector or tensor, if any component has flag ANY, then the ANY flag is returned by default\&. (this is checked for in loops from 0 < dim for vectors and 0 <dim*dim for tensors) 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> size_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::RebuildCellAndPerimeterFaceVector ()"
+
+.PP
+deletes 'nullptr' cells from cell vector, retaining the sorting into interior and perimeter elements, and rebuilding perimeter faces as necessary Deletes 'nullptr' cells from cell vector, retaining the sorting into interior and perimeter elements\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+number of cell pointers removed\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+method does not account for the possibility that the deletion of interior elements creates new boundary elements and nodes which should be flagged as such\&. This may require rebuilding the interior and perimeter ranges\&. For this reason the \fBRegion\fP is flagged for rebuild in this case\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> size_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::RebuildNodeVector ()"
+
+.PP
+deletes 'nullptr' nodes from \fBNode\fP vector, retaining the sorting into interior and perimeter nodes Deletes 'nullptr' nodes from \fBNode\fP vector, retaining the sorting into interior and perimeter nodes
+
+.PP
+\fBReturns\fP
+.RS 4
+total number of node pointers removed\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::RebuildSubDomainAfterChangeOfCellVector ()"
+
+.PP
+deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells Removes cells and nodes and rebuilds the bd_face_vec_ and node_vec_ if necessary\&. 
+.PP
+\fBReturns\fP
+.RS 4
+size_t the number of cells removed\&. Deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+method also deals with the case where the new cells have been added to the subdomain\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> size_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::RenumberCells () const"
+
+.PP
+renumbers cells in domain 0\&.\&.n-1 Renumbers cells from 0 to n-1\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> size_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::RenumberNodes () const"
+
+.PP
+renumbers nodes in domain 0\&.\&.n-1 Renumbers nodes from 0 to n-1\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> size_t \fBcsmp::ModelSubDomain\fP< dim, CELL >::SharedPerimeterNodes (typename std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator start, typename std::vector< \fBcsmp::Node\fP< dim > * >::const_iterator end) const"
+
+.PP
+returns how many of the nodes in the supplied iterator range also form part of the current subdomain's perimeter 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstart\fP iterator to beginning of range that will be checked for region membership 
+.br
+\fIend\fP iterator behind last element in the range 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+returns the number of nodes in the supplied range, which also form part of the perimeter of this model subdomain 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::SortVectors (size_t interior_cells, size_t interior_nodes)"
+
+.PP
+sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations) SKM - September 2019\&. Jan 2020, updated for the case where there are no interior nodes or cells 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> pair< int32_t, int32_t > \fBcsmp::ModelSubDomain\fP< dim, CELL >::SpatialDimensions () const"
+
+.PP
+returns 1) cells of how many different spatial dimensions are contained, and 2) the highest cell spatial dimension in subdomain Detects of how many spatial dimensions cell types are contained in model\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+method returns a pair: first value gives number of different spatial dimensions contained, second value returns the highest spatial dimension contained\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 1/11/2013 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::UpdateMemberIndexes () const"
+
+.PP
+renumber cells and nodes consecutively from 0\&.\&.n-1 Renumbers cells and nodes from 0 to n-1\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::ModelSubDomain\fP< dim, CELL >::ValidVariable (const char * variableName) const\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::Region< dim >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::ModelSubDomain\fP< dim, CELL >::WriteDomainIndexesToBinaryFile (std::fstream & ) const"
+
+.PP
+writes complete \fBModelSubDomain\fP specifications in terms of unique indices as block to binary file Writes data block containing all information that is needed to reconstruct a \fBModelSubDomain\fP
+
+.PP
+\fBNote\fP
+.RS 4
+this is not a function because template template parameters are not allowed for for functions\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

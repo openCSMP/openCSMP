@@ -9,7 +9,6 @@
 #include <random>
 #include "FiniteElementManager_Test.h"
 #include "FiniteElementManager.h"
-#include "FiniteElementManager_stack_version.h"
 #include "vsetMakers.h"
 #include "VSet.h"
 #include "ModelTopology.h"
@@ -40,7 +39,6 @@ namespace csmp {
 void FiniteElementManager_Test::run()
  {
     TestBasicFunctionality();
-    TestBasicFunctionality_FiniteElementManager1();
 //    TestAccumulationSpeed();
  
  } // end run
@@ -136,90 +134,6 @@ void FiniteElementManager_Test::TestBasicFunctionality()
     }
      
  } // end TestBasicFunctionality(FiniteElementManager)
-
-
-
-/**
-     Builds templatiised version of finite element manager (FiniteElementManager1) and demonstrates that it contains the correct element types
- */
-void FiniteElementManager_Test::TestBasicFunctionality_FiniteElementManager1()
- {
-    // 2D MODEL: LINEAR ISOPARAMETRIC ELEMENTS
-    {
-        const uint32_t dimensions{2u}, interpolation_order{1};
-        const bool isoparametric{ true };
-        FiniteElementManager1<dimensions,interpolation_order,isoparametric> mgr;
-        // testing that the right elements are assigned and can be retrieved
-        _test( mgr.E(ISOPARAMETRIC_LINEAR_BAR)->ElementType() == ISOPARAMETRIC_LINEAR_BAR );
-        _test( mgr.LinearBarElement()->ElementType() == ISOPARAMETRIC_LINEAR_BAR );
-        _test( mgr.LinearTriangleElement()->ElementType() == ISOPARAMETRIC_LINEAR_TRIANGLE );
-        _test( mgr.NodesOfElementType( ISOPARAMETRIC_LINEAR_TRIANGLE ) == 3u );
-        _test( mgr.ContainsElementType(ISOPARAMETRIC_LINEAR_TRIANGLE) );
-        list<CSMP_FEM_TYPE> etypes;
-        mgr.CurrentElementTypes(etypes);
-        _test( etypes.size() == 3 ); // line, tria, quad
-        if ( verbose_ ) mgr.Out();
-    }
-
-    // 3D MODEL: QUADRATIC ISOPARAMETRIC ELEMENTS
-    {
-        const uint32_t dimensions = 3u;
-        const uint32_t interpolation_order = 2;
-        const bool isoparametric = true;
-        // calls InitializeElements()
-        FiniteElementManager mgr( dimensions, interpolation_order, isoparametric );
-        _test( dimensions == mgr.Dimensions() );
-        _test( interpolation_order == mgr.InterpolationOrder() );
-        _test( isoparametric == mgr.UsesElementsWithLocalCoordinateSystem() );
-        // testing that the right elements are assigned and can be retrieved
-        _test( mgr.E(ISOPARAMETRIC_QUADRATIC_TETRAHEDRON)->ElementType() == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON );
-        const int8_t prism_type = ISOPARAMETRIC_QUADRATIC_PRISM18;
-        _test( mgr.E(prism_type)->ElementType() == ISOPARAMETRIC_QUADRATIC_PRISM18 );
-        _test( mgr.LinearBarElement() == nullptr );
-        _test( mgr.LinearTriangleElement() == nullptr );
-        _test( mgr.LinearTetrahedronElement() == nullptr );
-        _test( mgr.NodesOfElementType( ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) == 27u );
-        _test( mgr.NodesOfElementType( ISOPARAMETRIC_QUADRATIC_PRISM18 ) == 18u );
-        _test( mgr.NodesOfElementType( ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) == 14u ); // one node in centre of base plane
-        _test( mgr.ContainsElementType(ISOPARAMETRIC_QUADRATIC_TRIANGLE) );
-        list<CSMP_FEM_TYPE> etypes;
-        mgr.CurrentElementTypes(etypes);
-        _test( etypes.size() == 7 ); // line, tria, quad, tet, hex, prism, pyra
-        if ( verbose_ ) mgr.Out();
-    }
-
-    // 3D MODEL: STANDARD FINITE ELEMENTS
-    {
-        const uint32_t dimensions = 3u;
-        const uint32_t interpolation_order = 1;
-        const bool isoparametric = false;
-        // calls InitializeElements()
-        FiniteElementManager mgr( dimensions, interpolation_order, isoparametric );
-        _test( dimensions == mgr.Dimensions() );
-        _test( interpolation_order == mgr.InterpolationOrder() );
-        _test( isoparametric == mgr.UsesElementsWithLocalCoordinateSystem() );
-        // testing that the right elements are assigned and can be retrieved
-        _test( mgr.E(LINEAR_TETRAHEDRON)->ElementType() == LINEAR_TETRAHEDRON );
-        _test( mgr.LinearBarElement()->ElementType() == LINEAR_BAR );
-        _test( mgr.LinearTriangleElement()->ElementType() == LINEAR_TRIANGLE3D );
-        _test( mgr.LinearTetrahedronElement()->ElementType() == LINEAR_TETRAHEDRON );
-        _test( mgr.NodesOfElementType( LINEAR_CUBOID ) == 8u );
-        _test( mgr.NodesOfElementType( LINEAR_TETRAHEDRON ) == 4u );
-        list<CSMP_FEM_TYPE> etypes;
-        mgr.CurrentElementTypes(etypes);
-        _test( etypes.size() == 5 ); // line, tria, quad, tet, hex
-        if ( verbose_ ) mgr.Out();
-        // testing copy construction and assignment
-        FiniteElementManager mgr2(mgr);
-        FiniteElementManager mgr3;
-        mgr3 = mgr;
-        list<CSMP_FEM_TYPE> etypes2, etypes3;
-        mgr2.CurrentElementTypes(etypes2);
-        mgr3.CurrentElementTypes(etypes3);
-        _test( etypes2 == etypes3 );
-    }
-     
- } // end TestBasicFunctionality_FiniteElementManager1
 
 
 

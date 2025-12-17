@@ -1,0 +1,7 @@
+<map id="csmp::PropertyData::Clear" name="csmp::PropertyData::Clear">
+<area shape="rect" id="Node000001" title="changing container size" alt="" coords="192,39,330,79"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_data.html#a3d47ce3a5c14576b43c08310494faafe" title="change the size if this required by parent container, e.g., VSet" alt="" coords="5,5,144,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,47,144,41,145,35,177,41"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_property_data___test.html#a7d7443087d0052da7dc5e009941dc5b9" title="TESTING THE PUBLIC INTERFACE OF THE CLASS." alt="" coords="5,71,144,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,76,145,82,144,76,176,71"/>
+</map>

@@ -1,0 +1,113 @@
+\doxysection{csmp\+::Transport\+Step\+Size\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_transport_step_size}{}\label{classcsmp_1_1_transport_step_size}\index{csmp::TransportStepSize$<$ dim $>$@{csmp::TransportStepSize$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Transport\+Step\+Size\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_transport_step_size__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Transport\+Step\+Size\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_transport_step_size__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_transport_step_size_a0d7deff4b83701bf6729341734eb6eb0}\label{classcsmp_1_1_transport_step_size_a0d7deff4b83701bf6729341734eb6eb0} 
+{\bfseries Transport\+Step\+Size} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p, const char \texorpdfstring{$\ast$}{*}n\+\_\+velo, const char \texorpdfstring{$\ast$}{*}e\+\_\+velo, const char \texorpdfstring{$\ast$}{*}i\+\_\+radius)
+\item 
+\Hypertarget{classcsmp_1_1_transport_step_size_a45f5ce07b08fba8e0b7581bf91cd80f3}\label{classcsmp_1_1_transport_step_size_a45f5ce07b08fba8e0b7581bf91cd80f3} 
+double {\bfseries Advection\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_transport_step_size_ad3798a5b36d996582d0aaf53196f7738}{Calculate}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_interrelation}{csmp\+::\+Interrelation$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_interrelation_a69421dcd403100425c104e19c448ae6a}{Interrelation}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_a290d8ce61bb80667f6f4c4e47ce2a1d7}{Name}} (const char \texorpdfstring{$\ast$}{*}s)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} \mbox{\hyperlink{classcsmp_1_1_interrelation_a282f351fcc2c460d9deeda7c4b81fd7e}{Application\+Level}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_a406a9abb7bfe1f137609706b7d284ced}{Apply}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&)
+\item 
+{\footnotesize template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_interrelation_aa3ba0fda284bd8e8770a5528c07d78e4}{Apply}} (\mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, CELL $>$ \&)
+\begin{DoxyCompactList}\small\item\em a simplex is any geometrical association of points \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_interrelation_a33099fc5e139eae825e6e7af735942e9}{Result\+Within\+Range}} ()
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::const\+\_\+iterator \mbox{\hyperlink{classcsmp_1_1_interrelation_aee9a4e21075825121c1b8cbbee320ec0}{Operands\+Begin}} () const
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::const\+\_\+iterator {\bfseries Operands\+End} () const
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::iterator \mbox{\hyperlink{classcsmp_1_1_interrelation_a96b1dd64d8110e5b7909aa2c444d68b5}{Result}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_interrelation}{csmp\+::\+Interrelation$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_interrelation_a77c4acf6321b0f95825bb662931bfd93}{Global\+Property}} (const char \texorpdfstring{$\ast$}{*}var)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_a306872fe3c804c1db1c5da34a6e84fdc}{Result\+Property}} (const char \texorpdfstring{$\ast$}{*}var)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_interrelation_ae028ae8c308556d78a6632b322207aba}{Output\+Condition}} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \&var, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} output)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_interrelation}{csmp\+::\+Interrelation$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries p\+\_\+ref}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\item 
+std\+::string {\bfseries result\+\_\+property\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$ {\bfseries operand\+\_\+list\+\_\+}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ $>$\+::iterator {\bfseries result\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_transport_step_size_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_transport_step_size_ad3798a5b36d996582d0aaf53196f7738}\index{csmp::TransportStepSize$<$ dim $>$@{csmp::TransportStepSize$<$ dim $>$}!Calculate@{Calculate}}
+\index{Calculate@{Calculate}!csmp::TransportStepSize$<$ dim $>$@{csmp::TransportStepSize$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Calculate()}{Calculate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_transport_step_size_ad3798a5b36d996582d0aaf53196f7738} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_transport_step_size}{csmp\+::\+Transport\+Step\+Size}}$<$ dim $>$\+::\+Calculate (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Pure virtual function that the user overrides to express the interrelation between variables mathematically. A more detailed description of this inheritance process is given in the introduction to the class above.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Within \doxylink{classcsmp_1_1_transport_step_size_ad3798a5b36d996582d0aaf53196f7738}{Calculate()} the user has access to Operands defined in the private data section of the \doxylink{classcsmp_1_1_interrelation}{Interrelation} subclass. These Operands can be used in mathematical and logical expressions, or associated variables can be assigned to local variables of double, scalar, vector or tensor type. Please refer to the documentation of the \doxylink{classcsmp_1_1_operand}{Operand} interface to learn about the overloaded operators. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To calculate local (element-\/restricted) interdependencies of physical variables inside of the CSP model.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Use the method Print\+Value() of the \doxylink{classcsmp_1_1_operand}{Operand} class to output computed property values to screen. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_interrelation_a416837f708198b42b157be411d01ec96}{csmp\+::\+Interrelation$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_transport_step_size_ad3798a5b36d996582d0aaf53196f7738_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/regular\+\_\+grids/Transport\+Step\+Size.\+h\item 
+source/modules/regular\+\_\+grids/Transport\+Step\+Size.\+cpp\end{DoxyCompactItemize}

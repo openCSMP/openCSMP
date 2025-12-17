@@ -1,0 +1,105 @@
+.TH "csmp::HaliteLookup" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::HaliteLookup \- Build and/or query lookup tables for thermodynamic properties of halite (crystalline NaCl)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include 'eos/h2o_nacl/HaliteLookup\&.h'\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBHaliteLookup\fP (const double &externaltemperature, const double &externalpressure)"
+.br
+.ti -1c
+.RI "double \fBMassFractionNaCl\fP ()"
+.br
+.ti -1c
+.RI "double \fBDensity\fP ()"
+.br
+.ti -1c
+.RI "double \fBEnthalpy\fP ()"
+.br
+.ti -1c
+.RI "double \fBHeatCapacity\fP ()"
+.br
+.ti -1c
+.RI "double \fBCompressibility\fP ()"
+.br
+.ti -1c
+.RI "double \fBViscosity\fP ()"
+.br
+.ti -1c
+.RI "double \fBValueOf\fP (const int &property_index)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Build and/or query lookup tables for thermodynamic properties of halite (crystalline NaCl) 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+thomas.driesner@erdw.ethz.ch
+
+.PP
+@changes changes Latest Changes Jan 28, 2013: ported to CSMP++, changed all pressure units to Pa\&. Sep 10, 2014: adapted to CSMP++ coding style, updated doxygen comments
+.SH "Motivation"
+.PP
+"HaliteLookup" stores various properties of the mineral halite (solid crystalline salt, NaCl) in lookup tables, as a function of temperature-pressure-composition [Celsius, Pa, mole fraction NaCl] according to the papers
+
+.PP
+Driesner T\&. and Heinrich C\&.A\&. (2007): The system H2O-NaCl\&. Part I: Correlation formulae for phase relations in temperature-pressure-composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl\&. Geochimica et Cosmochimica Acta 71, 4880-4901\&.
+
+.PP
+Driesner T\&. (2007): The system H2O-NaCl\&. Part II: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNaCl\&. Geochimica et Cosmochimica Acta 71, 4902-4919\&.
+.SH "Usage"
+.PP
+
+.br
+ Construct an instance of "HaliteLookup" with temperature (in C) and pressure (in Pa) as they exist in the code that is supposed to use "HaliteLookup" as constructor variables\&. "HaliteLookup" has an internal mechanism to make sure that it always uses the current values of temperature and pressure \&. Public member names should be self-explanatory, I hope\&.
+
+.PP
+Upon construction, \fBHaliteLookup\fP will check if the lookup tables do already exist\&. If not, they will be re-computed and written\&. The respective files are "HalitePropertiesLookupTable\&.bin" and "HaliteStateLookupTable\&.bin"\&.
+
+.PP
+.PP
+.nf
+double t; // temperature [C] in user's application
+double p; // pressure [Pa] in user's application                                                             
+HaliteLookup haliteLookup(t,p);
+\&.\&.\&.
+t = some_value;
+p = some_other_value;
+cout << haliteLookup\&.Density() << endl; // will return density at the new t and p conditions
+.fi
+.PP
+.SH "Dependencies"
+.PP
+
+.br
+ requires "ConvertConcentrationUnitsNaCl\&.h" to ensure consistent unit conversions 
+.br
+.SH "Known issues"
+.PP
+Composition() is in mole fraction NaCl, to convert to other units, the functions in "ConvertConcentrationUnitsNaCl\&.h" may be useful\&.
+
+.PP
+To do: interpolation near the halite melting curve has not been coded optimally\&. Hence at extreme conditions (t > 800\&.7 C and salinities very close to 100%) tiny mismatches in fluid properties may appear and cause problems\&.
+.SH "Testing"
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

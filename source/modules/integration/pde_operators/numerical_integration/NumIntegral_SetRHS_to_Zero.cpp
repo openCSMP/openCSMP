@@ -8,10 +8,6 @@ using namespace std;
 namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class CELL>
-NumIntegral_SetRHS_to_Zero<dim,CELL>::~NumIntegral_SetRHS_to_Zero() {}
-
-
-template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_SetRHS_to_Zero<dim,CELL>::NumIntegral_SetRHS_to_Zero( const PropertyDatabase<dim>& pref, const char* test )
   : MathOperatorRHS<dim,CELL>(pref,test)
  {

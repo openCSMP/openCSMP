@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_variable_data_type_3_01_t_e_n_s_o_r_00_01dim_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::VariableDataType&lt; TENSOR, dim &gt;</compoundname>
+    <includes refid="property__manipulation_2_field_variable_8h" local="no">FieldVariable.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcsmp_1_1_variable_data_type_3_01_t_e_n_s_o_r_00_01dim_01_4_1a4c7b6607ef793636df9a3394ebea2241" prot="public" static="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+        <definition>using csmp::VariableDataType&lt; TENSOR, dim &gt;::type =  TensorVariable&lt;dim&gt;</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>csmp::VariableDataType&lt; TENSOR, dim &gt;::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="39" column="3" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Tensor type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::VariableDataType&lt; Ty, dim &gt;</label>
+        <link refid="structcsmp_1_1_variable_data_type"/>
+      </node>
+      <node id="1">
+        <label>csmp::VariableDataType&lt; TENSOR, dim &gt;</label>
+        <link refid="structcsmp_1_1_variable_data_type_3_01_t_e_n_s_o_r_00_01dim_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; TENSOR, dim &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::VariableDataType&lt; Ty, dim &gt;</label>
+        <link refid="structcsmp_1_1_variable_data_type"/>
+      </node>
+      <node id="1">
+        <label>csmp::VariableDataType&lt; TENSOR, dim &gt;</label>
+        <link refid="structcsmp_1_1_variable_data_type_3_01_t_e_n_s_o_r_00_01dim_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; TENSOR, dim &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/property_manipulation/FieldVariable.h" line="38" column="1" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="38" bodyend="40"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_variable_data_type_3_01_t_e_n_s_o_r_00_01dim_01_4_1a4c7b6607ef793636df9a3394ebea2241" prot="public" virt="non-virtual"><scope>csmp::VariableDataType&lt; TENSOR, dim &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

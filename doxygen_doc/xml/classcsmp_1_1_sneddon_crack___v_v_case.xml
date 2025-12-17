@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_sneddon_crack___v_v_case" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SneddonCrack_VVCase</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_sneddon_crack___v_v_case_1a2224b6b15ea5f47b5e02828eb6fd6e5c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SneddonCrack_VVCase::min_avg_error</definition>
+        <argsstring></argsstring>
+        <name>min_avg_error</name>
+        <qualifiedname>csmp::SneddonCrack_VVCase::min_avg_error</qualifiedname>
+        <initializer>= 8.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/SneddonCrack_VVCase.h" line="21" column="14" bodyfile="tests/integration/SneddonCrack_VVCase.h" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_sneddon_crack___v_v_case_1af746b351fcfaf899ca8f724eda95309b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SneddonCrack_VVCase::SneddonCrack_VVCase</definition>
+        <argsstring>(const char *prefix)</argsstring>
+        <name>SneddonCrack_VVCase</name>
+        <qualifiedname>csmp::SneddonCrack_VVCase::SneddonCrack_VVCase</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/SneddonCrack_VVCase.h" line="13" column="7" bodyfile="tests/integration/SneddonCrack_VVCase.cpp" bodystart="43" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sneddon_crack___v_v_case_1a9d0f157a2f9bc996a2233b2005f30aa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::SneddonCrack_VVCase::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::SneddonCrack_VVCase::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Author: E. Pezzulli &amp; M. Nejati </para>
+<sect1 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md58">
+<title>Linear Elasticity: Plane stress/strain problem with central crack under uniform tension; testing the aperture profile of the crack</title><para>Domain: &quot;Infinite&quot; 2D rectangle shaped model length LxL meters with central crack of half length a where L/a &gt; 20 Mesh: Linear/Quadratic Triangles tested OK; Quadrilaterials have to be tested Material: Linear ELastic Isotropic Material: E=Young&apos;s Modulus, nu= Poisson&apos;s Ratio; Loading: No stress on boundaries. BC: Zero x and y displacements on LEFT BOTTOM Corner (CRN1), and zero y displacement on CRN2 (BOTTOM RIGHT) </para>
+</sect1>
+<sect1 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md59">
+<title>ConfigFiles: (.asc, .dat)</title><para>The solution for the aperture w(x) of a horizontal fracture of half length a with origin x=0 representing middle of crack:</para>
+<para>Plane Strain: (aperture) w = 2*Uy 4*(1 - v^2)*P/E * (a^2 - x^2 )^(1/2) E = youngs Modulus, v = Poisson Ration, a = crack half length, x = distance along crack with origin at midpoint</para>
+<para>Marji - 2006 - Crack Tip Elements - doi:10.1016/j.ijsolstr.2005.04.042 Sneddon - 1946 - The opening of griffith cracks (factor of two wrong!)</para>
+<para>The following implementation is testing the creation of the <ref refid="classcsmp_1_1_fracture" kindref="compound">Fracture</ref> Class, its initialisation and creation of <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> Objects, constructed from opposite face pairs of the master and slave Boundaries of a 2D fracture. The calculation and calibration of a Unit Normal and the creation of midPoint Elements within the fracture, which are however not used/tested to work.</para>
+<para><simplesect kind="attention"><para>The following implemetation relies on LinearElasticityIsotropicDeformation2D_VVcase to work</para>
+</simplesect>
+Assumptions of <ref refid="classcsmp_1_1_test" kindref="compound">Test</ref>: 1) Relies on <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> Naming convention when created from lower dimensional region </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+<para>========================================================================================== </para>
+<sect1 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md60">
+<title>Elasticity with Central Crack VV_Case</title><para><hruler/>
+ </para>
+<sect2 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md61">
+<title>Setting up Fracture Configuration</title><para><hruler/>
+ </para>
+</sect2>
+<sect2 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md62">
+<title>Elasto-Lubrication Parameter Configuration</title><para><hruler/>
+ </para>
+</sect2>
+<sect2 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md63">
+<title>Elasticity Boundary Conditions</title><para>================================================================== </para>
+</sect2>
+</sect1>
+<sect1 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md64">
+<title>Elasticity Equations</title><para><verbatim> K u = - Cp
+</verbatim></para>
+<para>K = int BT D B dV C = int NT n N dS</para>
+<para>================================================================== </para>
+</sect1>
+<sect1 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md65">
+<title>Displacement Solution &amp; Verification</title><para>========================================= </para>
+</sect1>
+<sect1 id="classcsmp_1_1_sneddon_crack___v_v_case_1autotoc_md66">
+<title>Outputing to VTU</title><para>ANALYTICAL SOLUTION</para>
+</sect1>
+        </inbodydescription>
+        <location file="tests/integration/SneddonCrack_VVCase.h" line="14" column="20" bodyfile="tests/integration/SneddonCrack_VVCase.cpp" bodystart="88" bodyend="456"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sneddon_crack___v_v_case_1a1f0c153b95d50a300b79b838828b1c88" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SneddonCrack_VVCase::set_min_avg_error</definition>
+        <argsstring>(double epsilon)</argsstring>
+        <name>set_min_avg_error</name>
+        <qualifiedname>csmp::SneddonCrack_VVCase::set_min_avg_error</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>epsilon</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/SneddonCrack_VVCase.h" line="16" column="12" bodyfile="tests/integration/SneddonCrack_VVCase.h" bodystart="16" bodyend="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_sneddon_crack___v_v_case_1a86b608700002900f52ea2f32dfb62889" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SneddonCrack_VVCase::WriteSolutionToFile</definition>
+        <argsstring>(std::vector&lt; std::vector&lt; T &gt; &gt; data, std::string name)</argsstring>
+        <name>WriteSolutionToFile</name>
+        <qualifiedname>csmp::SneddonCrack_VVCase::WriteSolutionToFile</qualifiedname>
+        <param>
+          <type>std::vector&lt; std::vector&lt; T &gt; &gt;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/SneddonCrack_VVCase.h" line="24" column="12" bodyfile="tests/integration/SneddonCrack_VVCase.cpp" bodystart="528" bodyend="540"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_sneddon_crack___v_v_case_1a3679cb3451d9a6e8f56ab033886239e8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::SneddonCrack_VVCase::Verify</definition>
+        <argsstring>(std::map&lt; Point&lt; dim &gt;, double &gt; &amp;PressureProfile, bool at_angle, T F, double tol)</argsstring>
+        <name>Verify</name>
+        <qualifiedname>csmp::SneddonCrack_VVCase::Verify</qualifiedname>
+        <param>
+          <type>std::map&lt; <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; dim &gt;, double &gt; &amp;</type>
+          <declname>PressureProfile</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>at_angle</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>F</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/SneddonCrack_VVCase.h" line="27" column="12" bodyfile="tests/integration/SneddonCrack_VVCase.cpp" bodystart="463" bodyend="518"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::SneddonCrack_VVCase</label>
+        <link refid="classcsmp_1_1_sneddon_crack___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SneddonCrack_VVCase</label>
+        <link refid="classcsmp_1_1_sneddon_crack___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/integration/SneddonCrack_VVCase.h" line="11" column="3" bodyfile="tests/integration/SneddonCrack_VVCase.h" bodystart="11" bodyend="28"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_sneddon_crack___v_v_case_1a2224b6b15ea5f47b5e02828eb6fd6e5c" prot="private" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>min_avg_error</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_sneddon_crack___v_v_case_1a9d0f157a2f9bc996a2233b2005f30aa0" prot="public" virt="virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_sneddon_crack___v_v_case_1a1f0c153b95d50a300b79b838828b1c88" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>set_min_avg_error</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_sneddon_crack___v_v_case_1af746b351fcfaf899ca8f724eda95309b" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>SneddonCrack_VVCase</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_sneddon_crack___v_v_case_1a3679cb3451d9a6e8f56ab033886239e8" prot="private" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>Verify</name></member>
+      <member refid="classcsmp_1_1_sneddon_crack___v_v_case_1a86b608700002900f52ea2f32dfb62889" prot="private" virt="non-virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>WriteSolutionToFile</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::SneddonCrack_VVCase</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,13 @@
+<map id="csmp::EOS_CO2H2ONaCl_Spycher04::Bg" name="csmp::EOS_CO2H2ONaCl_Spycher04::Bg">
+<area shape="rect" id="Node000001" title="gas (CO2) formation volume factor, Bg" alt="" coords="5,13,186,54"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a4d984744c1e2ba7d387ba62f31069fef" title="vCo2 @RC / vCo2 @SC unit =&gt; Rm^3/Sm^3" alt="" coords="234,5,458,61"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,30,218,30,218,36,186,36"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aba193f357734c78d5ac6fe60e589dc0f" title="compressed volume molar CO2" alt="" coords="506,13,686,54"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="458,30,490,30,490,36,458,36"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a62501eb7250b9755f378f5803a302d28" title="returns the compressed volume of CO2." alt="" coords="734,13,975,54"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="687,30,719,30,719,36,687,36"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a809be0c93aa4d76e041d6a51fd76d7e0" title="activity of mixture" alt="" coords="1023,13,1203,54"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="975,30,1007,30,1007,36,975,36"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a011005facf6bac559db9a48bcc0edbba" title=" " alt="" coords="1251,13,1431,54"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1203,30,1235,30,1235,36,1203,36"/>
+</map>

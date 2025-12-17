@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_i_n_d_e_xand_variables___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::INDEXandVariables_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <includes refid="_i_n_d_e_xand_variables___test_8h" local="no">INDEXandVariables_Test.h</includes>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_i_n_d_e_xand_variables___test_1af32f3ce68847ca5eba715ebc3fe503a3" prot="private" static="yes" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::INDEXandVariables_Test::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::INDEXandVariables_Test::verbose_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/INDEXandVariables_Test.h" line="27" column="23" bodyfile="tests/unit/INDEXandVariables_Test.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_i_n_d_e_xand_variables___test_1abee37dc34076bc2f3fa837d26c8c84c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::INDEXandVariables_Test::INDEXandVariables_Test</definition>
+        <argsstring>()</argsstring>
+        <name>INDEXandVariables_Test</name>
+        <qualifiedname>csmp::INDEXandVariables_Test::INDEXandVariables_Test</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>SPLIT22_BASIC is the test model model name created by vsetMakers..</para>
+<para>The test model should contain <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> objects </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/INDEXandVariables_Test.h" line="22" column="5" bodyfile="tests/unit/INDEXandVariables_Test.cpp" bodystart="18" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_n_d_e_xand_variables___test_1ad1f8ff612a97670a133baa54d00e218b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::INDEXandVariables_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::INDEXandVariables_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000261"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-F) <ref refid="classcsmp_1_1_test" kindref="compound">Test</ref> for <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> and <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> properties</para>
+</xrefdescription></xrefsect></para>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>9/24/2012 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/INDEXandVariables_Test.h" line="23" column="18" bodyfile="tests/unit/INDEXandVariables_Test.cpp" bodystart="32" bodyend="45"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_i_n_d_e_xand_variables___test_1a249f61cba420a9b9317c1065b681faec" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::INDEXandVariables_Test::runModel</definition>
+        <argsstring>(Model&lt; 2 &gt; &amp;)</argsstring>
+        <name>runModel</name>
+        <qualifiedname>csmp::INDEXandVariables_Test::runModel</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2 &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/INDEXandVariables_Test.h" line="26" column="10" bodyfile="tests/unit/INDEXandVariables_Test.cpp" bodystart="57" bodyend="1385"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>same as <ref refid="classcsmp_1_1_variables___test" kindref="compound">Variables_Test</ref>, but instead of using runtime <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> variables, the typed compile time versions are used and the corresponding Read(), Store() and Status() operations.</para>
+<para><xrefsect id="todo_1_todo000246"><xreftitle>Todo</xreftitle><xrefdescription><para>test new methods that allow the selective reading of <ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> members.</para>
+</xrefdescription></xrefsect></para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>21/6/2020 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::INDEXandVariables_Test</label>
+        <link refid="classcsmp_1_1_i_n_d_e_xand_variables___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::INDEXandVariables_Test</label>
+        <link refid="classcsmp_1_1_i_n_d_e_xand_variables___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/INDEXandVariables_Test.h" line="20" column="1" bodyfile="tests/unit/INDEXandVariables_Test.h" bodystart="20" bodyend="28"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_i_n_d_e_xand_variables___test_1abee37dc34076bc2f3fa837d26c8c84c6" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>INDEXandVariables_Test</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::INDEXandVariables_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_i_n_d_e_xand_variables___test_1ad1f8ff612a97670a133baa54d00e218b" prot="public" virt="virtual"><scope>csmp::INDEXandVariables_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_i_n_d_e_xand_variables___test_1a249f61cba420a9b9317c1065b681faec" prot="private" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>runModel</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_i_n_d_e_xand_variables___test_1af32f3ce68847ca5eba715ebc3fe503a3" prot="private" virt="non-virtual"><scope>csmp::INDEXandVariables_Test</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::INDEXandVariables_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,429 @@
+.TH "csmp::FiniteElement_TestData" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FiniteElement_TestData \- Container class for FEM Test/Validation Data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FiniteElement_TestData\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFiniteElement_TestData\fP (bool verbose)"
+.br
+.ti -1c
+.RI "std::string \fBFemName\fP () const"
+.br
+.ti -1c
+.RI "void \fBFemName\fP (std::string femName)"
+.br
+.ti -1c
+.RI "int \fBDim\fP () const"
+.br
+.ti -1c
+.RI "void \fBDim\fP (int dim)"
+.br
+.ti -1c
+.RI "size_t \fBNodeCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBNodeCount\fP (int nodeCount)"
+.br
+.ti -1c
+.RI "int \fBSegmentCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBSegmentCount\fP (int segmentCount)"
+.br
+.ti -1c
+.RI "size_t \fBFaceCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBFaceCount\fP (int faceCount)"
+.br
+.ti -1c
+.RI "int \fBNeighborCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBNeighborCount\fP (int neighborCount)"
+.br
+.ti -1c
+.RI "int \fBNodesPerFace\fP (int i) const"
+.br
+.ti -1c
+.RI "void \fBNodesPerFace\fP (int i, int nodesPerFace)"
+.br
+.ti -1c
+.RI "int \fBNodeOfFace\fP (int face, int faceNode) const"
+.br
+.ti -1c
+.RI "void \fBNodeOfFace\fP (int face, int faceNode, int femNode)"
+.br
+.ti -1c
+.RI "int \fBIntegrationPointNeighborCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBIntegrationPointNeighborCount\fP (int constraintPointNeighborCount)"
+.br
+.ti -1c
+.RI "int \fBIntegrationPointCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBIntegrationPointCount\fP (int count)"
+.br
+.ti -1c
+.RI "int \fBInterpolationNumber\fP () const"
+.br
+.ti -1c
+.RI "void \fBInterpolationNumber\fP (int interpolationNumber)"
+.br
+.ti -1c
+.RI "bool \fBIsoparametric\fP () const"
+.br
+.ti -1c
+.RI "void \fBIsoparametric\fP (bool isoparametric)"
+.br
+.ti -1c
+.RI "bool \fBUsesLocalCoordinates\fP () const"
+.br
+.ti -1c
+.RI "void \fBUsesLocalCoordinates\fP (bool localCoordinates)"
+.br
+.ti -1c
+.RI "int \fBOrderOfShapeFunctions\fP () const"
+.br
+.ti -1c
+.RI "void \fBOrderOfShapeFunctions\fP (int orderOfShapeFunctions)"
+.br
+.ti -1c
+.RI "bool \fBLineElement\fP () const"
+.br
+.ti -1c
+.RI "void \fBLineElement\fP (bool lineElement)"
+.br
+.ti -1c
+.RI "bool \fBSurfaceElement\fP () const"
+.br
+.ti -1c
+.RI "void \fBSurfaceElement\fP (bool surfaceElement)"
+.br
+.ti -1c
+.RI "bool \fBVolumeElement\fP () const"
+.br
+.ti -1c
+.RI "void \fBVolumeElement\fP (bool volumeElement)"
+.br
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBElementType\fP () const"
+.br
+.ti -1c
+.RI "void \fBElementType\fP (\fBCSMP_FEM_TYPE\fP elementType)"
+.br
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBFaceElementType\fP (int face) const"
+.br
+.ti -1c
+.RI "void \fBFaceElementType\fP (int face, \fBCSMP_FEM_TYPE\fP faceElementType)"
+.br
+.ti -1c
+.RI "\fBNode\fP< 3U > * \fBNodePtr\fP (int i) const"
+.br
+.ti -1c
+.RI "void \fBNodePtr\fP (int i, \fBNode\fP< 3U > *node)"
+.br
+.ti -1c
+.RI "double \fBVolume\fP () const"
+.br
+.ti -1c
+.RI "void \fBVolume\fP (double volume)"
+.br
+.ti -1c
+.RI "double \fBTolerance\fP () const"
+.br
+.ti -1c
+.RI "void \fBTolerance\fP (double tolerance)"
+.br
+.ti -1c
+.RI "double \fBAspectRatio\fP () const"
+.br
+.ti -1c
+.RI "void \fBAspectRatio\fP (double aspectRatio)"
+.br
+.ti -1c
+.RI "double \fBInnerRadius\fP () const"
+.br
+.ti -1c
+.RI "void \fBInnerRadius\fP (double innerRadius)"
+.br
+.ti -1c
+.RI "size_t \fBEdgeCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBEdgeCount\fP (int edgeCount)"
+.br
+.ti -1c
+.RI "double \fBEdgeLength\fP (int i) const"
+.br
+.ti -1c
+.RI "void \fBEdgeLength\fP (int i, double length)"
+.br
+.ti -1c
+.RI "size_t \fBNodesPerSegment\fP () const"
+.br
+.ti -1c
+.RI "void \fBNodesPerSegment\fP (int nodesPerSegment)"
+.br
+.ti -1c
+.RI "int \fBNodeOfSegment\fP (int segment, int segmentNode) const"
+.br
+.ti -1c
+.RI "void \fBNodeOfSegment\fP (int segment, int segmentNode, int femNode)"
+.br
+.ti -1c
+.RI "size_t \fBCornerNodeCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBCornerNodeCount\fP (int count)"
+.br
+.ti -1c
+.RI "int \fBNodeAtCorner\fP (int corner) const"
+.br
+.ti -1c
+.RI "void \fBNodeAtCorner\fP (int corner, int femNode)"
+.br
+.ti -1c
+.RI "size_t \fBMidsideNodeCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBMidsideNodeCount\fP (int count)"
+.br
+.ti -1c
+.RI "int \fBNodeAtMidside\fP (int midside) const"
+.br
+.ti -1c
+.RI "void \fBNodeAtMidside\fP (int midside, int femNode)"
+.br
+.ti -1c
+.RI "size_t \fBInteriorNodeCount\fP () const"
+.br
+.ti -1c
+.RI "void \fBInteriorNodeCount\fP (int count)"
+.br
+.ti -1c
+.RI "int \fBNodeAtInterior\fP (int interior) const"
+.br
+.ti -1c
+.RI "void \fBNodeAtInterior\fP (int interior, int femNode)"
+.br
+.ti -1c
+.RI "void \fBUnitNormal\fP (std::vector< double > unitNormal)"
+.br
+.ti -1c
+.RI "std::vector< double > \fBUnitNormal\fP () const"
+.br
+.ti -1c
+.RI "void \fBExtrapolationVariableCount\fP (int count)"
+.br
+.ti -1c
+.RI "size_t \fBExtrapolationVariableCount\fP () const"
+.br
+.ti -1c
+.RI "double \fBIntegrationPointVariable\fP (int ip, int var) const"
+.br
+.ti -1c
+.RI "void \fBIntegrationPointVariable\fP (int ip, int var, double value)"
+.br
+.ti -1c
+.RI "double \fBNodePointVariable\fP (int np, int var) const"
+.br
+.ti -1c
+.RI "void \fBNodePointVariable\fP (int np, int var, double value)"
+.br
+.ti -1c
+.RI "double \fBIpGlobal\fP (int ip, int xyz) const"
+.br
+.ti -1c
+.RI "void \fBIpGlobal\fP (int ip, int xyz, double value)"
+.br
+.ti -1c
+.RI "double \fBIntegrationPointWeight\fP (int ip) const"
+.br
+.ti -1c
+.RI "void \fBIntegrationPointWeight\fP (int ip, double value)"
+.br
+.ti -1c
+.RI "int \fBCounterClockWiseNode\fP (int n) const"
+.br
+.ti -1c
+.RI "void \fBCounterClockWiseNode\fP (int n, int node)"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionXYZ\fP (int xyz) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionXYZ\fP (int xyz, double value)"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionN\fP (int n) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionN\fP (int n, double value)"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionNatIP\fP (int ip, int n) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionNatIP\fP (int ip, int n, double value)"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionNatBarycenter\fP (int n) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionNatBarycenter\fP (int n, double value)"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionDN\fP (int n, int xyz) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDN\fP (int n, int xyz, double value)"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionDNatXYZ\fP (int n, int xyz) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatXYZ\fP (int n, int xyz, double value)"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatXYZ\fP (bool val)"
+.br
+.ti -1c
+.RI "bool \fBShapeFunctionDNatXYZ\fP () const"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionDNatIP\fP (int ip, int n, int xyz) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatIP\fP (int ip, int n, int xyz, double value)"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatIP\fP (bool val)"
+.br
+.ti -1c
+.RI "bool \fBShapeFunctionDNatIP\fP () const"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionDNatNode\fP (int node, int n, int xyz) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatNode\fP (int node, int n, int xyz, double value)"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatNode\fP (bool val)"
+.br
+.ti -1c
+.RI "bool \fBShapeFunctionDNatNode\fP () const"
+.br
+.ti -1c
+.RI "double \fBShapeFunctionDNatBaryCenter\fP (int n, int xyz) const"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatBaryCenter\fP (int n, int xyz, double value)"
+.br
+.ti -1c
+.RI "void \fBShapeFunctionDNatBaryCenter\fP (bool val)"
+.br
+.ti -1c
+.RI "bool \fBShapeFunctionDNatBaryCenter\fP () const"
+.br
+.ti -1c
+.RI "double \fBJACOBIANatIP\fP (int ip, int row, int column) const"
+.br
+.ti -1c
+.RI "void \fBJACOBIANatIP\fP (int ip, int row, int column, double value)"
+.br
+.ti -1c
+.RI "void \fBJACOBIANatIP\fP (bool val)"
+.br
+.ti -1c
+.RI "bool \fBJACOBIANatIP\fP () const"
+.br
+.ti -1c
+.RI "void \fBJACOBIANatRST\fP (bool val)"
+.br
+.ti -1c
+.RI "bool \fBJACOBIANatRST\fP () const"
+.br
+.ti -1c
+.RI "void \fBJACOBIANatRST\fP (int row, int column, double value)"
+.br
+.ti -1c
+.RI "double \fBJACOBIANatRST\fP (int row, int column) const"
+.br
+.ti -1c
+.RI "void \fBRST\fP (int rst, double value)"
+.br
+.ti -1c
+.RI "double \fBRST\fP (int rst) const"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "std::istream & \fBoperator>>\fP (std::istream &iStream, \fBFiniteElement_TestData\fP &femTestData)"
+.br
+.RI "PL 2010: overloaded istream operator for the \fBFiniteElement_TestData\fP class\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Container class for FEM Test/Validation Data\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Philipp Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Dec 2010
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+(3) Verbose for read in feedback
+.RE
+.PP
+
+.PP
+Designed to hold test data of a given Finite \fBElement\fP type for later use in the generic \fBFiniteElement_Test\fP\&. Overloaded istream operator to facilitate input from text file\&.
+.SH "Data File Structure"
+.PP
+Delimeters between variable names and corresponding values are tabs, names may cointain white spaces\&. The given sequence is crucial\&. The following sample test file should be selx explanatory, please scroll further down for detailed information on the individual blocks\&.
+.SS "Test File Content and Structure"
+.PP
+.nf
+entire test file here
+.fi
+.PP
+.SS "from Integration Point to Node"
+Testing extrapolation from integration(gauss) points to nodes\&. We choose to test a fix number of two variables per IP\&. The first data line porvides the input values in a form such that [ variable1 @ IP1, variable 2 @ IP1, variable1 @ IP2, variable2 @ IP2 \&.\&.\&. etc\&. for each IP ] Similarly, the resulting extrapolated node values are given such that [ variable1 @ N1, variable 2 @ N1, variable1 @ N2, variable2 @ N2 \&.\&.\&. etc\&. for each \fBNode\fP ]
+
+.PP
+.PP
+.nf
+Integration Points To Node Extrapolation(2 variables)
+Integration Point Values(2x integration points)         1\&. 2\&. 1\&. 2\&. 1\&. 2\&. 1\&. 2\&.
+Extrapolated Node Values(2x nodes)                    1\&. 2\&. 1\&. 2\&. 1\&. 2\&. 1\&. 2\&.
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

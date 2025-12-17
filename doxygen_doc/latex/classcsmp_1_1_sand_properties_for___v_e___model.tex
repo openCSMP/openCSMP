@@ -1,0 +1,61 @@
+\doxysection{csmp\+::Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model Class Reference}
+\hypertarget{classcsmp_1_1_sand_properties_for___v_e___model}{}\label{classcsmp_1_1_sand_properties_for___v_e___model}\index{csmp::SandPropertiesFor\_VE\_Model@{csmp::SandPropertiesFor\_VE\_Model}}
+
+
+{\ttfamily \#include $<$Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=242pt]{classcsmp_1_1_sand_properties_for___v_e___model__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_sand_properties_for___v_e___model_a063c781ec323575113f15679f4c80f4b}\label{classcsmp_1_1_sand_properties_for___v_e___model_a063c781ec323575113f15679f4c80f4b} 
+{\bfseries Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2U $>$ \&model, const std\+::string \&dim\+M1\+\_\+region\+\_\+name, double bcp, double swr, double snr)
+\begin{DoxyCompactList}\small\item\em original properties that the model returns the distributed parameters to once the specific computation has been done \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sand_properties_for___v_e___model_afb829ce57c2ccd098f4cc1b244b642ec}\label{classcsmp_1_1_sand_properties_for___v_e___model_afb829ce57c2ccd098f4cc1b244b642ec} 
+{\bfseries Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 3U $>$ \&model, const std\+::string \&dim\+M1\+\_\+region\+\_\+name, double bcp, double swr, double snr)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_sand_properties_for___v_e___model_a4f2c81fdc527bfb65a1f5d709991ac94}{Compute2\+Phase\+Flow\+Properties\+For\+Sand\+Layer}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2U $>$ \&)
+\begin{DoxyCompactList}\small\item\em specific version that only works for line elements in a two dimensional model \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sand_properties_for___v_e___model_a10a3019ee70d6a8c7fa49703453328db}\label{classcsmp_1_1_sand_properties_for___v_e___model_a10a3019ee70d6a8c7fa49703453328db} 
+bool {\bfseries Has\+Line\+Element\+Representation} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class is used to initialise uniform properties of lower-\/dimensional sandbodies so that an application of the Brooks-\/\+Corey model will yied the correct input parameters for an element with a certain dip etc.
+
+While the model needs \textquotesingle{}total velocity\textquotesingle{} as an input, all other properties are calculated locally. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_sand_properties_for___v_e___model_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_sand_properties_for___v_e___model_a4f2c81fdc527bfb65a1f5d709991ac94}\index{csmp::SandPropertiesFor\_VE\_Model@{csmp::SandPropertiesFor\_VE\_Model}!Compute2PhaseFlowPropertiesForSandLayer@{Compute2PhaseFlowPropertiesForSandLayer}}
+\index{Compute2PhaseFlowPropertiesForSandLayer@{Compute2PhaseFlowPropertiesForSandLayer}!csmp::SandPropertiesFor\_VE\_Model@{csmp::SandPropertiesFor\_VE\_Model}}
+\doxysubsubsection{\texorpdfstring{Compute2PhaseFlowPropertiesForSandLayer()}{Compute2PhaseFlowPropertiesForSandLayer()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sand_properties_for___v_e___model_a4f2c81fdc527bfb65a1f5d709991ac94} 
+void csmp\+::\+Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model\+::\+Compute2\+Phase\+Flow\+Properties\+For\+Sand\+Layer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 2U $>$ \&}]{model}{}\end{DoxyParamCaption})}
+
+
+
+specific version that only works for line elements in a two dimensional model 
+
+Computes multiphase flow parameters for the finite volumes associated with the line elements of the lower-\/dimensional region associated with the sand properties object.
+
+\begin{DoxyAttention}{Attention}
+method must be called after the standard multiphase properties were calculated because it uses these property values. 
+\end{DoxyAttention}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+examples/source/Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model.\+h\item 
+examples/source/Sand\+Properties\+For\+\_\+\+VE\+\_\+\+Model.\+cpp\end{DoxyCompactItemize}

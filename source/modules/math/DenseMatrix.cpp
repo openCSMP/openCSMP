@@ -1656,6 +1656,26 @@ vector<double>  operator*( const DenseMatrix<DM4>& mat,
 
                       
                       
+template class DenseMatrix<DM6>;
+
+template DenseMatrix<DM6>  operator+(
+                      const DenseMatrix<DM6>& a,
+                      const DenseMatrix<DM6>& b );
+
+template DenseMatrix<DM6>  operator-(
+                      const DenseMatrix<DM6>& a,
+                      const DenseMatrix<DM6>& b );
+
+template DenseMatrix<DM6>  operator*(
+                      const DenseMatrix<DM6>& a,
+                      const DenseMatrix<DM6>& b );
+template
+vector<double>  operator*( const DenseMatrix<DM6>&,
+                           const vector<double>& );
+
+
+                      
+                      
 template class DenseMatrix<DM12>;
 
 template DenseMatrix<DM12>  operator+( 

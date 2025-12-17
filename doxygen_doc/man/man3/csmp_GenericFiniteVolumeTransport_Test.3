@@ -1,0 +1,131 @@
+.TH "csmp::GenericFiniteVolumeTransport_Test" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::GenericFiniteVolumeTransport_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "void \fBTestBasics\fP ()"
+.br
+.ti -1c
+.RI "void \fBBenchmarkGlobalVersusParametricIntegration\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegration ()"
+Testing finite volume projection calculations for the underpinning stencils\&.
+
+.PP
+.IP "1." 4
+get model and compute pressure gradients
+.IP "2." 4
+verify (for the interior elements only) that the flux balance is indeed zero using established approach
+.IP "3." 4
+verify face by face computations
+.IP "4." 4
+verify flux balance cell-by-cell
+.IP "5." 4
+verify overall flux balances for hybrid element mesh
+.IP "6." 4
+compare computation times for flux balances 
+.PP
+
+.SS "void csmp::GenericFiniteVolumeTransport_Test::run ()\fR [virtual]\fP"
+Tests performed:
+
+.PP
+Speed comparison between projections made in parametric versus physical space while checking accuracy at same time\&. 
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "void csmp::GenericFiniteVolumeTransport_Test::TestBasics ()"
+Testing finite volume projection calculations for the underpinning stencils\&.
+
+.PP
+.IP "1." 4
+get model and compute pressure gradients
+.IP "2." 4
+verify (for the interior elements only) that the flux balance is indeed zero using established approach
+.IP "3." 4
+verify face by face computations
+.IP "4." 4
+verify flux balance cell-by-cell
+.IP "5." 4
+verify overall flux balances for hybrid element mesh
+.IP "6." 4
+compare computation times for flux balances 
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

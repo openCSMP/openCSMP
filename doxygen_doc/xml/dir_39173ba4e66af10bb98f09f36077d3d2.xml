@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_39173ba4e66af10bb98f09f36077d3d2" kind="dir">
+    <compoundname>source/modules/integration/solver/SAMG_profiles</compoundname>
+    <innerfile refid="_s_a_m_g___profile_8cpp">SAMG_Profile.cpp</innerfile>
+    <innerfile refid="_s_a_m_g___profile_8h">SAMG_Profile.h</innerfile>
+    <innerfile refid="_steady_state_diffusion_profile_8cpp">SteadyStateDiffusionProfile.cpp</innerfile>
+    <innerfile refid="_steady_state_diffusion_profile_8h">SteadyStateDiffusionProfile.h</innerfile>
+    <innerfile refid="_two_phase_implicit_node_centered_f_v_trans_profile_8cpp">TwoPhaseImplicitNodeCenteredFVTransProfile.cpp</innerfile>
+    <innerfile refid="_two_phase_implicit_node_centered_f_v_trans_profile_8h">TwoPhaseImplicitNodeCenteredFVTransProfile.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/solver/SAMG_profiles/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,505 @@
+\doxysection{csmp\+::Eclipse\+Model Class Reference}
+\hypertarget{classcsmp_1_1_eclipse_model}{}\label{classcsmp_1_1_eclipse_model}\index{csmp::EclipseModel@{csmp::EclipseModel}}
+
+
+Input interface which converts a standard corner-\/point (hexahedral cell) grid from Schlumberger\textquotesingle{}s reservoir simulator Eclipse into a CSMP model object in which the cells are represented by hexahedra. Degenerate cells are converted to other element types like prisms and tetrahedra.  
+
+
+
+
+{\ttfamily \#include $<$Eclipse\+Model.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Eclipse\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_eclipse_model__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Eclipse\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_eclipse_model__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_a25b282fdf9de65e9cdaadf351e94a6fb}\label{classcsmp_1_1_eclipse_model_a25b282fdf9de65e9cdaadf351e94a6fb} 
+{\bfseries Eclipse\+Model} (\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings}{Eclipse\+Model\+Settings}} \&settings, const std\+::string \&model\+\_\+name, const std\+::string \&variables\+\_\+file)
+\begin{DoxyCompactList}\small\item\em CSMP model construction from Eclipse files; property database is created from "{}variables\+\_\+file.\+txt"{}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_a521a84a0620c16e0d80feeda960dff3f}\label{classcsmp_1_1_eclipse_model_a521a84a0620c16e0d80feeda960dff3f} 
+{\bfseries Eclipse\+Model} (\mbox{\hyperlink{classcsmp_1_1_eclipse_model_settings}{Eclipse\+Model\+Settings}} \&settings, const std\+::string \&model\+\_\+name)
+\begin{DoxyCompactList}\small\item\em CSMP model construction from mesh files; empty property database. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Container$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a8b83a0b6df4e6b640d9e8a06bc564a45}{Get\+Regions}} (Container \&data)
+\begin{DoxyCompactList}\small\item\em volumetric model subdomains if any \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_a619a663cf64cb58801dff4721cf0c6c4}\label{classcsmp_1_1_eclipse_model_a619a663cf64cb58801dff4721cf0c6c4} 
+{\footnotesize template$<$class Container$>$ }\\void {\bfseries Get\+Faults} (Container \&data)
+\begin{DoxyCompactList}\small\item\em lower-\/dimensional element regions representing geological faults \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_a6c79047fd6b8410fe003193a444ebf10}\label{classcsmp_1_1_eclipse_model_a6c79047fd6b8410fe003193a444ebf10} 
+{\footnotesize template$<$class Container$>$ }\\void {\bfseries Get\+Wells} (Container \&data)
+\begin{DoxyCompactList}\small\item\em wells which do not have a discrete representation inside of Eclipse \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_eclipse_model_a77a5f95f5f7af96ec8953f255d7cb908}{Create\+Boundaries\+Around\+Faults}} (bool keep\+\_\+fault\+\_\+regions=false)
+\begin{DoxyCompactList}\small\item\em JC\+: remove it later -\/ processing special regions. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_aa30c50d84068a079dc74fc023713b46c}\label{classcsmp_1_1_eclipse_model_aa30c50d84068a079dc74fc023713b46c} 
+void {\bfseries Create\+Split\+Boundaries\+Around\+Faults} (bool delete\+\_\+fault\+\_\+regions=false)
+\begin{DoxyCompactList}\small\item\em JC\+: remove it later -\/ TODO\+: not implemented yet. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_eclipse_model_affd70fe23cb3244a2b9b2e1e4f8c6a58}{Assign\+Box\+Boundary\+Flags\+Where\+Possible}} (const char \texorpdfstring{$\ast$}{*}target\+\_\+region)
+\begin{DoxyCompactList}\small\item\em JC\+: remove it later -\/ BOX flag nodes and elements of volumetric target region. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_a694073cca375de10759b7c6710cf4bca}\label{classcsmp_1_1_eclipse_model_a694073cca375de10759b7c6710cf4bca} 
+\mbox{\hyperlink{structijk}{ijk}} {\bfseries Eclipse\+Coordinates} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ 3u $>$ \texorpdfstring{$\ast$}{*}e) const
+\begin{DoxyCompactList}\small\item\em Get ijk coordinates of corner-\/point grid cell that corresponds to \doxylink{classcsmp_1_1_element}{csmp\+::\+Element}. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_a3bcaadbc8fc2436a30e43b6748ff4f6d}\label{classcsmp_1_1_eclipse_model_a3bcaadbc8fc2436a30e43b6748ff4f6d} 
+void {\bfseries Add\+Well} (const std\+::string \&well\+\_\+name, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&well\+\_\+start\+\_\+point, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&well\+\_\+end\+\_\+point)
+\begin{DoxyCompactList}\small\item\em inserts a well path that penetrates the centers of the faces of the supplied cells \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_eclipse_model_a707640c77a9a4ffe1560078edb41c1e4}\label{classcsmp_1_1_eclipse_model_a707640c77a9a4ffe1560078edb41c1e4} 
+void {\bfseries Grid\+Dimensions} (size\+\_\+t \&max\+\_\+I, size\+\_\+t \&max\+\_\+J, size\+\_\+t \&max\+\_\+K) const
+\begin{DoxyCompactList}\small\item\em the dimensions of the original corner-\/point grid \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_model}{csmp\+::\+Model$<$ 3\+U $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a9d88f8a2aa52d8c26944faf4ae8c5e6c}{Input\+Variable\+From}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const \mbox{\hyperlink{classcsmp_1_1_f_e_m___data}{FEM\+\_\+\+Data}}$<$ Var $>$ \&vdata)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_model_acefd52598cd77133895e29d4f9cf8814}{Model}} (\mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}var\+\_\+file, bool treat\+\_\+domains\+\_\+as\+\_\+regions\+\_\+and\+\_\+use\+\_\+regions\+\_\+file\+\_\+if\+\_\+any)
+\begin{DoxyCompactList}\small\item\em constructs model with subdomains (\doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_boundary}{Boundary}, \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary}), variables file name with extension "{}\texorpdfstring{$\ast$}{*}-\/variables.\+txt"{} where \texorpdfstring{$\ast$}{*} is the name of the model \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_model_a5330b8f1f65b441691a80a749f5e0015}{\texorpdfstring{$\sim$}{\string~}\+Model}} ()
+\begin{DoxyCompactList}\small\item\em destructor that needs to be overloaded when a subclass is derived from model \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \& {\bfseries Database} () const
+\begin{DoxyCompactList}\small\item\em returns const (read-\/only) reference to database object where all variable access and type specifications are stored \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}}$<$ dim $>$ \& {\bfseries Mesh} () const
+\begin{DoxyCompactList}\small\item\em read-\/only access the mesh container (nodes, elements, faces, interfaces and associated variable storage) \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}} \& {\bfseries FE\+\_\+\+Manager} () const
+\begin{DoxyCompactList}\small\item\em read-\/only access to the finite element types that are needed to support the current mesh \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a8a437f9aa192afd88f871720f320bd8e}{Instantiate\+Finite\+Volumes}} ()
+\begin{DoxyCompactList}\small\item\em prompts the finite volume manager to connect the elements and faces with finite volume stencils \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Placement} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a40267f0970a5f782de8ae9916da1e005}{Output\+To\+Binary\+File}} (const char \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em writes entire model with associated properties to disk; non-\/constant because this involves region creation; not const because mesh is updated \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a54b42649c2116beae5b32cb0e8750dab}{Input\+From\+Binary\+File}} (const char \texorpdfstring{$\ast$}{*}model\+\_\+name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\begin{DoxyCompactList}\small\item\em reads model written by \doxylink{classcsmp_1_1_model_a40267f0970a5f782de8ae9916da1e005}{Output\+To\+Binary\+File()} including all associated properties; if subset of variables is not empty only these will be read \end{DoxyCompactList}\item 
+void {\bfseries Output\+Mesh\+To} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&, bool get\+\_\+indices\+\_\+from\+\_\+stored\+\_\+variables=false)
+\begin{DoxyCompactList}\small\item\em computes deques of numbered \doxylink{classcsmp_1_1_node}{Node}, \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face} and \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} objects, and outputs mesh as polygonal dataset (\doxylink{classcsmp_1_1_v_set}{VSet}, see HDF doc of NCSA, Urbana, Champagne, Il, US) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_adf5297f19ae1481d29afd513aaa29699}{Output\+Variable\+To}} (const char \texorpdfstring{$\ast$}{*}var, \mbox{\hyperlink{classcsmp_1_1_f_e_m___data}{FEM\+\_\+\+Data}}$<$ Var $>$ \&) const
+\begin{DoxyCompactList}\small\item\em writes discretised variable to generic variable container \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a1c8cd5a8dabcd4733b9545d813e78559}{Input\+Variables\+From}} (const \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em inputs all discretised variables stored in the supplied \doxylink{classcsmp_1_1_v_set}{VSet} into the model \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \mbox{\hyperlink{classcsmp_1_1_model_aff7668a969afb1b8934e63a27b47ca31}{Create\+Property}} (const char \texorpdfstring{$\ast$}{*}new\+\_\+prop, const char \texorpdfstring{$\ast$}{*}notation, const char \texorpdfstring{$\ast$}{*}unit, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} type=SCALAR, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} place=NODE, uint32\+\_\+t vsize=1, double vmin=-\/1.\+0e+30, double vmax=1.\+0e+30, std\+::string usage="{}???"{})
+\begin{DoxyCompactList}\small\item\em inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a6c9c1075f4048ab03276569f580fce19}{Delete\+Property}} (const char \texorpdfstring{$\ast$}{*}property)
+\begin{DoxyCompactList}\small\item\em deletes property from the database and the distributed containers all across the model \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_ac629d1175ce8e74dbdc3974553b14531}{Index\+By\+Property\+Values}} ()
+\begin{DoxyCompactList}\small\item\em renumbers everything, using stored "{}node number"{} etc. if available, else \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} is prompted to created unique numbering \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_ab7e40578f44ca6ced2cf05db309f122e}{Input\+Property\+Value}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const T \&value)
+\begin{DoxyCompactList}\small\item\em sets the values of the distributed variable all across the model; to enter scalar value use make\+Scalar(flag,value) helper function \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_af02c3aae20950e871acfafd520dd532f}{Input\+Boundary\+Value}} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}, const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const T \&value)
+\begin{DoxyCompactList}\small\item\em sets the value of the property on those sites (nodes, elements) whose At\+Boundary() function matches the \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} value \end{DoxyCompactList}\item 
+void {\bfseries Input\+Boundary\+Flags} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}, const char \texorpdfstring{$\ast$}{*}property, const std\+::vector$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} $>$ \&flags)
+\begin{DoxyCompactList}\small\item\em uses the vector of variable flags (ANY, DIRICH etc.) to change the status of the target variable at the given \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a69f9911b3ea97c2db09cd990442126f9}{Interpolate\+Boundary\+Values}} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}}, const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} $>$ \&bvalues)
+\begin{DoxyCompactList}\small\item\em the supplied 4 scalar node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-\/shaped model \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_acf6ea2249b3f45d733262b3977a61a1f}{Copy\+Replace}} (const char \texorpdfstring{$\ast$}{*}from, const char \texorpdfstring{$\ast$}{*}to)
+\begin{DoxyCompactList}\small\item\em replaces the values of the target propery (to) with the values of property (from); both variables must have the same type and placement \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_a28e317bfa74330d1b2ce9763e52803c6}{Copy\+Gradient\+Of\+Property\+\_\+\+A\+\_\+\+To\+\_\+B}} (const char \texorpdfstring{$\ast$}{*}node\+\_\+prop, const char \texorpdfstring{$\ast$}{*}element\+\_\+prop)
+\begin{DoxyCompactList}\small\item\em computes the (constant valued) first spatial derivative of the node property and assigns it to the element property / barycenter of the element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a242fb0eb48c3c42c69a204882d5704e4}{Interpolate\+Integration\+Point\+To\+Cell\+Property}} (const char \texorpdfstring{$\ast$}{*}ipoint\+\_\+prop, const char \texorpdfstring{$\ast$}{*}eprop)
+\begin{DoxyCompactList}\small\item\em linearly interpolates the value of the integration point property to the barycentre of element; result is stored as element property \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_acec8aaf9553395187eef0cd4105e5197}{Interpolate\+Node\+To\+Cell\+Property}} (const char \texorpdfstring{$\ast$}{*}nprop, const char \texorpdfstring{$\ast$}{*}eprop, bool verbose=true)
+\begin{DoxyCompactList}\small\item\em interpolates node property values to the barycentre of element and stores results in element property \end{DoxyCompactList}\item 
+void {\bfseries Interpolate\+Node\+To\+Integration\+Point\+Property} (const char \texorpdfstring{$\ast$}{*}nprop, const char \texorpdfstring{$\ast$}{*}ipoint\+\_\+prop)
+\begin{DoxyCompactList}\small\item\em interpolates distributed node property values the quadrature points of numerically integrated finite elements \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a4bfc03c69ae4b2523a1b9d40da381823}{Extrapolate\+Integration\+Point\+To\+Node\+Property}} (const char \texorpdfstring{$\ast$}{*}ipoint\+\_\+prop, const char \texorpdfstring{$\ast$}{*}eprop)
+\begin{DoxyCompactList}\small\item\em linearly extrapolates the values of the integration point variable to the element nodes where an averaging with the neighbor elements is performed \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a13852cb18c944af4b5f132e5714f4d7a}{Extrapolate\+Cell\+To\+Node\+Property}} (const char \texorpdfstring{$\ast$}{*}eprop, const char \texorpdfstring{$\ast$}{*}nprop, bool by\+\_\+distance=true)
+\begin{DoxyCompactList}\small\item\em piecewise constant element property values are extrapolated to nodes using a choice of averaging schemes (1/distance vs. element-\/volume weighted) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a79de9bdafebf73cfe8d7472b46c5ac54}{Change\+Property\+Status}} (const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} new\+\_\+status)
+\begin{DoxyCompactList}\small\item\em changes the flags of the target variable all across the model \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a8175c191fb82044c968d087ce6ca5c20}{Change\+Property\+Status\+Where}} (const char \texorpdfstring{$\ast$}{*}var, double min, double max, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} new\+\_\+status)
+\begin{DoxyCompactList}\small\item\em where the values of the target property are within the given range the flag of the target variables are changed to the new status \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_af05be8dbc1bdfd766ae01def456e8314}{Min\+Max\+Coordinates}} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&xyz\+\_\+min, \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&xyz\+\_\+max) const
+\begin{DoxyCompactList}\small\item\em returns the opposite corners of the bounding box that encloses the model \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_ae98b627c7aa1d3422044856e211fdf96}{Min\+Max\+Of}} (const char \texorpdfstring{$\ast$}{*}prop, double \&min, double \&max) const
+\begin{DoxyCompactList}\small\item\em returns the value range of the target property within the entire model \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_ae5e7ec4fee6a39db1fa287bdbc88f77e}{Is\+Within\+Range}} (const char \texorpdfstring{$\ast$}{*}prop, const char \texorpdfstring{$\ast$}{*}model\+\_\+subdomain="{}Model"{}) const
+\begin{DoxyCompactList}\small\item\em checks the value range of a variable against the range specified in its \doxylink{structcsmp_1_1_parameter}{Parameter} record in the Property\+Databse \end{DoxyCompactList}\item 
+void {\bfseries Assign\+Node\+Coordinates\+To} (const char \texorpdfstring{$\ast$}{*}scalar\+\_\+variable, char coord)
+\begin{DoxyCompactList}\small\item\em permits to transfer node coordinate components to the target scalar node variable; char options are \textquotesingle{}x\textquotesingle{}, \textquotesingle{}y\textquotesingle{}, \textquotesingle{}z\textquotesingle{} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a1215540ea41e232f4e5c845e5466f92d}{Move\+Node\+Coordinates\+By}} (const char \texorpdfstring{$\ast$}{*}vector\+\_\+variable)
+\begin{DoxyCompactList}\small\item\em shifts the node coordinates by an amount that is determined by the value of the target \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable$<$dim$>$} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_afa95b2a116d4772dcc7ef61c4a7b6c2c}{Assign\+Cell\+Characteristics\+To}} (const char \texorpdfstring{$\ast$}{*}characteristic, const char \texorpdfstring{$\ast$}{*}var)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}characteristic\textquotesingle{} options are\+: volume, inner radius, and aspect ratio \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a1f470e567edc05fb61d72ba12dbda6b8}{Apply}} (\mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}$<$ dim $>$ \&relation, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\begin{DoxyCompactList}\small\item\em prompts the region-\/by-\/region, element-\/by-\/element or node-\/by-\/node calculation of the target variable via the interrelation \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a2e12f259012989765f3269d8ea721092}{Accept}} (\mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em support of the visitor pattern giving visitors access to the model \end{DoxyCompactList}\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em the name of the computational model \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a1f918e53e2331dbe07719e023535152b}{Output\+Variable\+To\+Screen}} (const char \texorpdfstring{$\ast$}{*}prop) const
+\begin{DoxyCompactList}\small\item\em console output \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a39c10e94cf437465bf27cf9b6b53b0a8}{Out}} () const
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp\+::\+Region\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries Contains\+Region} (const std\+::string \&regionname) const
+\begin{DoxyCompactList}\small\item\em checks whether region exists considering both unique and non-\/unique regions \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_region}{csmp\+::\+Region}}$<$ dim $>$ \& {\bfseries Region} (const std\+::string \&region\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em returns const reference to region \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Unique} (const std\+::string \&regionname) const
+\begin{DoxyCompactList}\small\item\em checks whether the region is space exclusive, i.\+e. does not contain any other regions \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_region}{csmp\+::\+Region}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_region_interface_a76b7f2f0b92cb59c95116e06d31a120a}{Region\+By\+Domain\+Index}} (int32\+\_\+t domain\+\_\+index)
+\begin{DoxyCompactList}\small\item\em checks whether all elements within the region are interconnected (if the region has multi-\/dimensional elements this is never the case) \end{DoxyCompactList}\item 
+bool {\bfseries Has\+Valid\+Model\+Region} () const
+\begin{DoxyCompactList}\small\item\em checks that there is a model region and that it contains elements \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Regions\+Out} () const
+\item 
+void {\bfseries Print\+Domain\+Indices} () const
+\begin{DoxyCompactList}\small\item\em prints \doxylink{classcsmp_1_1_model_sub_domain_a6147d916c36176edc6f20745772d5469}{Model\+Sub\+Domain\+::domain\+\_\+idx\+\_\+} assigned automatically using reference count mechanism \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_interface_a4baedc0566e529f2a54d46a56e62a138}{Output\+Regions\+To\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em writes unique and non-\/unique regions to binary file, including, interior/perimeter/boundary face information; relies on unique indexes \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_interface_abf1c6bc80311fc070ff4da11211093d8}{Input\+Regions\+From\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\begin{DoxyCompactList}\small\item\em Reads unique and non-\/unique regions from binary file as written by Output\+All\+Regions\+To\+Binary(); it can also read only a subset of variables. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_region_interface_ac93adcf7fe57c7630ea5f07af6e7bada}{region\+Iterator}} {\bfseries Regions\+Begin} ()
+\item 
+\mbox{\hyperlink{classcsmp_1_1_region_interface_ac93adcf7fe57c7630ea5f07af6e7bada}{region\+Iterator}} {\bfseries Regions\+End} ()
+\item 
+\mbox{\hyperlink{classcsmp_1_1_region_interface_ac93adcf7fe57c7630ea5f07af6e7bada}{region\+Iterator}} {\bfseries Unique\+Regions\+Begin} ()
+\item 
+\mbox{\hyperlink{classcsmp_1_1_region_interface_ac93adcf7fe57c7630ea5f07af6e7bada}{region\+Iterator}} {\bfseries Unique\+Regions\+End} ()
+\item 
+size\+\_\+t {\bfseries Regions} () const
+\begin{DoxyCompactList}\small\item\em number of non-\/unique regions that potentially overlap \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Unique\+Regions} () const
+\begin{DoxyCompactList}\small\item\em number of regions that are space eclusive like the subvolumes of a water tight CAD model \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_a0a622ed266b74e15e39f8ad734ad7a3d}{Rename\+Region}} (const std\+::string \&old\+\_\+name, const std\+::string \&new\+\_\+name)
+\begin{DoxyCompactList}\small\item\em changes the subdomain name and the search key in the region map with deletion or copying of elements \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_a01c89d70b2cc76f81224c318f0840bb8}{Form\+Model\+Region}} (bool is\+\_\+unique)
+\begin{DoxyCompactList}\small\item\em builds master region \textquotesingle{}\doxylink{classcsmp_1_1_model}{Model}\textquotesingle{} (discontigous or not) including all elements (line, surface, or volume if any); this regions is then used to build others \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_a54852db0700b343b2c21d420fa387797}{Form\+Region\+From}} (const char \texorpdfstring{$\ast$}{*}regionname, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator first, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator last, bool unique=false)
+\begin{DoxyCompactList}\small\item\em forms unique or non-\/unique region including entire range of elements; returns number of elements created (USED TO CREATE MODEL REGION 22/5/21) \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_a893076f9f7bf4711e6d4897f719bb2b5}{Form\+Regions\+From\+Property\+Values}} (const char \texorpdfstring{$\ast$}{*}prop, std\+::set$<$ std\+::string $>$ \&region\+\_\+names)
+\begin{DoxyCompactList}\small\item\em treats the values of the property as discrete, forming one region per value and returning their names into the set; returns number of regions \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_aefd55525755bb027d8b6204b2ce604c3}{Form\+Regions\+From}} (const \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&, bool ignore\+\_\+domain\+\_\+type\+\_\+identifiers=false)
+\begin{DoxyCompactList}\small\item\em forms unique regions from the supplied element ids (0..n-\/1) stored in \doxylink{classcsmp_1_1_model_topology}{Model\+Topology}; assigns region number to element material IDs if empty; returns \# of regions formed \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_aba5ce4ad7998c91591500e6385bd5fe3}{Form\+Regions\+From\+Material\+IDs}} ()
+\begin{DoxyCompactList}\small\item\em creates unique regions from material IDs which must have been defined earlier; returns number of regions formed; returns number of regions \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_a47865ffc9553be4af8b2f5ed92bb5061}{Form\+Region\+In\+Bounding\+Box}} (const char \texorpdfstring{$\ast$}{*}region\+Name, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&cnr\+\_\+min, const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&cnr\+\_\+max, bool all\+\_\+nodes\+\_\+must\+\_\+be\+\_\+within)
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_adf554e6b22902ffe7e6793538a05f8d4}{Count\+And\+Label\+Unique\+Regions}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+identifier, std\+::vector$<$ std\+::string $>$ \&region\+\_\+names)
+\begin{DoxyCompactList}\small\item\em assigns unique region-\/indicative variable values to the elements of all unique regions and returns name value mapping vector\mbox{[}value\mbox{]}=name \end{DoxyCompactList}\item 
+bool {\bfseries Check\+Region\+Identifier\+Is\+Up\+To\+Date} (const char \texorpdfstring{$\ast$}{*}region\+\_\+identifier)
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_ac9096a4b2be14096aafa13fc61322bce}{Partition\+Region\+Into\+Contiguous\+Sub\+Regions}} (const char \texorpdfstring{$\ast$}{*}region)
+\begin{DoxyCompactList}\small\item\em finds disconnected subregions in region, dividing it into these. The new subregion are numbered and their total \# is returned \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_a1261d193620bc36dfed780945f7f6751}{Partition\+Region\+Into\+Contiguous\+Sub\+Regions\+\_\+\+Bromage}} (const char \texorpdfstring{$\ast$}{*}region)
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_a830b59da55e4235995ebfc6affa254e6}{Remove\+Region\+Partitions\+For}} (const char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em removes all regions with the given name followed by an arbitrary number; returns number of removed regions=partitions \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_afdab232b6b3ef6880224f6f72ade4cb5}{Form\+Rectangular\+Region}} (const char \texorpdfstring{$\ast$}{*}regionname, const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ dim $>$ \&xyz\+\_\+min, const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ dim $>$ \&xyz\+\_\+max)
+\begin{DoxyCompactList}\small\item\em forms a non-\/unique rectangular region of elements whose barycenter falls into the bounding box defined by the points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_interface_ad6890490309612e7b94004a89026b392}{Copy\+Region}} (const char \texorpdfstring{$\ast$}{*}existing\+\_\+region, const char \texorpdfstring{$\ast$}{*}copied\+\_\+region, bool place\+\_\+copy\+\_\+in\+\_\+unique\+\_\+regions=false)
+\begin{DoxyCompactList}\small\item\em replicates region and gives duplicate a new name ( \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_interface_a3a5c416879b0f17829f989a65c4a18a1}{Assimilate\+Region}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+to\+\_\+add, const char \texorpdfstring{$\ast$}{*}region\+\_\+to\+\_\+be\+\_\+added\+\_\+to)
+\begin{DoxyCompactList}\small\item\em adds the region specified by first argument to the existing region given by second argument \end{DoxyCompactList}\item 
+void {\bfseries Merge\+Regions} (const std\+::set$<$ std\+::string $>$ \&input\+\_\+regions, const char \texorpdfstring{$\ast$}{*}ensemble\+\_\+region)
+\begin{DoxyCompactList}\small\item\em merges multiple regions as identified by their names into a new master region \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_interface_a753c2b6332c5c14f228abbf81568123c}{Remove\+Region}} (const char \texorpdfstring{$\ast$}{*}regionname, bool erase\+\_\+elements=false)
+\begin{DoxyCompactList}\small\item\em removes region and associated variable storage; \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager} removes elements and rebuilds connectivity if requested, but only if region is unique \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_afdc209398fea9597da430153ace32208}{Remove\+From\+Region}} (const char \texorpdfstring{$\ast$}{*}region, const char \texorpdfstring{$\ast$}{*}region\+\_\+to\+\_\+subtract)
+\begin{DoxyCompactList}\small\item\em excludes the intersection of elements of the 2 regions from the non-\/unique region \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_afc081b026c8c072b1fef0c9df85b6ce6}{Move\+To\+Non\+Unique\+Regions}} (const char \texorpdfstring{$\ast$}{*}unique\+\_\+region)
+\begin{DoxyCompactList}\small\item\em moves region to from the unique-\/ to the non-\/unique regions map \end{DoxyCompactList}\item 
+bool {\bfseries Move\+To\+Unique\+Regions} (const char \texorpdfstring{$\ast$}{*}non\+\_\+unique\+\_\+region)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_a4167afbf2ee98fda0fd380bcbcbb1fb8}{Region\+Includes}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+a, const char \texorpdfstring{$\ast$}{*}region\+\_\+b) const
+\begin{DoxyCompactList}\small\item\em boolean operation\+: include \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_a02754829ba2beb42af7bdf232f646188}{Region\+Union}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+a, const char \texorpdfstring{$\ast$}{*}region\+\_\+b, const char \texorpdfstring{$\ast$}{*}region\+\_\+union)
+\begin{DoxyCompactList}\small\item\em boolean operation\+: union \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_a35cbd8c6094105001f9b2bc740263939}{Region\+Intersection}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+a, const char \texorpdfstring{$\ast$}{*}region\+\_\+b, const char \texorpdfstring{$\ast$}{*}region\+\_\+intersection)
+\begin{DoxyCompactList}\small\item\em boolean operation\+: intersection \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_a24356853ec2de423c20a55b22c7244b8}{Region\+Difference}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+a, const char \texorpdfstring{$\ast$}{*}region\+\_\+b, const char \texorpdfstring{$\ast$}{*}region\+\_\+diff)
+\begin{DoxyCompactList}\small\item\em boolean operation\+: difference (returns the data in region a that is not in region b) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_region_interface_a8b2d9d622d7203e8e050cb9ca7811b46}{Region\+Symmetric\+Difference}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+a, const char \texorpdfstring{$\ast$}{*}region\+\_\+b, const char \texorpdfstring{$\ast$}{*}region\+\_\+symdiff)
+\begin{DoxyCompactList}\small\item\em boolean operation\+: symmetric difference (the symmetric difference is the union without the intersection) \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_region_interface_a6eb99206ead464836c322df187ef4d2f}{Shared\+Perimeter\+Faces}} (const char \texorpdfstring{$\ast$}{*}region\+\_\+a, const char \texorpdfstring{$\ast$}{*}region\+\_\+b, std\+::vector$<$ std\+::tuple$<$ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}, size\+\_\+t, size\+\_\+t $>$ $>$ \&shared) const
+\begin{DoxyCompactList}\small\item\em finds the contact area between regions a and b, logging pairs of element pointers and face numbers; \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_region_interface_a0f61dad58f69e668195d5a8bbcfdc9cf}{Update\+Regions}} ()
+\begin{DoxyCompactList}\small\item\em if the mesh changed this safe but model-\/wide method rebuilds the node and element vectors of all regions \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ \& {\bfseries Boundary} (const std\+::string \&b\+Name)
+\item 
+bool {\bfseries Contains\+Boundary} (const std\+::string \&b\+Name) const
+\item 
+boundary\+Iterator {\bfseries Boundaries\+Begin} ()
+\item 
+boundary\+Iterator {\bfseries Boundaries\+End} ()
+\item 
+size\+\_\+t {\bfseries Boundaries} () const
+\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a7f343a42577037dff47093f62a90b84b}{Create\+Boundary\+Name}} (const std\+::string \&inside\+\_\+region, const std\+::string \&outside\+\_\+region)
+\begin{DoxyCompactList}\small\item\em creates a name for a new boundary that shall be created between two touching unique (non-\/overlapping) regions \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad66b7d53568c18e4241ad24ef51f51d7}{Find\+Boundary\+By\+Name}} (const std\+::set$<$ std\+::string $>$ \&intersected\+\_\+regions) const
+\begin{DoxyCompactList}\small\item\em searches for a boundary that intersects the supplied higher-\/dimensional region(s); returns null string (\textquotesingle{}\textbackslash{}0\textquotesingle{}) if not found \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a8c12cd3934001fdeea4d927a94bd4e9d}{Find\+Boundary\+By\+Names}} (const std\+::set$<$ std\+::string $>$ \&intersected\+\_\+regions, std\+::set$<$ std\+::string $>$ \&region\+\_\+patches\+\_\+found) const
+\begin{DoxyCompactList}\small\item\em searches for the boundaries whose name contains the supplied strings (region names etc.) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_af8d883b322003e0e831b114a53120eef}{Is\+Boundary\+Name}} (const std\+::string \&region\+Name) const
+\begin{DoxyCompactList}\small\item\em checks whether name contains the strings BOUNDARY or any of the predefined boundary names \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a170a0b5502f6e14e6ea475714b6764db}{Box\+Shaped}} () const
+\begin{DoxyCompactList}\small\item\em checks whether the model contains the \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}=equivalent boundaries TOP, BOTTOM etc. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_boundary_interface_abc0392784790ae33fdc9759a7bf19615}{Form\+Boundaries\+From}} (const \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&)
+\begin{DoxyCompactList}\small\item\em uses the \doxylink{classcsmp_1_1_face}{Face} ids stored in the model topology object to form boundaries using \doxylink{classcsmp_1_1_face}{Face} objects which already exist; returns number of boundaries formed \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::set$<$ std\+::string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a41271a0826a7dfae74abdb5cf4856b4f}{Create\+Internal\+Boundary\+From}} (const char \texorpdfstring{$\ast$}{*}dimension\+\_\+minus1\+\_\+region)
+\begin{DoxyCompactList}\small\item\em converts lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} into uniquely named \doxylink{classcsmp_1_1_boundary}{Boundary} patches, assigning more specific names to these; the input \doxylink{classcsmp_1_1_region}{Region} and its elements are removed \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a46772c373bade27cc1bfd5de6a7f2cb1}{Create\+External\+Boundary\+From}} (const char \texorpdfstring{$\ast$}{*}dimension\+\_\+minus1\+\_\+region, bool check\+\_\+topo\+\_\+attributes\+\_\+of\+\_\+nodes)
+\begin{DoxyCompactList}\small\item\em converts lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} on the outside of the model into a \doxylink{classcsmp_1_1_boundary}{Boundary}; returns whether this conversion was successful as well as the boundary name \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad24b7f5db1277b6a7837a700d103d153}{Create\+Boundary\+Around}} (const char \texorpdfstring{$\ast$}{*}region)
+\begin{DoxyCompactList}\small\item\em creates INTERNAL boundary, ignoring already existing boundaries or split-\/boundaries as well as lower-\/dimensional regions, region will be on inside \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a4e8a32b74b875851b1805944812b3a70}{Create\+Boundary\+Between}} (const char \texorpdfstring{$\ast$}{*}region1, const char \texorpdfstring{$\ast$}{*}region2)
+\begin{DoxyCompactList}\small\item\em insert lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} between two equidimensional unique regions, and then converts it into \doxylink{classcsmp_1_1_boundary}{Boundary}; returns boundary name \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad1c6156ff7aa50d5a1c26d12d32006f7}{Establish\+Edge\+Boundaries\+Of\+Box\+Shaped\+Model}} ()
+\begin{DoxyCompactList}\small\item\em creates EDGE\# \doxylink{classcsmp_1_1_boundary}{Boundary} line objects for box-\/shaped model by intersecting side boundaries objects \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_aa3b79631cd879e55338d14803caae786}{Establish\+Box\+Boundaries}} ()
+\begin{DoxyCompactList}\small\item\em creates \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary} objects replacing lower-\/dimensional \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} named regions with boundaries with the same names \end{DoxyCompactList}\item 
+std\+::set$<$ std\+::string $>$ \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ad0eed3c326997f854db44d5a7320a1e2}{Establish\+Boundaries\+From\+Regions}} ()
+\begin{DoxyCompactList}\small\item\em inserts box boundary or irregular \doxylink{classcsmp_1_1_boundary}{csmp\+::\+Boundary} objects for all eligible regions in the model; returns the names of the created boudaries \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a432e8ca3268d6ef31eaf6b9fd23a3e7c}{Establish\+Box\+Boundaries\+From\+Orientation}} ()
+\begin{DoxyCompactList}\small\item\em tries to create \doxylink{classcsmp_1_1_box}{Box} \doxylink{classcsmp_1_1_boundary}{Boundary} objects surrounding \textquotesingle{}\doxylink{classcsmp_1_1_model}{Model}\textquotesingle{} into TOP, BOTTOM, IRREGULAR if possible; updates \doxylink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY} flags \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a806f539a7761ee70feaa892a22d040ff}{Establish\+Box\+Boundaries\+From\+Node\+Flags}} (bool recreate\+\_\+box\+\_\+boundary\+\_\+flags\+\_\+before)
+\begin{DoxyCompactList}\small\item\em creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface_ae8976912d2d26ce92222880798dba583}{Remove\+Boundary}} (const char \texorpdfstring{$\ast$}{*}boundary, bool erase\+\_\+faces)
+\begin{DoxyCompactList}\small\item\em Removes boundary with deletion of its faces in the \doxylink{classcsmp_1_1_mesh_manager}{Mesh\+Manager}. \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Boundaries\+Out} () const
+\begin{DoxyCompactList}\small\item\em prints boundary names and other stats to screen; returns number of boundaries \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a4e58d1c493b2e439a430621ea11df640}{Output\+Boundaries\+To\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em method used in the storage of a model to binary file \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a573cc9956b043b7010b5c70eebc47a40}{Input\+Boundaries\+From\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\begin{DoxyCompactList}\small\item\em reads boundaries stored in CSMP native binary file written by Output\+Boundaries\+To\+Binary; if set non-\/empty will only read subset of variables \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ \& {\bfseries Split\+Boundary} (const std\+::string \&)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_afb450a873c86b4ce2468d4d29920cb2d}{Contains\+Split\+Boundary}} (const std\+::string \&) const
+\item 
+split\+Boundary\+Iterator {\bfseries Split\+Boundaries\+Begin} ()
+\item 
+split\+Boundary\+Iterator {\bfseries Split\+Boundaries\+End} ()
+\item 
+size\+\_\+t {\bfseries Split\+Boundaries} () const
+\item 
+size\+\_\+t {\bfseries Form\+Split\+Boundaries\+From} (const \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&)
+\begin{DoxyCompactList}\small\item\em uses the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::set$<$ std\+::string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a34e5f96c416a4e88a8b189b7700515f8}{Detect\+And\+Create\+Split\+Boundaries}} ()
+\begin{DoxyCompactList}\small\item\em Creates Split\+Boundaries detecting disconnected but node-\/matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a69879ca6a06d881fe3ef71251cca84ff}{Separate\+Unique\+Regions\+By\+Split\+Boundaries}} ()
+\begin{DoxyCompactList}\small\item\em creates consistently named split boundaries between all unique regions in the model \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::set$<$ std\+::string $>$, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_aabc87e8481fc15687fdb428da104a5d2}{Create\+Split\+Boundary\+From}} (const char \texorpdfstring{$\ast$}{*}dim\+\_\+1\+\_\+region, bool retain\+\_\+elmts\+\_\+as\+\_\+intervening\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em creation of one or multiple Split\+Boundaries from a lower dimensional region \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a0a4e52dd0e6018a0b751be1dfc4b13a5}{Create\+Split\+Boundary\+Between}} (const char \texorpdfstring{$\ast$}{*}region1, const char \texorpdfstring{$\ast$}{*}region2)
+\begin{DoxyCompactList}\small\item\em creates \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} between non-\/overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::string, bool $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a0f810da61d370f5942a8478c3b32ccbc}{Insert\+Region\+Into\+Split\+Boundary}} (const char \texorpdfstring{$\ast$}{*}split\+\_\+boundary, int32\+\_\+t material\+\_\+id\+\_\+for\+\_\+new\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em inserts a lower-\/dimensional \doxylink{classcsmp_1_1_region}{Region} inside of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary}, assigning its elements to the Intervening\+Element() pointers of its interfaces; the name will be that of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} followed by \+\_\+\+REGION \end{DoxyCompactList}\item 
+std\+::set$<$ std\+::string $>$ \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a01c9167b824ee1726bd64390319bcd47}{Insert\+Lower\+Dimensional\+Regions\+Into\+Split\+Boundaries}} (int32\+\_\+t material\+\_\+id\+\_\+for\+\_\+new\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em Creates isolated lower-\/dimensional mesh regions between split boundaries with unique names matching those of the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} objects; set will be empty if none created. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a85db4d8207a4baec857b7352926900a2}{Remove\+Split\+Boundary}} (const char \texorpdfstring{$\ast$}{*}split\+\_\+boundary, bool erase\+\_\+interfaces)
+\begin{DoxyCompactList}\small\item\em Creates a single lower-\/dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a932d9bf33ebc1f1feff208c0a8a5e900}{Merge\+Split\+Boundaries}} (const char \texorpdfstring{$\ast$}{*}new\+\_\+sb\+\_\+name, std\+::set$<$ std\+::string $>$ splitboundaries)
+\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a523aa296793f798a9aa89e3f6334a66d}{Split\+Boundaries\+Out}} () const
+\begin{DoxyCompactList}\small\item\em prints current split boundaries to screen and returns how many there are \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a4ddcf39d8581ca63a8b618741a5385d5}{Output\+Split\+Boundaries\+To\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+Name) const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a56710d6c84622848e351e794f8e71381}{Input\+Split\+Boundaries\+From\+Binary}} (const char \texorpdfstring{$\ast$}{*}file\+Name, const std\+::set$<$ std\+::string $>$ \&subset\+\_\+variables)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_model}{Model}} $>$ \&) const
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void {\bfseries Resize\+Property\+Storage} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&)
+\begin{DoxyCompactList}\small\item\em Goto overload for storees without \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ae81c2b297f4166821bc3de2856e055ae}{Add\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Creates an empty space in the storage preserving the original variable values. \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect NEW state (incl added) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_a3b56bab7bc4a1db37bfc4d4176457349}{Delete\+Property}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Deletes data and flags of property \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} in \doxylink{structcsmp_1_1_index}{Index} have to reflect CURRENT state (incl property to be removed) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_aa8f995011429356bfd7e7744794c9b9b}{Is\+Within\+Range}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double, double) const
+\item 
+double {\bfseries Read} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar variable value. \end{DoxyCompactList}\item 
+void {\bfseries Store} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Scalar variable. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Status} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em Scalar \& Array variable flag. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, double array\+\_\+elmt\+\_\+value, int\+\_\+type)
+\item 
+double {\bfseries Read\+Array\+Entry} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, int\+\_\+type array\+\_\+elmt) const
+\begin{DoxyCompactList}\small\item\em reads single double element inside of the target array \end{DoxyCompactList}\item 
+bool {\bfseries Empty\+LVS} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_local_variable_storage_ade5ec5a8e9afb482c1619924cf8259b2}{Out\+LVS}} () const
+\item 
+void {\bfseries Assert\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Assert\+Finite\+Volume\+Integration\+Point\+Placement} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em We check in debug only. \end{DoxyCompactList}\item 
+void {\bfseries Store\+Local\+State} (const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&lv)
+\begin{DoxyCompactList}\small\item\em We store in debug only. \end{DoxyCompactList}\item 
+void {\bfseries LVS} (const Data \&data)
+\begin{DoxyCompactList}\small\item\em copy or move supplied data into storage \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp\+::\+Region\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_region}{csmp\+::\+Region}}$<$ dim $>$ $>$\+::iterator {\bfseries region\+Iterator}
+\begin{DoxyCompactList}\small\item\em iterators to associative containers of regions \end{DoxyCompactList}\item 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_region}{csmp\+::\+Region}}$<$ dim $>$ $>$\+::const\+\_\+iterator {\bfseries region\+Const\+Iterator}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ $>$\+::iterator {\bfseries boundary\+Iterator}
+\item 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ $>$\+::const\+\_\+iterator {\bfseries boundary\+Const\+Iterator}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ $>$\+::iterator {\bfseries split\+Boundary\+Iterator}
+\item 
+typedef std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ $>$\+::const\+\_\+iterator {\bfseries split\+Boundary\+Const\+Iterator}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_model}{csmp\+::\+Model$<$ 3\+U $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_model_a659628e032169aace551f8493bb8d64e}{Initialize}} (\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em builds with model without specifically named subdomains other than "{}\+Model"{}. If model is box-\/shaped corresponding boundary flags will exist. \end{DoxyCompactList}\item 
+void {\bfseries Initialize\+Local\+Variable\+Storage} ()
+\begin{DoxyCompactList}\small\item\em Instantiates MODEL \doxylink{structcsmp_1_1_local_variables}{Local\+Variables}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_aa508619f940dab016d03df48e4a2bd7e}{Update\+Subdomain\+Property\+Storage}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp\+::\+Region\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Rebuild\+Unique\+Regions} ()
+\begin{DoxyCompactList}\small\item\em rebuilds unique regions, but only if they contain some nulled element pointers \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a7aef8cb4f10754a119e7df1309b9d98a}{Create\+Boundary\+Name\+From}} (const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}}$<$ dim $>$ \&, const std\+::vector$<$ std\+::string $>$ \&region\+\_\+names) const
+\begin{DoxyCompactList}\small\item\em combines strings (including \textquotesingle{}BOUNDARY\textquotesingle{}) into a unique name of the boundary \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_boundary_interface_a9bdc4e94ff3dbf306bdcccfefd721969}{Add\+Boundary}} (const char \texorpdfstring{$\ast$}{*}name, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator faces\+Begin, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator faces\+End, \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}})
+\begin{DoxyCompactList}\small\item\em creates boundary from already interconnected faces that also know their parent elements \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_acb2fac24571ca74f7ffae218347d80b0}{Create\+Split\+Boundary\+Name}} (const std\+::pair$<$ std\+::string, std\+::string $>$ \&juxtaposed\+\_\+regions) const
+\begin{DoxyCompactList}\small\item\em creating name for the case when the \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} was already present in the input mesh \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_ac2f3505cd6c6368e76cc7fbbdf3a5361}{Create\+Split\+Boundary\+Name\+From}} (const \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{Face\+Construction\+Data}}$<$ dim $>$ \&, const std\+::vector$<$ std\+::string $>$ \&region\+\_\+names) const
+\begin{DoxyCompactList}\small\item\em creates name for one specific patch of the new split boundary \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface_a8c05e87268deed28098c8770b79fb183}{Find\+Split\+Boundary\+By\+Names}} (const std\+::set$<$ std\+::string $>$ \&intersected\+\_\+regions, std\+::set$<$ std\+::string $>$ \&region\+\_\+patches\+\_\+found) const
+\begin{DoxyCompactList}\small\item\em searches the split boundary map for split-\/boundary names that contain the names of the regions stored in the first set \end{DoxyCompactList}\item 
+bool {\bfseries Add\+Split\+Boundary} (const char \texorpdfstring{$\ast$}{*}name, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator first, typename std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator last, \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\+\_\+\+BOUNDARY}})
+\begin{DoxyCompactList}\small\item\em creates split boundary from already interconnected faces that also know their parent elements \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_model}{csmp\+::\+Model$<$ 3\+U $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::string {\bfseries Binary\+Vset\+File\+Name} (const char \texorpdfstring{$\ast$}{*}base\+\_\+file\+\_\+name)
+\item 
+static std\+::string {\bfseries Binary\+Regions\+File\+Name} (const char \texorpdfstring{$\ast$}{*}base\+\_\+file\+\_\+name)
+\item 
+static std\+::string {\bfseries Binary\+Boundaries\+File\+Name} (const char \texorpdfstring{$\ast$}{*}base\+\_\+file\+\_\+name)
+\item 
+static std\+::string {\bfseries Binary\+Split\+Boundaries\+File\+Name} (const char \texorpdfstring{$\ast$}{*}base\+\_\+file\+\_\+name)
+\item 
+static std\+::string {\bfseries Binary\+Variables\+File\+Name} (const char \texorpdfstring{$\ast$}{*}base\+\_\+file\+\_\+name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_region_interface}{csmp\+::\+Region\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_region}{csmp\+::\+Region}}$<$ dim $>$ $>$ {\bfseries unique\+Region\+Map\+\_\+}
+\begin{DoxyCompactList}\small\item\em map of unique regions that do not overlap \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_region}{csmp\+::\+Region}}$<$ dim $>$ $>$ {\bfseries region\+Map\+\_\+}
+\begin{DoxyCompactList}\small\item\em map of non-\/unique (potentially overlapping) regions \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_property_constraints}{Property\+Constraints}} $>$ {\bfseries region\+Traits\+\_\+}
+\begin{DoxyCompactList}\small\item\em criteria how non-\/unique regions were created \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_boundary_interface}{csmp\+::\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ $>$ {\bfseries boundary\+Map\+\_\+}
+\begin{DoxyCompactList}\small\item\em storage of the boundaries \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_split_boundary_interface}{csmp\+::\+Split\+Boundary\+Interface$<$ dim, Model $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{classcsmp_1_1_split_boundary}{csmp\+::\+Split\+Boundary}}$<$ dim $>$ $>$ {\bfseries split\+Boundary\+Map\+\_\+}
+\begin{DoxyCompactList}\small\item\em boundary name \& boundary container of key-\/value pairs \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Input interface which converts a standard corner-\/point (hexahedral cell) grid from Schlumberger\textquotesingle{}s reservoir simulator Eclipse into a CSMP model object in which the cells are represented by hexahedra. Degenerate cells are converted to other element types like prisms and tetrahedra. 
+
+\begin{DoxyAttention}{Attention}
+do not apply to Eclipse grids with non-\/standard (partially overlapping) connections with grid cells.
+\end{DoxyAttention}
+\begin{DoxyAuthor}{Author}
+R. Manasipov 
+
+Stephan Matthai (done some refactoring, but still needs much work) 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2014, 2016, 2018 @revised SKM 12/04/2018 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_eclipse_model_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_eclipse_model_affd70fe23cb3244a2b9b2e1e4f8c6a58}\index{csmp::EclipseModel@{csmp::EclipseModel}!AssignBoxBoundaryFlagsWherePossible@{AssignBoxBoundaryFlagsWherePossible}}
+\index{AssignBoxBoundaryFlagsWherePossible@{AssignBoxBoundaryFlagsWherePossible}!csmp::EclipseModel@{csmp::EclipseModel}}
+\doxysubsubsection{\texorpdfstring{AssignBoxBoundaryFlagsWherePossible()}{AssignBoxBoundaryFlagsWherePossible()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_eclipse_model_affd70fe23cb3244a2b9b2e1e4f8c6a58} 
+void csmp\+::\+Eclipse\+Model\+::\+Assign\+Box\+Boundary\+Flags\+Where\+Possible (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{target\+\_\+region}{}\end{DoxyParamCaption})}
+
+
+
+JC\+: remove it later -\/ BOX flag nodes and elements of volumetric target region. 
+
+BOX flag nodes and elements of volumetric target region This method assumes that the nodes of the mesh were previously flagged correctly. \Hypertarget{classcsmp_1_1_eclipse_model_a77a5f95f5f7af96ec8953f255d7cb908}\index{csmp::EclipseModel@{csmp::EclipseModel}!CreateBoundariesAroundFaults@{CreateBoundariesAroundFaults}}
+\index{CreateBoundariesAroundFaults@{CreateBoundariesAroundFaults}!csmp::EclipseModel@{csmp::EclipseModel}}
+\doxysubsubsection{\texorpdfstring{CreateBoundariesAroundFaults()}{CreateBoundariesAroundFaults()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_eclipse_model_a77a5f95f5f7af96ec8953f255d7cb908} 
+void csmp\+::\+Eclipse\+Model\+::\+Create\+Boundaries\+Around\+Faults (\begin{DoxyParamCaption}\item[{bool}]{keep\+\_\+fault\+\_\+regions}{ = {\ttfamily false}}\end{DoxyParamCaption})}
+
+
+
+JC\+: remove it later -\/ processing special regions. 
+
+processing special regions \Hypertarget{classcsmp_1_1_eclipse_model_a8b83a0b6df4e6b640d9e8a06bc564a45}\index{csmp::EclipseModel@{csmp::EclipseModel}!GetRegions@{GetRegions}}
+\index{GetRegions@{GetRegions}!csmp::EclipseModel@{csmp::EclipseModel}}
+\doxysubsubsection{\texorpdfstring{GetRegions()}{GetRegions()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_eclipse_model_a8b83a0b6df4e6b640d9e8a06bc564a45} 
+template$<$class Container$>$ \\
+template void csmp\+::\+Eclipse\+Model\+::\+Get\+Regions (\begin{DoxyParamCaption}\item[{Container \&}]{data}{}\end{DoxyParamCaption})}
+
+
+
+volumetric model subdomains if any 
+
+existing special regions 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Eclipse/Eclipse\+Model.\+h\item 
+source/modules/interfaces/\+Eclipse/Eclipse\+Model.\+cpp\end{DoxyCompactItemize}

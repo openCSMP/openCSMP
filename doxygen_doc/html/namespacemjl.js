@@ -1,0 +1,28 @@
+var namespacemjl =
+[
+    [ "Edge", "classmjl_1_1_edge.html", "classmjl_1_1_edge" ],
+    [ "Edge3D", "classmjl_1_1_edge3_d.html", "classmjl_1_1_edge3_d" ],
+    [ "Node", "classmjl_1_1_node.html", null ],
+    [ "Plane3D", "classmjl_1_1_plane3_d.html", null ],
+    [ "Point", "classmjl_1_1_point.html", "classmjl_1_1_point" ],
+    [ "Point3D", "classmjl_1_1_point3_d.html", null ],
+    [ "Polygon", "classmjl_1_1_polygon.html", "classmjl_1_1_polygon" ],
+    [ "Triangle3D", "classmjl_1_1_triangle3_d.html", "classmjl_1_1_triangle3_d" ],
+    [ "Vertex", "classmjl_1_1_vertex.html", null ],
+    [ "advance", "group___c_s_m_pglobal_functions.html#gacd8af910a04c305310a5c4604717022c", null ],
+    [ "aimsAt", "namespacemjl.html#a46b4a82bced4640cc11268d65ea81ed5", null ],
+    [ "clipEdgeToPolygon", "group___c_s_m_pglobal_functions.html#ga85e8aa8dcc3d8d4c0dd5040561c42762", null ],
+    [ "convexPolygonIntersect", "group___c_s_m_pglobal_functions.html#ga9855cfe021c08cc1f9bde489be203e1c", null ],
+    [ "crossingPoint", "namespacemjl.html#a32b3a8d58f823cb167c3f3c499f56224", null ],
+    [ "crossingPoint", "namespacemjl.html#a348040fdb4ce16d483f82390665a1741", null ],
+    [ "insertionHull", "group___c_s_m_pglobal_functions.html#gaea8a18b26b51f566412167647313d90e", null ],
+    [ "lineTriangle3DIntersect", "group___c_s_m_pglobal_functions.html#gad0c65e760ab51db4f6d69fc3b3df1275", null ],
+    [ "merge", "group___c_s_m_pglobal_functions.html#ga4c5b0d0e367b95ba94568213ac285891", null ],
+    [ "pointInConvexPolygon", "group___c_s_m_pglobal_functions.html#ga053d54563be9acde49470bd3f6b915fa", null ],
+    [ "pointInPolygonRS", "group___c_s_m_pglobal_functions.html#ga64cdb764eca9edf178ab6f150b6ea442", null ],
+    [ "pointInPolygonSA", "group___c_s_m_pglobal_functions.html#gaefc5a7c57cb80172558eced9b844ee8f", null ],
+    [ "polarCmp", "namespacemjl.html#a443051f9c1d069b20f9367efe234472b", null ],
+    [ "project", "group___c_s_m_pglobal_functions.html#ga3842086f8e9c889fda20ec752eb9521e", null ],
+    [ "signedAngle", "namespacemjl.html#a24fe914e67952eeec27fab5d5265a692", null ],
+    [ "starShapedPolygon", "group___c_s_m_pglobal_functions.html#ga4036b26d513b7b8b06e505aecdf6aafb", null ]
+];

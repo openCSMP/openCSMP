@@ -1,0 +1,386 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_mohr_coulomb_failure___visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::MohrCoulombFailure_Visitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <includes refid="_mohr_coulomb_failure___visitor_8h" local="no">MohrCoulombFailure_Visitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a7e2609651f9938f16e2316cbade4ea67" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        <definition>PropertyDatabase&lt;dim&gt;&amp; csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::stressref_</definition>
+        <argsstring></argsstring>
+        <name>stressref_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::stressref_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="38" column="23" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1af1063db52a259a9425f145cafe439b4f" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="39" column="29" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a0cd28f509a65dca96dc9054b7a5bdc1d" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::Stress_key_</definition>
+        <argsstring></argsstring>
+        <name>Stress_key_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::Stress_key_</qualifiedname>
+        <briefdescription>
+<para>stress </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="40" column="29" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1ab8d0413bafdf208e211e93db42f80d2a" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::pf_key_</definition>
+        <argsstring></argsstring>
+        <name>pf_key_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::pf_key_</qualifiedname>
+        <briefdescription>
+<para>fluid pressure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="41" column="29" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1acb7f6e88fa4297678901c4872dd8906b" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::Cohesion_key_</definition>
+        <argsstring></argsstring>
+        <name>Cohesion_key_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::Cohesion_key_</qualifiedname>
+        <briefdescription>
+<para>cohesion </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="42" column="29" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a26a267468a772e3fa645b1028debcd27" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::Friction_key_</definition>
+        <argsstring></argsstring>
+        <name>Friction_key_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::Friction_key_</qualifiedname>
+        <briefdescription>
+<para>friction angle 0..90o </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="43" column="29" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a4833ad5c405255d4fd1d2b256cb39ad9" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::Failure_key_</definition>
+        <argsstring></argsstring>
+        <name>Failure_key_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::Failure_key_</qualifiedname>
+        <briefdescription>
+<para>failure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="44" column="29" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a86966ecf734581fbc096e6468273a2c9" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::Failure01_key_</definition>
+        <argsstring></argsstring>
+        <name>Failure01_key_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::Failure01_key_</qualifiedname>
+        <briefdescription>
+<para>failure 0 1 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="45" column="29" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a59b523b043220197ec9ad10ca01dd06e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+        <definition>TensorVariable&lt;dim&gt; csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::Cartesian_stress_</definition>
+        <argsstring></argsstring>
+        <name>Cartesian_stress_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::Cartesian_stress_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="47" column="24" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1aa74177b115b345f5dcf77aede9c05ed6" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::degrees_to_radians_</definition>
+        <argsstring></argsstring>
+        <name>degrees_to_radians_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::degrees_to_radians_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="49" column="18" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a4c01fbd06d8ef09f7f33c889b515f8e3" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::sqrt3_</definition>
+        <argsstring></argsstring>
+        <name>sqrt3_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::sqrt3_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="50" column="18" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1afff1478b698ca9286d78457894f5a4b6" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::sqrt32_</definition>
+        <argsstring></argsstring>
+        <name>sqrt32_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::sqrt32_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="51" column="18" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1aa5fff69940752476baef561ce33ca096" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::fluid_pressure_</definition>
+        <argsstring></argsstring>
+        <name>fluid_pressure_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::fluid_pressure_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="52" column="18" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1adbd99869cb733b6013a041360e0a9422" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::biot_coefficient_alpha_</definition>
+        <argsstring></argsstring>
+        <name>biot_coefficient_alpha_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::biot_coefficient_alpha_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="53" column="18" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a07194eab10ba42528a44861feb21514a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::sign_of_tensile_stress_</definition>
+        <argsstring></argsstring>
+        <name>sign_of_tensile_stress_</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::sign_of_tensile_stress_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="54" column="18" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a0ced979a28b263c12fde2e61f3c97603" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::MohrCoulombFailure_Visitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, bool positive_compressive_stress_convention=true, bool verbose=false)</argsstring>
+        <name>MohrCoulombFailure_Visitor</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::MohrCoulombFailure_Visitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>positive_compressive_stress_convention</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>SKM 28/9/2014 - added documentation, fixed wrong output and formatted code </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="30" column="14" bodyfile="source/modules/thmc/mechanics/MohrCoulombFailure_Visitor.cpp" bodystart="16" bodyend="55"/>
+        <references refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a0ced979a28b263c12fde2e61f3c97603" compoundref="_mohr_coulomb_failure___visitor_8cpp" startline="16" endline="55">csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::MohrCoulombFailure_Visitor</references>
+        <referencedby refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a0ced979a28b263c12fde2e61f3c97603" compoundref="_mohr_coulomb_failure___visitor_8cpp" startline="16" endline="55">csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::MohrCoulombFailure_Visitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1ac8688ce97640b395a6c690d4b5e5b3b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::~MohrCoulombFailure_Visitor</definition>
+        <argsstring>()</argsstring>
+        <name>~MohrCoulombFailure_Visitor</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::~MohrCoulombFailure_Visitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="34" column="13" bodyfile="source/modules/thmc/mechanics/MohrCoulombFailure_Visitor.cpp" bodystart="60" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mohr_coulomb_failure___visitor_1a8f7452556bff69e1630f4d5487ffc247" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::MohrCoulombFailure_Visitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::MohrCoulombFailure_Visitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Loops over the element integration points and evaluates shear and tensile failure potential. Where failure occurred the variable &apos;failure&apos; is set to 1. A distinction is made between tensile &apos;tensile failure&apos; and shear failure &apos;failure&apos; variables.</para>
+<para><simplesect kind="attention"><para>it is assumed that the tensile strength is about 1/10 of the cohesive strength of the rock</para>
+</simplesect>
+<simplesect kind="attention"><para>SKM 28/9/2014 - added case where stress is placed on the element. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="35" column="18" bodyfile="source/modules/thmc/mechanics/MohrCoulombFailure_Visitor.cpp" bodystart="77" bodyend="359"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Evaluates Mohr-Coulomb shear and tensile failure criteria that are output to the element integration points.</para>
+<para>Input variables:<itemizedlist>
+<listitem><para>friction angle</para>
+</listitem><listitem><para>cohesion (scalar)</para>
+</listitem><listitem><para>stress (tensor) = Cartesian stress</para>
+</listitem><listitem><para>fluid pressure (if this variable is not specified its value is assumed to be zero)</para>
+<para><xrefsect id="todo_1_todo000221"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM: this visitor should include the influence of pore pressure.</para>
+</xrefdescription></xrefsect></para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::MohrCoulombFailure_Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_mohr_coulomb_failure___visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::MohrCoulombFailure_Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_mohr_coulomb_failure___visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" line="28" column="1" bodyfile="source/includes/thmc/mechanics/MohrCoulombFailure_Visitor.h" bodystart="28" bodyend="55"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1adbd99869cb733b6013a041360e0a9422" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>biot_coefficient_alpha_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a59b523b043220197ec9ad10ca01dd06e" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Cartesian_stress_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1acb7f6e88fa4297678901c4872dd8906b" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Cohesion_key_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1aa74177b115b345f5dcf77aede9c05ed6" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>degrees_to_radians_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a86966ecf734581fbc096e6468273a2c9" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Failure01_key_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a4833ad5c405255d4fd1d2b256cb39ad9" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Failure_key_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1aa5fff69940752476baef561ce33ca096" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>fluid_pressure_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a26a267468a772e3fa645b1028debcd27" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Friction_key_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a0ced979a28b263c12fde2e61f3c97603" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>MohrCoulombFailure_Visitor</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1ab8d0413bafdf208e211e93db42f80d2a" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>pf_key_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a07194eab10ba42528a44861feb21514a" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>sign_of_tensile_stress_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1afff1478b698ca9286d78457894f5a4b6" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>sqrt32_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a4c01fbd06d8ef09f7f33c889b515f8e3" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>sqrt3_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a0cd28f509a65dca96dc9054b7a5bdc1d" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Stress_key_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a7e2609651f9938f16e2316cbade4ea67" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>stressref_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1af1063db52a259a9425f145cafe439b4f" prot="private" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1a8f7452556bff69e1630f4d5487ffc247" prot="public" virt="virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_mohr_coulomb_failure___visitor_1ac8688ce97640b395a6c690d4b5e5b3b2" prot="public" virt="virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>~MohrCoulombFailure_Visitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::MohrCoulombFailure_Visitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

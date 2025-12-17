@@ -1,0 +1,824 @@
+\doxysection{csmp\+::Linear\+Triangle3D Class Reference}
+\hypertarget{classcsmp_1_1_linear_triangle3_d}{}\label{classcsmp_1_1_linear_triangle3_d}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+
+
+Straight-\/sided, analytically integrated triangular finite element suspended in 3D space; linear element interpolation functions.  
+
+
+
+
+{\ttfamily \#include $<$Linear\+Triangle3\+D.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Linear\+Triangle3D\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_linear_triangle3_d__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Linear\+Triangle3D\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_linear_triangle3_d__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_aedb176275d71119ec5253b625321608b}{Volume}} ()
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a743e4220e8a43b2ecc61c42ad14d5791}{Aspect\+Ratio}} ()
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a442a3b96f8359b42ed7d9351deb4d4e0}{Inner\+Radius}} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a1870dcbde8f7ef115956240be3632e51}{Edge\+Lengths}} (std\+::vector$<$ double $>$ \&vec)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a6b419c20f544a1ff1d1a7943ad6f8396}{Nodes\+Of\+Segment}} (uint32\+\_\+t segm\+\_\+id, std\+::vector$<$ uint32\+\_\+t $>$ \&snids) const
+\begin{DoxyCompactList}\small\item\em segments are numbered like faces \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610}{Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8}{Corner\+Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the corner nodes of the face \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7}{Nodes\+Connected\+To}} (uint32\+\_\+t node\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the nodes at the other end of the sgment that the argument node is on \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a35f462851d87692bbb772ff7f95338f7}{Corner\+Nodes}} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a7fa2dcc2e063a32b175037721adeaa38}{Corner\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em The linear triangle is numbered counter-\/clockwise by default. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_ab5f8763a0a6117f299f9c77eed2d26f2}\label{classcsmp_1_1_linear_triangle3_d_ab5f8763a0a6117f299f9c77eed2d26f2} 
+virtual void {\bfseries Unit\+Normal} (std\+::vector$<$ double $>$ \&unrml) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ae392eaa6606fa4becb4bccb113940f44}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&unrml) const
+\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a8306fafab98fe11af16795dd673d86aa}{Element\+Type\+Of\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding face \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ad6d380b38427648167de15f05a88b685}{Element\+Type\+Of\+Segment}} (uint32\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding segment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ac3a06318940bff7b325843665eebec8b}{N}} (std\+::vector$<$ double $>$ \&N, const std\+::vector$<$ double $>$ \&xyz)
+\begin{DoxyCompactList}\small\item\em element interpolation functions at the point xzy \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a9dcc5734869993fdd19f8839da1cd745}{N\+\_\+\+At\+Bary\+Center}} (std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_ac3a06318940bff7b325843665eebec8b}{N}})
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the center of gravity of the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a4a3028362fc43fbdefc57a1892391f28}{dN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em first derivatives of element interpolation functions \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a46b917869e349473f991b0584bcf7d7f}{d\+N\+\_\+\+At}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, const std\+::vector$<$ double $>$ \&xyz)
+\begin{DoxyCompactList}\small\item\em note that the derivative is constant so that the point location will not be considerd \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a11ee66bbf4277701f3702ee2a9e2f5c0}{d\+N\+\_\+\+At\+Barycenter}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a71dcc8b7baf243235d8fea2da93a4e63}{Integral\+NN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}})
+\begin{DoxyCompactList}\small\item\em integral over interpolation functions \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_a0b487e8ed898104b91cda9dc97ace3cb}{Output\+Node\+Data\+To\+VTK}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const char \texorpdfstring{$\ast$}{*}var\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&DATA) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d_aac44d2564ecbf607adba60f6d029b4cf}{Output\+To\+VTK}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csp\+\_\+fem\+\_\+type, bool isoparametric, bool uses\+\_\+local\+\_\+coordinates, uint32\+\_\+t order\+\_\+of\+\_\+shape\+\_\+functions)
+\item 
+void {\bfseries Current\+ID} (size\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em assigns integer value used to avoid repeating the same operation \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Current\+ID} () const
+\begin{DoxyCompactList}\small\item\em returns integer value for comparison to avoid repeating the same operation \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Dim} () const
+\begin{DoxyCompactList}\small\item\em return minimum spatial dimension in which this element can exist \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Nodes} () const
+\item 
+uint32\+\_\+t {\bfseries Segments} () const
+\begin{DoxyCompactList}\small\item\em returns the number of edges of the FE, i.\+e. the number of connections between nodes \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Faces} () const
+\begin{DoxyCompactList}\small\item\em returns the number of sides the finite element has \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Neighbors} () const
+\begin{DoxyCompactList}\small\item\em neighbor elements that may be connected to this FE in its characteristic space \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a3cb7bc938ad00c9f4dbfbfa94c13e781}{Nodes\+Per\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns how many nodes make up a particular face; some elements have different numbers \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Integration\+Points} () const
+\begin{DoxyCompactList}\small\item\em returns number of quadrature points used by current integration scheme \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Interpolation} () const
+\begin{DoxyCompactList}\small\item\em returns order of interpolation scheme\+: linear=1, quadratic=2, cubic=3 \end{DoxyCompactList}\item 
+bool {\bfseries Isoparametric} () const
+\begin{DoxyCompactList}\small\item\em for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions \end{DoxyCompactList}\item 
+bool {\bfseries Uses\+Local\+Coordinates} () const
+\begin{DoxyCompactList}\small\item\em reports whether element is defined in a local (r,s,t) coordinate system; analytically integrated elements are not \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Order\+Of\+Shape\+Functions} () const
+\begin{DoxyCompactList}\small\item\em returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Line} () const
+\item 
+bool {\bfseries Is\+Surface} () const
+\item 
+bool {\bfseries Is\+Volume} () const
+\item 
+bool {\bfseries Is\+Simplex} () const
+\begin{DoxyCompactList}\small\item\em true for linear line-\/, triangle-\/ or tetrahedral elements for which the Jacobian matrix is constant throughout \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries Element\+Type} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a8149423046e10426a7eb520164ad3a38}{Mid\+Side\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports only the mid-\/edge nodes (0..nodes-\/1) of the element \end{DoxyCompactList}\item 
+virtual void {\bfseries Interior\+Nodes} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports the nodes (0..nodes-\/1) of the element which are not shared with any other element \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t {\bfseries Mid\+Side\+Nodes} () const
+\item 
+virtual uint32\+\_\+t {\bfseries Interior\+Nodes} () const
+\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a1dedbd91a6e8765f57dfdaf999494b76}{Unit\+Normal}} () const
+\begin{DoxyCompactList}\small\item\em returns unit normal to element where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae600307171225f53a2615aaffd5afb18}{Unit\+Normal\+At\+Face\+Barycenter}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&nrml)
+\begin{DoxyCompactList}\small\item\em computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework \end{DoxyCompactList}\item 
+double {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j) const
+\begin{DoxyCompactList}\small\item\em accessor for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+void {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j, double val)
+\begin{DoxyCompactList}\small\item\em mutator for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a34a5c030987c7e9842af332f5ed0d61b}{Reference\+Coordinates}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&mat\+Coords) const
+\begin{DoxyCompactList}\small\item\em for element types defined using a local coordinate system, returns the node coordinates into the argument matrix \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae7ea6940dcaa8403c7c35e70db4ba21c}{Extrapolate\+Integration\+Point\+Variable\+To\+Nodes}} (uint32\+\_\+t nvars, const std\+::vector$<$ double $>$ \&IVAR, std\+::vector$<$ double $>$ \&NVAR) const
+\begin{DoxyCompactList}\small\item\em using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_aef00dcb02705580693988e47924a055d}{Integration\+Point}} (uint32\+\_\+t i, std\+::vector$<$ double $>$ \&xyz) const
+\begin{DoxyCompactList}\small\item\em returns the global coordinates of the element integration point \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_ac224265aa216deebfcf44b54d2689d1d}{Weight\+At\+Integration\+Point}} (uint32\+\_\+t i) const
+\begin{DoxyCompactList}\small\item\em returns the integration weight of the desired quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ac1168c0c1cc280d1a1ecba676877d13b}{N\+\_\+\+At\+Integration\+Point}} (uint32\+\_\+t ip, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{N}})
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the given quadrature point \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a885bb35784705f295c5f8ad9aa47f227}{d\+N\+\_\+\+At\+Integration\+Point}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t gauss\+\_\+point)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a89d6f320e17b4cfe1f9ddbeade1c9255}{d\+N\+\_\+\+At\+Node}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t node)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at node; determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ac6a31722bbf25abad86ccea3b653953e}{Jacobian\+At\+Integration\+Point}} (uint32\+\_\+t ip)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a246043f81c66c9f65e08c6a5190ea381}{Jacobian\+At}} (const std\+::vector$<$ double $>$ \&rst)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae62e0c447141f0e2b7f7a4eb8412278b}{Jacobian}} (const std\+::vector$<$ double $>$ \&dnr)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 1D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 2D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns, const std\+::vector$<$ double $>$ \&dnt)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 3D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce}{Jacobian\+Inverse}} ()
+\begin{DoxyCompactList}\small\item\em initializes the member matrix JINV \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_ae758e82d3b214e9f9c5bda10cd20b515}{Jacobian\+Determinant}} ()
+\begin{DoxyCompactList}\small\item\em returns the determinant of the member Jacobian matrix JAC that must have been initialised before \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a5d79c3309e261dd0939e5b733aac83d9}{Integrald\+NdN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises interpolation function derivatives product matrix DN\texorpdfstring{$^\wedge$}{\string^}T x DN for element where derivatives are constant \end{DoxyCompactList}\item 
+virtual void {\bfseries Integral\+\_\+d\+NT\+\_\+\+K\+\_\+dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&K)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_af583becda82f4fef39bbe2d4c3b41cea}{Nr}} (double r, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 1D element interpolation functions N(r) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a84befa0a4da0b4b8469ec5e7be89860e}{d\+Nr}} (double r, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 1D element interpolation functions derivatives N(r)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_adb2baab01a52b040d73c10623a0605b2}{Nrs}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions N(r,s) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_af159e5f99a0281ae603ca6ddde9bf6bf}{d\+Nr}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6d2fb4557b0681959501365138c9d3c3}{d\+Ns}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}{DNS}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/ds \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a34bd4d39b1a026b1de15f028e9692bd8}{Nrst}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 3D element interpolation functions N(r,s,t) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a5b77ad8925c75b096867822e83bed7cd}{d\+Nr}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a1c5cfe76807ea0d685c8e22d74c5582e}{d\+Ns}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}{DNS}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/ds \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c22543bd89563413954beb8697fa914}{d\+Nt}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a203a9d019620abee39fdbe7847ee8df0}{DNT}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/dt \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em prints finite element properties to screen \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Static Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ad4aaeb22c3a8da44a33361057ef2097f}{Initial\+ID}} ()
+\begin{DoxyCompactList}\small\item\em returns ID value set to FEM during construction \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a022fd86373136421b00ce343508efe52}{XY}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5de71dcc5e56c2e814d31d798969f437}{JAC}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5c3fd117b986587599dcb441feeb000a}{JINV}}
+\item 
+std\+::vector$<$ double $>$ {\bfseries NRST}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function values \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNR}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNS}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNT}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ uint32\+\_\+t $>$ {\bfseries IDX}
+\begin{DoxyCompactList}\small\item\em convenience storage for integer vectors \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+void {\bfseries Isoparametric} (bool isoparam)
+\item 
+void {\bfseries Uses\+Local\+Coordinates} (bool uses)
+\item 
+void {\bfseries Line\+Element} ()
+\item 
+void {\bfseries Surface\+Element} ()
+\item 
+void {\bfseries Volume\+Element} ()
+\item 
+void {\bfseries Element\+Type} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} etype)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab749771eccc931e112125efe7bf8252c}{dim}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ac8f4f6ea8649710e01ea018c61d93a30}{itp}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a9d9ced72fa35fd6a9fc755a219590820}{npf}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a329300ec856aa91bfe492daf93556b04}{npe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a609a2f0f70b086a278d112761c07c9de}{spe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a36972113f6f8351c891431038f8514bd}{fpe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a5684660784d3f15adffb485e8f47d9f3}{epe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a2509e6d8ab556b6a65a9036a62485df4}{nne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab4ad41c705b9691a4d01ee979b6214cc}{cne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a0729a0486b6febb96160f3e184c3f33f}{gpe}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Straight-\/sided, analytically integrated triangular finite element suspended in 3D space; linear element interpolation functions. 
+
+\begin{DoxyDate}{Date}
+2000 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei 
+
+Stephen G. Roberts 
+
+S. Geiger
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+To carry out computations using linear triangular and tetrahedral elements with exact integration in which surfaces inside the tetrahedral mesh are represented by triangles oriented freely in space. This triangle has to be put into the \doxylink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager} in order to be accessible for computations. ~\newline
+\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_collaboration}{}\doxysubsection{\texorpdfstring{Collaboration}{Collaboration}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_collaboration}
+The \doxylink{classcsmp_1_1_linear_triangle3_d}{Linear\+Triangle3D} collaborates with the \textquotesingle{}\doxylink{classcsmp_1_1_element}{Element}\textquotesingle{} class within a bridge pattern proving polymorphic behaviour of the \textquotesingle{}\doxylink{classcsmp_1_1_element}{Element}\textquotesingle{}.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+See CSMP User\textquotesingle{}s guide for a full listing of shape functions and their derivatives. ~\newline
+\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+The shape function values and their derivatives can be output to VTK by the public method \textquotesingle{}\doxylink{classcsmp_1_1_linear_triangle3_d_aac44d2564ecbf607adba60f6d029b4cf}{Output\+To\+VTK()}\textquotesingle{}. This result can be visualized with the following VTK tcl script. ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{catch}\ \{load\ vtktcl\}}
+\DoxyCodeLine{source\ vtkInt.tcl}
+\DoxyCodeLine{}
+\DoxyCodeLine{vtkUnstructuredGridReader\ reader}
+\DoxyCodeLine{\ \ \ \ reader\ SetFileName\ \ \ \ \textcolor{stringliteral}{"{}etest1.vtk"{}}}
+\DoxyCodeLine{\ \ \ \ reader\ SetScalarsName\ \textcolor{stringliteral}{"{}sum\_N"{}}}
+\DoxyCodeLine{\ \ \ \ reader\ SetVectorsName\ \textcolor{stringliteral}{"{}derivative\_N"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{vtkDataSetMapper\ gridMapper}
+\DoxyCodeLine{\ \ \ \ gridMapper\ SetInput\ [reader\ GetOutput]}
+\DoxyCodeLine{\ \ \ \ gridMapper\ ScalarVisibilityOff}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkActor\ gridActor}
+\DoxyCodeLine{\ \ \ \ gridActor\ SetMapper\ gridMapper}
+\DoxyCodeLine{\ \ \ \ [gridActor\ GetProperty]\ SetColor\ 0.1\ 0.1\ 0.1}
+\DoxyCodeLine{\ \ \ \ [gridActor\ GetProperty]\ SetRepresentationToWireframe}
+\DoxyCodeLine{}
+\DoxyCodeLine{vtkDataSetMapper\ modelMapper}
+\DoxyCodeLine{\ \ \ \ modelMapper\ SetInput\ [reader\ GetOutput]}
+\DoxyCodeLine{\ \ \ \ modelMapper\ ScalarVisibilityOn}
+\DoxyCodeLine{\ \ \ \ reader\ Update;\ \#force\ update\ \textcolor{keywordflow}{for}\ scalar\ range}
+\DoxyCodeLine{\ \ \ \ eval\ modelMapper\ SetScalarRange\ [[reader\ GetOutput]\ GetScalarRange]}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \#\ red=high,\ blue=low}}
+\DoxyCodeLine{\ \ \ \ [modelMapper\ GetLookupTable]\ SetHueRange\ .667\ 0.}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkActor\ modelActor}
+\DoxyCodeLine{\ \ \ \ modelActor\ SetMapper\ modelMapper}
+\DoxyCodeLine{\ \ \ \ [modelActor\ GetProperty]\ SetColor\ .2\ .2\ .2}
+\DoxyCodeLine{\ \ \ \ [modelActor\ GetProperty]\ SetOpacity\ 0.7}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ vtkHedgeHog\ hhog1}
+\DoxyCodeLine{\ \ \ \ hhog1\ SetInput\ [reader\ GetOutput]}
+\DoxyCodeLine{\ \ \ \ hhog1\ SetScaleFactor\ 2.0\ }
+\DoxyCodeLine{}
+\DoxyCodeLine{\ vtkPolyDataMapper\ uvMapper}
+\DoxyCodeLine{\ \ \ \ uvMapper\ SetInput\ [hhog1\ GetOutput]}
+\DoxyCodeLine{\ vtkActor\ uvActor}
+\DoxyCodeLine{\ \ \ \ uvActor\ SetMapper\ uvMapper}
+\DoxyCodeLine{\ \ \ \ [uvActor\ GetProperty]\ SetColor\ 0.\ 0.\ 0.}
+\DoxyCodeLine{}
+\DoxyCodeLine{vtkAxes\ axes}
+\DoxyCodeLine{\ \ \ \ axes\ SetOrigin\ 0.\ 0.\ 0.}
+\DoxyCodeLine{\ \ \ \ axes\ SetScaleFactor\ 10.}
+\DoxyCodeLine{vtkPolyDataMapper\ axesMapper}
+\DoxyCodeLine{\ \ \ \ axesMapper\ SetInput\ [axes\ GetOutput]}
+\DoxyCodeLine{\ \ \ \ axesMapper\ ScalarVisibilityOff}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkActor\ axesActor}
+\DoxyCodeLine{\ \ \ \ axesActor\ SetMapper\ axesMapper}
+\DoxyCodeLine{\ \ \ \ [axesActor\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkVectorText\ textX}
+\DoxyCodeLine{\ \ \ \ textX\ SetText\ \textcolor{stringliteral}{"{}X"{}}}
+\DoxyCodeLine{vtkPolyDataMapper\ textMapperX}
+\DoxyCodeLine{\ \ \ \ textMapperX\ SetInput\ [textX\ GetOutput]}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkFollower\ textActorX}
+\DoxyCodeLine{\ \ \ \ textActorX\ SetMapper\ textMapperX}
+\DoxyCodeLine{\ \ \ \ textActorX\ SetScale\ .5\ .5\ .5}
+\DoxyCodeLine{\ \ \ \ textActorX\ AddPosition\ 11.\ 0.\ 0.}
+\DoxyCodeLine{\ \ \ \ [textActorX\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}
+\DoxyCodeLine{\ \ \ }
+\DoxyCodeLine{vtkVectorText\ textY}
+\DoxyCodeLine{\ \ \ \ textY\ SetText\ \textcolor{stringliteral}{"{}Y"{}}}
+\DoxyCodeLine{vtkPolyDataMapper\ textMapperY}
+\DoxyCodeLine{\ \ \ \ textMapperY\ SetInput\ [textY\ GetOutput]}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkFollower\ textActorY}
+\DoxyCodeLine{\ \ \ \ textActorY\ SetMapper\ textMapperY}
+\DoxyCodeLine{\ \ \ \ textActorY\ SetScale\ .5\ .5\ .5\ }
+\DoxyCodeLine{\ \ \ \ textActorY\ AddPosition\ 0.\ 11.\ 0}
+\DoxyCodeLine{\ \ \ \ [textActorY\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkVectorText\ textZ}
+\DoxyCodeLine{\ \ \ \ textZ\ SetText\ \textcolor{stringliteral}{"{}Z"{}}}
+\DoxyCodeLine{vtkPolyDataMapper\ textMapperZ}
+\DoxyCodeLine{\ \ \ \ textMapperZ\ SetInput\ [textZ\ GetOutput]}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{vtkFollower\ textActorZ}
+\DoxyCodeLine{\ \ \ \ textActorZ\ SetMapper\ textMapperZ}
+\DoxyCodeLine{\ \ \ \ textActorZ\ SetScale\ .5\ .5\ .5\ }
+\DoxyCodeLine{\ \ \ \ textActorZ\ AddPosition\ 0.\ 0.\ 11.}
+\DoxyCodeLine{\ \ \ \ [textActorZ\ GetProperty]\ SetDiffuseColor\ 0.1\ 0.1\ 0.1}
+\DoxyCodeLine{}
+\DoxyCodeLine{vtkRenderer\ ren1}
+\DoxyCodeLine{vtkRenderWindow\ renWin}
+\DoxyCodeLine{\ \ \ \ renWin\ AddRenderer\ ren1}
+\DoxyCodeLine{vtkRenderWindowInteractor\ iren}
+\DoxyCodeLine{\ \ \ \ iren\ SetRenderWindow\ renWin}
+\DoxyCodeLine{}
+\DoxyCodeLine{ren1\ AddActor\ modelActor}
+\DoxyCodeLine{ren1\ AddActor\ gridActor}
+\DoxyCodeLine{ren1\ AddActor\ uvActor}
+\DoxyCodeLine{}
+\DoxyCodeLine{ren1\ AddActor\ axesActor}
+\DoxyCodeLine{ren1\ AddActor\ textActorX}
+\DoxyCodeLine{ren1\ AddActor\ textActorY}
+\DoxyCodeLine{ren1\ AddActor\ textActorZ}
+\DoxyCodeLine{}
+\DoxyCodeLine{ren1\ SetBackground\ 1\ 1\ 1}
+\DoxyCodeLine{renWin\ SetSize\ 900\ 700}
+\DoxyCodeLine{}
+\DoxyCodeLine{iren\ Initialize}
+\DoxyCodeLine{iren\ SetUserMethod\ \{wm\ deiconify\ .vtkInteract\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{renWin\ SetFileName\ \textcolor{stringliteral}{"{}element.ppm"{}}}
+\DoxyCodeLine{renWin\ SaveImageAsPPM}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#\ prevent\ the\ tk\ window\ from\ showing\ up\ then\ start\ the\ event\ loop}}
+\DoxyCodeLine{wm\ withdraw\ .}
+
+\end{DoxyCode}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a743e4220e8a43b2ecc61c42ad14d5791}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!AspectRatio@{AspectRatio}}
+\index{AspectRatio@{AspectRatio}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{AspectRatio()}{AspectRatio()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a743e4220e8a43b2ecc61c42ad14d5791} 
+double csmp\+::\+Linear\+Triangle3\+D\+::\+Aspect\+Ratio (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The aspect ratio of the triangle is computed as the ratio of the lengths of the longest and shortest boundary segments of the triangle. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The node coordinates are retrieved from the parent element. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The method returns the computed aspect ratio as a double value. ~\newline
+
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The aspect ratio is a useful measure for determining whether an element is too skewed in shape for the interpolation functions to give realistic values of the interpolated property. It is therefore used to assess the quality of a finiteelement mesh. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c6148f7a38b639b721013dbd8f8d3f5}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a35f462851d87692bbb772ff7f95338f7}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!CornerNodes@{CornerNodes}}
+\index{CornerNodes@{CornerNodes}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{CornerNodes()}{CornerNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a35f462851d87692bbb772ff7f95338f7} 
+virtual uint32\+\_\+t csmp\+::\+Linear\+Triangle3\+D\+::\+Corner\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a7fa2dcc2e063a32b175037721adeaa38}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!CornerNodes@{CornerNodes}}
+\index{CornerNodes@{CornerNodes}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{CornerNodes()}{CornerNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a7fa2dcc2e063a32b175037721adeaa38} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+Corner\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+The linear triangle is numbered counter-\/clockwise by default. 
+
+clearly all nodes are corner nodes 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ae3f0ae4a9ad3424ccc4553ff270b155e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!CornerNodesOfFace@{CornerNodesOfFace}}
+\index{CornerNodesOfFace@{CornerNodesOfFace}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{CornerNodesOfFace()}{CornerNodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_af3f7227da1d6868fb0b6d0908e4407b8} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Linear\+Triangle3\+D\+::\+Corner\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the corner nodes of the face 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a9614d03193a707898a0b26336a61d9d9}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a4a3028362fc43fbdefc57a1892391f28}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!dN@{dN}}
+\index{dN@{dN}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{dN()}{dN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a4a3028362fc43fbdefc57a1892391f28} 
+void csmp\+::\+Linear\+Triangle3\+D\+::dN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{B}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+first derivatives of element interpolation functions 
+
+Reports the derivatives of the 3 linear element interpolation functions. These are stored into a matrix with m=rows=dimensions and n=cols=nodes of the triangle. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method uses the \doxylink{classcsmp_1_1_element}{Element} to get the nodal coordinates. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em B} & The partial derivatives of the element interpolation functions are stored in the supplied matrix, where each node corresponds to a column of x, y, and z partial derivatives. ~\newline
+\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Method uses an unconventional approach designed by Adrian Umpleby at Imperial College. The derivatives are found using normals, n, to planes which are perpendicular to the triangle and go through the 2 nodes opposite of the node for which the derivative is computed. Thus the normal faces the node, lies in the plane of the triangle and is equivalent in position to the height of the triangle. The formula for node 2 is\+:
+
+d\+N1/dx = nx / n . -\/(p1 -\/ p2) d\+N1/dy = ny / n . -\/(p1 -\/ p2) d\+N1/dz = nz / n . -\/(p1 -\/ p2)
+
+Where . refers to the dot (scalar) product of the normal to plane through nodes 2 and 3, and (p1-\/p2) is the vector giving by the difference of the node points 12. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a3bf543b54ba24535aced15598495730f}{csmp\+::\+Finite\+Element}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_a4a3028362fc43fbdefc57a1892391f28_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a46b917869e349473f991b0584bcf7d7f}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!dN\_At@{dN\_At}}
+\index{dN\_At@{dN\_At}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{dN\_At()}{dN\_At()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a46b917869e349473f991b0584bcf7d7f} 
+double csmp\+::\+Linear\+Triangle3\+D\+::d\+N\+\_\+\+At (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{B}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+note that the derivative is constant so that the point location will not be considerd 
+
+Note that the derivative is constant so that the point location is ignored. method returns the element volume. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_adb4103981ca8a56bbea237ef71c0cdc1}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_a46b917869e349473f991b0584bcf7d7f_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a11ee66bbf4277701f3702ee2a9e2f5c0}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!dN\_AtBarycenter@{dN\_AtBarycenter}}
+\index{dN\_AtBarycenter@{dN\_AtBarycenter}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{dN\_AtBarycenter()}{dN\_AtBarycenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a11ee66bbf4277701f3702ee2a9e2f5c0} 
+double csmp\+::\+Linear\+Triangle3\+D\+::d\+N\+\_\+\+At\+Barycenter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{B}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Exactly equivalent to dN because the interpolation function derivatives are constant inside the linear triangular element.
+
+Method returns the element volume. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a703b7ce9d818248bbd9864dffee30b7c}{csmp\+::\+Finite\+Element}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_a11ee66bbf4277701f3702ee2a9e2f5c0_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a1870dcbde8f7ef115956240be3632e51}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!EdgeLengths@{EdgeLengths}}
+\index{EdgeLengths@{EdgeLengths}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{EdgeLengths()}{EdgeLengths()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a1870dcbde8f7ef115956240be3632e51} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+Edge\+Lengths (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{vec}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Returns the lengths of the triangles segments into the supplied Meschpp vector. The segments are defined as follows\+: Segment 1 is from node1 to node2, segment 2 from node2 to 3, and segment 3 from node3 to 1. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em len} & vector into which the lengths will be stored. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac2348fa774457d4adde9354189277d9e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a8306fafab98fe11af16795dd673d86aa}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!ElementTypeOfFace@{ElementTypeOfFace}}
+\index{ElementTypeOfFace@{ElementTypeOfFace}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{ElementTypeOfFace()}{ElementTypeOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a8306fafab98fe11af16795dd673d86aa} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+Linear\+Triangle3\+D\+::\+Element\+Type\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the element type that would match that of its corresponding face 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000069}{Todo}}](2-\/P) Remove typid by name fct \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a066cbd92cd983a3c2e73859286280587}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_ad6d380b38427648167de15f05a88b685}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!ElementTypeOfSegment@{ElementTypeOfSegment}}
+\index{ElementTypeOfSegment@{ElementTypeOfSegment}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{ElementTypeOfSegment()}{ElementTypeOfSegment()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_ad6d380b38427648167de15f05a88b685} 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+Linear\+Triangle3\+D\+::\+Element\+Type\+Of\+Segment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segment}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+reports the element type that would match that of its corresponding segment 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000070}{Todo}}](2-\/P) Remove typid by name fct \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a136f53aa9d4cd295a984ca46c0864ff7}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a442a3b96f8359b42ed7d9351deb4d4e0}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!InnerRadius@{InnerRadius}}
+\index{InnerRadius@{InnerRadius}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{InnerRadius()}{InnerRadius()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a442a3b96f8359b42ed7d9351deb4d4e0} 
+double csmp\+::\+Linear\+Triangle3\+D\+::\+Inner\+Radius (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Method computes the radius of a circle which just fits into the inside of the triangular element. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method retrieves the node coordinates from the parent element. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The method returns the radius of the inscribed circle of the triangle. ~\newline
+
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method computes the inner circle using the lengths of the segments bounding the triangle. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The inner circle is a useful measure for defining the coarseness of grids onto which finite element data are mapped and vice versa. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a3ad8c30e7136d47df5ca95907647c538}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_a442a3b96f8359b42ed7d9351deb4d4e0_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a71dcc8b7baf243235d8fea2da93a4e63}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!IntegralNN@{IntegralNN}}
+\index{IntegralNN@{IntegralNN}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{IntegralNN()}{IntegralNN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a71dcc8b7baf243235d8fea2da93a4e63} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+Integral\+NN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{CE}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+integral over interpolation functions 
+
+Computes the \textquotesingle{}mass\textquotesingle{} matrix for the element for the case where the factor which is used to multiply the matrix with is constant on the element and can therefore be put in front of the integral. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The coordinates of the \doxylink{classcsmp_1_1_element}{Element} are retrieved in order to calculate its area. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em CE} & The mass matrix (nodes x nodes) is returned into the second argument of the method. This is a Meschach++ matrix which will be automatically resized if it has not got the correct dimensions. ~\newline
+\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The mass matrix = Integral Ni Nj dx dy dz is explained in many FE text books. For instance in \textquotesingle{}Groundwater Modeling by the Finite \doxylink{classcsmp_1_1_element}{Element} Method"{} AGU Monograph 13 by Jonathan Istok. The resulting matrix is output in its consistent form. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For example, to compute the element \textquotesingle{}capacitance\textquotesingle{} matrix for transient fluid flow. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a84a69958fd3567565d4dc83037664d97}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_a71dcc8b7baf243235d8fea2da93a4e63_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_ac3a06318940bff7b325843665eebec8b}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!N@{N}}
+\index{N@{N}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{N()}{N()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_ac3a06318940bff7b325843665eebec8b} 
+void csmp\+::\+Linear\+Triangle3\+D\+::N (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+element interpolation functions at the point xzy 
+
+Computes the basis functions for this linear triangle element in 3D space at the point \textquotesingle{}xyz\textquotesingle{} within the plane of the triangle. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method uses the data of the \textquotesingle{}\doxylink{classcsmp_1_1_element}{Element}\textquotesingle{} to retrieve nodal coordinates, and the point location supplied as third method argument. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em N} & The values of the 3 linear interpolation functions at the point \textquotesingle{}xyz\textquotesingle{} are returned into the second method argument which is a Meschpp double vector. ~\newline
+\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The interpolation functions are calculated using an approach by Adrian Umpleby (Imperial College) which is based on normals to planes through faces perpendicular to the triangles plane. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a9dcc5734869993fdd19f8839da1cd745}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!N\_AtBaryCenter@{N\_AtBaryCenter}}
+\index{N\_AtBaryCenter@{N\_AtBaryCenter}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{N\_AtBaryCenter()}{N\_AtBaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a9dcc5734869993fdd19f8839da1cd745} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+N\+\_\+\+At\+Bary\+Center (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the values of the interpolation functions at the center of gravity of the element 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a6df28d2a7b4bcaff49cb726d6ef0890b}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!NodesConnectedTo@{NodesConnectedTo}}
+\index{NodesConnectedTo@{NodesConnectedTo}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{NodesConnectedTo()}{NodesConnectedTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a018d54edd6dc5a40eca57ebc20bb25d7} 
+std\+::vector$<$ uint32\+\_\+t $>$ csmp\+::\+Linear\+Triangle3\+D\+::\+Nodes\+Connected\+To (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{node\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the nodes at the other end of the sgment that the argument node is on 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ab7196476d9fb740d91384c6c4521b0f5}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!NodesOfFace@{NodesOfFace}}
+\index{NodesOfFace@{NodesOfFace}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{NodesOfFace()}{NodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a944a1435b382f7dd44fc6b8122015610} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Linear\+Triangle3\+D\+::\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+For this element, the faces are numbered such that face 0 lies opposite of node 0, face 1 node 1 etc. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a32fc14575277846326041fe914209f9a}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a6b419c20f544a1ff1d1a7943ad6f8396}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!NodesOfSegment@{NodesOfSegment}}
+\index{NodesOfSegment@{NodesOfSegment}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{NodesOfSegment()}{NodesOfSegment()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a6b419c20f544a1ff1d1a7943ad6f8396} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+Nodes\+Of\+Segment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segm\+\_\+id}{, }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{snids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+segments are numbered like faces 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a443213e98dc0cc9692bd3eef5a168295}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_a0b487e8ed898104b91cda9dc97ace3cb}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!OutputNodeDataToVTK@{OutputNodeDataToVTK}}
+\index{OutputNodeDataToVTK@{OutputNodeDataToVTK}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{OutputNodeDataToVTK()}{OutputNodeDataToVTK()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_a0b487e8ed898104b91cda9dc97ace3cb} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+Output\+Node\+Data\+To\+VTK (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{var\+\_\+name}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DATA}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Outputs nodal values of a triangle into user-\/specified output file.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The parent element, the output file name to which the extension "{}.\+vtk"{} will be appended automatically, the name of the variable, a data matrix which will contain n-\/colums=nodes and n-\/rows = dimensions of data (n-\/rows=1 = scalar data, n-\/rows=3 = vector data etc.).\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Single elements are output to VTK as polygons in order to test the quality of interpolation and the computed properties directly. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The method will indicate if there is a problem in opening the output file. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a67341585f83bc9d941c67e7a84801248}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_a0b487e8ed898104b91cda9dc97ace3cb_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_aac44d2564ecbf607adba60f6d029b4cf}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!OutputToVTK@{OutputToVTK}}
+\index{OutputToVTK@{OutputToVTK}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{OutputToVTK()}{OutputToVTK()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_aac44d2564ecbf607adba60f6d029b4cf} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+Output\+To\+VTK (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{}\end{DoxyParamCaption})}
+
+Outputs triangle to VTK file for visualization. The scalar variable called \textquotesingle{}sum\+\_\+N\textquotesingle{} sums the values of the interpolation functions at the nodes, and the vector variable \textquotesingle{}derivative\+\_\+N\textquotesingle{} reports the shape function derivatives at each node as vectors.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The parent \textquotesingle{}\doxylink{classcsmp_1_1_element}{Element}\textquotesingle{} and the name of the file to which the triangle shall be output. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Use this together with a tcl script new\+Element\+Viewer.\+tcl if this is available. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_aac44d2564ecbf607adba60f6d029b4cf_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_ae392eaa6606fa4becb4bccb113940f44}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!UnitNormalToFace@{UnitNormalToFace}}
+\index{UnitNormalToFace@{UnitNormalToFace}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{UnitNormalToFace()}{UnitNormalToFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_ae392eaa6606fa4becb4bccb113940f44} 
+void csmp\+::\+Linear\+Triangle3\+D\+::\+Unit\+Normal\+To\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{, }\item[{std\+::vector$<$ double $>$ \&}]{unrml}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+outward pointing normals to the faces that lie on the opposite nodes
+
+\begin{DoxyAuthor}{Author}
+SKM 18/2/2016
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000022}{Test}}]OK -\/ for 3D version \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a39eb6d5a1827783a679870277b4c68b8}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_linear_triangle3_d_aedb176275d71119ec5253b625321608b}\index{csmp::LinearTriangle3D@{csmp::LinearTriangle3D}!Volume@{Volume}}
+\index{Volume@{Volume}!csmp::LinearTriangle3D@{csmp::LinearTriangle3D}}
+\doxysubsubsection{\texorpdfstring{Volume()}{Volume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_linear_triangle3_d_aedb176275d71119ec5253b625321608b} 
+double csmp\+::\+Linear\+Triangle3\+D\+::\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The triangles planar area in 3D is computed as the length of the cross-\/product of the vectors which define the edges 12 and 13 of the triangle. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The parent \textquotesingle{}\doxylink{classcsmp_1_1_element}{Element}\textquotesingle{} object is queried for the node coordinates. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The method returns the computed area. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a16025c5d7f2ac217d2dbedad5d561a06}{csmp\+::\+Finite\+Element}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_linear_triangle3_d_aedb176275d71119ec5253b625321608b_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+elements/Linear\+Triangle3\+D.\+h\item 
+source/modules/integration/finite\+\_\+elements/Linear\+Triangle3\+D.\+cpp\end{DoxyCompactItemize}

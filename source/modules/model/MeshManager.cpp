@@ -91,7 +91,7 @@ size_t MeshManager<dim>::Faces() const
 
   /// returns number of InterFaces=lower-dimensional elements in current mesh
 template<uint32_t dim>
-size_t MeshManager<dim>::InterFaces() const
+size_t MeshManager<dim>::Interfaces() const
  { return interfaces_.size(); }
 
 template<uint32_t dim>
@@ -134,11 +134,11 @@ template<uint32_t dim>
   { return faces_.end(); }
 
 template<uint32_t dim>
-  typename plf::colony<InterFace<dim>>::iterator MeshManager<dim>::InterFacesBegin()
+  typename plf::colony<InterFace<dim>>::iterator MeshManager<dim>::InterfacesBegin()
   { return interfaces_.begin(); }
   
 template<uint32_t dim>
-  typename plf::colony<InterFace<dim>>::iterator MeshManager<dim>::InterFacesEnd()
+  typename plf::colony<InterFace<dim>>::iterator MeshManager<dim>::InterfacesEnd()
   { return interfaces_.end(); }
 
   // const versions
@@ -167,11 +167,11 @@ template<uint32_t dim>
   { return faces_.end(); }
 
 template<uint32_t dim>
-  typename plf::colony<InterFace<dim>>::const_iterator MeshManager<dim>::InterFacesBegin() const
+  typename plf::colony<InterFace<dim>>::const_iterator MeshManager<dim>::InterfacesBegin() const
   { return interfaces_.begin(); }
 
 template<uint32_t dim>
-  typename plf::colony<InterFace<dim>>::const_iterator MeshManager<dim>::InterFacesEnd() const
+  typename plf::colony<InterFace<dim>>::const_iterator MeshManager<dim>::InterfacesEnd() const
   { return interfaces_.end(); }
 
 
@@ -505,6 +505,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  e.ParentFaceID( INSIDE, static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors + 2U )) );
                  if ( outerElement )
                    e.ParentFaceID( OUTSIDE, static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors + 3U )) );
+                 // else, this would be a nullptr that is already initialised as such
                  
                } // end face loop
               
@@ -1264,7 +1265,7 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
                                                     const IntegrationPointVariables& ivars )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-   
+
    // 0. verifying the input
    // pointers
    if ( eptr == nullptr )
@@ -1273,6 +1274,10 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
      csmp_error.Note( ERROR, "MeshManager<dim>::AddBoundaryFace", "face ID does not exist in element");
    if ( eptr->Neighbor(local_face_id) != nullptr )
      csmp_error.Note( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it really located at model boundary?");
+
+   if ( eptr->IsEquidimensional() == false )
+     csmp_error.Note( WARNING, "MeshManager<dim>::AddBoundaryFace", "element must have the same dimension as the model for this method to work");
+
    // is face indeed a boundary face?
    if ( eptr->Neighbor(local_face_id) != nullptr ) {
         cout <<"\n"<<"Element "<< eptr->Idx() <<" "<< parseAbbreviated_FE_Type(eptr->FE_Type()) <<": face "<< local_face_id << endl;
@@ -1296,11 +1301,11 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
      }
 
    // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
-   const size_t face_number{faces_.size()};
+   const size_t global_face_number{faces_.size()};
    typename plf::colony<Face<dim>>::iterator
      fit = faces_.emplace( Face<dim>( *eptr, fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) ),
                                       fvm_manager_, local_face_id, lvars, ivars ) );
-   (*fit).Idx( face_number );
+   (*fit).Idx( global_face_number );
 
    return &(*fit);
 
@@ -2041,7 +2046,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     vector<Face<dim>*> face_ptrs;
-    const long         n_faces_to_build{ distance(first,last) };
+    const auto         n_faces_to_build{ distance(first,last) };
 #if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
     auto               n_elements   = distance(first,last);
     size_t             n_duplicates = duplicatesCheck<dim,Element>( first, last );
@@ -2169,8 +2174,6 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
    for rebuild
    and establishing their connectivity. Since the Face objects are deleted the supplied pointer ranges to them (interior and perimeter) are invalidated
    by this method.
-
-   @param dbase is needed for the inialisation of the LocalVariableStorage associated with the Face objects
 
    @param first iterator to the first FaceConstructionData of the supplied dim-1 region
 
@@ -2440,7 +2443,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
 //       bool found_perimter_interface = false;
        for ( auto& ifit : potential_interfaces){
          //search for perimeter node (inside outside nodes match)
-         for ( uint32_t n{0U}; n<ifit->FE()->Nodes(); ++n){
+         for ( uint32_t n{0U}; n<ifit->FE()->Nodes(); ++n ){
             if (ifit->N(n,INSIDE) == perimeter_node && ifit->MatchingN(n,INSIDE) == ifit->MatchingN(n,OUTSIDE)){
               //We should also have perimeter node on the outside
               assert(ifit->MatchingN(n,OUTSIDE) == perimeter_node );
@@ -2766,6 +2769,9 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
 
     @param dbase a reference to property database needed for the initialisation of the LocalVariableStorage of potential interface variables
     @param interface_nbor_elmts vector of higher-dimensional elements that share a face where the new interface will be created.
+    @param multiplicate_perimeter_nodes whether the nodes on the perimeter should be copied so that they are different in adjacent regions
+    @param outside_elmts output of a set of element pointers to the volumetric elements neighboring the faces of interest
+    
     The iinside elements are first in Element-element face pairs.
     
     @return returns vector of pointers to the newly created InterFace objects.
@@ -3158,7 +3164,7 @@ size_t MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity( typename vector<
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-     long n_nodes_to_delete( distance(first,last) );
+     auto n_nodes_to_delete( static_cast<size_t>(distance(first,last)) );
  
      if ( n_nodes_to_delete == 0 ) return 0U;
 
@@ -3262,8 +3268,6 @@ template<uint32_t dim>
 size_t MeshManager<dim>::DeleteElementsAfterDisconnectingRemainingOnes( typename vector<Element<dim>*>::iterator first,
                                                                         typename vector<Element<dim>*>::iterator last )
  {
-     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-     
      long elmts_to_delete( distance(first,last) );
  
      if ( elmts_to_delete == 0 ) return 0U;
@@ -3441,7 +3445,7 @@ size_t MeshManager<dim>::DeleteFacesAndRepairConnnectivity( typename vector<Face
  {
 //     throw csmp::Exception( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity", "method not tested yet");
 
-     auto faces_to_delete( distance(first,last) );
+     auto faces_to_delete( static_cast<size_t>(distance(first,last)) );
  
      if ( faces_to_delete == 0 ) return 0U;
      
@@ -3500,7 +3504,7 @@ size_t MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity( typename vector
  {
 //     throw csmp::Exception( ERROR, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity", "method not tested yet");
   
-     auto interfaces_to_delete( distance(first,last) );
+     auto interfaces_to_delete( static_cast<size_t>(distance(first,last)) );
  
      if ( interfaces_to_delete == 0 ) return 0U;
      
@@ -4450,9 +4454,9 @@ void MeshManager<dim>::UpdateConnectivity(  typename vector<InterFace<dim>*>::co
     // 0. Finding all Elements sharing a node with the interface
     // ---------------------------------------------------------
     vector<Element<dim>*> element_ptrs;
-    element_ptrs.reserve( distance(first,last) * 3 );
+    element_ptrs.reserve( static_cast<size_t>(distance(first,last) * 3) );
     vector<Node<dim>*> core_node_ptrs;
-    core_node_ptrs.reserve( distance(first,last) * 4 );
+    core_node_ptrs.reserve( static_cast<size_t>(distance(first,last) * 4) );
     
     for ( auto it=first; it!=last; ++it ) {
          // disconnects inner from outer parent element
@@ -4595,9 +4599,9 @@ void MeshManager<dim>::UpdateConnectivity(  typename vector<Face<dim>*>::const_i
     // 0. Finding all Elements sharing a node with the interface
     // ---------------------------------------------------------
     vector<Element<dim>*> element_ptrs;
-    element_ptrs.reserve( distance(first,last) * 3 );
+    element_ptrs.reserve( static_cast<size_t>(distance(first,last) * 3) );
     vector<Node<dim>*> core_node_ptrs;
-    core_node_ptrs.reserve( distance(first,last) * 4 );
+    core_node_ptrs.reserve( static_cast<size_t>(distance(first,last) * 4) );
     
     for ( auto it=first; it!=last; ++it ) {
          // (re)connects inner from outer parent element
@@ -5010,7 +5014,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // elements
   for ( const auto& e : elements_ ) {
       const auto n_nodes{e.Nodes()};
-      for ( auto j{0U}; j<n_nodes; ++j )
+      for ( uint32_t j{0U}; j<n_nodes; ++j )
         vset.Plist( eidx, j, (e.N( j )->Idx()) );
       pmtrl[eidx] = e.Material_ID();
       ++eidx;
@@ -5022,7 +5026,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   if ( !faces_.empty() )
     for ( const auto& f : faces_ ) {
         const auto n_nodes{f.Nodes()};
-        for ( auto j{0U}; j<n_nodes; ++j )
+        for ( uint32_t j{0U}; j<n_nodes; ++j )
           vset.Plist( eidx, j, (f.N( j )->Idx()) );
         ++eidx;
       }
@@ -5031,9 +5035,9 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   if ( !interfaces_.empty() )
     for ( const auto& f : interfaces_ ) {
         const auto n_nodes{f.FE()->Nodes()};
-        for ( auto j{0U}; j<n_nodes; ++j )
+        for ( uint32_t j{0U}; j<n_nodes; ++j )
           vset.Plist( eidx, j, (f.N( j, INSIDE )->Idx()) );
-        for ( auto j{0U}; j<n_nodes; ++j )
+        for ( uint32_t j{0U}; j<n_nodes; ++j )
           vset.Plist( eidx, n_nodes + j, (f.N( j, OUTSIDE )->Idx()) );
         ++eidx;
       }
@@ -5049,10 +5053,19 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       for ( uint32_t j{0U}; j<neighbors; ++j ) {
             const Element<dim>* const ptr = e.Neighbor(j);
             if ( ptr ) {
+                assert( e.FE_Type() == ptr->FE_Type() );
                 assert( ptr->Idx() < elements_.size() );
                 vset.Pfvert( eidx, j, static_cast<int64_t>(ptr->Idx()) );
               }
-            else vset.Pfvert( eidx, j, e.AtBoundary(j) );
+            else {
+                int64_t bflag = e.AtBoundary(j);
+                if ( bflag == 0 ) {
+                   e.Out();
+                   csmp_error.Note( ERROR, "MeshManager<dim>::OutputMeshTo", "'pfvert' atBoundary evaluated to zero");
+                   e.AtBoundary(j);
+                }
+                vset.Pfvert( eidx, j, bflag );
+              }
          }
       ++eidx;
     }
@@ -5092,8 +5105,9 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
           vset.Pfvert( eidx, neighbors + 1U, static_cast<int64_t>(f.OuterParent()->Idx()) );
         }
       else {
-          // getting the boundary placement of the inner element
-          vset.Pfvert( eidx, neighbors + 1U, atBoundary( f.InnerParent(), f.InnerParentFaceID() ) );
+          // getting the placement of the inner element at the boundary (negative number), if it cannot be determined, INTERNAL boundary is set
+          // TODO: perhaps this requires an extra corner case in atBoundary()
+          vset.Pfvert( eidx, neighbors + 1U, std::min(atBoundary( f.InnerParent(), f.InnerParentFaceID() ),INTERNAL) );
         }
       // face id's converted to
       // adding the local numbers of the faces that the Face is collocated with if any
@@ -5112,7 +5126,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     //    they are written in the order in which they are stored in the interface
     //    To simplify things there is always an entry for the intervening element even if there is none.
     const auto neighbors{ f.Neighbors() };
-    for ( auto j{0U}; j<neighbors; ++j ) {
+    for ( uint32_t j{0U}; j<neighbors; ++j ) {
          if ( f.Neighbor(j) != nullptr )
            vset.Pfvert( eidx, j, static_cast<int64_t>(f.Neighbor(j)->Idx()) );
          else
@@ -6239,7 +6253,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // ---------------------------------------------------
   // ---------------------------------------------------
   database.ListVariables( INTER_FACE, properties );
-  const size_t n_interfaces( InterFaces() );
+  const size_t n_interfaces( Interfaces() );
 
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
   {
@@ -6329,7 +6343,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // interface integration point properties
   // --------------------------------------
-  if ( database.ListVariables( INTER_FACE_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
+  if ( database.ListVariables( INTER_FACE_INTEGRATION_POINT, properties ) > 0 && Interfaces() > 0 ) {
     const size_t interface_ips{ (*interfaces_.begin()).IntegrationPoints() };
 
     for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -6436,8 +6450,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // interface sector integration point properties
   // ---------------------------------------------
-  if ( database.ListVariables( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
-    assert( InterFaces() > 0 );
+  if ( database.ListVariables( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && Interfaces() > 0 ) {
+    assert( Interfaces() > 0 );
     const size_t interface_sector_ips{ (*interfaces_.begin()).IntegrationPointsPerSector() };
     const size_t sectors_per_interface{ (*interfaces_.begin()).Sectors() };
 
@@ -6560,8 +6574,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // interface facet integration point properties
   // --------------------------------------------
-  if ( database.ListVariables( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
-    assert( InterFaces() > 0 );
+  if ( database.ListVariables( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 && Interfaces() > 0 ) {
+    assert( Interfaces() > 0 );
     const size_t interface_facet_ips( (*interfaces_.begin()).IntegrationPointsPerFacet() );
     const size_t facets_per_interface( (*interfaces_.begin()).Facets() );
 
@@ -6687,8 +6701,16 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
 
 
-
-
+/// helper function that searches property sets for variables with specific placement
+static bool containsPropertiesWithPlacement( PLACEMENT place,
+                                             map<string,PropertyData>::const_iterator pit,
+                                             const map<string,PropertyData>::const_iterator end ) {
+   while ( pit != end  ) {
+        if ( (*pit).second.Placement() == place ) return true;
+        pit++;
+     }
+   return false;
+}
 
 
   /**
@@ -6703,12 +6725,28 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
-  if ( vset.Vertices()   != nodes_.size() ||
-       vset.Elements()   != elements_.size() ||
-       vset.Faces()      != faces_.size() ||
-       vset.Interfaces() != interfaces_.size() ) {
-       csmp_error.Note( ERROR, "MeshManager<dim>::InputStoredVariablesFrom",
-                         "mismatch between property data sizes and mesh stored in manager; no input." );
+  if ( vset.Vertices() != nodes_.size() &&
+       containsPropertiesWithPlacement( NODE, vset.PropertyValuesBegin(), vset.PropertyValuesEnd() ) ) {
+       csmp_error.Note( WARNING, "MeshManager<dim>::InputStoredVariablesFrom",
+                               "mismatch between number of vset and model nodes; NODE property input aborted." );
+       return;
+    }
+  if ( vset.Elements() != elements_.size() &&
+       containsPropertiesWithPlacement( ELEMENT, vset.PropertyValuesBegin(), vset.PropertyValuesEnd() ) ) {
+       csmp_error.Note( WARNING, "MeshManager<dim>::InputStoredVariablesFrom",
+                               "mismatch between number of vset and model elements; ELEMENT property input aborted." );
+       return;
+    }
+  if ( vset.Faces() != faces_.size() &&
+       containsPropertiesWithPlacement( FACE, vset.PropertyValuesBegin(), vset.PropertyValuesEnd() ) ) {
+       csmp_error.Note( WARNING, "MeshManager<dim>::InputStoredVariablesFrom",
+                               "mismatch between number of vset and model faces; FACE property input aborted." );
+       return;
+    }
+  if ( vset.Interfaces() != interfaces_.size() &&
+       containsPropertiesWithPlacement( INTER_FACE, vset.PropertyValuesBegin(), vset.PropertyValuesEnd() ) ) {
+       csmp_error.Note( WARNING, "MeshManager<dim>::InputStoredVariablesFrom",
+                               "mismatch between number of vset and model interfaces; INTERFACE property input aborted." );
        return;
     }
 
@@ -6870,7 +6908,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U ); // running index
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i{0U}; i<integration_points; ++i ) {
+              for ( uint32_t i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -6883,7 +6921,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i{0U}; i<integration_points; ++i ) {
+              for ( uint32_t i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -6896,7 +6934,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i{0U}; i<integration_points; ++i ) {
+              for ( uint32_t i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -6909,7 +6947,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i{0U}; i<integration_points; ++i ) {
+              for ( uint32_t i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -6922,7 +6960,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i{0U}; i<integration_points; ++i ) {
+              for ( uint32_t i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -6955,9 +6993,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors{ e.Sectors() };
-              for ( auto i{0U}; i<sectors; ++i ) {
+              for ( uint32_t i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector{ e.IntegrationPointsPerSector() };
-                for ( auto j{0U}; j<ips_per_sector; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -6972,9 +7010,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors{ e.Sectors() };
-              for ( auto i{0U}; i<sectors; ++i ) {
+              for ( uint32_t i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector{ e.IntegrationPointsPerSector() };
-                for ( auto j{0U}; j<ips_per_sector; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -6989,9 +7027,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors{ e.Sectors() };
-              for ( auto i{0U}; i<sectors; ++i ) {
+              for ( uint32_t i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector{ e.IntegrationPointsPerSector() };
-                for ( auto j{0U}; j<ips_per_sector; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -7006,9 +7044,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors{ e.Sectors() };
-              for ( auto i{0U}; i<sectors; ++i ) {
+              for ( uint32_t i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector{ e.IntegrationPointsPerSector() };
-                for ( auto j{0U}; j<ips_per_sector; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -7023,9 +7061,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors{ e.Sectors() };
-              for ( auto i{0U}; i<sectors; ++i ) {
+              for ( uint32_t i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector{ e.IntegrationPointsPerSector() };
-                for ( auto j{0U}; j<ips_per_sector; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -7059,9 +7097,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           for ( auto& e : elements_ ) {
             if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
             const auto facets{ e.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
               const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 read( (*pit).second, entry, value );
                 e.Store( i, j, key, value );
                 entry++;
@@ -7076,9 +7114,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets{ e.Facets() };
-              for ( auto i{0U}; i<facets; ++i ) {
+              for ( uint32_t i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
-                for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -7093,9 +7131,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets{ e.Facets() };
-              for ( auto i{0U}; i<facets; ++i ) {
+              for ( uint32_t i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
-                for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -7110,9 +7148,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets{ e.Facets() };
-              for ( auto i{0U}; i<facets; ++i ) {
+              for ( uint32_t i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
-                for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -7127,9 +7165,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets{ e.Facets() };
-              for ( auto i{0U}; i<facets; ++i ) {
+              for ( uint32_t i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
-                for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -7512,7 +7550,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
     assert( database.IsDefined( (*pit).first.c_str() ) );
     const Index key( database.StorageKey( (*pit).first.c_str() ) );
     assert( key.place == INTER_FACE );
-    assert( (*pit).second.Size() / key.dataDepth == InterFaces() );
+    assert( (*pit).second.Size() / key.dataDepth == Interfaces() );
 
     switch ( key.type )
     {
@@ -7982,12 +8020,12 @@ template<uint32_t dim>
 vector<const Node<dim>*> MeshManager<dim>::OrphanNodeVector() const
   {
      // renumbering the Node objects consecutively and creating a corresponding integer vector
-     long counter{0};
+     size_t counter{0};
      for ( const auto& node : nodes_ )  node.Idx( counter++ );
      vector<long> all_nodes( nodes_.size(), UNSPECIFIED );
      iota( all_nodes.begin(), all_nodes.end(), 0 );
  
-     plf::colony<long>  connected_nodes;
+     plf::colony<size_t>  connected_nodes;
  
      for ( const auto& elmt : elements_ )
        for ( auto nit=elmt.NodesBegin(); nit!=elmt.NodesEnd(); ++nit )
@@ -8129,7 +8167,7 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
       if ( parseFiniteElementDimension( eit.FE_Type() ) == highest_spatial_dim )
       {
         // creating a subset with their nodes
-        for ( auto i{0U}; i<eit.Nodes(); ++i ) {
+        for ( uint32_t i{0U}; i<eit.Nodes(); ++i ) {
           assert( eit.N( i ) != nullptr );
           highest_dim_elmt_nodes.insert( eit.N( i ) );
         }
@@ -8160,7 +8198,7 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
         // lower-dimensional elements with nodes that do not belong to the node set of the
         // higher dimensional elements must be boundary elements
         size_t  exterior_nodes( 0U );
-        for ( auto i{0U}; i<e->Nodes(); ++i )
+        for ( uint32_t i{0U}; i<e->Nodes(); ++i )
           if ( !highest_dim_elmt_nodes.count( e->N( i ) ) )
             exterior_nodes++;
 
@@ -8224,10 +8262,10 @@ void MeshManager<dim>::Out() const
          cout << "\nElement ID: " << e.Idx() <<" ("<< parseFiniteElementType(e.FE_Type());
          cout <<"), Boundary flag: " << bound << endl;
          cout << "Member Nodes: " << endl;
-         for ( auto i{0U}; i < e.Nodes(); i++ )
+         for ( uint32_t i{0U}; i < e.Nodes(); i++ )
            cout << e.N( i )->Idx() << "\t";
          cout << "\nNeighbor elements: " << endl;
-         for ( auto i{0U}; i < e.Neighbors(); i++ )
+         for ( uint32_t i{0U}; i < e.Neighbors(); i++ )
            if ( e.Neighbor( i ) != nullptr )
              cout << e.Neighbor( i )->Idx() << "\t";
            else
@@ -8242,10 +8280,10 @@ void MeshManager<dim>::Out() const
   for ( const auto& f : faces_ ) {
         cout << "\nFace ID: " << f.Idx() <<" ("<< parseFiniteElementType(f.FE_Type()) <<")."<< endl;
         cout << "Member Nodes: " << endl;
-        for ( auto i{0U}; i < f.Nodes(); i++ )
+        for ( uint32_t i{0U}; i < f.Nodes(); i++ )
           cout << f.N( i )->Idx() << "\t";
         cout << "\nNeighbor faces: " << endl;
-        for ( auto i{0U}; i < f.Neighbors(); i++ )
+        for ( uint32_t i{0U}; i < f.Neighbors(); i++ )
           if ( f.Neighbor( i ) != nullptr )
             cout << f.Neighbor( i )->Idx() << "\t";
           else
@@ -8261,12 +8299,12 @@ void MeshManager<dim>::Out() const
   for ( const auto& f : interfaces_ ) {
         cout << "\nInterFace ID: " << f.Idx() <<" ("<< parseFiniteElementType(f.FE_Type()) <<")."<< endl;
         cout << "Member Nodes: " << endl;
-        for ( auto i{0U}; i < f.FE()->Nodes(); i++ )
+        for ( uint32_t i{0U}; i < f.FE()->Nodes(); i++ )
           cout << f.N( i, INSIDE )->Idx() << "\t";
-        for ( auto i{0U}; i < f.FE()->Nodes(); i++ )
+        for ( uint32_t i{0U}; i < f.FE()->Nodes(); i++ )
           cout << f.N( i, OUTSIDE )->Idx() << "\t";
         cout << "\nNeighbor faces: " << endl;
-        for ( auto i{0U}; i < f.Neighbors(); i++ )
+        for ( uint32_t i{0U}; i < f.Neighbors(); i++ )
           if ( f.Neighbor( i ) != NULL )
             cout << f.Neighbor( i )->Idx() << "\t";
           else
@@ -8281,7 +8319,7 @@ void MeshManager<dim>::Out() const
   cout << "PARENT ELEMENT INFORMATION FOR ALL NODES: " << endl;
   for ( const auto& n : nodes_ ) {
       cout << "\nNode: " << n.Idx() << ", parent elements: " << endl;
-      for ( auto i = 0u; i < n.Parents(); i++ )
+      for ( uint32_t i = 0u; i < n.Parents(); i++ )
         cout << n.Parent( i )->Idx() << " ";
       cout << endl;
       n_node++;
@@ -8394,12 +8432,12 @@ Step-by-Step Algorithm
 1.	Mark the Elements for Deletion: A unique negative region ID of -999  is assigned to each element that will be deleted. This attribute allows to identify deleted elements without affecting other mesh operations.
 	
 2.	Identify the Halo Neighbors of the Deleted Elements:
-	•	For each element in the set to be deleted, iterate over its neighbors (from the std::vector of neighbor pointers).
-	•	For each face, if the neighboring element on that face is not marked for deletion, mark it as a “halo element” for updating or collect a pointer to it in a separate container as it needs to have its connectivity adjusted.
+		For each element in the set to be deleted, iterate over its neighbors (from the std::vector of neighbor pointers).
+		For each face, if the neighboring element on that face is not marked for deletion, mark it as a halo element for updating or collect a pointer to it in a separate container as it needs to have its connectivity adjusted.
   
 3.	Update the Connectivity of Halo Elements:
-	•	For each halo neighbor identified in the previous step, iterate over its list of neighbors (the neighbor pointers for each face).
-	•	For each face with a neighbor that is marked for deletion, set the corresponding neighbor pointer to nullptr because this connection will become invalid.
+		For each halo neighbor identified in the previous step, iterate over its list of neighbors (the neighbor pointers for each face).
+		For each face with a neighbor that is marked for deletion, set the corresponding neighbor pointer to nullptr because this connection will become invalid.
   
 @todo If the face with the deleted neighbor belongs to a lower dimensional element, it may be a manfold that is potentially  connected to other remaining element(s).
 In this case, replace the deleted neighbor that will be deleted with another adjacent lower-dimensional element sharing its face nodes.
@@ -8408,10 +8446,10 @@ This requires searching because there is no knowledge stored about face-node sha
 Now that these tasks have been completed one can:
 
 4.	Delete the Elements from the Mesh:
-	•	Now that the border neighbors have been updated, you can safely delete the elements in the set marked for deletion.
+		Now that the border neighbors have been updated, you can safely delete the elements in the set marked for deletion.
   
 5.	Clean-Up Neighbor Pointers:
-	•	Remove any redundant or invalid pointers from the std::vector of neighbor pointers in each element to ensure the integrity of your mesh data structure.
+		Remove any redundant or invalid pointers from the std::vector of neighbor pointers in each element to ensure the integrity of your mesh data structure.
 
 @attention function assumes that all elements in the iterator range have the same dimension, i.e. are lines, surfaces or volumes
 
@@ -8622,7 +8660,7 @@ void updateHaloCellConnectivity( typename vector<CELL<dim>*>::iterator first,
                              } );
 
     // 2. collect the halo cells so that their neighbor connectivity can later be updated efficiently
-    set<CELL<dim>* const> halo_cells;
+    set<CELL<dim>*> halo_cells;
     for_each( first, last, [ &halo_cells ](CELL<dim>* cptr) {
                                 const auto n_nbors = cptr->Neighbors();
                                 for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )

@@ -218,7 +218,7 @@ void SKUA_FiniteElementMeshInterface_Test::Test_NodesAndTheirManifolds( const Mo
  */
 void SKUA_FiniteElementMeshInterface_Test::Test_InterfaceNodes( const Model<3U>& model )
  {
-    for ( auto it=model.Mesh().InterFacesBegin(); it!=model.Mesh().InterFacesEnd(); it++ )
+  for ( auto it=model.Mesh().InterfacesBegin(); it!=model.Mesh().InterfacesEnd(); it++ )
       {
           const auto n_nodes{ (*it).FE()->Nodes() };
           for ( auto i{0U}; i<n_nodes; i++ ) {

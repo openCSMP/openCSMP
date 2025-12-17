@@ -1,0 +1,105 @@
+\doxysection{Face\+Construction\+Data.\+h}
+\hypertarget{_face_construction_data_8h_source}{}\label{_face_construction_data_8h_source}\index{source/includes/model/FaceConstructionData.h@{source/includes/model/FaceConstructionData.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ FaceConstructionData.hpp}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 28/03/2016.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Copyright\ ©\ 2016\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FACE\_CONSTRUCTION\_DATA\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FACE\_CONSTRUCTION\_DATA\_H}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ @brief\ Container\ of\ pairs\ of\ pointers\ to\ Element\ objects\ juxtaposed\ along\ a\ shared\ face\ identified\ by\ its\ local\ face\ number.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ Used\ in\ the\ construction\ of\ Boundary\ and\ SplitBoundary\ objects.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ The\ juxtaposed\ elements\ must\ have\ the\ same\ dimension\ as\ the\ model.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ The\ first\ element\ in\ the\ pair\ is\ the\ inside\ one\ and\ the\ second\ one\ the\ outside\ one.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ Material\ values\ identify\ which\ regions\ they\ belong\ to.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ There\ is\ also\ a\ Face\ or\ InterFace\ patch\ number\ used\ to\ identify\ the\ new\ modelsubdomain\ that\ will\ be\ created\ with\ the\ help}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ of\ FaceConstructionData.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ @attention\ FaceConstructionData\ is\ populated\ by\ the\ function}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ \ \ higherDimensionalNeighbors(\ csmp::Element<dim>\&,\ const\ csmp::Index\&\ );}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{FaceConstructionData}}\ \{}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ FaceConstructionData(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ parent\_element,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<Element<dim>*,Element<dim>*>\&\ neighbor\_elements,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<uint32\_t,uint32\_t>\&\ neighbor\_element\_faces,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<\textcolor{keywordtype}{long},\textcolor{keywordtype}{long}>\&\ neighbor\_element\_materials,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ this\_material\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ FaceConstructionData(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ parent\_element,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<Element<dim>*,Element<dim>*>\&\ neighbor\_elements,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<uint32\_t,uint32\_t>\&\ neighbor\_element\_faces,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<\textcolor{keywordtype}{long},\textcolor{keywordtype}{long}>\&\ neighbor\_element\_materials,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ this\_material,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ number\_of\_patch\_this\_data\_belongs\_to\ );}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \textcolor{comment}{//\ NO\ ASSIGMENT\ OPERATOR\ BECAUSE\ ALL\ CLASS\ MEMBERS\ ARE\ CONSTANT}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ inner\ (first)\ and\ out\ (second)\ higher-\/order\ parent\ element}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}{std}}::\mbox{\hyperlink{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}{pair}}<\mbox{\hyperlink{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}{Element}}<\mbox{\hyperlink{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}{dim}}>*,\mbox{\hyperlink{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}{Element}}<\mbox{\hyperlink{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}{dim}}>*>\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_ab7bf5ccab0978b8d13adf8677f7d8e76}{NeighborElements}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{///\ idx\ of\ lower-\/dimensional\ element\ from\ which\ face\ data\ were\ derived\ if\ it\ exists}}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a755fa43ededa0dd4aa4e57b90f47423d}{LowerDimElement}}();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ idx\ of\ element\ on\ the\ opposite\ site\ of\ the\ outward\ pointing\ normal}}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a1361171918c2c7924afc3a684d2fb890}{InnerElement}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ the\ local\ id\ of\ the\ face\ located\ at\ the\ boundary}}
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a82c63b74486f01334a43c03fa35e8fb4}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a82c63b74486f01334a43c03fa35e8fb4}{InnerElementFace}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{///\ idx\ of\ element\ on\ the\ side\ to\ which\ the\ normal\ points\ to}}
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_acf9920ec4e143c7ab0a75e1d0e04aeb5}{OuterElement}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ \ \ \ \ uint32\_t\ OuterElementFace()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{///\ the\ material\ out\ of\ which\ the\ element\ consists\ from\ which\ the\ boundary\ face\ shall\ be\ constructed}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_ae59ebdabe9fff46a778e6e97366daa96}{ElementMaterial}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{///\ in\ the\ order:\ 1)\ parent,\ 2)\ inner,\ 3)\ outer}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a606fe32e8a1db262baf0fd2946f54eaa}{Materials}}(\ std::vector<\textcolor{keywordtype}{long}>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ Returns\ the\ materials\ of\ the\ neighboring\ higher-\/dimensional\ elements,\ inside\ followed\ by\ outside}}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a1b1e754e5b677491df4bc27ddaf955f3}{std}}::\mbox{\hyperlink{classcsmp_1_1_face_construction_data_a1b1e754e5b677491df4bc27ddaf955f3}{pair}}<\textcolor{keywordtype}{long},\textcolor{keywordtype}{long}>\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a1b1e754e5b677491df4bc27ddaf955f3}{Materials}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ identifier\ of\ the\ boundary\ that\ the\ face\ will\ belong\ to}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face_construction_data_a9e84a255cf7065383d4dfc0195f9846c}{PatchNumber}}(\ uint32\_t\ number\ );}
+\DoxyCodeLine{00076\ \ \ \ \ uint32\_t\ PatchNumber()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00081\ \ \ \ \ FaceConstructionData();}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dim\_m1\_element\_;\ \textcolor{comment}{///<\ idx\ of\ lower-\/dimensional\ parent\ element}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{const}\ std::pair<Element<dim>*,Element<dim>*>\ neighbors\_;\ \ \ \ \textcolor{comment}{///<\ indices\ of\ higher-\/dimensional\ elements\ on\ inside\ (first)\ and\ outside\ (second)}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{const}\ std::pair<uint32\_t,uint32\_t>\ \ \ \ \ \ \ \ \ \ \ nbor\_faces\_;\ \ \ \textcolor{comment}{///<\ matching\ faces\ on\ inside\ (first)\ and\ outside\ (second)}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{const}\ std::pair<\textcolor{keywordtype}{long},\textcolor{keywordtype}{long}>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ materials\_;\ \ \ \ \textcolor{comment}{///<\ integer\ codified\ juxtaposed\ regions}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ material\_;\ \ \ \ \ \textcolor{comment}{///<\ of\ the\ element\ from\ which\ the\ Face\ shall\ be\ constructed}}
+\DoxyCodeLine{00089\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ patch\_number\_;\ \textcolor{comment}{///<\ unique\ identifier\ for\ the\ internal\ boundary\ patch\ this\ data\ relates\ to}}
+\DoxyCodeLine{00090\ \};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{comment}{///\ finds\ the\ neighbors\ of\ dim-\/1\ element,\ and\ their\ faces\ that\ connect\ to\ it;\ index\ records\ neighbor\ materials}}
+\DoxyCodeLine{00094\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00095\ \mbox{\hyperlink{classcsmp_1_1_face_construction_data}{FaceConstructionData}}<dim>\ \ \mbox{\hyperlink{namespacecsmp_ad5202c6b521360ae1a186a5452878a3c}{higherDimensionalNeighbors}}(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ );}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ FACE\_CONSTRUCTION\_DATA\_H\ */}}
+
+\end{DoxyCode}

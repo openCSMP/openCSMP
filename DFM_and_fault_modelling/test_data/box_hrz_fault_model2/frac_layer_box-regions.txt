@@ -1,0 +1,10 @@
+frac_layer_box-regions.txt
+no properties
+MATRIX
+BACK
+BOTTOM
+FRONT
+LEFT
+RIGHT
+TOP
+FRACTURE

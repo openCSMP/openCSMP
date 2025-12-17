@@ -1,0 +1,78 @@
+\doxysection{csmp\+::FRED\+\_\+\+Interface Class Reference}
+\hypertarget{classcsmp_1_1_f_r_e_d___interface}{}\label{classcsmp_1_1_f_r_e_d___interface}\index{csmp::FRED\_Interface@{csmp::FRED\_Interface}}
+
+
+FRED was a DFN-\/modelling consortium run by Golder Associates \texorpdfstring{$<$}{<}2004.  
+
+
+
+
+{\ttfamily \#include $<$FRED\+\_\+\+Interface.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::FRED\+\_\+\+Interface\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=253pt]{classcsmp_1_1_f_r_e_d___interface__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a5c91de4357edad2cf4ee54135f8d8d94}\label{classcsmp_1_1_f_r_e_d___interface_a5c91de4357edad2cf4ee54135f8d8d94} 
+void {\bfseries Initialize\+From\+\_\+\+FRED\+\_\+\+File} (const char \texorpdfstring{$\ast$}{*}ffb\+\_\+file)
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a695cf1e9ee36e6de13ba0edee05fd4ac}\label{classcsmp_1_1_f_r_e_d___interface_a695cf1e9ee36e6de13ba0edee05fd4ac} 
+double {\bfseries Bounding\+Box} (\mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} \&pmin, \mbox{\hyperlink{classmjl_1_1_point3_d}{mjl\+::\+Point3D}} \&pmax) const
+\begin{DoxyCompactList}\small\item\em returns volume of box \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_f_r_e_d___interface_a44dd68dc4efcc7a2481885888b999c98}{Move\+Geometry\+To\+Origin}} ()
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a46d74cd735de168b8b2406bee3c8d5d0}\label{classcsmp_1_1_f_r_e_d___interface_a46d74cd735de168b8b2406bee3c8d5d0} 
+void {\bfseries Scale\+Geometry} (double xfac, double yfac, double zfac)
+\begin{DoxyCompactList}\small\item\em scales geometry by supplied factors \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_ac3de192dc465b95ad50020b92fc73a59}\label{classcsmp_1_1_f_r_e_d___interface_ac3de192dc465b95ad50020b92fc73a59} 
+void {\bfseries Output\+To\+DXF} (const char \texorpdfstring{$\ast$}{*}dxf\+\_\+file) const
+\begin{DoxyCompactList}\small\item\em writes entities only DXF file compatible with DXF 12 or earlier \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a5e1c48b6389015a83a261f256f62306c}\label{classcsmp_1_1_f_r_e_d___interface_a5e1c48b6389015a83a261f256f62306c} 
+void {\bfseries Output\+To\+TETIN} (const char \texorpdfstring{$\ast$}{*}tetin\+\_\+file) const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a9636379f928e09603ec45e66d4e942ae}\label{classcsmp_1_1_f_r_e_d___interface_a9636379f928e09603ec45e66d4e942ae} 
+void {\bfseries Output\+Selected\+Regions} (const char \texorpdfstring{$\ast$}{*}sregions) const
+\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a446a58f97275a6553588dbd080f48732}\label{classcsmp_1_1_f_r_e_d___interface_a446a58f97275a6553588dbd080f48732} 
+void {\bfseries Output\+Selected\+Fracture\+Diameters} (const char \texorpdfstring{$\ast$}{*}sregions) const
+\begin{DoxyCompactList}\small\item\em outputs fracture numbers and diameters to text \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a53802c82475ad4f27ada166eeab67861}\label{classcsmp_1_1_f_r_e_d___interface_a53802c82475ad4f27ada166eeab67861} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+FRED was a DFN-\/modelling consortium run by Golder Associates \texorpdfstring{$<$}{<}2004. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_f_r_e_d___interface_a44dd68dc4efcc7a2481885888b999c98}\index{csmp::FRED\_Interface@{csmp::FRED\_Interface}!MoveGeometryToOrigin@{MoveGeometryToOrigin}}
+\index{MoveGeometryToOrigin@{MoveGeometryToOrigin}!csmp::FRED\_Interface@{csmp::FRED\_Interface}}
+\doxysubsubsection{\texorpdfstring{MoveGeometryToOrigin()}{MoveGeometryToOrigin()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_f_r_e_d___interface_a44dd68dc4efcc7a2481885888b999c98} 
+void csmp\+::\+FRED\+\_\+\+Interface\+::\+Move\+Geometry\+To\+Origin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+places minimum xyz coordinate of all fractures into the origin of the coordinate system Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_f_r_e_d___interface_a44dd68dc4efcc7a2481885888b999c98_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Fracman/FRED\+\_\+\+Interface.\+h\item 
+source/modules/interfaces/\+Fracman/FRED\+\_\+\+Interface.\+cpp\end{DoxyCompactItemize}

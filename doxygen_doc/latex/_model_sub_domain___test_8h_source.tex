@@ -1,0 +1,135 @@
+\doxysection{Model\+Sub\+Domain\+\_\+\+Test.\+h}
+\hypertarget{_model_sub_domain___test_8h_source}{}\label{_model_sub_domain___test_8h_source}\index{tests/unit/ModelSubDomain\_Test.h@{tests/unit/ModelSubDomain\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ ModelSubDomain\_Test.hpp}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_GitHub\_UnitTests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 25/12/2016.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2016\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ModelSubDomain\_Test\_hpp}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ModelSubDomain\_Test\_hpp}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_sub_domain_8h}{"{}ModelSubDomain.h"{}}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__math_utilities_8h}{"{}CSMP\_mathUtilities.h"{}}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_box_8h}{"{}Box.h"{}}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**\ Tests\ the\ functionality\ of\ the\ base\ class\ of\ Region,\ Boundary\ and\ SplitBoundary}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ Only\ tests\ selected\ less\ frequently\ used,\ less\ obvious\ functionality\ that\ requires\ testing.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ Functions\ involving\ variables\ require\ testing\ in\ 2\ and\ 3D.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ \ \ \ ///\ deletes\ nullptr\ cells,\ rebuilds\ node\ vector,\ sorts\ everything\ and\ re-\/establishes\ the\ perimeter\ face\ vectors\ after\ modifications\ of\ cells}}
+\DoxyCodeLine{00024\ \textcolor{comment}{@todo\ \ \ \ void\ RebuildSubDomainAfterChangeOfCellVector();}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ ///\ rebuilds\ subdomain\ on\ the\ basis\ of\ the\ cells\ that\ will\ be\ selected\ according\ to\ the\ supplied\ property\ constraints}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ void\ UpdateCellMembershipApplyingConstraints(\ typename\ std::vector<CELL<dim>*>::const\_iterator\ master\_domain\_start,}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ typename\ std::vector<CELL<dim>*>::const\_iterator\ master\_domain\_end,}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ PropertyConstraints\&\ );}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ ///\ removes\ any\ cells\ or\ node\ pointers\ that\ were\ set\ to\ zero\ elsewhere;\ returns\ number\ of\ cells\ removed}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ size\_t\ RemoveNullPointerCells();}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ ///\ reference\ counting-\/based\ unique\ domain\ identifier\ \ (0..n-\/1)}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ size\_t\ DomainIndex()\ const;}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ bool\ IsContiguous()\ const;}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ std::pair<CELL\_SHAPE,bool>\ \ SingleCellShapeDomain()\ const;}}
+\DoxyCodeLine{00040\ \textcolor{comment}{}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ ///\ output\ coordinates\ to\ user-\/defined\ vector\ variable\ [x1,y1,z1,...xn,yn,zn]}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ void\ AssignNodeCoordinatesTo(\ const\ char*\ vector\_prop\ );}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ ///\ assigment\ of\ coordinate\ component\ 'x','y','z'\ to\ scalar\ variable\ of\ choice}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ void\ AssignNodeCoordinatesTo(\ const\ char*\ scalar\_prop,\ char\ coord\ );}}
+\DoxyCodeLine{00046\ \textcolor{comment}{}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ ///\ characteristics\ like\ 'length',\ 'area',\ 'volume'\ ,\ 'aspect\ ratio',\ 'inner\ radius'\ are\ assigned\ to\ user-\/defined\ variable}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ void\ AssignCellCharacteristicsTo(\ const\ char*\ characteristic,\ const\ char*\ var\ );}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ template<typename\ Var>}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ void\ InputPropertyValue(\ const\ char*\ input\_prop,\ const\ Var\&\ new\_value,\ SUBDOMAIN\_PART\ sd=COMPLETE\ );}}
+\DoxyCodeLine{00052\ \textcolor{comment}{}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ ///\ as\ InputPropertyValue,\ but\ with\ overwrite\ protection\ for\ variable\ components\ that\ have\ the\ flag\ 'do\_not\_overwrite'}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ template<typename\ Var>}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ void\ InputPropertyValue(\ const\ char*\ input\_prop,\ const\ Var\&\ new\_value,\ VARIABLE\_FLAG\ do\_not\_overwrite,\ SUBDOMAIN\_PART\ sd=COMPLETE\ );}}
+\DoxyCodeLine{00056\ \textcolor{comment}{}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ ///\ changes\ the\ flag\ of\ the\ scalar\ variable\ 'property'\ to\ new\ value;\ applied\ either\ in\ the\ entire\ subdomain\ or\ its\ interior\ or\ perimeter}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ void\ ChangePropertyStatus(\ const\ char*\ property,}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VARIABLE\_FLAG\ new\_status\_of\_scalar,}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SUBDOMAIN\_PART=COMPLETE\ );}}
+\DoxyCodeLine{00061\ \textcolor{comment}{}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ ///\ changes\ the\ flag\ of\ the\ scalar\ variable\ 'property'\ to\ new\ value\ if\ the\ scalar\ variable\ is\ withing\ the\ specified\ range}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ void\ ChangePropertyStatusWhere(\ const\ char*\ property,}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VARIABLE\_FLAG\ new\_status\_of\_scalar,}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ double\ min\_value\_to\_change,}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ double\ max\_value\_to\_change\ );}}
+\DoxyCodeLine{00067\ \textcolor{comment}{}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ ///\ changes\ the\ flags\ of\ the\ vector\ variable\ 'property'\ to\ new\ value;\ applied\ either\ in\ the\ entire\ subdomain\ or\ its\ interior\ or\ perimeter}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ void\ ChangePropertyStatus(\ const\ char*\ property,}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ std::vector<VARIABLE\_FLAG>\&\ new\_status,}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SUBDOMAIN\_PART=COMPLETE\ );}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ ///\ changes\ the\ flag\ of\ the\ vector\ variable\ 'property'\ to\ new\ value\ if\ the\ scalar\ variable\ is\ withing\ the\ specified\ range}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ void\ ChangePropertyStatusWhere(\ const\ char*\ property,}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ std::vector<VARIABLE\_FLAG>\&\ new\_status,}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ double\ min\_value\_to\_change,}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ double\ max\_value\_to\_change\ );}}
+\DoxyCodeLine{00078\ \textcolor{comment}{}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ ///\ changes\ the\ flag\ of\ a\ particular\ variable\ component\ to\ new\ value;\ applied\ either\ in\ the\ entire\ subdomain\ or\ its\ interior\ or\ perimeter}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ void\ ChangePropertyStatus(\ const\ char*\ property,}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ component,}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VARIABLE\_FLAG\ new\_status,}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SUBDOMAIN\_PART=COMPLETE\ );}}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ ///\ changes\ the\ flag\ of\ a\ particular\ variable\ component\ to\ new\ value\ if\ the\ scalar\ variable\ is\ withing\ the\ specified\ range}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ void\ ChangePropertyStatusWhere(\ const\ char*\ property,}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ component,}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VARIABLE\_FLAG\ new\_status,}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ double\ min\_value\_to\_change,}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ double\ max\_value\_to\_change\ );}}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ ///\ by\ default\ (i=0)\ returns\ status\ of\ scalar\ variable\ or\ first\ component\ of\ a\ vector\ or\ tensor\ variable;\ if\ i>0\ flag\ of\ corresponding\ component\ is\ returned}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ VARIABLE\_FLAG\ \ PropertyStatus(\ const\ char*\ variable,\ SUBDOMAIN\_PART\ flag=COMPLETE\ ,\ uint32\_t\ i=0\ )\ const;}}
+\DoxyCodeLine{00094\ \textcolor{comment}{}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ void\ InterpolateNodeToCellProperty(\ const\ char*\ nprop,\ const\ char*\ eprop\ );}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ void\ InterpolateNodeToIntegrationPointProperty(\ const\ char*\ nprop,\ const\ char*\ eprop\ );}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ void\ InterpolateIntegrationPointToCellProperty(\ const\ char*\ cprop,\ const\ char*\ eprop\ );}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ void\ ExtrapolateCellToIntegrationPointProperty(\ const\ char*\ eprop,\ const\ char*\ cprop\ );}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ void\ ExtrapolateCellToFacetIntegrationPointProperty(\ const\ char*\ eprop,\ const\ char*\ fipprop\ );}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ void\ ExtrapolateCellToNodeProperty(\ const\ char*\ eprop,\ const\ char*\ nprop,\ bool\ by\_distance=true\ );}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ void\ ExtrapolateIntegrationPointToNodeProperty(\ const\ char*\ cprop,\ const\ char*\ nprop\ );}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ ///\ arithmetic\ (number\ as\ opposed\ to\ volume\ weighted)\ average}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ double\ Average(\ const\ char*\ property\ )\ const;}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ bool\ \ \ CopyGradientOfProperty\_A\_To\_B(\ const\ char*\ node\_prop,\ const\ char*\ cell\_prop\ );}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ void\ \ \ CopyReplace(\ const\ char*\ from,\ const\ char*\ to\ );}}
+\DoxyCodeLine{00107\ \textcolor{comment}{}}
+\DoxyCodeLine{00108\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00109\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test}{ModelSubDomain\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00110\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test_afe7329263a099250faec64ad329e477a}{run}}();}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{///\ tests\ method\ that\ creates\ neighbor\ connectivity\ inside\ of\ CSMP}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test_a65fd6d69a0b13edad52be4346a4953f5}{Test\_EstablishNeighborConnectivity}}();}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_RebuildCellAndNodeVectors();}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{///\ compares\ node\ locations\ and\ connectivity}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim,\textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ simplicial\_complex>}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test_a851b5401af4af54fb07b27d22fb361cb}{CompareModelSubdomains}}(\ \textcolor{keyword}{const}\ ModelSubDomain<dim,simplicial\_complex>\&,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ ModelSubDomain<dim,simplicial\_complex>\&,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose\ );}
+\DoxyCodeLine{00123\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00125\ \};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ ModelSubDomain\_Test\_hpp\ */}}
+
+\end{DoxyCode}

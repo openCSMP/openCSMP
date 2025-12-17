@@ -156,7 +156,7 @@ Node<dim>::~Node()
     That must be coordinate and parent elements
 */
 template<uint32_t dim>
-bool  Node<dim>::operator==( const Node<dim>& nd )
+bool  Node<dim>::operator==( const Node<dim>& nd ) const
  {
     if ( &nd == this ) return true;
     if ( idx_ != nd.idx_ ) return false;

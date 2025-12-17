@@ -1,0 +1,326 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_grid_node" kind="class" language="C++" prot="public">
+    <compoundname>csmp::GridNode</compoundname>
+    <basecompoundref refid="classcsmp_1_1_point_3_013_u_01_4" prot="public" virt="non-virtual">csmp::Point&lt; 3U &gt;</basecompoundref>
+    <includes refid="_polygon_grid_8h" local="no">PolygonGrid.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_grid_node_1a700e7d1c04f1ad74f8bff41a8904d0c5" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::GridNode::idx_</definition>
+        <argsstring></argsstring>
+        <name>idx_</name>
+        <qualifiedname>csmp::GridNode::idx_</qualifiedname>
+        <initializer>= std::numeric_limits&lt;uint32_t&gt;::max()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="35" column="12" bodyfile="source/includes/interfaces/Eclipse/PolygonGrid.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1aa83b515bfc2c111cd582e3669e909475" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GridNode::GridNode</definition>
+        <argsstring>()</argsstring>
+        <name>GridNode</name>
+        <qualifiedname>csmp::GridNode::GridNode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="17" column="5" bodyfile="source/includes/interfaces/Eclipse/PolygonGrid.h" bodystart="17" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a57fc1e921cf11b5c1bfe00de47793c84" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GridNode::GridNode</definition>
+        <argsstring>(size_t index, const Point&lt; 3U &gt; &amp;)</argsstring>
+        <name>GridNode</name>
+        <qualifiedname>csmp::GridNode::GridNode</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="18" column="5" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="11" bodyend="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a2bd3e70856f8e51b4b9fec6d07ed2941" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GridNode::GridNode</definition>
+        <argsstring>(const GridNode &amp;)</argsstring>
+        <name>GridNode</name>
+        <qualifiedname>csmp::GridNode::GridNode</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> &amp;</type>
+          <defname>gn</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="19" column="5" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="17" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a1a352b7ea69a48bdc7249187a843da96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> &amp;</type>
+        <definition>GridNode &amp; csmp::GridNode::operator=</definition>
+        <argsstring>(const GridNode &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::GridNode::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> &amp;</type>
+          <defname>gn</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="21" column="14" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="23" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a6be02eaef43880fc2df45655099334f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::GridNode::operator==</definition>
+        <argsstring>(const GridNode &amp;)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::GridNode::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> &amp;</type>
+          <defname>gn</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="23" column="10" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="32" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1aaf3e03b445affd83eacc7ee5f8f0688d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::GridNode::GetIdx</definition>
+        <argsstring>() const</argsstring>
+        <name>GetIdx</name>
+        <qualifiedname>csmp::GridNode::GetIdx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="25" column="12" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a16f530f062ba95deb31079e9f3268e3e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::GridNode::IsNullIdx</definition>
+        <argsstring>() const</argsstring>
+        <name>IsNullIdx</name>
+        <qualifiedname>csmp::GridNode::IsNullIdx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="26" column="10" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="45" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a10088aff6b1a78e19cdb1e5f42c45ead" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+        <definition>const csmp::Point&lt; 3U &gt; &amp; csmp::GridNode::GetPoint</definition>
+        <argsstring>() const</argsstring>
+        <name>GetPoint</name>
+        <qualifiedname>csmp::GridNode::GetPoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="27" column="23" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="52" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a5da1d81d334245cfb39bf7fa9fcfba18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+        <definition>csmp::Point&lt; 3U &gt; &amp; csmp::GridNode::GetPoint</definition>
+        <argsstring>()</argsstring>
+        <name>GetPoint</name>
+        <qualifiedname>csmp::GridNode::GetPoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="28" column="17" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="58" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a3edbfc602296fd273ff0aa02d5f43b1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GridNode::AssignNullIdx</definition>
+        <argsstring>()</argsstring>
+        <name>AssignNullIdx</name>
+        <qualifiedname>csmp::GridNode::AssignNullIdx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="30" column="10" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="64" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a517f11ad3ecb7f149393ccbfe0d940ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GridNode::AssignIdx</definition>
+        <argsstring>(size_t)</argsstring>
+        <name>AssignIdx</name>
+        <qualifiedname>csmp::GridNode::AssignIdx</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <defname>idx</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="31" column="10" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_grid_node_1a96b86707306f8d11a104d1d28e07f9c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GridNode::AssignPoint</definition>
+        <argsstring>(const csmp::Point&lt; 3U &gt; &amp;)</argsstring>
+        <name>AssignPoint</name>
+        <qualifiedname>csmp::GridNode::AssignPoint</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">csmp::Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="32" column="10" bodyfile="source/modules/interfaces/Eclipse/PolygonGrid.cpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>refactored - strictly 3D</para>
+<para><xrefsect id="todo_1_todo000119"><xreftitle>Todo</xreftitle><xrefdescription><para>check whether this class is needed at all, if so, remove all un-used interfaces. </para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::GridNode</label>
+        <link refid="classcsmp_1_1_grid_node"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Point&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_point"/>
+      </node>
+      <node id="2">
+        <label>csmp::Point&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_point_3_013_u_01_4"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::GridNode</label>
+        <link refid="classcsmp_1_1_grid_node"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Point&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_point"/>
+      </node>
+      <node id="2">
+        <label>csmp::Point&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_point_3_013_u_01_4"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/PolygonGrid.h" line="15" column="1" bodyfile="source/includes/interfaces/Eclipse/PolygonGrid.h" bodystart="15" bodyend="36"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_grid_node_1a517f11ad3ecb7f149393ccbfe0d940ad" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>AssignIdx</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a3edbfc602296fd273ff0aa02d5f43b1a" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>AssignNullIdx</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a96b86707306f8d11a104d1d28e07f9c1" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>AssignPoint</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1ac6c2360e095124726edded027620a0a8" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>CoincidesWithWithinTolerance</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1aba408d39bf5a2216bae06cc6d254401e" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>CoordinateArray</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a3678fd1960c64bbbb04f10e48c970216" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Coordinates</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a1aa61ca2f9a6acce71b7fd5a7a2a4eb8" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>DistanceTo</name></member>
+      <member refid="classcsmp_1_1_grid_node_1aaf3e03b445affd83eacc7ee5f8f0688d" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>GetIdx</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a10088aff6b1a78e19cdb1e5f42c45ead" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>GetPoint</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a5da1d81d334245cfb39bf7fa9fcfba18" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>GetPoint</name></member>
+      <member refid="classcsmp_1_1_grid_node_1aa83b515bfc2c111cd582e3669e909475" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>GridNode</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a57fc1e921cf11b5c1bfe00de47793c84" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>GridNode</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a2bd3e70856f8e51b4b9fec6d07ed2941" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>GridNode</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a700e7d1c04f1ad74f8bff41a8904d0c5" prot="private" virt="non-virtual"><scope>csmp::GridNode</scope><name>idx_</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a7c2ba6ae4eb7ec45cf48a24180b0a98a" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>IsBetween</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a16f530f062ba95deb31079e9f3268e3e" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>IsNullIdx</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a718833119239623d0c4c0328a7645738" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Length</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a4c5337efa0b28e6f712b52c86801aa2d" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>NormalizeLengthTo</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a8bb8d4bbaeb05d8804b05d8a0392dca7" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a631cec8c9e3d6d238e813976cdc4c95c" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1aabf9f0b7ba7def0e649db5f24752b0f9" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a311ddeeaa9a7885ed63fec760cddcc8f" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a32c9c65531a5a3710664f406a2daa4ee" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1ada8e5cb93fdc5ee290064041e80475ac" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a2df9d1801158306e4e759f9c6fa45fb7" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a08c545dbc72ada8f0c8ab5b8e03f7023" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a22faf1af9daf33994c063bd545d94a98" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a8da89a885b041d4b70a0b6f1cde14b72" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a4b5d7eb8d4f16cb93efcc2709b6a4877" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1aa83c52b04bfaeac1195e7bad8eeeadc6" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1af923accbfe61ffd991d04f662e8363fd" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1ac9c6beba6acef059c070be0c7f3e205b" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a647453d29bcd73deb60805744c79a504" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a4a2e6fe46b397a14c371178210411380" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a5ac5693ea1b940969c89f20852310219" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1ad74f7bb95a5a280a2b9ca6191fbd8cbe" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a1a352b7ea69a48bdc7249187a843da96" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a388bf2607b6d4e0616aa76eee54ce127" prot="public" virt="non-virtual" ambiguityscope="csmp::Point&lt; 3U &gt;::"><scope>csmp::GridNode</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_grid_node_1a6be02eaef43880fc2df45655099334f2" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1aa5a6e63db22661ee0d18ae33368d49bd" prot="public" virt="non-virtual" ambiguityscope="csmp::Point&lt; 3U &gt;::"><scope>csmp::GridNode</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a8f3ec9994dbfb5875c44345123717e0f" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator&gt;</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1aac3ba43e28dc65e894577a87f78efd35" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a9d854635cfc857a8bf8d895b11b1590c" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a962979ac8a94b8e4567546bc9d1edd30" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1ab2448e7de4a44c373e345eb5f47af246" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Point</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a5e588add5f2fe8f36f67b794127c279c" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Point</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1af93cc91295c9a34a2cf578c63b3d5377" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Point</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1afee87282ff5988a7d59f814b611090d7" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Point</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a1b7493bc304884071e436cf6168c8894" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Set</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1abf0bd598e447a7db5d386246f99cacd2" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Set</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1aad8a406309e8e4fd5b84e482e4e1df23" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>Set</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a542e8670565ec3328b90ad524f40c613" prot="public" virt="non-virtual"><scope>csmp::GridNode</scope><name>SquaredLength</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a23cce1ba0e45f12b0fac87dd7683c52e" prot="protected" virt="non-virtual"><scope>csmp::GridNode</scope><name>x_</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a6deec54c5876c243fd6e75cac9008eed" prot="protected" virt="non-virtual"><scope>csmp::GridNode</scope><name>y_</name></member>
+      <member refid="classcsmp_1_1_point_3_013_u_01_4_1a663de1401fd3ed715fa6e585e0965201" prot="protected" virt="non-virtual"><scope>csmp::GridNode</scope><name>z_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

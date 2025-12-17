@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_mesh_patch" kind="class" language="C++" prot="public">
+    <compoundname>csmp::MeshPatch</compoundname>
+    <includes refid="_mesh_patch_8h" local="no">MeshPatch.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_mesh_patch_1a2ec713f21216afe7cee7804d364ed7f4" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref>, <ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> * &gt;</type>
+        <definition>std::map&lt;CSMP_FEM_TYPE,FiniteElement*&gt; csmp::MeshPatch&lt; dim &gt;::fe_ptrs_</definition>
+        <argsstring></argsstring>
+        <name>fe_ptrs_</name>
+        <qualifiedname>csmp::MeshPatch::fe_ptrs_</qualifiedname>
+        <briefdescription>
+<para>finite-element pointers used in the FE policy </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="54" column="15" bodyfile="source/includes/model/MeshPatch.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mesh_patch_1a5ab2db3f0085821a92a5910085286529" prot="private" static="no" mutable="no">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &gt;</type>
+        <definition>plf::colony&lt;Node&lt;dim&gt; &gt; csmp::MeshPatch&lt; dim &gt;::nodes_</definition>
+        <argsstring></argsstring>
+        <name>nodes_</name>
+        <qualifiedname>csmp::MeshPatch::nodes_</qualifiedname>
+        <briefdescription>
+<para>nodes (if they are pre-existing, a light copy without properties is made) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="55" column="34" bodyfile="source/includes/model/MeshPatch.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mesh_patch_1ac92300a3d5e08dabf12505eabed71bbb" prot="private" static="no" mutable="no">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &gt;</type>
+        <definition>plf::colony&lt;Element&lt;dim&gt; &gt; csmp::MeshPatch&lt; dim &gt;::elements_</definition>
+        <argsstring></argsstring>
+        <name>elements_</name>
+        <qualifiedname>csmp::MeshPatch::elements_</qualifiedname>
+        <briefdescription>
+<para>elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="56" column="31" bodyfile="source/includes/model/MeshPatch.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mesh_patch_1a49d43431dd221652a4e0bb3a5d49a22d" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gae70f4082919c7730a8934bfcac658ea2" kindref="member">CELL_SHAPE</ref></type>
+        <definition>CELL_SHAPE csmp::MeshPatch&lt; dim &gt;::cell_dimension_</definition>
+        <argsstring></argsstring>
+        <name>cell_dimension_</name>
+        <qualifiedname>csmp::MeshPatch::cell_dimension_</qualifiedname>
+        <briefdescription>
+<para>types of elements in the patch </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="57" column="45" bodyfile="source/includes/model/MeshPatch.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a72de8a95992b3e14d60b9137d9c96073" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MeshPatch&lt; dim &gt;::MeshPatch</definition>
+        <argsstring>(CELL_SHAPE cs)</argsstring>
+        <name>MeshPatch</name>
+        <qualifiedname>csmp::MeshPatch::MeshPatch</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gae70f4082919c7730a8934bfcac658ea2" kindref="member">CELL_SHAPE</ref></type>
+          <declname>cs</declname>
+        </param>
+        <briefdescription>
+<para>specify whether this is a volume, surface or line element patch </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="32" column="14" bodyfile="source/includes/model/MeshPatch.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a59427cdb469c501b7d31b64cf1bee212" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::MeshPatch&lt; dim &gt;::BuildInterveningPatch</definition>
+        <argsstring>(const std::vector&lt; std::pair&lt; std::pair&lt; Element&lt; dim &gt; *, uint32_t &gt;, std::pair&lt; Element&lt; dim &gt; *, uint32_t &gt; &gt; &gt; &amp;, bool copy_nodes, std::vector&lt; Node&lt; dim &gt; * &gt; perimeter_node_ptrs)</argsstring>
+        <name>BuildInterveningPatch</name>
+        <qualifiedname>csmp::MeshPatch::BuildInterveningPatch</qualifiedname>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; std::pair&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *, uint32_t &gt;, std::pair&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *, uint32_t &gt; &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>copy_nodes</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; * &gt;</type>
+          <declname>perimeter_node_ptrs</declname>
+        </param>
+        <briefdescription>
+<para>creates an interconnected element patch from the shared faces of the supplied elements; replicates nodes upon request, and returns perimeter nodes and size of patch </para>
+        </briefdescription>
+        <detaileddescription>
+<para>&lt; inside element and its outside face number outside element and inside face number</para>
+<para>Creates an interconnected element patch from the shared faces of the supplied elements. There is no property storage associated with these elements from the start. The elements are rather barebone.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>input_elmts</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pairs of highest-dim elements that share a face that will be turned into a new lower-dimensional element </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>copy_nodes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the Elements already share nodes, but light copies of these are made when true </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>perimeter_node_ptrs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>whether copies are made or not, the method returns vector of pointers of the perimeter nodes of the new element patch </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the number of new elements in the patch </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="35" column="12" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="80" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a91b2cd56af3c4eb464d0162b59672efa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::MeshPatch&lt; dim &gt;::CellTypes</definition>
+        <argsstring>() const</argsstring>
+        <name>CellTypes</name>
+        <qualifiedname>csmp::MeshPatch::CellTypes</qualifiedname>
+        <briefdescription>
+<para>how many different finite element types the patch contains </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="41" column="12" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a2dfff4371950d90cdc211709a429d6ac" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gae70f4082919c7730a8934bfcac658ea2" kindref="member">CELL_SHAPE</ref></type>
+        <definition>CELL_SHAPE csmp::MeshPatch&lt; dim &gt;::CellGeometry</definition>
+        <argsstring>() const</argsstring>
+        <name>CellGeometry</name>
+        <qualifiedname>csmp::MeshPatch::CellGeometry</qualifiedname>
+        <briefdescription>
+<para>whether this is a LINE, SURFACE or VOLUME mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="43" column="16" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="46" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a1a0897e4bea65ac79db7ce93b28a7ef4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::MeshPatch&lt; dim &gt;::Cells</definition>
+        <argsstring>() const</argsstring>
+        <name>Cells</name>
+        <qualifiedname>csmp::MeshPatch::Cells</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="44" column="12" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a4b33dcfa7ea9234269b81cc8cf146c3b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::MeshPatch&lt; dim &gt;::Nodes</definition>
+        <argsstring>() const</argsstring>
+        <name>Nodes</name>
+        <qualifiedname>csmp::MeshPatch::Nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="45" column="12" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="32" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a8ef6c145f6535426e9d99dfe448da858" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>plf::colony&lt; Element&lt; dim &gt; &gt;::iterator csmp::MeshPatch&lt; dim &gt;::ElementsBegin</definition>
+        <argsstring>()</argsstring>
+        <name>ElementsBegin</name>
+        <qualifiedname>csmp::MeshPatch::ElementsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="47" column="37" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="53" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a30b6e8c55caf467f67114f9a7743a232" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>plf::colony&lt; Element&lt; dim &gt; &gt;::iterator csmp::MeshPatch&lt; dim &gt;::ElementsEnd</definition>
+        <argsstring>()</argsstring>
+        <name>ElementsEnd</name>
+        <qualifiedname>csmp::MeshPatch::ElementsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="48" column="37" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="57" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a467129f3fa702bbc95c108d79351334e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>plf::colony&lt; Node&lt; dim &gt; &gt;::iterator csmp::MeshPatch&lt; dim &gt;::NodesBegin</definition>
+        <argsstring>()</argsstring>
+        <name>NodesBegin</name>
+        <qualifiedname>csmp::MeshPatch::NodesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="50" column="37" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="61" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mesh_patch_1a41e5014286c0542da0c7ec11a9e6d0ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>plf::colony&lt; Node&lt; dim &gt; &gt;::iterator csmp::MeshPatch&lt; dim &gt;::NodesEnd</definition>
+        <argsstring>()</argsstring>
+        <name>NodesEnd</name>
+        <qualifiedname>csmp::MeshPatch::NodesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/MeshPatch.h" line="51" column="37" bodyfile="source/modules/model/MeshPatch.cpp" bodystart="65" bodyend="66"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Contiguous mesh patch that can, but does not have to be integrated into a <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. The idea is to temporarily store parts of a mesh during rebuilding operations; Size info is used also to keep number information uptodate.</para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>23/5/21 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::MeshPatch&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_mesh_patch"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/MeshPatch.h" line="29" column="1" bodyfile="source/includes/model/MeshPatch.h" bodystart="29" bodyend="58"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_mesh_patch_1a59427cdb469c501b7d31b64cf1bee212" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>BuildInterveningPatch</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a49d43431dd221652a4e0bb3a5d49a22d" prot="private" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>cell_dimension_</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a2dfff4371950d90cdc211709a429d6ac" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>CellGeometry</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a1a0897e4bea65ac79db7ce93b28a7ef4" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>Cells</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a91b2cd56af3c4eb464d0162b59672efa" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>CellTypes</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1ac92300a3d5e08dabf12505eabed71bbb" prot="private" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>elements_</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a8ef6c145f6535426e9d99dfe448da858" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>ElementsBegin</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a30b6e8c55caf467f67114f9a7743a232" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>ElementsEnd</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a2ec713f21216afe7cee7804d364ed7f4" prot="private" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>fe_ptrs_</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a72de8a95992b3e14d60b9137d9c96073" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>MeshPatch</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a4b33dcfa7ea9234269b81cc8cf146c3b" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a5ab2db3f0085821a92a5910085286529" prot="private" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>nodes_</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a467129f3fa702bbc95c108d79351334e" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>NodesBegin</name></member>
+      <member refid="classcsmp_1_1_mesh_patch_1a41e5014286c0542da0c7ec11a9e6d0ad" prot="public" virt="non-virtual"><scope>csmp::MeshPatch</scope><name>NodesEnd</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

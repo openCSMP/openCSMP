@@ -1,0 +1,151 @@
+\doxysection{Consecutive\+Sequence\+Checker Class Reference}
+\hypertarget{class_consecutive_sequence_checker}{}\label{class_consecutive_sequence_checker}\index{ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}}
+
+
+Collaboration diagram for Consecutive\+Sequence\+Checker\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=276pt]{class_consecutive_sequence_checker__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+template$<$$>$ bool \mbox{\hyperlink{class_consecutive_sequence_checker_a25366983ea46ef0f334be8dd68bb52fa}{Is\+Range\+Of\+Unsigned\+Int\+Consecutive}} (const std\+::set$<$ size\+\_\+t $>$ \&iset, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\item 
+template$<$$>$ bool \mbox{\hyperlink{class_consecutive_sequence_checker_a1bfbce5638ac2e0836f0f3ab731f607a}{Is\+Range\+Of\+Unsigned\+Int\+Consecutive}} (const std\+::vector$<$ size\+\_\+t $>$ \&ivec, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\item 
+template$<$$>$ bool \mbox{\hyperlink{class_consecutive_sequence_checker_ad3edef6da7c9b6773f0f5fda171e9564}{Is\+Value\+Range\+Of\+Unsigned\+Int\+Consecutive}} (const std\+::map$<$ size\+\_\+t, size\+\_\+t $>$ \&imap, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\item 
+template$<$$>$ bool \mbox{\hyperlink{class_consecutive_sequence_checker_ad5462961164aaad98e1733a45032962e}{Is\+Value\+Range\+Unique\+And\+Bounded}} (const std\+::map$<$ size\+\_\+t, size\+\_\+t $>$ \&imap, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\item 
+template$<$$>$ bool \mbox{\hyperlink{class_consecutive_sequence_checker_aec95064d1f68e6b1da26f39c7a3a9dfd}{Is\+Value\+Range\+Of\+Unsigned\+Int\+Consecutive}} (const multimap$<$ string, \mbox{\hyperlink{classvector}{vector}}$<$ size\+\_\+t $>$ $>$ \&immap, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_consecutive_sequence_checker_add78e9316f6dadf08e0bf7c2312ffc69}\label{class_consecutive_sequence_checker_add78e9316f6dadf08e0bf7c2312ffc69} 
+{\footnotesize template$<$typename T$>$ }\\static bool {\bfseries Is\+Range\+Of\+Unsigned\+Int\+Consecutive} (const std\+::set$<$ T $>$ \&, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\begin{DoxyCompactList}\small\item\em checks elements of an integer set \end{DoxyCompactList}\item 
+\Hypertarget{class_consecutive_sequence_checker_ae7875088f91eb8a0594385e7781ff99b}\label{class_consecutive_sequence_checker_ae7875088f91eb8a0594385e7781ff99b} 
+{\footnotesize template$<$typename T$>$ }\\static bool {\bfseries Is\+Range\+Of\+Unsigned\+Int\+Consecutive} (const std\+::vector$<$ T $>$ \&, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\begin{DoxyCompactList}\small\item\em checks elements of an integer vector \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename K, typename V$>$ }\\static bool \mbox{\hyperlink{class_consecutive_sequence_checker_aa021fe7bd036c5e0508588ef5fb162a5}{Is\+Key\+Range\+Of\+Unsigned\+Int\+Consecutive}} (const std\+::map$<$ K, V $>$ \&, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\begin{DoxyCompactList}\small\item\em checks whether the keys of a map are in consecutive order \end{DoxyCompactList}\item 
+\Hypertarget{class_consecutive_sequence_checker_aba7559a456b334624b3b48cd3b50bb76}\label{class_consecutive_sequence_checker_aba7559a456b334624b3b48cd3b50bb76} 
+{\footnotesize template$<$typename K, typename V$>$ }\\static bool {\bfseries Is\+Value\+Range\+Of\+Unsigned\+Int\+Consecutive} (const std\+::map$<$ K, V $>$ \&, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\begin{DoxyCompactList}\small\item\em checks whether the values of a map are in consecutive order \end{DoxyCompactList}\item 
+\Hypertarget{class_consecutive_sequence_checker_a57dd32e4236b21e88488ea6ef0f3daab}\label{class_consecutive_sequence_checker_a57dd32e4236b21e88488ea6ef0f3daab} 
+{\footnotesize template$<$typename K, typename V$>$ }\\static bool {\bfseries Is\+Value\+Range\+Unique\+And\+Bounded} (const std\+::map$<$ K, V $>$ \&, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\begin{DoxyCompactList}\small\item\em checks whether the values in the map are unique, form a continuous sequence and (optionally) are bounded by max-\/val == n-\/values-\/1 \end{DoxyCompactList}\item 
+\Hypertarget{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e}\label{class_consecutive_sequence_checker_a38bf69cdb2e3ce4bfa807cd9e12c145e} 
+{\footnotesize template$<$typename K, typename V$>$ }\\static bool {\bfseries Is\+Value\+Range\+Of\+Unsigned\+Int\+Consecutive} (const std\+::multimap$<$ K, std\+::vector$<$ V $>$ $>$ \&, bool check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1)
+\begin{DoxyCompactList}\small\item\em checks whether the values of a map are in consecutive order \end{DoxyCompactList}\item 
+\Hypertarget{class_consecutive_sequence_checker_ae279a6852c64c467cdef67fb26e945ef}\label{class_consecutive_sequence_checker_ae279a6852c64c467cdef67fb26e945ef} 
+static bool {\bfseries Test\+\_\+\+Consecutive\+Sequence\+Checker} ()
+\begin{DoxyCompactList}\small\item\em verifies the interfaces of this class \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+integer sequences for whether they are consecutive.
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+10/12/2016
+\end{DoxyDate}
+
+\begin{DoxyEnumerate}
+\item Finds the max­i­mum and min­i­mum ele­ments in sequences
+\item Checks if the sequence length = max-\/min+1
+\item Checks if the sequence contains duplicates
+\item checks whether the elements of the sequence are consecutuve
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+current implementation is restricted to size\+\_\+t unsigned integers.
+
+use \doxylink{class_consecutive_sequence_checker_ae279a6852c64c467cdef67fb26e945ef}{Test\+\_\+\+Consecutive\+Sequence\+Checker()} to see verification of methods. 
+\end{DoxyNote}
+
+
+\label{doc-func-members}
+\Hypertarget{class_consecutive_sequence_checker_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_consecutive_sequence_checker_aa021fe7bd036c5e0508588ef5fb162a5}\index{ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}!IsKeyRangeOfUnsignedIntConsecutive@{IsKeyRangeOfUnsignedIntConsecutive}}
+\index{IsKeyRangeOfUnsignedIntConsecutive@{IsKeyRangeOfUnsignedIntConsecutive}!ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}}
+\doxysubsubsection{\texorpdfstring{IsKeyRangeOfUnsignedIntConsecutive()}{IsKeyRangeOfUnsignedIntConsecutive()}}
+{\footnotesize\ttfamily \label{class_consecutive_sequence_checker_aa021fe7bd036c5e0508588ef5fb162a5} 
+template$<$typename K, typename V$>$ \\
+template bool Consecutive\+Sequence\+Checker\+::\+Is\+Key\+Range\+Of\+Unsigned\+Int\+Consecutive (\begin{DoxyParamCaption}\item[{const std\+::map$<$ K, V $>$ \&}]{}{, }\item[{bool}]{check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+checks whether the keys of a map are in consecutive order 
+
+checks whether the keys of the map are numbered in consecutive order. \Hypertarget{class_consecutive_sequence_checker_a25366983ea46ef0f334be8dd68bb52fa}\index{ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}!IsRangeOfUnsignedIntConsecutive@{IsRangeOfUnsignedIntConsecutive}}
+\index{IsRangeOfUnsignedIntConsecutive@{IsRangeOfUnsignedIntConsecutive}!ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}}
+\doxysubsubsection{\texorpdfstring{IsRangeOfUnsignedIntConsecutive()}{IsRangeOfUnsignedIntConsecutive()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_consecutive_sequence_checker_a25366983ea46ef0f334be8dd68bb52fa} 
+template$<$$>$ \\
+bool Consecutive\+Sequence\+Checker\+::\+Is\+Range\+Of\+Unsigned\+Int\+Consecutive (\begin{DoxyParamCaption}\item[{const std\+::set$<$ size\+\_\+t $>$ \&}]{iset}{, }\item[{bool}]{check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1}{}\end{DoxyParamCaption})}
+
+checks elements of an unsigned integer set
+
+
+\begin{DoxyEnumerate}
+\item Finds the Max­i­mum and min­i­mum ele­ments in array (Say the array is arrA)
+\item Check if array length = max-\/min+1
+\item Sub­tract the min from every ele­ment of the array.
+\item Check if array doesn’t have duplicates 
+\end{DoxyEnumerate}\Hypertarget{class_consecutive_sequence_checker_a1bfbce5638ac2e0836f0f3ab731f607a}\index{ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}!IsRangeOfUnsignedIntConsecutive@{IsRangeOfUnsignedIntConsecutive}}
+\index{IsRangeOfUnsignedIntConsecutive@{IsRangeOfUnsignedIntConsecutive}!ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}}
+\doxysubsubsection{\texorpdfstring{IsRangeOfUnsignedIntConsecutive()}{IsRangeOfUnsignedIntConsecutive()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_consecutive_sequence_checker_a1bfbce5638ac2e0836f0f3ab731f607a} 
+template$<$$>$ \\
+bool Consecutive\+Sequence\+Checker\+::\+Is\+Range\+Of\+Unsigned\+Int\+Consecutive (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{ivec}{, }\item[{bool}]{check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1}{}\end{DoxyParamCaption})}
+
+checks elements of an unsigned integer vector
+
+
+\begin{DoxyEnumerate}
+\item Finds the max­i­mum and min­i­mum ele­ments in the array
+\item Checks if array length = max-\/min+1
+\item Sub­tract the min from every ele­ment of the array.
+\item Checks if array doesn’t have duplicates 
+\end{DoxyEnumerate}\Hypertarget{class_consecutive_sequence_checker_aec95064d1f68e6b1da26f39c7a3a9dfd}\index{ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}!IsValueRangeOfUnsignedIntConsecutive@{IsValueRangeOfUnsignedIntConsecutive}}
+\index{IsValueRangeOfUnsignedIntConsecutive@{IsValueRangeOfUnsignedIntConsecutive}!ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}}
+\doxysubsubsection{\texorpdfstring{IsValueRangeOfUnsignedIntConsecutive()}{IsValueRangeOfUnsignedIntConsecutive()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_consecutive_sequence_checker_aec95064d1f68e6b1da26f39c7a3a9dfd} 
+template$<$$>$ \\
+bool Consecutive\+Sequence\+Checker\+::\+Is\+Value\+Range\+Of\+Unsigned\+Int\+Consecutive (\begin{DoxyParamCaption}\item[{const multimap$<$ string, \mbox{\hyperlink{classvector}{vector}}$<$ size\+\_\+t $>$ $>$ \&}]{immap}{, }\item[{bool}]{check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1}{}\end{DoxyParamCaption})}
+
+checks whether the values of a map are in consecutive order
+
+
+\begin{DoxyEnumerate}
+\item checks the individual element ranges for duplicates.
+\item combines these ranges into a single one and tests that it is consecutive. 
+\end{DoxyEnumerate}\Hypertarget{class_consecutive_sequence_checker_ad3edef6da7c9b6773f0f5fda171e9564}\index{ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}!IsValueRangeOfUnsignedIntConsecutive@{IsValueRangeOfUnsignedIntConsecutive}}
+\index{IsValueRangeOfUnsignedIntConsecutive@{IsValueRangeOfUnsignedIntConsecutive}!ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}}
+\doxysubsubsection{\texorpdfstring{IsValueRangeOfUnsignedIntConsecutive()}{IsValueRangeOfUnsignedIntConsecutive()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_consecutive_sequence_checker_ad3edef6da7c9b6773f0f5fda171e9564} 
+template$<$$>$ \\
+bool Consecutive\+Sequence\+Checker\+::\+Is\+Value\+Range\+Of\+Unsigned\+Int\+Consecutive (\begin{DoxyParamCaption}\item[{const std\+::map$<$ size\+\_\+t, size\+\_\+t $>$ \&}]{imap}{, }\item[{bool}]{check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1}{}\end{DoxyParamCaption})}
+
+allows to check the values of the map (knowing that the key already is unique). \Hypertarget{class_consecutive_sequence_checker_ad5462961164aaad98e1733a45032962e}\index{ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}!IsValueRangeUniqueAndBounded@{IsValueRangeUniqueAndBounded}}
+\index{IsValueRangeUniqueAndBounded@{IsValueRangeUniqueAndBounded}!ConsecutiveSequenceChecker@{ConsecutiveSequenceChecker}}
+\doxysubsubsection{\texorpdfstring{IsValueRangeUniqueAndBounded()}{IsValueRangeUniqueAndBounded()}}
+{\footnotesize\ttfamily \label{class_consecutive_sequence_checker_ad5462961164aaad98e1733a45032962e} 
+template$<$$>$ \\
+bool Consecutive\+Sequence\+Checker\+::\+Is\+Value\+Range\+Unique\+And\+Bounded (\begin{DoxyParamCaption}\item[{const std\+::map$<$ size\+\_\+t, size\+\_\+t $>$ \&}]{imap}{, }\item[{bool}]{check\+\_\+whether\+\_\+max\+\_\+value\+\_\+is\+\_\+size\+\_\+minus1}{}\end{DoxyParamCaption})}
+
+Checks whether the values in the supplied map are continuous, unique and bounded as max value \texorpdfstring{$<$}{<} \#-\/elements in the map. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/Consecutive\+Sequence\+Checker.\+h\item 
+source/modules/math/Consecutive\+Sequence\+Checker.\+cpp\end{DoxyCompactItemize}

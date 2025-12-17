@@ -1,0 +1,161 @@
+\doxysection{Isoparametric\+Quadratic\+Tetrahedron.\+h}
+\hypertarget{_isoparametric_quadratic_tetrahedron_8h_source}{}\label{_isoparametric_quadratic_tetrahedron_8h_source}\index{source/includes/integration/finite\_elements/IsoparametricQuadraticTetrahedron.h@{source/includes/integration/finite\_elements/IsoparametricQuadraticTetrahedron.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{ISOPARAMETRIC\_QUADRATIC\_TETRAHEDRON\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{ISOPARAMETRIC\_QUADRATIC\_TETRAHEDRON\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron}{IsoparametricQuadraticTetrahedron}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}\ \{}
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_afd991cf4e88c403009784d5fc5f982d4}{IsoparametricQuadraticTetrahedron}}();}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa4ed09cce0fbad65dff3d92637622cb7}{Volume}}();}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9fccbbb8546bec83ec0bf35044c114a0}{AspectRatio}}();}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa56e795385ac8033518e4008249832cd}{InnerRadius}}();}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a7ddb203d36719ad60ba0391483328b76}{EdgeLengths}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ vec\ );}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a056cc2aef94a4d2950b563d6ecf2ea6f}{NodesOfSegment}}(\ uint32\_t\ segm\_id,\ std::vector<uint32\_t>\&\ snids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad643bc5c2df06b27e9f966512c9a7a37}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad643bc5c2df06b27e9f966512c9a7a37}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad643bc5c2df06b27e9f966512c9a7a37}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad643bc5c2df06b27e9f966512c9a7a37}{NodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ab0aec1b787e4e742198efb465a287e6a}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ab0aec1b787e4e742198efb465a287e6a}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ab0aec1b787e4e742198efb465a287e6a}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ab0aec1b787e4e742198efb465a287e6a}{CornerNodesOfFace}}(\ uint32\_t\ face\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9b3e95fba5e41ac7a39a1f48297cc67a}{std}}::\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9b3e95fba5e41ac7a39a1f48297cc67a}{vector}}<\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9b3e95fba5e41ac7a39a1f48297cc67a}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9b3e95fba5e41ac7a39a1f48297cc67a}{NodesConnectedTo}}(\ uint32\_t\ node\_id\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_af458046b0390a613b5f8e9f81a785094}{CornerNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a55ed0e6fe4eef381e70f88540b26489b}{MidSideNodes}}(\ std::vector<uint32\_t>\&\ ids\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ \ \ \ \ MidSideNodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 6U;\ \}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ uint32\_t\ \ \ \ \ \ CornerNodes()\ \textcolor{keyword}{const}\ \ \{\ \textcolor{keywordflow}{return}\ 4U;\ \}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_accfd6c15523f7652dd0a2d09c798ea6f}{ElementTypeOfFace}}(\ uint32\_t\ face\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad066d2f663d2f9fd22d6473a389eb3dc}{ElementTypeOfSegment}}(\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad066d2f663d2f9fd22d6473a389eb3dc}{uint32\_t}}\ \textcolor{comment}{/*\ segment\ */}\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_BAR;\ \};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a8e55135cd48da35eeb7e61241560f15e}{UnitNormalAtFaceBarycenter}}(\ uint32\_t\ face,\ std::vector<\textcolor{keywordtype}{double}>\&\ nrml\ );}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//virtual\ void\ \ \ \ \ \ UnitNormalToFace(\ uint32\_t\ face,\ std::vector<double>\&\ unrml\ )\ const;}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a759d8b75f4bc95b9d47709162c188822}{ExtrapolateIntegrationPointVariableToNodes}}(\ uint32\_t\ nvars,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ IVAR,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ \ \ \ \ \ \ NVAR\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a931cae919c839063d3fefdb1b3d40da9}{N}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ N,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ );}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a7c07ebbdd869afd7b25318a0748f9bbf}{N\_AtIntegrationPoint}}(\ uint32\_t\ ip,\ std::vector<\textcolor{keywordtype}{double}>\&\ N\ );}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a615592b8cab9af70edc94e2113f82ad8}{N\_AtBaryCenter}}(\ std::vector<\textcolor{keywordtype}{double}>\&\ N\ );}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_af59743b332269bdec27e24f4e659dab3}{JacobianAtIntegrationPoint}}(\ uint32\_t\ ip\ );}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad5bfab2561ca300a32fe3db3ce7c1287}{JacobianAt}}(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ rst);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a55890b2586e5d6d8578014b2ac4c1a1f}{dN\_At}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DN2,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ \ );}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a2c861e91df9740dc137c9a4e8651f322}{dN}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ );}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_ad26ad9ae942298c81c762404bc15ac8b}{dN\_AtIntegrationPoint}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M,\ uint32\_t\ gauss\_point\ );}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_af5f449ad3d1d7932b0742a0b3ffd507d}{dN\_AtNode}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M,\ uint32\_t\ node\ );}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a2588054b997d33227315fb9e8e1b34f5}{dN\_AtBarycenter}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ );}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa3c1d868b62aea56bc4048a23981fca1}{Nrst}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ nrst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ Nrst(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ \textcolor{keywordtype}{double}*\ nrst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a69a8be5957c3b66ae3c7bac841c45e93}{dNr}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNr\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a80f1af2ef961977bebff429816394c43}{dNs}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aae1e07bb04116103c51c85aca61b2402}{dNt}}(\ \textcolor{keywordtype}{double}\ r,\ \textcolor{keywordtype}{double}\ s,\ \textcolor{keywordtype}{double}\ t,\ std::vector<\textcolor{keywordtype}{double}>\&\ dNt\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a9c8cbd69442615c8000039b35d4139e2}{WeightAtIntegrationPoint}}(\ uint32\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{virtual}\ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_aa19b610812b8a3ab2b6c285e9b69bd7c}{IntegrationPoint}}(\ uint32\_t\ i,\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_afff9420db93435d80446692044bad26e}{OutputNodeDataToVTK}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ DATA\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a2eb6b773665c2b80533808d8bf3b5557}{ReferenceCoordinates}}(\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \&\ matCoords)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{///\ underintegrate\ element\ by\ just\ using\ a\ single\ quadrature\ point\ located\ at\ the\ barycentre}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a6423543a0b0eefa681bf9e595dae57bc}{QuadratureRules\_1Point}}();}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{///\ integrate\ element\ by\ using\ a\ 4\ quadrature\ points}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron_a62f3d178d2e2db733ad7ce93eff4084e}{QuadratureRules\_4Points}}();}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ QuadratureRules\_5Points();}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ QuadratureRules\_11Points();}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ QuadratureRules\_14Points();}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ QuadratureRules\_24Points();}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ QuadratureRules\_45Points();}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ returns\ interpolation\ function\ values\ at\ barycenter\ of\ the\ element\ faces}}
+\DoxyCodeLine{00075\ \ \ \ \ std::array<\textcolor{keywordtype}{double},\ 10>\ N\_AtFaceBarycenter(\ uint32\_t\ i)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ returns\ coordinates\ of\ barycenters\ of\ the\ element\ faces}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ FaceBarycenterCoordinates(\ uint32\_t\ face,\ std::vector<\textcolor{keywordtype}{double}>\&\ barycenterCoord\ );}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{//\ (Gauss)\ integration\ point\ coordinates,\ and\ weights}}
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ NXYZ,\ DN,\ IP,\ BEE;}
+\DoxyCodeLine{00083\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ W;}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ RST[3],\ LXY[4];}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ accDistance;}
+\DoxyCodeLine{00086\ \ \ \ \ uint32\_t\ totIterations;}
+\DoxyCodeLine{00087\ \ \ \ \ uint32\_t\ nonConvergenceOfProjections;}
+\DoxyCodeLine{00088\ \ \ \ \ uint32\_t\ projectionCalledNTimes;}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ 3x3\ matrix\ operations}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{double}\ Determinant(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{double}\ InvertMatrix(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ M\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{//Local\ \&\ \ Global\ coordinates}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{void}\ ParametricToPhysical(std::vector<\textcolor{keywordtype}{double}>\ \&rst,\ std::vector<\textcolor{keywordtype}{double}>\ \&xyz);}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ PhysicalToParametric(std::vector<\textcolor{keywordtype}{double}>\&\ rst,\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ xyz);}
+\DoxyCodeLine{00096\ \ \ \ \ uint32\_t\ n(\ uint32\_t\ i,\ uint32\_t\ a\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ \};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00101\ \textcolor{comment}{}}
+\DoxyCodeLine{00102\ \textcolor{comment}{@class\ IsoparametricQuadraticTetrahedron\ \ IsoparametricQuadraticTetrahedron\ "{}finite\_elements/IsoparametricQuadraticTetrahedron.h"{}}}
+\DoxyCodeLine{00103\ \textcolor{comment}{@date\ 2000}}
+\DoxyCodeLine{00104\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00105\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00106\ \textcolor{comment}{}}
+\DoxyCodeLine{00107\ \textcolor{comment}{Inherited\ from\ the\ FiniteElement\ base\ class.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{}}
+\DoxyCodeLine{00109\ \textcolor{comment}{}}
+\DoxyCodeLine{00110\ \textcolor{comment}{@section\ collaboration\ Collaboration}}
+\DoxyCodeLine{00111\ \textcolor{comment}{}}
+\DoxyCodeLine{00112\ \textcolor{comment}{In\ an\ element-\/centered\ finite\ volume\ computation,\ the\ IsoparametricQuadraticTetrahedron}}
+\DoxyCodeLine{00113\ \textcolor{comment}{collaborates\ with\ the\ QuadraticTriangle\ element.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{}}
+\DoxyCodeLine{00115\ \textcolor{comment}{}}
+\DoxyCodeLine{00116\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00117\ \textcolor{comment}{}}
+\DoxyCodeLine{00118\ \textcolor{comment}{Quadratic\ tetrahedral\ finite-\/element\ with\ local\ interpolation\ function}}
+\DoxyCodeLine{00119\ \textcolor{comment}{and\ Jacobian\ transformation\ capability.\ The\ node\ numbering\ of\ the}}
+\DoxyCodeLine{00120\ \textcolor{comment}{tetrahedron\ with\ regard\ to\ the\ local\ coordinate\ frame\ is:}}
+\DoxyCodeLine{00121\ \textcolor{comment}{}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \string^\ t}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ |}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ |}}
+\DoxyCodeLine{00125\ \textcolor{comment}{}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ \ \ \ 4\ o}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ |\ \(\backslash\)}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ |\ \ \ \(\backslash\)}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ \ \ \ 8\ o\ \ \ \ \ o\ 10}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ |\ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ 9\ o\ \ \ \ |\ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ \ \ \ 1\ o\ -\/-\/\ o\ -\/-\/-\/\ o\ 3\ \ -\/-\/>\ s}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ /\ \ \ \ \ 7}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ \ \ /}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ 5\ o\ \ \ \ \ o\ 6}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ /}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ /}}
+\DoxyCodeLine{00138\ \textcolor{comment}{o\ 2}}
+\DoxyCodeLine{00139\ \textcolor{comment}{r}}
+\DoxyCodeLine{00140\ \textcolor{comment}{}}
+\DoxyCodeLine{00141\ \textcolor{comment}{Note\ that\ this\ numbering\ scheme\ is\ different\ from\ that\ used\ by\ ICEMCFD}}
+\DoxyCodeLine{00142\ \textcolor{comment}{where\ node\ 7\ (0..n-\/1)\ is\ the\ midside\ node\ of\ the\ edge\ 0-\/3,\ node\ 8\ of}}
+\DoxyCodeLine{00143\ \textcolor{comment}{edge\ 1-\/3,\ and\ node\ 9\ of\ edge\ 2-\/3.}}
+\DoxyCodeLine{00144\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{comment}{///\ \ loop\ mapping\ over\ the\ nodes\ of\ the\ element.\ @test\ AM\ o.k.}}
+\DoxyCodeLine{00147\ \textcolor{keyword}{inline}\ uint32\_t\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron}{IsoparametricQuadraticTetrahedron}}::n(\ uint32\_t\ i,\ uint32\_t\ a\ )\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ i+a\ >=\ 4\ )\ \textcolor{keywordflow}{return}\ i+a-\/4;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \textcolor{keywordflow}{return}\ i+a;}
+\DoxyCodeLine{00150\ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

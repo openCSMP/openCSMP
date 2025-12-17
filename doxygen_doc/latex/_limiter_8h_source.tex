@@ -1,0 +1,69 @@
+\doxysection{Limiter.\+h}
+\hypertarget{_limiter_8h_source}{}\label{_limiter_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/Limiter.h@{source/includes/integration/cvfe\_hydrothermal/Limiter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LIMITER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LIMITER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ \ \ \ \ November\ 2014,\ Philipp\ Weis:}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \textcolor{comment}{///\ Limiting\ the\ value\ of\ a\ variable\ to\ a\ specified\ range}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00016\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_limiter}{Limiter}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ op;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{double}\ min,\ max;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_limiter_a5cc28ac8fbbe0844e014dba9f5228339}{Limiter}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prop,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ variable\ name\ of\ property}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ min\_value,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ minimum\ value\ of\ specified\ range}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ max\_value\ );\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ maximum\ value\ of\ specified\ range}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \string~Limiter()\ \{\};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_limiter_a8d76f3b680dfad78125f738725e479a1}{Calculate}}();}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ @class\ Limiter\ Limiter.h}}
+\DoxyCodeLine{00032\ \textcolor{comment}{}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00036\ \textcolor{comment}{}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ \ Designed\ to\ keep\ variable\ within\ the\ validity\ of\ equation\ of\ state.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ \ Used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ \ Use\ with\ care,\ as\ the\ values\ are\ changed\ somewhat\ arbitrarily,\ which\ may\ lead\ to\ unwanted\ behavior.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ The\ interralation\ reads\ in\ a\ variable\ and\ checks\ whether\ the\ value\ lies\ within\ the\ specified\ range.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ If\ not,\ the\ value\ is\ corrected\ to\ the\ minimum\ or\ maximum\ value,\ respectively.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ Currently,\ the\ user\ does\ not\ receive\ any\ information\ whether\ the\ values\ are\ changed\ or\ not.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00061\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

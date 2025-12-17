@@ -1,0 +1,48 @@
+\doxysection{PARDISO\+\_\+\+Solver.\+h}
+\hypertarget{_p_a_r_d_i_s_o___solver_8h_source}{}\label{_p_a_r_d_i_s_o___solver_8h_source}\index{source/includes/integration/solver/PARDISO\_Solver.h@{source/includes/integration/solver/PARDISO\_Solver.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PARDISO\_SOLVER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PARDISO\_SOLVER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_solver_settings_8h}{"{}SolverSettings.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_solver_8h}{"{}Solver.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_p_a_r_d_i_s_o___solver_settings}{PARDISO\_SolverSettings}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}\ \{}
+\DoxyCodeLine{00012\ \};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ Interface\ to\ the\ direct\ PARDISO\ solver\ from\ the\ MKL\ library.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ Derived\ from\ Solver\ class,\ following\ CSMP's\ strategy\ design\ pattern\ for\ the\ solution\ of\ linear\ algebraic\ systems\ of\ equations.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ @note\ works\ only\ if\ there\ is\ access\ to\ the\ MKL\ library.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ @author\ draft\ SKM}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ @date\ 30/7/2019}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_p_a_r_d_i_s_o___solver}{PARDISO\_Solver}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_solver}{Solver}}\ \{}
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ PARDISO\_Solver(\ \mbox{\hyperlink{structcsmp_1_1_p_a_r_d_i_s_o___solver_settings}{PARDISO\_SolverSettings}}\&\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~PARDISO\_Solver();}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ this\ does\ not\ override\ the\ base\ class!}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_p_a_r_d_i_s_o___solver_a72c4ce00928f5f88943ec6f8d2f3bd10}{SolveMatrixEquation}}(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ A,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ b,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ solver\_tolerance\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_p_a_r_d_i_s_o___solver_settings}{PARDISO\_SolverSettings}}\&\ settings\_;}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ CSMP\_PARDISO\_SOLVER\_H}}
+
+\end{DoxyCode}

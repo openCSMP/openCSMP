@@ -1,0 +1,12 @@
+‘sticking_out-configuration.txt’  - test model with multi-dim element region CM6/6/2014
+
+# model has 4407 nodes and 632 boundary nodes
+# default properties
+permeability	1e-17
+porosity	0.5
+thickness	1.
+
+# regional properties: fractures
+MIXED_FRACTURE	complete	permeability	8.33E-14
+MIXED_FRACTURE	complete	thickness	1.0e-4
+MIXED_FRACTURE	complete	porosity	1.

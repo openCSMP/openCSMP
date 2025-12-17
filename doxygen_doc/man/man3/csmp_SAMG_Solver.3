@@ -1,0 +1,286 @@
+.TH "csmp::SAMG_Solver" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SAMG_Solver \- Subclass of \fBSolver\fP for linear algebra computations conducted with SAMG, the algebraic multigrid solver for systems of equation from SCAPOS, Fraunhofer, Germany\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <SAMG_Solver\&.h>\fP
+.PP
+Inherits \fBcsmp::Solver\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSAMG_Solver\fP (\fBSAMG_Settings\fP *settings)"
+.br
+.RI "this method will not memory manage the \fBSAMG_Settings\fP object "
+.ti -1c
+.RI "\fBSAMG_Solver\fP (const \fBSAMG_Solver\fP &)"
+.br
+.ti -1c
+.RI "\fBSAMG_Solver\fP & \fBoperator=\fP (const \fBSAMG_Solver\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBInputSolverSettings\fP (\fBSolverSettings\fP &settings)"
+.br
+.ti -1c
+.RI "virtual \fBSolverSettings\fP * \fBGetSolverSettings\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWrite_SAMG_TextInputFile\fP (const char *filename) const"
+.br
+.ti -1c
+.RI "void \fBWrite_SAMG_TextOutput\fP (bool write)"
+.br
+.ti -1c
+.RI "double \fBLastSolverResidual\fP () const"
+.br
+.ti -1c
+.RI "void \fBCheckSparsityCriterion\fP (int32_t &levelx) const"
+.br
+.RI "Check matrix sparsity\&. "
+.ti -1c
+.RI "void \fBCheckCycleCriterion\fP (int32_t &iswtch) const"
+.br
+.RI "SAMG iteration cycles benchmark criterion\&. "
+.ti -1c
+.RI "void \fBUpdateCycleCriterion\fP (int32_t iswtch)"
+.br
+.ti -1c
+.RI "bool \fBCheckConvergence\fP (double eps) const"
+.br
+.ti -1c
+.RI "void \fBOutputVectors\fP () const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Solver\fP
+.in +1c
+.ti -1c
+.RI "\fBSolver\fP ()"
+.br
+.ti -1c
+.RI "\fBSolver\fP (\fBSolverSettings\fP *settings)"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verb)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP () const"
+.br
+.ti -1c
+.RI "void \fBSolve\fP (\fBSparseMatrix\fP &G, std::vector< double > &rh, std::vector< double > &x, size_t no_unknowns=1U)"
+.br
+.ti -1c
+.RI "void \fBSolve\fP (\fBCompressedRowMatrix\fP &G, std::vector< double > &rh, std::vector< double > &x, size_t no_unknowns=1U)"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const \fBSparseMatrix\fP &mat, const char *fname='SparseMatrix') const"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const std::vector< double > &vec, const char *fname='CSP_Vec') const"
+.br
+.ti -1c
+.RI "double \fBCalculateResidual\fP (const \fBSparseMatrix\fP &A, const std::vector< double > &b, const std::vector< double > &x) const"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBSolveMatrixEquation\fP (\fBSparseMatrix\fP &A, std::vector< double > &b, std::vector< double > &x, size_t no_unknowns)"
+.br
+.ti -1c
+.RI "virtual void \fBSolveMatrixEquation\fP (\fBCompressedRowMatrix\fP &A, std::vector< double > &b, std::vector< double > &x, size_t no_unknowns)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Solver\fP
+.in +1c
+.ti -1c
+.RI "\fBSolverSettings\fP * \fBsolver_settings_\fP = nullptr"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Subclass of \fBSolver\fP for linear algebra computations conducted with SAMG, the algebraic multigrid solver for systems of equation from SCAPOS, Fraunhofer, Germany\&. 
+
+Solves the linear algebraic system A x = b using the algebraic multigrid solver DLL from SCAI, Fraunhofer Gesellschaft (St\&. Augustin, Bonn), which can be obtained from SCAPOS\&.
+
+.PP
+Up to 2 istances of the DLL can be communicated with\&. Use another instance of the solver if you have multiple PDEs that are solved sequentially and you want to remember SAMG settings from step to step\&.
+.SH "Segmentation Fault on some linux based os"
+.PP
+We have noticed invalid memory access when using dynamically allocated \fBSAMG_Solver\fP objects and their calls to SAMG\&. To avoid that, use static(stack) instantiation\&. Right now we have no idea why, but we're working on that\&.\&.\&. 
+.PP
+.nf
+// i\&.e\&.:
+SAMG_Settings settings;
+settings\&.Set_napproach(2);
+SAMG_Solver samgSolver(&settings);
+PDE_Integrator<DIM,Region> pressure_diffusion(&samgSolver);
+
+.fi
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+(1) Check line 254: is resetting res_in allowed if we use relative convergence 
+
+.PP
+(3) Convergence check 670: 679 check eps or fabs(eps)? 
+
+.PP
+(1) Look into runtime debug error when solving systems with vector as variable 
+
+.PP
+(3) Try mpl::is_volatile type trait to check whether they should manage the pointers they are supplied with in the constructor (B)
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "bool csmp::SAMG_Solver::CheckConvergence (double eps) const"
+Verbose checks for absolute or relative convergence as supplied by user\&.
+
+.PP
+Returns true if the solution residual is smaller than the user supplied eps (this usually indicates convergence) 
+.SS "void csmp::SAMG_Solver::CheckCycleCriterion (int32_t & iswtch) const"
+
+.PP
+SAMG iteration cycles benchmark criterion\&. 
+.SH "Input Arguments"
+.PP
+Below functions are called only if NO_PRIMARY_SOLVER_CONTROL is defined by the user\&.
+
+.PP
+When SAMG solver settings allow reuse of coarsening setups for subsequent time steps it must be ensured that it is still applicable to the problem\&. The below function has access to the SAMG output parameter ncyc_done_ and stores the lowest number of performed iteration cycles required to reach convergence (ncyc_best_)\&. If the criterion can not be fulfilled a new SAMG solver setting is enforce by adjusting the SAMG paramters iswtch before it is passed on to the solver call\&. Subsequent solver calls will query the unaffected iswit setting of the \fBSAMG_Settings\fP instance and hence resume reusing the new solver setup\&.
+
+.PP
+Within CSMP++ this optimization feature can be only applied when solving for diffusion in an IMPES numeric scheme or IMP-IMS in combination with SAMG Multiple Instances\&. 
+.SS "void csmp::SAMG_Solver::CheckSparsityCriterion (int32_t & levelx) const"
+
+.PP
+Check matrix sparsity\&. 
+.SH "Input Arguments"
+.PP
+Gauss-Seidel preconditioned BiCGstab without coarsening (levelx = 1) is permitted only for nealy diagonal matrices\&. SAMG hidden parameter levelx defines number of coarsening levels\&. If SAMG levelx is set to 1, and the sparsity criterion is not fulfilled ( ratio of non-diagonal matrix entries to unknowns > 2), levelx is reset to its default parameter 25\&.
+
+.PP
+Within CSMP++ this optimization feature can be only applied when solving for advective transport 
+.SS "\fBSolverSettings\fP * csmp::SAMG_Solver::GetSolverSettings ()\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Solver\fP\&.
+.SS "void csmp::SAMG_Solver::InputSolverSettings (\fBSolverSettings\fP & settings)\fR [virtual]\fP"
+Set new solver settings\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIsettings\fP Pointer to a \fBSAMG_Settings\fP object\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The new setting is stored as a pointer variable\&.
+
+.PP
+\fBWarning\fP
+.RS 4
+The \fBSAMG_Solver\fP object DOES NOT delete ANY pointer to \fBSAMG_Settings\fP objects given to it\&. The user is therefore solely responsible for guaranteeing the destruction of \fBSAMG_Settings\fP objects created with new 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBcsmp::Solver\fP\&.
+.SS "void csmp::SAMG_Solver::SolveMatrixEquation (\fBCompressedRowMatrix\fP & A, std::vector< double > & b, std::vector< double > & x, size_t no_unknowns)\fR [protected]\fP, \fR [virtual]\fP"
+
+.IP "1." 4
+Calculate number of non-zero elements in A
+.PP
+
+.PP
+Initialize settings Output parameter
+
+.PP
+Paramater from \fBSAMG_Settings\fP object
+
+.PP
+SAMG matrix output to file
+
+.PP
+Define SAMG hidden parameters
+
+.PP
+Define number of SAMG levels
+
+.PP
+Check applicability of renounced coarsening
+
+.PP
+SAMG output to file
+
+.PP
+IMPES without SAMG Multiple Instances
+
+.PP
+IMPES without SAMG Multiple Instances
+
+.PP
+SAMG convergence check
+.PP
+Implements \fBcsmp::Solver\fP\&.
+.SS "void csmp::SAMG_Solver::SolveMatrixEquation (\fBSparseMatrix\fP & A, std::vector< double > & b, std::vector< double > & x, size_t no_unknowns)\fR [protected]\fP, \fR [virtual]\fP"
+CSMP's sparse matrix is converted into a temporary CompressedRowStorage which is handed over to SAMG that solves it\&. The solution is returned into the vector x\&.
+
+.PP
+Only 2 DLL instances (0->not numbered and (1) are supported\&. 
+.IP "1." 4
+Calculate number of non-zero elements in A
+.PP
+
+.PP
+Initialize settings Output parameter
+
+.PP
+Paramater from \fBSAMG_Settings\fP object
+
+.PP
+SAMG matrix output to file
+
+.PP
+Define SAMG hidden parameters
+
+.PP
+Define number of SAMG levels
+
+.PP
+Check applicability of renounced coarsening
+
+.PP
+SAMG output to file
+
+.PP
+IMPES without SAMG Multiple Instances
+
+.PP
+IMPES without SAMG Multiple Instances
+
+.PP
+SAMG convergence check
+.PP
+Implements \fBcsmp::Solver\fP\&.
+.SS "bool csmp::SAMG_Solver::Write_SAMG_TextInputFile (const char * file) const"
+Outputs the input \fBSparseMatrix\fP into the desired format for the AMG solver's file-based interface\&. This entails the generation of a format file (\fI\&.frm) and the files "</em>\&.amg", "*\&.rhs", "*\&.lhs", "*\&.a", as well as the optional files "*\&.iu" and "*\&.ip", see SAMG users guide for their meaning\&. \fP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

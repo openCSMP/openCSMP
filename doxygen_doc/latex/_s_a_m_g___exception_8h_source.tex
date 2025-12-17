@@ -1,0 +1,32 @@
+\doxysection{SAMG\+\_\+\+Exception.\+h}
+\hypertarget{_s_a_m_g___exception_8h_source}{}\label{_s_a_m_g___exception_8h_source}\index{source/includes/integration/solver/SAMG\_Exception.h@{source/includes/integration/solver/SAMG\_Exception.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SAMG\_EXCEPTION\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SAMG\_EXCEPTION\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{exception}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{stdexcept}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{///\ translation\ of\ SAMG\ error\ codes\ into\ human\ readable\ strings}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___exception}{SAMG\_Exception}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___exception}{std}}::\mbox{\hyperlink{classcsmp_1_1_s_a_m_g___exception}{exception}}\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{explicit}\ SAMG\_Exception(\textcolor{keywordtype}{int}\ ierr)\ \textcolor{keywordflow}{throw}();}
+\DoxyCodeLine{00014\ \ \ \ \ SAMG\_Exception(\textcolor{keywordtype}{int}\ ierr,\ std::string\ err\_string)\ \textcolor{keywordflow}{throw}();}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SAMG\_Exception()\ \textcolor{keywordflow}{throw}();}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ what()\ \textcolor{keyword}{const}\ \textcolor{keywordflow}{throw}();}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{int}\ ierr()\ \textcolor{keyword}{const}\ \textcolor{keywordflow}{throw}();}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{int}\ ierr\_;}
+\DoxyCodeLine{00021\ \ \ \ \ std::string\ err\_string\_;}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

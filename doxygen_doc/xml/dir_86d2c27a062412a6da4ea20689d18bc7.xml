@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_86d2c27a062412a6da4ea20689d18bc7" kind="dir">
+    <compoundname>source/modules/interfaces/gOcad_SKUA</compoundname>
+    <innerfile refid="_gocad_header_8cpp">GocadHeader.cpp</innerfile>
+    <innerfile refid="_go_cad_interface_8cpp">GoCadInterface.cpp</innerfile>
+    <innerfile refid="_gocad_object_8cpp">GocadObject.cpp</innerfile>
+    <innerfile refid="_go_cad_p_grids___interface_8cpp">GoCadPGrids_Interface.cpp</innerfile>
+    <innerfile refid="_gocad_property_class_header_8cpp">GocadPropertyClassHeader.cpp</innerfile>
+    <innerfile refid="_s_k_u_a___finite_element_mesh_interface_8cpp">SKUA_FiniteElementMeshInterface.cpp</innerfile>
+    <innerfile refid="_s_k_u_a___interface_8cpp">SKUA_Interface.cpp</innerfile>
+    <innerfile refid="_s_k_u_a___model_8cpp">SKUA_Model.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/interfaces/gOcad_SKUA/"/>
+  </compounddef>
+</doxygen>

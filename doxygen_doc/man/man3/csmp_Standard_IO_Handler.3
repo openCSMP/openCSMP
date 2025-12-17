@@ -1,0 +1,276 @@
+.TH "csmp::Standard_IO_Handler" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Standard_IO_Handler \- Primitive handler for command line and file input/output of user-defined input parameters during runs (input may also be read from file)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Standard_IO_Handler\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStandard_IO_Handler\fP (const char *doc_file)"
+.br
+.RI "constructs handler, specifying which file the collected information shall be written to "
+.ti -1c
+.RI "\fBStandard_IO_Handler\fP ()"
+.br
+.ti -1c
+.RI "\fB~Standard_IO_Handler\fP ()"
+.br
+.RI "Default destructor\&. "
+.ti -1c
+.RI "bool \fBYesNo\fP (const std::string &question, const char *help_message=nullptr)"
+.br
+.RI "prints question onto screen and collects input from user (stdin) "
+.ti -1c
+.RI "double \fBRecordChoice\fP (const char *question)"
+.br
+.RI "prompts user to enter a floating point value which is collected from stdin returned "
+.ti -1c
+.RI "long \fBRecordIntChoice\fP (const char *question)"
+.br
+.RI "prompts user to enter an integer value which is collected from stdin returned "
+.ti -1c
+.RI "bool \fBRecordLogicalChoice\fP (const char *question)"
+.br
+.RI "prompts user to make a binary choice which is collected from stdin returned "
+.ti -1c
+.RI "std::string \fBRecordLiteralChoice\fP (const char *question)"
+.br
+.RI "prompts user to input a word of text in response to the posed question "
+.ti -1c
+.RI "std::string \fBRecordMultipleLiteralChoice\fP (const char *question)"
+.br
+.RI "prompts user to input a string of text in response to the posed question "
+.ti -1c
+.RI "void \fBRecordInformation\fP (const std::string &info)"
+.br
+.RI "collects text from stdin and stores it in internal container of strings "
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.RI "removes all logged information "
+.ti -1c
+.RI "void \fBProtocol\fP (const char *info)"
+.br
+.RI "appends info string to doc_file (specified during handler construction) "
+.ti -1c
+.RI "void \fBProtocol\fP (const char *info, double parameter)"
+.br
+.RI "appends info string + numeric value to doc_file "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "prints all the recorded information to the output text file 'doc_file' "
+.ti -1c
+.RI "void \fBSetDefaultHelp\fP (const std::string &default_help)"
+.br
+.RI "sets default help message fot this handler "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Primitive handler for command line and file input/output of user-defined input parameters during runs (input may also be read from file) 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::Standard_IO_Handler::Standard_IO_Handler (const char * doc_file)\fR [explicit]\fP"
+
+.PP
+constructs handler, specifying which file the collected information shall be written to Custom Constructor
+
+.PP
+establishes protocol filename based on argument 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdoc_file\fP Filename for protocol file 
+.RE
+.PP
+
+.SS "csmp::Standard_IO_Handler::Standard_IO_Handler ()"
+Default constructor
+
+.PP
+Establishes Standard_IO_Handler-protocol\&.txt as protocol file 
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::Standard_IO_Handler::Out () const"
+
+.PP
+prints all the recorded information to the output text file 'doc_file' CSMP output feature
+
+.PP
+\fBOut()\fP returns all the internal data that \fBIndex\fP needs to access variables\&. These include the type and placement of a variable in the finite element mesh and the associated data storage index\&. 
+.SS "void csmp::Standard_IO_Handler::Protocol (const char * info)"
+
+.PP
+appends info string to doc_file (specified during handler construction) Documents outputs in logfile
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIinfo\fP The text to be displayed if file was opened successfully 
+.RE
+.PP
+
+.SS "void csmp::Standard_IO_Handler::Protocol (const char * info, double parameter)"
+
+.PP
+appends info string + numeric value to doc_file Documents outputs in logfile
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIinfo\fP The text to be displayed if file was opened successfully 
+.br
+\fIparameter\fP Number to be displayed after successfully opening file 
+.RE
+.PP
+
+.SS "double csmp::Standard_IO_Handler::RecordChoice (const char * question)"
+
+.PP
+prompts user to enter a floating point value which is collected from stdin returned Records user choice to the protocol cache
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIquestion\fP The question that is to be prompted 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The user input 
+.RE
+.PP
+
+.SS "void csmp::Standard_IO_Handler::RecordInformation (const std::string & info)"
+
+.PP
+collects text from stdin and stores it in internal container of strings Records argument to the protocol cache
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIinfo\fP The information that is to be protocolled 
+.RE
+.PP
+
+.SS "long csmp::Standard_IO_Handler::RecordIntChoice (const char * question)"
+
+.PP
+prompts user to enter an integer value which is collected from stdin returned Records user choice to the protocol cache
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIquestion\fP The question that is to be prompted 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The user input 
+.RE
+.PP
+
+.SS "string csmp::Standard_IO_Handler::RecordLiteralChoice (const char * question)"
+
+.PP
+prompts user to input a word of text in response to the posed question Records literal user choice to the protocol cache
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIquestion\fP The question that is to be prompted 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The user's response, up to the first white space 
+.RE
+.PP
+
+.SS "bool csmp::Standard_IO_Handler::RecordLogicalChoice (const char * question)"
+
+.PP
+prompts user to make a binary choice which is collected from stdin returned Records logical user choice to the protocol cache
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIquestion\fP The question that is to be prompted 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The boolean user input, true if 'yes' 
+.RE
+.PP
+
+.SS "string csmp::Standard_IO_Handler::RecordMultipleLiteralChoice (const char * question)"
+
+.PP
+prompts user to input a string of text in response to the posed question Records literal user choice to the protocol cache
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIquestion\fP The question that is to be prompted 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The user's response, including white spaces, up to carriage return 
+.RE
+.PP
+
+.SS "void csmp::Standard_IO_Handler::SetDefaultHelp (const std::string & default_help)"
+
+.PP
+sets default help message fot this handler Changes default help message for this handler 
+.SS "bool csmp::Standard_IO_Handler::YesNo (const std::string & question, const char * help_message = \fRnullptr\fP)"
+
+.PP
+prints question onto screen and collects input from user (stdin) Prompts the user for yes/no input
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIquestion\fP Question to be asked 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true if user replies 'yes' 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,1366 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_tensor_variable_3_012_u_01_4" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TensorVariable&lt; 2U &gt;</compoundname>
+    <includes refid="_tensor_variable2_8h" local="no">TensorVariable2.h</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2e3f97552e35ae9553ce0e9d363d7e29" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::TensorVariable&lt; 2U &gt;::VariableType</definition>
+        <argsstring></argsstring>
+        <name>VariableType</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::VariableType</qualifiedname>
+        <initializer>= TENSOR</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="14" column="36" bodyfile="source/includes/model/TensorVariable2.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ac07f7219a1bc028c5bc74e781866c637" prot="private" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref>, 2U &gt;</type>
+        <definition>std::array&lt;VARIABLE_FLAG,2U&gt; csmp::TensorVariable&lt; 2U &gt;::flag</definition>
+        <argsstring></argsstring>
+        <name>flag</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::flag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="101" column="27" bodyfile="source/includes/model/TensorVariable2.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ab1e6e1c73d55e99b3c66d53d26e4a35a" prot="private" static="no" mutable="no">
+        <type>std::array&lt; std::array&lt; double, 2U &gt;, 2U &gt;</type>
+        <definition>std::array&lt;std::array&lt;double,2U&gt;,2U&gt; csmp::TensorVariable&lt; 2U &gt;::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="102" column="17" bodyfile="source/includes/model/TensorVariable2.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad7bfa3c522958e0854d9eba862e361ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</definition>
+        <argsstring>()</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000189"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM initialise array elements in the initialiser list </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="16" column="5" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="11" bodyend="16"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad7bfa3c522958e0854d9eba862e361ce" compoundref="_tensor_variable2_8cpp" startline="11" endline="16">TensorVariable</references>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad7bfa3c522958e0854d9eba862e361ce" compoundref="_tensor_variable2_8cpp" startline="11" endline="16">TensorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad1bd2b07c2ec54234297b0616baee648" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</definition>
+        <argsstring>(VARIABLE_FLAG f, double val)</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>initialises variable as diagonal isotropic tensor with flag and value SKM 17/6/2015 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="17" column="5" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="26" bodyend="30"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad1bd2b07c2ec54234297b0616baee648" compoundref="_tensor_variable2_8cpp" startline="26" endline="30">TensorVariable</references>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad1bd2b07c2ec54234297b0616baee648" compoundref="_tensor_variable2_8cpp" startline="26" endline="30">TensorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a48a0472b5b4db45f8b3670e1a589bac3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</definition>
+        <argsstring>(VARIABLE_FLAG f, double v11, double v12, double v21, double v22)</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v11</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v12</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v21</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v22</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="18" column="5" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="35" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a0d4462fbe254300e94d3c53f5d4a0365" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</definition>
+        <argsstring>(const VARIABLE_FLAG &amp;f11, const VARIABLE_FLAG &amp;f22, const double &amp;v11, const double &amp;v12, const double &amp;v21, const double &amp;v22)</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::TensorVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+          <declname>f11</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+          <declname>f22</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>v11</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>v12</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>v21</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>v22</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="21" column="5" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="45" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a7adb09408a2be112117834d20913f3e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::TensorVariable&lt; 2U &gt;::operator()</definition>
+        <argsstring>(uint32_t i, uint32_t j)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="25" column="19" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="57" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ac07240998cb4cd9b8ef91c2d7309ca7c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const double &amp;</type>
+        <definition>const double &amp; csmp::TensorVariable&lt; 2U &gt;::operator()</definition>
+        <argsstring>(uint32_t i, uint32_t j) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="26" column="19" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="75" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af898ecb838f10c9f2bf297514ae4a967" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::Component</definition>
+        <argsstring>(uint32_t, double)</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="27" column="20" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="92" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a1ef396f6ac83af2899fabe3ad539f6cc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 2U &gt;::Component</definition>
+        <argsstring>(uint32_t i) const</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="28" column="20" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="104" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a77d04cffffe976cb84123c07ecff27dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::operator+</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="30" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="279" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a4603c8e6728c4ca94afb9dcf32f02784" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::operator-</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="31" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="288" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1acf9f8cb4a556331826a8e6df3a815753" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::operator*</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="32" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="297" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a59fc6d824023fc428767a26d6cc86e92" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::operator/</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="33" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="306" bodyend="311"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a5a1935aaecb78e47094b34c14f59b9d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator+=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="35" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="487" bodyend="495"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ae3c5f61ab1585dce161c2f796b421ff9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator-=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="36" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="499" bodyend="507"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aadcb7fc96060264b79273576ccdf0976" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator*=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="37" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="511" bodyend="519"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a328c9c441eecbb2fc46ff271d7069362" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator/=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="38" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="523" bodyend="531"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a7a945cd6856f950e623137092a8b8750" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator+=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="40" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="366" bodyend="374"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a14be3a5aa08aadc84d27aaedb381e3af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator-=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="41" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="378" bodyend="386"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aedf6e7e4622b94172a48a6288764f683" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator*=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="42" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="390" bodyend="398"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a22272bb306f23e231a64a1f5f3043ea5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator/=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="43" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="402" bodyend="410"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a7e0f05fc35f3ad42adf489d34aeacf59" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 2U &gt;::operator+</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="44" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2b88f14a2cb00ae998eba5ec78aa243b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 2U &gt;::operator-</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="45" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a5ee7c0a96d12c3c7486e1dfa79c00201" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 2U &gt;::operator*</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="46" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a302cab07af139ec3db3f45742b77040b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt;</type>
+        <definition>VectorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::operator*</definition>
+        <argsstring>(const VectorVariable&lt; 2U &gt; &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="48" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="317" bodyend="323"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a063fa2e51b0c801acf3d753d47b22f75" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 2U &gt;</type>
+        <definition>Point&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::operator*</definition>
+        <argsstring>(const Point&lt; 2U &gt; &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 2U &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="50" column="12" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="325" bodyend="330"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a1f5d27a51c100030e82a01884c8f601c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 2U &gt;::operator/</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator/</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="52" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a1aa587eb7b518767dc8e6e20025c4ada" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 2U &gt;::operator+=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="53" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a92cf4f23e58220fcbfb700d28301db74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 2U &gt;::operator-=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="54" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a6c92c59f1afb8304940138a5c3a1ebfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 2U &gt;::operator/=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="55" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1acdc1d82a0af42bb5b8d5653f75398a17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 2U &gt;::operator*=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="56" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af1484de8e45989e30ac1eef00d600ece" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="58" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="539" bodyend="547"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1abc0c82ca6ea2dafa24a6268ce5f72535" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="59" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="552" bodyend="561"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a4d20a935dce4c038ecf6801044bc31b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 2U &gt; &amp; csmp::TensorVariable&lt; 2U &gt;::operator=</definition>
+        <argsstring>(const VectorVariable&lt; 2U &gt; &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="60" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="566" bodyend="576"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad70a4ec82fd0455c17cf312ad14a900b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::operator==</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="62" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="150" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aaed1db021d52228e596537d0a6f9d2b0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::operator!=</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="63" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="156" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2b44b270966a1be4b9ac6049b1b4925f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::operator&lt;</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="64" column="5" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="163" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2b9dd4a78731aec0e8fbfad7608714e1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::IsWithinRange</definition>
+        <argsstring>(double vmin, double vmax) const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::IsWithinRange</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>vmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>vmax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000071"><xreftitle>Test</xreftitle><xrefdescription><para>re-tested: SKM 29-9-2001 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="66" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="678" bodyend="686"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a03033cb72d25c0af029370be1016dd76" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::Has_NaN_Values</definition>
+        <argsstring>() const</argsstring>
+        <name>Has_NaN_Values</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Has_NaN_Values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks only the diagonal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="67" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="692" bodyend="696"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a4bcde7d0fdbc07520b063c4dcfbe343f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::TensorVariable&lt; 2U &gt;::Flag</definition>
+        <argsstring>(uint32_t i=0)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Flag</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="68" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="118" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a8c90542ebcdd4fd7350a5192dc613a0d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::TensorVariable&lt; 2U &gt;::Flag</definition>
+        <argsstring>(uint32_t i=0) const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Flag</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="69" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="131" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a96a4d60cbf104251ea1ef1de03cc49ef" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::TensorVariable&lt; 2U &gt;::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="70" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="143" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af4f6f94649f823eddb7f3e9549874103" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::Identity</definition>
+        <argsstring>()</argsstring>
+        <name>Identity</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Identity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="71" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="584" bodyend="590"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a68033b9a81ca2d7e60f9fe875861ac4c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 2U &gt;::MinElement</definition>
+        <argsstring>() const</argsstring>
+        <name>MinElement</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::MinElement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000069"><xreftitle>Test</xreftitle><xrefdescription><para>re-tested: SKM 29-9-2001 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="72" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="649" bodyend="658"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a5db854853d5b75cfa243244125ec91d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 2U &gt;::MaxElement</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxElement</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::MaxElement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000070"><xreftitle>Test</xreftitle><xrefdescription><para>re-tested: SKM 29-9-2001 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="73" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="663" bodyend="672"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af6aad8b094bfa9493966603dab38eae5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 2U &gt;::Determinant</definition>
+        <argsstring>() const</argsstring>
+        <name>Determinant</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Determinant</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="74" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="177" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1adc6ed6f634752a1d9f0e0bb0467a87dc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 2U &gt;::Trace</definition>
+        <argsstring>() const</argsstring>
+        <name>Trace</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Trace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="75" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="184" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1abec22e276942f956a0af70538e7963c2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::Adjoint</definition>
+        <argsstring>() const</argsstring>
+        <name>Adjoint</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Adjoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="76" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="337" bodyend="343"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af592713eda10c7b01674b6acb3d0cc7d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::Inverse</definition>
+        <argsstring>() const</argsstring>
+        <name>Inverse</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Inverse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="77" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="630" bodyend="644"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a0045136d155b41589374286348b23348" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::Transposed</definition>
+        <argsstring>() const</argsstring>
+        <name>Transposed</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Transposed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000068"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="78" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="620" bodyend="625"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aac198c446c90d4807096276736f66ebe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::Eigen</definition>
+        <argsstring>(VectorVariable&lt; 2U &gt; &amp;vvEigenvalues, TensorVariable&lt; 2U &gt; &amp;tvEigenvectors, bool bNormalize) const</argsstring>
+        <name>Eigen</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Eigen</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>vvEigenvalues</declname>
+          <defname>evals</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>tvEigenvectors</declname>
+          <defname>evecs</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>bNormalize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes eigenvalues and eigenvectors assuming that the tensor variable is symmetric. If not symmetric, off-diagonal elements are averaged. No check of symmetry is performed. <linebreak/>
+</para>
+<para>By default the length of the eigenvectors is equivalent to the eigenvalues but it can be normalized to one. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Flag to normalize length of eigenvectors. <linebreak/>
+</para>
+<para><simplesect kind="return"><para>Eigenvalues and vectors are returned into the supplied Vector and TensorVariables, respectively.</para>
+</simplesect>
+Will return false if the rank of the matrix is zero. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Just uses the normal binomial root formula. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="80" column="15" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="785" bodyend="819"/>
+        <references refid="classcsmp_1_1_vector_variable_3_012_u_01_4_1a95943b61e4208515c5dcba154b222f84" compoundref="_vector_variable2_8cpp" startline="345" endline="353">csmp::VectorVariable&lt; 2U &gt;::EuclideanNormalize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aabe069035dbf369b77b24a0f5bbeba9b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::EigenValues</definition>
+        <argsstring>(VectorVariable&lt; 2U &gt; &amp;vvEigenvalues) const</argsstring>
+        <name>EigenValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::EigenValues</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>vvEigenvalues</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="84" column="15" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="823" bodyend="845"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af9486b309c9056e9b443a8152d4bf2d1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::EigenValues</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vecEigenvalues) const</argsstring>
+        <name>EigenValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::EigenValues</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vecEigenvalues</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="85" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="850" bodyend="872"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af3e7d72b1f775c8d73658ff415e4f070" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::EigenNonSymmetric</definition>
+        <argsstring>(VectorVariable&lt; 2U &gt; &amp;eigenVals, TensorVariable&lt; 2U &gt; &amp;eigenVecs) const</argsstring>
+        <name>EigenNonSymmetric</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::EigenNonSymmetric</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>eigenVals</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>eigenVecs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="86" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="875" bodyend="1121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a8f6bfd2eb47e0cb79a5b38675f2c4e59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::DiagonalValues</definition>
+        <argsstring>(double f_00, double f_11)</argsstring>
+        <name>DiagonalValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::DiagonalValues</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f_00</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>f_11</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="87" column="13" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="594" bodyend="598"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a72d02180b911b5e255a4c6ed27e9f14c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::DiagonalValues</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;vecDiags)</argsstring>
+        <name>DiagonalValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::DiagonalValues</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>vecDiags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="88" column="13" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="602" bodyend="606"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aee51c69e895778d22bb0b792452181a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::DiagonalValues</definition>
+        <argsstring>(const VectorVariable&lt; 2U &gt; &amp;vecDiags)</argsstring>
+        <name>DiagonalValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::DiagonalValues</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>vecDiags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="89" column="13" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="610" bodyend="616"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad5c19aa799d22ee926eaabe159ab1b57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::AssignToRow</definition>
+        <argsstring>(uint32_t i, VectorVariable&lt; 2U &gt; &amp;vc)</argsstring>
+        <name>AssignToRow</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::AssignToRow</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>vc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="90" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="191" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a928ee41b4fe0e2bbbbe4432ff0260f91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::AssignToColumn</definition>
+        <argsstring>(uint32_t j, VectorVariable&lt; 2U &gt; &amp;vc)</argsstring>
+        <name>AssignToColumn</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::AssignToColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt; &amp;</type>
+          <declname>vc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="91" column="21" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="202" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a3108e71b6eebbc938a530a621340a5d8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt;</type>
+        <definition>VectorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::Row</definition>
+        <argsstring>(uint32_t iRow) const</argsstring>
+        <name>Row</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Row</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iRow</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="92" column="18" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="215" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a55297a5d4f04c4df4b8eb59998599851" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 2U &gt;</type>
+        <definition>VectorVariable&lt; 2U &gt; csmp::TensorVariable&lt; 2U &gt;::Column</definition>
+        <argsstring>(uint32_t iCol) const</argsstring>
+        <name>Column</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Column</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iCol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="93" column="19" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="222" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2d0d0d551baee0af0ab553b6ebbd43ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::In</definition>
+        <argsstring>()</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::In</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="95" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="721" bodyend="738"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a995b512924d7ce6131c021b197e17031" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 2U &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000072"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="96" column="22" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="744" bodyend="758"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aebac896c53e84d0e2af53a48a6dfe0b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::In</definition>
+        <argsstring>(std::fstream &amp;fp)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::In</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="97" column="23" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="244" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad469ce577d52b1f43415eca18e30247d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 2U &gt;::Out</definition>
+        <argsstring>(std::fstream &amp;fp) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::TensorVariable&lt; 2U &gt;::Out</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable2.h" line="98" column="23" bodyfile="source/modules/model/TensorVariable2.cpp" bodystart="229" bodyend="242"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>2D full specialization of tensor-type variable template (other tensors are declared in files #1, #) </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::TensorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+      </node>
+      <node id="1">
+        <label>csmp::TensorVariable&lt; 2U &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable_3_012_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 2U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::TensorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+      </node>
+      <node id="1">
+        <label>csmp::TensorVariable&lt; 2U &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable_3_012_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 2U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/TensorVariable2.h" line="12" column="1" bodyfile="source/includes/model/TensorVariable2.h" bodystart="12" bodyend="103"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1abec22e276942f956a0af70538e7963c2" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Adjoint</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a928ee41b4fe0e2bbbbe4432ff0260f91" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>AssignToColumn</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad5c19aa799d22ee926eaabe159ab1b57" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>AssignToRow</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a55297a5d4f04c4df4b8eb59998599851" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Column</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af898ecb838f10c9f2bf297514ae4a967" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a1ef396f6ac83af2899fabe3ad539f6cc" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ab1e6e1c73d55e99b3c66d53d26e4a35a" prot="private" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>data</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af6aad8b094bfa9493966603dab38eae5" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Determinant</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a8f6bfd2eb47e0cb79a5b38675f2c4e59" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>DiagonalValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a72d02180b911b5e255a4c6ed27e9f14c" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>DiagonalValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aee51c69e895778d22bb0b792452181a5" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>DiagonalValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aac198c446c90d4807096276736f66ebe" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Eigen</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af3e7d72b1f775c8d73658ff415e4f070" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>EigenNonSymmetric</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aabe069035dbf369b77b24a0f5bbeba9b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>EigenValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af9486b309c9056e9b443a8152d4bf2d1" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>EigenValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a4bcde7d0fdbc07520b063c4dcfbe343f" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a8c90542ebcdd4fd7350a5192dc613a0d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ac07f7219a1bc028c5bc74e781866c637" prot="private" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>flag</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a03033cb72d25c0af029370be1016dd76" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Has_NaN_Values</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af4f6f94649f823eddb7f3e9549874103" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Identity</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2d0d0d551baee0af0ab553b6ebbd43ba" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aebac896c53e84d0e2af53a48a6dfe0b3" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af592713eda10c7b01674b6acb3d0cc7d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Inverse</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2b9dd4a78731aec0e8fbfad7608714e1" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a5db854853d5b75cfa243244125ec91d9" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>MaxElement</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a68033b9a81ca2d7e60f9fe875861ac4c" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>MinElement</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aaed1db021d52228e596537d0a6f9d2b0" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a7adb09408a2be112117834d20913f3e0" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ac07240998cb4cd9b8ef91c2d7309ca7c" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1acf9f8cb4a556331826a8e6df3a815753" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a5ee7c0a96d12c3c7486e1dfa79c00201" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a302cab07af139ec3db3f45742b77040b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a063fa2e51b0c801acf3d753d47b22f75" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aadcb7fc96060264b79273576ccdf0976" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1aedf6e7e4622b94172a48a6288764f683" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1acdc1d82a0af42bb5b8d5653f75398a17" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a77d04cffffe976cb84123c07ecff27dd" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a7e0f05fc35f3ad42adf489d34aeacf59" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a5a1935aaecb78e47094b34c14f59b9d0" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a7a945cd6856f950e623137092a8b8750" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a1aa587eb7b518767dc8e6e20025c4ada" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a4603c8e6728c4ca94afb9dcf32f02784" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2b88f14a2cb00ae998eba5ec78aa243b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ae3c5f61ab1585dce161c2f796b421ff9" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a14be3a5aa08aadc84d27aaedb381e3af" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a92cf4f23e58220fcbfb700d28301db74" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a59fc6d824023fc428767a26d6cc86e92" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a1f5d27a51c100030e82a01884c8f601c" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a328c9c441eecbb2fc46ff271d7069362" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a22272bb306f23e231a64a1f5f3043ea5" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a6c92c59f1afb8304940138a5c3a1ebfa" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2b44b270966a1be4b9ac6049b1b4925f" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1af1484de8e45989e30ac1eef00d600ece" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1abc0c82ca6ea2dafa24a6268ce5f72535" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a4d20a935dce4c038ecf6801044bc31b9" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad70a4ec82fd0455c17cf312ad14a900b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a995b512924d7ce6131c021b197e17031" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad469ce577d52b1f43415eca18e30247d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a3108e71b6eebbc938a530a621340a5d8" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Row</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a96a4d60cbf104251ea1ef1de03cc49ef" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad7bfa3c522958e0854d9eba862e361ce" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1ad1bd2b07c2ec54234297b0616baee648" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a48a0472b5b4db45f8b3670e1a589bac3" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a0d4462fbe254300e94d3c53f5d4a0365" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1adc6ed6f634752a1d9f0e0bb0467a87dc" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Trace</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a0045136d155b41589374286348b23348" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>Transposed</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_012_u_01_4_1a2e3f97552e35ae9553ce0e9d363d7e29" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 2U &gt;</scope><name>VariableType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

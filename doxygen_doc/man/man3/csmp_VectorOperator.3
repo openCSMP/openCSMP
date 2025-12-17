@@ -1,0 +1,83 @@
+.TH "csmp::VectorOperator< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::VectorOperator< dim > \- Vector operator\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <VectorOperator\&.h>\fP
+.PP
+Inherited by \fBcsmp::PoreVolumeRHS< dim >\fP, and \fBcsmp::SourceTermRHS< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBAccumulateFiniteVolume\fP (const \fBNode\fP< dim > &, std::vector< double > &rhs) const =0"
+.br
+.ti -1c
+.RI "virtual void \fBAccumulateStencil\fP (const \fBElement\fP< dim > &, std::vector< double > &rhs) const =0"
+.br
+.ti -1c
+.RI "void \fBMultiplyWithTimeIncrement\fP (double dt)"
+.br
+.RI "includes the time increment in the multiplication factor for this operator "
+.ti -1c
+.RI "void \fBFactor\fP (double value)"
+.br
+.RI "set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-1), multiplication or division (fac=1/value) "
+.ti -1c
+.RI "double \fBFactor\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::VectorOperator< dim >"Vector operator\&. 
+
+Part of the Colleoli transport scheme\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan Matthai 
+.RE
+.PP
+\fBVersion\fP
+.RS 4
+0a 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+6/12/2017 
+.RE
+.PP
+\fBPrecondition\fP
+.RS 4
+base class for matrix operators 
+.RE
+.PP
+\fBCopyright\fP
+.RS 4
+The University of Melbourne 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> virtual void \fBcsmp::VectorOperator\fP< dim >::AccumulateFiniteVolume (const \fBNode\fP< dim > & , std::vector< double > & rhs) const\fR [pure virtual]\fP"
+
+.PP
+Implemented in \fBcsmp::PoreVolumeRHS< dim >\fP, and \fBcsmp::SourceTermRHS< dim >\fP\&.
+.SS "template<uint32_t dim> virtual void \fBcsmp::VectorOperator\fP< dim >::AccumulateStencil (const \fBElement\fP< dim > & , std::vector< double > & rhs) const\fR [pure virtual]\fP"
+
+.PP
+Implemented in \fBcsmp::PoreVolumeRHS< dim >\fP, and \fBcsmp::SourceTermRHS< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

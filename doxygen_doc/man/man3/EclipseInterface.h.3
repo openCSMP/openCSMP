@@ -1,0 +1,167 @@
+.TH "source/includes/interfaces/Eclipse/EclipseInterface.h" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+source/includes/interfaces/Eclipse/EclipseInterface.h \- 
+.IP "\(bu" 2
+glue that creates a file-based interface between CSMP and Eclipse 
+.PP
+ 
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include 'CornerPointCell\&.h'\fP
+.br
+\fR#include 'CornerPointGrid\&.h'\fP
+.br
+\fR#include 'Parameter\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBcsmp::EclipseWellCompletion\fP"
+.br
+.ti -1c
+.RI "struct \fBcsmp::EclipseWell\fP"
+.br
+.ti -1c
+.RI "struct \fBcsmp::EclipseWellPathEntry\fP"
+.br
+.ti -1c
+.RI "struct \fBcsmp::EclipseWellPath\fP"
+.br
+.ti -1c
+.RI "struct \fBcsmp::EclipseFault\fP"
+.br
+.ti -1c
+.RI "class \fBcsmp::EclipseInterface\fP"
+.br
+.ti -1c
+.RI "class \fBcsmp::EclipseModelSettings\fP"
+.br
+.RI "PROPS and several other specifications from the RUNSPECS file record\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBcsmp\fP"
+.br
+.RI "Complex System Modeling Platform\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBcsmp::ECLIPSE_PROPERTY\fP { \fBcsmp::ECLIPSE_FIPNUM\fP = -5, \fBcsmp::ECLIPSE_ROCKNUM\fP = -4, \fBcsmp::ECLIPSE_EQLNUM\fP = -3, \fBcsmp::ECLIPSE_PVTNUM\fP = -2, \fBcsmp::ECLIPSE_SATNUM\fP = -1, \fBcsmp::ECLIPSE_NTG\fP = 1, \fBcsmp::ECLIPSE_PORO\fP = 2, \fBcsmp::ECLIPSE_PERM\fP = 3, \fBcsmp::ECLIPSE_PRESSURE\fP = 4, \fBcsmp::ECLIPSE_SWAT\fP = 5, \fBcsmp::ECLIPSE_SOIL\fP = 6, \fBcsmp::ECLIPSE_SGAS\fP = 7, \fBcsmp::ECLIPSE_MULTFLT\fP = 8, \fBcsmp::ECLIPSE_MULT\fP = 9, \fBcsmp::ECLIPSE_TRAN\fP = 10 }"
+.br
+.RI "Eclipse integer tags needed to interpret properties and constitutive relations applied to grid cells\&. "
+.ti -1c
+.RI "enum \fBcsmp::ECLIPSE_PHASE\fP { \fBECLIPSE_OIL\fP = 0, \fBECLIPSE_WATER\fP = 1, \fBECLIPSE_GAS\fP = 2, \fBECLIPSE_LIQ\fP = 3 }"
+.br
+.RI "ACTNUM active region number; in definition of regions? "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBcsmp::isEclipseCommentLine\fP (char *text_line)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isEclipseEndOfBlock\fP (char *str)"
+.br
+.RI "Eclipse ends its definitions with a forward slash\&. "
+.ti -1c
+.RI "bool \fBcsmp::isEclipseLineWithEndOfBlock\fP (char *text_line)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::readEclipseKeyword\fP (std::ifstream &ifs, char *text_line, size_t line_length, std::string &keyword, std::vector< std::string > &keyword_parameters)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::readEclipseNonBlankLine\fP (std::ifstream &ifs, char *text_line, size_t line_length, bool &endOfblock)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseFirstLineInBlock\fP (std::ifstream &ifs, char *text_line, size_t line_length, bool &endOfblock)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseIncludeFileName\fP (std::ifstream &ifs, char *text_line, size_t line_length, std::string &fname)"
+.br
+.ti -1c
+.RI "template<class VarType> bool \fBcsmp::readEclipseValue\fP (const std::string &text_line, bool &default_value, size_t &num, VarType &value)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseDimensions\fP (uint32_t &NX, uint32_t &NY, uint32_t &NZ, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseGridSpecs\fP (uint32_t &NX, uint32_t &NY, uint32_t &NZ, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipsePillarCoordinates\fP (uint32_t &NX, uint32_t &NY, \fBCornerPointGrid\fP &grid, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseCornerDepths\fP (uint32_t NX, uint32_t NY, uint32_t &NZ, \fBCornerPointGrid\fP &grid, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseActiveCells\fP (std::vector< uint8_t > &cell_activity, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseCellData\fP (std::vector< \fBcsmp::ScalarVariable\fP > &values, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseWellSpecs\fP (std::map< std::string, \fBEclipseWell\fP > &well_data, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseWellCompletionsData\fP (uint32_t NX, uint32_t NY, uint32_t NZ, std::map< std::string, \fBEclipseWell\fP > &well_data, std::map< std::string, \fBEclipseWellPath\fP > &well_path, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseExplicitFaceWellCompletionsData\fP (uint32_t NX, uint32_t NY, uint32_t NZ, std::map< std::string, \fBEclipseWell\fP > &well_data, std::map< std::string, \fBEclipseWellPath\fP > &well_path, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseExplicitNodeWellCompletionsData\fP (uint32_t NX, uint32_t NY, uint32_t NZ, std::map< std::string, \fBEclipseWell\fP > &well_data, std::map< std::string, \fBEclipseWellPath\fP > &well_path, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseFaultData\fP (uint32_t NX, uint32_t NY, uint32_t NZ, std::map< std::string, \fBEclipseFault\fP > &faults_data, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseFaultTransmissibilityMultipliers\fP (uint32_t NX, uint32_t NY, uint32_t NZ, std::map< std::string, double > &multflt, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::readEclipseBoxData\fP (std::vector< uint32_t > &box_data, std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "int \fBcsmp::skipEclipseBlock\fP (std::ifstream &ifs, char *text_line, size_t line_length, bool verbose)"
+.br
+.ti -1c
+.RI "void \fBcsmp::removeSymbolsFromString\fP (std::string &str, const char *symbolsToRemove)"
+.br
+.ti -1c
+.RI "void \fBcsmp::addWellPath\fP (uint32_t NX, uint32_t NY, uint32_t NZ, const std::string &well_name, const std::vector< \fBijk\fP > &cell_ids, std::map< std::string, \fBEclipseWellPath\fP > &well_path)"
+.br
+.ti -1c
+.RI "void \fBcsmp::addWellPath\fP (const std::string &well_name, const std::vector< \fBijk\fP > &cell_ids, const std::vector< std::pair< \fBijk\fP, \fB::csmp::CORNER_POINT_CELL_FACE_INDEX\fP > > &face_ids, std::map< std::string, \fBEclipseWellPath\fP > &well_path)"
+.br
+.ti -1c
+.RI "void \fBcsmp::addWellPath\fP (const std::string &well_name, const std::vector< \fBijk\fP > &cell_ids, std::pair< \fBijk\fP, \fB::csmp::CORNER_POINT_CELL_FACE_INDEX\fP > face_ids, std::map< std::string, \fBEclipseWellPath\fP > &well_path)"
+.br
+.ti -1c
+.RI "void \fBcsmp::addWellPath\fP (const std::string &well_name, const std::vector< \fBijk\fP > &cell_ids, std::pair<\fB::csmp::CORNER_POINT_CELL_FACE_INDEX\fP, \fB::csmp::CORNER_POINT_CELL_FACE_INDEX\fP > face_ids, std::map< std::string, std::vector< std::pair< size_t, std::pair< size_t, size_t > > > > &well_path)"
+.br
+.ti -1c
+.RI "void \fBcsmp::addWellPath\fP (const std::string &well_name, const \fBijk\fP &cell_ids, std::pair< \fBijk\fP, \fB::csmp::CORNER_POINT_CELL_FACE_INDEX\fP > face_id, std::map< std::string, \fBEclipseWellPath\fP > &well_path)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.IP "\(bu" 2
+glue that creates a file-based interface between CSMP and Eclipse 
+.PP
+
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

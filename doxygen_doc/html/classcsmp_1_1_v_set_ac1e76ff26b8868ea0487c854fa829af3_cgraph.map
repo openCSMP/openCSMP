@@ -1,0 +1,5 @@
+<map id="csmp::VSet::Erase" name="csmp::VSet::Erase">
+<area shape="rect" id="Node000001" title="deletes all content of the VSet" alt="" coords="5,5,138,31"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_data.html#ab682ddf35a3fb622b898a3d69db0d048" title="clear the container" alt="" coords="186,5,326,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,16,170,16,170,21,138,21"/>
+</map>

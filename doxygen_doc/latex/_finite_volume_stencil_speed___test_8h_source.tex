@@ -1,0 +1,37 @@
+\doxysection{Finite\+Volume\+Stencil\+Speed\+\_\+\+Test.\+h}
+\hypertarget{_finite_volume_stencil_speed___test_8h_source}{}\label{_finite_volume_stencil_speed___test_8h_source}\index{tests/unit/FiniteVolumeStencilSpeed\_Test.h@{tests/unit/FiniteVolumeStencilSpeed\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_FINITE\_VOLUME\_STENCIL\_SPEED\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_FINITE\_VOLUME\_STENCIL\_SPEED\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00007\ \ \ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00009\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ \ \ @brief\ benchmarking\ the\ FiniteVolumeStencil\ container\ class\ underpinning\ CSMP's\ transport\ schemes.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ \ \ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ \ \ \ Compares\ the\ access\ speed\ of\ FiniteVolumeStencil\ with\ a\ refactored\ version\ based\ on\ DynamicArray2D\ and\ DynamicArray3D}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ \ \ \ }}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ \ \ \ @attention\ a\ tetrahedral\ /\ triangular\ element\ mesh\ is\ used\ to\ to\ keep\ \ variable\ access\ cost\ to\ a\ mininum}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_speed___test}{FiniteVolumeStencilSpeed\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00017\ \ \ \ \ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_speed___test_afbcc5a193ceea973fc00fcfd5f0f1eac}{AssignFlowProperties}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_speed___test_a54ed2cc3436766235e63a622e10e5013}{DivergenceFreeTotalVelocityField}}(\ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&,\ \textcolor{keywordtype}{double}\ delta\_pf\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_speed___test_a5641c71658839637ad4d7bf323a3aa80}{TestFlowThroughModel}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model,\ \textcolor{keywordtype}{bool}\ prescribed\_velocity\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00027\ \ \ \ \ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

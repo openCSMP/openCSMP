@@ -122,7 +122,7 @@ struct Index {
     VARIABLE_TYPE                       type;
     PLACEMENT                           place;
     // mutable as these might have to change as new variables at added at runtime
-    mutable int_type                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
+    mutable int_type                    index = std::numeric_limits<int_type>::max(); ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
     int_type                            dataDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim*dim, Array:Size, FlaggedArray:Size
     int_type                            flagDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim, Array:1, FlaggedArray:Size
     mutable int_type                    dataOffset;                 ///< Index in data container where data start

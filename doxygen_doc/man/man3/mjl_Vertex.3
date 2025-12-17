@@ -1,0 +1,170 @@
+.TH "mjl::Vertex" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mjl::Vertex
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBmjl::Node\fP, and \fBmjl::Point\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVertex\fP (double, double)"
+.br
+.ti -1c
+.RI "\fBVertex\fP (const \fBmjl::Point\fP &)"
+.br
+.ti -1c
+.RI "\fBVertex\fP * \fBCw\fP () const"
+.br
+.ti -1c
+.RI "\fBVertex\fP * \fBCcw\fP () const"
+.br
+.ti -1c
+.RI "\fBVertex\fP * \fBNeighbor\fP (ORIENTATION) const"
+.br
+.ti -1c
+.RI "\fBmjl::Point\fP \fBPoint\fP () const"
+.br
+.ti -1c
+.RI "\fBVertex\fP * \fBInsert\fP (\fBVertex\fP *)"
+.br
+.ti -1c
+.RI "\fBVertex\fP * \fBRemove\fP ()"
+.br
+.ti -1c
+.RI "void \fBSplice\fP (\fBVertex\fP *)"
+.br
+.ti -1c
+.RI "\fBVertex\fP * \fBSplit\fP (\fBVertex\fP *)"
+.br
+.ti -1c
+.RI "bool \fBIsConvex\fP () const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBmjl::Node\fP
+.in +1c
+.ti -1c
+.RI "\fBNode\fP * \fBNext\fP ()"
+.br
+.ti -1c
+.RI "\fBNode\fP * \fBPrev\fP ()"
+.br
+.ti -1c
+.RI "\fBNode\fP * \fBInsert\fP (\fBNode\fP *)"
+.br
+.ti -1c
+.RI "\fBNode\fP * \fBRemove\fP ()"
+.br
+.ti -1c
+.RI "void \fBSplice\fP (\fBNode\fP *)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBmjl::Point\fP
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP (double, double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBoperator+\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBoperator\-\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator+=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator\-=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator*=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator/=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator*=\fP (double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator/=\fP (double)"
+.br
+.ti -1c
+.RI "double & \fBoperator()\fP (int)"
+.br
+.ti -1c
+.RI "double \fBoperator[]\fP (int) const"
+.br
+.ti -1c
+.RI "double \fBX\fP () const"
+.br
+.ti -1c
+.RI "double \fBY\fP () const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator>\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "int \fBOrientation\fP (\fBPoint\fP &, \fBPoint\fP &, \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "double \fBPolarAngle\fP () const"
+.br
+.ti -1c
+.RI "double \fBLength\fP () const"
+.br
+.ti -1c
+.RI "LOCATION \fBClassify\fP (const \fBPoint\fP &, const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "LOCATION \fBClassify\fP (const \fBEdge\fP &) const"
+.br
+.ti -1c
+.RI "void \fBSet\fP (double, double)"
+.br
+.ti -1c
+.RI "void \fBMove\fP (double dx, double dy)"
+.br
+.ti -1c
+.RI "void \fBScale\fP (double xfac, double yfac)"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBmjl::Node\fP
+.in +1c
+.ti -1c
+.RI "\fBNode\fP * \fBnext_\fP = nullptr"
+.br
+.ti -1c
+.RI "\fBNode\fP * \fBprev_\fP = nullptr"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

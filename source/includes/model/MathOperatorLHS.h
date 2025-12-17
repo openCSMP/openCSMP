@@ -120,10 +120,10 @@ class MathOperatorLHS {
                                               DenseMatrix<DM_MIN>& );
                                               
     /// getting data from the Element, Face, InterFace
-    virtual void  GetOperands( const CELL<dim>&  );
+    virtual void  GetOperands( const CELL<dim>& );
 
     /// integration performed on Element, Face, InterFace
-    virtual void  ComputeContribution( const CELL<dim>&  );
+    virtual void  ComputeContribution( const CELL<dim>& );
 
     /// writing data to the Element, Face, InterFace
     virtual void  WriteOperands( CELL<dim>& );

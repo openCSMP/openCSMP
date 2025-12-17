@@ -8,12 +8,6 @@ using namespace std;
 namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class CELL>
-NumIntegral_NT_dNi_dV<dim,CELL>::~NumIntegral_NT_dNi_dV() {}
-
-
-
-
-template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_dNi_dV<dim,CELL>::NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>& pref,
                                                          const char*            basic,
                                                          const char*            test )

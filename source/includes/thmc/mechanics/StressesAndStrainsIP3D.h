@@ -13,8 +13,8 @@ template<uint32_t> class Model;
 
 // TODO: add Biot constraints as a post-processing step, Biot-Willis coefficient alpha or drained and undrained moduli are needed
 
-/// 3D stress & strain tensor variables placed at integration points
-class StressesAndStrainsIP3D : public MathOperatorLHS<3U> {
+/// 3D (only) stress & strain tensor variables placed at integration points
+class StressesAndStrainsIP3D : public MathOperatorLHS<3,Element> {
   public:
     /// 3D constructor: note that - in contrast with civil engineering - in geomechanics compressive stresses are positive
     StressesAndStrainsIP3D( const Model<3U>&, 
@@ -25,13 +25,13 @@ class StressesAndStrainsIP3D : public MathOperatorLHS<3U> {
                             bool geomechanics_conventions=true  );
   
     /// get displacement values to compute {d} vector
-    virtual void GetOperands( Element<3U>& );
+    virtual void GetOperands( const Element<3>& );
 
     /// {e} = [B]{d}, {s} = [D]{e} at integration points
-    virtual void ComputeContribution( Element<3U>& );
+    virtual void ComputeContribution( const Element<3>& );
 
     /// write {e} to each elements
-    virtual void WriteOperands( Element<3U>& );
+    virtual void WriteOperands( Element<3>& );
     
     void PrincipalStrainsAndStresses( bool yes_no );
     

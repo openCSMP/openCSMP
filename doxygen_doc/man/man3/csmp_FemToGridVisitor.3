@@ -1,0 +1,148 @@
+.TH "csmp::FemToGridVisitor< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FemToGridVisitor< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFemToGridVisitor\fP (const \fBPropertyDatabase\fP< dim > &, \fBFiniteDifferenceGrid\fP &, const char *var, size_t elements)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.RI "if the visitor is passed to a region, all its elements are processed "
+.ti -1c
+.RI "void \fBOutputProperty\fP (const char *prop)"
+.br
+.ti -1c
+.RI "const char * \fBOutputProperty\fP () const"
+.br
+.ti -1c
+.RI "bool \fBOverWrite\fP () const"
+.br
+.ti -1c
+.RI "void \fBOverWrite\fP (bool yes_or_no)"
+.br
+.ti -1c
+.RI "void \fBChangeOutputProperty\fP (const char *var)"
+.br
+.ti -1c
+.RI "\fBFemToGridVisitor\fP & \fBoperator=\fP (const \fBFemToGridVisitor\fP &)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::FemToGridVisitor< dim >"
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1997
+.RE
+.PP
+class '\fBFemToGridVisitor\fP' uses linear interpolation on a triangle to calculate values of the input "var" on the supplied regular grid\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::FemToGridVisitor\fP< dim >::Visit (\fBElement\fP< dim > * n)\fR [virtual]\fP"
+Using the element interpolation functions, the property is interpolated onto the \fBFiniteDifferenceGrid\fP object\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIn\fP A pointer to the \fBElement\fP in which the values shall be interpolated\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+To output model results to JPEG images or other gridded data\&. 
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::FemToGridVisitor\fP< dim >::Visit (\fBRegion\fP< dim > * r)\fR [virtual]\fP"
+
+.PP
+if the visitor is passed to a region, all its elements are processed 
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

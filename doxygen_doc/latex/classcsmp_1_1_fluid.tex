@@ -1,0 +1,110 @@
+\doxysection{csmp\+::Fluid\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_fluid}{}\label{classcsmp_1_1_fluid}\index{csmp::Fluid$<$ dim, USER $>$@{csmp::Fluid$<$ dim, USER $>$}}
+
+
+{\ttfamily \#include $<$Fluid.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Fluid\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_fluid__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Fluid\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=207pt]{classcsmp_1_1_fluid__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_fluid_aa40e2f444b57d5b9cab64096e81532f8}\label{classcsmp_1_1_fluid_aa40e2f444b57d5b9cab64096e81532f8} 
+{\bfseries Fluid} ()
+\begin{DoxyCompactList}\small\item\em default constructor that tests the phase-\/state key \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_a5d35a075b444911a7e9040682ec52b84}\label{classcsmp_1_1_fluid_a5d35a075b444911a7e9040682ec52b84} 
+double {\bfseries Viscosity} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em the node property fluid viscosity (Pa.\+s) returned has been interpolated to the user-\/specified target placement (argument parameter) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_ad48d5b1424a713044b64f5f1643b11b0}\label{classcsmp_1_1_fluid_ad48d5b1424a713044b64f5f1643b11b0} 
+double {\bfseries Viscosity} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em the node property fluid viscosity (Pa.\+s) interpolated to element barycentre \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_a61429ffb69af923f493044a3f8e4cf26}\label{classcsmp_1_1_fluid_a61429ffb69af923f493044a3f8e4cf26} 
+double {\bfseries Viscosity} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em the node property fluid viscosity (Pa.\+s) at the node i of the element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_a71cf4da9f4528fe980cf17fde0489dd8}\label{classcsmp_1_1_fluid_a71cf4da9f4528fe980cf17fde0489dd8} 
+double {\bfseries Density} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em the returned node property fluid density (of phase) (kg/m3) interpolated to the user-\/specified target placement (argument parameter) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_a6f8be3917e76cfb892eee2780563021d}\label{classcsmp_1_1_fluid_a6f8be3917e76cfb892eee2780563021d} 
+double {\bfseries Density} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\item 
+\Hypertarget{classcsmp_1_1_fluid_abe4c1295be1ce60491b496070a35f0eb}\label{classcsmp_1_1_fluid_abe4c1295be1ce60491b496070a35f0eb} 
+double {\bfseries Density} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node, uint32\+\_\+t phase) const
+\item 
+\Hypertarget{classcsmp_1_1_fluid_ac79983865ce50ef995e71b8d9ce1227f}\label{classcsmp_1_1_fluid_ac79983865ce50ef995e71b8d9ce1227f} 
+double {\bfseries Mixture\+Density} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em returns saturation-\/weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_a4fbb324f0b646984612e237f6b5c957b}\label{classcsmp_1_1_fluid_a4fbb324f0b646984612e237f6b5c957b} 
+double {\bfseries Mixture\+Density} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+\Hypertarget{classcsmp_1_1_fluid_ae3baf07b2ba77e37d620ccd405a326fa}\label{classcsmp_1_1_fluid_ae3baf07b2ba77e37d620ccd405a326fa} 
+double {\bfseries Mixture\+Density} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_fluid_ae18bd5309962a5d0a15e766c159f8ae0}{Viscosity\+Ratio}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em returns the ratio of the phase viscosities at the target placement \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_a3748aec68bc142512495b743330ab9c4}\label{classcsmp_1_1_fluid_a3748aec68bc142512495b743330ab9c4} 
+double {\bfseries Viscosity\+Ratio} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\item 
+\Hypertarget{classcsmp_1_1_fluid_a5ea885c34cf66e3546676d2c2f903407}\label{classcsmp_1_1_fluid_a5ea885c34cf66e3546676d2c2f903407} 
+double {\bfseries Viscosity\+Ratio} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_fluid_ae6d7eda07d8d4e2ab19593f4045e3056}\label{classcsmp_1_1_fluid_ae6d7eda07d8d4e2ab19593f4045e3056} 
+USER$<$ dim $>$ \texorpdfstring{$\ast$}{*} {\bfseries User} ()
+\begin{DoxyCompactList}\small\item\em shorthand for accessing the class that Facet\+Flux\+\_\+\+Tracer\+Transfer\+Explicit is a policy of \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_fluid_a3c824350e593f55ced63e0ea96e86eb3}\label{classcsmp_1_1_fluid_a3c824350e593f55ced63e0ea96e86eb3} 
+USER$<$ dim $>$ const \texorpdfstring{$\ast$}{*} {\bfseries User} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$\newline
+class csmp\+::\+Fluid$<$ dim, USER $>$}
+Blueprint for any specific \doxylink{classcsmp_1_1_fluid}{Fluid} property class to be used in the generic transport scheme. This generic one is not associated with any particular equation of state, but derived ones in this implementation of static polymorphism may well be.
+
+When properties are requested for the element, the methods of the class performs a smart interpolation of fluid properties dependent on their existance as indicated by the phase state. Else,the method just reads the properties from the model.
+
+\begin{DoxyAttention}{Attention}
+the fluid properties must be initialised elsewhere by an equation of state. 
+\end{DoxyAttention}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_fluid_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_fluid_ae18bd5309962a5d0a15e766c159f8ae0}\index{csmp::Fluid$<$ dim, USER $>$@{csmp::Fluid$<$ dim, USER $>$}!ViscosityRatio@{ViscosityRatio}}
+\index{ViscosityRatio@{ViscosityRatio}!csmp::Fluid$<$ dim, USER $>$@{csmp::Fluid$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{ViscosityRatio()}{ViscosityRatio()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_fluid_ae18bd5309962a5d0a15e766c159f8ae0} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_fluid}{csmp\+::\+Fluid}}$<$ dim, USER $>$\+::\+Viscosity\+Ratio (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the ratio of the phase viscosities at the target placement 
+
+aqueous phase viscosity / carbonic phase viscosity 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/two\+\_\+phase\+\_\+flow/Fluid.\+h\item 
+source/modules/thmc/two\+\_\+phase\+\_\+flow/Fluid.\+cpp\end{DoxyCompactItemize}

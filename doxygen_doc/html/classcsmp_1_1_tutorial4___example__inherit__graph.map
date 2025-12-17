@@ -1,0 +1,6 @@
+<map id="csmp::Tutorial4_Example" name="csmp::Tutorial4_Example">
+<area shape="rect" id="Node000001" title=" " alt="" coords="19,440,178,567"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_example.html" title=" " alt="" coords="5,5,191,392"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,407,94,440,88,440,87,407"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="109,407,108,440,103,440,104,407"/>
+</map>

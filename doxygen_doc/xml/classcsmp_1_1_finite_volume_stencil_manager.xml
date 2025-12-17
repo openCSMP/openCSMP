@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_finite_volume_stencil_manager" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FiniteVolumeStencilManager</compoundname>
+    <includes refid="_finite_volume_stencil_manager_8h" local="no">FiniteVolumeStencilManager.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="enum" id="classcsmp_1_1_finite_volume_stencil_manager_1ad01ce4549bbd5401039756bbd2778a68" prot="private" static="no" strong="no">
+        <type></type>
+        <name></name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager</qualifiedname>
+        <enumvalue id="classcsmp_1_1_finite_volume_stencil_manager_1ad01ce4549bbd5401039756bbd2778a68a9c6ca4796ff7b45cd2b5110cdba60a83" prot="private">
+          <name>STENCIL_POLYTYPES</name>
+          <initializer>= 7</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="33" column="5" bodyfile="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" bodystart="33" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_stencil_manager_1a9ba80b63d08814010dd776d81aca9b62" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref>&lt; dim &gt;</type>
+        <definition>FiniteVolumeStencil&lt;dim&gt; csmp::FiniteVolumeStencilManager&lt; dim &gt;::stencils[STENCIL_POLYTYPES]</definition>
+        <argsstring>[STENCIL_POLYTYPES]</argsstring>
+        <name>stencils</name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager::stencils</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="34" column="32" bodyfile="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_stencil_manager_1a22ac2fbeaa32b8282866a4eee43334d8" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref>, size_t &gt;</type>
+        <definition>std::map&lt;CSMP_FEM_TYPE,size_t&gt; csmp::FiniteVolumeStencilManager&lt; dim &gt;::type_mapping</definition>
+        <argsstring></argsstring>
+        <name>type_mapping</name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager::type_mapping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="35" column="15" bodyfile="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_stencil_manager_1ad73e332086469e81b6a6f8e2820e619a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumeStencilManager&lt; dim &gt;::FiniteVolumeStencilManager</definition>
+        <argsstring>(const FiniteElementManager &amp;fem_manager)</argsstring>
+        <name>FiniteVolumeStencilManager</name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager::FiniteVolumeStencilManager</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_element_manager" kindref="compound">FiniteElementManager</ref> &amp;</type>
+          <declname>fem_manager</declname>
+        </param>
+        <briefdescription>
+<para>creates finite volume stencil objects for the element types supported by the current finite-element manager </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="22" column="5" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencilManager.cpp" bodystart="10" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_stencil_manager_1ae638ca019b054ba7c1c2a26f70ce82f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumeStencilManager&lt; dim &gt;::~FiniteVolumeStencilManager</definition>
+        <argsstring>()</argsstring>
+        <name>~FiniteVolumeStencilManager</name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager::~FiniteVolumeStencilManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="23" column="5" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencilManager.cpp" bodystart="18" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_stencil_manager_1a3bf1c0f001664a99392eab39383192a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref>&lt; dim &gt; *const</type>
+        <definition>const FiniteVolumeStencil&lt; dim &gt; *const csmp::FiniteVolumeStencilManager&lt; dim &gt;::Stencil</definition>
+        <argsstring>(CSMP_FEM_TYPE etype) const</argsstring>
+        <name>Stencil</name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager::Stencil</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+          <declname>etype</declname>
+        </param>
+        <briefdescription>
+<para>returns pointer to corresponding FV stencil type </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns pointer to corresponding FV stencil type </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="26" column="37" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencilManager.cpp" bodystart="57" bodyend="66"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_stencil_manager_1a07ad7be9bf3ff942fcd8225c6b85cb67" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumeStencilManager&lt; dim &gt;::FiniteVolumeStencilManager</definition>
+        <argsstring>()=delete</argsstring>
+        <name>FiniteVolumeStencilManager</name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager::FiniteVolumeStencilManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="29" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_stencil_manager_1a9a50ee6290d9f60a5f1bd21ab5dd769e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumeStencilManager&lt; dim &gt;::Initialize</definition>
+        <argsstring>(const FiniteElementManager &amp;fem_manager)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::FiniteVolumeStencilManager::Initialize</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_element_manager" kindref="compound">FiniteElementManager</ref> &amp;</type>
+          <declname>fem_manager</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="30" column="10" bodyfile="source/modules/integration/finite_volumes/FiniteVolumeStencilManager.cpp" bodystart="25" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Finite element - finite volume stencils with a parametric space representation, see Paluszny et al. (2007, Geofluids). </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="author"><para>Adriana Paluszny </para>
+</simplesect>
+<simplesect kind="date"><para>2001 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FiniteVolumeStencilManager&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_stencil_manager"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" line="19" column="1" bodyfile="source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h" bodystart="19" bodyend="36"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1ad73e332086469e81b6a6f8e2820e619a" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>FiniteVolumeStencilManager</name></member>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1a07ad7be9bf3ff942fcd8225c6b85cb67" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>FiniteVolumeStencilManager</name></member>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1a9a50ee6290d9f60a5f1bd21ab5dd769e" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1a3bf1c0f001664a99392eab39383192a3" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>Stencil</name></member>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1ad01ce4549bbd5401039756bbd2778a68a9c6ca4796ff7b45cd2b5110cdba60a83" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>STENCIL_POLYTYPES</name></member>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1a9ba80b63d08814010dd776d81aca9b62" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>stencils</name></member>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1a22ac2fbeaa32b8282866a4eee43334d8" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>type_mapping</name></member>
+      <member refid="classcsmp_1_1_finite_volume_stencil_manager_1ae638ca019b054ba7c1c2a26f70ce82f7" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumeStencilManager</scope><name>~FiniteVolumeStencilManager</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

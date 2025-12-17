@@ -126,7 +126,7 @@ void writeVariableIf( CELL<dim>* ptr,
     Generic version for variables that are placed on Element/Face/Interface integration points.
 */
 template<uint32_t dim, template<uint32_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
+void writeVariableIf( CELL<dim>*, uint32_t, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
     std::cerr <<"\nwriteVariableIf( CELL<dim>*, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): generic should never be called.\n";
  } // end generic specification
@@ -224,14 +224,14 @@ void writeVariableIf( CELL<dim>* ptr,
 
 
 /**
-    Helper functions that checks a complex varboundary flags of a variable that shall be assigned
+    Helper functions that check a complex varboundary flags of a variable that shall be assigned
     and only transfers values to it if the variable has not got the specified flag.
     
     Generic version for finite volume-related integration points.
 */
 template<uint32_t dim, template<uint32_t> class CELL, class Var>
 void writeVariableIf( CELL<dim>*, uint32_t sector_or_facet,
-                      uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
+                      uint32_t, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
     std::cerr <<"\nwriteVariableIf( CELL<dim>*, uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): should never be called; only specialisation thereof.\n";
  } // end generic specification
@@ -239,7 +239,7 @@ void writeVariableIf( CELL<dim>*, uint32_t sector_or_facet,
 /// write guard for scalar variables
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      uint32_t sector_or_facet,
+                      uint32_t,
                       uint32_t ip,
                       const csmp::Index& idx,
                       const ScalarVariable& var,
@@ -253,7 +253,7 @@ void writeVariableIf( CELL<dim>* ptr,
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      uint32_t sector_or_facet,
+                      uint32_t,
                       uint32_t ip,
                       const csmp::Index& idx,
                       const ArrayVariable& var,

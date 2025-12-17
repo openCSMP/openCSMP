@@ -1,0 +1,822 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_brooks_corey_with_hysteresis" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BrooksCoreyWithHysteresis</compoundname>
+    <basecompoundref refid="classcsmp_1_1_two_phase_model" prot="public" virt="non-virtual">csmp::TwoPhaseModel&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a530c8eec486d9705a56737d95aa2d317" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::pd_key</definition>
+        <argsstring></argsstring>
+        <name>pd_key</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::pd_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="54" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1afe4c18efe0d8ef582bb3d39e6b043750" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::lamda_key</definition>
+        <argsstring></argsstring>
+        <name>lamda_key</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::lamda_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="54" column="33" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1ab7860f6aadf5bfd67b1c72db9d6661cf" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::sormax_key</definition>
+        <argsstring></argsstring>
+        <name>sormax_key</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::sormax_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="54" column="43" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1aa2e93554e278bb4908c1c506ba454491" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::sat_previous_key</definition>
+        <argsstring></argsstring>
+        <name>sat_previous_key</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::sat_previous_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="55" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1aea35997ba2b73f5edc82f4c437085824" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::sat_inflection_key</definition>
+        <argsstring></argsstring>
+        <name>sat_inflection_key</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::sat_inflection_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="55" column="43" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a29fa83a283f0617b01ef9b84be2706b6" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::acc_gravity_</definition>
+        <argsstring></argsstring>
+        <name>acc_gravity_</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::acc_gravity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="56" column="24" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1afe2b2dc15a38aaf9dc12b333eb1f8ec0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::sat_previous</definition>
+        <argsstring></argsstring>
+        <name>sat_previous</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::sat_previous</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="57" column="24" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a1b3b2462ae11ced208d9b5378abcef6c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::sat_inflection</definition>
+        <argsstring></argsstring>
+        <name>sat_inflection</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::sat_inflection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="58" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a45fa2ec1c1d8c9235f3440e141bb8b0c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::sormax</definition>
+        <argsstring></argsstring>
+        <name>sormax</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::sormax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="59" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1af6335d8d7b0f7182a36501d5901c0a77" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::imbibing</definition>
+        <argsstring></argsstring>
+        <name>imbibing</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::imbibing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="60" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a76cdfc2d7e3b2a094672e88631b6145b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::on_scaning_curve</definition>
+        <argsstring></argsstring>
+        <name>on_scaning_curve</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::on_scaning_curve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="61" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1aaad3c119dfd5b4924de4cab84e5aff92" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::CC</definition>
+        <argsstring></argsstring>
+        <name>CC</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::CC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="12" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a0604489e1c96984a66542e6f341d7409" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::CK</definition>
+        <argsstring></argsstring>
+        <name>CK</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::CK</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="15" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1adf812223bc6588c32e38f54b0d2af5c0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::Sot</definition>
+        <argsstring></argsstring>
+        <name>Sot</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::Sot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="18" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a78f85cd36ecb4bcb9b5c5814b1c1fd46" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::Snorm</definition>
+        <argsstring></argsstring>
+        <name>Snorm</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::Snorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="22" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a56483da15fe873a149078831b9d627c9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::kroDswinflection</definition>
+        <argsstring></argsstring>
+        <name>kroDswinflection</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::kroDswinflection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="28" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a5aadd62d71c117f912ca485b288d49b4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::Sof_1_Snorm</definition>
+        <argsstring></argsstring>
+        <name>Sof_1_Snorm</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::Sof_1_Snorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="45" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a1140cdd1bc27dc7e359a25703b9613d3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::kroI_1_Snorm</definition>
+        <argsstring></argsstring>
+        <name>kroI_1_Snorm</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::kroI_1_Snorm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="57" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1ae1890ec21169da0954ab2e47e7b781d8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::pm1</definition>
+        <argsstring></argsstring>
+        <name>pm1</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::pm1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="70" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a3c52dc831648e33901e415b7de37b29d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::pm2</definition>
+        <argsstring></argsstring>
+        <name>pm2</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::pm2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="62" column="74" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1aa13355dfc0e2120c9ffa906533205d66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::BrooksCoreyWithHysteresis</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, const char *permeability, double viscosity_nw, double viscosity_w, double density_nw, double density_w, const char *lamda, const char *pc_entry)</argsstring>
+        <name>BrooksCoreyWithHysteresis</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::BrooksCoreyWithHysteresis</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>permeability</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>viscosity_nw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>viscosity_w</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>density_nw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>density_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>lamda</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pc_entry</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>we also need to initialize the material parameter key in the base class in this case the material parameter is used as the lambda parameter of the Brooks-Corey model </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="13" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="24" bodyend="59"/>
+        <references refid="classcsmp_1_1_brooks_corey_with_hysteresis_1aa13355dfc0e2120c9ffa906533205d66" compoundref="_brooks_corey_with_hysteresis_8cpp" startline="24" endline="59">csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::BrooksCoreyWithHysteresis</references>
+        <referencedby refid="classcsmp_1_1_brooks_corey_with_hysteresis_1aa13355dfc0e2120c9ffa906533205d66" compoundref="_brooks_corey_with_hysteresis_8cpp" startline="24" endline="59">csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::BrooksCoreyWithHysteresis</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1ab677311b546abf94e80c46a799335928" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::BrooksCoreyWithHysteresis</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, const char *lamda, const char *pc_entry)</argsstring>
+        <name>BrooksCoreyWithHysteresis</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::BrooksCoreyWithHysteresis</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>lamda</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pc_entry</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="19" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="64" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a048d38e1852648206823f2694ccc6ad6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::~BrooksCoreyWithHysteresis</definition>
+        <argsstring>()</argsstring>
+        <name>~BrooksCoreyWithHysteresis</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::~BrooksCoreyWithHysteresis</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="22" column="13" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a27745e30768368b7083a70bfd28bdcae" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::InitializeAndStore</definition>
+        <argsstring>(Element&lt; dim &gt; &amp;)</argsstring>
+        <name>InitializeAndStore</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::InitializeAndStore</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1aea34aa1fb3b86a30fd8876ffd6b832df">InitializeAndStore</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>not constant as it sets the saturation inflection point </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="25" column="18" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="110" bodyend="156"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1abc734fa838f07b7e8fa16af1397d3af1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::krn_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>krn_Phase</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::krn_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7">krn_Phase</reimplements>
+        <briefdescription>
+<para>relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="28" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="174" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1ab54c84bc5d9ff5c7e4808ed53ffa64e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::krw_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>krw_Phase</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::krw_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b">krw_Phase</reimplements>
+        <briefdescription>
+<para>relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="29" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="162" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a2ff25fd52a4b9df31b45184c91c02c46" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::dfds</definition>
+        <argsstring>() const</argsstring>
+        <name>dfds</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::dfds</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9">dfds</reimplements>
+        <briefdescription>
+<para>derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn </para>
+        </briefdescription>
+        <detaileddescription>
+<para>derivative of fractional flow function (advection multipliers) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="32" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="267" bodyend="286"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a00d35bf31ea946e0b71ca390f989e79b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::MaxFractionalFlowDerivative</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxFractionalFlowDerivative</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::MaxFractionalFlowDerivative</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a46e4e125f5c5eb3c78f081027179d40f">MaxFractionalFlowDerivative</reimplements>
+        <briefdescription>
+<para>maximum value of previous derivative </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="35" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="222" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1ae65fc8fbd41df5f100417f2f4c8c5c5d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::dGds</definition>
+        <argsstring>() const</argsstring>
+        <name>dGds</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::dGds</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d">dGds</reimplements>
+        <briefdescription>
+<para>derivatives of gravitational flow (advection multipliers) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>derivatives of gravitational flow </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="38" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="293" bodyend="323"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1af604aaf734e098af0ff4f9061f32f23b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::pc_Phase</definition>
+        <argsstring>(size_t phase) const</argsstring>
+        <name>pc_Phase</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::pc_Phase</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="41" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="231" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a2c66899d4e4138a2a1bbdb1484251c08" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::dpcds_Phase</definition>
+        <argsstring>(size_t phase) const</argsstring>
+        <name>dpcds_Phase</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::dpcds_Phase</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="44" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="246" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1ab8ccb8d69f03cd42de881dc2cbace3d0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::ShockSpeed</definition>
+        <argsstring>() const</argsstring>
+        <name>ShockSpeed</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::ShockSpeed</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ac160a98a72d2a12fcda59cc513f17fb6">ShockSpeed</reimplements>
+        <briefdescription>
+<para>linearized fractional flow derivative </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="47" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="331" bodyend="335"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1ae18f9199ec62b66a3def061152991b51" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::ShockHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>ShockHeight</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::ShockHeight</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ab5bd3691e1e08d769292892d02603666">ShockHeight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="48" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="340" bodyend="344"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a1b66c7c73f47f31d5a1db353756aa0f9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::Out</definition>
+        <argsstring>(uint32_t phase) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::Out</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a9c8b70b4cb55a2028b78aa0ec631f400">Out</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>default is the wetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="50" column="18" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="350" bodyend="359"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_with_hysteresis_1a589655a5fd33f0d65de0e501e4329f1c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCoreyWithHysteresis&lt; dim &gt;::BrooksCoreyWithHysteresis</definition>
+        <argsstring>()</argsstring>
+        <name>BrooksCoreyWithHysteresis</name>
+        <qualifiedname>csmp::BrooksCoreyWithHysteresis::BrooksCoreyWithHysteresis</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="53" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreyWithHysteresis.cpp" bodystart="12" bodyend="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::BrooksCoreyWithHysteresis&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_with_hysteresis"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::TwoPhaseModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_model"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BrooksCoreyWithHysteresis&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_with_hysteresis"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="5">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="8">
+        <label>csmp::TensorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+      </node>
+      <node id="7">
+        <label>csmp::TensorVariable&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::TwoPhaseModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_model"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#ift_key_</edgelabel>
+          <edgelabel>#lt_key_</edgelabel>
+          <edgelabel>#mun_key_</edgelabel>
+          <edgelabel>#muw_key_</edgelabel>
+          <edgelabel>#perm_key_</edgelabel>
+          <edgelabel>#rhn_key_</edgelabel>
+          <edgelabel>#rhw_key_</edgelabel>
+          <edgelabel>#sat_key_</edgelabel>
+          <edgelabel>#snr_key_</edgelabel>
+          <edgelabel>#swr_key_</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>#K_</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" line="11" column="1" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h" bodystart="11" bodyend="63"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a29fa83a283f0617b01ef9b84be2706b6" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>acc_gravity_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a29b1cf1676c8fac2faeea06d341e1e03" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>AdvectionMultiplier</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1aa13355dfc0e2120c9ffa906533205d66" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>BrooksCoreyWithHysteresis</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ab677311b546abf94e80c46a799335928" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>BrooksCoreyWithHysteresis</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a589655a5fd33f0d65de0e501e4329f1c" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>BrooksCoreyWithHysteresis</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a503aab2ef0cdb43b39ae52ed277dfceb" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>CapillaryDiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1aaad3c119dfd5b4924de4cab84e5aff92" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>CC</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a0604489e1c96984a66542e6f341d7409" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>CK</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9263314c3cb1d6e50ce8cfd09d411276" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>DensityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6168dc03fed46b8b916b48cd2be4a1d9" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>DensityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3390594869038bb3cf05256072d50751" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>DensityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abbe4fa907d41d4e83760586ac7547cc8" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>DensityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a2ff25fd52a4b9df31b45184c91c02c46" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dfds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab6a0d830d3381b641bde2d0d41ecaf18" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dfds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aebb908311eff09132a9741b18115c310" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dfds_numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ae65fc8fbd41df5f100417f2f4c8c5c5d" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5cfd5cb5d31b538a7540906b9cb7b8b" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dGds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3f28a44e20135a0eda808a185b0b3872" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>DiffusionCharacteristic</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af6fc4c52013d567bc9b2c2acb680becd" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>DiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4eec6e36881c230776f38731414f0e4a" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dkrnds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a235c92738451968f796f05b15c0f79c5" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dkrnds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a443ab083ab0a009e2976d420099610a9" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dkrnds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abe0652b8778382c04cd18b8ab600ea96" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dkrwds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa19c0eb9e5f5c8564c174ff566a44964" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dkrwds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aee63123cf9276045d351d0f832a41ef0" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dkrwds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab4eeb89ea5ef7f4712e9992bb3537fa2" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dlnds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abf2edca98411263db66c25c551ce3be7" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dlnds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1adaaeae8402ca9003b29c624f0ba26929" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dlwds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7734fabaf23e67cac34ca1ccac9dfea5" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dlwds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a210de106c8538e972bcf0f02cb78e278" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dpcds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae929ec1d4c7e905865f8b3b529a16ae4" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dpcds_numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a2c66899d4e4138a2a1bbdb1484251c08" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dpcds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aac4bba423c4d31322d744ea5d77d8830" prot="public" virt="pure-virtual" ambiguityscope="csmp::TwoPhaseModel::"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dpcds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae8eb4d48e0ec82cc6fb2c18b8c5d161d" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dsdpc_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9cfa41794233d9fb6854e0b4a00f8ddf" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>dsdpc_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ac796aeb19755c2905f7f5969c66f7f8c" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>EffectiveSaturation</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af5f9ba8fd94fe48d40cca93a042c6618" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>f_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abfdc07305e42e076e1bab48e147c578b" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>fn_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8f37ad603a4bf7f5d37d453a313da478" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>fw_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>G</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a26c99b49057701e4f26a2d12bbc8c6b0" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>G_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a697acaf5dd0aad5ed586a9756d8d6875" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>GravityMultiplier_dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6245a32bb53cd9abcf67a5bcded9bf4f" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>GravityMultiplier_G</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a90c517eb7a5faf1507204f721aba8535" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>GravityTerm</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afbd66b65f7f76a8cb18e9fe26eca5045" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ift_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afed59c0d76526b7267fbcb7ddfbd103c" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ift_key_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1af6335d8d7b0f7182a36501d5901c0a77" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>imbibing</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1affc076dda4e95cfbdc9c3e12dfbd68a5" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a27745e30768368b7083a70bfd28bdcae" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>InitializeAndStore</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9b8050e80a78c2dbf7e58edbd1a6fda3" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>InitializeForBaryCenter</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7e5ffdf7d5d7e6247f505514c13e59ba" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>InitializeForFacetIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a035564f82664ed735dd10b90252affc1" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>InitializeForIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4946a65cddfb1d2b244bd9202ef6a7c6" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>InitializeForNode</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a76820115685a04287c37f3bf793faaeb" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>InitializeForSectorIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa1396da1d4ffce2a75d3e2344dc12bbe" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>interpolate_fluid_properties_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a68ba34a53479c12885884d299f8ada02" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>InterpolateNodeProperties</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aeef9e999593b3d8d7384c928738683bb" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>K_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a69c352b7101de29a6c298d2a9ac03a2a" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>k_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a47cf273a46a177a0b9748646b83ac8bc" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>krn_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1abc734fa838f07b7e8fa16af1397d3af1" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>krn_Phase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a56483da15fe873a149078831b9d627c9" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>kroDswinflection</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a1140cdd1bc27dc7e359a25703b9613d3" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>kroI_1_Snorm</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afa4bad3a3c573bd5f049132c26a95cee" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>krw_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ab54c84bc5d9ff5c7e4808ed53ffa64e3" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>krw_Phase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1afe4c18efe0d8ef582bb3d39e6b043750" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>lamda_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab23a76bf8e7190d36540dbb87855e909" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>lt_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae429661671b756b0dcbed408dc66a901" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>MAX_CAPILLARY_PRESSURE_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a80e0231aee428c8a10389fda1261f33c" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>MAX_CAPILLARY_PRESSURE_SLOPE_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a04eff9d0d3c09d011aba6bbd46a2eda0" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>MaxCapillaryPressure</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a00d35bf31ea946e0b71ca390f989e79b" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>MaxFractionalFlowDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5c106acc437e4c62c14fd916fbaf50c" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>mobility_n_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8d1dc7daff33c410ba77b49517707b61" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>mobility_w_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ace751e7ae6bf5a2bd4605e5d29550329" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>MobilityPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a813f4d49ed99e37c8fc80048e0293e93" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>mun_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a85359fbcc412cd4f3d8b4995244bfba3" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>mun_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a1d87598a734e6671f4b153453f37e2da" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>muw_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a755f5f5de97f71bd11d0c5525a2b825f" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>muw_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a492aa415c596093780d144d468d778cc" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>NonWettingPhaseSaturationKey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a76cdfc2d7e3b2a094672e88631b6145b" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>on_scaning_curve</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a1b66c7c73f47f31d5a1db353756aa0f9" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7a5fb8efac951f2c7d61b43bb0aa4014" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>pc_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1af604aaf734e098af0ff4f9061f32f23b" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>pc_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa22fa0a162c0e3d38012fc24d6ed59f4" prot="public" virt="pure-virtual" ambiguityscope="csmp::TwoPhaseModel::"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>pc_Phase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a530c8eec486d9705a56737d95aa2d317" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>pd_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4bff3ce11382c26112f7c2cc72974c84" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>perm_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a24979dee40c424aa9e78e508a9fdd54a" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa93ca9953ff3cf15f4aae0bd7f1ef87a" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ae1890ec21169da0954ab2e47e7b781d8" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>pm1</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a3c52dc831648e33901e415b7de37b29d" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>pm2</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abaeba466b652999181d16909421e2abd" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>rhn_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1acf5e0ea1fde6aa4bfbbfda6bbb39af04" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>rhn_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae893513c9b4199420b06ab2d68465bf3" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>rhw_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae7e5792b6ecc96bbe735dd480ef9304d" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>rhw_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a92e6c51b800c1e4e6eb57362c7894ebb" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sat_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a1b3b2462ae11ced208d9b5378abcef6c" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sat_inflection</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1aea35997ba2b73f5edc82f4c437085824" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sat_inflection_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a1346eac40e3a09c6ae7264737aaa61f6" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sat_key_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1afe2b2dc15a38aaf9dc12b333eb1f8ec0" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sat_previous</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1aa2e93554e278bb4908c1c506ba454491" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sat_previous_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3dc094ad03c4deb676cd3c2e9f477a1d" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Saturation</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af231e8d21dd47901266bc941f6b20d53" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>SaturationWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a717178b5b8ebd4e6cd90e806e3c75984" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>seff_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae6f67062e5a9702b13340943f6c1142e" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>SeffToSw</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae25169a198e4423eee83158365897c85" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>SeffToSw</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ae18f9199ec62b66a3def061152991b51" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ShockHeight</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ab8ccb8d69f03cd42de881dc2cbace3d0" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ShockSpeed</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3cad2de63b5e4b36c8e2cf4099ea94c8" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ShockSpeedHeight</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a78f85cd36ecb4bcb9b5c5814b1c1fd46" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Snorm</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a2ed211e8b4e44dc03669b415059c495d" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Snr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad635256c30362aafc998b4205bef00bd" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Snr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a03564672375e3db427e40e77a04b28f8" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>snr_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a636e1276285fbf97b1c3c2ae942c3c36" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>snr_key_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a5aadd62d71c117f912ca485b288d49b4" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Sof_1_Snorm</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a45fa2ec1c1d8c9235f3440e141bb8b0c" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sormax</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1ab7860f6aadf5bfd67b1c72db9d6661cf" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sormax_key</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1adf812223bc6588c32e38f54b0d2af5c0" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Sot</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9210bd68068b2d27cb01eef6a5c8a464" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Sw_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aeb29d7ad37775ec0753fe935ac5e2cc6" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Sw_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a413087063e40e71e90b5f573538ee953" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>sw_ro_mu_placement_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a753786842d256a10e2f648781cba80c3" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Swr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a65060e8f00a9635132b314872c1c2356" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>Swr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a06e3a9b3d23be9aa3239c74e1c25268c" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>swr_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a0ccfc050d9e86571b9bf685770f782fb" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>swr_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a111dc3eba3c33c0ccd2cc49c6fff5439" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>tensor_permeability_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afd18457e1a803d0878ea2eb522abcc0c" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TensorPermeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9f750feb26a8c5bd67e688c92d2c2aa5" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TensorPermeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8485eb64c4709f938017a47333fe7fa3" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>tolerance_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afe87adcce8dc3c20438072541a973075" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TotalMobility</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a55cb58cd1f8a191f38718932d9b487b7" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TotalMobilityKey</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TotalMobilityMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abfdb2ac9fb5d193308c6a217b16cd032" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a5b0782527b060ea802294942b88adcd8" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae59dbf53ef3861828f80c7c88b38079f" prot="protected" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a5725adbe29291d9c0d9555b37b299e14" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ViscosityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4bfb130244e5558dde06f392ef600515" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ViscosityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5825da6dae18e0298d4e4f136971f06" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ViscosityRatio</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a68f4aa6b07e0fcf17aeb5865a71699c4" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ViscosityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae9a23928fdca86e49806e231f4480251" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>ViscosityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6e0856b1080a40e27e759ab6778ce94b" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>WettingPhaseSaturationKey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_with_hysteresis_1a048d38e1852648206823f2694ccc6ad6" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>~BrooksCoreyWithHysteresis</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a716a045623682dc5614580d4d18af10e" prot="public" virt="virtual"><scope>csmp::BrooksCoreyWithHysteresis</scope><name>~TwoPhaseModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

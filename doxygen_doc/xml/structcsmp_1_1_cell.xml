@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_cell" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::Cell</compoundname>
+    <includes refid="_meshing_tools_8h" local="no">MeshingTools.h</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcsmp_1_1_cell_1ae3361211ccb3f28606189c4686ed8e0d" prot="public" static="no">
+        <type>std::vector&lt; std::pair&lt; <ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">csmp::CSMP_FEM_TYPE</ref>, std::vector&lt; <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> * &gt; &gt; &gt;</type>
+        <definition>typedef std::vector&lt;std::pair&lt;csmp::CSMP_FEM_TYPE,std::vector&lt;GridNode*&gt; &gt; &gt; csmp::Cell::Vector</definition>
+        <argsstring></argsstring>
+        <name>Vector</name>
+        <qualifiedname>csmp::Cell::Vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/MeshingTools.h" line="24" column="26" bodyfile="source/includes/interfaces/Eclipse/MeshingTools.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>vector of pairs of FE-type - <ref refid="classcsmp_1_1_grid_node" kindref="compound">GridNode</ref> pointer vectors </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Cell</label>
+        <link refid="structcsmp_1_1_cell"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/MeshingTools.h" line="23" column="2" bodyfile="source/includes/interfaces/Eclipse/MeshingTools.h" bodystart="23" bodyend="25"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_cell_1ae3361211ccb3f28606189c4686ed8e0d" prot="public" virt="non-virtual"><scope>csmp::Cell</scope><name>Vector</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

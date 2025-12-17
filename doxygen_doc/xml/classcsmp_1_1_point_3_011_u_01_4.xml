@@ -1,0 +1,824 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_point_3_011_u_01_4" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Point&lt; 1U &gt;</compoundname>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_point_3_011_u_01_4_1a9c26df0fe7569f661df6d432ea30389f" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Point&lt; 1U &gt;::x_</definition>
+        <argsstring></argsstring>
+        <name>x_</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::x_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="183" column="12" bodyfile="source/includes/model/Point.h" bodystart="183" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a9aa092eecefdbeae581110169ee46d2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Point&lt; 1U &gt;::Point</definition>
+        <argsstring>(double=0.)</argsstring>
+        <name>Point</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Point</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+          <defval>0.</defval>
+        </param>
+        <briefdescription>
+<para>explicit keyword is not required because conversion is desired </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="139" column="5" bodyfile="source/modules/model/Point.cpp" bodystart="88" bodyend="90"/>
+        <referencedby refid="namespacecsmp_1a532c59d2a10366bb83d158b2eaac6569" compoundref="_quadrilateral_facet_8cpp" startline="89" endline="95">csmp::normalAtFacetCenter</referencedby>
+        <referencedby refid="namespacecsmp_1ae81d89d97a295bfe356ab0e2effe311f" compoundref="_vector_variable_8cpp" startline="482" endline="485">csmp::operator+</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a7e1ddf32d8baee64cf17fd0d0b591e67" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Point&lt; 1U &gt;::Point</definition>
+        <argsstring>(const std::array&lt; double, 1 &gt; &amp;)</argsstring>
+        <name>Point</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Point</qualifiedname>
+        <param>
+          <type>const std::array&lt; double, 1 &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="140" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a762c4e546cb202e07442c2f731e85362" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Point&lt; 1U &gt;::Point</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;)</argsstring>
+        <name>Point</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Point</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="141" column="14" bodyfile="source/modules/model/Point.cpp" bodystart="98" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a4f933472f94d18e9db294279ebc9f690" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="142" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="129" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1ac789eff781f8d397d0db1a5ca497e4bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator+</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="143" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="136" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a2dd6d9067278f7eadbbfdccd6fd9025e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator-</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="144" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="141" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a00c12517aab251302a63989ce69009d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator*</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="145" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="146" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1ace2998158f0e022a3a54823b1a4aac76" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator/</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator/</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="146" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a1ab4922074fcf50ccc68d279d3ae550b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator+</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="147" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="157" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a05e3f49714f8b7e20ee45baaa024f638" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator-</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="148" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="162" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1ae4ff45edd0fbb841086c31ba5ebb75b9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator*</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="149" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="167" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1acf270cd1407cababb143424700d0e4ad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; csmp::Point&lt; 1U &gt;::operator/</definition>
+        <argsstring>(double) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="150" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="172" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a4a611a86477d853648a5e22a5995d440" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator+=</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="151" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="179" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a49d689be6fd88aa3d41dc0067ede38fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator-=</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="152" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="185" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a12b520c4048bb8cb35e7776bf48930ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator*=</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="153" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="191" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a726fe5f428aa6c537433167133f37be4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator/=</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="154" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="197" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a14c597fa59674f0f5523ecb6b60728bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator+=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="155" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="204" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1ab45dc4b02d03b575efa71678d66ea490" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator-=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="156" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="210" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a5eb8d029dfe2a0251c011643aa0d6662" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator*=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="157" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="216" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a0197cfe77e486aa7b00201ff0ffc5768" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+        <definition>Point&lt; 1U &gt; &amp; csmp::Point&lt; 1U &gt;::operator/=</definition>
+        <argsstring>(double)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="158" column="11" bodyfile="source/modules/model/Point.cpp" bodystart="222" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a0d47e446e2b1ed2cbbaea9bc32d9acbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::Point&lt; 1U &gt;::operator[]</definition>
+        <argsstring>(uint32_t)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="159" column="13" bodyfile="source/modules/model/Point.cpp" bodystart="105" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1afba9ca8805dd8adeca0a113860ca1c8c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const double &amp;</type>
+        <definition>const double &amp; csmp::Point&lt; 1U &gt;::operator[]</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="160" column="19" bodyfile="source/modules/model/Point.cpp" bodystart="110" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a15c8ac29afc3aa61c589b5bcfb12a283" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Point&lt; 1U &gt;::operator==</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="161" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="229" bodyend="233"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a379a16f01f40c85482f5617476745c69" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Point&lt; 1U &gt;::operator!=</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="162" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="235" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a222098494a5acd4315d49c6b604283c0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Point&lt; 1U &gt;::operator&lt;</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="163" column="5" bodyfile="source/modules/model/Point.cpp" bodystart="240" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1aee449764b886c053e3da39b00b10d95b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Point&lt; 1U &gt;::operator&gt;</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator&gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="164" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="246" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a140cd3b317b42af6f67c97565f2dfebc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Point&lt; 1U &gt;::Set</definition>
+        <argsstring>(const std::array&lt; double, 1U &gt; &amp;)</argsstring>
+        <name>Set</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Set</qualifiedname>
+        <param>
+          <type>const std::array&lt; double, 1U &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="165" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a72a6b4cfc8742f530ef338b391bd6d06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Point&lt; 1U &gt;::Set</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;)</argsstring>
+        <name>Set</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Set</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="166" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="122" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a74fabbc320d2b189f8ae0367dfa50ff7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Point&lt; 1U &gt;::Length</definition>
+        <argsstring>() const</argsstring>
+        <name>Length</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="167" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="253" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a6ef4753fca22fc36571cfb561f49a14d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Point&lt; 1U &gt;::SquaredLength</definition>
+        <argsstring>() const</argsstring>
+        <name>SquaredLength</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::SquaredLength</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="168" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="258" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1abfad762ee99a99e147ff2047da5e9a06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Point&lt; 1U &gt;::NormalizeLengthTo</definition>
+        <argsstring>(double len=1.)</argsstring>
+        <name>NormalizeLengthTo</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::NormalizeLengthTo</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>len</declname>
+          <defval>1.</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="169" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="264" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a3b9b5a00d63ccd068e33509d02f39e38" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Point&lt; 1U &gt;::DistanceTo</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;) const</argsstring>
+        <name>DistanceTo</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::DistanceTo</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="170" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="270" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1ab8a9a23c5acc2a47a92af7d309f23849" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Point&lt; 1U &gt;::CoincidesWithWithinTolerance</definition>
+        <argsstring>(const Point&lt; 1U &gt; &amp;, double tolerance=1.0e-5) const</argsstring>
+        <name>CoincidesWithWithinTolerance</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::CoincidesWithWithinTolerance</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <defname>pt</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+          <defval>1.0e-5</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="171" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="276" bodyend="281"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a31b6a3b04793773fb834d00819d1a412" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Point&lt; 1U &gt;::IsBetween</definition>
+        <argsstring>(const Point &amp;pt1, const Point &amp;pt2)</argsstring>
+        <name>IsBetween</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::IsBetween</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <declname>pt1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref> &amp;</type>
+          <declname>pt2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="172" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="283" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1adf11927dfbd6ad838b4affc5e99dbbf2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>vector&lt; double &gt; csmp::Point&lt; 1U &gt;::Coordinates</definition>
+        <argsstring>() const</argsstring>
+        <name>Coordinates</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Coordinates</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="173" column="17" bodyfile="source/modules/model/Point.cpp" bodystart="290" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1af8b189b9839640e39834f0d1cb64c4ba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::array&lt; double, 1U &gt;</type>
+        <definition>std::array&lt; double, 1U &gt; csmp::Point&lt; 1U &gt;::CoordinateArray</definition>
+        <argsstring>() const</argsstring>
+        <name>CoordinateArray</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::CoordinateArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="174" column="16" bodyfile="source/includes/model/Point.h" bodystart="174" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_3_011_u_01_4_1a7d3e222a8d88fa0f36ba15b7b815d821" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Point&lt; 1U &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="176" column="12" bodyfile="source/modules/model/Point.cpp" bodystart="296" bodyend="301"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_point_3_011_u_01_4_1a44d7b0ed03d7a91135d97e32dd7c09d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; operator-</definition>
+        <argsstring>(double val, const Point&lt; 1U &gt; &amp;pt)</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="178" column="18" bodyfile="source/modules/model/Point.cpp" bodystart="865" bodyend="868"/>
+      </memberdef>
+      <memberdef kind="friend" id="classcsmp_1_1_point_3_011_u_01_4_1aa93741a8f10b171a6a4520a148e38e9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; operator+</definition>
+        <argsstring>(double val, const Point&lt; 1U &gt; &amp;pt)</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="179" column="18" bodyfile="source/modules/model/Point.cpp" bodystart="870" bodyend="873"/>
+      </memberdef>
+      <memberdef kind="friend" id="classcsmp_1_1_point_3_011_u_01_4_1a0ef9c271f6a5f8275f72f77b6f0f8f26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt;</type>
+        <definition>Point&lt; 1U &gt; operator*</definition>
+        <argsstring>(double val, const Point&lt; 1U &gt; &amp;pt)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::Point&lt; 1U &gt;::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 1U &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/Point.h" line="180" column="18" bodyfile="source/modules/model/Point.cpp" bodystart="875" bodyend="878"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::Point&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_point"/>
+      </node>
+      <node id="1">
+        <label>csmp::Point&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_point_3_011_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::Point&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_point"/>
+      </node>
+      <node id="1">
+        <label>csmp::Point&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_point_3_011_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/Point.h" line="137" column="1" bodyfile="source/includes/model/Point.h" bodystart="137" bodyend="184"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1ab8a9a23c5acc2a47a92af7d309f23849" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>CoincidesWithWithinTolerance</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1af8b189b9839640e39834f0d1cb64c4ba" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>CoordinateArray</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1adf11927dfbd6ad838b4affc5e99dbbf2" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Coordinates</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a3b9b5a00d63ccd068e33509d02f39e38" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>DistanceTo</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a31b6a3b04793773fb834d00819d1a412" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>IsBetween</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a74fabbc320d2b189f8ae0367dfa50ff7" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Length</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1abfad762ee99a99e147ff2047da5e9a06" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>NormalizeLengthTo</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a379a16f01f40c85482f5617476745c69" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a00c12517aab251302a63989ce69009d9" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1ae4ff45edd0fbb841086c31ba5ebb75b9" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a0ef9c271f6a5f8275f72f77b6f0f8f26" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a12b520c4048bb8cb35e7776bf48930ba" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a5eb8d029dfe2a0251c011643aa0d6662" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1ac789eff781f8d397d0db1a5ca497e4bd" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a1ab4922074fcf50ccc68d279d3ae550b" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1aa93741a8f10b171a6a4520a148e38e9f" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a4a611a86477d853648a5e22a5995d440" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a14c597fa59674f0f5523ecb6b60728bd" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a2dd6d9067278f7eadbbfdccd6fd9025e" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a05e3f49714f8b7e20ee45baaa024f638" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a44d7b0ed03d7a91135d97e32dd7c09d3" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a49d689be6fd88aa3d41dc0067ede38fb" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1ab45dc4b02d03b575efa71678d66ea490" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1ace2998158f0e022a3a54823b1a4aac76" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1acf270cd1407cababb143424700d0e4ad" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a726fe5f428aa6c537433167133f37be4" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a0197cfe77e486aa7b00201ff0ffc5768" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a222098494a5acd4315d49c6b604283c0" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a4f933472f94d18e9db294279ebc9f690" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a15c8ac29afc3aa61c589b5bcfb12a283" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1aee449764b886c053e3da39b00b10d95b" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator&gt;</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a0d47e446e2b1ed2cbbaea9bc32d9acbd" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1afba9ca8805dd8adeca0a113860ca1c8c" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>operator[]</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a7d3e222a8d88fa0f36ba15b7b815d821" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a9aa092eecefdbeae581110169ee46d2d" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Point</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a7e1ddf32d8baee64cf17fd0d0b591e67" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Point</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a762c4e546cb202e07442c2f731e85362" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Point</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a140cd3b317b42af6f67c97565f2dfebc" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Set</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a72a6b4cfc8742f530ef338b391bd6d06" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>Set</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a6ef4753fca22fc36571cfb561f49a14d" prot="public" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>SquaredLength</name></member>
+      <member refid="classcsmp_1_1_point_3_011_u_01_4_1a9c26df0fe7569f661df6d432ea30389f" prot="protected" virt="non-virtual"><scope>csmp::Point&lt; 1U &gt;</scope><name>x_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

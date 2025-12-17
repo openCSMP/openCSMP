@@ -1,0 +1,63 @@
+\doxysection{Isoparametric\+Quadratic\+Tetrahedron\+\_\+\+Test.\+h}
+\hypertarget{_isoparametric_quadratic_tetrahedron___test_8h_source}{}\label{_isoparametric_quadratic_tetrahedron___test_8h_source}\index{tests/unit/IsoparametricQuadraticTetrahedron\_Test.h@{tests/unit/IsoparametricQuadraticTetrahedron\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ IsoparametricQuadraticTetrahedron\_Test.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ }}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 7/14/14.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{IsoparametricQuadraticTetrahedron\_Test\_h}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{IsoparametricQuadraticTetrahedron\_Test\_h}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_element_8h}{"{}Element.h"{}}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ Testing:}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ 1.\ Interpolation\ functions\ at\ all\ nodes\ =\ 1;\ 0\ at\ all\ other\ nodes}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ 2.\ Placement\ of\ integration\ points\ is\ correct}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ 3.\ Interpolation\ functions\ at\ up\ to\ 1\ at\ all\ integration\ points}}
+\DoxyCodeLine{00024\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test}{IsoparametricQuadraticTetrahedron\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_a7df8c3ee793f005d484722cef1ea242d}{IsoparametricQuadraticTetrahedron\_Test}}(\ \textcolor{keywordtype}{bool}\ verbose\ );}
+\DoxyCodeLine{00029\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_a88a0d9833b9c4033788bbe595131000e}{IsoparametricQuadraticTetrahedron\_Test}}();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_abdddc281f8a64d6c600ecbe9eaf4d4de}{run}}();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{bool}\ TestIntegrationPointPlacement();}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_a49822296b512bd664de3da0bde292cb7}{TestInterpolationFunctionValues}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ );}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_a5b2d9be5290ebbac9cc9b58ffa544f74}{TestSumOfInterpolationFunctionValuesEqualTo1}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ );}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_a594ee9a1048e23678788960b1fcb1ead}{CheckElementFaceConsistency}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ );}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_a81f68ee026e0bd021fa1a4664c5937a5}{CheckInterpolation}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_acecd1c3a8ff8901fb79c5bfbcb3893cb}{OutputIntegrationPointsToVTK}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron___test_ab38cbbe126188123483a7227e9286c95}{OutputFaceNormalsToVTK}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ ChangeNodeCoordinatesToTestConfiguration();}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ ChangeNodeCoordinatesToParametric();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \ ltetra\_,\ *qtetra\_;}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\ \ \ \ \ element\_,\ element2\_;}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3U>\ \ \ \ \ \ \ \ n0,\ n1,\ n2,\ n3,\ n4,\ n5,\ n6,\ n7,\ n8,\ n9;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ tolerance\_factor\_;}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ verbose\_;}
+\DoxyCodeLine{00052\ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ defined(IsoparametricQuadraticTetrahedron\_Test\_h)\ */}}
+
+\end{DoxyCode}

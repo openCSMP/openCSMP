@@ -25,12 +25,10 @@ class NumIntegral_NT_op_N_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_NT_op_N_dV( const PropertyDatabase<dim>&,
                             const char* oper, const char* test );
-                            
-    ~NumIntegral_NT_op_N_dV() {}
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual NumIntegral_NT_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_N_dV<dim,CELL> (*this); }
+    NumIntegral_NT_op_N_dV<dim,CELL>* clone() const override final { return new NumIntegral_NT_op_N_dV<dim,CELL> (*this); }
     
   private:
     uint32_t  nodal_degrees_of_freedom;

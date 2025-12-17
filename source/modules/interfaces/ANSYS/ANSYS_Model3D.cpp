@@ -5,6 +5,7 @@
 #include "Region.h"
 #include "Box.h"
 #include "Exception.h"
+#include "ErrorHandler.h"
 #include "ModelTopology.h"
 #include "ModelTime.h"
 
@@ -90,10 +91,6 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
 }
 
 
-/// nothing needs to be done here
-ANSYS_Model3D::~ANSYS_Model3D()
-{
-}
 
 
 /** Builds Model after it was constructed with the default constructor.
@@ -125,6 +122,8 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
 {
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
+  
+  auto& csmp_error( ErrorHandler::Instance() );
 
   // -------------------------------------------------
   // initializing the empty Model from the ANSYS
@@ -140,12 +139,15 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
     // 0. reading the mesh from ANSYS-CSMP-input files
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
 
-    // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
+    // ATTENTION: Since, in many cases, ANSYS does not output the neighbour connectivity correctly,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
     vset.RemovePfverts();
-    vset.EstablishElementConnectivity3D(); // tested: OK
-    vset.InitialiseNodeTopologyIdentifiers();
+    if ( vset.OrderOfFiniteElementInterpolationFunctions() == 1 ) {
+        vset.EstablishElementConnectivity3D(); // tested: OK, but does not handle midside nodes
+        vset.InitialiseNodeTopologyIdentifiers(); // relies on 'pfverts'
+      }
+    else csmp_error.Note( WARNING, "ANSYS_Model3D::InitializeANSYS", "VDataEstablishElementConnectivity3D:: has not been tested for quadratic elements yet" );
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
@@ -231,6 +233,8 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
 {
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
+  
+  auto& csmp_error( ErrorHandler::Instance() );
 
   // -------------------------------------------------
   // initializing the empty Model from the ANSYS
@@ -246,7 +250,7 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
     // 0. reading the mesh from ANSYS-CSMP-input files
     const bool recreate_node_boundary_flags{true};
     mesh_interface.Read_ANSYS_Mesh( std::string{mesh_file_set}, vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
-    // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
+    // ATTENTION: Since ANSYS does not output the neighbour connectivity correctly,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
     vset.RemovePfverts();
@@ -254,6 +258,7 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
         vset.EstablishElementConnectivity3D(); // tested: OK, but does not handle midside nodes
         vset.InitialiseNodeTopologyIdentifiers(); // relies on 'pfverts'
       }
+    else csmp_error.Note( WARNING, "ANSYS_Model3D::InitializeANSYS", "VDataEstablishElementConnectivity3D:: has not been tested for quadratic elements yet" );
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {

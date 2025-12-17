@@ -1,0 +1,11 @@
+<map id="csmp::PropertyDatabase&lt; dim &gt;" name="csmp::PropertyDatabase&lt; dim &gt;">
+<area shape="rect" id="Node000001" title="Specifications of the variables used by the current model, i.e. name, notation, SI&#45;unit,..." alt="" coords="305,5,461,290"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_database.html" title=" " alt="" coords="5,361,161,646"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="296,232,234,294,175,363,163,378,159,374,170,359,231,291,293,228"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_property_database.html" title=" " alt="" coords="184,368,371,638"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="340,304,320,370,315,368,334,303"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_property_database.html" title=" " alt="" coords="395,368,582,638"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="432,303,451,368,446,370,427,304"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_property_database.html" title=" " alt="" coords="605,361,761,646"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="474,228,536,291,596,359,608,374,603,378,592,363,532,294,470,232"/>
+</map>

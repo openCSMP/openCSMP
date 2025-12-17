@@ -1,0 +1,5 @@
+<map id="csmp::StabilizationParameterVisitor&lt; dim &gt;" name="csmp::StabilizationParameterVisitor&lt; dim &gt;">
+<area shape="rect" id="Node000001" title="for Stokes&#45;lubrication equation where the same basis functions are used for pressure and velocity" alt="" coords="5,343,213,506"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_visitor.html" title=" " alt="" coords="38,5,180,295"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,310,112,343,107,343,107,310"/>
+</map>

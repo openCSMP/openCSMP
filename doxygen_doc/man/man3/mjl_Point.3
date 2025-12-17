@@ -1,0 +1,126 @@
+.TH "mjl::Point" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mjl::Point
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherited by \fBmjl::Vertex\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP (double, double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBoperator+\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBoperator\-\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator+=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator\-=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator*=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator/=\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator*=\fP (double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBoperator/=\fP (double)"
+.br
+.ti -1c
+.RI "double & \fBoperator()\fP (int)"
+.br
+.ti -1c
+.RI "double \fBoperator[]\fP (int) const"
+.br
+.ti -1c
+.RI "double \fBX\fP () const"
+.br
+.ti -1c
+.RI "double \fBY\fP () const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator>\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "int \fBOrientation\fP (\fBPoint\fP &, \fBPoint\fP &, \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "double \fBPolarAngle\fP () const"
+.br
+.ti -1c
+.RI "double \fBLength\fP () const"
+.br
+.ti -1c
+.RI "LOCATION \fBClassify\fP (const \fBPoint\fP &, const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "LOCATION \fBClassify\fP (const \fBEdge\fP &) const"
+.br
+.ti -1c
+.RI "void \fBSet\fP (double, double)"
+.br
+.ti -1c
+.RI "void \fBMove\fP (double dx, double dy)"
+.br
+.ti -1c
+.RI "void \fBScale\fP (double xfac, double yfac)"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP \fBoperator*\fP (double s, const \fBPoint\fP &p)"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "int mjl::Point::Orientation (\fBPoint\fP & p0, \fBPoint\fP & p1, \fBPoint\fP & p2)"
+
+.PP
+\fBReturns\fP
+.RS 4
+1 if positive oriented (counterclockwise) 
+
+.PP
+-1 if clockwise 
+
+.PP
+0 if collinear 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

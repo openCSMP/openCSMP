@@ -1,0 +1,116 @@
+\doxysection{Region\+Monitor.\+h}
+\hypertarget{_region_monitor_8h_source}{}\label{_region_monitor_8h_source}\index{source/includes/analysis/RegionMonitor.h@{source/includes/analysis/RegionMonitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_REGION\_MONITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_REGION\_MONITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**\ }}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ @brief\ Monitors\ value\ ranges\ and\ integrated\ property\ values\ in\ all\ regions\ of\ a\ model.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ Among\ the\ non-\/unique\ (potentially\ overlapping)\ regions\ those\ with\ names\ identical\ to}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ BOX\_BOUNDARY\ flags\ and\ the\ "{}All\ Element"{}\ region\ are\ ignored.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ @attention\ if\ the\ model\ contains\ lower-\/dimensional\ regions,\ a\ thickness\ attribute\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ called\ "{}thickness"{}\ must\ be\ specified\ for\ these\ in\ order\ to\ get\ their\ volume\ right.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ For\ the\ regions\ with\ the\ same\ dimension\ as\ the\ model,\ the\ thickness\ attribute}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ should\ have\ a\ value\ of\ 1.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ @author\ Stephan\ Matthai}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ @date\ 1999}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00025\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{RegionMonitor}}\ \{}
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ RegionMonitor();}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{///\ construct\ with\ 2\ properties\ to\ monitor}}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_a5a66e3bc501aad67adaf1e626e07920b}{RegionMonitor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ first\_integral\_property,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ first\_range\_property,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ integrate\_pore\_volume\_only=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{///\ construct\ with\ lists\ of\ multiple\ range\ and/or\ integral\ properties}}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_a5a66e3bc501aad67adaf1e626e07920b}{RegionMonitor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<std::string>\&\ to\_integrate\_over\_groups,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<std::string>\&\ to\_find\_ranges\_in\_groups,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ integrate\_pore\_volume\_only=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \string~RegionMonitor();}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ tell\ RegionMonitor\ which\ properties\ it\ should\ track}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_a6d9a525c4d086c9236c39ca666f0bd0f}{DefineProperties}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<std::string>\&\ to\_integrate\_over\_groups,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<std::string>\&\ to\_find\_ranges\_in\_groups,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ integrate\_pore\_volume\_only=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ switches\ on\ normalisation\ by\ volume\ for\ all\ property\ value\ integrations}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_aa0bab746a56979294516331a287d08ed}{DivideIntegralPropertiesByRegionVolumes}}(\ \textcolor{keywordtype}{bool}\ divide\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{///\ returns\ true\ when\ there\ are\ already\ monitoring\ data\ stored\ in\ respective\ containers}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_aed5f0feb4951220654920a9cf71d89ac}{DataExists}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ (\ !integrals\_.empty()\ ||\ !ranges\_.empty()\ );\ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ calculates\ integrals\ over\ current\ property\ values\ and\ stores\ these\ for\ the\ current\ time-\/step\ and\ property\ name}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_a4c0f6f66e3e8a5d372745702acb059cf}{ScalarPropertyIntegrals}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keywordtype}{double}\ current\_time=0.\ );}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ monitors\ current\ ranges\ of\ the\ the\ scalar\ values}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_ab19a4bda6f9ace0a4ee64f28d0864bc5}{ScalarPropertyRanges}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keywordtype}{double}\ current\_time=0.\ );}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{/**\ adds\ in\ values\ in\ a\ separate\ container,\ to\ be\ output\ to\ a\ separate\ file}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ \ \ \ with\ the\ same\ prefix\ name\ as\ the\ other\ monitoring\ file,\ except\ with\ the\ "{}\_ext"{}\ added\ to\ its\ name.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_aa3bae5ced5a8ced7c7c85ec69cc34106}{InsertExternallyCalculatedProperty}}(\ std::string\ property,\ std::string\ regionname\ );}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ \ InsertExternallyCalculatedProperty(\ std::string\ property\_regionname\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \ InsertPreCalculatedPropertyValue(\ \textcolor{keywordtype}{double}\ time,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ property,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ regionname,}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \ InsertPreCalculatedPropertyValue(\ \textcolor{keywordtype}{double}\ time,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ property\_regionname,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_ad3e12040d6ebf263edba97db9f7d0493}{Reset}}();\ \textcolor{comment}{///<\ zap\ all\ recorded\ values\ and\ property\ names}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor_a5757ba47fae09aa44d1ddf5e65e62898}{EraseData}}();\ \textcolor{comment}{///<\ zap\ all\ recorded\ values}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \ Out(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ text\_file\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ internal\ helper\ for\ calculations\ on\ models\ with\ involve\ surface\ elements}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ HasVolumeElements(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//\ geometric\ group\ properties}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ groupname,\ \ \ \ \ \ \ \ \ \ volume,\ \ \ surface\ area}}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{string}},\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{group\_specs\_}};}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ properties\ which\ are\ monitored}}
+\DoxyCodeLine{00089\ \ \ \ \ std::list<std::string>\ \ integral\_properties\_;}
+\DoxyCodeLine{00090\ \ \ \ \ std::list<std::string>\ \ range\_properties\_;}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{//\ \ \ \ model\_time,\ \ \ \ \ \ \ \ \ \ property,\ \ \ \ \ \ \ \ \ \ \ \ \ groupname,\ property\ value}}
+\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\textcolor{keywordtype}{double},\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{string}},\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{string}},\textcolor{keywordtype}{double}>\ >\ >\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{integrals\_}};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//\ \ \ \ model\_time,\ \ \ \ \ \ \ \ \ \ property,\ \ \ \ \ \ \ \ \ \ \ \ \ \ groupname,\ \ \ \ \ \ \ \ \ \ property\ range}}
+\DoxyCodeLine{00095\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\textcolor{keywordtype}{double},\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{string}},\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{string}},\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ >\ >\ >\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{ranges\_}};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{//\ for\ externally\ calculated\ monitored\ properties}}
+\DoxyCodeLine{00098\ \ \ \ \ std::set<std::string>\ \ ext\_calc\_properties\_column\_headers\_;}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{//\ \ \ \ model\_time,\ \ \ \ \ \ \ \ \ \ property\_groupname,\ \ \ property\ value}}
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\textcolor{keywordtype}{double},\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{map}}<\mbox{\hyperlink{classcsmp_1_1_region_monitor}{std}}::\mbox{\hyperlink{classcsmp_1_1_region_monitor}{string}},\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_region_monitor}{ext\_properties\_}};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{bool}\ divide\_by\_volume\_,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ pore\_volume\_integral\_,}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ include\_thickness\_attribute\_;}
+\DoxyCodeLine{00106\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

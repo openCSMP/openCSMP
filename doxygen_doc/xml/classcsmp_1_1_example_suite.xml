@@ -1,0 +1,636 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_example_suite" kind="class" language="C++" prot="public">
+    <compoundname>csmp::ExampleSuite</compoundname>
+    <includes refid="_example_suite_8h" local="no">ExampleSuite.h</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_example_suite_1a10b909b43ed5916c2fb7f5cfb5ffbb8c" prot="public" static="no">
+        <type>std::map&lt; std::string, std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; * &gt;::iterator</type>
+        <definition>typedef std::map&lt;std::string,std::vector&lt;Example*&gt;*&gt;::iterator csmp::ExampleSuite::category_iterator</definition>
+        <argsstring></argsstring>
+        <name>category_iterator</name>
+        <qualifiedname>csmp::ExampleSuite::category_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="30" column="31" bodyfile="examples/source/ExampleSuite.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_example_suite_1ac2d2c6f61faa4029dfee99090d4f68da" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::ExampleSuite::title_</definition>
+        <argsstring></argsstring>
+        <name>title_</name>
+        <qualifiedname>csmp::ExampleSuite::title_</qualifiedname>
+        <briefdescription>
+<para>Title of suite. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="57" column="15" bodyfile="examples/source/ExampleSuite.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_suite_1abec8b445bc672356bd2f7a8ea74fb32f" prot="private" static="no" mutable="no">
+        <type>std::ostream *</type>
+        <definition>std::ostream* csmp::ExampleSuite::ostream_</definition>
+        <argsstring></argsstring>
+        <name>ostream_</name>
+        <qualifiedname>csmp::ExampleSuite::ostream_</qualifiedname>
+        <briefdescription>
+<para>output stream suite writes messages to </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="58" column="16" bodyfile="examples/source/ExampleSuite.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_example_suite_1ad42a5adb4e73b7b8ddf636ed7157c285" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; * &gt;</type>
+        <definition>std::map&lt;std::string,std::vector&lt;Example*&gt;* &gt; csmp::ExampleSuite::categories_</definition>
+        <argsstring></argsstring>
+        <name>categories_</name>
+        <qualifiedname>csmp::ExampleSuite::categories_</qualifiedname>
+        <briefdescription>
+<para>registerd examples of different categories </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="59" column="12" bodyfile="examples/source/ExampleSuite.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a6e2d1a5e088048c58111dee2f1b53c3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ExampleSuite::ExampleSuite</definition>
+        <argsstring>(const std::string &amp;title, std::ostream *ostream=&amp;std::cout)</argsstring>
+        <name>ExampleSuite</name>
+        <qualifiedname>csmp::ExampleSuite::ExampleSuite</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>title</declname>
+        </param>
+        <param>
+          <type>std::ostream *</type>
+          <declname>ostream</declname>
+          <defval>&amp;std::cout</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="17" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a680a9a55ea4d9e3c24efedf8433d3e8d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::ExampleSuite::GetTitle</definition>
+        <argsstring>() const</argsstring>
+        <name>GetTitle</name>
+        <qualifiedname>csmp::ExampleSuite::GetTitle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="20" column="15" bodyfile="examples/source/ExampleSuite.h" bodystart="20" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a100d152675962265c63d12508d87ef1e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const std::ostream *</type>
+        <definition>const std::ostream * csmp::ExampleSuite::GetStream</definition>
+        <argsstring>() const</argsstring>
+        <name>GetStream</name>
+        <qualifiedname>csmp::ExampleSuite::GetStream</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="21" column="22" bodyfile="examples/source/ExampleSuite.h" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a68a9baaa59aba3f0b000f5a693983a4a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::SetStream</definition>
+        <argsstring>(std::ostream *ostream)</argsstring>
+        <name>SetStream</name>
+        <qualifiedname>csmp::ExampleSuite::SetStream</qualifiedname>
+        <param>
+          <type>std::ostream *</type>
+          <declname>ostream</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="22" column="8" bodyfile="examples/source/ExampleSuite.h" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1af18ede7ff8365370f600f3c4e6f94f57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::Run</definition>
+        <argsstring>()</argsstring>
+        <name>Run</name>
+        <qualifiedname>csmp::ExampleSuite::Run</qualifiedname>
+        <briefdescription>
+<para>start the stdIO interface </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="25" column="8" bodyfile="examples/source/ExampleSuite.cpp" bodystart="19" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1abf1c8f252a5f3c6c3802cb76923d629c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::Free</definition>
+        <argsstring>()</argsstring>
+        <name>Free</name>
+        <qualifiedname>csmp::ExampleSuite::Free</qualifiedname>
+        <briefdescription>
+<para>clear suite of all examples, calls their destructors </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="26" column="8" bodyfile="examples/source/ExampleSuite.cpp" bodystart="28" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1abafb0a007ac2ca12bc38300e23efb10d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::ExampleSuite::RegisterExample</definition>
+        <argsstring>(Example *example)</argsstring>
+        <name>RegisterExample</name>
+        <qualifiedname>csmp::ExampleSuite::RegisterExample</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> *</type>
+          <declname>example</declname>
+        </param>
+        <briefdescription>
+<para>add example to suite (use heap) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="27" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="44" bodyend="68"/>
+        <references refid="classcsmp_1_1_example_1a69f06458486c7a3a3669739a2039c4ed" compoundref="_example_8cpp" startline="21" endline="33">csmp::Example::Initialize</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1ab34f4eabc39736408214a94945f8e877" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>category_iterator</type>
+        <definition>category_iterator csmp::ExampleSuite::GetCategoriesBegin</definition>
+        <argsstring>()</argsstring>
+        <name>GetCategoriesBegin</name>
+        <qualifiedname>csmp::ExampleSuite::GetCategoriesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="31" column="21" bodyfile="examples/source/ExampleSuite.h" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1ac903d43eae67097ab459c6d1c2f942c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>category_iterator</type>
+        <definition>category_iterator csmp::ExampleSuite::GetCategoriesEnd</definition>
+        <argsstring>()</argsstring>
+        <name>GetCategoriesEnd</name>
+        <qualifiedname>csmp::ExampleSuite::GetCategoriesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="32" column="21" bodyfile="examples/source/ExampleSuite.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1ae58deee2f0ca6516ca216f0213cc40f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::ExampleSuite::StripExampleTitle</definition>
+        <argsstring>(std::string title) const</argsstring>
+        <name>StripExampleTitle</name>
+        <qualifiedname>csmp::ExampleSuite::StripExampleTitle</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>title</declname>
+        </param>
+        <briefdescription>
+<para>remove typeid from example name </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="33" column="15" bodyfile="examples/source/ExampleSuite.cpp" bodystart="298" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1ac8f85b9ffc7163b41da254e32fc2bd63" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::OstreamDoubleUnderlined</definition>
+        <argsstring>(std::string) const</argsstring>
+        <name>OstreamDoubleUnderlined</name>
+        <qualifiedname>csmp::ExampleSuite::OstreamDoubleUnderlined</qualifiedname>
+        <param>
+          <type>std::string</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="34" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="209" bodyend="218"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a759554d9c82a7cd343c3ccc62e8dfe0e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::UIMenu</definition>
+        <argsstring>() const</argsstring>
+        <name>UIMenu</name>
+        <qualifiedname>csmp::ExampleSuite::UIMenu</qualifiedname>
+        <briefdescription>
+<para>starts UI menu </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="39" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="103" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1aa40adaa5c6baf5e5b7b411c4fc69db6d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::UICategoryMenu</definition>
+        <argsstring>() const</argsstring>
+        <name>UICategoryMenu</name>
+        <qualifiedname>csmp::ExampleSuite::UICategoryMenu</qualifiedname>
+        <briefdescription>
+<para>UI menu for Level Category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="40" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="141" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a4a0e03e82a414fe1ce2a8f7b32822953" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::UIExampleDetailsMenu</definition>
+        <argsstring>(int exampleIndex, std::map&lt; std::string, std::vector&lt; Example * &gt; * &gt;::const_iterator) const</argsstring>
+        <name>UIExampleDetailsMenu</name>
+        <qualifiedname>csmp::ExampleSuite::UIExampleDetailsMenu</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>exampleIndex</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; * &gt;::const_iterator</type>
+        </param>
+        <briefdescription>
+<para>UI menu for Level <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> Details. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="41" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="109" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a194fae7831253476021e09af4ddf521d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::UIExamplesMenu</definition>
+        <argsstring>(std::map&lt; std::string, std::vector&lt; Example * &gt; * &gt;::const_iterator) const</argsstring>
+        <name>UIExamplesMenu</name>
+        <qualifiedname>csmp::ExampleSuite::UIExamplesMenu</qualifiedname>
+        <param>
+          <type>std::map&lt; std::string, std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; * &gt;::const_iterator</type>
+        </param>
+        <briefdescription>
+<para>UI menu for Level Examples. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="43" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="127" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1ad199ff993c4e668a87ff73f3d9a6587a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::Initialize</definition>
+        <argsstring>()</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::ExampleSuite::Initialize</qualifiedname>
+        <briefdescription>
+<para>initialize suite db </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="44" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="73" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1ad5f7175dd4e73e128be53aacd963d09e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::CategoriesList</definition>
+        <argsstring>() const</argsstring>
+        <name>CategoriesList</name>
+        <qualifiedname>csmp::ExampleSuite::CategoriesList</qualifiedname>
+        <briefdescription>
+<para>ostream all categories </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="45" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="79" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a488bb2451f8b43119422415c94fa89d5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::SuiteHeader</definition>
+        <argsstring>() const</argsstring>
+        <name>SuiteHeader</name>
+        <qualifiedname>csmp::ExampleSuite::SuiteHeader</qualifiedname>
+        <briefdescription>
+<para>ostream suite header </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="46" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="221" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a075ba5fe6ef676adf654944ec90b99f5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::ExampleSuite::ChoiceWithinRange</definition>
+        <argsstring>(double min, double max) const</argsstring>
+        <name>ChoiceWithinRange</name>
+        <qualifiedname>csmp::ExampleSuite::ChoiceWithinRange</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+<para>assure that user choice is within range, otherwise reprompt </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="47" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="270" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a9234106c5fda80e9e0ec2cd658f4a608" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::ExampleDetails</definition>
+        <argsstring>(Example *example) const</argsstring>
+        <name>ExampleDetails</name>
+        <qualifiedname>csmp::ExampleSuite::ExampleDetails</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> *</type>
+          <declname>example</declname>
+        </param>
+        <briefdescription>
+<para>ostreams example in detail </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="48" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="183" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1ab34d04531414358ae4b7bb2ca54f7bea" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::ExampleSuite::ChooseExampleAction</definition>
+        <argsstring>() const</argsstring>
+        <name>ChooseExampleAction</name>
+        <qualifiedname>csmp::ExampleSuite::ChooseExampleAction</qualifiedname>
+        <briefdescription>
+<para>UI to choose what to do with given example. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="49" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="237" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a7b25c27957de2649ac3c9272ecef17a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::SortExampleVector</definition>
+        <argsstring>(std::vector&lt; Example * &gt; &amp;examples)</argsstring>
+        <name>SortExampleVector</name>
+        <qualifiedname>csmp::ExampleSuite::SortExampleVector</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; &amp;</type>
+          <declname>examples</declname>
+        </param>
+        <briefdescription>
+<para>sorts examples in <ref refid="classvector" kindref="compound">vector&lt;Example*&gt;</ref> depending on difficulty </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="50" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="154" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1af6677a64c032052285bf2d0984cd6fe6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::ExamplesList</definition>
+        <argsstring>(std::map&lt; std::string, std::vector&lt; Example * &gt; * &gt;::const_iterator) const</argsstring>
+        <name>ExamplesList</name>
+        <qualifiedname>csmp::ExampleSuite::ExamplesList</qualifiedname>
+        <param>
+          <type>std::map&lt; std::string, std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; * &gt;::const_iterator</type>
+        </param>
+        <briefdescription>
+<para>ostream all examples of a category </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="51" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="91" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a132087663f39501a758e2b785bbafcdf" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::OstreamUnderlined</definition>
+        <argsstring>(std::string) const</argsstring>
+        <name>OstreamUnderlined</name>
+        <qualifiedname>csmp::ExampleSuite::OstreamUnderlined</qualifiedname>
+        <param>
+          <type>std::string</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="52" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="201" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a48064995c6f792046a69fb5c1409b036" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::ExampleSuite::ChooseExample</definition>
+        <argsstring>(const std::vector&lt; Example * &gt; *) const</argsstring>
+        <name>ChooseExample</name>
+        <qualifiedname>csmp::ExampleSuite::ChooseExample</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; *</type>
+          <defname>examples</defname>
+        </param>
+        <briefdescription>
+<para>UI to choose example. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="53" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="228" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a5661489dd6e313b085fe2a8aee5598ab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::ExampleSuite::WriteExamplesFile</definition>
+        <argsstring>()</argsstring>
+        <name>WriteExamplesFile</name>
+        <qualifiedname>csmp::ExampleSuite::WriteExamplesFile</qualifiedname>
+        <briefdescription>
+<para>writes all registered examples to file, sorted by section headings </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="54" column="10" bodyfile="examples/source/ExampleSuite.cpp" bodystart="306" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a1552699ba8f11aec2eed82dbd855ee93" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; std::string, std::vector&lt; <ref refid="classcsmp_1_1_example" kindref="compound">Example</ref> * &gt; * &gt;::const_iterator</type>
+        <definition>map&lt; string, vector&lt; Example * &gt; * &gt;::const_iterator csmp::ExampleSuite::ChooseCategory</definition>
+        <argsstring>() const</argsstring>
+        <name>ChooseCategory</name>
+        <qualifiedname>csmp::ExampleSuite::ChooseCategory</qualifiedname>
+        <briefdescription>
+<para>UI to choose category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="55" column="29" bodyfile="examples/source/ExampleSuite.cpp" bodystart="248" bodyend="266"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a12a205dd59b3fe4967e0bce8d2b9007f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::ExampleSuite::ExampleSuite</definition>
+        <argsstring>(const ExampleSuite &amp;)</argsstring>
+        <name>ExampleSuite</name>
+        <qualifiedname>csmp::ExampleSuite::ExampleSuite</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_example_suite" kindref="compound">ExampleSuite</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="62" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_example_suite_1a0be894e8e95a87f8be0e80060b46a2f9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_example_suite" kindref="compound">ExampleSuite</ref> &amp;</type>
+        <definition>ExampleSuite &amp; csmp::ExampleSuite::operator=</definition>
+        <argsstring>(const ExampleSuite &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::ExampleSuite::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_example_suite" kindref="compound">ExampleSuite</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/ExampleSuite.h" line="63" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A suite to contain a number of examples with UI. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>P. Lang </para>
+</simplesect>
+<simplesect kind="date"><para>2010</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Contains a map which holds one entry for each example category (<ref refid="_example_8h_source" kindref="compound">Example.h</ref> --&gt; category_) This map entry holds a pointer to a vector which in turn contains pointers to all examples registered to the suite of the respective category.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para><programlisting><codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>instantiating<sp/>ExampleSuite</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">ExampleSuite<sp/>exampleSuite(<sp/></highlight><highlight class="stringliteral">&quot;CSMP<sp/>EXAMPLES&quot;</highlight><highlight class="normal">,<sp/>&amp;cout<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>register<sp/>new<sp/>example</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">exampleSuite.RegisterExample(<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>Example1ForSuite()<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">exampleSuite.RegisterExample<sp/>(<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>YourExampleClass()<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>execute<sp/>examples<sp/>in<sp/>order<sp/>of<sp/>registration</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">exampleSuite.Execute();</highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ExampleSuite</label>
+        <link refid="classcsmp_1_1_example_suite"/>
+      </node>
+    </collaborationgraph>
+    <location file="examples/source/ExampleSuite.h" line="14" column="1" bodyfile="examples/source/ExampleSuite.h" bodystart="15" bodyend="64"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_example_suite_1ad42a5adb4e73b7b8ddf636ed7157c285" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>categories_</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ad5f7175dd4e73e128be53aacd963d09e" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>CategoriesList</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a10b909b43ed5916c2fb7f5cfb5ffbb8c" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>category_iterator</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a075ba5fe6ef676adf654944ec90b99f5" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ChoiceWithinRange</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a1552699ba8f11aec2eed82dbd855ee93" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ChooseCategory</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a48064995c6f792046a69fb5c1409b036" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ChooseExample</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ab34d04531414358ae4b7bb2ca54f7bea" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ChooseExampleAction</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a9234106c5fda80e9e0ec2cd658f4a608" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ExampleDetails</name></member>
+      <member refid="classcsmp_1_1_example_suite_1af6677a64c032052285bf2d0984cd6fe6" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ExamplesList</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a6e2d1a5e088048c58111dee2f1b53c3d" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ExampleSuite</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a12a205dd59b3fe4967e0bce8d2b9007f" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ExampleSuite</name></member>
+      <member refid="classcsmp_1_1_example_suite_1abf1c8f252a5f3c6c3802cb76923d629c" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>Free</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ab34f4eabc39736408214a94945f8e877" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>GetCategoriesBegin</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ac903d43eae67097ab459c6d1c2f942c5" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>GetCategoriesEnd</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a100d152675962265c63d12508d87ef1e" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>GetStream</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a680a9a55ea4d9e3c24efedf8433d3e8d" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>GetTitle</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ad199ff993c4e668a87ff73f3d9a6587a" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a0be894e8e95a87f8be0e80060b46a2f9" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_example_suite_1abec8b445bc672356bd2f7a8ea74fb32f" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>ostream_</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ac8f85b9ffc7163b41da254e32fc2bd63" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>OstreamDoubleUnderlined</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a132087663f39501a758e2b785bbafcdf" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>OstreamUnderlined</name></member>
+      <member refid="classcsmp_1_1_example_suite_1abafb0a007ac2ca12bc38300e23efb10d" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>RegisterExample</name></member>
+      <member refid="classcsmp_1_1_example_suite_1af18ede7ff8365370f600f3c4e6f94f57" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>Run</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a68a9baaa59aba3f0b000f5a693983a4a" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>SetStream</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a7b25c27957de2649ac3c9272ecef17a6" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>SortExampleVector</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ae58deee2f0ca6516ca216f0213cc40f1" prot="public" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>StripExampleTitle</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a488bb2451f8b43119422415c94fa89d5" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>SuiteHeader</name></member>
+      <member refid="classcsmp_1_1_example_suite_1ac2d2c6f61faa4029dfee99090d4f68da" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>title_</name></member>
+      <member refid="classcsmp_1_1_example_suite_1aa40adaa5c6baf5e5b7b411c4fc69db6d" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>UICategoryMenu</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a4a0e03e82a414fe1ce2a8f7b32822953" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>UIExampleDetailsMenu</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a194fae7831253476021e09af4ddf521d" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>UIExamplesMenu</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a759554d9c82a7cd343c3ccc62e8dfe0e" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>UIMenu</name></member>
+      <member refid="classcsmp_1_1_example_suite_1a5661489dd6e313b085fe2a8aee5598ab" prot="private" virt="non-virtual"><scope>csmp::ExampleSuite</scope><name>WriteExamplesFile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

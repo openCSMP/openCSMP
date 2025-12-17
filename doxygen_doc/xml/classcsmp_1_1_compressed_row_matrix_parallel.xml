@@ -1,0 +1,367 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_compressed_row_matrix_parallel" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CompressedRowMatrixParallel</compoundname>
+    <basecompoundref refid="classcsmp_1_1_compressed_row_matrix" prot="public" virt="non-virtual">csmp::CompressedRowMatrix</basecompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1af9f9f36aced88bcc2fcf1c252cf08d5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CompressedRowMatrixParallel::CompressedRowMatrixParallel</definition>
+        <argsstring>()</argsstring>
+        <name>CompressedRowMatrixParallel</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::CompressedRowMatrixParallel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="12" column="5" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="10" bodyend="12"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1aad579c8e9930adbb623fc75e55fc2550" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::RemoveHalo</definition>
+        <argsstring>(int32_t &amp;)</argsstring>
+        <name>RemoveHalo</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::RemoveHalo</qualifiedname>
+        <param>
+          <type>int32_t &amp;</type>
+          <defname>nrhalo</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes outerhalo node entries from the matrix</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nrhalo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>= total number of rows which need to be removed </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="14" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="18" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1a4e01cd6eed43900fbec8dc10324651a5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::CreatePartitions</definition>
+        <argsstring>(uint32_t n_blocks, std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;) const</argsstring>
+        <name>CreatePartitions</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::CreatePartitions</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>n_blocks</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Break matrix into even row ranges and return them into argument vector.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ranges</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ranges are stored in the first pair of the vector. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="15" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="40" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1a23a1c96714d034de10e32d85dff79c16" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::ScanHaloOfPartition</definition>
+        <argsstring>(uint32_t, std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;) const</argsstring>
+        <name>ScanHaloOfPartition</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::ScanHaloOfPartition</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <param>
+          <type>std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Looks along the rows of the current partition for non-zero elements. Where such elements are found in column ranges corresponding to the other processors, the row entry of the boolean vector (one for each processor) is set to true else false. The method also takes care of the initialization of the boolean vectors.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>While all boolean vectors are set to the same size = nrows of current bock, the column ranges of the partitions are used in the scanning. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="18" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="82" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1acb5321b28f259809016bbb351158ec28" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::CompressedRowMatrixParallel::RowsWithHaloElements</definition>
+        <argsstring>(int32_t, std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;) const</argsstring>
+        <name>RowsWithHaloElements</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::RowsWithHaloElements</qualifiedname>
+        <param>
+          <type>int32_t</type>
+        </param>
+        <param>
+          <type>std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Put into boolean vector of the current partition true values where there are halo elements in the corresponding row.</para>
+<para><simplesect kind="return"><para>the number of true values in this vector. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="21" column="14" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="346" bodyend="380"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1a94ca82183f7de97b82fba73156b49d4b" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast</definition>
+        <argsstring>(uint32_t, const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;) const</argsstring>
+        <name>ComputeVariableIndicesForBroadcast</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="23" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="198" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1a11af21a3862d628bd336a97f021a6ae3" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::CreateReceiveList</definition>
+        <argsstring>(uint32_t, const std ::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;) const</argsstring>
+        <name>CreateReceiveList</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::CreateReceiveList</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <param>
+          <type>const std ::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The SAMGp_CommunicationData dealing with receiving data are determined for the curren processor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="26" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="124" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1a85dbcca31c9c1b6be8e2cf2a6a983f9c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::CreateIpts</definition>
+        <argsstring>(int32_t, const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;) const</argsstring>
+        <name>CreateIpts</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::CreateIpts</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <defname>n_block</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+          <defname>partition_vector</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>iranksnd</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>isndlists</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>ipts</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="29" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="259" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1a3ac489b429ad2f21d7e5cb1ae5365ef1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::CreateIptr</definition>
+        <argsstring>(int32_t, const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;) const</argsstring>
+        <name>CreateIptr</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::CreateIptr</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <defname>n_block</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+          <defname>partition_vector</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>irankrec</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>ireclists</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+          <defname>iptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="32" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="288" bodyend="313"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_compressed_row_matrix_parallel_1a8b7e87b5a4441d96e8884cc474eb38ff" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CompressedRowMatrixParallel::Renumber</definition>
+        <argsstring>(uint32_t, const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;, std::vector&lt; int32_t &gt; &amp;, std::vector&lt; int32_t &gt; &amp;) const</argsstring>
+        <name>Renumber</name>
+        <qualifiedname>csmp::CompressedRowMatrixParallel::Renumber</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; std::pair&lt; uint32_t, uint32_t &gt;, std::vector&lt; bool &gt; &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::vector&lt; int32_t &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Put into boolean vector of the current partition true values where there are halo elements in the corresponding row.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>partition_vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the number of true values in this vector. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CompressedRowMatrixParallel.h" line="36" column="10" bodyfile="source/modules/math/CompressedRowMatrixParallel.cpp" bodystart="322" bodyend="337"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::CompressedRowMatrix</label>
+        <link refid="classcsmp_1_1_compressed_row_matrix"/>
+      </node>
+      <node id="1">
+        <label>csmp::CompressedRowMatrixParallel</label>
+        <link refid="classcsmp_1_1_compressed_row_matrix_parallel"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::CompressedRowMatrix</label>
+        <link refid="classcsmp_1_1_compressed_row_matrix"/>
+      </node>
+      <node id="1">
+        <label>csmp::CompressedRowMatrixParallel</label>
+        <link refid="classcsmp_1_1_compressed_row_matrix_parallel"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/math/CompressedRowMatrixParallel.h" line="9" column="1" bodyfile="source/includes/math/CompressedRowMatrixParallel.h" bodystart="10" bodyend="38"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a9fc00fc9121ab81b0b0eac3e967a5d56" prot="protected" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>a</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a58229257d6659d5166f1a2f8f2fa5904" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1acf49d6f108eec0b042041d01fbb89808" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>AddRowByAnotherRow</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a479a715fc26968137514e349d3f543e5" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Assign</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a0cbb72e6d97b7a34174ea9bb7e3d2ef4" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>AssignRowByAnotherRow</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1ae3dc20d47e64b509c96a2c1c25ff7bd5" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>At</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1ae0607dbae6b07f9548f03695bec7b97b" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Cols</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a4c16ed22422329390ccb4b68833e5731" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CompressedRowMatrix</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a33f63886c9c671505c90f622f929ddc9" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CompressedRowMatrix</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1ae2da20b879a81f70c92d96b3c24bbf51" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CompressedRowMatrix</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1af9f9f36aced88bcc2fcf1c252cf08d5a" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CompressedRowMatrixParallel</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1a94ca82183f7de97b82fba73156b49d4b" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>ComputeVariableIndicesForBroadcast</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1aebd294b1e0e4313410824a6c2aeabee9" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>ConvertFromSparseMatrix</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a1817e8979927df017b734bd08267bc56" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>ConvertToSAMGFormat</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1a3ac489b429ad2f21d7e5cb1ae5365ef1" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CreateIptr</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1a85dbcca31c9c1b6be8e2cf2a6a983f9c" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CreateIpts</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1a4e01cd6eed43900fbec8dc10324651a5" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CreatePartitions</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1a11af21a3862d628bd336a97f021a6ae3" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>CreateReceiveList</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1ae38e7687e92b82e4ae2e81685243cc72" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Erase</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a1611d70fbf30774e9cdfc3b691c174fc" prot="protected" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>ia</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a4efa13a821b88a66dcd6e295bb42c33d" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1ab08768fbe9ee9fc44c9f8ee51788fb07" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>InitializePointBased</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1abbf5a48708eda97af5463d507a93c9f3" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>IsFormattedForSAMG</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a8d7b28ce3d544e34bbb47283eaef3907" prot="protected" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>ja</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1aacd79586da394a882d78b599fc8bb322" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>MultiplyEntryWith</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1af27351d85603acdeceb62bd3f45b2684" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>NonZeroEntries</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1afdfb9d6e1cfbb296ca0e8bd1abfd290d" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a5872bd2e7bc86a6f10aa67e61a793a97" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a10bde617f47f51d892dc3f5a0cb27a18" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1aad579c8e9930adbb623fc75e55fc2550" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>RemoveHalo</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1a8b7e87b5a4441d96e8884cc474eb38ff" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Renumber</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a705634e1eb793452a71bad6971a04220" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Rows</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1acb5321b28f259809016bbb351158ec28" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>RowsWithHaloElements</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_parallel_1a23a1c96714d034de10e32d85dff79c16" prot="private" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>ScanHaloOfPartition</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a565ab698ba86a39c626f3dcf0497ebbf" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>TotalExistingEntries</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a0d47dce5fff5bed6cfa87ef5cbd5c79c" prot="protected" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1abc6ace7562e8af52859271cc36f4a9f1" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>Zero</name></member>
+      <member refid="classcsmp_1_1_compressed_row_matrix_1a2ed7976b8c5e49c4bb935adc727f209e" prot="public" virt="non-virtual"><scope>csmp::CompressedRowMatrixParallel</scope><name>ZeroRow</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

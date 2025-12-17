@@ -8,10 +8,9 @@ namespace csmp {
 template<uint32_t dim>
 StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& mdl,
                                                                    double mu, double coeff,
-                                                                   const char* stab_param)
-  : pref(mdl.Database()),
-    viscosity(mu), coefficient(coeff),
-    stparam_key(mdl.Database().StorageKey(stab_param))
+                                                                   const char* stab_param )
+  : viscosity_(mu), coefficient_(coeff),
+    stparam_key_(mdl.Database().StorageKey(stab_param))
 {
     //extern ErrorHandler skm_err;
     this->ApplicationLevel(MODEL);
@@ -19,15 +18,15 @@ StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& m
 } // end constructor
 
 
+
 template<uint32_t dim>
 StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& mdl,
                                                                    double coeff,
                                                                    const char* stab_param)
-  : pref(mdl.Database()),
-    viscosity(1.6e-3), // water at room temperature
-    coefficient(coeff),
+  : viscosity_(1.6e-3), // water at room temperature
+    coefficient_(coeff),
     visc_key_(mdl.Database().StorageKey("viscosity")),
-    stparam_key(mdl.Database().StorageKey(stab_param))
+    stparam_key_(mdl.Database().StorageKey(stab_param))
 {
     this->ApplicationLevel(MODEL);
     this->ApplicationTarget(ELEMENT);
@@ -37,33 +36,17 @@ StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& m
 
 
 template<uint32_t dim>
-StabilizationParameterVisitor<dim>::~StabilizationParameterVisitor() {}
-
-template<uint32_t dim>
-void StabilizationParameterVisitor<dim>::Visit( Model<dim>* m )
-  {
-  }
-
-template<uint32_t dim>
 void StabilizationParameterVisitor<dim>::Visit( Element<dim>* e )
   {
-     e->SegmentLengths( segments );
-     min_segment = *min_element(segments.begin(), segments.end());
+     e->SegmentLengths( segments_ );
+     const double min_segment = *min_element(segments_.begin(), segments_.end());
     
      // if the viscosity key has been defined
-     if ( visc_key_.place != UNDEFINED ) viscosity = e->Read( visc_key_ );
+     if ( visc_key_.place != UNDEFINED ) viscosity_ = e->Read( visc_key_ );
     
-     sp() = min_segment * min_segment/12.0/viscosity*coefficient;
+     ScalarVariable sp( e->Status(stparam_key_), min_segment * min_segment / 12.0 / viscosity_ * coefficient_ );
      
-    /* for (stl_index i = 0; i <= dim; i++)
-     {
-       dir = 0.0;
-       dir(i) = 1.0;
-       min_segment = n->LengthOfElementInDirection(dir);
-       sp(i) = min_segment*min_segment/12.0/viscosity;
-     }
-     */
-     e->Store( stparam_key, sp );
+     e->Store( stparam_key_, sp );
 }
      
      

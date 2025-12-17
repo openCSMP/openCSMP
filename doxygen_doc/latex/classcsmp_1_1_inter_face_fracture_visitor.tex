@@ -1,0 +1,98 @@
+\doxysection{csmp\+::Inter\+Face\+Fracture\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_inter_face_fracture_visitor}{}\label{classcsmp_1_1_inter_face_fracture_visitor}\index{csmp::InterFaceFractureVisitor$<$ dim $>$@{csmp::InterFaceFractureVisitor$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Inter\+Face\+Fracture\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_inter_face_fracture_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Inter\+Face\+Fracture\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_inter_face_fracture_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_fracture_visitor_a3f47b56b391dc0fd30d45903ecf8fcde}\label{classcsmp_1_1_inter_face_fracture_visitor_a3f47b56b391dc0fd30d45903ecf8fcde} 
+{\bfseries Inter\+Face\+Fracture\+Visitor} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p\+\_\+ref, const char \texorpdfstring{$\ast$}{*}displacement, const char \texorpdfstring{$\ast$}{*}aperture, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} aperture\+\_\+side)
+\item 
+\Hypertarget{classcsmp_1_1_inter_face_fracture_visitor_ae2f91cb7c92385b696c47eea2dbb952d}\label{classcsmp_1_1_inter_face_fracture_visitor_ae2f91cb7c92385b696c47eea2dbb952d} 
+{\bfseries Inter\+Face\+Fracture\+Visitor} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&p\+\_\+ref, const char \texorpdfstring{$\ast$}{*}displacement, const char \texorpdfstring{$\ast$}{*}aperture, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\+\_\+\+SIDE}} aperture\+\_\+side, const char \texorpdfstring{$\ast$}{*}conductivity, const char \texorpdfstring{$\ast$}{*}viscosity, double min\+\_\+aperture=0.\+0)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_inter_face_fracture_visitor_af6670221f5500dfeb4584027101633b7}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a1a3ed57d253eef9a0097232c7359627c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a46449d8a657dbe4a2db5f1126e08323d}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_inter_face_fracture_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_inter_face_fracture_visitor_af6670221f5500dfeb4584027101633b7}\index{csmp::InterFaceFractureVisitor$<$ dim $>$@{csmp::InterFaceFractureVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::InterFaceFractureVisitor$<$ dim $>$@{csmp::InterFaceFractureVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_inter_face_fracture_visitor_af6670221f5500dfeb4584027101633b7} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_inter_face_fracture_visitor}{csmp\+::\+Inter\+Face\+Fracture\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{f}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Takes the displacement defined on the nodes of the INSIDE and OUTSIDE faces of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} object, dots them with the Interface unit normal (which by convention points inside to outside) to obtain the aperture, and stores the aperture on the middle Nodes of the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} object. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/fractures/Inter\+Face\+Fracture\+Visitor.\+h\item 
+source/modules/thmc/fractures/Inter\+Face\+Fracture\+Visitor.\+cpp\end{DoxyCompactItemize}

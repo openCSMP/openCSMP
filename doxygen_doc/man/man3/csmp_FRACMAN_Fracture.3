@@ -1,0 +1,105 @@
+.TH "csmp::FRACMAN_Fracture" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FRACMAN_Fracture
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFRACMAN_Fracture\fP (const \fBFRACMAN_Fracture\fP &ffr)"
+.br
+.ti -1c
+.RI "\fBFRACMAN_Fracture\fP (double ap, double compr, double perm, const std::list< double > &properties, const std::list< \fBmjl::Point3D\fP > &boundary)"
+.br
+.ti -1c
+.RI "\fBFRACMAN_Fracture\fP & \fBoperator=\fP (const \fBFRACMAN_Fracture\fP &ffr)"
+.br
+.ti -1c
+.RI "bool \fBInitializeFrom\fP (long nprops, std::ifstream &ifs)"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBFRACMAN_Fracture\fP &ffr) const"
+.br
+.RI "compare perimeter length "
+.ti -1c
+.RI "uint32_t \fBID\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBTextID\fP () const"
+.br
+.ti -1c
+.RI "int \fBSetID\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBTextSetID\fP () const"
+.br
+.ti -1c
+.RI "void \fBBaryCenter\fP (\fBmjl::Point3D\fP &ctr) const"
+.br
+.ti -1c
+.RI "void \fBBaryCenter\fP (double &x, double &y, double &z) const"
+.br
+.ti -1c
+.RI "double \fBPerimeter\fP () const"
+.br
+.ti -1c
+.RI "double \fBDiameter\fP () const"
+.br
+.ti -1c
+.RI "void \fBBoundingBox\fP (\fBmjl::Point3D\fP &cnr1, \fBmjl::Point3D\fP &cnr8) const"
+.br
+.ti -1c
+.RI "void \fBMove\fP (double dx, double dy, double dz)"
+.br
+.ti -1c
+.RI "void \fBScale\fP (double xfac, double dfac, double zfac)"
+.br
+.ti -1c
+.RI "std::list< \fBmjl::Point3D\fP >::const_iterator \fBBegin\fP () const"
+.br
+.ti -1c
+.RI "std::list< \fBmjl::Point3D\fP >::const_iterator \fBEnd\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBPolygonPoints\fP () const"
+.br
+.ti -1c
+.RI "std::list< double >::const_iterator \fBPropertiesBegin\fP () const"
+.br
+.ti -1c
+.RI "std::list< double >::const_iterator \fBPropertiesEnd\fP () const"
+.br
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "bool csmp::FRACMAN_Fracture::InitializeFrom (long nprops, std::ifstream & ifs)"
+Explanation and file entries:
+
+.PP
+.PP
+.nf
+ID#  #points #fset permeability      compressibility   aperture
+
+   1    4    1     1\&.000000e+000     3\&.000000e\-006     1\&.000000e\-001
+   1     3\&.333330e+001    \-1\&.000000e+002     1\&.000000e+002
+   2     3\&.333330e+001    \-1\&.000000e+002    \-1\&.000000e+002
+   3     3\&.333330e+001     1\&.000000e+002    \-1\&.000000e+002
+   4     3\&.333330e+001     1\&.000000e+002     1\&.000000e+002
+   0     1\&.000000e+000     0\&.000000e+000     0\&.000000e+000
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

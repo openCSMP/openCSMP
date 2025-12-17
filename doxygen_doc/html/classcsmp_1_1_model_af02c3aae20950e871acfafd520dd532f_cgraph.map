@@ -1,0 +1,9 @@
+<map id="csmp::Model::InputBoundaryValue" name="csmp::Model::InputBoundaryValue">
+<area shape="rect" id="Node000001" title="sets the value of the property on those sites (nodes, elements) whose AtBoundary() function matches t..." alt="" coords="5,47,194,88"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga6b970c9a34abf2a9150140f4fd91e833" title="returns whether flag is a corner" alt="" coords="242,5,352,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,44,227,33,229,38,184,49"/>
+<area shape="rect" id="Node000003" href="$group___c_s_m_pglobal_functions.html#ga86d9cf3c88a730a881254cbd98f8c9eb" title="returns whether supplied boundary flag refers to a model edge" alt="" coords="246,55,348,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,65,230,65,230,70,194,70"/>
+<area shape="rect" id="Node000004" href="$group___c_s_m_pglobal_functions.html#ga1ac914be25ff02b5b8c1d629c7cb191b" title="returns whether flag is a side of the model" alt="" coords="248,104,346,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="184,86,234,98,232,104,183,91"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="csmp::TwoPhaseModel::G" name="csmp::TwoPhaseModel::G">
+<area shape="rect" id="Node000001" title="G multiplier." alt="" coords="5,46,181,72"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_two_phase_model.html#ab6127c81bce3b1af871ec4cc83b165f7" title="relative permeabilities" alt="" coords="229,5,386,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,43,213,38,214,43,180,48"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_two_phase_model.html#ab2460fc60f9beaf1c6ffc9f7a4d1200b" title="relative permeabilities" alt="" coords="229,71,386,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,69,214,74,213,80,181,75"/>
+</map>

@@ -1,0 +1,968 @@
+\doxysection{Finite\+Volume\+Stencil.\+h}
+\hypertarget{_finite_volume_stencil_8h_source}{}\label{_finite_volume_stencil_8h_source}\index{source/includes/integration/finite\_volumes/FiniteVolumeStencil.h@{source/includes/integration/finite\_volumes/FiniteVolumeStencil.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_FINITE\_VOLUME\_STENCIL\_REFACTORED\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_FINITE\_VOLUME\_STENCIL\_REFACTORED\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dynamic_array2_d_8h}{"{}DynamicArray2D.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dynamic_array3_d_8h}{"{}DynamicArray3D.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ VERSION\ WITH\ SINGLE\ INTEGRATION\ POINTS\ PER\ FACET\ AND\ SECTOR}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{FiniteVolumeStencilManager}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_f_v___integration_points_and_weights}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_f_v___integration_points_and_weights}{FV\_IntegrationPointsAndWeights}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<\mbox{\hyperlink{structcsmp_1_1_temp_vecs}{uint32\_t}}>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_temp_vecs}{TempVecs}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{@brief\ Finite-\/element\ specific\ finite\ volume\ stencil\ (partition\ into\ facets\ and\ sectors)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{of\ the\ finite\ element\ for\ which\ the\ stencil\ was\ initialized.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00027\ \textcolor{comment}{@author\ A.Paluszny}}
+\DoxyCodeLine{00028\ \textcolor{comment}{@date\ 2003}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00032\ \textcolor{comment}{Class\ provides\ a\ whole\ set\ of\ functionality,\ related\ to\ construction\ of\ the}}
+\DoxyCodeLine{00033\ \textcolor{comment}{node-\/centered\ FV\ virtual\ cells\ for\ realisation\ of\ the\ CVPEM\ in\ CSP.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00035\ \textcolor{comment}{Tesarius:\ sector\ -\/\ sector\ part\ of\ the\ finite\ element\ (FE),\ attributed\ to\ the\ FE\ node.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{Number\ of\ sectors\ corresponds\ to\ the\ number\ of\ nodes.\ Sector\ is\ a\ topological}}
+\DoxyCodeLine{00037\ \textcolor{comment}{hexahedron\ and\ is\ defined\ in\ physical\ and\ parametric\ spaces\ of\ the\ FE.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{Physical\ and\ parametric\ spaces\ of\ the\ FE\ are\ related\ by\ the\ mapping,}}
+\DoxyCodeLine{00039\ \textcolor{comment}{characterized\ by\ Jacobian\ transformation.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{facet\ \ -\/\ four-\/side\ face\ inside\ the\ FE,\ dividing\ \ it\ to\ volumetric\ sectors.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00043\ \textcolor{comment}{Other\ set\ of\ methods\ here\ is\ providing\ accessors\ for\ the\ stencil\ dynamic\ data:}}
+\DoxyCodeLine{00044\ \textcolor{comment}{integration\ points\ in\ the\ parametric\ space\ of\ the\ finite\ element,\ integration}}
+\DoxyCodeLine{00045\ \textcolor{comment}{weights,\ normals\ and\ correction\ multiplies\ for\ unification\ of\ the\ parametric}}
+\DoxyCodeLine{00046\ \textcolor{comment}{paces\ of\ different\ elements.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00049\ \textcolor{comment}{}}
+\DoxyCodeLine{00050\ \textcolor{comment}{Class\ is\ applicable\ to\ any\ FE\ model,\ containing\ isoparametric\ linear}}
+\DoxyCodeLine{00051\ \textcolor{comment}{elements.\ It\ can\ work\ on\ the\ mono-\/\ and\ poly-\/element\ type\ meshes,\ containing}}
+\DoxyCodeLine{00052\ \textcolor{comment}{tetrahedrons,\ hexahedrons,\ prisms\ \ and\ pyramids.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00055\ \textcolor{comment}{}}
+\DoxyCodeLine{00056\ \textcolor{comment}{Gets\ it\ data\ from\ IntegrationPointsAndWeights.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00058\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{Class\ provides\ facet\ /\ sector\ integration\ methods\ for\ finite\ volumes}}
+\DoxyCodeLine{00061\ \textcolor{comment}{associated\ with\ specific\ finite\ elements.\ For\ tabulation\ of\ the\ points}}
+\DoxyCodeLine{00062\ \textcolor{comment}{and\ weights\ if\ uses\ class\ FV\_IntegrationPointsAndWeights\ ().}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00065\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00066\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}\ \{}
+\DoxyCodeLine{00067\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{explicit}\ FiniteVolumeStencil(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ csp\_finite\_element\_type\ );}
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4decf12242cd92779cfc166f6b64019d}{FiniteVolumeStencil}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}\&\ );}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}\&\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a7846969e282b0cde61c9f0967e6e696d}{operator}}=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}\&\ );}
+\DoxyCodeLine{00071\ \ \ \ \ \string~FiniteVolumeStencil()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{///\ number\ of\ facets\ that\ delimited\ the\ FV\ sector\ on\ the\ insider\ of\ the\ parent\ finite\ element}}
+\DoxyCodeLine{00074\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a1ece48d9c8874da39b8986a39331d376}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a1ece48d9c8874da39b8986a39331d376}{FacetsPerSector}}(\ uint32\_t\ iSector\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{///\ n-\/th\ facet\ that\ delimits\ the\ FV\ sector\ in\ the\ inside\ of\ the\ finite\ element}}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_acb4ae4ab39ee401464ba5f5204846596}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_acb4ae4ab39ee401464ba5f5204846596}{FacetSurroundingSector}}(\ uint32\_t\ iSector,\ uint32\_t\ n\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{///\ reports\ the\ type\ of\ a\ facet}}
+\DoxyCodeLine{00080\ \ \ \ \ FV\_FACET\_TYPE\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a07449cd581adbec2f413261db31ab766}{FacetType}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ choice\ of\ rst-\/integration\ point\ coordinate\ of\ the\ facet\ integration\ point}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_af68ad19c114be8b0e5f3ad3617552d1d}{FacetIntegrationPoint}}(\ uint32\_t\ iFacet,\ uint32\_t\ ip,\ uint32\_t\ r\_or\_s\_or\_t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{///\ rst\ coordinate\ of\ facet\ integration\ point\ in\ parametric\ space}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a05cf0a31b57acfeb29dfcf10cc465fe0}{FacetIntegrationPoint}}(\ uint32\_t\ iFacet,\ uint32\_t\ ip,\ std::vector<\textcolor{keywordtype}{double}>\&\ rst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{///\ returns\ rst\ coordinate\ of\ facet\ integration\ point\ in\ parametric\ space}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a551133d9719a9a86ed328c191f42b055}{FacetIntegrationPoint}}(\ uint32\_t\ iFacet,\ uint32\_t\ ip\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{///\ integration\ weight\ of\ given\ integration\ point\ correlated\ with\ facet\ area\ and\ number\ of\ facet\ integration\ points}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac5328db21a4e3d8eac37c5ffafadad1e}{FacetIntegrationWeight}}(\ uint32\_t\ iFacet,\ uint32\_t\ ip\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{///\ scale\ factor\ to\ match\ sector\ integration\ weights\ between\ adjacent\ finite\ elements\ that\ have\ a\ different\ volume\ in\ rst\ space}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4e2b2012dca4be0a494ff6f8d01a1c5e}{FacetProjectionWeight}}(\ uint32\_t\ iFacet,\ uint32\_t\ ip\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{///\ nodes\ that\ sit\ on\ the\ opposite\ sides\ of\ the\ facet;\ outside\ is\ direction\ into\ which\ facet\ normal\ points}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a5d31104dba1a424a8e641f4d97cbb1c0}{FacetEdgeNodes}}(\ uint32\_t\ iFacet,\ uint32\_t\&\ inside\_node,\ uint32\_t\&\ outside\_node\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{///\ opposite\ side\ of\ the\ outward\ pointing\ normal\ of\ the\ facet}}
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_addc86558828d8ec39b3970ff924d21b1}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_addc86558828d8ec39b3970ff924d21b1}{InsideNode}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{///\ same\ side\ as\ the\ outward\ pointing\ normal\ of\ the\ facet}}
+\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9e1b1a49bfc3b859c1c3f91dde8f0a64}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9e1b1a49bfc3b859c1c3f91dde8f0a64}{OutsideNode}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{///\ point\ on\ the\ finite-\/element\ edge\ that\ is\ touched\ by\ the\ facet}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a274c8514d980cc865d6b53046b80c61a}{FacetEdgeMidPoint}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{///\ of\ finite\ element\ in\ parametric\ space}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac730c56262ae42f423860db3bd07f35c}{Barycenter}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ SectorIntegrationPoint(\ uint32\_t\ iSector,\ uint32\_t\ ip,\ uint32\_t\ r\_or\_s\_or\_t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SectorIntegrationPoint(\ uint32\_t\ iSector,\ uint32\_t\ ip,\ std::vector<\textcolor{keywordtype}{double}>\&\ rst\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_aebbd142b86049686d23aaa36d7af5abf}{SectorIntegrationPoint}}(\ uint32\_t\ iSector,\ uint32\_t\ ip\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_aa4664f3c3d268a131bbd074f18a2f930}{SectorIntegrationWeight}}(\ uint32\_t\ iSector,\ uint32\_t\ ip\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \ FacetPoint(\ uint32\_t\ iFacet,\ uint32\_t\ iPoint\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00117\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ FacetPoints(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(facet\_points\_[iFacet].size());\ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{///\ corner\ points\ of\ the\ (hexahedral)\ sector\ in\ parametric\ space}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a7a4028dcef8785a9b7738fd374350dcb}{SectorPoint}}(\ uint32\_t\ iSector,\ uint32\_t\ iPoint\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{///\ pairs\ of\ sector\ edge\ points\ definining\ the\ intersection\ lines\ of\ the\ sector\ with\ the\ finite\ element\ faces}}
+\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{pair}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{Point}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{dim}}>,\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{Point}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{dim}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{SectorEdgePoints}}(\ uint32\_t\ iSector,\ uint32\_t\ iEdge\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{///\ pairs\ of\ the\ ids\ (0..n-\/1)\ of\ the\ sector\ edge\ point\ definining\ the\ intersection\ lines\ of\ the\ sector\ with\ the\ finite\ element\ faces}}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{pair}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{uint32\_t}},\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{SectorEdge}}(\ uint32\_t\ iSector,\ uint32\_t\ iEdge\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{///\ number\ of\ corner\ points\ of\ the\ finite\ volume\ sector}}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a06f1fb84272a78d93e79b2303be88502}{uint32\_t}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a06f1fb84272a78d93e79b2303be88502}{SectorPoints}}(\ uint32\_t\ iSector\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{///\ number\ of\ edges\ of\ the\ finite\ volume\ sector}}
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a5ddd2f15a3da926021974f7499277123}{uint32\_t}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a5ddd2f15a3da926021974f7499277123}{SectorEdges}}(\ uint32\_t\ iSector\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{///\ number\ of\ finite-\/volume\ facets\ in\ the\ parent\ finite\ element}}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac87ff8389f2145a08c6891458e234ef1}{uint32\_t}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac87ff8389f2145a08c6891458e234ef1}{Facets}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{///\ number\ of\ finite-\/volume\ sectors\ in\ the\ parent\ finite\ element}}
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a02bd458618612c5732e56ebf1724c5c8}{uint32\_t}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a02bd458618612c5732e56ebf1724c5c8}{Sectors}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{///\ number\ of\ quadrature\ points\ of\ the\ finite\ volume\ facet\ i}}
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4bd1557f5b13650df786ba19e50689eb}{uint32\_t}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4bd1557f5b13650df786ba19e50689eb}{IntegrationPointsPerFacet}}(\ uint32\_t\ iFacet=0U\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{///\ number\ of\ quadrature\ points\ of\ the\ finite\ volume\ sector\ i}}
+\DoxyCodeLine{00144\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a337f1ad3ea29be8d8667440d885b0ff0}{uint32\_t}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a337f1ad3ea29be8d8667440d885b0ff0}{IntegrationPointsPerSector}}(\ uint32\_t\ iSector=0U\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{///\ returns\ unit\ normal\ to\ facet\ in\ parametric\ space}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a52b5c8c1b868c910001696aa4433394c}{UnitParametricNormalTo}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{///\ returns\ x,y\ or\ z\ component\ of\ unit\ normal\ in\ parametric\ space}}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a3a0eae76387ecec0ca445c0ed3f90f71}{UnitParametricNormalComponent}}(\ uint32\_t\ iFacet,\ uint32\_t\ x\_or\_y\_or\_z\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}{FacetNormalTransformationNodeWeights}}(\ uint32\_t\ iFacet,\ uint32\_t\ iNode\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{///\ returns\ the\ parent\ element\ of\ the\ finite\ volume\ stencil}}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a153d13e212432290ac349df265325a7d}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a153d13e212432290ac349df265325a7d}{string}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a153d13e212432290ac349df265325a7d}{ParentElement}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ parent\_element\_;\ \}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{///\ reports\ whether\ the\ parent\ element\ of\ the\ stencil\ is\ a\ line,\ surface\ or\ volume}}
+\DoxyCodeLine{00158\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\_SHAPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ae1738e77437b48e631425ee36359ff34}{Geometry}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{///\ returns\ the\ data\ (private\ members)\ stored\ in\ this\ finite\ volume\ stencil}}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a87a4e8e2904cc707aa8a849ff67d7ebe}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{void}\ \ Resize(\ uint32\_t\ isrf,\ uint32\_t\ srfs\_per\_node,\ uint32\_t\ ivol,\ uint32\_t\ spts,\ uint32\_t\ vpts\ );}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{void}\ \ ResizeTemporaryVectors(\ \mbox{\hyperlink{structcsmp_1_1_temp_vecs}{TempVecs}}<dim>\&\ tvecs,}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ n\_isrf,}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ srfs\_per\_node,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ n\_ivol,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ n\_spts,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ n\_vpts\ );}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordtype}{void}\ \ Initialize(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ csp\_finite\_element\_type\ );}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{void}\ \ InitializeDataMembers(\ \mbox{\hyperlink{structcsmp_1_1_temp_vecs}{TempVecs}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___integration_points_and_weights}{FV\_IntegrationPointsAndWeights}}<dim>\&\ );}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00176\ \ \ \ \ FiniteVolumeStencil()\ =\ \textcolor{keywordflow}{default};\ \textcolor{comment}{//\ only\ for\ FiniteVolumeStencilManager}}
+\DoxyCodeLine{00177\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00178\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{DynamicArray3D}}<\textcolor{keywordtype}{double}>\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{facet\_integration\_points\_}};\ \ \ \ \ \textcolor{comment}{///<\ [isrf][spts][rst]}}
+\DoxyCodeLine{00179\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{DynamicArray3D}}<\textcolor{keywordtype}{double}>\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{sector\_integration\_points\_}};\ \ \ \ \textcolor{comment}{///<\ [ivol][vpts][rst]}}
+\DoxyCodeLine{00180\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{facet\_integration\_weights\_}};\ \ \ \ \textcolor{comment}{///<\ [isrf][spts]}}
+\DoxyCodeLine{00181\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{facet\_projection\_weights\_}};\ \ \ \ \ \textcolor{comment}{///<\ [isrf][spts]}}
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{sector\_integration\_weights\_}};\ \ \ \textcolor{comment}{///<\ [ivol][vpts]}}
+\DoxyCodeLine{00183\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00184\ \ \ \ \ \mbox{\hyperlink{class_dynamic_array2_d}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ facet\_integration\_points\_;\ \ \ \ \ \textcolor{comment}{///<\ [isrf][rst]}}
+\DoxyCodeLine{00185\ \ \ \ \ \mbox{\hyperlink{class_dynamic_array2_d}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ sector\_integration\_points\_;\ \ \ \ \textcolor{comment}{///<\ [ivol][rst]}}
+\DoxyCodeLine{00186\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ facet\_integration\_weights\_;\ \ \ \ \textcolor{comment}{///<\ [isrf]}}
+\DoxyCodeLine{00187\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ facet\_projection\_weights\_;\ \ \ \ \ \textcolor{comment}{///<\ [isrf]}}
+\DoxyCodeLine{00188\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ sector\_integration\_weights\_;\ \ \ \textcolor{comment}{///<\ [ivol]}}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00190\ \ \ \ \ \mbox{\hyperlink{class_dynamic_array2_d}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ facet\_edge\_midpoints\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ [isrf][rst]}}
+\DoxyCodeLine{00191\ \ \ \ \ \mbox{\hyperlink{class_dynamic_array2_d}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ facet\_normals\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ [isrf][dim]}}
+\DoxyCodeLine{00192\ \ \ \ \ \mbox{\hyperlink{class_dynamic_array2_d}{DynamicArray2D}}<\textcolor{keywordtype}{double}>\ \ \ \ facet\_parametric\_normals\_;\ \ \ \ \ \textcolor{comment}{///<\ [isrf][dim]}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ DynamicArray2D<uint32\_t>\ \ edges\_of\_element\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ [isrf][2=pair]\ \ element\ segments\ =\ number\ of\ facets,\ each\ identified\ by\ the\ nodes\ it\ connects}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{comment}{//\ jagged\ arrays\ (where\ rows\ have\ different\ number\ of\ columns)\ TODO:\ not\ refactored\ yet}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \textcolor{comment}{//\ DynamicArray3D<double>\ \ \ \ facet\_normal\_xforms\_;\ ///<\ jagged\ array\ for\ PYRAMID(triangular\ facets)\ !-\/\ else\ [isrf][node][2=pair]}}
+\DoxyCodeLine{00199\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>>>\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{facet\_normal\_xforms\_}};\ \ \ \textcolor{comment}{///<\ [isrf][node]}}
+\DoxyCodeLine{00200\ \textcolor{comment}{//\ DynamicArray3D<double>\ \ \ \ facet\_points\_;\ \ \ \ \ \ \ \ ///<\ jagged\ array\ for\ PYRAMID(triangular\ facets)!\ -\/\ else\ [isrf][spts][rst]}}
+\DoxyCodeLine{00201\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Point}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{dim}}>\ >\ >\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{facet\_points\_}};}
+\DoxyCodeLine{00202\ \textcolor{comment}{//\ DynamicArray3D<double>\ \ \ \ sector\_points\_;\ \ \ \ \ \ \ ///<\ jagged\ arrat\ for\ PYRAMID(triangular\ facets)\ !-\/\ else\ [ivol][spts][rst]}}
+\DoxyCodeLine{00203\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Point}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{dim}}>\ >\ >\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{sector\_points\_}};}
+\DoxyCodeLine{00204\ \textcolor{comment}{//DynamicArray2D<uint32\_t>\ \ facets\_surrounding\_node\_;\ ///<\ jagged\ array\ [ivol][isrf]}}
+\DoxyCodeLine{00205\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{uint32\_t}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{facets\_surrounding\_node\_}};\ \ \ \ \ \ \textcolor{comment}{///<\ jagged\ array[node][facet\ -\/\ number\ is\ variable]}}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{comment}{///<\ for\ each\ sector,\ for\ each\ sector\ edge,\ pair\ of\ local\ indices\ of\ the\ end\ nodes\ of\ the\ edge}}
+\DoxyCodeLine{00208\ \textcolor{comment}{//DynamicArray3D<uint32\_t>\ \ edges\_of\_sector\_;\ ///<\ [sector][edges][node1,node2]\ @attention\ does\ not\ work\ because\ it\ is\ a\ JAGGED\ ARRAY\ !!!}}
+\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{vector}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{pair}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{uint32\_t}},\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{uint32\_t}}>\ >\ >\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{edges\_of\_sectors\_}};\ \textcolor{comment}{///<\ edges\ of\ FV\ sector\ on\ outside\ of\ the\ finite\ element}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{///<\ for\ each\ sector,\ all\ the\ points\ delimiting\ the\ sector\ in\ parametric\ space}}
+\DoxyCodeLine{00212\ \ \ \ \ std::vector<FV\_FACET\_TYPE>\ \ facet\_types\_;\ \ \ \ \ \ \textcolor{comment}{///<\ [isrf]}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ barycenter\_;}
+\DoxyCodeLine{00215\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ parent\_element\_;\ \ \ \ \ \textcolor{comment}{///<\ name\ of\ parent\ finite\ element}}
+\DoxyCodeLine{00216\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \ \ \ \ \ \ \ \ \ \ \ \ parent\_element\_type\_;}
+\DoxyCodeLine{00217\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\_SHAPE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ space\_dimension\_;\ \ \ \ \textcolor{comment}{///<\ line,\ surface,\ or\ volumetric\ parent\ element}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{FiniteVolumeStencilManager}}<dim>;}
+\DoxyCodeLine{00220\ \};}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \textcolor{comment}{//\ INLINE\ FUNCTIONS}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ Irrespective\ of\ the\ dimension\ of\ the\ model,}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ this\ method\ reports\ whether\ the\ stencil\ corresponds\ to\ a\ line,\ surface\ or\ volumetric}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ finite\ element.}}
+\DoxyCodeLine{00233\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00234\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00235\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gae70f4082919c7730a8934bfcac658ea2}{CELL\_SHAPE}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ae1738e77437b48e631425ee36359ff34}{Geometry}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00236\ \ \{}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordflow}{return}\ space\_dimension\_;}
+\DoxyCodeLine{00238\ \ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00243\ \textcolor{comment}{}}
+\DoxyCodeLine{00244\ \textcolor{comment}{Returns\ the\ number\ of\ internal\ facets\ -\/\ division\ walls\ inside\ the\ FE.}}
+\DoxyCodeLine{00245\ \textcolor{comment}{}}
+\DoxyCodeLine{00246\ \textcolor{comment}{@return\ Returns\ the\ number\ of\ the\ internal\ facets.}}
+\DoxyCodeLine{00247\ \textcolor{comment}{}}
+\DoxyCodeLine{00248\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00249\ \textcolor{comment}{}}
+\DoxyCodeLine{00250\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ class,\ retreiving\ the\ value.}}
+\DoxyCodeLine{00251\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00252\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00253\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac87ff8389f2145a08c6891458e234ef1}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac87ff8389f2145a08c6891458e234ef1}{Facets}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00254\ \ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(edges\_of\_element\_.rows());}
+\DoxyCodeLine{00256\ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00261\ \textcolor{comment}{}}
+\DoxyCodeLine{00262\ \textcolor{comment}{Returns\ number\ of\ facets,\ opposite\ to\ the\ given\ node\ -\/\ this\ corresponds\ to}}
+\DoxyCodeLine{00263\ \textcolor{comment}{the\ number\ of\ facets,\ adding\ flux\ to\ the\ given\ node.}}
+\DoxyCodeLine{00264\ \textcolor{comment}{}}
+\DoxyCodeLine{00265\ \textcolor{comment}{@return\ the\ number\ of\ the\ facets\ in\ front\ of\ the\ node\ of\ given\ element\ type.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{}}
+\DoxyCodeLine{00267\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00268\ \textcolor{comment}{}}
+\DoxyCodeLine{00269\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ class,\ retrieving\ the\ value.}}
+\DoxyCodeLine{00270\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00271\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00272\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a1ece48d9c8874da39b8986a39331d376}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a1ece48d9c8874da39b8986a39331d376}{FacetsPerSector}}(\ uint32\_t\ iSector\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00273\ \ \{}
+\DoxyCodeLine{00274\ \ \ \ \ assert(\ iSector\ <\ facets\_surrounding\_node\_.size()\ );}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(facets\_surrounding\_node\_[iSector].size());}
+\DoxyCodeLine{00276\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ if\ constexpr\ (\ dim\ ==\ 1u\ )\ return\ 1U;}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ if\ constexpr\ (\ dim\ ==\ 2U\ )\ \{}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ if\ (\ space\_dimension\_\ ==\ LINE\ )\ return\ 1U;}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ return\ 2U;}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ \ \}}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ //\ special\ cases\ of\ pyramid\ apex\ and\ lower\ dimensional\ elements}}
+\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ if\ constexpr(\ dim\ ==\ 3U\ )\ \{}}
+\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ if\ (\ space\_dimension\_\ ==\ VOLUME\ )\ \{}}
+\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (\ parent\_element\_type\_\ ==\ ISOPARAMETRIC\_LINEAR\_PYRAMID\ \&\&\ iSector\ ==\ 4U\ )\ \{}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \#ifdef\ PYRAMID\_TRIANGULAR\_FACETS}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ 9U;\ //\ apex\ node\ 4}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \#else}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ 4U;\ //\ Special\ case\ of\ the\ Pyramid\ vertex\ 4\ is\ surrounded\ by\ 4\ facets}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \#endif}}
+\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ dim;}}
+\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ if\ (\ space\_dimension\_\ ==\ SURFACE\ )\ return\ 2U;}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ if\ (\ space\_dimension\_\ ==\ LINE\ )\ return\ 1U;}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ \ \}}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ return\ dim;}}
+\DoxyCodeLine{00299\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00300\ \ \}}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00305\ \textcolor{comment}{}}
+\DoxyCodeLine{00306\ \textcolor{comment}{Returns\ number\ of\ internal\ FV\ sectors,\ given\ FE\ is\ divided\ to.}}
+\DoxyCodeLine{00307\ \textcolor{comment}{}}
+\DoxyCodeLine{00308\ \textcolor{comment}{@return\ the\ number\ of\ sectors.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{}}
+\DoxyCodeLine{00310\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00311\ \textcolor{comment}{}}
+\DoxyCodeLine{00312\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ class,\ retreiving\ the\ value.}}
+\DoxyCodeLine{00313\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00314\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00315\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a02bd458618612c5732e56ebf1724c5c8}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a02bd458618612c5732e56ebf1724c5c8}{Sectors}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00316\ \ \{}
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{//\ since\ this\ is\ a\ vector\ of\ vectors\ of\ points\ per\ sector}}
+\DoxyCodeLine{00318\ \textcolor{comment}{//\ \ \ \ return\ static\_cast<uint32\_t>(sector\_points\_.depth());}}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(sector\_points\_.size());}
+\DoxyCodeLine{00320\ \ \}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00325\ \textcolor{comment}{}}
+\DoxyCodeLine{00326\ \textcolor{comment}{Returns\ number\ of\ integration\ points\ per\ facet.}}
+\DoxyCodeLine{00327\ \textcolor{comment}{}}
+\DoxyCodeLine{00328\ \textcolor{comment}{@return\ the\ number\ of\ integration\ points\ per\ facet.}}
+\DoxyCodeLine{00329\ \textcolor{comment}{}}
+\DoxyCodeLine{00330\ \textcolor{comment}{@section\ implementation\ Implementation\ }}
+\DoxyCodeLine{00331\ \textcolor{comment}{}}
+\DoxyCodeLine{00332\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ class,\ retreiving\ the\ value.}}
+\DoxyCodeLine{00333\ \textcolor{comment}{For\ current\ implementation\ this\ value\ is\ 1.}}
+\DoxyCodeLine{00334\ \textcolor{comment}{}}
+\DoxyCodeLine{00335\ \textcolor{comment}{@attention\ assumes\ that\ the\ number\ of\ integration\ points\ per\ facet\ is\ the\ same\ for\ all\ facets}}
+\DoxyCodeLine{00336\ \textcolor{comment}{}}
+\DoxyCodeLine{00337\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00338\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00339\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4bd1557f5b13650df786ba19e50689eb}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4bd1557f5b13650df786ba19e50689eb}{IntegrationPointsPerFacet}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00340\ \ \{}
+\DoxyCodeLine{00341\ \ \ \ \ assert(\ iFacet\ <\ facet\_integration\_weights\_.size()\ );}
+\DoxyCodeLine{00342\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00343\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(facet\_integration\_weights\_.cols());}
+\DoxyCodeLine{00344\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00345\ \ \ \ \ \textcolor{keywordflow}{return}\ 1U;}
+\DoxyCodeLine{00346\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00347\ \ \}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00352\ \textcolor{comment}{}}
+\DoxyCodeLine{00353\ \textcolor{comment}{Returns\ number\ of\ integration\ points\ per\ sectortric\ sector\ of\ given\ FE}}
+\DoxyCodeLine{00354\ \textcolor{comment}{type.}}
+\DoxyCodeLine{00355\ \textcolor{comment}{}}
+\DoxyCodeLine{00356\ \textcolor{comment}{@return\ the\ number\ of\ integration\ points\ per\ volumetric\ sector.}}
+\DoxyCodeLine{00357\ \textcolor{comment}{}}
+\DoxyCodeLine{00358\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00359\ \textcolor{comment}{}}
+\DoxyCodeLine{00360\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ class,\ retreiving\ the\ value.}}
+\DoxyCodeLine{00361\ \textcolor{comment}{For\ current\ implementation\ this\ value\ is\ 1.}}
+\DoxyCodeLine{00362\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00363\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00364\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a337f1ad3ea29be8d8667440d885b0ff0}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a337f1ad3ea29be8d8667440d885b0ff0}{IntegrationPointsPerSector}}(\ uint32\_t\ iSector\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00365\ \ \{}
+\DoxyCodeLine{00366\ \ \ \ \ assert(\ iSector\ <\ sector\_integration\_weights\_.size()\ );}
+\DoxyCodeLine{00367\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00368\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(sector\_integration\_weights\_.cols());}
+\DoxyCodeLine{00369\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00370\ \ \ \ \ \textcolor{keywordflow}{return}\ 1U;}
+\DoxyCodeLine{00371\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00372\ \ \ \}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00377\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00378\ \textcolor{comment}{}}
+\DoxyCodeLine{00379\ \textcolor{comment}{Returns\ to\ argument\ rst\ the\ reference\ to\ STL\ vector\ of\ the\ parametric\ coordinates}}
+\DoxyCodeLine{00380\ \textcolor{comment}{of\ the\ given\ facet\ integration\ point.}}
+\DoxyCodeLine{00381\ \textcolor{comment}{}}
+\DoxyCodeLine{00382\ \textcolor{comment}{@param\ iFacet\ index\ (No)\ of\ the\ internal\ facet\ isnside\ the\ FE}}
+\DoxyCodeLine{00383\ \textcolor{comment}{@param\ ip\ index\ (No)\ of\ the\ integration\ point\ on\ the\ facet}}
+\DoxyCodeLine{00384\ \textcolor{comment}{}}
+\DoxyCodeLine{00385\ \textcolor{comment}{@return\ reference\ to\ STL\ vector\ of\ the\ parametric\ coordinates\ }}
+\DoxyCodeLine{00386\ \textcolor{comment}{of\ the\ given\ facet\ integration\ point}}
+\DoxyCodeLine{00387\ \textcolor{comment}{}}
+\DoxyCodeLine{00388\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00389\ \textcolor{comment}{}}
+\DoxyCodeLine{00390\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ tabulated\ points,\ associated\ with\ the\ facet.}}
+\DoxyCodeLine{00391\ \textcolor{comment}{}}
+\DoxyCodeLine{00392\ \textcolor{comment}{@section\ application\ \ Application}}
+\DoxyCodeLine{00393\ \textcolor{comment}{}}
+\DoxyCodeLine{00394\ \textcolor{comment}{For\ current\ implementation\ index\ ip\ is\ constrained\ to\ 0\ only,\ i.e.\ the}}
+\DoxyCodeLine{00395\ \textcolor{comment}{FVPEM\ method\ is\ working\ with\ 1\ facet\ integration\ point\ only.}}
+\DoxyCodeLine{00396\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00397\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00398\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a551133d9719a9a86ed328c191f42b055}{FacetIntegrationPoint}}(\ uint32\_t\ iFacet,}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00400\ \ \{}
+\DoxyCodeLine{00401\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00402\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerFacet(iFacet)\ );}
+\DoxyCodeLine{00403\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_integration\_points\_(iFacet,ip,0u)\ );}
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_integration\_points\_(iFacet,ip,0u),\ facet\_integration\_points\_(iFacet,ip,1u)\ );}
+\DoxyCodeLine{00408\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )\ \{}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ facet\_integration\_points\_.out();}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_integration\_points\_(iFacet,ip,0u),}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_integration\_points\_(iFacet,ip,1u),}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_integration\_points\_(iFacet,ip,2u)\ );}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00414\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00415\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00416\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_integration\_points\_(iFacet,0u)\ );}
+\DoxyCodeLine{00418\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_integration\_points\_(iFacet,0u),\ facet\_integration\_points\_(iFacet,1u)\ );}
+\DoxyCodeLine{00420\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )\ \{}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ facet\_integration\_points\_.out();}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_integration\_points\_(iFacet,0u),}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_integration\_points\_(iFacet,1u),}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_integration\_points\_(iFacet,2u)\ );}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00426\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00427\ \}}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00432\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a05cf0a31b57acfeb29dfcf10cc465fe0}{FacetIntegrationPoint}}(\ uint32\_t\ iFacet,}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip,}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ rst\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00435\ \ \{}
+\DoxyCodeLine{00436\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00437\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerFacet(iFacet)\ );}
+\DoxyCodeLine{00438\ \ \ \ \ rst.resize(dim);}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00441\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ rst[0u]\ =\ facet\_integration\_points\_(iFacet,ip,0u);}
+\DoxyCodeLine{00443\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )\ \{}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ rst[0u]\ =\ facet\_integration\_points\_(iFacet,ip,0u);}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ rst[1u]\ =\ facet\_integration\_points\_(iFacet,ip,1u);}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00447\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )\ \{}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ facet\_integration\_points\_.out();}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ rst[0u]\ =\ facet\_integration\_points\_(iFacet,ip,0u);}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ rst[1u]\ =\ facet\_integration\_points\_(iFacet,ip,1u);}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ rst[2u]\ =\ facet\_integration\_points\_(iFacet,ip,2u);}
+\DoxyCodeLine{00452\ \ \ \ \ \ \}}
+\DoxyCodeLine{00453\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00454\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00455\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ rst[0u]\ =\ facet\_integration\_points\_(iFacet,0u);}
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )\ \{}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ rst[0u]\ =\ facet\_integration\_points\_(iFacet,0u);}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ rst[1u]\ =\ facet\_integration\_points\_(iFacet,1u);}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00461\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )\ \{}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ facet\_integration\_points\_.out();}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ rst[0u]\ =\ facet\_integration\_points\_(iFacet,0u);}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ rst[1u]\ =\ facet\_integration\_points\_(iFacet,1u);}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ rst[2u]\ =\ facet\_integration\_points\_(iFacet,2u);}
+\DoxyCodeLine{00466\ \ \ \ \ \ \}}
+\DoxyCodeLine{00467\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00468\ \ \}}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00472\ \textcolor{comment}{//\ SKM\ addon}}
+\DoxyCodeLine{00473\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00474\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_af68ad19c114be8b0e5f3ad3617552d1d}{FacetIntegrationPoint}}(\ uint32\_t\ iFacet,}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip,}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ rst\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00477\ \ \{}
+\DoxyCodeLine{00478\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00479\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerFacet(iFacet)\ );}
+\DoxyCodeLine{00480\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_integration\_points\_(iFacet,ip,rst);}
+\DoxyCodeLine{00482\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00483\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00484\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_integration\_points\_(iFacet,rst);}
+\DoxyCodeLine{00485\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00486\ \ \}}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ }
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00491\ \textcolor{comment}{}}
+\DoxyCodeLine{00492\ \textcolor{comment}{Defines\ FE\ edge,\ associated\ with\ that\ facet\ of\ interest.\ For\ a\ given}}
+\DoxyCodeLine{00493\ \textcolor{comment}{facet\ method\ returns\ local\ indices\ of\ the\ FE\ start\ node\ and\ }}
+\DoxyCodeLine{00494\ \textcolor{comment}{the\ end\ node.\ The\ end\ node\ is\ the\ one\ on\ the\ side\ of\ the\ facet\ into}}
+\DoxyCodeLine{00495\ \textcolor{comment}{which\ the\ outward\ pointing\ normal\ points.\ \ }}
+\DoxyCodeLine{00496\ \textcolor{comment}{}}
+\DoxyCodeLine{00497\ \textcolor{comment}{@param\ iFacet\ index\ of\ the\ internal\ dividing\ facet\ in\ the\ FE.}}
+\DoxyCodeLine{00498\ \textcolor{comment}{@param\ estart\ local\ index\ of\ the\ FE\ edge\ start\ \ node}}
+\DoxyCodeLine{00499\ \textcolor{comment}{@param\ eend\ \ \ local\ index\ of\ the\ FE\ edge\ end\ node}}
+\DoxyCodeLine{00500\ \textcolor{comment}{}}
+\DoxyCodeLine{00501\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00502\ \textcolor{comment}{}}
+\DoxyCodeLine{00503\ \textcolor{comment}{Accesses\ the\ private\ pair\ of\ nodes,\ associated\ with\ the\ facet.}}
+\DoxyCodeLine{00504\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00505\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00506\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a5d31104dba1a424a8e641f4d97cbb1c0}{FacetEdgeNodes}}(\ uint32\_t\ iFacet,}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\&\ estart,}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\&\ eend\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00509\ \{}
+\DoxyCodeLine{00510\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00511\ \ \ \ \ estart=edges\_of\_element\_(iFacet,0U);}
+\DoxyCodeLine{00512\ \ \ \ \ eend=edges\_of\_element\_(iFacet,1U);}
+\DoxyCodeLine{00513\ \}}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00517\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_addc86558828d8ec39b3970ff924d21b1}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_addc86558828d8ec39b3970ff924d21b1}{InsideNode}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00518\ \{}
+\DoxyCodeLine{00519\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00520\ \ \ \ \ \textcolor{keywordflow}{return}\ edges\_of\_element\_(iFacet,0u);}
+\DoxyCodeLine{00521\ \}}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ }
+\DoxyCodeLine{00524\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00525\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9e1b1a49bfc3b859c1c3f91dde8f0a64}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9e1b1a49bfc3b859c1c3f91dde8f0a64}{OutsideNode}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00526\ \{}
+\DoxyCodeLine{00527\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00528\ \ \ \ \ \textcolor{keywordflow}{return}\ edges\_of\_element\_(iFacet,1U);}
+\DoxyCodeLine{00529\ \}}
+\DoxyCodeLine{00530\ }
+\DoxyCodeLine{00531\ }
+\DoxyCodeLine{00532\ }
+\DoxyCodeLine{00533\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00534\ \textcolor{comment}{}}
+\DoxyCodeLine{00535\ \textcolor{comment}{Returns\ to\ argument\ rst\ the\ reference\ to\ STL\ vector\ of\ the\ parametric\ coordinates}}
+\DoxyCodeLine{00536\ \textcolor{comment}{of\ the\ given\ sector\ integration\ point,\ associated\ with\ given\ sector\ "{}volume"{}.}}
+\DoxyCodeLine{00537\ \textcolor{comment}{}}
+\DoxyCodeLine{00538\ \textcolor{comment}{@param\ iSector\ number\ of\ the\ internal\ sector\ isnside\ the\ FE}}
+\DoxyCodeLine{00539\ \textcolor{comment}{@param\ ip\ index\ (No)\ of\ the\ integration\ point\ on\ the\ facet}}
+\DoxyCodeLine{00540\ \textcolor{comment}{}}
+\DoxyCodeLine{00541\ \textcolor{comment}{@return\ reference\ to\ STL\ vector\ of\ the\ parametric\ coordinates}}
+\DoxyCodeLine{00542\ \textcolor{comment}{of\ the\ given\ facet\ integration\ point}}
+\DoxyCodeLine{00543\ \textcolor{comment}{}}
+\DoxyCodeLine{00544\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00545\ \textcolor{comment}{}}
+\DoxyCodeLine{00546\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ tabulated\ points,\ associated\ with\ the\ sector.}}
+\DoxyCodeLine{00547\ \textcolor{comment}{}}
+\DoxyCodeLine{00548\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00549\ \textcolor{comment}{}}
+\DoxyCodeLine{00550\ \textcolor{comment}{For\ current\ implementation\ index\ ip\ is\ constrained\ to\ 0\ only,\ i.e.\ the}}
+\DoxyCodeLine{00551\ \textcolor{comment}{FVPEM\ method\ is\ working\ with\ 1\ facet\ integration\ point\ only.}}
+\DoxyCodeLine{00552\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00553\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00554\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_aebbd142b86049686d23aaa36d7af5abf}{SectorIntegrationPoint}}(\ uint32\_t\ iSector,}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00556\ \{}
+\DoxyCodeLine{00557\ \ \ \ \ assert(\ iSector\ <\ Sectors()\ );}
+\DoxyCodeLine{00558\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerSector(iSector)\ );}
+\DoxyCodeLine{00559\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00560\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ sector\_integration\_points\_(iSector,ip,0u)\ );}
+\DoxyCodeLine{00562\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ sector\_integration\_points\_(iSector,ip,0u),\ sector\_integration\_points\_(iSector,ip,1u)\ );}
+\DoxyCodeLine{00564\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ sector\_integration\_points\_(iSector,ip,0u),}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sector\_integration\_points\_(iSector,ip,1u),}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sector\_integration\_points\_(iSector,ip,2u)\ );}
+\DoxyCodeLine{00568\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00569\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00570\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ sector\_integration\_points\_(iSector,0u)\ );}
+\DoxyCodeLine{00572\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ sector\_integration\_points\_(iSector,0u),\ sector\_integration\_points\_(iSector,1u)\ );}
+\DoxyCodeLine{00574\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ sector\_integration\_points\_(iSector,0u),}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sector\_integration\_points\_(iSector,1u),}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sector\_integration\_points\_(iSector,2u)\ );}
+\DoxyCodeLine{00578\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00579\ \ \}}
+\DoxyCodeLine{00580\ }
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00582\ }
+\DoxyCodeLine{00583\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00584\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::SectorIntegrationPoint(\ uint32\_t\ iSector,}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip,}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ rst\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00587\ \{}
+\DoxyCodeLine{00588\ \ \ \ \ assert(\ iSector\ <\ Sectors()\ );}
+\DoxyCodeLine{00589\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerSector(iSector)\ );}
+\DoxyCodeLine{00590\ \ \ \ \ rst.resize(dim);}
+\DoxyCodeLine{00591\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00592\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ rst[0u]\ =\ sector\_integration\_points\_(iSector,ip,0u);}
+\DoxyCodeLine{00594\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )\ \{}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ rst[0u]\ =\ sector\_integration\_points\_(iSector,ip,0u);}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ rst[1u]\ =\ sector\_integration\_points\_(iSector,ip,1u);}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00598\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )\ \{}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ rst[0u]\ =\ sector\_integration\_points\_(iSector,ip,0u);}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ rst[1u]\ =\ sector\_integration\_points\_(iSector,ip,1u);}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ rst[2u]\ =\ sector\_integration\_points\_(iSector,ip,2u);}
+\DoxyCodeLine{00602\ \ \ \ \ \ \}}
+\DoxyCodeLine{00603\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00604\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00605\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ rst[0u]\ =\ sector\_integration\_points\_(iSector,0u);}
+\DoxyCodeLine{00607\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )\ \{}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ rst[0u]\ =\ sector\_integration\_points\_(iSector,0u);}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ rst[1u]\ =\ sector\_integration\_points\_(iSector,1u);}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00611\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )\ \{}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ rst[0u]\ =\ sector\_integration\_points\_(iSector,0u);}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ rst[1u]\ =\ sector\_integration\_points\_(iSector,1u);}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ rst[2u]\ =\ sector\_integration\_points\_(iSector,2u);}
+\DoxyCodeLine{00615\ \ \ \ \ \ \}}
+\DoxyCodeLine{00616\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00617\ \ \}}
+\DoxyCodeLine{00618\ }
+\DoxyCodeLine{00619\ }
+\DoxyCodeLine{00620\ }
+\DoxyCodeLine{00621\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00622\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::SectorIntegrationPoint(\ uint32\_t\ iSector,}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip,}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ rst\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00625\ \{}
+\DoxyCodeLine{00626\ \ \ \ \ assert(\ iSector\ <\ Sectors()\ );}
+\DoxyCodeLine{00627\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerSector(iSector)\ );}
+\DoxyCodeLine{00628\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00629\ \ \ \ \ \textcolor{keywordflow}{return}\ sector\_integration\_points\_(iSector,ip,rst);}
+\DoxyCodeLine{00630\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00631\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{keywordflow}{return}\ sector\_integration\_points\_(iSector,rst);}
+\DoxyCodeLine{00633\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00634\ \ \}}
+\DoxyCodeLine{00635\ }
+\DoxyCodeLine{00636\ }
+\DoxyCodeLine{00637\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00638\ \textcolor{comment}{}}
+\DoxyCodeLine{00639\ \textcolor{comment}{Returns\ for\ the\ given\ facet\ integration\ point\ integration\ weight,}}
+\DoxyCodeLine{00640\ \textcolor{comment}{associated\ with\ given\ facet\ "{}facet"{}.}}
+\DoxyCodeLine{00641\ \textcolor{comment}{}}
+\DoxyCodeLine{00642\ \textcolor{comment}{@param\ iFacet\ index\ (No)\ of\ the\ internal\ facet\ \ isnside\ the\ FE}}
+\DoxyCodeLine{00643\ \textcolor{comment}{@param\ ip\ index\ (No)\ of\ the\ integration\ point\ on\ the\ facet}}
+\DoxyCodeLine{00644\ \textcolor{comment}{}}
+\DoxyCodeLine{00645\ \textcolor{comment}{@return\ the\ value\ of\ the\ facet\ integration\ weight.}}
+\DoxyCodeLine{00646\ \textcolor{comment}{}}
+\DoxyCodeLine{00647\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00648\ \textcolor{comment}{}}
+\DoxyCodeLine{00649\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ tabulated\ points,\ associated\ with\ the\ facet.}}
+\DoxyCodeLine{00650\ \textcolor{comment}{}}
+\DoxyCodeLine{00651\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00652\ \textcolor{comment}{}}
+\DoxyCodeLine{00653\ \textcolor{comment}{For\ current\ implementation\ index\ ip\ is\ constrained\ to\ 0\ only,\ i.e.\ the}}
+\DoxyCodeLine{00654\ \textcolor{comment}{FVPEM\ method\ is\ working\ with\ 1\ facet\ integration\ point\ only.}}
+\DoxyCodeLine{00655\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00656\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00657\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac5328db21a4e3d8eac37c5ffafadad1e}{FacetIntegrationWeight}}(\ uint32\_t\ iFacet,}
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00659\ \ \{}
+\DoxyCodeLine{00660\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00661\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerFacet(iFacet)\ );}
+\DoxyCodeLine{00662\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00663\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_integration\_weights\_(iFacet,ip);}
+\DoxyCodeLine{00664\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00665\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00666\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_integration\_weights\_[iFacet];}
+\DoxyCodeLine{00667\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00668\ \ \}}
+\DoxyCodeLine{00669\ }
+\DoxyCodeLine{00670\ }
+\DoxyCodeLine{00671\ }
+\DoxyCodeLine{00672\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00673\ \textcolor{comment}{}}
+\DoxyCodeLine{00674\ \textcolor{comment}{Returns\ for\ the\ given\ sector\ integration\ point\ projection\ weight,}}
+\DoxyCodeLine{00675\ \textcolor{comment}{associated\ with\ given\ facet\ "{}facet"{}.\ Projection\ weight\ is\ an\ extra\ multiplier,}}
+\DoxyCodeLine{00676\ \textcolor{comment}{which\ is\ bringing\ to\ the\ same\ scale\ the\ size\ of\ the\ unit\ parametric}}
+\DoxyCodeLine{00677\ \textcolor{comment}{spaces\ of\ different\ element\ types.}}
+\DoxyCodeLine{00678\ \textcolor{comment}{}}
+\DoxyCodeLine{00679\ \textcolor{comment}{@param\ iFacet\ index\ (No)\ of\ the\ internal\ facet\ \ isnside\ the\ FE}}
+\DoxyCodeLine{00680\ \textcolor{comment}{@param\ ip\ index\ (No)\ of\ the\ integration\ point\ on\ the\ facet}}
+\DoxyCodeLine{00681\ \textcolor{comment}{}}
+\DoxyCodeLine{00682\ \textcolor{comment}{@return\ the\ value\ of\ the\ facet\ projection\ weight.}}
+\DoxyCodeLine{00683\ \textcolor{comment}{}}
+\DoxyCodeLine{00684\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00685\ \textcolor{comment}{}}
+\DoxyCodeLine{00686\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ tabulated\ points,\ associated\ with\ the\ facet.}}
+\DoxyCodeLine{00687\ \textcolor{comment}{}}
+\DoxyCodeLine{00688\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00689\ \textcolor{comment}{}}
+\DoxyCodeLine{00690\ \textcolor{comment}{For\ current\ implementation\ index\ ip\ is\ constrained\ to\ 0\ only,\ i.e.\ the}}
+\DoxyCodeLine{00691\ \textcolor{comment}{FVPEM\ method\ is\ working\ with\ 1\ facet\ integration\ point\ only.}}
+\DoxyCodeLine{00692\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00693\ }
+\DoxyCodeLine{00694\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00695\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a4e2b2012dca4be0a494ff6f8d01a1c5e}{FacetProjectionWeight}}(\ uint32\_t\ iFacet,\ uint32\_t\ ip\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00696\ \ \{}
+\DoxyCodeLine{00697\ \ \ \ \ assert(\ iFacet\ <\ Facets()\ );}
+\DoxyCodeLine{00698\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerFacet(iFacet)\ );}
+\DoxyCodeLine{00699\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00700\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_projection\_weights\_(iFacet,ip);}
+\DoxyCodeLine{00701\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00702\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00703\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_projection\_weights\_[iFacet];}
+\DoxyCodeLine{00704\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00705\ \ \}}
+\DoxyCodeLine{00706\ }
+\DoxyCodeLine{00707\ }
+\DoxyCodeLine{00708\ }
+\DoxyCodeLine{00709\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00710\ \textcolor{comment}{}}
+\DoxyCodeLine{00711\ \textcolor{comment}{Returns\ for\ the\ given\ sector\ integration\ point\ integration\ weight,}}
+\DoxyCodeLine{00712\ \textcolor{comment}{associated\ with\ given\ sector\ "{}volume"{}.}}
+\DoxyCodeLine{00713\ \textcolor{comment}{}}
+\DoxyCodeLine{00714\ \textcolor{comment}{@param\ iSector\ corresponding\ to\ the\ finite\ element\ node\ with\ the\ same\ number}}
+\DoxyCodeLine{00715\ \textcolor{comment}{@param\ ip\ represents\ the\ n-\/th\ integration\ point\ on\ the\ facet}}
+\DoxyCodeLine{00716\ \textcolor{comment}{}}
+\DoxyCodeLine{00717\ \textcolor{comment}{@return\ the\ value\ of\ the\ sector\ integration\ weight=volume\ in\ parametric\ space.}}
+\DoxyCodeLine{00718\ \textcolor{comment}{}}
+\DoxyCodeLine{00719\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00720\ \textcolor{comment}{}}
+\DoxyCodeLine{00721\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ tabulated\ points,\ associated\ with\ the\ sector.}}
+\DoxyCodeLine{00722\ \textcolor{comment}{}}
+\DoxyCodeLine{00723\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00724\ \textcolor{comment}{}}
+\DoxyCodeLine{00725\ \textcolor{comment}{For\ current\ implementation\ index\ ip\ is\ constrained\ to\ 0\ only,\ i.e.\ the}}
+\DoxyCodeLine{00726\ \textcolor{comment}{FVPEM\ method\ is\ working\ with\ 1\ facet\ integration\ point\ only.}}
+\DoxyCodeLine{00727\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00728\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00729\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_aa4664f3c3d268a131bbd074f18a2f930}{SectorIntegrationWeight}}(\ uint32\_t\ iSector,\ uint32\_t\ ip\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00730\ \ \{}
+\DoxyCodeLine{00731\ \ \ \ \ assert(\ iSector\ <\ Sectors()\ );}
+\DoxyCodeLine{00732\ \ \ \ \ assert(\ ip\ <\ IntegrationPointsPerSector(iSector)\ );}
+\DoxyCodeLine{00733\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00734\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{FV\_STENCIL\_WITH\_MORE\_THAN\_1\_INTEGRATION\_POINT\_PER\_FACET\_OR\_SECTOR}}
+\DoxyCodeLine{00735\ \ \ \ \ \textcolor{keywordflow}{return}\ sector\_integration\_weights\_(iSector,ip);}
+\DoxyCodeLine{00736\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00737\ \ \ \ \ assert(\ ip\ ==\ 0U\ );\ \textcolor{comment}{//\ restrictive\ assumpting\ of\ this\ scheme\ for\ testing}}
+\DoxyCodeLine{00738\ \ \ \ \ \textcolor{keywordflow}{return}\ sector\_integration\_weights\_[iSector];}
+\DoxyCodeLine{00739\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00740\ \ \}}
+\DoxyCodeLine{00741\ }
+\DoxyCodeLine{00742\ }
+\DoxyCodeLine{00743\ }
+\DoxyCodeLine{00744\ \ \ \textcolor{comment}{//\ overloaded\ method,\ returns\ specific\ index\ of\ a\ facet\ }}
+\DoxyCodeLine{00745\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00746\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_acb4ae4ab39ee401464ba5f5204846596}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_acb4ae4ab39ee401464ba5f5204846596}{FacetSurroundingSector}}(\ uint32\_t\ iSector,\ uint32\_t\ n\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00747\ \ \{}
+\DoxyCodeLine{00748\ \ \ \ \ assert(\ iSector\ <\ Sectors()\ );}
+\DoxyCodeLine{00749\ \ \ \ \ assert(\ n\ <\ FacetsPerSector(iSector)\ );}
+\DoxyCodeLine{00750\ \textcolor{comment}{//\ \ \ \ return\ facets\_surrounding\_node\_(iSector,n);}}
+\DoxyCodeLine{00751\ \ \ \ \ \textcolor{keywordflow}{return}\ facets\_surrounding\_node\_[iSector][n];}
+\DoxyCodeLine{00752\ \ \}}
+\DoxyCodeLine{00753\ }
+\DoxyCodeLine{00754\ }
+\DoxyCodeLine{00755\ }
+\DoxyCodeLine{00756\ }
+\DoxyCodeLine{00757\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00758\ \textcolor{comment}{}}
+\DoxyCodeLine{00759\ \textcolor{comment}{Returns\ the\ normal\ vector\ in\ parametric\ space\ of\ the\ FE.}}
+\DoxyCodeLine{00760\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00761\ \textcolor{comment}{@param\ iFacet\ is\ the\ number\ 0..n-\/1\ of\ the\ internal\ facet\ inside\ of\ the\ FE}}
+\DoxyCodeLine{00762\ \textcolor{comment}{}}
+\DoxyCodeLine{00763\ \textcolor{comment}{@return\ to\ argument\ "{}nrml"{}\ reference\ to\ STL\ vector\ of\ the\ normal\ vector}}
+\DoxyCodeLine{00764\ \textcolor{comment}{\ coordinates\ in\ parametric\ space\ of\ the\ FE.\ }}
+\DoxyCodeLine{00765\ \textcolor{comment}{}}
+\DoxyCodeLine{00766\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00767\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00768\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ class,\ retreiving\ tabulated\ vector.}}
+\DoxyCodeLine{00769\ \textcolor{comment}{}}
+\DoxyCodeLine{00770\ \textcolor{comment}{@attention\ here\ parametric\ space\ has\ same\ dimensions\ as\ physical\ space,\ but\ third\ dimension\ may\ be\ zero}}
+\DoxyCodeLine{00771\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00772\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00773\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a52b5c8c1b868c910001696aa4433394c}{UnitParametricNormalTo}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00774\ \{}
+\DoxyCodeLine{00775\ \ \ \ \ assert(\ iFacet\ <\ facet\_types\_.size()\ );}
+\DoxyCodeLine{00776\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_parametric\_normals\_(iFacet,0u)\ );}
+\DoxyCodeLine{00778\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_parametric\_normals\_(iFacet,0u),\ facet\_parametric\_normals\_(iFacet,1u)\ );}
+\DoxyCodeLine{00780\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_parametric\_normals\_(iFacet,0u),}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_parametric\_normals\_(iFacet,1u),}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_parametric\_normals\_(iFacet,2u)\ );}
+\DoxyCodeLine{00784\ \}}
+\DoxyCodeLine{00785\ }
+\DoxyCodeLine{00786\ }
+\DoxyCodeLine{00787\ }
+\DoxyCodeLine{00788\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00789\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a3a0eae76387ecec0ca445c0ed3f90f71}{UnitParametricNormalComponent}}(\ uint32\_t\ iFacet,}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ x\_or\_y\_or\_z\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00791\ \{}
+\DoxyCodeLine{00792\ \ \ \ assert(\ iFacet\ <\ facet\_types\_.size()\ );}
+\DoxyCodeLine{00793\ \ \ \ assert(\ x\_or\_y\_or\_z\ <\ dim\ );}
+\DoxyCodeLine{00794\ \ \ \ \textcolor{keywordflow}{return}\ facet\_parametric\_normals\_(iFacet,x\_or\_y\_or\_z);}
+\DoxyCodeLine{00795\ \}}
+\DoxyCodeLine{00796\ }
+\DoxyCodeLine{00797\ }
+\DoxyCodeLine{00798\ }
+\DoxyCodeLine{00799\ }
+\DoxyCodeLine{00800\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00801\ \textcolor{comment}{}}
+\DoxyCodeLine{00802\ \textcolor{comment}{Returns\ the\ component\ of\ the\ transformation\ from\ nodes\ to\ normals\ in\ physical\ space.}}
+\DoxyCodeLine{00803\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00804\ \textcolor{comment}{@param\ iFacet\ is\ the\ number\ 0..n-\/1\ of\ the\ internal\ facet\ inside\ of\ the\ FE}}
+\DoxyCodeLine{00805\ \textcolor{comment}{@param\ iNode\ is\ the\ number\ 0..n-\/1\ of\ the\ FE\ node}}
+\DoxyCodeLine{00806\ \textcolor{comment}{}}
+\DoxyCodeLine{00807\ \textcolor{comment}{@return\ a\ pair\ of\ weights,\ one\ for\ each\ tangent\ vector}}
+\DoxyCodeLine{00808\ \textcolor{comment}{}}
+\DoxyCodeLine{00809\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00810\ \textcolor{comment}{}}
+\DoxyCodeLine{00811\ \textcolor{comment}{Accesses\ the\ private\ data\ of\ the\ class,\ retreiving\ tabulated\ vector.}}
+\DoxyCodeLine{00812\ \textcolor{comment}{}}
+\DoxyCodeLine{00813\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00814\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00815\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}{pair}}<\textcolor{keywordtype}{double},\textcolor{keywordtype}{double}>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a78ea2fa1408e1205df9b59130d605aa8}{FacetNormalTransformationNodeWeights}}(}
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ iFacet,\ uint32\_t\ iNode\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00817\ \{}
+\DoxyCodeLine{00818\ \textcolor{comment}{//\ \ \ \ assert(\ iFacet\ <\ facet\_normal\_xforms\_.depth()\ );}}
+\DoxyCodeLine{00819\ \textcolor{comment}{//\ \ \ \ assert(\ iNode\ <\ sector\_integration\_weights\_.size()\ );}}
+\DoxyCodeLine{00820\ \textcolor{comment}{//\ \ \ \ return\ make\_pair(\ facet\_normal\_xforms\_(iFacet,iNode,0u),\ facet\_normal\_xforms\_(iFacet,iNode,1u)\ );}}
+\DoxyCodeLine{00821\ \ \ \ \ assert(\ iFacet\ <\ facet\_normal\_xforms\_.size()\ );}
+\DoxyCodeLine{00822\ \ \ \ \ assert(\ iNode\ <\ facet\_normal\_xforms\_[iFacet].size()\ );}
+\DoxyCodeLine{00823\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_normal\_xforms\_[iFacet][iNode];}
+\DoxyCodeLine{00824\ \}}
+\DoxyCodeLine{00825\ }
+\DoxyCodeLine{00826\ }
+\DoxyCodeLine{00827\ }
+\DoxyCodeLine{00828\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00829\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a274c8514d980cc865d6b53046b80c61a}{FacetEdgeMidPoint}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00830\ \ \{}
+\DoxyCodeLine{00831\ \ \ \ \ assert(\ iFacet\ <\ facet\_types\_.size()\ );}
+\DoxyCodeLine{00832\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 1u\ )}
+\DoxyCodeLine{00833\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_edge\_midpoints\_(iFacet,0u)\ );}
+\DoxyCodeLine{00834\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 2u\ )}
+\DoxyCodeLine{00835\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_edge\_midpoints\_(iFacet,0u),\ facet\_edge\_midpoints\_(iFacet,1u)\ );}
+\DoxyCodeLine{00836\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\ dim\ ==\ 3u\ )}
+\DoxyCodeLine{00837\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Point<dim>(\ facet\_edge\_midpoints\_(iFacet,0u),}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_edge\_midpoints\_(iFacet,1u),}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_edge\_midpoints\_(iFacet,2u)\ );}
+\DoxyCodeLine{00840\ \}}
+\DoxyCodeLine{00841\ }
+\DoxyCodeLine{00842\ }
+\DoxyCodeLine{00843\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00844\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_ac730c56262ae42f423860db3bd07f35c}{Barycenter}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00845\ \{}
+\DoxyCodeLine{00846\ \ \ \ \ \ \textcolor{keywordflow}{return}\ barycenter\_;}
+\DoxyCodeLine{00847\ \}}
+\DoxyCodeLine{00848\ }
+\DoxyCodeLine{00849\ }
+\DoxyCodeLine{00850\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00851\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::FacetPoint(\ uint32\_t\ iFacet,\ uint32\_t\ iPoint\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00852\ \ \{}
+\DoxyCodeLine{00853\ \ \ \ \ assert(\ iFacet\ <\ facet\_points\_.size()\ );}
+\DoxyCodeLine{00854\ \ \ \ \ assert(\ iPoint\ <\ facet\_points\_[iPoint].size()\ );}
+\DoxyCodeLine{00855\ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_points\_[iFacet][iPoint];}
+\DoxyCodeLine{00856\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00857\ \textcolor{comment}{\ \ \ \ assert(\ iFacet\ <\ facet\_points\_.depth()\ );}}
+\DoxyCodeLine{00858\ \textcolor{comment}{\ \ \ \ assert(\ iPoint\ <\ facet\_points\_.rows()\ );}}
+\DoxyCodeLine{00859\ \textcolor{comment}{\ \ \ \ if\ constexpr\ (\ dim\ ==\ 1u\ )}}
+\DoxyCodeLine{00860\ \textcolor{comment}{\ \ \ \ \ \ return\ Point<dim>(\ facet\_points\_(iFacet,iPoint,0u)\ );}}
+\DoxyCodeLine{00861\ \textcolor{comment}{\ \ \ \ else\ if\ constexpr\ (\ dim\ ==\ 2u\ )}}
+\DoxyCodeLine{00862\ \textcolor{comment}{\ \ \ \ \ \ return\ Point<dim>(\ facet\_points\_(iFacet,iPoint,0u),\ facet\_points\_(iFacet,iPoint,1u)\ );}}
+\DoxyCodeLine{00863\ \textcolor{comment}{\ \ \ \ else\ if\ constexpr\ (\ dim\ ==\ 3u\ )}}
+\DoxyCodeLine{00864\ \textcolor{comment}{\ \ \ \ \ \ return\ Point<dim>(\ facet\_points\_(iFacet,iPoint,0u),}}
+\DoxyCodeLine{00865\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_points\_(iFacet,iPoint,1u),}}
+\DoxyCodeLine{00866\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ facet\_points\_(iFacet,iPoint,2u)\ );}}
+\DoxyCodeLine{00867\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00868\ \ \}}
+\DoxyCodeLine{00869\ }
+\DoxyCodeLine{00870\ }
+\DoxyCodeLine{00871\ }
+\DoxyCodeLine{00872\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00873\ \textcolor{keyword}{inline}\ FV\_FACET\_TYPE\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a07449cd581adbec2f413261db31ab766}{FacetType}}(\ uint32\_t\ iFacet\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00874\ \{}
+\DoxyCodeLine{00875\ \ \ \ assert(\ iFacet\ <\ facet\_types\_.size()\ );}
+\DoxyCodeLine{00876\ \ \ \ \ \ \textcolor{keywordflow}{return}\ facet\_types\_[iFacet];}
+\DoxyCodeLine{00877\ \}}
+\DoxyCodeLine{00878\ }
+\DoxyCodeLine{00879\ }
+\DoxyCodeLine{00880\ }
+\DoxyCodeLine{00881\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00882\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a7a4028dcef8785a9b7738fd374350dcb}{SectorPoint}}(\ uint32\_t\ iSector,\ uint32\_t\ iPoint\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00883\ \ \{}
+\DoxyCodeLine{00884\ \ \ \ \ assert(\ iSector\ <\ sector\_points\_.size()\ );}
+\DoxyCodeLine{00885\ \ \ \ \ assert(\ iPoint\ <\ sector\_points\_[iSector].size()\ );}
+\DoxyCodeLine{00886\ \ \ \ \ \textcolor{keywordflow}{return}\ sector\_points\_[iSector][iPoint];}
+\DoxyCodeLine{00887\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00888\ \textcolor{comment}{\ \ \ \ assert(\ iSector\ <\ sector\_points\_.depth()\ );}}
+\DoxyCodeLine{00889\ \textcolor{comment}{\ \ \ \ assert(\ iPoint\ <\ sector\_points\_.rows()\ );}}
+\DoxyCodeLine{00890\ \textcolor{comment}{\ \ \ \ if\ constexpr\ (\ dim\ ==\ 1u\ )}}
+\DoxyCodeLine{00891\ \textcolor{comment}{\ \ \ \ \ \ return\ Point<dim>(\ sector\_points\_(iSector,iPoint,0u)\ );}}
+\DoxyCodeLine{00892\ \textcolor{comment}{\ \ \ \ else\ if\ constexpr\ (\ dim\ ==\ 2u\ )}}
+\DoxyCodeLine{00893\ \textcolor{comment}{\ \ \ \ \ \ return\ Point<dim>(\ sector\_points\_(iSector,iPoint,0u),\ sector\_points\_(iSector,iPoint,1u)\ );}}
+\DoxyCodeLine{00894\ \textcolor{comment}{\ \ \ \ else\ if\ constexpr\ (\ dim\ ==\ 3u\ )}}
+\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ \ \ return\ Point<dim>(\ sector\_points\_(iSector,iPoint,0u),}}
+\DoxyCodeLine{00896\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sector\_points\_(iSector,iPoint,1u),}}
+\DoxyCodeLine{00897\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sector\_points\_(iSector,iPoint,2u)\ );}}
+\DoxyCodeLine{00898\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00899\ \ \}}
+\DoxyCodeLine{00900\ }
+\DoxyCodeLine{00901\ }
+\DoxyCodeLine{00902\ }
+\DoxyCodeLine{00903\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00904\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{pair}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{Point}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{dim}}>,\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{Point}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{dim}}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a42f7f72118ee9fee35c502706ac498e2}{SectorEdgePoints}}(}
+\DoxyCodeLine{00905\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ iSector,\ uint32\_t\ iEdge\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00906\ \{}
+\DoxyCodeLine{00907\ \ \ \ assert(\ iSector\ <\ edges\_of\_sectors\_.size()\ );}
+\DoxyCodeLine{00908\ \ \ \ assert(\ iEdge\ <\ edges\_of\_sectors\_[iSector].size()\ );}
+\DoxyCodeLine{00909\ \ \ \ \textcolor{keyword}{const}\ uint32\_t\ pt1(edges\_of\_sectors\_[iSector][iEdge].first);}
+\DoxyCodeLine{00910\ \ \ \ \textcolor{keyword}{const}\ uint32\_t\ pt2(edges\_of\_sectors\_[iSector][iEdge].second);}
+\DoxyCodeLine{00911\ }
+\DoxyCodeLine{00912\ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_pair(\ sector\_points\_[iSector][pt1],\ sector\_points\_[iSector][pt2]\ );}
+\DoxyCodeLine{00913\ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00914\ \textcolor{comment}{\ \ \ \ assert(\ iSector\ <\ edges\_of\_sectors\_.size()\ );}}
+\DoxyCodeLine{00915\ \textcolor{comment}{\ \ \ \ assert(\ iEdge\ <\ edges\_of\_sectors\_[iSector].size()\ );}}
+\DoxyCodeLine{00916\ \textcolor{comment}{\ \ \ \ const\ uint32\_t\ pt1(edges\_of\_sectors\_[iSector][iEdge].first);}}
+\DoxyCodeLine{00917\ \textcolor{comment}{\ \ \ \ const\ uint32\_t\ pt2(edges\_of\_sectors\_[iSector][iEdge].second);}}
+\DoxyCodeLine{00918\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00919\ \textcolor{comment}{\ \ \ \ if\ constexpr\ (\ dim\ ==\ 1u\ )}}
+\DoxyCodeLine{00920\ \textcolor{comment}{\ \ \ \ \ \ return\ make\_pair(\ Point<1U>(sector\_points\_(iSector,pt1,0u)),\ Point<1U>(sector\_points\_(iSector,pt2,0u))\ );}}
+\DoxyCodeLine{00921\ \textcolor{comment}{\ \ \ \ else\ if\ constexpr\ (\ dim\ ==\ 2u\ )}}
+\DoxyCodeLine{00922\ \textcolor{comment}{\ \ \ \ \ \ return\ make\_pair(\ Point<2U>(sector\_points\_(iSector,pt1,0u),sector\_points\_(iSector,pt1,1u)),}}
+\DoxyCodeLine{00923\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Point<2U>(sector\_points\_(iSector,pt2,0u),sector\_points\_(iSector,pt2,1u))\ );}}
+\DoxyCodeLine{00924\ \textcolor{comment}{\ \ \ \ else\ if\ constexpr\ (\ dim\ ==\ 3u\ )}}
+\DoxyCodeLine{00925\ \textcolor{comment}{\ \ \ \ \ \ return\ make\_pair(\ Point<3U>(sector\_points\_(iSector,pt1,0u),sector\_points\_(iSector,pt1,1u),\ sector\_points\_(iSector,pt1,2u)),}}
+\DoxyCodeLine{00926\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Point<3U>(sector\_points\_(iSector,pt2,0u),sector\_points\_(iSector,pt2,1u),\ sector\_points\_(iSector,pt2,2u))\ );}}
+\DoxyCodeLine{00927\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00928\ \}}
+\DoxyCodeLine{00929\ }
+\DoxyCodeLine{00930\ }
+\DoxyCodeLine{00931\ }
+\DoxyCodeLine{00932\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00933\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{std}}::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{pair}}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{uint32\_t}},\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{uint32\_t}}>\ \ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a9833a165fd48971b4d351e5a56d29fb8}{SectorEdge}}(\ uint32\_t\ iSector,}
+\DoxyCodeLine{00934\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ iEdge\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00935\ \{}
+\DoxyCodeLine{00936\ \ \ \ assert(\ iSector\ <\ edges\_of\_sectors\_.size()\ );}
+\DoxyCodeLine{00937\ \ \ \ assert(\ iEdge\ <\ edges\_of\_sectors\_[iSector].size()\ );}
+\DoxyCodeLine{00938\ \ \ \ \ \ \textcolor{keywordflow}{return}\ edges\_of\_sectors\_[iSector][iEdge];}
+\DoxyCodeLine{00939\ \}}
+\DoxyCodeLine{00940\ }
+\DoxyCodeLine{00941\ }
+\DoxyCodeLine{00942\ \textcolor{comment}{///\ number\ of\ corner\ points\ of\ the\ finite\ volume\ sector}}
+\DoxyCodeLine{00943\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00944\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a06f1fb84272a78d93e79b2303be88502}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a06f1fb84272a78d93e79b2303be88502}{SectorPoints}}(\ uint32\_t\ iSector\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00945\ \{}
+\DoxyCodeLine{00946\ \ \ \ assert(\ iSector\ <\ sector\_points\_.size()\ );}
+\DoxyCodeLine{00947\ \ \ \ \textcolor{comment}{//\ assumes\ that\ all\ sectors\ have\ the\ same\ number\ of\ points}}
+\DoxyCodeLine{00948\ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(sector\_points\_[iSector].size());}
+\DoxyCodeLine{00949\ \}}
+\DoxyCodeLine{00950\ }
+\DoxyCodeLine{00951\ }
+\DoxyCodeLine{00952\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00953\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a5ddd2f15a3da926021974f7499277123}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>::\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_a5ddd2f15a3da926021974f7499277123}{SectorEdges}}(\ uint32\_t\ iSector\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00954\ \{}
+\DoxyCodeLine{00955\ \ \ \ assert(\ iSector\ <\ edges\_of\_sectors\_.size()\ );}
+\DoxyCodeLine{00956\ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(edges\_of\_sectors\_[iSector].size());}
+\DoxyCodeLine{00957\ \}}
+\DoxyCodeLine{00958\ }
+\DoxyCodeLine{00959\ }
+\DoxyCodeLine{00960\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00961\ }
+\DoxyCodeLine{00962\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

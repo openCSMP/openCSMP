@@ -1,0 +1,53 @@
+\doxysection{Event.\+h}
+\hypertarget{_event_8h_source}{}\label{_event_8h_source}\index{source/includes/integration/finite\_volumes/DES\_transport\_scheme/Event.h@{source/includes/integration/finite\_volumes/DES\_transport\_scheme/Event.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_NEW\_EVENT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_NEW\_EVENT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_node_8h}{"{}Node.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_fibonacci_heap_8h}{"{}FibonacciHeap.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_event}{Event}}\ \{}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//constructor}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{explicit}\ Event(\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ nd);}
+\DoxyCodeLine{00017\ \ \ \ \ Event()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//getting\ node}}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ getNode()\ \textcolor{keyword}{const}\ \{\textcolor{keywordflow}{return}\ node\_;\}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{bool}\ valid()\ \textcolor{keyword}{const}\ \{\textcolor{keywordflow}{return}\ valid\_;\}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ valid(\textcolor{keywordtype}{bool}\ validity)\ \{valid\_\ =\ validity;\}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ inPEPStack()\ \textcolor{keyword}{const}\ \{\textcolor{keywordflow}{return}\ inPEPStack\_;\}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ inPEPStack(\textcolor{keywordtype}{bool}\ boolean)\ \{inPEPStack\_\ =\ boolean;\}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{bool}\ inQueue()\ \textcolor{keyword}{const}\ \{\textcolor{keywordflow}{return}\ inQueue\_;\}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ inQueue(\textcolor{keywordtype}{bool}\ boolean)\ \{inQueue\_\ =\ boolean;\}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ t\_schedule()\ \textcolor{keyword}{const}\ \{\textcolor{keywordflow}{return}\ t\_schedule\_;\}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ t\_schedule(\textcolor{keywordtype}{double}\ time)\ \{t\_schedule\_\ =\ time;\}}
+\DoxyCodeLine{00028\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ facetAreaCollection;}
+\DoxyCodeLine{00029\ \ \ \ \ std::vector<Point<dim>>\ facetNormalCollection;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{typedef}\ ajb::detail::FibonacciHeap\_Node<\textcolor{keywordtype}{double},size\_t>\ Heap\_Node;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ setHeapNode(Heap\_Node*\ heap\_node)\ \{heap\_node\_\ =\ heap\_node;\}}
+\DoxyCodeLine{00033\ \ \ \ \ Heap\_Node*\ getHeapNode()\ \{\textcolor{keywordflow}{return}\ heap\_node\_;\}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ node\_\ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00037\ \ \ \ \ Heap\_Node*\ heap\_node\_\ \ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ t\_schedule\_;\ \textcolor{comment}{//scheduled\ time\ stamp\ used\ for\ sorting\ event\ queue}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//validity\ (false\ =\ event\ needs\ to\ be\ rescheduled\ after\ it\ is\ executed,\ becomes\ true\ after\ re-\/scheduling)}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ valid\_;}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{bool}\ inPEPStack\_;\ \textcolor{comment}{//whether\ in\ PEPStack\ \ }}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ inQueue\_;\ \textcolor{comment}{//whether\ in\ event\ queue}}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

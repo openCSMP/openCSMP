@@ -46,13 +46,15 @@ Detailed content:
 
 (double) px, py, pz[0..n-1]  = coordinates of n nodes (= FE vertices)
 
-(int8_t) bflags[0..n-1] = negative numbers for nodes at boundary, see later
-
 (enum int8_t) pelmt[0..e-1] = CSMP_FEM_TYPE of e finite elements  (1 entry only for single element-type mesh)
 
 (size_t) plist[0..e *[sum npe[e]]] = nodes making up each element
 
 (int64_t) pfverts[0..e *[sum fpe[e]]] = neighbor elements adjacent to the faces of each element
+
+(int8_t) bflags[0..n-1] = negative numbers for nodes at boundary, see later
+
+(int8_t) gflags[0..n-1] = topology identifiers telling if? and which function the nodes have in defining the BREP of the model geometry
 
 For Face and InterFace objects, 'pfverts' also contains the indices of the higher-dimensional neighbor element.
 
@@ -141,7 +143,7 @@ class VData {
     /// number of element neighbors in a single element type mesh
     size_t ElementNeighbors() const;
   
-    /// reports the number of different nde flags stored as boundary flags in the model
+    /// reports the number of different node flags stored as boundary flags in the model
     size_t BFlags() const;
   
     /// number of nodes stored for element, face or interface
@@ -373,17 +375,17 @@ class VData {
   
  private:
 
-    bool                               hybrid_mesh_;      ///< mesh that consists of different element types
-    std::vector<double>                px, py, pz;        ///< node coordinates
-    std::vector<int8_t>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
-    std::deque<std::vector<size_t> >   plist;             ///< nodes of each element, face and interface in that order
-    std::deque<std::vector<int64_t> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
-    std::vector<std::int8_t>           bflags;            ///< int_8 enumeration flags for those nodes that lie on model boundaries
-    std::vector<std::int8_t>           gflags_;           ///< int_8 enumeration flags distinguishing mesh nodes that contribute to the model topology / geometry
-    size_t                             first_face_;       ///< faces come after elements; if none this is equal to elements
-    size_t                             first_interface_;  ///< interfaces come after faces; if none this is equal to elements
+    bool                               hybrid_mesh_ = false; ///< mesh that consists of different element types
+    std::vector<double>                px, py, pz;           ///< node coordinates
+    std::vector<int8_t>                pelmt;                ///< CSMP element type info, needed to read plist & pfverts
+    std::deque<std::vector<size_t> >   plist;                ///< nodes of each element, face and interface in that order
+    std::deque<std::vector<int64_t> >  pfverts;              ///< element neighbors; same range as eidx, but also negative values possible
+    std::vector<std::int8_t>           bflags;               ///< int_8 enumeration flags for those nodes that lie on model boundaries
+    std::vector<std::int8_t>           gflags_;              ///< int_8 enumeration flags distinguishing mesh nodes that contribute to the model topology / geometry
+    size_t                             first_face_;          ///< faces come after elements; if none this is equal to elements
+    size_t                             first_interface_;     ///< interfaces come after faces; if none this is equal to elements
     // collocated nodes connecting mesh patches, and their flags
-    manifoldContainer                  pmanifolds_;       ///< node manifolds, are added separately: @todo must be constructed separately
+    manifoldContainer                  pmanifolds_;          ///< node manifolds, are added separately: @todo must be constructed separately
 
     friend class VData_Test;
 };

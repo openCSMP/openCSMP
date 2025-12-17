@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_e26751f378969cc6804c1e6c2035f617" kind="dir">
+    <compoundname>source/modules/interfaces/Fracman</compoundname>
+    <innerfile refid="_frac_man___fracture_8cpp">FracMan_Fracture.cpp</innerfile>
+    <innerfile refid="_frac_man___interface_8cpp">FracMan_Interface.cpp</innerfile>
+    <innerfile refid="_f_r_e_d___fracture_8cpp">FRED_Fracture.cpp</innerfile>
+    <innerfile refid="_f_r_e_d___interface_8cpp">FRED_Interface.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/interfaces/Fracman/"/>
+  </compounddef>
+</doxygen>

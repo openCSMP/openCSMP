@@ -1,0 +1,74 @@
+\doxysection{BE\+\_\+require.\+h}
+\hypertarget{_b_e__require_8h_source}{}\label{_b_e__require_8h_source}\index{source/includes/utilities/BE\_require.h@{source/includes/utilities/BE\_require.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00002\ \textcolor{comment}{}}
+\DoxyCodeLine{00003\ \textcolor{comment}{require.h}}
+\DoxyCodeLine{00004\ \textcolor{comment}{From\ Thinking\ in\ C++,\ 2nd\ Edition}}
+\DoxyCodeLine{00005\ \textcolor{comment}{Available\ at\ http://www.BruceEckel.com}}
+\DoxyCodeLine{00006\ \textcolor{comment}{(c)\ Bruce\ Eckel\ 2000}}
+\DoxyCodeLine{00007\ \textcolor{comment}{Copyright\ notice\ in\ Copyright.txt}}
+\DoxyCodeLine{00008\ \textcolor{comment}{Test\ for\ error\ conditions\ in\ programs}}
+\DoxyCodeLine{00009\ \textcolor{comment}{Local\ "{}using\ namespace\ std"{}\ for\ old\ compilers\ */}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{REQUIRE\_H}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{REQUIRE\_H}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdio}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdlib}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{fstream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ require(\textcolor{keywordtype}{bool}\ requirement,}
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{const}\ std::string\&\ msg\ =\ \textcolor{stringliteral}{"{}Requirement\ failed"{}})\{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00020\ \ \ \textcolor{keywordflow}{if}\ (!requirement)\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ fputs(msg.c\_str(),\ stderr);}
+\DoxyCodeLine{00022\ \ \ \ \ fputs(\textcolor{stringliteral}{"{}\(\backslash\)n"{}},\ stderr);}
+\DoxyCodeLine{00023\ \ \ \ \ exit(1);}
+\DoxyCodeLine{00024\ \ \ \}}
+\DoxyCodeLine{00025\ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ requireArgs(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{int}\ args,}
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{const}\ std::string\&\ msg\ =}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{stringliteral}{"{}Must\ use\ \%d\ arguments"{}})\ \{}
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00031\ \ \ \ \textcolor{keywordflow}{if}\ (argc\ !=\ args\ +\ 1)\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ fprintf(stderr,\ msg.c\_str(),\ args);}
+\DoxyCodeLine{00033\ \ \ \ \ \ fputs(\textcolor{stringliteral}{"{}\(\backslash\)n"{}},\ stderr);}
+\DoxyCodeLine{00034\ \ \ \ \ \ exit(1);}
+\DoxyCodeLine{00035\ \ \ \ \}}
+\DoxyCodeLine{00036\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ requireMinArgs(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{int}\ minArgs,}
+\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{const}\ std::string\&\ msg\ =}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{stringliteral}{"{}Must\ use\ at\ least\ \%d\ arguments"{}})\ \{}
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00042\ \ \ \textcolor{keywordflow}{if}(argc\ <\ minArgs\ +\ 1)\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ fprintf(stderr,\ msg.c\_str(),\ minArgs);}
+\DoxyCodeLine{00044\ \ \ \ \ fputs(\textcolor{stringliteral}{"{}\(\backslash\)n"{}},\ stderr);}
+\DoxyCodeLine{00045\ \ \ \ \ exit(1);}
+\DoxyCodeLine{00046\ \ \ \}}
+\DoxyCodeLine{00047\ \}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ assure(std::ifstream\&\ in,}
+\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{const}\ std::string\&\ filename\ =\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{00051\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00052\ \ \ \textcolor{keywordflow}{if}(!in)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Could\ not\ open\ file\ \%s\(\backslash\)n"{}},}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ filename.c\_str());}
+\DoxyCodeLine{00055\ \ \ \ \ exit(1);}
+\DoxyCodeLine{00056\ \ \ \}}
+\DoxyCodeLine{00057\ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ assure(std::ofstream\&\ out,}
+\DoxyCodeLine{00060\ \ \ \textcolor{keyword}{const}\ std::string\&\ filename\ =\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{00061\ \ \ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00062\ \ \ \textcolor{keywordflow}{if}(!out)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Could\ not\ open\ file\ \%s\(\backslash\)n"{}},}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ filename.c\_str());}
+\DoxyCodeLine{00065\ \ \ \ \ exit(1);}
+\DoxyCodeLine{00066\ \ \ \}}
+\DoxyCodeLine{00067\ \}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ REQUIRE\_H\ ///:\string~}}
+
+\end{DoxyCode}

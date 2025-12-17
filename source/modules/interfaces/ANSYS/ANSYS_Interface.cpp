@@ -235,9 +235,10 @@ void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                   "Nodes per element information not read correctly");
       }
+    // the 'pfverts' record is usually broken, so only a warning is issued
     if ( !ReadPfvertsBinary( ifs_dat, vset ) ) {
-         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                  "Element neighbor information not read correctly");
+         csmp_error.Note(  WARNING, "ANSYS_Interface::ReadMeshBinary",
+                                    "Element neighbor information was not read correctly");
       }
     if ( !ReadPmaterialBinary( ifs_dat, vset ) ) {
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
@@ -1052,10 +1053,13 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // making an array of numbers of neighbors of each element
+    size_t n_pfvert_records{0u};
     assert( vset.HybridElementTypeMesh() );
     deque<uint32_t>  nbors( vset.Cells() );
-    for ( size_t i{0U}; i<vset.Cells(); ++i )
-      nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
+    for ( size_t i{0U}; i<vset.Cells(); ++i ) {
+       nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
+       n_pfvert_records += nbors[i];
+    }
     vset.ResizePfverts( nbors );
 
     // reading how many neighbor-element data identifiers are in the file record
@@ -1067,7 +1071,12 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
 
     if ( total_items == 0 ) {
          csmp_error.Note( WARNING, "ANSYS_Interface::ReadPfvertsASCII", 
-                                     "File record of neighbors per element (pfverts) appears empty" );
+                         "File record of neighbors per element (pfverts) appears empty" );
+         return false;
+      }
+    else if ( total_items != n_pfvert_records ) {
+         csmp_error.Note( WARNING, "ANSYS_Interface::ReadPfvertsASCII",
+                         "File record of neighbors per element (pfverts) contains incorrect number of entries" );
          return false;
       }
     
@@ -1448,50 +1457,78 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof(uint32_t);
-    long          entries(0);
+    constexpr size_t ibytes  = sizeof(int32_t);
+    constexpr size_t uibytes = sizeof(uint32_t);
 
-    // setting up the storage for 'pfverts' in VSet
-    assert( vset.Elements() > 0 );
-    assert( vset.HybridElementTypeMesh() );
-    const size_t nelements(vset.Cells());
+    // Check mesh validity
+    assert(vset.Elements() > 0);
+    assert(vset.HybridElementTypeMesh());
+    const size_t nelements = vset.Cells();
 
-    // making an array of with the number of neighbors for each element
-    deque<uint32_t>  nbors( nelements );
-    size_t          n_pfverts_entries_expected{0};
-    for ( size_t i{0U}; i<nelements; ++i ) {
-         assert( vset.ElementType(i) >= -128 );
-         assert( vset.ElementType(i) <=  128 );
-         nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
-         n_pfverts_entries_expected += nbors[i];
-//         cout << nbors[i] <<":"<< parseAbbreviated_FE_Type( vset.ElementType(i) ) <<" ";
-      }
-    assert( nbors.size() == vset.Elements() );
-    vset.ResizePfverts( nbors );
+    // Determine number of neighbors per element
+    std::deque<uint32_t> nbors(nelements);
+    size_t expected_entries = 0;
+    for (size_t i = 0; i < nelements; ++i) {
+        const auto etype = vset.ElementType(i);
+        assert(etype >= -128 && etype <= 128);
+        const uint32_t n = csmp_elmt_specs::NeighborsPerElementOfType(etype);
+        nbors[i] = n;
+        expected_entries += n;
+    }
 
-    // reading neighbors connected to elements 'pfverts' (int)
-    // -----------------------------------------------------------
-    // size of pfverts array
-    fread( (void*) &entries, uibytes, 1U, fp );
-    
-    assert( entries > 0 );
-    assert( entries < ULONG_MAX );
-    
-    if ( entries != n_pfverts_entries_expected ) {
-         cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
-         csmp_error.Note( WARNING, "ANSYS_Interface::ReadPfvertsBinary",
-                           "neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced");
-      }
-    if ( csmp_error.Verbose() ) {
-         cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< endl;
-         cout.flush();
-      }
-      
-    // this number format must be respected since the file is written by ANSYS
-    int32_t*  pfverts = new int32_t[ entries ];
-    fread( (void*) pfverts, ibytes, entries, fp );
+    assert(nbors.size() == vset.Elements());
+    vset.ResizePfverts(nbors);
 
+    // Read actual entry count from file
+    uint32_t raw_entry_count = 0;
+    if (fread(&raw_entry_count, uibytes, 1U, fp) != 1) {
+        csmp_error.Note( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "Failed to read entry count");
+        return false;
+    }
+
+    const size_t actual_entries = static_cast<size_t>(raw_entry_count);
+    if (actual_entries < 1 || actual_entries >= static_cast<size_t>(std::numeric_limits<long>::max())) {
+        csmp_error.Note( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "Invalid entry count in binary file");
+        return false;
+    }
+
+    // pfverts data must be read in any case because file pointer needs to be advanced since reading is sequential
+    unique_ptr<int32_t[]> pfverts(new int32_t[actual_entries]);
+    if (csmp_error.Verbose()) {
+        std::cout << "\n\treading " << nelements << " neighbor-list records from 'pfverts' (size=" 
+                  << actual_entries << ")..." << std::endl;
+    }
+    if (fread(pfverts.get(), ibytes, actual_entries, fp) != actual_entries)
+        csmp_error.Note( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "Failed to read pfverts data");
+
+    if (actual_entries != expected_entries) {
+        std::cerr << "\nneighbor records " << actual_entries
+                  << " vs expected: " << expected_entries << '\n';
+
+        csmp_error.Note( WARNING, "ANSYS_Interface::ReadPfvertsBinary",
+                        "Neighbor element ('pfvert') record in binary file and is therefore ignored");
+
+        vset.RemovePfverts();
+
+        return false;
+    }
+
+    // copy 'pfverts' record into VSet pfverts structure
+    auto it = vset.PfvertsBegin();
+    size_t offset = 0;
+    for (size_t i = 0; i < nelements && it != vset.PfvertsEnd(); ++i, ++it) {
+        assert(nbors[i] >= 2);
+        for (uint32_t j = 0; j < nbors[i] && offset < actual_entries; ++j) {
+            (*it)[j] = pfverts[offset++];
+        }
+    }
+
+    return true;
+}
+
+template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<1U>& );
+template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<2U>& );
+template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<3U>& );
 
 // DEBUGGING - what is actually been read
 /*
@@ -1500,30 +1537,6 @@ for ( auto i{0}; i<n_pfverts_entries_expected; ++i )
   cerr << pfverts[i] <<" ";
 cerr << endl;
 */
-
-    // reading the C array into the resized pfverts deque inside VData
-    // ---------------------------------------------------------------
-    deque<vector<int64_t> >::iterator it(vset.PfvertsBegin());
-    size_t  n_entry(0U);
-    for ( size_t i{0U}; i<nelements; i++, ++it ) {
-        // minimum number of neighbors per element
-        assert( nbors[i] >= 2 );
-        for ( size_t j{0U}; j<nbors[i]; j++ ) {
-             // ignoring extra entries if ANSYS pfverts array is too short
-             // later uses VData::EstablishNeighborConnectivity3D() to fix things up
-             if ( n_entry >= entries ) break;
-             (*it)[j] = pfverts[n_entry++];
-          }
-      }
-
-    delete[] pfverts;
-
-    return true;
-}
-
-template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<1U>& );
-template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<2U>& );
-template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<3U>& );
 
 // TESTING of previous function
 

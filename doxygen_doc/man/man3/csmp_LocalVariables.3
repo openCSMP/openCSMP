@@ -1,0 +1,73 @@
+.TH "csmp::LocalVariables" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::LocalVariables \- Data class to store physical variable count at given placement\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <LocalVariables\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBint_type\fP = uint32_t"
+.br
+.RI "unsigned integer type that is big enough to hold 'totalDataDepth' "
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLocalVariables\fP (\fBint_type\fP scalarsVars, \fBint_type\fP vectorVars, \fBint_type\fP tensorVars, \fBint_type\fP array_count, \fBint_type\fP array_length, \fBint_type\fP flag_array_count, \fBint_type\fP flag_array_length, \fBint_type\fP total_data_depth, \fBint_type\fP total_flag_depth)"
+.br
+.ti -1c
+.RI "\fBLocalVariables\fP (const \fBLocalVariables\fP &lvs)"
+.br
+.ti -1c
+.RI "\fBLocalVariables\fP & \fBoperator=\fP (const \fBLocalVariables\fP &lvs)"
+.br
+.ti -1c
+.RI "bool \fBEmpty\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBint_type\fP \fBscalars\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBvectors\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBtensors\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBarrayCount\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBarrayLength\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBflaggedArrayCount\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBflaggedArrayLength\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBtotalDataDepth\fP"
+.br
+.ti -1c
+.RI "\fBint_type\fP \fBtotalFlagDepth\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Data class to store physical variable count at given placement\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

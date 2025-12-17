@@ -35,22 +35,22 @@ static constexpr std::int8_t
     TOP_OUTSIDE{-5},
     FRONT_OUTSIDE{-6},
     BACK_OUTSIDE{-7},
-    CNR_MIN{-8},       ///< min-x, min-y, min-z
-    CNR_MAX{-9},       ///< max-x, max-y, max-z
-    CNR_MIN_MAXX{-10}, ///< see users guide
-    CNR_MIN_MAXXZ{-11},
-    CNR_MIN_MAXZ{-12},
-    CNR_MAX_MINXZ{-13},
-    CNR_MAX_MAXX{-14},
-    CNR_MAX_MAXZ{-15},
+    CNR_MIN{-8},      ///< Min-x, min-y, min-z
+    CNR_X{-9},        ///< Max x, min y, z
+    CNR_XY{-10},      ///< Max x, y, min z
+    CNR_Y{-11},       ///< Max y, min x, z
+    CNR_Z{-12},       ///< Max z, min x, y
+    CNR_XZ{-13},      ///< Max x, z, min y
+    CNR_MAX{-14},     ///< Max-x, max-y, max-z
+    CNR_YZ{-15},      ///< Max y, z, Min x
     BACK_BOTTOM{-16}, ///< model edges: BACK and BOTTOM
     BACK_RIGHT{-17},  ///< BACK and RIGHT
     BACK_TOP{-18},    ///< BACK and TOP
     BACK_LEFT{-19},   ///< BACK and LEFT
-    BOTTOM_RIGHT{-20},///< BOTTOM and RIGHT
-    TOP_RIGHT{-21},   ///< TOP and RIGHT
-    TOP_LEFT{-22},    ///< TOP and LEFT
-    BOTTOM_LEFT{-23}, ///< BOTTOM and LEFT
+    BOTTOM_LEFT{-20}, ///< BOTTOM and LEFT
+    BOTTOM_RIGHT{-21},///< BOTTOM and RIGHT
+    TOP_RIGHT{-22},   ///< TOP and RIGHT
+    TOP_LEFT{-23},    ///< TOP and LEFT
     FRONT_BOTTOM{-24},///< FRONT and BOTTOM
     FRONT_RIGHT{-25}, ///< FRONT and RIGHT
     FRONT_TOP{-26},   ///< FRONT and TOP
@@ -62,20 +62,20 @@ static constexpr std::int8_t
 enum BOX_BOUNDARY : std::int8_t {
   NOT       = 0,                  ///< not located on a model boundary
   IRREGULAR = IRREGULAR_OUTSIDE,  ///< located on a not-specified outside boundary of model (usually in the bounding box)
-  TOP       = TOP_OUTSIDE,
+  LEFT      = LEFT_OUTSIDE,
+  RIGHT     = RIGHT_OUTSIDE,
   BOTTOM    = BOTTOM_OUTSIDE,
-  LEFT   = LEFT_OUTSIDE,
-  RIGHT = RIGHT_OUTSIDE,
+  TOP       = TOP_OUTSIDE,
   FRONT = FRONT_OUTSIDE,
   BACK  = BACK_OUTSIDE,
   CNR1  = CNR_MIN,
-  CNR2  = CNR_MIN_MAXX,
-  CNR3  = CNR_MAX_MAXX,
-  CNR4  = CNR_MAX_MINXZ,
-  CNR5  = CNR_MIN_MAXZ,
-  CNR6  = CNR_MIN_MAXXZ,
+  CNR2  = CNR_X,
+  CNR3  = CNR_XY,
+  CNR4  = CNR_Y,
+  CNR5  = CNR_Z,
+  CNR6  = CNR_XZ,
   CNR7  = CNR_MAX,
-  CNR8  = CNR_MAX_MAXZ,
+  CNR8  = CNR_YZ,
   EDGE1 = BACK_BOTTOM,
   EDGE2 = BACK_RIGHT,
   EDGE3 = BACK_TOP,
@@ -107,57 +107,66 @@ public:
 
 };
 
-BOX_BOUNDARY  intToBOX_BOUNDARY( int8_t i );
+constexpr BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i ) noexcept;
 
 /// turn enumeration into string
-std::string  parseBoundary( BOX_BOUNDARY );
+std::string  parseBoundary( BOX_BOUNDARY ) noexcept;
 
 /// interprets enumeration from string
-BOX_BOUNDARY  parseBoundary( const std::string& box_boundary_name );
+BOX_BOUNDARY  parseBoundary( const std::string& box_boundary_name ) noexcept;
 
 /// returns whether supplied boundary flag refers to a model edge
-bool isEdge( BOX_BOUNDARY );
+bool isEdge( BOX_BOUNDARY ) noexcept;
 
 /// returns whether flag is a corner
-bool isCorner( BOX_BOUNDARY );
+bool isCorner( BOX_BOUNDARY ) noexcept;
 
-/// returns whether flag is a side of the model
-bool isSide( BOX_BOUNDARY );
+/// returns whether flag is a side of the model (LEFT, RIGHT, TOP...)
+bool isSide( BOX_BOUNDARY ) noexcept;
+
+/// can be located on the supplied side (any node on LEFT, RIGHT.., including edges and corners)
+bool sharesSide(BOX_BOUNDARY b) noexcept;
 
 /// returns whether supplied boundary flag is located at a model boundary edge
-bool belongsToEdge( BOX_BOUNDARY edge, BOX_BOUNDARY );
+constexpr bool belongsToEdge( BOX_BOUNDARY edge, BOX_BOUNDARY )  noexcept;
 
 /// returns whether supplied boundary flag is located at a model boundary side
-bool belongsToSide( BOX_BOUNDARY side, BOX_BOUNDARY );
+constexpr bool belongsToSide( BOX_BOUNDARY side, BOX_BOUNDARY )  noexcept;
 
 /// returns whether boundary flag belongs to boundary LEFT
-bool isLEFT( BOX_BOUNDARY );
+bool isLEFT( BOX_BOUNDARY ) noexcept;
 /// returns whether boundary flag belongs to boundary RIGHT
-bool isRIGHT( BOX_BOUNDARY );
+bool isRIGHT( BOX_BOUNDARY ) noexcept;
 /// returns whether boundary flag belongs to boundary TOP
-bool isTOP( BOX_BOUNDARY );
+bool isTOP( BOX_BOUNDARY ) noexcept;
 /// returns whether boundary flag belongs to boundary BOTTOM
-bool isBOTTOM( BOX_BOUNDARY );
+bool isBOTTOM( BOX_BOUNDARY ) noexcept;
 /// returns whether boundary flag belongs to boundary FRONT (3D only)
-bool isFRONT( BOX_BOUNDARY );
+bool isFRONT( BOX_BOUNDARY ) noexcept;
 /// returns whether boundary flag belongs to boundary BACK (3D only)
-bool isBACK( BOX_BOUNDARY );
+bool isBACK( BOX_BOUNDARY ) noexcept;
 
 /// returns true also for edges and corners
-bool canBeIRREGULAR( BOX_BOUNDARY );
+bool canBeIRREGULAR( BOX_BOUNDARY ) noexcept;
+
+std::array<BOX_BOUNDARY,2> facesOfEdge(BOX_BOUNDARY) noexcept;
+std::array<BOX_BOUNDARY,3> facesOfCorner(BOX_BOUNDARY) noexcept;
+std::set<BOX_BOUNDARY> impliedSides(const std::set<BOX_BOUNDARY>& ) noexcept;
+BOX_BOUNDARY uniqueEdgeOrNot(const std::set<BOX_BOUNDARY>&) noexcept;
+BOX_BOUNDARY uniqueImpliedSideOrNot(const std::set<BOX_BOUNDARY>& ) noexcept;
 
 /// returns nodes that are either flagged  CNR1 or CNR2 from one-dimensional model
 Node<1U>* const cornerFlaggedNode( Model<1U>&, BOX_BOUNDARY );
-
-/// infers from node flags and cell type, which boundary the element face lies on including INTERNAL boundaries
-template<uint32_t dim, template<uint32_t> class CELL>
-BOX_BOUNDARY atBoundary( const CELL<dim>* const, uint32_t boundary_face );
 
 /// is the cell located at a model boundary? - for line or surface element in 3D models  this is inferred when all their nodes are on boundary; for volume elements all nodes of one face must be
 template<uint32_t dim, template<uint32_t> class CELL>
 bool atBoundary( const CELL<dim>* const );
 
-/// identifies which boundary a lower dimensional element is located on using the node  flags of this element
+/// infers from cell type and flags of the corner nodes of the face, on which BOX_BUNDARY the cell face lies on including INTERNAL boundaries
+template<uint32_t dim, template<uint32_t> class CELL>
+BOX_BOUNDARY atBoundary( const CELL<dim>* const, uint32_t boundary_face );
+
+/// master function that does all the work to identify which boundary a lower dimensional element is located on based on its node flags
 template<uint32_t dim>
 BOX_BOUNDARY atBoundary( const std::set<BOX_BOUNDARY>& node_flags, uint32_t boundary_face_corner_nodes );
 
@@ -170,13 +179,13 @@ void boundaryMinMaxCoordinates( BOX_BOUNDARY,
                                 csmp::Point<1U>& model_coord_max );
 
 /// gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 2D model
-void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<2U>&, csmp::Point<2U>& );
+void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<2U>&, csmp::Point<2U>& ) noexcept;
 
 /// gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 3D model
-void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<3U>&, csmp::Point<3U>& );
+void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<3U>&, csmp::Point<3U>& ) noexcept;
 
 /// compares the supplied string with valid BOX_BOUNDARY classifications; returns true if it is among them
-bool isDiagnosticBoxBoundaryClassifier( const std::string& );
+bool isDiagnosticBoxBoundaryClassifier( const std::string& ) noexcept;
 
 /// Applies box boundary flags assuming that the model stored in the VSet is box-shaped with the sides aligned with the coordinate axes.
 template<uint32_t dim>
@@ -263,6 +272,88 @@ double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
                             const Point<3U>& coord,
                             // val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
                             double p1, double p2, double p3, double p4 );
+
+
+
+
+
+// ======================================================================
+//
+//          INLINE OF CONSTEXPR FUNCTIONS (LOOKUP TABLES
+//
+// ======================================================================
+
+
+
+/**
+   Parses the BOX_BOUNDARY identifier (see Box.h). If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative.
+   
+   @attention use this only to convert ANSYS or outside-of CSMP generated flags of the enlisted names into BOX_BOUNDARY enums
+*/
+inline constexpr BOX_BOUNDARY intToBOX_BOUNDARY(std::int8_t i) noexcept
+ {
+    // valid range: NOT (0) or any negative value down to MULTIPLE (-29)
+    if (i == 0)
+        return BOX_BOUNDARY::NOT;
+
+    if (i <= -1 && i >= MULTIPLE_BOUNDARIES)
+        return static_cast<BOX_BOUNDARY>(i);
+
+    // fallback for out-of-range values
+    return BOX_BOUNDARY::NOT;
+ }
+
+
+/**
+Returns true if @param bd belongs to the corresponding edge.
+Example: CNR1 and CNR2 belong to EDGE1.
+*/
+inline constexpr bool belongsToEdge(BOX_BOUNDARY edge, BOX_BOUNDARY bd) noexcept {
+    // Mapping each edge to its associated flags
+    constexpr std::array<std::pair<BOX_BOUNDARY, std::array<BOX_BOUNDARY,3>>, 12> edge_map{{
+        {EDGE1,  {EDGE1, CNR1, CNR2}},
+        {EDGE2,  {EDGE2, CNR2, CNR3}},
+        {EDGE3,  {EDGE3, CNR3, CNR4}},
+        {EDGE4,  {EDGE4, CNR1, CNR4}},
+        {EDGE5,  {EDGE5, CNR1, CNR5}},
+        {EDGE6,  {EDGE6, CNR2, CNR6}},
+        {EDGE7,  {EDGE7, CNR3, CNR7}},
+        {EDGE8,  {EDGE8, CNR4, CNR8}},
+        {EDGE9,  {EDGE9, CNR5, CNR6}},
+        {EDGE10, {EDGE10, CNR6, CNR7}},
+        {EDGE11, {EDGE11, CNR7, CNR8}},
+        {EDGE12, {EDGE12, CNR5, CNR8}}
+    }};
+
+    for (const auto& p : edge_map) {
+        if (p.first == edge) {
+            for (const auto f : p.second) {
+                if (f == bd) return true;
+            }
+            return false;
+        }
+    }
+    return false;
+}
+
+
+/**
+Returns true if @param bd belongs to the corresponding side of the box-shaped model.
+Example: CNR1 - CNR4 belong to BACK.
+*/
+inline constexpr bool belongsToSide(BOX_BOUNDARY side, BOX_BOUNDARY bd) noexcept {
+    switch (side) {
+        case LEFT:      return isLEFT(bd);
+        case RIGHT:     return isRIGHT(bd);
+        case TOP:       return isTOP(bd);
+        case BOTTOM:    return isBOTTOM(bd);
+        case FRONT:     return isFRONT(bd);
+        case BACK:      return isBACK(bd);
+        case IRREGULAR: return bd == IRREGULAR;
+        default:        return false;
+    }
+}
+
 
 
 } // end namespace csmp

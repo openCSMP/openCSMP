@@ -1,0 +1,19 @@
+Model: 'test_3_frac-equivalent-properties.text, physical dimensions: x-length (m): 100.000000,  y-length: 100.000000,  z-length: 100.000000 (box-shaped model). 
+P32: 0.00548792
+fracture-matrix interface area: 10975.8
+fraction of void space due to fractures: 0.00173025
+
+DFM_PermeabilityAndFluxRatioAnalyzer::TensorDiagonalAnalysis: The equivalent permeability (m2) of the model is: 
+in the x-direction: 7.49812e-17
+in the y-direction: 9.84315e-17
+in the z-direction: 6.38432e-17
+
+DFM_PermeabilityAndFluxRatioAnalyzer::TensorDiagonalAnalysis: Contribution of the fractures relative to the matrix: 
+in the x-direction: 0.249686
+in the y-direction: 0.640525
+in the z-direction: 0.0640533
+
+DFM_PermeabilityAndFluxRatioAnalyzer::TensorDiagonalAnalysis: The matrix-only permeability (m2) is: 
+in the x-direction: 6e-17
+in the y-direction: 6e-17
+in the z-direction: 6e-17

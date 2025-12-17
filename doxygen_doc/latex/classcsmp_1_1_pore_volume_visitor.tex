@@ -1,0 +1,171 @@
+\doxysection{csmp\+::Pore\+Volume\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_pore_volume_visitor}{}\label{classcsmp_1_1_pore_volume_visitor}\index{csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Pore\+Volume\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Pore\+Volume\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{classcsmp_1_1_pore_volume_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Pore\+Volume\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{classcsmp_1_1_pore_volume_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor_aae11cccc89098bcba11eb22c88d44c01}{Pore\+Volume\+Visitor}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}porosity, const char \texorpdfstring{$\ast$}{*}volume, const char \texorpdfstring{$\ast$}{*}pore\+\_\+volume)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor_ab06d7d532fdd63e5a878077f421d07c4}{\texorpdfstring{$\sim$}{\string~}\+Pore\+Volume\+Visitor}} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor_a13736ab4ca7daef2bf7aaa66a338ef8b}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor_a3632e6a7f773f77914cde2a9a9254999}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a1a3ed57d253eef9a0097232c7359627c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Pore\+Volume\+Visitor$<$ dim $>$}
+Calculating the volume and pore volume of a node-\/centered control volume.
+
+\begin{DoxyAuthor}{Author}
+Philipp Weis, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:philipp.weis@erdw.ethz.ch}{\texttt{philipp.\+weis@erdw.\+ethz.\+ch}}
+
+@changes changes Latest Changes\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Intitially designed to avoid the usage of the Finite\+Volume\+Manager in csp5. Output as nodal field variables allows to use them for post-\/processing (e.\+g. with Para\+View or Mat\+Lab).\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{The\ visitor\ reads\ in\ a\ nodal\ variable\ \textcolor{keywordflow}{for}\ porosity,\ which\ has\ to\ be\ initialised\ before\ visitation}
+\DoxyCodeLine{It\ further\ \textcolor{keyword}{requires}\ existing\ nodal\ variables\ \textcolor{keywordflow}{for}\ volume\ and\ pore\ volume.}
+\DoxyCodeLine{The\ three\ variable\ names\ are\ provided\ as\ constructor\ arguments.}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ The\ visitor\ calculates\ the\ node-\/centered\ volume\ and\ pore\ volume,\ assuming\ that\ all\ elements\ contribute\ equally\ to\ the\ control\ volumes\ of\ their\ respecetive\ nodes.}
+\DoxyCodeLine{}
+\DoxyCodeLine{The\ values\ \textcolor{keywordflow}{for}\ volume\ and\ pore\ volume\ are\ stored\ as\ nodal\ variables.}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_issues}{}\doxysubsection{\texorpdfstring{Known issues}{Known issues}}\label{classcsmp_1_1_upwind_control_visitor_issues}
+There may be new funcionality in CSMP++ that could make this visitor redundant. Only \doxylink{classcsmp_1_1_pore_volume_visitor_a13736ab4ca7daef2bf7aaa66a338ef8b}{Visit(\+Node$<$dim$>$\texorpdfstring{$\ast$}{*} n)} is overwritten. However, application target and level are always set to NODE. How to limit to \doxylink{classcsmp_1_1_region}{Region} (former Group)?
+
+Does the Application Level have to be changed? How can it be restricted to a \doxylink{classcsmp_1_1_region}{Region}? Include the possibility to use porosity as an element variable? Change name to Nodal\+Pore\+Volume\+Visitor?\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2014. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_pore_volume_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_pore_volume_visitor_aae11cccc89098bcba11eb22c88d44c01}\index{csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}!PoreVolumeVisitor@{PoreVolumeVisitor}}
+\index{PoreVolumeVisitor@{PoreVolumeVisitor}!csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PoreVolumeVisitor()}{PoreVolumeVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pore_volume_visitor_aae11cccc89098bcba11eb22c88d44c01} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor}{csmp\+::\+Pore\+Volume\+Visitor}}$<$ dim $>$\+::\+Pore\+Volume\+Visitor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{porosity}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{volume}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{pore\+\_\+volume}{}\end{DoxyParamCaption})}
+
+custom constructor \Hypertarget{classcsmp_1_1_pore_volume_visitor_ab06d7d532fdd63e5a878077f421d07c4}\index{csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}!````~PoreVolumeVisitor@{\texorpdfstring{$\sim$}{\string~}PoreVolumeVisitor}}
+\index{````~PoreVolumeVisitor@{\texorpdfstring{$\sim$}{\string~}PoreVolumeVisitor}!csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}PoreVolumeVisitor()}{\string~PoreVolumeVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pore_volume_visitor_ab06d7d532fdd63e5a878077f421d07c4} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor}{csmp\+::\+Pore\+Volume\+Visitor}}$<$ dim $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor}{Pore\+Volume\+Visitor}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+deconstructor 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_pore_volume_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_pore_volume_visitor_a13736ab4ca7daef2bf7aaa66a338ef8b}\index{csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pore_volume_visitor_a13736ab4ca7daef2bf7aaa66a338ef8b} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor}{csmp\+::\+Pore\+Volume\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+visit function for \doxylink{classcsmp_1_1_node}{Node} 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_pore_volume_visitor_a13736ab4ca7daef2bf7aaa66a338ef8b_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_pore_volume_visitor_a3632e6a7f773f77914cde2a9a9254999}\index{csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::PoreVolumeVisitor$<$ dim $>$@{csmp::PoreVolumeVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pore_volume_visitor_a3632e6a7f773f77914cde2a9a9254999} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_pore_volume_visitor}{csmp\+::\+Pore\+Volume\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+visit function for \doxylink{classcsmp_1_1_region}{Region} 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/cvfe\+\_\+hydrothermal/Pore\+Volume\+Visitor.\+h\item 
+source/modules/integration/cvfe\+\_\+hydrothermal/Pore\+Volume\+Visitor.\+cpp\end{DoxyCompactItemize}

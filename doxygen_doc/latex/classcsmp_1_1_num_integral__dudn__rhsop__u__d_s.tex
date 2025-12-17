@@ -1,0 +1,296 @@
+\doxysection{csmp\+::Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{}\label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}\index{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+d\+S.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4cb68a8ee6f784df9798edbf15ed42c0}{Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}interface\+\_\+oper, const char \texorpdfstring{$\ast$}{*}elmt\+\_\+oper, const char \texorpdfstring{$\ast$}{*}test)
+\begin{DoxyCompactList}\small\item\em interface variable has to be flagged Robin and elmt variable will be read as a matching variable placed on the element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a983f88d08973ee359a31624766207785}{Get\+Operands}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&) override final
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_af22f6fa88965dbb06a632caa1865d27d}{Compute\+Contribution}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&) override final
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a5b4c7ed0cedc8e864b2f4fe8e0f59511}{Assign\+To\+Global}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&rhs, const std\+::vector$<$ size\+\_\+t $>$ \&DOF\+\_\+indexes) override final
+\begin{DoxyCompactList}\small\item\em used by PDE\+\_\+\+Integrator\+UoM for assembly of a pre-\/eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4f3f7db7f6fced4e9ed2237a859a2c99}\label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4f3f7db7f6fced4e9ed2237a859a2c99} 
+void {\bfseries Update\+Time\+Increment} (double dt)
+\begin{DoxyCompactList}\small\item\em adjusting the time increment in case it changes during the transient calculation \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a9a64635223f8fab69d68c872131d9897}{clone}} () const override final
+\item 
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a2866e186272fb3da995a65a432d8806c}\label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a2866e186272fb3da995a65a432d8806c} 
+void {\bfseries Reset\+Min\+Max\+Transfer\+Terms} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_operand}{Operand} Functions. \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Material\+Operand} () const
+\begin{DoxyCompactList}\small\item\em op \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Material\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Material\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Material\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Material\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Material\+Operand\+Data\+Depth} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Basic\+Operand} () const
+\begin{DoxyCompactList}\small\item\em bop \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Basic\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Basic\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Basic\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Basic\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Basic\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Basic\+Operand\+Offset} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Test\+Operand} () const
+\begin{DoxyCompactList}\small\item\em top \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Test\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Test\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Test\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Test\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Test\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Test\+Operand\+Offset} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_af950a8b9a3d4ea2229f60d27ab6a69c2}{Add}} () const
+\begin{DoxyCompactList}\small\item\em Accumulation Process Settings. \end{DoxyCompactList}\item 
+bool {\bfseries Subtract} () const
+\item 
+bool {\bfseries Add\+Later} () const
+\item 
+bool {\bfseries Subtract\+Later} () const
+\item 
+bool {\bfseries Multiply} () const
+\item 
+bool {\bfseries Lumped\+Formulation} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycle} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycles} () const
+\item 
+double {\bfseries Multiply\+By} () const
+\item 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+bool {\bfseries Divide\+By\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a95426d12ae7f3a6eb1bf10c036505e7b}{Add\+Accumulate}} ()
+\begin{DoxyCompactList}\small\item\em Set Flags and Properties. \end{DoxyCompactList}\item 
+void {\bfseries Subtract\+Accumulate} ()
+\item 
+void {\bfseries Add\+Accumulate\+Later} ()
+\item 
+void {\bfseries Subtract\+Accumulate\+Later} ()
+\item 
+void {\bfseries Multiply\+Accumulate} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a4ac9c3b2f60149cd6cc4a35681b29e0d}{Property\+At\+Integration\+Point}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t ip, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em interpolation of property if isoparametric elements are used \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad5614fa4de569146a684d28635eb9ff7}{Get\+Operands}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em getting data from the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void {\bfseries Compute\+Contribution} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em integration performed on \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void {\bfseries Write\+Operands} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em writing data to the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void {\bfseries Multiply\+With\+Time\+Factor} (double dt)
+\begin{DoxyCompactList}\small\item\em if so specified multiply with time increment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad9c03f1d3138a22e0bc40778d0032f6a}{Assign\+To\+Global}} (const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&rhs)
+\begin{DoxyCompactList}\small\item\em assigment to the right hand side global vector (after everything was calculated ) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, Inter\+Face $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of operator \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} {\bfseries op}
+\begin{DoxyCompactList}\small\item\em material property operand \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries top}
+\begin{DoxyCompactList}\small\item\em test function operand \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries RHS}
+\begin{DoxyCompactList}\small\item\em solution \doxylink{classvector}{vector$<$double$>$} to be accumulated \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ {\bfseries MTRL}
+\begin{DoxyCompactList}\small\item\em material property matrix(es) needed for PDE operand \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DERIV}
+\begin{DoxyCompactList}\small\item\em shape function derivative matrix \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries IPOL}
+\begin{DoxyCompactList}\small\item\em shape function vector \end{DoxyCompactList}\item 
+double {\bfseries factor\+\_\+}
+\begin{DoxyCompactList}\small\item\em constant factor \end{DoxyCompactList}\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+}
+\begin{DoxyCompactList}\small\item\em specifies accumulation procedure \end{DoxyCompactList}\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries multiply\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries lump\+\_\+matrices\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycles\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycle\+\_\+}
+\item 
+bool {\bfseries time\+\_\+multiply\+\_\+}
+\begin{DoxyCompactList}\small\item\em time-\/dependent multipliers \end{DoxyCompactList}\item 
+bool {\bfseries time\+\_\+divide\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+d\+S$<$ dim $>$}
+Use to apply a Robin type (flux) boundary condition coupling the sides of the Interface with a lower-\/dimensional region in the middle between them.
+
+\begin{DoxyNote}{Note}
+use for transient computations involving fractures
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+18/8/22 
+\end{DoxyDate}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4cb68a8ee6f784df9798edbf15ed42c0}\index{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}!NumIntegral\_dudn\_rhsop\_u\_dS@{NumIntegral\_dudn\_rhsop\_u\_dS}}
+\index{NumIntegral\_dudn\_rhsop\_u\_dS@{NumIntegral\_dudn\_rhsop\_u\_dS}!csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{NumIntegral\_dudn\_rhsop\_u\_dS()}{NumIntegral\_dudn\_rhsop\_u\_dS()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4cb68a8ee6f784df9798edbf15ed42c0} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{csmp\+::\+Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}}$<$ dim $>$\+::\+Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{interface\+\_\+oper}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{elmt\+\_\+oper}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{test}{}\end{DoxyParamCaption})}
+
+
+
+interface variable has to be flagged Robin and elmt variable will be read as a matching variable placed on the element 
+
+Constructor gets the finite element types that \doxylink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS} needs to turn the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} into the equivalent of a volumetric element from the \doxylink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}. Since Inter\+Faces can either be triangles or quadrilaterals, their extruded volumetric pendants are prism and hexahedral elements.
+
+\begin{DoxyAttention}{Attention}
+the variable \textquotesingle{}thickness\textquotesingle{} needs to be defined on the \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}, else the pde operator will not work. 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=212pt]{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4cb68a8ee6f784df9798edbf15ed42c0_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=212pt]{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4cb68a8ee6f784df9798edbf15ed42c0_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a5b4c7ed0cedc8e864b2f4fe8e0f59511}\index{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}!AssignToGlobal@{AssignToGlobal}}
+\index{AssignToGlobal@{AssignToGlobal}!csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AssignToGlobal()}{AssignToGlobal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a5b4c7ed0cedc8e864b2f4fe8e0f59511} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{csmp\+::\+Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}}$<$ dim $>$\+::\+Assign\+To\+Global (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&}]{iface}{, }\item[{std\+::vector$<$ double $>$ \&}]{rhs}{, }\item[{const std\+::vector$<$ size\+\_\+t $>$ \&}]{DOF\+\_\+indexes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}}
+
+
+
+used by PDE\+\_\+\+Integrator\+UoM for assembly of a pre-\/eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran) 
+
+Assign\+To\+Global matrix function
+
+Ordering of nodes in the vectors is inner face nodes, outer face nodes, and intervening element nodes
+
+\begin{DoxyAuthor}{Author}
+SKM -\/ modified from LKT\textquotesingle{}s version that eliminates Dirichlet constraints from G 
+\end{DoxyAuthor}
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a9a64635223f8fab69d68c872131d9897}\index{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}!clone@{clone}}
+\index{clone@{clone}!csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{clone()}{clone()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a9a64635223f8fab69d68c872131d9897} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{csmp\+::\+Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}}$<$ dim $>$\+::clone (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, Inter\+Face $>$}}.
+
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_af22f6fa88965dbb06a632caa1865d27d}\index{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}!ComputeContribution@{ComputeContribution}}
+\index{ComputeContribution@{ComputeContribution}!csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ComputeContribution()}{ComputeContribution()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_af22f6fa88965dbb06a632caa1865d27d} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{csmp\+::\+Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}}$<$ dim $>$\+::\+Compute\+Contribution (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&}]{iface}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}}
+
+Computes integral over shape function derivatives squared. These are the shape functions of the volumetric elements that match the lower-\/dimensional \doxylink{classcsmp_1_1_inter_face}{Inter\+Face}.
+
+\begin{DoxyAttention}{Attention}
+The connections could also be established using line elements, but this would require a more complicated accumulation process.
+\end{DoxyAttention}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000114}{Todo}}]in Get\+Operands implement the collection of material operands from integration points otherwise second part of method will not work \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a983f88d08973ee359a31624766207785}\index{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}!GetOperands@{GetOperands}}
+\index{GetOperands@{GetOperands}!csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$@{csmp::NumIntegral\_dudn\_rhsop\_u\_dS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{GetOperands()}{GetOperands()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a983f88d08973ee359a31624766207785} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{csmp\+::\+Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+dS}}$<$ dim $>$\+::\+Get\+Operands (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}}
+
+Computes difference between the variable values at the topologically collocated nodes, including that in the intervening lower-\/dimensional region, using it to compute the transfer coefficient (=coupling coefficient) at the time level t + delta t.
+
+Computes difference between the variable values at the topologically collocated nodes, including that in the intervening lower-\/dimensional region, using it to compute the transfer coefficient (=coupling coefficient) at the time level t + delta t.
+
+The hydraulic conductivity (\doxylink{classcsmp_1_1_operand}{Operand} value) is read from the higher-\/dimensional neighbors of the lower-\/dimensional region. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/pde\+\_\+operators/numerical/Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+d\+S.\+h\item 
+source/modules/integration/pde\+\_\+operators/numerical\+\_\+integration/Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+d\+S.\+cpp\end{DoxyCompactItemize}

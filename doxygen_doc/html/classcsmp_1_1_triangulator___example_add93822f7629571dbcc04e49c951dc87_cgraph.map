@@ -1,0 +1,9 @@
+<map id="csmp::Triangulator_Example::Run" name="csmp::Triangulator_Example::Run">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,135,96"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="208,5,338,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,55,182,41,210,33,211,38,183,46,136,60"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_text_interface.html#a6d560187e62ad65b4a6d24c40be5698e" title=" " alt="" coords="188,55,359,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,73,172,73,172,78,135,78"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_triangulator.html#ab420a7832700c821881b3916a4bf6021" title=" " alt="" coords="183,120,364,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="136,94,194,113,192,118,134,99"/>
+</map>

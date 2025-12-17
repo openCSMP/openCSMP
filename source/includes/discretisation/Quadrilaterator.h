@@ -28,7 +28,6 @@ finite-element mesh for CSMP computations.
 class Quadrilaterator {
   public:
     Quadrilaterator( bool harmonic_permeability_averaging=false ); 
-    ~Quadrilaterator(); 
 
     /// prompts user for color-coded permeability values (0..256) matrix in ascii text file and creates a regular quadrilateral mesh from this data
     void QuadrilateralsFromRegularGrid( VSet<2U>& vset, bool from_bitmap=true );

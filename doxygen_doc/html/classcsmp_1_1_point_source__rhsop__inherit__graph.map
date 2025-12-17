@@ -1,0 +1,11 @@
+<map id="csmp::PointSource_rhsop&lt; dim, CELL &gt;" name="csmp::PointSource_rhsop&lt; dim, CELL &gt;">
+<area shape="rect" id="Node000001" title="Assignment of scalar nodal (Neumann) source or sink terms." alt="" coords="97,1102,258,1244"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_point_source__rhsop.html" title=" " alt="" coords="5,1315,166,1457"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="100,1258,95,1269,88,1292,85,1315,80,1315,83,1290,90,1267,96,1256"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_point_source__rhsop.html" title=" " alt="" coords="191,1315,351,1457"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="239,1256,244,1267,260,1315,255,1316,239,1269,234,1258"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_math_operator_r_h_s.html" title=" " alt="" coords="83,564,273,1052"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,1067,180,1102,175,1102,175,1067"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_math_operator_r_h_s.html" title="Base class for FE or FV integrals accumulated into righthand vector." alt="" coords="98,5,257,493"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="180,508,180,565,175,565,175,508"/>
+</map>

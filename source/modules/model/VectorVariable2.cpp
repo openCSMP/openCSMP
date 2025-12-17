@@ -112,35 +112,6 @@ VectorVariable<2U>  VectorVariable<2U>::operator/( const VectorVariable<2U>& v )
 
 
 
-VectorVariable<2U>  VectorVariable<2U>::operator+( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], data[0] + val, data[1] + val );
-}
-
-
-
-VectorVariable<2U>  VectorVariable<2U>::operator-( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], data[0] - val, data[1] - val );
-}
-
-
-
-VectorVariable<2U>  VectorVariable<2U>::operator*( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], data[0] * val, data[1] * val );
-}
-
-
-
-VectorVariable<2U>  VectorVariable<2U>::operator/( double val ) const
-{
-  return VectorVariable( flag[0], flag[1], data[0] / val, data[1] / val );
-}
-
-
-
-
 VectorVariable<2U>  VectorVariable<2U>::operator^( double val ) const
 {
   return VectorVariable( flag[0], flag[1], std::pow( data[0], val ), std::pow( data[1], val ) );

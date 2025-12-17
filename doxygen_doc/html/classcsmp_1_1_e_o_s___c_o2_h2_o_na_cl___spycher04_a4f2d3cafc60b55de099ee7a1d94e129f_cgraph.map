@@ -1,0 +1,36 @@
+<map id="csmp::EOS_CO2H2ONaCl_Spycher04::y_Co2" name="csmp::EOS_CO2H2ONaCl_Spycher04::y_Co2">
+<area shape="rect" id="Node000001" title="mole fraction (0..1) of CO2 in carbonic phase (the rest is H2O)" alt="" coords="5,256,186,296"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ad36569b8f0ae897ac2dc64209ca81dfb" title="returns yCo2Brine calculated from 1&#45;yH2oBrine" alt="" coords="234,222,456,263"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,261,218,257,219,262,187,266"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a74efbc1440ff4d9a809a471c2f6c0d71" title="mole fraction (0..1) of H20 in carbonic phase" alt="" coords="255,288,435,328"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,285,240,292,239,297,186,290"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a7f025230a96da96c6f9ff917a0b27427" title=" " alt="" coords="517,5,720,61"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="434,288,454,273,471,248,479,224,480,199,478,175,476,149,477,124,484,98,502,72,504,70,507,73,506,75,489,100,482,124,481,149,483,174,485,199,484,225,476,251,458,276,437,292"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aae46bcc6a3083999f6403a288ac41962" title=" " alt="" coords="515,85,722,126"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="434,287,454,273,467,256,474,240,477,206,481,171,488,154,502,137,507,133,510,137,506,140,493,157,486,173,483,207,479,241,472,259,458,276,437,291"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#abd86d4f882296aa81b7077df5799e3bb" title=" " alt="" coords="515,150,722,191"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="432,285,454,272,470,257,478,241,486,224,502,207,521,195,524,200,506,211,491,227,483,243,474,260,458,277,435,289"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aaa041ed091d036d932bde93f3b382b06" title=" " alt="" coords="811,208,992,248"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="435,291,504,280,795,239,796,244,504,285,436,296"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a1f91407fe0dbbfaa7a983fa23ca1537e" title=" " alt="" coords="811,273,992,314"/>
+<area shape="poly" id="edge10_Node000003_Node000010" title=" " alt="" coords="435,303,796,293,796,299,435,308"/>
+<area shape="rect" id="Node000011" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aec512b061b8958862e14cda6b8462833" title=" " alt="" coords="508,316,730,356"/>
+<area shape="poly" id="edge12_Node000003_Node000011" title=" " alt="" coords="436,314,492,320,492,326,435,320"/>
+<area shape="rect" id="Node000012" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a8309a70ac33d2235ab946d21b5b00585" title=" " alt="" coords="504,381,733,422"/>
+<area shape="poly" id="edge13_Node000003_Node000012" title=" " alt="" coords="399,326,505,365,530,373,528,378,503,370,397,331"/>
+<area shape="rect" id="Node000013" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a7bebc42253e66321b50baa44292387b4" title=" " alt="" coords="506,446,732,487"/>
+<area shape="poly" id="edge14_Node000003_Node000013" title=" " alt="" coords="369,327,427,379,465,407,505,431,520,438,518,443,503,436,462,411,424,383,365,331"/>
+<area shape="rect" id="Node000014" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ad91f5469dd2a2de597ff003450c0b399" title=" " alt="" coords="509,512,728,552"/>
+<area shape="poly" id="edge15_Node000003_Node000014" title=" " alt="" coords="360,327,382,364,415,409,457,456,506,496,515,502,512,506,502,501,453,460,411,413,378,367,355,330"/>
+<area shape="rect" id="Node000015" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#aba193f357734c78d5ac6fe60e589dc0f" title="compressed volume molar CO2" alt="" coords="528,577,709,618"/>
+<area shape="poly" id="edge16_Node000003_Node000015" title=" " alt="" coords="356,328,375,376,406,439,450,505,476,535,506,562,516,569,513,573,502,566,472,539,445,509,401,442,370,378,351,330"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a011005facf6bac559db9a48bcc0edbba" title=" " alt="" coords="1298,241,1478,282"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="992,231,1283,251,1282,257,992,237"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a809be0c93aa4d76e041d6a51fd76d7e0" title="activity of mixture" alt="" coords="1070,269,1250,310"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="991,246,1057,262,1056,267,989,251"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="1250,275,1282,271,1283,277,1251,281"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="992,289,1054,288,1054,293,992,294"/>
+<area shape="rect" id="Node000016" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a62501eb7250b9755f378f5803a302d28" title="returns the compressed volume of CO2." alt="" coords="781,457,1022,498"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="697,574,732,561,795,533,851,503,853,508,797,538,734,566,699,579"/>
+<area shape="poly" id="edge18_Node000016_Node000009" title=" " alt="" coords="930,454,1117,317,1120,321,933,458"/>
+</map>

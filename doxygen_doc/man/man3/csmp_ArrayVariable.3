@@ -1,0 +1,364 @@
+.TH "csmp::ArrayVariable" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ArrayVariable \- Storage for an arbitrary number of variables with a single flag; array size is not predefined or dependent on model dimensions, but can be determined at runtime\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ArrayVariable\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::vector< double > \fBArrayContainer\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<uint32_t dim> \fBArrayVariable\fP (const char *arrayPropertyName, const \fBPropertyDatabase\fP< dim > &, double defaultValue=std::numeric_limits< double >::quiet_NaN(), \fBVARIABLE_FLAG\fP flag=\fBANY\fP)"
+.br
+.RI "Automatically sets size to corresponding index, flag to ANY\&. "
+.ti -1c
+.RI "\fBArrayVariable\fP (uint32_t arraySize, double defaultValue=0\&., \fBVARIABLE_FLAG\fP flag=\fBANY\fP)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP (const \fBIndex\fP &arrayKey, double defaultValue=0\&., \fBVARIABLE_FLAG\fP flag=\fBANY\fP)"
+.br
+.RI "As \fBPropertyDatabase\fP ctor, but using index right away\&. "
+.ti -1c
+.RI "\fBArrayVariable\fP (const \fBArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator=\fP (const \fBArrayVariable\fP &)"
+.br
+.RI "assigments "
+.ti -1c
+.RI "void \fBCopyValuesOnly\fP (\fBFlaggedArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator=\fP (double)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator+\fP (double) const"
+.br
+.RI "standard operations "
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator\-\fP (double) const"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator*\fP (double) const"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator/\fP (double) const"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator^\fP (double) const"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator+=\fP (double)"
+.br
+.RI "Standart Operations with current object\&. "
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator\-=\fP (double)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator*=\fP (double)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator/=\fP (double)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator+=\fP (const \fBScalarVariable\fP &)"
+.br
+.RI "Standart Operations with current object\&. "
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator\-=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator*=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator/=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator+=\fP (const \fBArrayVariable\fP &)"
+.br
+.RI "value by value operations "
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator\-=\fP (const \fBArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator*=\fP (const \fBArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP & \fBoperator/=\fP (const \fBArrayVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator\-\fP (const \fBArrayVariable\fP &) const"
+.br
+.RI "element-by-element operations "
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator*\fP (const \fBArrayVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator+\fP (const \fBArrayVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBArrayVariable\fP \fBoperator/\fP (const \fBArrayVariable\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBArrayVariable\fP &) const"
+.br
+.RI "comparison of flags and values "
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBArrayVariable\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBArrayVariable\fP &) const"
+.br
+.RI "comparison of length (to allow ordering in containers) "
+.ti -1c
+.RI "double & \fBoperator()\fP (uint32_t)"
+.br
+.RI "accessors to the data "
+.ti -1c
+.RI "double \fBoperator[]\fP (uint32_t) const"
+.br
+.ti -1c
+.RI "void \fBComponent\fP (uint32_t, double)"
+.br
+.RI "functions needed to make CSMP variables interoperable; do not delete "
+.ti -1c
+.RI "double \fBComponent\fP (uint32_t) const"
+.br
+.ti -1c
+.RI "uint32_t \fBSize\fP () const"
+.br
+.RI "returns number of array elements "
+.ti -1c
+.RI "void \fBResize\fP (uint32_t newSize, double newValue=std::numeric_limits< double >::quiet_NaN())"
+.br
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBFlag\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP & \fBFlag\fP ()"
+.br
+.ti -1c
+.RI "void \fBFlag\fP (\fBVARIABLE_FLAG\fP flag)"
+.br
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (double min, double max) const"
+.br
+.ti -1c
+.RI "bool \fBHas_NaN_Values\fP () const"
+.br
+.ti -1c
+.RI "void \fBMinMax\fP (double &min, double &max) const"
+.br
+.RI "returns the minimum and maximum of the values stored in the array variable "
+.ti -1c
+.RI "void \fBSort\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP (long digits=3) const"
+.br
+.RI "printing array values to screen "
+.ti -1c
+.RI "bool \fBOut\fP (const char *filename, long precision=9) const"
+.br
+.ti -1c
+.RI "bool \fBOut\fP (std::fstream &) const"
+.br
+.RI "filestream I/O used for domain variables (not recommended because padding creates large storage overhead; use \fBPropertyData\fP instead) "
+.ti -1c
+.RI "bool \fBIn\fP (std::fstream &)"
+.br
+.RI "Reads the array from given file pointer (binary format) "
+.ti -1c
+.RI "ArrayContainer::const_iterator \fBBegin\fP () const"
+.br
+.ti -1c
+.RI "ArrayContainer::const_iterator \fBEnd\fP () const"
+.br
+.ti -1c
+.RI "double & \fBFront\fP ()"
+.br
+.RI "Julian 17-07-2014 - This is to allow passing of array variables to GEMS\&. "
+.ti -1c
+.RI "double \fBNextLargestEntry\fP (double) const"
+.br
+.ti -1c
+.RI "bool \fBHasLargerEntry\fP (double) const"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static constexpr \fBVARIABLE_TYPE\fP \fBVariableType\fP = ARRAY"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Storage for an arbitrary number of variables with a single flag; array size is not predefined or dependent on model dimensions, but can be determined at runtime\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2012
+.RE
+.PP
+In order to support arbitrary sized variables to be discretized in CSMP\&.
+.SH "Usage"
+.PP
+If used to read/store arrays from/on entities featuring a VariableStorage, the size of the \fBArrayVariable\fP has to equal that specified in the variables file, since in the current version (9/4/2012) runtime changes regarding the \fBPropertyDatabase\fP and ArrayVariables are not supported\&.
+
+.PP
+To instantiate an \fBArrayVariable\fP of arbitrary size:
+
+.PP
+.PP
+.nf
+ArrayVariable av;                  // 0 entries, flag set to Plain
+ArrayVariable av(4, 10\&., DIRICH ); // 4 entries with value 10\&., flag set to Dirichlet
+.fi
+.PP
+
+.PP
+When using \fBArrayVariable\fP in Store/Read operations, we need to first create an instance of appropriate size, i\&.e\&. the same size as provided in the \fBPropertyDatabase\fP\&. A ctor which does exactly this is:
+
+.PP
+.PP
+.nf
+ArrayVariable av( "element array", model\&.Database() ); // size as specified in PropertyDatabase, values = 0\&., flag = plain
+.fi
+.PP
+
+.PP
+Again, the alternative would be to manually initiate the correct size\&. With an \fBArrayVariable\fP of appropriate size, you may use functions like
+
+.PP
+.PP
+.nf
+model\&.InputPropertyValue( "element array", av );
+.fi
+.PP
+
+.PP
+Or something low level in the likes of
+
+.PP
+.PP
+.nf
+Index eaKey( model\&.Database()\&.StorageKey("element array") );
+for( vector<Element<3>*>::const_iterator it( model\&.Region("Model")\&.CellsBegin() ); it != model\&.Region("Model")\&.CellsEnd(); ++it )
+  (*it)\->Read( eaKey, av );
+.fi
+.PP
+
+.PP
+\fBArrayVariable\fP operations are possible as defined through the interface
+
+.PP
+TODO: why can this not be of a size that is known at compile time TODO: check whether <array> may be a good basis for refactoring TODO: why - as this is essentially a vector - is it not inherited from a vector? 
+.SH "Member Function Documentation"
+.PP 
+.SS "bool csmp::ArrayVariable::In (std::fstream & fp)"
+
+.PP
+Reads the array from given file pointer (binary format) See bool \fBArrayVariable::Out( std::fstream& fp ) const\fP
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+9/28/2012
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIfp\fP If non-null, the fp\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true if it succeeds, false if it fails\&. 
+.RE
+.PP
+
+.SS "\fBArrayVariable\fP csmp::ArrayVariable::operator+ (double val) const"
+
+.PP
+standard operations Standart Operations with temporary object\&. 
+.SS "\fBArrayVariable\fP & csmp::ArrayVariable::operator+= (const \fBArrayVariable\fP & arr)"
+
+.PP
+value by value operations Operations with ArrayVariables\&. 
+.SS "\fBArrayVariable\fP & csmp::ArrayVariable::operator+= (const \fBScalarVariable\fP & sc)"
+
+.PP
+Standart Operations with current object\&. Operations with ScalarVariables 
+.SS "void csmp::ArrayVariable::Out (long digits = \fR3\fP) const"
+
+.PP
+printing array values to screen outputs values to screen up to 10 values per row 
+.SS "bool csmp::ArrayVariable::Out (std::fstream & fp) const"
+
+.PP
+filestream I/O used for domain variables (not recommended because padding creates large storage overhead; use \fBPropertyData\fP instead) Outs the array to given file pointer (binary format)
+
+.PP
+Order:
+.IP "1." 4
+Flag
+.IP "2." 4
+Size
+.IP "3." 4
+Data
+.PP
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+9/28/2012
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIfp\fP If non-null, the fp\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true if it succeeds, false if it fails\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,443 @@
+.TH "csmp::FiniteElementPolicy< dim, CELL >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FiniteElementPolicy< dim, CELL > \- finite element policy for class \fBElement\fP  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FiniteElementPolicy\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP (const CELL< dim > &) noexcept"
+.br
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP (\fBFiniteElement\fP *) noexcept"
+.br
+.RI "takes pointer reference to avoid copying "
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP (const \fBFiniteElementPolicy\fP &p) noexcept"
+.br
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP & \fBoperator=\fP (const \fBFiniteElementPolicy\fP &p) noexcept"
+.br
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP (\fBFiniteElementPolicy\fP &&p) noexcept"
+.br
+.RI "move semantics "
+.ti -1c
+.RI "\fBFiniteElementPolicy\fP & \fBoperator=\fP (\fBFiniteElementPolicy\fP &&p) noexcept"
+.br
+.ti -1c
+.RI "void \fBAssign\fP (\fBFiniteElement\fP *fe_ptr)"
+.br
+.RI "for deferred assignment or changing the element at runtime "
+.ti -1c
+.RI "void \fBAssignFiniteElementNullPtr\fP () noexcept"
+.br
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBFE_Type\fP () const noexcept"
+.br
+.RI "the type is an enumeration that is used in the generation of finite elements "
+.ti -1c
+.RI "\fBFiniteElement\fP * \fBFE\fP () const noexcept"
+.br
+.RI "you are allowed to switch the element at runtime and modifies the volatile data it stores "
+.ti -1c
+.RI "bool \fBIsEquidimensional\fP () const"
+.br
+.RI "true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element "
+.ti -1c
+.RI "bool \fBIsLine\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsSurface\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIsVolume\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBInterpolation\fP () const"
+.br
+.ti -1c
+.RI "bool \fBUsesLocalCoordinates\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBIntegrationPoints\fP () const"
+.br
+.RI "number of element integration points for current quadrature scheme "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBIntegrationPoint\fP (uint32_t ip) const"
+.br
+.RI "returns the location of the integration point in global coordinates "
+.ti -1c
+.RI "double \fBWeightAtIntegrationPoint\fP (uint32_t i) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBRstToXYZ\fP (\fBPoint\fP< dim > rst) const"
+.br
+.RI "mapping of local points from local to global coordinates "
+.ti -1c
+.RI "void \fBN_At\fP (const \fBPoint\fP< dim > &rst) const"
+.br
+.RI "interpolation function values at local points "
+.ti -1c
+.RI "void \fBN_At\fP (const \fBPoint\fP< dim > &rst, std::vector< double > &N) const"
+.br
+.ti -1c
+.RI "void \fBN_AtGlobalPoint\fP (std::vector< double > &N, const std::vector< double > &xyz) const"
+.br
+.RI "for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space "
+.ti -1c
+.RI "void \fBN_AtBaryCenter\fP (std::vector< double > &N) const"
+.br
+.ti -1c
+.RI "void \fBN_AtIntegrationPoint\fP (uint32_t ipoint, std::vector< double > &N) const"
+.br
+.ti -1c
+.RI "void \fBIntegral_dNT_K_dN\fP (\fBDenseMatrix\fP< DM_MIN > &M, \fBDenseMatrix\fP< DM_MIN > &K) const"
+.br
+.RI "first (constant) derivatives of linear interpolation functions of analytically integrated simplex "
+.ti -1c
+.RI "void \fBdN\fP (\fBDenseMatrix\fP< DM_MIN > &) const"
+.br
+.ti -1c
+.RI "double \fBdN_AtNode\fP (\fBDenseMatrix\fP< DM_MIN > &, uint32_t nd, uint32_t dof=1) const"
+.br
+.RI "first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j) "
+.ti -1c
+.RI "double \fBdN_AtBaryCenter\fP (\fBDenseMatrix\fP< DM_MIN > &, uint32_t dof=1) const"
+.br
+.RI "first derivatives of interpolation functions at the (returned is determinant of Jacobian matrix at i,j) "
+.ti -1c
+.RI "double \fBdN_AtIntegrationPoint\fP (\fBDenseMatrix\fP< DM_MIN > &, uint32_t gp, uint32_t dof=1) const"
+.br
+.RI "first derivatives of interpolation functions at Gauss point gp (returned is determinant of Jacobian matrix at i,j) "
+.ti -1c
+.RI "double \fBdet_JINV_AtIntegrationPoint\fP (uint32_t ipoint) const"
+.br
+.RI "returned is determinant of Jacobian matrix at given Gauss point "
+.ti -1c
+.RI "void \fBIntegralNN\fP (\fBDenseMatrix\fP< DM_MIN > &M) const"
+.br
+.RI "interpolation function products matrix for analytically integrated element "
+.ti -1c
+.RI "void \fBCoordinateMatrix\fP () const"
+.br
+.RI "initialises the nodes x dim matrix XY stored in the connected finite element class "
+.ti -1c
+.RI "double \fBPropertyIntegral\fP (const \fBcsmp::Index\fP &scalar_property) const"
+.br
+.RI "integrates a scalar property over the element and returns this value "
+.ti -1c
+.RI "template<class Var> void \fBPropertyValueAt\fP (const \fBcsmp::Index\fP &, const std::vector< double > &xyz, Var &) const"
+.br
+.RI "interpolates node property values to the point of interest (in global coordinates); "
+.ti -1c
+.RI "double \fBPropertyValueAt\fP (const \fBcsmp::Index\fP &, const std::vector< double > &xyz) const"
+.br
+.RI "scalar version "
+.ti -1c
+.RI "template<class Var> void \fBPropertyValueAtBaryCenter\fP (const \fBcsmp::Index\fP &, Var &) const"
+.br
+.RI "returns the value of any property interpolated to the element's center of gravity "
+.ti -1c
+.RI "double \fBPropertyValueAtBaryCenter\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "scalar version "
+.ti -1c
+.RI "template<class Var> void \fBPropertyValueAtIntegrationPoint\fP (const \fBcsmp::Index\fP &node_prop, uint32_t integration_point, Var &) const"
+.br
+.RI "returns the value of any property interpolated to the integration point of interest "
+.ti -1c
+.RI "double \fBPropertyValueAtIntegrationPoint\fP (const \fBcsmp::Index\fP &node_prop, uint32_t integration_point) const"
+.br
+.RI "returns the value of a scalar property interpolated to the integration point of interest "
+.ti -1c
+.RI "template<class Var> void \fBIntegrationPointPropertyVector\fP (const \fBcsmp::Index\fP &, std::vector< Var > &) const"
+.br
+.RI "returns property values at the integration points "
+.ti -1c
+.RI "void \fBExtrapolateIntegrationPointVariableToNodes\fP (uint32_t nvars, const std::vector< double > &integration_point_var, std::vector< double > &node_variable) const"
+.br
+.RI "uses linear extrapolation of property values from the integration points to the nodes "
+.ti -1c
+.RI "double \fBVolume\fP () const"
+.br
+.RI "reports volume, area*1, and length*1*1 products for volumetric, surfacic and line elements respectively "
+.ti -1c
+.RI "double \fBAspectRatio\fP () const"
+.br
+.RI "ratio of longest to shortest edge=segment "
+.ti -1c
+.RI "double \fBInnerRadius\fP () const"
+.br
+.RI "the radius of an inscribed circle / sphere "
+.ti -1c
+.RI "uint32_t \fBSegments\fP () const"
+.br
+.RI "number of edges = segments in the finite element of interest "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBSegmentMidPoint\fP (uint32_t segm) const"
+.br
+.RI "retrieve position of the segment (element edge) mid-points "
+.ti -1c
+.RI "double \fBSegmentLength\fP (uint32_t segm) const"
+.br
+.RI "returns the length of the nth segment=edge of the finite element "
+.ti -1c
+.RI "void \fBSegmentLengths\fP (std::vector< double > &) const"
+.br
+.RI "returns a vector with the lengths of all finite element segments = edges "
+.ti -1c
+.RI "std::set< \fBNode\fP< dim > * > \fBCornerNodesOfFace\fP (uint32_t face_id) const"
+.br
+.RI "returns search key to match element faces; pointers in order so that they can be searched "
+.ti -1c
+.RI "std::set< \fBNode\fP< dim > * > \fBCornerNodesConnectedTo\fP (uint32_t node_id) const"
+.br
+.RI "returns set of nodes that are neighbors of the target node in this element "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBFaceBaryCenter\fP (uint32_t face) const"
+.br
+.RI "retrieve barycenter of element face "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBUnitNormalToFace\fP (uint32_t face) const"
+.br
+.RI "returns unit normal to face of element i "
+.ti -1c
+.RI "void \fBUnitNormalToFace\fP (uint32_t face, std::vector< double > &) const"
+.br
+.RI "returns unit normal to face of element i into STL vector; fastest version! "
+.ti -1c
+.RI "void \fBUnitNormalToFace\fP (uint32_t face, \fBVectorVariable\fP< dim > &) const"
+.br
+.RI "returns unit normal to face of element i into supplied csmp \fBVectorVariable\fP "
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBUnitNormal\fP () const"
+.br
+.RI "computes unit normal to element if it is planar (3D) or linear (2D); vector components are returned into point "
+.ti -1c
+.RI "void \fBUnitNormal\fP (std::vector< double > &nrml) const"
+.br
+.RI "fastest: computes unit normal to element if it is planar (3D) or linear (2D); vector components are returned into argument vector "
+.ti -1c
+.RI "void \fBUnitNormal\fP (\fBVectorVariable\fP< dim > &nrml) const"
+.br
+.RI "computes unit normal to element if it is planar (3D) or linear (2D), vector components are returned into \fBVectorVariable\fP "
+.ti -1c
+.RI "void \fBOutputPropertyToVTK\fP (const \fBcsmp::Index\fP &, const char *file_name, const char *var_name) const"
+.br
+.RI "outputs finite element and discretised variable to VTK file "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBElement< dim >\fP"
+.br
+.ti -1c
+.RI "class \fBFace< dim >\fP"
+.br
+.ti -1c
+.RI "class \fBInterFace< dim >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL>
+.br
+class csmp::FiniteElementPolicy< dim, CELL >"finite element policy for class \fBElement\fP 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::Assign (\fBFiniteElement\fP * fe_ptr)"
+
+.PP
+for deferred assignment or changing the element at runtime 
+.PP
+\fBAttention\fP
+.RS 4
+call by reference is used to avoid assignment to copy of pointer 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::CoordinateMatrix () const"
+
+.PP
+initialises the nodes x dim matrix XY stored in the connected finite element class Writes the Elements node coordinates into a matrix of rows=nodes, columns=spatial dimensions\&. The coordinate matrix is internally initialized for connected \fBFiniteElement\fP subclass\&.
+.SH "Implementation"
+.PP
+During the visitation of an element the coordinate matrix is initialized only once, if the method is called without argument\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+for efficiency this method checks an element id in the connected finite element against that of the current element that it is called by\&. If they are the same, nothing is done\&. Thus, YOU MUST SET THE ELEMENT ID for this method to have an effect\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> set< \fBNode\fP< dim > * > \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::CornerNodesConnectedTo (uint32_t node_id) const"
+
+.PP
+returns set of nodes that are neighbors of the target node in this element returns search key to match element faces; pointers in order so that they can be searched 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> set< \fBNode\fP< dim > * > \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::CornerNodesOfFace (uint32_t face_id) const"
+
+.PP
+returns search key to match element faces; pointers in order so that they can be searched returns search key to match element faces 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::ExtrapolateIntegrationPointVariableToNodes (uint32_t nvars, const std::vector< double > & integration_point_var, std::vector< double > & node_variable) const"
+
+.PP
+uses linear extrapolation of property values from the integration points to the nodes Linear extrapolation of a variable placed on the element's integration points to its nodes\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBPoint\fP< dim > \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::FaceBaryCenter (uint32_t face) const"
+
+.PP
+retrieve barycenter of element face Finds the centre of gravity of the face, using the coordinates of all of its nodes\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBPoint\fP< dim > \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::IntegrationPoint (uint32_t ip) const"
+
+.PP
+returns the location of the integration point in global coordinates Returns the position of the element integration point i in physical space\&. The coordinate value is transformed into global coordinates by the finite element\&. Therefore the coordinate matrix must be initialized\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> template<class Var> template void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::IntegrationPointPropertyVector< \fBTensorVariable\fP< 3U > > (const \fBcsmp::Index\fP & , std::vector< Var > & ) const"
+
+.PP
+returns property values at the integration points Returns the ELEMENT_INTEGRATION_POINT variable values into the parameter vector\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> uint32_t \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::IntegrationPoints () const"
+
+.PP
+number of element integration points for current quadrature scheme Returns number of integration points per element, 0 if no \fBFiniteElement\fP assigned\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::N_At (const \fBPoint\fP< dim > & rst) const"
+
+.PP
+interpolation function values at local points Calculates local interpolation function values at the supplied parametric coordinate-> 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::N_At (const \fBPoint\fP< dim > & rst, std::vector< double > & N) const"
+Returns element interpolation functions at point rst in local coordinate system into argument vector IPOL\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::N_AtGlobalPoint (std::vector< double > & N, const std::vector< double > & xyz) const"
+
+.PP
+for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space Returns the value of the interpolation functions at a point in physical space\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> template<class Var> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::PropertyValueAt (const \fBcsmp::Index\fP & idx, const std::vector< double > & xyz, Var & var) const"
+
+.PP
+interpolates node property values to the point of interest (in global coordinates); 
+.PP
+\fBAttention\fP
+.RS 4
+costly for isoparametric elements
+.RE
+.PP
+Interpolates property value to a point within the element as specified using physical coordinates\&.
+.SH "Implementation"
+.PP
+If this method is used on an element with a local coordinate system the point in local coordinates has to be found iteratively\&. This is a much slower procedure than direct interpolation\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+If variable is an element property, method will simply return this value\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> template<class Var> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::PropertyValueAtBaryCenter (const \fBcsmp::Index\fP & idx, Var & var) const"
+
+.PP
+returns the value of any property interpolated to the element's center of gravity \fBNode\fP variables are interpolated to barycenter\&. Integration point variables (ELEMENT_INTEGRATION_POINT) are averaged\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+If variable is an element property, method will simply return this value\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> double \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::PropertyValueAtIntegrationPoint (const \fBcsmp::Index\fP & idx, uint32_t ip) const"
+
+.PP
+returns the value of a scalar property interpolated to the integration point of interest Interpolates SCALAR node properties to the integration points\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+If variable is an element property, method will simply return this value\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> template<class Var> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::PropertyValueAtIntegrationPoint (const \fBcsmp::Index\fP & idx, uint32_t ip, Var & var) const"
+
+.PP
+returns the value of any property interpolated to the integration point of interest Interpolates node properties to the integration points\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+If variable is an element property, method will simply return this value\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBPoint\fP< dim > \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::RstToXYZ (\fBPoint\fP< dim > rst) const"
+
+.PP
+mapping of local points from local to global coordinates Transforms point location from local to global coordinates\&.
+
+.PP
+\fBNote\fP
+.RS 4
+passing the point by value is intentional because the copy is reused by the function\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> double \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::SegmentLength (uint32_t segm) const"
+
+.PP
+returns the length of the nth segment=edge of the finite element Computes the length of the finite element edges = segments\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this method assumes that the first two nodes returned by NodesOfSegment() are the corner nodes, i\&.e\&. do not include midside nodes\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::SegmentLengths (std::vector< double > & lengths) const"
+
+.PP
+returns a vector with the lengths of all finite element segments = edges returns the length of all element segments=edges 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBPoint\fP< dim > \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::SegmentMidPoint (uint32_t segm) const"
+
+.PP
+retrieve position of the segment (element edge) mid-points returns the mid-point (in physical space) of the finite element segment = edge\&. 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::UnitNormal (\fBVectorVariable\fP< dim > & nrml) const"
+
+.PP
+computes unit normal to element if it is planar (3D) or linear (2D), vector components are returned into \fBVectorVariable\fP Computes outward pointing normal and returns the result into supplied vector variable\&.
+
+.PP
+\fBNote\fP
+.RS 4
+not as efficient as version that uses standard vector\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBPoint\fP< dim > \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::UnitNormalToFace (uint32_t face) const"
+
+.PP
+returns unit normal to face of element i Method calculates the unit normal that is outward pointing to to the queried face\&.
+
+.PP
+\fBTest\fP
+.RS 4
+SKM 22/9/2014: fixed 3D normals so that they are outward pointing\&.
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> void \fBcsmp::FiniteElementPolicy\fP< dim, CELL >::UnitNormalToFace (uint32_t face, std::vector< double > & nrml) const"
+
+.PP
+returns unit normal to face of element i into STL vector; fastest version! Fastest version to compute outward-pointing normal to target face\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

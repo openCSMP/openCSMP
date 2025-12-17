@@ -1,0 +1,67 @@
+\doxysection{csmp\+::Finite\+Volume\+Stencil\+Manager\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_finite_volume_stencil_manager}{}\label{classcsmp_1_1_finite_volume_stencil_manager}\index{csmp::FiniteVolumeStencilManager$<$ dim $>$@{csmp::FiniteVolumeStencilManager$<$ dim $>$}}
+
+
+Finite element -\/ finite volume stencils with a parametric space representation, see Paluszny et al. (2007, Geofluids).  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Volume\+Stencil\+Manager.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Finite\+Volume\+Stencil\+Manager\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{classcsmp_1_1_finite_volume_stencil_manager__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_manager_ad73e332086469e81b6a6f8e2820e619a}\label{classcsmp_1_1_finite_volume_stencil_manager_ad73e332086469e81b6a6f8e2820e619a} 
+{\bfseries Finite\+Volume\+Stencil\+Manager} (const \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}} \&fem\+\_\+manager)
+\begin{DoxyCompactList}\small\item\em creates finite volume stencil objects for the element types supported by the current finite-\/element manager \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager_a3bf1c0f001664a99392eab39383192a3}{Stencil}} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} etype) const
+\begin{DoxyCompactList}\small\item\em returns pointer to corresponding FV stencil type \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Finite\+Volume\+Stencil\+Manager$<$ dim $>$}
+Finite element -\/ finite volume stencils with a parametric space representation, see Paluszny et al. (2007, Geofluids). 
+
+\begin{DoxyAuthor}{Author}
+SKM 
+
+Adriana Paluszny 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2001 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_volume_stencil_manager_a3bf1c0f001664a99392eab39383192a3}\index{csmp::FiniteVolumeStencilManager$<$ dim $>$@{csmp::FiniteVolumeStencilManager$<$ dim $>$}!Stencil@{Stencil}}
+\index{Stencil@{Stencil}!csmp::FiniteVolumeStencilManager$<$ dim $>$@{csmp::FiniteVolumeStencilManager$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Stencil()}{Stencil()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_stencil_manager_a3bf1c0f001664a99392eab39383192a3} 
+template$<$uint32\+\_\+t dim$>$ \\
+const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{csmp\+::\+Finite\+Volume\+Stencil\+Manager}}$<$ dim $>$\+::\+Stencil (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}}}]{etype}{}\end{DoxyParamCaption}) const}
+
+
+
+returns pointer to corresponding FV stencil type 
+
+returns pointer to corresponding FV stencil type 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Model.\+h\item 
+source/includes/integration/finite\+\_\+volumes/Finite\+Volume\+Stencil\+Manager.\+h\item 
+source/modules/integration/finite\+\_\+volumes/Finite\+Volume\+Stencil\+Manager.\+cpp\end{DoxyCompactItemize}

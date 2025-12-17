@@ -1,0 +1,116 @@
+\doxysection{Finite\+Element\+Manager\+\_\+stack\+\_\+version.\+h}
+\hypertarget{_finite_element_manager__stack__version_8h_source}{}\label{_finite_element_manager__stack__version_8h_source}\index{source/includes/model/FiniteElementManager\_stack\_version.h@{source/includes/model/FiniteElementManager\_stack\_version.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_FINITE\_ELEMENT\_MANAGER1\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_FINITE\_ELEMENT\_MANAGER1\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_line_element_8h}{"{}LinearLineElement.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_line_element_8h}{"{}IsoparametricQuadraticLineElement.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_triangle_8h}{"{}LinearTriangle.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_triangle3_d_8h}{"{}LinearTriangle3D.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_tetrahedron_8h}{"{}LinearTetrahedron.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_cuboid_8h}{"{}LinearCuboid.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_rectangle_8h}{"{}LinearRectangle.h"{}}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_triangle_8h}{"{}IsoparametricQuadraticTriangle.h"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_tetrahedron_8h}{"{}IsoparametricQuadraticTetrahedron.h"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_linear_line_element_8h}{"{}IsoparametricLinearLineElement.h"{}}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_linear_triangle_8h}{"{}IsoparametricLinearTriangle.h"{}}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_linear_hexahedron_8h}{"{}IsoparametricLinearHexahedron.h"{}}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_linear_pyramid_8h}{"{}IsoparametricLinearPyramid.h"{}}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_linear_prism_8h}{"{}IsoparametricLinearPrism.h"{}}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_linear_tetrahedron_8h}{"{}IsoparametricLinearTetrahedron.h"{}}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_linear_quadrilateral_8h}{"{}IsoparametricLinearQuadrilateral.h"{}}}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_hexahedron_8h}{"{}IsoparametricQuadraticHexahedron.h"{}}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_pyramid_8h}{"{}IsoparametricQuadraticPyramid.h"{}}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_prism_8h}{"{}IsoparametricQuadraticPrism.h"{}}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_tetrahedron_8h}{"{}IsoparametricQuadraticTetrahedron.h"{}}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_isoparametric_quadratic_quadrilateral_8h}{"{}IsoparametricQuadraticQuadrilateral.h"{}}}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00032\ \textcolor{comment}{@brief\ Alternative\ version\ of\ FiniteElementManager\ where\ all\ elements\ are\ stored\ on\ the\ stack\ (initialised\ at\ compile\ time\ in\ the\ body\ of\ the\ class)}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ @attention\ IS\ SLOWER\ THAN\ MANAGER\ WHERE\ ELEMENTS\ ARE\ CREATED\ ON\ THE\ HEAP!!!!\ -\/\ and\ less\ flexible!\ (SKM30/6/2024)}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ @atttention\ needs\ specialisations\ for}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ -\/\ 1,\ 2,\ and\ 3D}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ -\/\ with\ and\ without\ local\ coordinate\ system}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ -\/\ with\ linear\ and\ with\ quadratic\ interpolation\ function}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ @note\ USING\_LOCAL\_COORDS\ refers\ to\ whether\ the\ element\ is\ defined\ in\ parametric\ space\ coordinates\ (r,s,t)\ like\ all\ the\ isoparametric\ elements\ in\ CSMP}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00044\ \textcolor{comment}{@date\ 2024}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keywordtype}{int}\ INTPOL\_ORDER,\ \textcolor{keywordtype}{bool}\ USING\_LOCAL\_COORDS>}
+\DoxyCodeLine{00048\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager1}{FiniteElementManager1}}\ \{}
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00050\ \ \ \ \ FiniteElementManager1();}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ dummy\ function\ does\ nothing}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ InitializeElements(\ uint32\_t\ \textcolor{comment}{/*\ dimensions\ */},\ uint32\_t\ \textcolor{comment}{/*\ interpolation\_order\ */},\ \textcolor{keywordtype}{bool}\ \textcolor{comment}{/*\ isoparametric\ */}\ )\ \{\}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{bool}\ ContainsElementType(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ etype\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ CurrentElementTypes(\ std::list<CSMP\_FEM\_TYPE>\&\ etypes\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{int}\ \ InterpolationOrder()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ INTPOL\_ORDER;\ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{bool}\ UsesElementsWithLocalCoordinateSystem()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ USING\_LOCAL\_COORDS;\ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ get\ finite\ element\ pointer\ from\ enumeration\ type\ (TODO:\ maybe\ a\ reference\ should\ be\ returned\ here?)}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager1_aafadb0deba8da4326f790d1a9765f536}{E}}(\ int8\_t\ csmp\_etype\ );}
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \textcolor{keyword}{const}\ E(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ csmp\_etype\ );}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ const\ version\ needed}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager1_a016ebd69557eaac6bef7c0a558222416}{E}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ csmp\_etype\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ uint32\_t\ NodesOfElementType(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ etype\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ standard\ types}}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \textcolor{keyword}{const}\ LinearBarElement();}
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \textcolor{keyword}{const}\ LinearTriangleElement();}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*\ \textcolor{keyword}{const}\ LinearTetrahedronElement();}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{comment}{//\ \ \ \ FiniteElement*\ \ \ \ LineElementPointer();}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ line\ elements}}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_line_element}{LinearLineElement}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line\_elmt1;\ \textcolor{comment}{//\ (DIM);}}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element}{IsoparametricLinearLineElement}}\ \ \ \ \ \ line\_elmt2;}
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element}{IsoparametricQuadraticLineElement}}\ \ \ line\_elmt3;}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ triangles}}
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle}{LinearTriangle}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tria\_elmt1a;}
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_triangle3_d}{LinearTriangle3D}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tria\_elmt1b;}
+\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_triangle}{IsoparametricLinearTriangle}}\ \ \ \ \ \ \ \ \ tria\_elmt2;}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_line_element}{IsoparametricLinearLineElement}}\ \ \ \ \ \ tria\_elmt3;}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ quadrilaterals}}
+\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_rectangle}{LinearRectangle}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ quad\_elmt1;}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_quadrilateral}{IsoparametricLinearQuadrilateral}}\ \ \ \ quad\_elmt2;}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_quadrilateral}{IsoparametricQuadraticQuadrilateral}}\ quad\_elmt3;}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{//\ tetrahedra}}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_tetrahedron}{LinearTetrahedron}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tet\_elmt1;}
+\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_tetrahedron}{IsoparametricLinearTetrahedron}}\ \ \ \ \ \ tet\_elmt2;}
+\DoxyCodeLine{00095\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_tetrahedron}{IsoparametricQuadraticTetrahedron}}\ \ \ tet\_elmt3;}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//\ hexahedra}}
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid}{LinearCuboid}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hexa\_elmt1;}
+\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_hexahedron}{IsoparametricLinearHexahedron}}\ \ \ \ \ \ \ hexa\_elmt2;}
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_hexahedron}{IsoparametricQuadraticHexahedron}}\ \ \ \ hexa\_elmt3;}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{//\ prisms}}
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism}{IsoparametricLinearPrism}}\ \ \ \ \ \ \ \ \ \ \ \ prism\_elmt2;}
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_prism}{IsoparametricQuadraticPrism}}\ \ \ \ \ \ \ \ \ prism\_elmt3;}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{//\ pyramids}}
+\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_pyramid}{IsoparametricLinearPyramid}}\ \ \ \ \ \ \ \ \ \ pyra\_elmt2;}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_pyramid}{IsoparametricQuadraticPyramid}}\ \ \ \ \ \ \ pyra\_elmt3;}
+\DoxyCodeLine{00106\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,80 @@
+\doxysection{Flat\+Boundary\+Stress\+Visitor.\+h}
+\hypertarget{_flat_boundary_stress_visitor_8h_source}{}\label{_flat_boundary_stress_visitor_8h_source}\index{source/includes/thmc/mechanics/FlatBoundaryStressVisitor.h@{source/includes/thmc/mechanics/FlatBoundaryStressVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ FlatBoundaryStressVisitor.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_ReservoirSimulator}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 9/29/14.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Updated\ by\ Hossein\ Agheshlui\ on\ 09\ April\ 16.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ \ Copyright\ (c)\ 2014\ Stephan\ K.\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FLAT\_BOUNDARY\_STRESS\_VISITOR\_H}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FLAT\_BOUNDARY\_STRESS\_VISITOR\_H}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_vector_variable_8h}{"{}VectorVariable.h"{}}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_boundary}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}};}
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ ///\ This\ visitor\ is\ to\ apply\ forces\ on\ flat\ boundary\ faces.\ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ ///\ It\ accesses\ a\ flat\ face\ and\ computes\ the\ nodal\ forces\ based\ on\ the\ normal\ and\ shear\ stresses\ defined\ in\ the\ config\ file.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ see\ DOxygen\ doc\ further\ below}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_flat_boundary_stress_visitor}{FlatBoundaryStressVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_flat_boundary_stress_visitor}{Visitor}}<\mbox{\hyperlink{classcsmp_1_1_flat_boundary_stress_visitor}{dim}}>\ \{}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ by\ default,\ any\ entries\ into\ the\ RHS\ force\ vectors\ will\ get\ overwritten}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_flat_boundary_stress_visitor_afaad5c833726587bc217e10875326535}{FlatBoundaryStressVisitor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keywordtype}{bool}\ overwrite\_force\_vector=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~FlatBoundaryStressVisitor();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ to\ zero\ out\ force\ vector,\ prior\ to\ accumulation\ of\ forces.}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_flat_boundary_stress_visitor_a4172f38f6156d888f95664eea28330a9}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}<dim>*\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ computes\ nodal\ forces\ weighted\ by\ node}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_flat_boundary_stress_visitor_af6001434d2cc7cad0ef65bf1b0b18f5d}{Visit}}(\ Face<dim>*\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ Sn\_key\_,\ Ss\_key\_;\ \textcolor{comment}{///<\ Principal\ stresses,\ the\ vertical\ and\ two\ horizontal\ ones,\ and\ the\ azimuth\ of\ the\ Sh\_max\_.\ Anderson\ Stress\ convention.}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ F\_key\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ (nodal)\ 'force'\ (N)}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{bool}\ overwrite\_previous\_forces\_;}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ \ vc\_,\ vs\_;}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ \ nrml\_;}
+\DoxyCodeLine{00051\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{comment}{/**\ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ Workaround\ for\ applying\ stress\ boundary\ conditions\ on\ a\ Model}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ in\ the\ form\ of\ nodal\ forces.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ Visits\ the\ model\ Boundaries\ looking\ for\ the\ variables\ }}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ 'normal\ stress'\ and\ 'shear\ stress'\ and\ computes\ }}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ nodal\ forces\ from\ these.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ Use\ this,\ for\ instance\ to\ compute\ and\ apply\ overburden\ stresses.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ @attention\ by\ default\ all\ forces\ that\ were\ previously\ assigned\ are\ }}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ zeroed\ first.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ @attention\ compressive\ (inward\ pointing)\ stresses\ are\ positive.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ @author\ SKM\ 29/9/2014}}
+\DoxyCodeLine{00069\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ defined(BOUNDARY\_STRESS\_VISITOR\_H)\ */}}
+
+\end{DoxyCode}

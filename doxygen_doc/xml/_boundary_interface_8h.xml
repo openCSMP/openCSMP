@@ -1,0 +1,833 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_boundary_interface_8h" kind="file" language="C++">
+    <compoundname>BoundaryInterface.h</compoundname>
+    <includes refid="_c_s_m_p__definitions_8h" local="yes">CSMP_definitions.h</includes>
+    <includes refid="_box_8h" local="yes">Box.h</includes>
+    <includedby refid="_model_8h" local="yes">source/includes/model/Model.h</includedby>
+    <includedby refid="_boundary_interface_8cpp" local="yes">source/modules/model/BoundaryInterface.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>source/includes/model/BoundaryInterface.h</label>
+        <link refid="_boundary_interface_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>Box.h</label>
+        <link refid="_box_8h"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="49">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>algorithm</label>
+      </node>
+      <node id="15">
+        <label>array</label>
+      </node>
+      <node id="13">
+        <label>cassert</label>
+      </node>
+      <node id="8">
+        <label>cctype</label>
+      </node>
+      <node id="11">
+        <label>cfloat</label>
+      </node>
+      <node id="16">
+        <label>chrono</label>
+      </node>
+      <node id="12">
+        <label>climits</label>
+      </node>
+      <node id="3">
+        <label>cmath</label>
+      </node>
+      <node id="7">
+        <label>cstdarg</label>
+      </node>
+      <node id="6">
+        <label>cstddef</label>
+      </node>
+      <node id="45">
+        <label>cstdint</label>
+      </node>
+      <node id="4">
+        <label>cstdio</label>
+      </node>
+      <node id="5">
+        <label>cstdlib</label>
+      </node>
+      <node id="9">
+        <label>cstring</label>
+      </node>
+      <node id="10">
+        <label>ctime</label>
+      </node>
+      <node id="17">
+        <label>deque</label>
+      </node>
+      <node id="18">
+        <label>exception</label>
+      </node>
+      <node id="19">
+        <label>filesystem</label>
+      </node>
+      <node id="20">
+        <label>fstream</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="22">
+        <label>iomanip</label>
+      </node>
+      <node id="23">
+        <label>iostream</label>
+      </node>
+      <node id="24">
+        <label>istream</label>
+      </node>
+      <node id="25">
+        <label>iterator</label>
+      </node>
+      <node id="26">
+        <label>limits</label>
+      </node>
+      <node id="27">
+        <label>list</label>
+      </node>
+      <node id="28">
+        <label>map</label>
+      </node>
+      <node id="29">
+        <label>memory</label>
+      </node>
+      <node id="30">
+        <label>numeric</label>
+      </node>
+      <node id="31">
+        <label>ostream</label>
+      </node>
+      <node id="32">
+        <label>random</label>
+      </node>
+      <node id="33">
+        <label>set</label>
+      </node>
+      <node id="34">
+        <label>sstream</label>
+      </node>
+      <node id="35">
+        <label>stdexcept</label>
+      </node>
+      <node id="36">
+        <label>string</label>
+      </node>
+      <node id="38">
+        <label>type_traits</label>
+      </node>
+      <node id="37">
+        <label>typeinfo</label>
+      </node>
+      <node id="42">
+        <label>unordered_map</label>
+      </node>
+      <node id="41">
+        <label>unordered_set</label>
+      </node>
+      <node id="39">
+        <label>utility</label>
+      </node>
+      <node id="40">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>examples/source/DES2PhaseFlowWithSplitBoundary_Example.h</label>
+        <link refid="_d_e_s2_phase_flow_with_split_boundary___example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>examples/source/DES2PhaseSlightlyCompressibleFlow_Example.h</label>
+        <link refid="_d_e_s2_phase_slightly_compressible_flow___example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>examples/source/Examples.h</label>
+        <link refid="_examples_8h_source"/>
+      </node>
+      <node id="6">
+        <label>examples/source/Interfaces_Example.h</label>
+        <link refid="_interfaces___example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>examples/source/ThermalConvectionETHZ_Example.h</label>
+        <link refid="_thermal_convection_e_t_h_z___example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>examples/source/Tutorial3_Example.h</label>
+        <link refid="_tutorial3___example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>examples/source/deprecated/Tutorial4_Example_original.h</label>
+        <link refid="_tutorial4___example__original_8h_source"/>
+      </node>
+      <node id="10">
+        <label>source/includes/analysis/NodeCenteredFiniteVolumeMonitor.h</label>
+        <link refid="_node_centered_finite_volume_monitor_8h_source"/>
+      </node>
+      <node id="11">
+        <label>source/includes/analysis/RegionMonitor.h</label>
+        <link refid="_region_monitor_8h_source"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PHX_Scheme.h</label>
+        <link refid="_c_v_f_e_m___p_h_x___scheme_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PressureGradientVisitor.h</label>
+        <link refid="_c_v_f_e_m___pressure_gradient_visitor_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>source/includes/integration/cvfe_hydrothermal/ExplicitFiniteVolumeTransportPHX.h</label>
+        <link refid="_explicit_finite_volume_transport_p_h_x_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>source/includes/integration/cvfe_hydrothermal/UpwindControlVisitor.h</label>
+        <link refid="_upwind_control_visitor_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>source/includes/integration/finite_volumes/GenericNodePropertyGradient.h</label>
+        <link refid="_generic_node_property_gradient_8h_source"/>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>source/includes/integration/finite_volumes/GenericNodePropertyGradientLimiter.h</label>
+        <link refid="_generic_node_property_gradient_limiter_8h_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitMassBasedTransport.h</label>
+        <link refid="_explicit_mass_based_transport_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitNodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_explicit_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_explicit_node_centered_f_v_transport_8h_source"/>
+      </node>
+      <node id="28">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseImplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_transport_8h_source"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Model2D.h</label>
+        <link refid="_a_n_s_y_s___model2_d_8h_source"/>
+      </node>
+      <node id="31">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Model3D.h</label>
+        <link refid="_a_n_s_y_s___model3_d_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>source/includes/interfaces/CGNS/CGNS_Interface.h</label>
+        <link refid="_c_g_n_s___interface_8h_source"/>
+      </node>
+      <node id="33">
+        <label>source/includes/interfaces/CGNS/CGNS_Model.h</label>
+        <link refid="_c_g_n_s___model_8h_source"/>
+      </node>
+      <node id="34">
+        <label>source/includes/interfaces/Eclipse/EclipseModel.h</label>
+        <link refid="_eclipse_model_8h_source"/>
+      </node>
+      <node id="35">
+        <label>source/includes/interfaces/Matlab/MatlabInterface.h</label>
+        <link refid="_matlab_interface_8h_source"/>
+      </node>
+      <node id="36">
+        <label>source/includes/interfaces/VTK/VTU_Interface.h</label>
+        <link refid="_v_t_u___interface_8h_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>source/includes/interfaces/gOcad_SKUA/SKUA_Model.h</label>
+        <link refid="_s_k_u_a___model_8h_source"/>
+      </node>
+      <node id="39">
+        <label>source/includes/math/RandomFieldGenerator.h</label>
+        <link refid="_random_field_generator_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/model/BoundaryInterface.h</label>
+        <link refid="_boundary_interface_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>source/includes/model/FieldVariable.h</label>
+        <link refid="model_2_field_variable_8h_source"/>
+      </node>
+      <node id="2">
+        <label>source/includes/model/Model.h</label>
+        <link refid="_model_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>source/includes/model/Model1D.h</label>
+        <link refid="_model1_d_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>source/includes/model/PropertyAtPointVisitor.h</label>
+        <link refid="_property_at_point_visitor_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>source/includes/run_control/SimulatorControl.h</label>
+        <link refid="_simulator_control_8h_source"/>
+      </node>
+      <node id="51">
+        <label>source/includes/run_control/SimulatorMonitor.h</label>
+        <link refid="_simulator_monitor_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>source/includes/run_control/SimulatorSetup.h</label>
+        <link refid="_simulator_setup_8h_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>source/includes/thmc/fractures/HydroFractureVisitor.h</label>
+        <link refid="_hydro_fracture_visitor_8h_source"/>
+      </node>
+      <node id="53">
+        <label>source/includes/thmc/single_phase_flow/DispersivityVisitor.h</label>
+        <link refid="_dispersivity_visitor_8h_source"/>
+      </node>
+      <node id="54">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h</label>
+        <link refid="_two_phase_undersaturated_fluid_property_visitor_8h_source"/>
+      </node>
+      <node id="49">
+        <label>source/includes/utilities/ModelComparator.h</label>
+        <link refid="_model_comparator_8h_source"/>
+      </node>
+      <node id="55">
+        <label>source/includes/utilities/PL_Utilities.h</label>
+        <link refid="_p_l___utilities_8h"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>source/modules/integration/solver/SAMG_profiles/TwoPhaseImplicitNodeCenteredFVTransProfile.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_trans_profile_8h_source"/>
+      </node>
+      <node id="15">
+        <label>tests/integration/CVFEM_1D_VVCase.h</label>
+        <link refid="_c_v_f_e_m__1_d___v_v_case_8h_source"/>
+      </node>
+      <node id="25">
+        <label>tests/integration/Geothermal_2D_VVCase.h</label>
+        <link refid="_geothermal__2_d___v_v_case_8h_source"/>
+      </node>
+      <node id="26">
+        <label>tests/integration/Geothermal_3D_VVCase.h</label>
+        <link refid="_geothermal__3_d___v_v_case_8h_source"/>
+      </node>
+      <node id="56">
+        <label>tests/unit/BoundaryInterface_Test.h</label>
+        <link refid="_boundary_interface___test_8h_source"/>
+      </node>
+      <node id="37">
+        <label>tests/unit/Boundary_Test.h</label>
+        <link refid="_boundary___test_8h_source"/>
+      </node>
+      <node id="57">
+        <label>tests/unit/Integral_var_NT_lhsop_N_dV_Test.h</label>
+        <link refid="_integral__var___n_t__lhsop___n__d_v___test_8h_source"/>
+      </node>
+      <node id="58">
+        <label>tests/unit/Integral_var_NT_rhsop_N_dV_Test.h</label>
+        <link refid="_integral__var___n_t__rhsop___n__d_v___test_8h_source"/>
+      </node>
+      <node id="42">
+        <label>tests/unit/MathOperatorLHS_Test.h</label>
+        <link refid="_math_operator_l_h_s___test_8h_source"/>
+      </node>
+      <node id="43">
+        <label>tests/unit/MathOperatorRHS_Test.h</label>
+        <link refid="_math_operator_r_h_s___test_8h_source"/>
+      </node>
+      <node id="59">
+        <label>tests/unit/MeshManager_Test.h</label>
+        <link refid="_mesh_manager___test_8h_source"/>
+      </node>
+      <node id="60">
+        <label>tests/unit/NodeManifoldManager_Test.h</label>
+        <link refid="_node_manifold_manager___test_8h_source"/>
+      </node>
+      <node id="50">
+        <label>tests/unit/PropertyAtPointVisitor_Test.h</label>
+        <link refid="_property_at_point_visitor___test_8h_source"/>
+      </node>
+      <node id="61">
+        <label>tests/unit/PropertyHandle_Test.h</label>
+        <link refid="_property_handle___test_8h_source"/>
+      </node>
+      <node id="12">
+        <label>tests/unit/RegionMonitor_Test.h</label>
+        <link refid="_region_monitor___test_8h_source"/>
+      </node>
+      <node id="62">
+        <label>tests/unit/Region_Test.h</label>
+        <link refid="_region___test_8h_source"/>
+      </node>
+      <node id="63">
+        <label>tests/unit/RelativePermeabilityModel_Test.h</label>
+        <link refid="_relative_permeability_model___test_8h_source"/>
+      </node>
+      <node id="44">
+        <label>tests/unit/StatisticalAnalyzer_Test.h</label>
+        <link refid="_statistical_analyzer___test_8h_source"/>
+      </node>
+      <node id="45">
+        <label>tests/unit/TwoPhaseModelCapillaryPressure_TestSuite.h</label>
+        <link refid="_two_phase_model_capillary_pressure___test_suite_8h_source"/>
+      </node>
+      <node id="46">
+        <label>tests/unit/TwoPhaseModelWithCapillaryPressure_TestSuite.h</label>
+        <link refid="_two_phase_model_with_capillary_pressure___test_suite_8h_source"/>
+      </node>
+      <node id="47">
+        <label>tests/unit/TwoPhaseModel_TestSuite.h</label>
+        <link refid="_two_phase_model___test_suite_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_boundary_interface" prot="public">csmp::BoundaryInterface</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>CSMP_BOUNDARY_INTERFACE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_BOUNDARY_INTERFACE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_box_8h" kindref="compound">Box.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref>;</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>;</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_face_construction_data" kindref="compound">FaceConstructionData</ref>;</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim,<sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">BOUNDARY_COMPLEX&gt;</highlight></codeline>
+<codeline lineno="43" refid="classcsmp_1_1_boundary_interface" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">BoundaryInterface<sp/>{</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>BoundaryInterface()<sp/>{}<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>BoundaryInterface(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>BoundaryInterface&amp;<sp/>)<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>~BoundaryInterface()<sp/>{}</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">Boundary_Test;</highlight></codeline>
+<codeline lineno="50" refid="classcsmp_1_1_boundary_interface_1a136b1488cdcd5c98e0ea3a2c34dd6480" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_boundary_interface_1a136b1488cdcd5c98e0ea3a2c34dd6480" kindref="member">BoundaryInterface_Test</ref>;<sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary&lt;dim&gt;</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Boundary(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>bName<sp/>);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary&lt;dim&gt;</ref>&amp;<sp/><sp/>Boundary(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>bName<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ContainsBoundary(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>bName<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>std::map&lt;std::string,csmp::Boundary&lt;dim&gt;<sp/>&gt;::iterator<sp/><sp/>boundaryIterator;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>std::map&lt;std::string,csmp::Boundary&lt;dim&gt;<sp/>&gt;<ref refid="structcsmp_1_1_inter_face_parent_elements" kindref="compound">::const_iterator</ref><sp/><sp/>boundaryConstIterator;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>boundaryIterator<sp/><sp/><sp/><sp/><sp/><sp/><sp/>BoundariesBegin();</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>boundaryIterator<sp/><sp/><sp/><sp/><sp/><sp/><sp/>BoundariesEnd();</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>boundaryConstIterator<sp/><sp/>BoundariesBegin()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>boundaryConstIterator<sp/><sp/>BoundariesEnd()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>boundaryIterator<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Boundary(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary&lt;dim&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Boundaries()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="classcsmp_1_1_boundary_interface_1a7f343a42577037dff47093f62a90b84b" kindref="member">CreateBoundaryName</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>inside_region,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>outside_region<sp/>);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><sp/><ref refid="classcsmp_1_1_boundary_interface_1ad66b7d53568c18e4241ad24ef51f51d7" kindref="member">FindBoundaryByName</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::set&lt;std::string&gt;&amp;<sp/>intersected_regions<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_boundary_interface_1a8c12cd3934001fdeea4d927a94bd4e9d" kindref="member">FindBoundaryByNames</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::set&lt;std::string&gt;&amp;<sp/>intersected_regions,</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::set&lt;std::string&gt;&amp;<sp/>region_patches_found<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1af8d883b322003e0e831b114a53120eef" kindref="member">IsBoundaryName</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>regionName<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1a170a0b5502f6e14e6ea475714b6764db" kindref="member">BoxShaped</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Boundary<sp/>creation,<sp/>modification<sp/>&amp;<sp/>removal<sp/>in<sp/>collaboration<sp/>with<sp/>MeshManager<sp/>that<sp/>creates<sp/>and<sp/>removes<sp/>the<sp/>needed<sp/>Faces</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1abc0392784790ae33fdc9759a7bf19615" kindref="member">FormBoundariesFrom</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>std::pair&lt;std::set&lt;std::string&gt;,</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&gt;<sp/><sp/><ref refid="classcsmp_1_1_boundary_interface_1a41271a0826a7dfae74abdb5cf4856b4f" kindref="member">CreateInternalBoundaryFrom</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>dimension_minus1_region<sp/>);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>std::pair&lt;std::string,bool&gt;<sp/><sp/><ref refid="classcsmp_1_1_boundary_interface_1a46772c373bade27cc1bfd5de6a7f2cb1" kindref="member">CreateExternalBoundaryFrom</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>dimension_minus1_region,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>check_topo_attributes_of_nodes<sp/>);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1ad24b7f5db1277b6a7837a700d103d153" kindref="member">CreateBoundaryAround</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>region<sp/>);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>std::pair&lt;std::string,bool&gt;<sp/><sp/><ref refid="classcsmp_1_1_boundary_interface_1a4e8a32b74b875851b1805944812b3a70" kindref="member">CreateBoundaryBetween</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>region1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>region2<sp/>);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1ad1c6156ff7aa50d5a1c26d12d32006f7" kindref="member">EstablishEdgeBoundariesOfBoxShapedModel</ref>();</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1aa3b79631cd879e55338d14803caae786" kindref="member">EstablishBoxBoundaries</ref>();</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>std::set&lt;std::string&gt;<sp/><sp/><ref refid="classcsmp_1_1_boundary_interface_1ad0eed3c326997f854db44d5a7320a1e2" kindref="member">EstablishBoundariesFromRegions</ref>();</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1a432e8ca3268d6ef31eaf6b9fd23a3e7c" kindref="member">EstablishBoxBoundariesFromOrientation</ref>();</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1a806f539a7761ee70feaa892a22d040ff" kindref="member">EstablishBoxBoundariesFromNodeFlags</ref>(<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>recreate_box_boundary_flags_before<sp/>);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1ae8976912d2d26ce92222880798dba583" kindref="member">RemoveBoundary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>boundary,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>erase_faces<sp/>);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1ae8976912d2d26ce92222880798dba583" kindref="member">RemoveBoundary</ref>(<sp/><ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary&lt;dim&gt;</ref>&amp;,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>erase_faces<sp/>);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>-----------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>input/output</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>-----------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1ae4bfaeada6c1968a38b739272df2e8a5" kindref="member">BoundariesOut</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1a4e58d1c493b2e439a430621ea11df640" kindref="member">OutputBoundariesToBinary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>file_name<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1a573cc9956b043b7010b5c70eebc47a40" kindref="member">InputBoundariesFromBinary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>file_name,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::set&lt;std::string&gt;&amp;<sp/>subset_variables<sp/>);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/><ref refid="classcsmp_1_1_boundary_interface_1a7aef8cb4f10754a119e7df1309b9d98a" kindref="member">CreateBoundaryNameFrom</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_face_construction_data" kindref="compound">FaceConstructionData&lt;dim&gt;</ref>&amp;,</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;std::string&gt;&amp;<sp/>region_names<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_boundary_interface_1a9bdc4e94ff3dbf306bdcccfefd721969" kindref="member">AddBoundary</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>name,</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="classcsmp_1_1_face" kindref="compound">Face&lt;dim&gt;</ref>*&gt;::iterator<sp/>facesBegin,</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="classcsmp_1_1_face" kindref="compound">Face&lt;dim&gt;</ref>*&gt;::iterator<sp/>facesEnd,</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref><sp/>);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="151" refid="classcsmp_1_1_boundary_interface_1a9ec05234ca81cb71c04c9b5e57064a8c" refkind="member"><highlight class="normal"><sp/><sp/><sp/>std::map&lt;std::string,csmp::Boundary&lt;dim&gt;<sp/>&gt;<sp/><sp/><ref refid="classcsmp_1_1_boundary_interface_1a9ec05234ca81cb71c04c9b5e57064a8c" kindref="member">boundaryMap_</ref>;<sp/></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">Box_Test;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">BoundaryInterFace_Test;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="source/includes/model/BoundaryInterface.h"/>
+  </compounddef>
+</doxygen>

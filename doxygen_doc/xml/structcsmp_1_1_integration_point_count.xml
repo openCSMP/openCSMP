@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_integration_point_count" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::IntegrationPointCount</compoundname>
+    <includes refid="_integration_point_count_8h" local="no">IntegrationPointCount.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_integration_point_count_1ab5bca25329a81b062b53aea1cba9b0cd" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::IntegrationPointCount::simplexIntegrationPoints</definition>
+        <argsstring></argsstring>
+        <name>simplexIntegrationPoints</name>
+        <qualifiedname>csmp::IntegrationPointCount::simplexIntegrationPoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IntegrationPointCount.h" line="25" column="14" bodyfile="source/includes/model/IntegrationPointCount.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_integration_point_count_1a9243e3dd6cac763172c85d078366553e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::IntegrationPointCount::sectorIntegrationPoints</definition>
+        <argsstring></argsstring>
+        <name>sectorIntegrationPoints</name>
+        <qualifiedname>csmp::IntegrationPointCount::sectorIntegrationPoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IntegrationPointCount.h" line="26" column="14" bodyfile="source/includes/model/IntegrationPointCount.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_integration_point_count_1a83ca2c2e33a11bbf5f240cd83d62e5d5" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::IntegrationPointCount::facetIntegrationPoints</definition>
+        <argsstring></argsstring>
+        <name>facetIntegrationPoints</name>
+        <qualifiedname>csmp::IntegrationPointCount::facetIntegrationPoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IntegrationPointCount.h" line="27" column="14" bodyfile="source/includes/model/IntegrationPointCount.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_integration_point_count_1a603422ad29d641f9a7affcfa7e8da0de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IntegrationPointCount::IntegrationPointCount</definition>
+        <argsstring>()</argsstring>
+        <name>IntegrationPointCount</name>
+        <qualifiedname>csmp::IntegrationPointCount::IntegrationPointCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IntegrationPointCount.h" line="9" column="5" bodyfile="source/includes/model/IntegrationPointCount.h" bodystart="9" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_integration_point_count_1a9b749984fd605b54acc2a74a9a9b5620" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IntegrationPointCount::IntegrationPointCount</definition>
+        <argsstring>(uint32_t siIntegrationPoints, uint32_t seIntegrationPoints, uint32_t faIntegrationPoints)</argsstring>
+        <name>IntegrationPointCount</name>
+        <qualifiedname>csmp::IntegrationPointCount::IntegrationPointCount</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>siIntegrationPoints</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>seIntegrationPoints</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>faIntegrationPoints</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IntegrationPointCount.h" line="10" column="5" bodyfile="source/includes/model/IntegrationPointCount.h" bodystart="10" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_integration_point_count_1ae0bc4b5618edd1e604e04591803bbe54" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_integration_point_count" kindref="compound">IntegrationPointCount</ref> &amp;</type>
+        <definition>IntegrationPointCount &amp; csmp::IntegrationPointCount::operator=</definition>
+        <argsstring>(const IntegrationPointCount &amp;ipc)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::IntegrationPointCount::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_integration_point_count" kindref="compound">IntegrationPointCount</ref> &amp;</type>
+          <declname>ipc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/IntegrationPointCount.h" line="15" column="27" bodyfile="source/includes/model/IntegrationPointCount.h" bodystart="15" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Data class that tracks number of element/facet/sector integration points in Element/Face/InterFace. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::IntegrationPointCount</label>
+        <link refid="structcsmp_1_1_integration_point_count"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/IntegrationPointCount.h" line="8" column="3" bodyfile="source/includes/model/IntegrationPointCount.h" bodystart="8" bodyend="28"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_integration_point_count_1a83ca2c2e33a11bbf5f240cd83d62e5d5" prot="public" virt="non-virtual"><scope>csmp::IntegrationPointCount</scope><name>facetIntegrationPoints</name></member>
+      <member refid="structcsmp_1_1_integration_point_count_1a603422ad29d641f9a7affcfa7e8da0de" prot="public" virt="non-virtual"><scope>csmp::IntegrationPointCount</scope><name>IntegrationPointCount</name></member>
+      <member refid="structcsmp_1_1_integration_point_count_1a9b749984fd605b54acc2a74a9a9b5620" prot="public" virt="non-virtual"><scope>csmp::IntegrationPointCount</scope><name>IntegrationPointCount</name></member>
+      <member refid="structcsmp_1_1_integration_point_count_1ae0bc4b5618edd1e604e04591803bbe54" prot="public" virt="non-virtual"><scope>csmp::IntegrationPointCount</scope><name>operator=</name></member>
+      <member refid="structcsmp_1_1_integration_point_count_1a9243e3dd6cac763172c85d078366553e" prot="public" virt="non-virtual"><scope>csmp::IntegrationPointCount</scope><name>sectorIntegrationPoints</name></member>
+      <member refid="structcsmp_1_1_integration_point_count_1ab5bca25329a81b062b53aea1cba9b0cd" prot="public" virt="non-virtual"><scope>csmp::IntegrationPointCount</scope><name>simplexIntegrationPoints</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

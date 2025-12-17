@@ -1,0 +1,111 @@
+\doxysection{CVFEM\+\_\+1\+D\+\_\+\+VVCase.\+h}
+\hypertarget{_c_v_f_e_m__1_d___v_v_case_8h_source}{}\label{_c_v_f_e_m__1_d___v_v_case_8h_source}\index{tests/integration/CVFEM\_1D\_VVCase.h@{tests/integration/CVFEM\_1D\_VVCase.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CVFEM\_1D\_VVCASE}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CVFEM\_1D\_VVCASE}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ model}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model1_d_8h}{"{}Model1D.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ File\ I/O\ and\ Initialization}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_computational_settings_8h}{"{}ComputationalSettings.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_input_data_manager_8h}{"{}InputDataManager.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ finite\ elements}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral__d_n_t__op__d_n__d_v_8h}{"{}NumIntegral\_dNT\_op\_dN\_dV.h"{}}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral__d_n_t__op__d_v_8h}{"{}NumIntegral\_dNT\_op\_dV.h"{}}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_velocity_and_volume_flux_8h}{"{}VelocityAndVolumeFlux.h"{}}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_num_integral___set_r_h_s__to___zero_8h}{"{}NumIntegral\_SetRHS\_to\_Zero.h"{}}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ finite\ volumes}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ CVFEM\ PHX}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_v_f_e_m___math_operator_r_h_s_8h}{"{}CVFEM\_MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_v_f_e_m___p_h_x___scheme_8h}{"{}CVFEM\_PHX\_Scheme.h"{}}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ visitors}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conductivity_visitor_8h}{"{}ConductivityVisitor.h"{}}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_compute_gravity_term_visitor_8h}{"{}ComputeGravityTermVisitor.h"{}}}}
+\DoxyCodeLine{00029\ \textcolor{comment}{//\#include\ "{}GEMS3K\_Visitor.h"{}}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ eos}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{comment}{//\ Solver}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_l_udcmp___solver_8h}{"{}LUdcmp\_Solver.h"{}}}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{//\ Output}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_t_u___interface_8h}{"{}VTU\_Interface.h"{}}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{time}\textcolor{preprocessor}{.}\textcolor{preprocessor}{h}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}iostream"{}}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00044\ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00048\ \ \ \{}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \textcolor{comment}{/**\ CVFEM\_1D\_VVCase\ :\ 1D\ Test\ Case}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ =================================}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ Mesh:\ \ \ \ \ \ \ Not\ needed}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ Model:\ \ \ \ \ \ 1D}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ Test:\ \ \ \ \ \ \ PHX\_Scheme}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ BC:\ \ \ \ \ \ \ \ \ TBC}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ Criterion:}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ =================================}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00059\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case}{CVFEM\_1D\_VVCase}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00060\ \ \ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_a75287725a37e6823686e144aa7078939}{CVFEM\_1D\_VVCase}}\ (\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prefix\ );}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \string~CVFEM\_1D\_VVCase();}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_afe070ca8718d2210324cd9b7a0a23efc}{run}}();}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ geometry\_name\_;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ config\_file\_name\_;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ vars\_name\_;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ system\_file\_list\_name\_;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ recipes\_file\_list\_name\_;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ list<string>\ output\_props\_;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ model;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<1U>*\ \ pd\_ref;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_t_u___interface}{VTU\_Interface}}<1U>*\ vtu;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_computational_settings}{ComputationalSettings}}\ \ run\_settings;}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//!\ CVFEM\ instance}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m___p_h_x___scheme}{CVFEM\_PHX\_Scheme}}<1U>\ *CVFEM\_PHX;}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//!\ Chemical\ diffusion\ operators\ and\ variables}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ std::vector<PDE\_Integrator<1U,\ Element>*>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ diffusion;}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ std::vector<NumIntegral\_NT\_lhsop\_N\_dV<1U>*>\ \ diff\_cap\_lhs;}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ std::vector<NumIntegral\_NT\_op\_N\_dV<1U>*>\ \ \ \ \ diff\_cap\_rhs;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ std::vector<NumIntegral\_dNT\_op\_dN\_dV<1U>*>\ \ diffusivity;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ pore\_diff\_key,\ eff\_diff\_key,\ porosity\_key;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ diff\_coeff,\ porosity;}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//!\ time\ variables}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ model\_time,\ dt,\ max\_time,\ vtu\_dt;}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ size\_t\ timestep,\ output\_counter;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ CalculateMassConductivity();}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ CalculateMassGravityTerm();}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ CalculateSteadyStatePressure();}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ CalculateSteadyStateTemperature();}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ InitializeFluidPropertiesLinearPressure();}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ InitializeFluidProperties();}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ CVFEM\_1D\_VVCase}}
+
+\end{DoxyCode}

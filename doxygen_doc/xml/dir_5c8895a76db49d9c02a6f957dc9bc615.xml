@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_5c8895a76db49d9c02a6f957dc9bc615" kind="dir">
+    <compoundname>source/modules/integration/pde_integrators</compoundname>
+    <innerfile refid="_iterative_integrator_8cpp">IterativeIntegrator.cpp</innerfile>
+    <innerfile refid="_newton_integrator_8cpp">NewtonIntegrator.cpp</innerfile>
+    <innerfile refid="_p_d_e___integrator_8cpp">PDE_Integrator.cpp</innerfile>
+    <innerfile refid="_p_d_e___integrator___c_r_m_8cpp">PDE_Integrator_CRM.cpp</innerfile>
+    <innerfile refid="_picard_integrator_8cpp">PicardIntegrator.cpp</innerfile>
+    <innerfile refid="_steady_state_diffusor_8cpp">SteadyStateDiffusor.cpp</innerfile>
+    <innerfile refid="_transient_diffusor_8cpp">TransientDiffusor.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/pde_integrators/"/>
+  </compounddef>
+</doxygen>

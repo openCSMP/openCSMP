@@ -1,0 +1,71 @@
+\doxysection{source/includes/math/\+Dense\+Matrix.h File Reference}
+\hypertarget{_dense_matrix_8h}{}\label{_dense_matrix_8h}\index{source/includes/math/DenseMatrix.h@{source/includes/math/DenseMatrix.h}}
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$typeinfo$>$}\newline
+{\ttfamily \#include $<$array$>$}\newline
+{\ttfamily \#include "{}Point.\+h"{}}\newline
+{\ttfamily \#include "{}Scalar\+Variable.\+h"{}}\newline
+{\ttfamily \#include "{}Vector\+Variable.\+h"{}}\newline
+{\ttfamily \#include "{}Tensor\+Variable.\+h"{}}\newline
+{\ttfamily \#include "{}Array\+Variable.\+h"{}}\newline
+{\ttfamily \#include "{}Flagged\+Array\+Variable.\+h"{}}\newline
+Include dependency graph for Dense\+Matrix.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_dense_matrix_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_dense_matrix_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{csmp\+::\+Dense\+Matrix$<$ mn\+\_\+max $>$}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecsmp}{csmp}}
+\begin{DoxyCompactList}\small\item\em Complex System Modeling Platform. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group___c_s_m_pglobal_enums_gaf487cd149273f4c0bdbd1e1027158b86}\label{group___c_s_m_pglobal_enums_gaf487cd149273f4c0bdbd1e1027158b86} 
+enum \mbox{\hyperlink{group___c_s_m_pglobal_enums_gaf487cd149273f4c0bdbd1e1027158b86}{csmp\+::\+CSMP\+\_\+\+DMAT\+\_\+\+SIZE}} \{ \newline
+{\bfseries DM3} =3U
+, {\bfseries DM4} =4U
+, {\bfseries DM6} =6U
+, {\bfseries DM12} =12U
+, \newline
+{\bfseries DM\+\_\+\+MIN} =36U
+, {\bfseries DM\+\_\+\+MAX} =81U
+ \}
+\begin{DoxyCompactList}\small\item\em choice of fixed sizes \textquotesingle{}mn\+\_\+max\textquotesingle{} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacecsmp_abce478da080d5c69835f9b53ac54cd19}\label{namespacecsmp_abce478da080d5c69835f9b53ac54cd19} 
+{\footnotesize template$<$uint32\+\_\+t mn\+\_\+max$>$ }\\bool {\bfseries csmp\+::operator==} (const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&)
+\begin{DoxyCompactList}\small\item\em comparitor of elements using compare\+Floats \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a0699f387d21ee79b6dd02ccb1067fa36}\label{namespacecsmp_a0699f387d21ee79b6dd02ccb1067fa36} 
+{\footnotesize template$<$uint32\+\_\+t mn\+\_\+max$>$ }\\\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ {\bfseries csmp\+::operator+} (const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&a, const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&b)
+\begin{DoxyCompactList}\small\item\em operator + \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a608e2d7815c4db87fc42d7cb1b3f76ad}\label{namespacecsmp_a608e2d7815c4db87fc42d7cb1b3f76ad} 
+{\footnotesize template$<$uint32\+\_\+t mn\+\_\+max$>$ }\\\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ {\bfseries csmp\+::operator-\/} (const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&a, const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&b)
+\begin{DoxyCompactList}\small\item\em operator -\/ \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a83cd60f16044ec4c01401467e6748a77}\label{namespacecsmp_a83cd60f16044ec4c01401467e6748a77} 
+{\footnotesize template$<$uint32\+\_\+t mn\+\_\+max$>$ }\\\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ {\bfseries csmp\+::operator\texorpdfstring{$\ast$}{*}} (const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&a, const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&b)
+\begin{DoxyCompactList}\small\item\em matrix multiplication operator\texorpdfstring{$\ast$}{*} that returns temporary \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_ad0f0048d8969928b832d09c713c5b59b}\label{namespacecsmp_ad0f0048d8969928b832d09c713c5b59b} 
+{\footnotesize template$<$uint32\+\_\+t mn\+\_\+max$>$ }\\std\+::vector$<$ double $>$ {\bfseries csmp\+::operator\texorpdfstring{$\ast$}{*}} (const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&mat, const std\+::vector$<$ double $>$ \&)
+\begin{DoxyCompactList}\small\item\em vector\texorpdfstring{$^\wedge$}{\string^}T = \doxylink{classcsmp_1_1_matrix}{Matrix} \texorpdfstring{$\ast$}{*} vector\texorpdfstring{$^\wedge$}{\string^}T \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t mn\+\_\+max$>$ }\\\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \mbox{\hyperlink{namespacecsmp_a0f1c5fa728626117c05fb7b4f1f9bbd5}{csmp\+::operator\texorpdfstring{$\ast$}{*}}} (const std\+::vector$<$ double $>$ \&v, const \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ mn\+\_\+max $>$ \&M)
+\begin{DoxyCompactList}\small\item\em v\texorpdfstring{$^\wedge$}{\string^}T = (v\texorpdfstring{$^\wedge$}{\string^}T M)\texorpdfstring{$^\wedge$}{\string^}T \end{DoxyCompactList}\end{DoxyCompactItemize}

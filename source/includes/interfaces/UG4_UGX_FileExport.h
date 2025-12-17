@@ -194,10 +194,10 @@ class UG4_UGX_FileExport {
     bool HasPyramids() const       { return !pyra_volumes_.empty(); }
     
     /// returns CSMP line element/face/interface  idx if it exists or UNSPECIFIED if not
-    long EquivalentEdgeInCSMP( size_t ug_idx ) const;
+    unsigned long EquivalentEdgeInCSMP( size_t ug_idx ) const;
 
     /// returns CSMP line element/face/interface  idx if it exists or UNSPECIFIED if not
-    long EquivalentFaceInCSMP( size_t ug_idx ) const;
+    unsigned long EquivalentFaceInCSMP( size_t ug_idx ) const;
     
     /// using the node numbering in the region 'Model' the property values at the vertices are written out
     void WriteVertexVariableValue( std::ofstream&, const csmp::Index&, const Region<dim>&, size_t ug_cell_idx, bool& print_whitespace ) const;

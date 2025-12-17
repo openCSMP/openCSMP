@@ -1,0 +1,6 @@
+<map id="csmp::AlterationVisitor::AlterationVisitor" name="csmp::AlterationVisitor::AlterationVisitor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,159,70"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="43,29,41,19,48,10,61,5,82,3,104,5,117,11,115,16,103,10,82,8,63,10,51,15,47,20,48,28"/>
+<area shape="rect" id="Node000002" href="$group___c_s_m_p__global__enumerations.html#ga8413f7c3b4f238c5a98a846198d49469" title="some fixed string sizes (max filename length on NTFS partition / arbitrary #&lt;32k)" alt="" coords="207,37,365,62"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="159,47,191,47,191,52,159,52"/>
+</map>

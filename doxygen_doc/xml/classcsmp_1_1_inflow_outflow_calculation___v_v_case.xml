@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_inflow_outflow_calculation___v_v_case" kind="class" language="C++" prot="public">
+    <compoundname>csmp::InflowOutflowCalculation_VVCase</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a932741b94045ee965f78c17cbf02bc67" prot="private" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;::prefix_</definition>
+        <argsstring></argsstring>
+        <name>prefix_</name>
+        <qualifiedname>csmp::InflowOutflowCalculation_VVCase::prefix_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/InflowOutflowCalculation_VVCase.h" line="20" column="18" bodyfile="tests/integration/InflowOutflowCalculation_VVCase.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a528e8f7f8c0ee8d431186395f97e0e7f" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;::name_</definition>
+        <argsstring></argsstring>
+        <name>name_</name>
+        <qualifiedname>csmp::InflowOutflowCalculation_VVCase::name_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/InflowOutflowCalculation_VVCase.h" line="21" column="19" bodyfile="tests/integration/InflowOutflowCalculation_VVCase.h" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a6265a38f0e4a463afdb4eb2b4b9ccee2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;::InflowOutflowCalculation_VVCase</definition>
+        <argsstring>()</argsstring>
+        <name>InflowOutflowCalculation_VVCase</name>
+        <qualifiedname>csmp::InflowOutflowCalculation_VVCase::InflowOutflowCalculation_VVCase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/InflowOutflowCalculation_VVCase.h" line="13" column="18" bodyfile="tests/integration/InflowOutflowCalculation_VVCase.cpp" bodystart="25" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1aaf4062ba4d57ac6b65b925b7045c4f30" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;::InflowOutflowCalculation_VVCase</definition>
+        <argsstring>(const char *prefix)</argsstring>
+        <name>InflowOutflowCalculation_VVCase</name>
+        <qualifiedname>csmp::InflowOutflowCalculation_VVCase::InflowOutflowCalculation_VVCase</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/InflowOutflowCalculation_VVCase.h" line="14" column="18" bodyfile="tests/integration/InflowOutflowCalculation_VVCase.cpp" bodystart="30" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a42e27fe1989c2747a8189a5b650355b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;::~InflowOutflowCalculation_VVCase</definition>
+        <argsstring>()</argsstring>
+        <name>~InflowOutflowCalculation_VVCase</name>
+        <qualifiedname>csmp::InflowOutflowCalculation_VVCase::~InflowOutflowCalculation_VVCase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/InflowOutflowCalculation_VVCase.h" line="15" column="9" bodyfile="tests/integration/InflowOutflowCalculation_VVCase.cpp" bodystart="37" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a4d8df48ddb888bff66be729e7c504545" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::InflowOutflowCalculation_VVCase::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><simplesect kind="attention"><para>Due to comments in NCFVT code, I have changed this test to use Stephan&apos;s functionality. ComputeBoundaryFlux no longer exists. (Julian 12-10-2014)</para>
+</simplesect>
+</para>
+        </inbodydescription>
+        <location file="tests/integration/InflowOutflowCalculation_VVCase.h" line="17" column="14" bodyfile="tests/integration/InflowOutflowCalculation_VVCase.cpp" bodystart="53" bodyend="161"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" compoundref="_c_s_m_p__global__enumerations_8h" startline="59">csmp::ANY</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::InflowOutflowCalculation_VVCase&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/integration/InflowOutflowCalculation_VVCase.h" line="10" column="1" bodyfile="tests/integration/InflowOutflowCalculation_VVCase.h" bodystart="11" bodyend="22"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a6265a38f0e4a463afdb4eb2b4b9ccee2" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>InflowOutflowCalculation_VVCase</name></member>
+      <member refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1aaf4062ba4d57ac6b65b925b7045c4f30" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>InflowOutflowCalculation_VVCase</name></member>
+      <member refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a528e8f7f8c0ee8d431186395f97e0e7f" prot="private" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a932741b94045ee965f78c17cbf02bc67" prot="private" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a4d8df48ddb888bff66be729e7c504545" prot="public" virt="virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_inflow_outflow_calculation___v_v_case_1a42e27fe1989c2747a8189a5b650355b6" prot="public" virt="non-virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>~InflowOutflowCalculation_VVCase</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::InflowOutflowCalculation_VVCase</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

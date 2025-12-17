@@ -1,0 +1,58 @@
+\doxysection{Gravity\+Projection\+Visitor.\+h}
+\hypertarget{_gravity_projection_visitor_8h_source}{}\label{_gravity_projection_visitor_8h_source}\index{source/includes/thmc/single\_phase\_flow/GravityProjectionVisitor.h@{source/includes/thmc/single\_phase\_flow/GravityProjectionVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{GRAVITY\_PROJECTION\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{GRAVITY\_PROJECTION\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_vector_variable_8h}{"{}VectorVariable.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ \ \ \ TODO:\ Who?\ -\/\ What\ for?}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_gravity_projection_visitor}{GravityProjectionVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_gravity_projection_visitor}{Visitor}}<\mbox{\hyperlink{classcsmp_1_1_gravity_projection_visitor}{dim}}>}
+\DoxyCodeLine{00016\ \ \ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ GravityProjectionVisitor(\ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ prop\_idx,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ result\_idx,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~GravityProjectionVisitor();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_gravity_projection_visitor_a4575b9de13f99fa508a2c1f731ed14d5}{Visit}}(Element<dim>*\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>*\ );}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_gravity_projection_visitor_a4575b9de13f99fa508a2c1f731ed14d5}{Visit}}(Region<dim>*\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \textcolor{comment}{///\ Get\ Result}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \mbox{\hyperlink{classcsmp_1_1_gravity_projection_visitor_a8e04a82b40ebe33f9e8cc52cf1ddfdf1}{Get\_PropertyIndex}}();}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ Get\_ResultIndex();}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ Get\_Result(\ Element<dim>*,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ result\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \textcolor{comment}{///\ Property\ indices}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prop\_idx\_;}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\_idx\_;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{comment}{///\ Temporary\ data}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ vec\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ proj\_;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \textcolor{comment}{///\ Flags}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\_vec\_;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ debug\_;}
+\DoxyCodeLine{00048\ \ \ \};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \}\ \textcolor{comment}{//csmp}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ GravityProjectionVisitor}}
+
+\end{DoxyCode}

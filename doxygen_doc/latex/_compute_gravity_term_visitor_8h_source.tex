@@ -1,0 +1,52 @@
+\doxysection{Compute\+Gravity\+Term\+Visitor.\+h}
+\hypertarget{_compute_gravity_term_visitor_8h_source}{}\label{_compute_gravity_term_visitor_8h_source}\index{source/includes/thmc/two\_phase\_flow/ComputeGravityTermVisitor.h@{source/includes/thmc/two\_phase\_flow/ComputeGravityTermVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{COMPUTEGRAVITYTERMVISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{COMPUTEGRAVITYTERMVISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_two_phase_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_compute_gravity_term_visitor}{ComputeGravityTermVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_compute_gravity_term_visitor}{Visitor}}<\mbox{\hyperlink{classcsmp_1_1_compute_gravity_term_visitor}{dim}}>}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ ComputeGravityTermVisitor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&\ saturationFunctions,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ gravityVectorTag,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeabilityTag\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ ComputeGravityTermVisitor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ gravityVectorTag,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ permeabilityTag,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosityTag,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ densityTag\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ ComputeGravityTermVisitor(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ gravityVector,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ permeability,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ viscosity,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ density\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~ComputeGravityTermVisitor()\ \{\}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_compute_gravity_term_visitor_a7e0770a6bcfcd39dca3d457a2e4f7936}{Visit}}(\ Element<dim>*\ element);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\_;}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>*\ saturationFunctions\_;}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ permeabilityKey\_,\ singlePhaseViscosityKey\_,\ singlePhaseDensityKey\_,\ gravityVectorKey\_;}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ gravityAcc\_;}
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \}\ \textcolor{comment}{//csmp}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ COMPUTEGRAVITYTERMVISITOR\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,57 @@
+\doxysection{Num\+Integral\+\_\+\+NT\+\_\+d\+Ni\+\_\+d\+V.\+h}
+\hypertarget{_num_integral___n_t__d_ni__d_v_8h_source}{}\label{_num_integral___n_t__d_ni__d_v_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_NT\_dNi\_dV.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_NT\_dNi\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_NT\_DNI\_DV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_NT\_DNI\_DV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_l_h_s_8h}{"{}MathOperatorLHS.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{enum}\ SPATIAL\_DERIVATIVE\ \{\ X\_DIRECTION=0,\ Y\_DIRECTION=1,\ Z\_DIRECTION=2\ \};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ Accumulation\ of\ scalar-\/coordinate-\/axis-\/aligned\ test-\/function\ *\ test\ function\ derivative\ products.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ @attention\ no\ operand\ values\ are\ required.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ @author\ Yan\ Zaretskiy\ \&\ Sebastian\ Geiger\ (2009),\ coefficient\ free\ version\ by\ SKM\ 29/2/16}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ @remarks\ refactored\ by\ SKM\ 19/1/2015}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v}{NumIntegral\_NT\_dNi\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v}{MathOperatorLHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ NumIntegral\_NT\_dNi\_dV(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ no\ operand\ 'oper'\ in\ this\ pde\ operator\ */}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ does\ nothing\ since\ there\ are\ no\ operands\ to\ read}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v_ade5edc00d77d01407a79e72f91c911f1}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{comment}{/*\ no\ operand\ to\ read\ */}\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ Computes\ N\_transposed\ *\ DN\_i\ product\ that\ is\ weighted\ by\ the\ determinant\ of\ Jacobian\ matrix.}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v_ae5647913a90d1ac2e316f0dbefa81765}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ chose\ the\ desired\ spatial\ derivate;\ default\ is\ Y}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v_a3c090a20c92871f204e6210806c79bb6}{SpatialDerivative}}(\ SPATIAL\_DERIVATIVE\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{///\ transposes\ LHS\ element\ matrix\ before\ it\ gets\ accumulated;\ default\ is\ false}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__d_ni__d_v_a122bf18de7b20c555c4d05064dd6af7c}{Transposed}}();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ NumIntegral\_NT\_dNi\_dV<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ NumIntegral\_NT\_dNi\_dV<dim,CELL>\ (*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ NumIntegral\_NT\_dNi\_dV();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ SPATIAL\_DERIVATIVE\ \ \ xyz\_;\ \ \ \ \ \textcolor{comment}{///<\ direction\ of\ partial\ derivative\ that\ shall\ be\ taken}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ transp\_;\ \ \textcolor{comment}{///<\ transpose\ element\ matrix\ or\ not(default)}}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ TEMP;\ \ \ \ \ \textcolor{comment}{///<\ temporary\ matrices}}
+\DoxyCodeLine{00047\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

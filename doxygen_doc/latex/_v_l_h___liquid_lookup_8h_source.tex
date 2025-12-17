@@ -1,0 +1,108 @@
+\doxysection{VLH\+\_\+\+Liquid\+Lookup.\+h}
+\hypertarget{_v_l_h___liquid_lookup_8h_source}{}\label{_v_l_h___liquid_lookup_8h_source}\index{source/includes/eos/VLH\_LiquidLookup.h@{source/includes/eos/VLH\_LiquidLookup.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \ \ \textcolor{preprocessor}{VLH\_LIQUIDLOOKUP\_H\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \ \ \textcolor{preprocessor}{VLH\_LIQUIDLOOKUP\_H\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_error_handler_8h}{"{}ErrorHandler.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_triple_point_na_cl_8h}{"{}TriplePointNaCl.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_states_8h}{"{}States.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_l_h___liquid_lookup}{VLH\_LiquidLookup}}}
+\DoxyCodeLine{00014\ \ \ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ VLH\_LiquidLookup(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature);}
+\DoxyCodeLine{00018\ \ \ \ \ \string~VLH\_LiquidLookup();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ValueOf(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Temperature();}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Pressure();}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MassFractionNaCl();}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Density();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Enthalpy();}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HeatCapacity();}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Compressibility();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Viscosity();}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Pmax();}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Tmax();}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TfromP(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ press,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\_estimate);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DPressureDT();}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DEnthalpyDT();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ properties\_at\_tmax;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ temperature;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tcurrent;}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pcurrent;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xcurrent;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmax;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pmax;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pnorm;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_res;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tnorm;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dp;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_dim;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\_max;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\_min;}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\_guess;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it\_p\_max;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ States\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ storage\_vector;\ \textcolor{comment}{//\ stores\ data\ in\ sequence\ t-\/p-\/x-\/rho-\/h\ at\ each\ Lookup\ point}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}\ \ \ \ \ \ \ \ \ tp\_nacl;}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ GetTemperatureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t);}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_error_handler}{ErrorHandler}}\&\ \ \ \ \ \ \ \ \ \ \ csmp\_error;}
+\DoxyCodeLine{00068\ \ \ \};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_v_l_h___liquid_lookup}{VLH\_LiquidLookup}}::Tmax()\{\ \textcolor{keywordflow}{return}\ tmax;\ \}}
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_v_l_h___liquid_lookup}{VLH\_LiquidLookup}}::Pmax()\{\ \textcolor{keywordflow}{return}\ pmax;\ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ author:\ Thomas\ Driesner,\ ETH\ Zuerich}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ contact:\ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ latest\ modification:\ May\ 27,\ 2008}}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ VLH\_LiquidLookup\ generates\ and\ queries\ a\ lookup\ table\ that\ stores\ the\ temperature-\/pressure-\/composition\ [Celsius,\ bar,\ mole\ fraction]\ coordinates\ of\ the\ halite-\/saturated\ liquid\ curve\ on\ the\ three-\/phase\ halite+liquid+vapor\ surface\ of\ the\ system\ H2O-\/NaCl,\ according\ to\ the\ paper}}
+\DoxyCodeLine{00079\ \textcolor{comment}{}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ and\ Heinrich\ C.A.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ I:\ Correlation\ formulae\ for\ phase\ relations\ in\ temperature-\/pressure-\/composition\ space\ from\ 0\ to\ 1000oC,\ 0\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4880-\/4901.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ In\ addition,\ mass\ density\ [kg/m3],\ specific\ enthalpy\ [J/kg],\ specific\ isobaric\ heat\ capacity\ [J/kg/C],\ isothermal\ compressibility\ [Pa\string^-\/1],\ dynamic\ viscosity\ [Pa\ s]\ on\ the\ curve\ are\ available,\ and\ are\ computed\ by\ applying\ the\ formulations\ from\ the\ paper}}
+\DoxyCodeLine{00083\ \textcolor{comment}{}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ II:\ Correlations\ for\ molar\ volume,\ enthalpy,\ and\ isobaric\ heat\ capacity\ from\ 0\ to\ 1000oC,\ 1\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4902-\/4919.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ The\ lookup\ table\ "{}VLH\_LiquidLookupTable.bin"{}\ is\ written\ as\ a\ binary\ file,\ and\ stores\ the\ properties\ listed\ above\ in\ a\ single,\ 1-\/dimensional\ std::vector<double>.\ \ The\ vector\ comprises\ subsequent\ blocks\ in\ each\ of\ which\ the\ values\ for\ one\ property\ are\ stored\ in\ sequence\ of\ ascending\ temperature\ from\ 0\ C\ to\ the\ triple\ point\ of\ NaCl\ (re-\/check,\ pleae).\ Each\ block\ is\ of\ size\ t\_dim\ (the\ number\ of\ entries,\ the\ first\ thing\ that\ is\ computed\ in\ the\ constructor),\ the\ sequence\ of\ property\ blocks\ is\ defined\ in\ the\ file\ "{}LookupPropertyIndex.h"{}.\ The\ temperature\ spacing\ is\ variable\ (see\ member\ GetTemperatureIndex\ for\ details),\ being\ densest\ near\ the\ critical\ temperature\ of\ water\ and\ largest\ at\ the\ lowest\ and\ highest\ temperatures.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ Known\ issues}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ Pressure()\ still\ return\ bars,\ a\ legacy\ from\ the\ SoWat\ development.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ Testing}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ The\ lookup\ version\ was\ tested\ against\ the\ original\ non-\/lookup\ code\ (May\ 26,\ 2007).\ Max\ deviations\ are:}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ Composition:\ -\/0.5\%\ at\ 374.03\ C,\ above\ 374.3\ C,\ deviations\ are\ <0.1\%\ and\ decay\ rapidly\ to\ negligible\ values.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ Pressure:\ deviations\ are\ negligible\ over\ the\ whole\ temperature\ range\ (.00x\ \%\ or\ less)}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ Density:\ (nota\ bene:\ this\ is\ NOT\ used\ in\ fluid\ flow\ simulations\ in\ the\ original\ ETH\ scheme\ by\ Thomas\ Driesner)\ up\ to\ 10\%\ at\ 374.04,\ rapidly\ decaying\ via\ 3\%\ at\ 374.6\ to\ less\ than\ 1\%\ above\ 375.5.\ Notice\ that\ the\ uncertainties\ are\ always\ maximum\ between\ lookup\ grid\ point\ and\ are\ "{}exact"{}\ at\ the\ grid\ points.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ Enthalpy:\ (again:\ not\ used\ in\ fluid\ flow\ simulations).\ 2\%\ at\ 374.04,\ rapidly\ decaying,\ <\ 0.05\%\ at\ t\ >\ 380\ C}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ HeatCapacity:\ (again:\ not\ used\ in\ fluid\ flow\ simulations):\ large\ deviations\ at\ t\ <\ 375.5,\ which\ are\ solely\ due\ to\ the\ "{}hard-\/wired"{}\ value\ assigned\ at\ tcrit\_h20\ (1e10,\ this\ happens\ in\ H2OLookup).\ From\ 424\ C:\ <\ 0.1\%}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ Compressibility:\ (again:\ not\ used\ ...)\ Near\ tcrit\_h2o\ suffers\ from\ the\ same\ problem\ as\ HeatCapacity,\ <1\%\ is\ reached\ at\ about\ 385\ C.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ Viscosity:\ (again\ ...)\ 0.07\%\ at\ 374.04,\ generally\ negligible}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00101\ \}\textcolor{comment}{//\ namespace\ csmp}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

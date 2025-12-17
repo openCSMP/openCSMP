@@ -1,0 +1,103 @@
+\doxysection{Twophase\+Vapor.\+h}
+\hypertarget{_twophase_vapor_8h_source}{}\label{_twophase_vapor_8h_source}\index{source/includes/eos/TwophaseVapor.h@{source/includes/eos/TwophaseVapor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWOPHASEVAPOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWOPHASEVAPOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_halite_liquidus_8h}{"{}HaliteLiquidus.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_twophase_liquid_8h}{"{}TwophaseLiquid.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_na_cl_saturated_vapor_8h}{"{}NaClSaturatedVapor.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/*\ Changelog}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ October\ 16,\ 2014,\ Thomas\ Driesner}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ -\/\ re-\/ported\ to\ CSMP++}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ -\/\ cleaned\ up\ interface,\ eliminating\ functionaility\ that\ is\ currently\ not\ being\ used\ anymore}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ -\/\ changed\ units\ in\ interface\ to\ [Pa]\ for\ pressure\ and\ [mass\ fraction\ NaCl]\ for\ composition}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ -\/\ added\ basic\ doxygen\ documentation}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ -\/\ changed\ coding\ style\ towards\ CSMP++\ style\ guide\ recommendations}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ -\/\ performed\ manual\ testing\ against\ CSP\ version\ -\/\ OK}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00019\ \{}
+\DoxyCodeLine{00020\ \ \ \textcolor{comment}{///\ Composition\ of\ vapor\ phase\ on\ twophase\ vapor+liquid\ envelope}}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_twophase_vapor}{TwophaseVapor}}}
+\DoxyCodeLine{00022\ \ \ \{}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ Constructor\ etc.}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_twophase_vapor_a106ce9bbb086b6e21f6bb8056b718fd8}{TwophaseVapor}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature,\ \textcolor{comment}{//\ [C]}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalpressure,\ \ \ \ \textcolor{comment}{//\ [Pa]}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ ph2o);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa]}}
+\DoxyCodeLine{00029\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_twophase_vapor_ac7c22e15b93c525933306a4a452ad920}{TwophaseVapor}}();}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_twophase_vapor_a43b44842ecc708e431e5605358c9dc6b}{MassFractionNaCl}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [XNaCl]}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ TwophaseVapor();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ temperature\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ reference\ to\ temperature\ [C]\ in\ flow\ code}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ pressure\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ reference\ to\ fluid\ pressure\ [P]\ in\ flow\ code}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ ph2o\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ reference\ to\ water\ boiling\ pressure\ (from\ Water\ object,\ which\ must\ have\ been\ constructed\ with\ the\ same\ temperature\ and\ fluid\ pressure\ variables\ as\ constructor\ arguments)}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ tcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ temperature\ variable\ [C]}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ pcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ pressure\ variable\ [Pa]}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{double}\ massfractionnacl\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ composition\ }}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ CheckState();}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ MoleFractionNaCl();}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_halite_liquidus}{HaliteLiquidus}}\ \ \ \ \ \ \ \ \ liquidus;}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_twophase_liquid}{TwophaseLiquid}}\ \ \ \ \ \ \ \ \ twophase\_l;}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_na_cl_saturated_vapor}{NaClSaturatedVapor}}\ \ \ \ \ naclsatvap;}
+\DoxyCodeLine{00051\ \ \ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ @class\ TwophaseVapor\ TwophaseVapor.h\ "{}eos/h2o\_nacl/TwophaseVapor.h"{}}}
+\DoxyCodeLine{00055\ \textcolor{comment}{}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich,\ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00057\ \textcolor{comment}{}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ "{}TwophaseVapor"{}\ is\ legacy\ code\ from\ Thomas\ Driesner's\ developments\ for\ the\ H2O-\/NaCl\ system,\ and\ computes\ the\ composition\ of\ vapor\ on\ the\ twophase\ liquid+vapor\ envelope\ as\ a\ function\ of\ temperature\ and\ pressure.\ It\ can\ be\ used\ standalone\ if\ only\ this\ information\ is\ needed.\ Otherwise,\ it\ is\ only\ used\ in\ the\ CSMP++\ context\ for\ building\ accurate\ lookup\ tables\ for\ the\ H2O-\/NaCl\ system,\ which\ are\ significantly\ faster\ if\ the\ full\ system\ properties\ are\ needed.\ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ Details\ of\ the\ underlying\ formulation\ can\ be\ found\ in}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ and\ Heinrich\ C.A.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ I:\ Correlation\ formulae\ for\ phase\ relations\ in\ temperature-\/pressure-\/molefraction\ space\ from\ 0\ to\ 1000oC,\ 0\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4880-\/4901.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ Construct\ an\ instance\ of\ "{}TwophaseVapor"{}\ with\ the\ temperature\ ("{}externaltemperature"{},\ in\ C),\ fluid\ pressure\ ("{}externalpressure"{},\ in\ Pa)\ and\ water\ boiling\ pressure\ ("{}ph2o"{},\ in\ Pa,\ see\ attention\ remark\ below)\ as\ constructor\ arguments.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ "{}TwophaseVapor"{}\ has\ an\ internal\ mechanism\ to\ make\ sure\ that\ it\ always\ uses\ the\ current\ value\ of\ temperature,\ fluid\ pressure,\ and\ water\ boiling\ pressure\ as\ they\ exist\ in\ your\ code.\ Public\ member\ names\ should\ be\ self-\/explanatory,\ I\ hope.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ The\ NaCl\ concentration\ can\ be\ retrieved\ in\ units\ of\ mass\ fraction.\ If\ you\ want\ to\ convert\ these\ or\ need\ values\ for\ molar\ masses\ of\ NaCl\ and\ H2O,\ please\ use\ ConvertConcentrationUnitsNaCl.h\ to\ stay\ consistent.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ @attention\ The\ water\ boiling\ pressure\ as\ constructor\ argument\ requires\ that\ a\ Water\ object\ is\ being\ instantiated\ before\ twophase\ liquid,\ with\ the\ same\ temperature\ and\ fluid\ pressure\ as\ its\ constructor\ arguments.\ Also,\ before\ querying\ TwophaseVapor::MassFractionNaCl(),\ one\ has\ to\ make\ sure\ that\ ph2o\ has\ been\ updated.\ See\ code\ example.\ I\ apologize\ for\ this\ odd\ design\ but\ for\ performance\ reasons\ it\ made\ sense\ when\ created\ originally.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ double\ t(somevalue);\ \ \ \ \ \ \ \ \ \ //\ temperature\ [C]\ in\ user's\ application}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ double\ p(anothervalue);\ \ \ \ \ \ \ //\ fluid\ pressure\ [in\ Pa]\ in\ user's\ application}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ double\ ph2o(yetanothervalue);\ //\ water\ boling\ pressure\ [in\ Pa]\ in\ user's\ application}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ Water\ \ \ \ \ \ \ \ \ \ water(t,p);}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ TwophaseVapor\ \ twophase\_vapor(t,p,ph2o);\ }}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ //\ Updating\ t,p,ph2o:}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ t\ \ \ \ =\ my\_new\_t\_value;}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ p\ \ \ \ =\ my\_new\_p\_value;}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ ph2o\ =\ water.SaturationPressure();}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ //\ And\ retrieving\ the\ new\ value\ of\ mass\ fraction\ NaCl\ in\ TwophaseVapor:}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ x\ =\ twophase\_vapor.MassFractionNaCl();\ //\ compute\ and\ assign\ to\ x\ the\ mass\ fraction\ of\ NaCl\ of\ TwophaseVapor\ at\ t\ and\ p}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ ...}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00091\ \textcolor{comment}{}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ Tested\ manually\ against\ CSP\ version\ OK}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \}\textcolor{comment}{//csmp}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

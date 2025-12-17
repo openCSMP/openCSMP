@@ -1,0 +1,29 @@
+\doxysection{Rhino\+Mesh\+\_\+\+Example.\+h}
+\hypertarget{_rhino_mesh___example_8h_source}{}\label{_rhino_mesh___example_8h_source}\index{examples/source/RhinoMesh\_Example.h@{examples/source/RhinoMesh\_Example.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{RHINOMESH\_EXAMPLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{RHINOMESH\_EXAMPLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_example_8h}{"{}Example.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_rhino_mesh___example}{RhinoMesh\_Example}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_example}{Example}}\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Run();}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Specifications();}
+\DoxyCodeLine{00015\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00016\ \ \ \textcolor{keywordtype}{void}\ SideBoundaryConditions(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00017\ \ \ \textcolor{keywordtype}{void}\ ConcentrationRectangle(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&,\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00018\ \ \ \textcolor{keywordtype}{void}\ CopyInputFiles(std::string\&\ model\_name,\ std::string\&\ variable\_file);}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ RHINOMESH\_EXAMPLE\_H}}
+
+\end{DoxyCode}

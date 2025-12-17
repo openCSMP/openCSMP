@@ -1,0 +1,121 @@
+.TH "csmp::CompressedRowMatrixParallel" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CompressedRowMatrixParallel
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::CompressedRowMatrix\fP\&.
+.SS "Additional Inherited Members"
+
+
+Public Member Functions inherited from \fBcsmp::CompressedRowMatrix\fP
+.in +1c
+.ti -1c
+.RI "\fBCompressedRowMatrix\fP (\fBcsmp::SparseMatrix\fP &)"
+.br
+.ti -1c
+.RI "\fBCompressedRowMatrix\fP (std::vector< int32_t > &&\fBia\fP, std::vector< int32_t > &&\fBja\fP, std::vector< double > &&\fBa\fP)"
+.br
+.RI "custom move constructor "
+.ti -1c
+.RI "double \fBoperator()\fP (uint32_t, uint32_t) const"
+.br
+.RI "standard accessor of matrix elements (asserts i,j in debug mode) "
+.ti -1c
+.RI "double \fBAt\fP (uint32_t, uint32_t) const"
+.br
+.RI "range-checked accessor for matrix elements "
+.ti -1c
+.RI "void \fBAssign\fP (uint32_t i, uint32_t j, double val)"
+.br
+.RI "use to assign matrix elements during accumulation; "
+.ti -1c
+.RI "void \fBMultiplyEntryWith\fP (uint32_t i, uint32_t j, double val)"
+.br
+.ti -1c
+.RI "void \fBAdd\fP (uint32_t i, uint32_t j, double val)"
+.br
+.ti -1c
+.RI "void \fBZeroRow\fP (size_t row)"
+.br
+.ti -1c
+.RI "void \fBZero\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddRowByAnotherRow\fP (uint32_t i, uint32_t j)"
+.br
+.ti -1c
+.RI "void \fBAssignRowByAnotherRow\fP (uint32_t i, uint32_t j)"
+.br
+.ti -1c
+.RI "void \fBInitialize\fP (const \fBcsmp::SparseMatrix\fP &)"
+.br
+.ti -1c
+.RI "void \fBInitializePointBased\fP (const \fBSparseMatrix\fP &, size_t nsys)"
+.br
+.ti -1c
+.RI "uint32_t \fBRows\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBCols\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBTotalExistingEntries\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBNonZeroEntries\fP () const"
+.br
+.RI "total number of available storage sites for non-zero matrix elements "
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.RI "this function erases all elements in ia, ja and a "
+.ti -1c
+.RI "bool \fBIsFormattedForSAMG\fP () const"
+.br
+.RI "check whether matrix has been converted to SAMG format "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const std::string &outfile) const"
+.br
+.ti -1c
+.RI "void \fBConvertFromSparseMatrix\fP (const \fBcsmp::SparseMatrix\fP &)"
+.br
+.RI "this function converts the supplies sparse matrix to compressed row matrix, but does not convert it to SAMG format "
+.ti -1c
+.RI "void \fBConvertToSAMGFormat\fP ()"
+.br
+.RI "this function converts a compressed row matrix to SAMG format "
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::CompressedRowMatrix\fP
+.in +1c
+.ti -1c
+.RI "std::vector< int32_t > \fBia\fP"
+.br
+.RI "\fBia(ilo)\fP and the last row ends at position ia(ihi+1)-1 (see next)\&. "
+.ti -1c
+.RI "std::vector< int32_t > \fBja\fP"
+.br
+.RI "ja - pointer array pointing to the column indices\&. that is, for each matrix element \fBa(j)\fP with \fBia(ilo)\fP<=j<=ia(ihi+1)-1, \fBja(j)\fP contains the column index of that element\&. since, within each row, the diagonal element is stored first (see above), we always have \fBja(ia(i))\fP=i\&. "
+.ti -1c
+.RI "std::vector< double > \fBa\fP"
+.br
+.RI "array containing the rows of the matrix, one after the other, each row starting with its diagonal element\&. the first row starts at position "
+.in -1c
+
+Static Protected Attributes inherited from \fBcsmp::CompressedRowMatrix\fP
+.in +1c
+.ti -1c
+.RI "static const bool \fBverbose_\fP = true"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

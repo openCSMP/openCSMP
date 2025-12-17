@@ -392,7 +392,7 @@ void PDE_Integrator_Test::TestAssemblySingleScalarNoDirichlet( bool debug ) {
 
     if( debug ) {
         attorney.Out();
-        attorney.OutputGlobals();
+        attorney.OutputGlobals( 0 );
     }
     cout <<"\nPDE_Integrator_Test::TestAssemblySingleScalarNoDirichlet: finished test."<< endl;
 }
@@ -464,7 +464,7 @@ void PDE_Integrator_Test::TestAssemblySingleScalarDirichlet( bool debug ) {
 
     if( debug ) {
         attorney.Out();
-        attorney.OutputGlobals();
+        attorney.OutputGlobals( 0 );
     }
     cout <<"\nPDE_Integrator_Test::TestAssemblySingleScalarDirichlet: finished test."<< endl;
 }
@@ -519,7 +519,7 @@ void PDE_Integrator_Test::TestAssemblySingleVectorNoDirichlet( bool debug ) {
 
     if( debug ) {
         attorney.Out();
-        attorney.OutputGlobals();
+        attorney.OutputGlobals( 0 );
     }
     cout <<"\nPDE_Integrator_Test::TestAssemblySingleVectorNoDirichlet: finished test."<< endl;
 }
@@ -590,7 +590,7 @@ void PDE_Integrator_Test::TestAssemblySingleVectorDirichlet( bool debug ) {
 
     if( debug ) {
         attorney.Out();
-        attorney.OutputGlobals();
+        attorney.OutputGlobals( 0 );
     }
     cout <<"\nPDE_Integrator_Test::TestAssemblySingleVectorDirichlet: finished test."<< endl;
 }

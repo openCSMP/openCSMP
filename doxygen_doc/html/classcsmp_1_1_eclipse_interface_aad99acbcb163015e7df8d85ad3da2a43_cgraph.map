@@ -1,0 +1,7 @@
+<map id="csmp::EclipseInterface::Read_ZCORN" name="csmp::EclipseInterface::Read_ZCORN">
+<area shape="rect" id="Node000001" title="ReadCornerDepths &#45;&gt; Read_ZCORN." alt="" coords="5,23,161,64"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a34701d1c9fda79fddb23382772ee2859" title=" " alt="" coords="237,5,365,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,32,221,25,222,30,161,37"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#af8c2740a4e6be30bdfb4207bf22e8609" title="Eclipse ends its definitions with a forward slash." alt="" coords="209,55,393,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,49,194,53,193,58,161,55"/>
+</map>

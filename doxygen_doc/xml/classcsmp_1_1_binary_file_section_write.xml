@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_binary_file_section_write" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BinaryFileSectionWrite</compoundname>
+    <includes refid="binary_read_write_8h" local="no">binaryReadWrite.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_binary_file_section_write_1a0bc82e66a50704140d1658ad843d3092" prot="private" static="no" mutable="no">
+        <type>std::fstream &amp;</type>
+        <definition>std::fstream&amp; csmp::BinaryFileSectionWrite::fp_</definition>
+        <argsstring></argsstring>
+        <name>fp_</name>
+        <qualifiedname>csmp::BinaryFileSectionWrite::fp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/binaryReadWrite.h" line="74" column="18" bodyfile="source/includes/model/binaryReadWrite.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_binary_file_section_write_1a2fff2e0a8bebbffd9539af420d2937c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BinaryFileSectionWrite::BinaryFileSectionWrite</definition>
+        <argsstring>(std::fstream &amp;fp, const char *header)</argsstring>
+        <name>BinaryFileSectionWrite</name>
+        <qualifiedname>csmp::BinaryFileSectionWrite::BinaryFileSectionWrite</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>header</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/binaryReadWrite.h" line="71" column="5" bodyfile="source/modules/model/binaryReadWrite.cpp" bodystart="8" bodyend="26"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Helper class to write sections to a binary file. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BinaryFileSectionWrite</label>
+        <link refid="classcsmp_1_1_binary_file_section_write"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/binaryReadWrite.h" line="69" column="1" bodyfile="source/includes/model/binaryReadWrite.h" bodystart="69" bodyend="75"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_binary_file_section_write_1a2fff2e0a8bebbffd9539af420d2937c9" prot="public" virt="non-virtual"><scope>csmp::BinaryFileSectionWrite</scope><name>BinaryFileSectionWrite</name></member>
+      <member refid="classcsmp_1_1_binary_file_section_write_1a0bc82e66a50704140d1658ad843d3092" prot="private" virt="non-virtual"><scope>csmp::BinaryFileSectionWrite</scope><name>fp_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

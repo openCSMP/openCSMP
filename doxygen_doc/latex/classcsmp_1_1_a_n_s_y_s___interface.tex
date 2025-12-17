@@ -1,0 +1,546 @@
+\doxysection{csmp\+::ANSYS\+\_\+\+Interface Class Reference}
+\hypertarget{classcsmp_1_1_a_n_s_y_s___interface}{}\label{classcsmp_1_1_a_n_s_y_s___interface}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+
+
+File based interface between ANSYS and CSMP.  
+
+
+
+
+{\ttfamily \#include $<$ANSYS\+\_\+\+Interface.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::ANSYS\+\_\+\+Interface\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=250pt]{classcsmp_1_1_a_n_s_y_s___interface__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_a357122e2aed231fe14d22fa2cc751b7d}{ANSYS\+\_\+\+Interface}} (bool create\+\_\+isoparametric\+\_\+element\+\_\+mesh=true)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_a6a005a688a43a03e85a9f3bbae45509e}{Read\+\_\+\+ANSYS\+\_\+\+Mesh}} (const std\+::string \&mesh\+\_\+file\+\_\+set, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&, bool binary\+\_\+input\+\_\+file, bool reassign\+\_\+boundary\+\_\+flags=true)
+\begin{DoxyCompactList}\small\item\em Reading function. \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_ac4b44741ba090b14c17e1f7fe41fa18a}{Read\+\_\+\+ANSYS\+\_\+\+Mesh}} (const string \&filename, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset, \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&mesh\+\_\+topology, bool binary\+\_\+input\+\_\+file, bool reassign\+\_\+boundary\+\_\+flags)
+\begin{DoxyCompactList}\small\item\em Builds \doxylink{classcsmp_1_1_model}{Model} after it was constructed with the default constructor. \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_adf7da9d137c32c314dec019a28f7b209}{Read\+Mesh\+Binary}} (const string \&meshfile, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset, \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&mesh\+\_\+topology, bool reassign\+\_\+boundary\+\_\+flags)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_ac30647361771d72ad58d02f2bbe43cdb}{Read\+Mesh\+ASCII}} (const string \&meshfile, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset, \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&mesh\+\_\+topology, bool reassign\+\_\+boundary\+\_\+flags)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_ac23098bc2165a3f32b0d0fc6a1212c06}{Read\+Node\+Coordinates\+ASCII}} (ifstream \&ifs, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset)
+\begin{DoxyCompactList}\small\item\em ASCII DATA FILE. \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_aed206e955271ff158ad8e9ab0ece4b14}{Read\+Boundary\+Flags\+And\+Conditions\+ASCII}} (ifstream \&ifs, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_a8c995a6badeff581d4f9e127f1e688ba}{Read\+Pelement\+ASCII}} (ifstream \&ifs, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_af7a9ca44b2ece6a811b55d0bca9c2302}{Read\+Plist\+ASCII}} (ifstream \&ifs, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_ac352502ffa61bbde7b31ebdc7b1da0a9}{Read\+Pfverts\+ASCII}} (ifstream \&ifs, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_af88837e62aadf5687da0d1db91336bea}{Read\+Pmaterial\+ASCII}} (ifstream \&ifs, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&vset)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_ab39904661e1ee204d32b5de07c7dbe3a}\label{classcsmp_1_1_a_n_s_y_s___interface_ab39904661e1ee204d32b5de07c7dbe3a} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Read\+Mesh\+ASCII} (const std\+::string \&meshfile, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&, bool reassign\+\_\+boundary\+\_\+flags=true)
+\begin{DoxyCompactList}\small\item\em ascii format \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___interface_af1fb1fd7a46eca039e542f0355a6c812}{Read\+Mesh\+Binary}} (const std\+::string \&meshfile, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&, \mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&, bool reassign\+\_\+boundary\+\_\+flags)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+File based interface between ANSYS and CSMP. 
+
+To provide a file-\/based interface between the TETRA meshing tool from ANSYS Technologies Inc. and CSMP which also allows to extract parts of the input mesh selectively, assign material properties, boundary conditions and to rigorously test the incorporated mesh for its compliance with CSMP requirements.
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+S. Geiger 
+
+S.\+G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2001
+\end{DoxyDate}
+\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+File reading has been broken up into modules such that with possible changes only small bits of code must be recreated. Also files have been separated into text and binary input, such that the user-\/readable part is readily accessible in textformat while the bulk of the data reside in an efficiently readable binary file.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+To files which have been written with a specific output module created specifically for CSP by ANSYS technologies (Ulrike Wolf, Berlin).\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+The ANSYS interface uses the classes \doxylink{classcsmp_1_1_v_set}{VSet}, FEM\+\_\+\+Primitive and \doxylink{classcsmp_1_1_model_topology}{Model\+Topology} to store the information in which has been retrieved from file.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Two files\+: one human readable text (.asc = ASCII) file and a binary (.dat) file that can be transferred across platforms (Windows OSX, linux etc/).
+
+The regions and material file (\textquotesingle{}\texorpdfstring{$\ast$}{*}.asc\textquotesingle{})\+:
+
+
+\begin{DoxyItemize}
+\item model name (line break)
+\item Comment line (header)\+: 1. filename, 2. date of generaton
+\item Number of labelled objects
+\item Table with objects, element types, material ID values (rock types), number of elements (cells)
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Object\ \ \ element-\/type\ \ \ material\ ID\ \ \ number-\/of-\/elements}
+\DoxyCodeLine{LIV\ \ \ \ \ \ \ \ \ \ TETRA\_4\ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 760}
+\DoxyCodeLine{BOXS\ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ 0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2030}
+\DoxyCodeLine{CURVES\ \ \ \ \ \ \ BAR\_2\ \ \ \ \ \ \ \ 0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 20}
+
+\end{DoxyCode}
+
+
+The material ID facilitates the association of \textquotesingle{}rock types\textquotesingle{} with model regions.
+
+
+\begin{DoxyItemize}
+\item List of elements making up each region (numbered 0...n-\/1), preceded by region name and number of elements of region.
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{LIV\_SMALL\ 6}
+\DoxyCodeLine{12\ 13\ 14\ 15\ 16\ 17}
+
+\end{DoxyCode}
+
+
+The binary file (\textquotesingle{}\texorpdfstring{$\ast$}{*}.dat\textquotesingle{}) contains\+:
+
+
+\begin{DoxyEnumerate}
+\item NODE COORDINATE DATA (double)\+:
+\end{DoxyEnumerate}
+
+PX, PY, PZ records\+: preceded by a single unsigned long indicating the size of these records which (individually) contain (with or without line breaks)\+:
+
+px\+: -\/\texorpdfstring{$>$}{>} x-\/coordinates of the nodes ~\newline
+ py\+: -\/\texorpdfstring{$>$}{>} y-\/coordinates of the nodes pz\+: -\/\texorpdfstring{$>$}{>} z-\/coordinates of the nodes
+
+(all entries in these records have the format double and the node-\/\+IDs are implicit from 0 to nodes-\/1)\+:
+
+Such records could be written as shown in the C++ code example below\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{double}*\ \ \ \ \ \ \ \ ptr;\ \textcolor{comment}{//\ data\ pointer}}
+\DoxyCodeLine{...}
+\DoxyCodeLine{unsigned\ \textcolor{keywordtype}{long}\ \ n0(0),\ n1(1);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (\ (records=px.size())\ >\ 0\ \&\&\ (ptr=\textcolor{keyword}{const\_cast<}\textcolor{keywordtype}{double}*\textcolor{keyword}{>}(px.Data()))\ !=\ NULL\ )\ }
+\DoxyCodeLine{\ \ \{}
+\DoxyCodeLine{\ \ \ \ \ fwrite(\ (\textcolor{keywordtype}{void}*)\ \&records,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}),\ 1,\ fp\ );}
+\DoxyCodeLine{\ \ \ \ \ fwrite(\ (\textcolor{keywordtype}{void}*)\ ptr,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{double}),\ records,\ fp\ );}
+\DoxyCodeLine{\ \ \}}
+\DoxyCodeLine{\textcolor{keywordflow}{else}\ fwrite(\ (\textcolor{keywordtype}{void}*)\ \&n0,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}),\ 1,\ fp\ );}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item NODE FLAGS (int)
+\end{DoxyEnumerate}
+
+PBFLAGS\+: Same record length as the record set above but in int32\+\_\+t format.
+
+
+\begin{DoxyItemize}
+\item if a node lies on a model boundary, a negative integer value is assigned to identify that boundary uniquely in terms of the named surface it belongs to. If the node is not located on a model boundary, its int value is set to zero. If lines or curves were specified on the model boundaries, edge nodes along these lines are flagged by unique negative integers by analogy to the identifiers for the edges in the ANSYS topology.
+
+A boundary and edge numbering scheme for box-\/shaped models in CSP has the following values (adhering to a righthand-\/rule coordinate system where x points to the right, y points upward and z points to the front\+:
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BACK\_BOTTOM\ \ \ \ \ \ \ -\/16\ }\textcolor{comment}{//\ BACK\ and\ BOTTOM}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BACK\_RIGHT\ \ \ \ \ \ \ \ -\/17\ }\textcolor{comment}{//\ BACK\ and\ RIGHT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BACK\_TOP\ \ \ \ \ \ \ \ \ \ -\/18\ }\textcolor{comment}{//\ BACK\ and\ TOP}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BACK\_LEFT\ \ \ \ \ \ \ \ \ -\/19\ }\textcolor{comment}{//\ BACK\ and\ LEFT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BOTTOM\_RIGHT\ \ \ \ \ \ -\/20\ }\textcolor{comment}{//\ BOTTOM\ and\ RIGHT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TOP\_RIGHT\ \ \ \ \ \ \ \ \ -\/21\ }\textcolor{comment}{//\ TOP\ and\ RIGHT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TOP\_LEFT\ \ \ \ \ \ \ \ \ \ -\/22\ }\textcolor{comment}{//\ TOP\ and\ LEFT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BOTTOM\_LEFT\ \ \ \ \ \ \ -\/23\ }\textcolor{comment}{//\ BOTTOM\ and\ LEFT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ FRONT\_BOTTOM\ \ \ \ \ \ -\/24\ }\textcolor{comment}{//\ FRONT\ and\ BOTTOM}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ FRONT\_RIGHT\ \ \ \ \ \ \ -\/25\ }\textcolor{comment}{//\ FRONT\ and\ RIGHT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ FRONT\_TOP\ \ \ \ \ \ \ \ \ -\/26\ }\textcolor{comment}{//\ FRONT\ and\ TOP}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ FRONT\_LEFT\ \ \ \ \ \ \ \ -\/27\ }\textcolor{comment}{//\ FRONT\ and\ LEFT}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item BOUNDARY CONDITIONS APPLIED TO NODES (double)
+\end{DoxyEnumerate}
+
+PBVALS\+: Analogous to the record sets above but in double format\+:
+
+
+\begin{DoxyItemize}
+\item Corresponding to the non-\/zero flags from above, where a node is located at a model boundary, a boundary value as previously assigned to the ANSYS topological model can be stored in this data record. If no value was assigned, this record will just hold zeroes.
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item TYPE OF FINITE ELEMENTS (enum -\/\texorpdfstring{$>$}{>} unsigned int)
+\end{DoxyEnumerate}
+
+PELMT (0...e-\/1)\+: Record is preceded by an unsigned long indicating record size (=number of finite elements in the mesh). \textquotesingle{}pelmt\textquotesingle{} consists of a single record of (all as unsigned longs)\+:
+
+
+\begin{DoxyItemize}
+\item element-\/type identifiers (unsigned int) for each finite element in the mesh. How they correspond to element type strings is specified further below.
+
+Dieser Eintrag vermeidet Doppeldeutigkeiten, die dadurch entstehen koennten, dass es verschiedene Elementtypen mit der gleichen Anzahl von Knotenpunkten gibt. ~\newline
+
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item MESH CONNECTIVITY (unsigned long)
+\end{DoxyEnumerate}
+
+PLIST\+: Record preceded by an unsigned long indicating record size, a single record follows containing (all as unsigned longs)\+:
+
+
+\begin{DoxyItemize}
+\item node ids of each element in counter-\/clockwise order (according to node numbering on reference elements). The enlisted node numbers range from 0...nodes-\/1 as above.
+\end{DoxyItemize}
+
+The elements are numbered implicitly and continuously by their position in the plist (there must be no jumps in the element ids).
+
+PFVERTS\+: Record preceded by unsigned long indicating record size, then a single record (all long, where negative numbers denote model boundaries)\+:
+
+
+\begin{DoxyItemize}
+\item neighbour elements of each element in an order defined for each existing element type (see further below, for tetrahedra and triangles, neighbors are those elements touching the element\textquotesingle{}s faces opposite of its corner nodes). Neighbor elements are denoted 0...element-\/1. Where there are no neighbour elements adjacent to the element\textquotesingle{}s faces because the element lies on a model boundary, a negative long is used to identify this boundary surface. ~\newline
+
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item MATERIAL IDENTIFIER FOR EACH ELEMENT = ROCK TYPE
+\end{DoxyEnumerate}
+
+PMTRL\+: preceded by number of elements, associates each element with the material flag from the \textquotesingle{}\texorpdfstring{$\ast$}{*}.asc\textquotesingle{} file such that properties can be assigned. ~\newline
+
+
+Comments\+: leading hash key (\# everything thereafter is ignored)\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+Human readable geometry descrition file (\texorpdfstring{$\ast$}{*}.asc)\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{icem\_example1}
+\DoxyCodeLine{\textcolor{stringliteral}{'icem1.asc'}\ generated\ by\ SKM\ on\ 8/6/2001}
+\DoxyCodeLine{7\ \#\ Anzahl\ Families}
+\DoxyCodeLine{\textcolor{preprocessor}{\#\ Objektname\ \ \ Elementtyp\ \ \ Materialkennzahl\ \ \ Anzahl-\/Elemente}}
+\DoxyCodeLine{soil\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 6}
+\DoxyCodeLine{rock\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}
+\DoxyCodeLine{air\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 5}
+\DoxyCodeLine{left\_boundary\ \ \ \ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}
+\DoxyCodeLine{right\_boundary\ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}
+\DoxyCodeLine{top\_boundary\ \ \ \ \ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}
+\DoxyCodeLine{bottom\_boundary\ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}
+\DoxyCodeLine{\textcolor{preprocessor}{\#\ now\ the\ elements\ which\ make\ up\ each\ object\ are\ listed\ in\ sequence}}
+\DoxyCodeLine{soil\ 6}
+\DoxyCodeLine{2\ 4\ 7\ 8\ 9\ 10}
+\DoxyCodeLine{rock\ 1}
+\DoxyCodeLine{5}
+\DoxyCodeLine{air\ 5}
+\DoxyCodeLine{0\ 1\ 3\ 6\ 11}
+\DoxyCodeLine{left\_boundary\ 2}
+\DoxyCodeLine{12\ 13}
+\DoxyCodeLine{right\_boundary\ 2}
+\DoxyCodeLine{18\ 19}
+\DoxyCodeLine{top\_boundary\ 2}
+\DoxyCodeLine{14\ 15}
+\DoxyCodeLine{bottom\_boundary\ 2}
+\DoxyCodeLine{16\ 17}
+
+\end{DoxyCode}
+
+
+Mesh connectivity file (\texorpdfstring{$\ast$}{*}.dat) in text ASCII version\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{11\ \#\ px,\ py,\ pz}
+\DoxyCodeLine{0.\ 5.\ 10.\ 0.\ 5.\ 10.\ 2.5\ 7.5\ 0.\ 5.\ 10.}
+\DoxyCodeLine{10.\ 10.\ 10.\ 6.\ 7.\ 5.\ 4.\ 4.\ 0.\ 0.\ 0.}
+\DoxyCodeLine{0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.\ 0.}
+\DoxyCodeLine{\textcolor{preprocessor}{\#\ pbflags}}
+\DoxyCodeLine{-\/13\ -\/5\ -\/14\ -\/2\ 0\ -\/3\ 0\ 0\ -\/8\ -\/4\ -\/10}
+\DoxyCodeLine{\textcolor{preprocessor}{\#\ pbvals}}
+\DoxyCodeLine{0.\ 5.\ 10.\ 0.\ 0.\ 10.\ 0.\ 0.\ 0.\ 5.\ 10.}
+\DoxyCodeLine{20\ \#\ pelements}
+\DoxyCodeLine{3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 3\ 2\ 2\ 2\ 2\ 2\ 2\ 2\ 2}
+\DoxyCodeLine{42\ \#\ plist}
+\DoxyCodeLine{0\ 4\ 1\ \ 1\ 4\ 2\ \ 0\ 3\ 4\ \ 3\ 6\ 4\ \ 4\ 6\ 7\ \ 4\ 7\ 5\ \ 3\ 8\ 6}
+\DoxyCodeLine{6\ 8\ 9\ \ 6\ 9\ 7\ \ 7\ 9\ 10\ \ 7\ 10\ 5\ \ 0\ 3\ \ 3\ 8\ \ 0\ 1\ \ 1\ 2}
+\DoxyCodeLine{8\ 9\ \ 9\ 10\ \ 2\ 5\ \ 5\ 10}
+\DoxyCodeLine{42\ \#\ pfverts}
+\DoxyCodeLine{1\ -\/5\ 2\ \ 3\ -\/5\ 0\ \ 4\ 0\ -\/2\ \ 5\ 2\ 7\ \ 9\ 6\ 4\ \ 11\ 3\ 5\ \ -\/3\ 1\ 6}
+\DoxyCodeLine{8\ 4\ -\/2\ \ -\/4\ 9\ 7\ \ 10\ 5\ 8\ \ 11\ 9\ -\/4\ \ -\/3\ 6\ 10}
+\DoxyCodeLine{-\/2\ 2\ \ -\/2\ 7\ \ 0\ -\/5\ \ 1\ -\/5\ \ -\/4\ 8\ \ -\/4\ 10\ \ 3\ -\/3\ \ 11\ -\/3}
+\DoxyCodeLine{20\ \#\ pmaterial}
+\DoxyCodeLine{3\ 3\ 1\ 3\ 1\ 2\ 3\ 1\ 1\ 1\ 1\ 3\ 1\ 1\ 3\ 3\ 1\ 1\ 3\ 3}
+
+\end{DoxyCode}
+ 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_a357122e2aed231fe14d22fa2cc751b7d}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ANSYS\_Interface@{ANSYS\_Interface}}
+\index{ANSYS\_Interface@{ANSYS\_Interface}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ANSYS\_Interface()}{ANSYS\_Interface()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_a357122e2aed231fe14d22fa2cc751b7d} 
+csmp\+::\+ANSYS\+\_\+\+Interface\+::\+ANSYS\+\_\+\+Interface (\begin{DoxyParamCaption}\item[{bool}]{create\+\_\+isoparametric\+\_\+element\+\_\+mesh}{ = {\ttfamily true}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Constructs the \doxylink{classcsmp_1_1_a_n_s_y_s___interface}{ANSYS\+\_\+\+Interface} interface object.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The default argument of the constructor (false) means that it will try to output finite elements using a global interpolation coordinate system to the client objects. However there are currently only line, triangular and tetrahedral elements with linear basis functions available in CSMP because the elements must be straight-\/sided for such an approach to work. Instead isoparametric elements can be used. ~\newline
+
+
+In order to create isoparametric element models use \textquotesingle{}true\textquotesingle{}. ~\newline
+
+
+At the moment, CSMP supports analytical element forms only for tetra-\/triangular poly-\/element type meshes. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{classcsmp_1_1_a_n_s_y_s___interface_a357122e2aed231fe14d22fa2cc751b7d_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___interface_a357122e2aed231fe14d22fa2cc751b7d_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_a6a005a688a43a03e85a9f3bbae45509e}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!Read\_ANSYS\_Mesh@{Read\_ANSYS\_Mesh}}
+\index{Read\_ANSYS\_Mesh@{Read\_ANSYS\_Mesh}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{Read\_ANSYS\_Mesh()}{Read\_ANSYS\_Mesh()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_a6a005a688a43a03e85a9f3bbae45509e} 
+template$<$uint32\+\_\+t dim$>$ \\
+void csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+\_\+\+ANSYS\+\_\+\+Mesh (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{mesh\+\_\+file\+\_\+set}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&}]{}{, }\item[{bool}]{binary\+\_\+input\+\_\+file}{, }\item[{bool}]{reassign\+\_\+boundary\+\_\+flags}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+Reading function. 
+
+needed when users do not properly assign them in ANSYS \Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_ac4b44741ba090b14c17e1f7fe41fa18a}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!Read\_ANSYS\_Mesh@{Read\_ANSYS\_Mesh}}
+\index{Read\_ANSYS\_Mesh@{Read\_ANSYS\_Mesh}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{Read\_ANSYS\_Mesh()}{Read\_ANSYS\_Mesh()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_ac4b44741ba090b14c17e1f7fe41fa18a} 
+template$<$uint32\+\_\+t dim$>$ \\
+void csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+\_\+\+ANSYS\+\_\+\+Mesh (\begin{DoxyParamCaption}\item[{const string \&}]{filename}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&}]{mesh\+\_\+topology}{, }\item[{bool}]{binary\+\_\+input\+\_\+file}{, }\item[{bool}]{reassign\+\_\+boundary\+\_\+flags}{}\end{DoxyParamCaption})}
+
+
+
+Builds \doxylink{classcsmp_1_1_model}{Model} after it was constructed with the default constructor. 
+
+read ansys mesh\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_aed206e955271ff158ad8e9ab0ece4b14}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadBoundaryFlagsAndConditionsASCII@{ReadBoundaryFlagsAndConditionsASCII}}
+\index{ReadBoundaryFlagsAndConditionsASCII@{ReadBoundaryFlagsAndConditionsASCII}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadBoundaryFlagsAndConditionsASCII()}{ReadBoundaryFlagsAndConditionsASCII()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_aed206e955271ff158ad8e9ab0ece4b14} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Boundary\+Flags\+And\+Conditions\+ASCII (\begin{DoxyParamCaption}\item[{ifstream \&}]{ifs}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{}\end{DoxyParamCaption})}
+
+The method reads the boundary condition and flag records from the input stream and stores them in the pbound and pbcond records in the \doxylink{classcsmp_1_1_v_set}{VSet}. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the initialized ASCII input file stream. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The boundary flags and values at where nodes were flagged as boundary nodes are stored in the second method argument. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_ac30647361771d72ad58d02f2bbe43cdb}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadMeshASCII@{ReadMeshASCII}}
+\index{ReadMeshASCII@{ReadMeshASCII}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadMeshASCII()}{ReadMeshASCII()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_ac30647361771d72ad58d02f2bbe43cdb} 
+template$<$uint32\+\_\+t dim$>$ \\
+void csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Mesh\+ASCII (\begin{DoxyParamCaption}\item[{const string \&}]{meshfile}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&}]{mesh\+\_\+topology}{, }\item[{bool}]{reassign\+\_\+boundary\+\_\+flags}{}\end{DoxyParamCaption})}
+
+Reads ANSYS \textquotesingle{}{\itshape .asc\textquotesingle{} and \textquotesingle{}}.dat\textquotesingle{} files as created by the Input module in the MED interface. The dat files which store the mesh connectivity must be in ASCII format.
+
+This method reads models of an arbitrary shape and returns them into the supplied \doxylink{classcsmp_1_1_v_set}{VSet} and mesh topology file. In order to assign boundary conditions to irregular shaped models one can use the outer surfaces if they are named appropriately. This must be done using the CAD and ANSYS tools.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method needs the model name which it will automatically expand into the names of the \textquotesingle{}{\itshape .asc\textquotesingle{} and \textquotesingle{}}.dat\textquotesingle{} files.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To read the ASCII file \textquotesingle{}\texorpdfstring{$\ast$}{*}dat\textquotesingle{} specifications that make sense for small box-\/shaped models for which the mesh data are to be transferred between different platforms so that binary files cannot be used.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The output is rather verbose, alerting the user to all potential errors that may have occurred in the reading and processing phase of the input data. check topologyHere is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___interface_ac30647361771d72ad58d02f2bbe43cdb_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_af1fb1fd7a46eca039e542f0355a6c812}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadMeshBinary@{ReadMeshBinary}}
+\index{ReadMeshBinary@{ReadMeshBinary}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadMeshBinary()}{ReadMeshBinary()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_af1fb1fd7a46eca039e542f0355a6c812} 
+template$<$uint32\+\_\+t dim$>$ \\
+void csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Mesh\+Binary (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{meshfile}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&}]{}{, }\item[{bool}]{reassign\+\_\+boundary\+\_\+flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+binary format use the binary interfaces for efficient reading of large files \Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_adf7da9d137c32c314dec019a28f7b209}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadMeshBinary@{ReadMeshBinary}}
+\index{ReadMeshBinary@{ReadMeshBinary}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadMeshBinary()}{ReadMeshBinary()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_adf7da9d137c32c314dec019a28f7b209} 
+template$<$uint32\+\_\+t dim$>$ \\
+void csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Mesh\+Binary (\begin{DoxyParamCaption}\item[{const string \&}]{meshfile}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_model_topology}{Model\+Topology}} \&}]{mesh\+\_\+topology}{, }\item[{bool}]{reassign\+\_\+boundary\+\_\+flags}{}\end{DoxyParamCaption})}
+
+Reads ANSYS finite element meshes created by any of the tools accessible through MED. If box shaped model geometry is assumed the method will attempt to set flags that will later be used to assign boundary counditions in CSMP (see method documentation for Model\+::\+Assign\+Boundary\+Values3\+D() ). ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method needs the filename (without extension) of the \textquotesingle{}{\itshape .asc\textquotesingle{}, \textquotesingle{}}.dat\textquotesingle{} file pair that is output by the Input utility in the ANSYS mesher. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em vset} & The correctly read mesh and the family definitions are returned into the user supplied vset and model topology objects, respectively. ~\newline
+\\
+\hline
+{\em mesh\+\_\+topology} & the elements that make up the different model regions\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Reads Ulrike\textquotesingle{}s binary output from Tetra 30/7/2003 which is written as follows\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ 32\ bit\ integers\ and\ unsigned\ integers}}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ nnodes;}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ records;}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ lplist,\ lpfverts;\ \textcolor{comment}{//\ overall\ length\ of\ plist,\ pfvert\ records}}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ lelem;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 32\ bit\ integers\ and\ unsigned\ integers\ arrays}}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ *pbflags,\ *pfverts;}
+\DoxyCodeLine{\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ *pelmt,\ *pmtrl,\ *plist;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ 64\ bit\ double\ arrays}}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ *pnts,\ *px,\ *py,\ *pz;}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ *pbvals;}
+\DoxyCodeLine{}
+\DoxyCodeLine{records\ =\ (\textcolor{keywordtype}{unsigned}\ int)\ nnodes;\ \textcolor{comment}{//\ changed}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ writing\ the\ nnodes-\/sized\ data\ blocks\ to\ file}}
+\DoxyCodeLine{\textcolor{comment}{//\ size\ =\ nnodes\ (Knotenpunkte)}}
+\DoxyCodeLine{fwrite(\&records,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}),\ 1,\ fdat);\ }
+\DoxyCodeLine{fwrite(px,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{double}),\ nnodes,\ fdat);}
+\DoxyCodeLine{fwrite(py,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{double}),\ nnodes,\ fdat);}
+\DoxyCodeLine{fwrite(pz,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{double}),\ nnodes,\ fdat);}
+\DoxyCodeLine{fwrite(pbflags,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),\ nnodes,\ fdat);}
+\DoxyCodeLine{fwrite(pbvals,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{double}),\ nnodes,\ fdat);}
+\DoxyCodeLine{\textcolor{comment}{//\ size\ =\ nelements\ (Finite\ Elemente)}}
+\DoxyCodeLine{fwrite(\&lelem,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}),\ 1,\ fdat);}
+\DoxyCodeLine{fwrite(pelmt,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),\ lelem,\ fdat);}
+\DoxyCodeLine{\textcolor{comment}{//\ size\ =\ sum\ over\ nodes\ per\ element}}
+\DoxyCodeLine{fwrite(\&lplist,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}),\ 1,\ fdat);}
+\DoxyCodeLine{fwrite(plist,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}),\ lplist,\ fdat);}
+\DoxyCodeLine{\textcolor{comment}{//\ size\ =\ sum\ over\ neighbors\ per\ element}}
+\DoxyCodeLine{fwrite(\&lpfverts,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}),\ 1,\ fdat);}
+\DoxyCodeLine{fwrite(pfverts,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),\ lpfverts,\ fdat);}
+\DoxyCodeLine{\textcolor{comment}{//\ size\ =\ nelements\ (Finite\ Elemente)}}
+\DoxyCodeLine{fwrite(\&lelem,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}),\ 1,\ fdat);}
+\DoxyCodeLine{fwrite(pmtrl,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),\ lelem,\ fdat);}
+
+\end{DoxyCode}
+
+
+NB\+: \doxylink{classcsmp_1_1_element}{Element} IDs in the ANSYS dataset are 0..n-\/1 by default.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Creates an interface the ANSYS suite of meshing tools. This interface can also be used for mixed (poly-\/element type meshes). ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+To protect the user against the erratic reading of transferred binary files a detailed reporting of the reading progress is output and errors are raised is encountered. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_a_n_s_y_s___interface_adf7da9d137c32c314dec019a28f7b209_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_ac23098bc2165a3f32b0d0fc6a1212c06}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadNodeCoordinatesASCII@{ReadNodeCoordinatesASCII}}
+\index{ReadNodeCoordinatesASCII@{ReadNodeCoordinatesASCII}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadNodeCoordinatesASCII()}{ReadNodeCoordinatesASCII()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_ac23098bc2165a3f32b0d0fc6a1212c06} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Node\+Coordinates\+ASCII (\begin{DoxyParamCaption}\item[{ifstream \&}]{ifs}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{}\end{DoxyParamCaption})}
+
+
+
+ASCII DATA FILE. 
+
+The method reads the node coordinate block from the supplied file stream. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the initialized ASCII input file stream. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The node coordinates are stored in the px, py, and pz records of the \doxylink{classcsmp_1_1_v_set}{VSet}. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_a8c995a6badeff581d4f9e127f1e688ba}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadPelementASCII@{ReadPelementASCII}}
+\index{ReadPelementASCII@{ReadPelementASCII}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadPelementASCII()}{ReadPelementASCII()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_a8c995a6badeff581d4f9e127f1e688ba} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Pelement\+ASCII (\begin{DoxyParamCaption}\item[{ifstream \&}]{ifs}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{}\end{DoxyParamCaption})}
+
+Reads element-\/type integer-\/based identifiers for each element which are later parsed to determine the number of nodes per element and neighbors per element for the reading process.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the initialized ASCII input file stream. \Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_ac352502ffa61bbde7b31ebdc7b1da0a9}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadPfvertsASCII@{ReadPfvertsASCII}}
+\index{ReadPfvertsASCII@{ReadPfvertsASCII}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadPfvertsASCII()}{ReadPfvertsASCII()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_ac352502ffa61bbde7b31ebdc7b1da0a9} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Pfverts\+ASCII (\begin{DoxyParamCaption}\item[{ifstream \&}]{ifs}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{}\end{DoxyParamCaption})}
+
+The \textquotesingle{}pfverts\textquotesingle{} record stores the IDs of the finite elements that sit opposite to the faces of the current finite element. If the face is located at the model boundary a negative boundary flag is stored in stead of the neighbor ID. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the initialized ASCII input file stream. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The pfvert information is added to the second argument \doxylink{classcsmp_1_1_v_set}{VSet}. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_af7a9ca44b2ece6a811b55d0bca9c2302}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadPlistASCII@{ReadPlistASCII}}
+\index{ReadPlistASCII@{ReadPlistASCII}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadPlistASCII()}{ReadPlistASCII()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_af7a9ca44b2ece6a811b55d0bca9c2302} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Plist\+ASCII (\begin{DoxyParamCaption}\item[{ifstream \&}]{ifs}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{}\end{DoxyParamCaption})}
+
+The method reads the \textquotesingle{}plist\textquotesingle{} record from the supplied ASCII file. The plist contains the nodel id\textquotesingle{}s of the consecutive finite elements that make up the mesh. These are output to the \doxylink{classcsmp_1_1_v_set}{VSet}. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the initialized ASCII file stream that points to the beginning of the plist data block. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The \doxylink{classcsmp_1_1_v_set}{VSet} into which the plist data shall be stored is supplied as the second method argument. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___interface_af88837e62aadf5687da0d1db91336bea}\index{csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}!ReadPmaterialASCII@{ReadPmaterialASCII}}
+\index{ReadPmaterialASCII@{ReadPmaterialASCII}!csmp::ANSYS\_Interface@{csmp::ANSYS\_Interface}}
+\doxysubsubsection{\texorpdfstring{ReadPmaterialASCII()}{ReadPmaterialASCII()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___interface_af88837e62aadf5687da0d1db91336bea} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool csmp\+::\+ANSYS\+\_\+\+Interface\+::\+Read\+Pmaterial\+ASCII (\begin{DoxyParamCaption}\item[{ifstream \&}]{ifs}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ dim $>$ \&}]{vset}{}\end{DoxyParamCaption})}
+
+Method reads the material ID record from the file stream and assigns the data to the argument \doxylink{classcsmp_1_1_v_set}{VSet}. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the initialized ASCII input file stream. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The material information is assigned to the supplied \doxylink{classcsmp_1_1_v_set}{VSet}. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+ANSYS/ANSYS\+\_\+\+Interface.\+h\item 
+source/modules/interfaces/\+ANSYS/ANSYS\+\_\+\+Interface.\+cpp\end{DoxyCompactItemize}

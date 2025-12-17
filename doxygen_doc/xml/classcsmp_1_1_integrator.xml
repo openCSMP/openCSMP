@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_integrator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Integrator</compoundname>
+    <includes refid="_integrator_8h" local="no">Integrator.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>USER</declname>
+        <defname>USER</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_integrator_1a583d9591d9b7cbc9f5bf6672f048c7e8" prot="private" static="no" mutable="no">
+        <type>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS</type>
+        <definition>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS csmp::Integrator&lt; dim, USER &gt;::settings_</definition>
+        <argsstring></argsstring>
+        <name>settings_</name>
+        <qualifiedname>csmp::Integrator::settings_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="65" column="41" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_integrator_1a999e54e057392550059d8e5ff0f81754" prot="private" static="no" mutable="no">
+        <type>CSMP_DEFAULT_LINEAR_SOLVER</type>
+        <definition>CSMP_DEFAULT_LINEAR_SOLVER csmp::Integrator&lt; dim, USER &gt;::solver_</definition>
+        <argsstring></argsstring>
+        <name>solver_</name>
+        <qualifiedname>csmp::Integrator::solver_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="66" column="41" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_integrator_1a6e8e3fbcc755d3fd899787c723c5e407" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::Integrator&lt; dim, USER &gt;::upper_limit_</definition>
+        <argsstring></argsstring>
+        <name>upper_limit_</name>
+        <qualifiedname>csmp::Integrator::upper_limit_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="68" column="19" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_integrator_1ac70adb85419c0c80eba2255182fe7b3c" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::Integrator&lt; dim, USER &gt;::lower_limit_</definition>
+        <argsstring></argsstring>
+        <name>lower_limit_</name>
+        <qualifiedname>csmp::Integrator::lower_limit_</qualifiedname>
+        <briefdescription>
+<para>range in which the result is allowed to vary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="68" column="32" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1abc39fad70f47beb4e4382acf06cd4afd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Integrator&lt; dim, USER &gt;::Integrator</definition>
+        <argsstring>(size_t m_x_n, double lower_limit, double upper_limit)</argsstring>
+        <name>Integrator</name>
+        <qualifiedname>csmp::Integrator::Integrator</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>m_x_n</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>lower_limit</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>upper_limit</declname>
+        </param>
+        <briefdescription>
+<para>m=n since solution matrix is square, limits should include permitted tolerances </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="40" column="5" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Integrator.cpp" bodystart="19" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1a2a14bd76ac1e8f602ab413427ba41c54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Integrator&lt; dim, USER &gt;::IntegrateOver</definition>
+        <argsstring>(double time_increment)</argsstring>
+        <name>IntegrateOver</name>
+        <qualifiedname>csmp::Integrator::IntegrateOver</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>time_increment</declname>
+        </param>
+        <briefdescription>
+<para>uses <ref refid="classcsmp_1_1_integral_equation" kindref="compound">IntegralEquation</ref> and <ref refid="classcsmp_1_1_accumulator" kindref="compound">Accumulator</ref> to build system and <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> to solve it </para>
+        </briefdescription>
+        <detaileddescription>
+<para>assuming that the <ref refid="classcsmp_1_1_integral_equation" kindref="compound">IntegralEquation</ref> and <ref refid="classcsmp_1_1_accumulator" kindref="compound">Accumulator</ref> have already been applied to build system and <ref refid="classcsmp_1_1_solver" kindref="compound">Solver</ref> to solve it </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="43" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Integrator.cpp" bodystart="55" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1af64619cd73000e47ae39e8e4b0b67f8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Integrator&lt; dim, USER &gt;::ReconfigureSolverForRepeatedUse</definition>
+        <argsstring>()</argsstring>
+        <name>ReconfigureSolverForRepeatedUse</name>
+        <qualifiedname>csmp::Integrator::ReconfigureSolverForRepeatedUse</qualifiedname>
+        <briefdescription>
+<para>transform solver settings from initial use to reuse of settings and previous solution </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="46" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Integrator.cpp" bodystart="33" bodyend="47"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1a713a272272d4e5180bb5da3dbd89cc2a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Integrator&lt; dim, USER &gt;::AssignInitialConditions</definition>
+        <argsstring>()</argsstring>
+        <name>AssignInitialConditions</name>
+        <qualifiedname>csmp::Integrator::AssignInitialConditions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="49" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1aa5662d1abddf106322cdc120907d851e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Integrator&lt; dim, USER &gt;::AssignEssentialConditions</definition>
+        <argsstring>()</argsstring>
+        <name>AssignEssentialConditions</name>
+        <qualifiedname>csmp::Integrator::AssignEssentialConditions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="50" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1ae98cb47a951de3bab5796c94f3707b12" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Integrator&lt; dim, USER &gt;::SolveLinearAlgebraicSystem</definition>
+        <argsstring>()</argsstring>
+        <name>SolveLinearAlgebraicSystem</name>
+        <qualifiedname>csmp::Integrator::SolveLinearAlgebraicSystem</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="52" column="10" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Integrator.cpp" bodystart="85" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1a4fc5423f07ad3f484394a04abb34d033" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::Integrator&lt; dim, USER &gt;::VerifyAndAssignResults</definition>
+        <argsstring>(bool show_range, bool do_range_check)</argsstring>
+        <name>VerifyAndAssignResults</name>
+        <qualifiedname>csmp::Integrator::VerifyAndAssignResults</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>do_range_check</declname>
+        </param>
+        <briefdescription>
+<para>transfer results updating concentration, zeroing out &apos;new concentration&apos; values, and performing range checks; returns error </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks the range of &apos;new saturation oil&apos; against that specified in the property database. Where the new values comply, they are used to replace the previous ones stored as &apos;saturation oil&apos;. If not, the deviations are reported and the nearest maximum or minimum permitted values of saturation are stored. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="55" column="12" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/Integrator.cpp" bodystart="112" bodyend="160"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1a22941b96ef355001734f8ff29e072fdc" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; *</type>
+        <definition>USER&lt; dim &gt; * csmp::Integrator&lt; dim, USER &gt;::User</definition>
+        <argsstring>()</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::Integrator::User</qualifiedname>
+        <briefdescription>
+<para>shorthand for accessing the class that this is a policy of </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="59" column="10" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_integrator_1adaab5812592bac45742f6ede3ebd2ce0" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; const *</type>
+        <definition>USER&lt; dim &gt; const  * csmp::Integrator&lt; dim, USER &gt;::User</definition>
+        <argsstring>() const</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::Integrator::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="60" column="16" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" bodystart="60" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classcsmp_1_1_integrator" kindref="compound">Integrator</ref> - to solve the linear algebraic system arising from the upwind implicit form of the transport equations.</para>
+<para>Operations<itemizedlist>
+<listitem><para>IntegrateOver( equation, domain, time )</para>
+</listitem><listitem><para>AssignInitialConditions( domain )</para>
+</listitem><listitem><para>AssignEssentialConditions( domain )</para>
+</listitem><listitem><para>InsertInMatrix()</para>
+</listitem><listitem><para>InsertInVector()</para>
+</listitem><listitem><para>Solve( solver );</para>
+</listitem><listitem><para>PostProcess( domain );</para>
+</listitem><listitem><para>OutputResults( domain ); Attributes</para>
+</listitem><listitem><para><ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> A_;</para>
+</listitem><listitem><para>Vector rhs_;</para>
+</listitem><listitem><para>Vector x_; </para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>csmp::ImplicitTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_implicit_transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Integrator&lt; dim, ImplicitTransport &gt;</label>
+        <link refid="classcsmp_1_1_integrator"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, ImplicitTransport &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::Integrator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_integrator"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Integrator&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_integrator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" line="37" column="1" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h" bodystart="37" bodyend="69"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_integrator_1aa5662d1abddf106322cdc120907d851e" prot="protected" virt="non-virtual"><scope>csmp::Integrator</scope><name>AssignEssentialConditions</name></member>
+      <member refid="classcsmp_1_1_integrator_1a713a272272d4e5180bb5da3dbd89cc2a" prot="protected" virt="non-virtual"><scope>csmp::Integrator</scope><name>AssignInitialConditions</name></member>
+      <member refid="classcsmp_1_1_integrator_1a2a14bd76ac1e8f602ab413427ba41c54" prot="public" virt="non-virtual"><scope>csmp::Integrator</scope><name>IntegrateOver</name></member>
+      <member refid="classcsmp_1_1_integrator_1abc39fad70f47beb4e4382acf06cd4afd" prot="public" virt="non-virtual"><scope>csmp::Integrator</scope><name>Integrator</name></member>
+      <member refid="classcsmp_1_1_integrator_1ac70adb85419c0c80eba2255182fe7b3c" prot="private" virt="non-virtual"><scope>csmp::Integrator</scope><name>lower_limit_</name></member>
+      <member refid="classcsmp_1_1_integrator_1af64619cd73000e47ae39e8e4b0b67f8f" prot="public" virt="non-virtual"><scope>csmp::Integrator</scope><name>ReconfigureSolverForRepeatedUse</name></member>
+      <member refid="classcsmp_1_1_integrator_1a583d9591d9b7cbc9f5bf6672f048c7e8" prot="private" virt="non-virtual"><scope>csmp::Integrator</scope><name>settings_</name></member>
+      <member refid="classcsmp_1_1_integrator_1ae98cb47a951de3bab5796c94f3707b12" prot="protected" virt="non-virtual"><scope>csmp::Integrator</scope><name>SolveLinearAlgebraicSystem</name></member>
+      <member refid="classcsmp_1_1_integrator_1a999e54e057392550059d8e5ff0f81754" prot="private" virt="non-virtual"><scope>csmp::Integrator</scope><name>solver_</name></member>
+      <member refid="classcsmp_1_1_integrator_1a6e8e3fbcc755d3fd899787c723c5e407" prot="private" virt="non-virtual"><scope>csmp::Integrator</scope><name>upper_limit_</name></member>
+      <member refid="classcsmp_1_1_integrator_1a22941b96ef355001734f8ff29e072fdc" prot="private" virt="non-virtual"><scope>csmp::Integrator</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_integrator_1adaab5812592bac45742f6ede3ebd2ce0" prot="private" virt="non-virtual"><scope>csmp::Integrator</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_integrator_1a4fc5423f07ad3f484394a04abb34d033" prot="protected" virt="non-virtual"><scope>csmp::Integrator</scope><name>VerifyAndAssignResults</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

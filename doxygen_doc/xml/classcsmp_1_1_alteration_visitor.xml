@@ -1,0 +1,999 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_alteration_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::AlterationVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="enum" id="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77b" prot="private" static="no" strong="no">
+        <type></type>
+        <name>PHASE_STATE</name>
+        <qualifiedname>csmp::AlterationVisitor::PHASE_STATE</qualifiedname>
+        <enumvalue id="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77ba61c6e22ff0542cc435ae5f7010db23fd" prot="private">
+          <name>SOLID</name>
+          <initializer>=1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77baa5652f6bdb7f6f54cda726a52cffb765" prot="private">
+          <name>AQUEOUS</name>
+          <initializer>=2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77bad1dd2a6b84d38a7b0006fa2032b3518b" prot="private">
+          <name>GAS</name>
+          <initializer>=3</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="229" column="5" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="229" bodyend="229"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a24ce384ddf3d1f990dc4a813c9020f04" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::AlterationVisitor&lt; dim &gt;::group_name</definition>
+        <argsstring></argsstring>
+        <name>group_name</name>
+        <qualifiedname>csmp::AlterationVisitor::group_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="206" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="206" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a67a4c21d6df281964cebba606d0e3cf8" prot="private" static="no" mutable="no">
+        <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        <definition>const PropertyDatabase&lt;dim&gt;&amp; csmp::AlterationVisitor&lt; dim &gt;::pref</definition>
+        <argsstring></argsstring>
+        <name>pref</name>
+        <qualifiedname>csmp::AlterationVisitor::pref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="207" column="29" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="207" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1aa9b750b28f80c8a020f5d174799bf990" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::val_tolerance</definition>
+        <argsstring></argsstring>
+        <name>val_tolerance</name>
+        <qualifiedname>csmp::AlterationVisitor::val_tolerance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="208" column="28" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="208" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1ad2e7ef66d569f4edeaec5bbc9a739bb1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::rate_tolerance</definition>
+        <argsstring></argsstring>
+        <name>rate_tolerance</name>
+        <qualifiedname>csmp::AlterationVisitor::rate_tolerance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="209" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="209" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a6165cd3c3f2d2db8fd8e7c551d5f9299" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::fvol</definition>
+        <argsstring></argsstring>
+        <name>fvol</name>
+        <qualifiedname>csmp::AlterationVisitor::fvol</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="210" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1ab1c292a5cb7f484531b7557466447370" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::fmass</definition>
+        <argsstring></argsstring>
+        <name>fmass</name>
+        <qualifiedname>csmp::AlterationVisitor::fmass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="210" column="35" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a367b030092cccf9fc4c50bc752de52ac" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::rho_r_new</definition>
+        <argsstring></argsstring>
+        <name>rho_r_new</name>
+        <qualifiedname>csmp::AlterationVisitor::rho_r_new</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="211" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a04408b857230c4fb3f946c6ec761096c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::sum</definition>
+        <argsstring></argsstring>
+        <name>sum</name>
+        <qualifiedname>csmp::AlterationVisitor::sum</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="211" column="40" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a7dbf3466394ac4170fc85938102bdec7" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::AlterationVisitor&lt; dim &gt;::sc</definition>
+        <argsstring></argsstring>
+        <name>sc</name>
+        <qualifiedname>csmp::AlterationVisitor::sc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="212" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a2082a671876939456db45448b7347bee" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::AlterationVisitor&lt; dim &gt;::phi</definition>
+        <argsstring></argsstring>
+        <name>phi</name>
+        <qualifiedname>csmp::AlterationVisitor::phi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="212" column="33" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a2df6df2bdd9d849eadfe6ccec2718bd4" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::AlterationVisitor&lt; dim &gt;::rho_f</definition>
+        <argsstring></argsstring>
+        <name>rho_f</name>
+        <qualifiedname>csmp::AlterationVisitor::rho_f</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="212" column="37" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a7ed43f0850a5513e532ba347683898e3" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::AlterationVisitor&lt; dim &gt;::fsource</definition>
+        <argsstring></argsstring>
+        <name>fsource</name>
+        <qualifiedname>csmp::AlterationVisitor::fsource</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="212" column="43" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a0fb3ca953b5f094b7469c247abec5254" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; bool &gt;</type>
+        <definition>std::vector&lt;bool&gt; csmp::AlterationVisitor&lt; dim &gt;::dirichlet</definition>
+        <argsstring></argsstring>
+        <name>dirichlet</name>
+        <qualifiedname>csmp::AlterationVisitor::dirichlet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="213" column="24" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1ac8eb22cfa2d6262b26ee25169e27623b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::AlterationVisitor&lt; dim &gt;::verbose</definition>
+        <argsstring></argsstring>
+        <name>verbose</name>
+        <qualifiedname>csmp::AlterationVisitor::verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="214" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a4bad94c100b0bda48bae6ef316934c37" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::AlterationVisitor&lt; dim &gt;::visited</definition>
+        <argsstring></argsstring>
+        <name>visited</name>
+        <qualifiedname>csmp::AlterationVisitor::visited</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="214" column="38" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1aef63c0ea2b1679c39fd5ee2a635bb997" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::AlterationVisitor&lt; dim &gt;::node_porosity_key</definition>
+        <argsstring></argsstring>
+        <name>node_porosity_key</name>
+        <qualifiedname>csmp::AlterationVisitor::node_porosity_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="215" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="215" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a40d1595a19e0b4642104f4245d5bf9d1" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::AlterationVisitor&lt; dim &gt;::rhof_key</definition>
+        <argsstring></argsstring>
+        <name>rhof_key</name>
+        <qualifiedname>csmp::AlterationVisitor::rhof_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="216" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="216" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1abc9ae7957c3cea7d6dfda0f06060edc1" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::AlterationVisitor&lt; dim &gt;::rhor_key</definition>
+        <argsstring></argsstring>
+        <name>rhor_key</name>
+        <qualifiedname>csmp::AlterationVisitor::rhor_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="217" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1afbb6ae484ed3f525b9eb3750bbafdfcd" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::AlterationVisitor&lt; dim &gt;::source_key</definition>
+        <argsstring></argsstring>
+        <name>source_key</name>
+        <qualifiedname>csmp::AlterationVisitor::source_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="218" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a9363d0220c522e625d9639daf19b2d02" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::AlterationVisitor&lt; dim &gt;::h2o_key</definition>
+        <argsstring></argsstring>
+        <name>h2o_key</name>
+        <qualifiedname>csmp::AlterationVisitor::h2o_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="219" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1aea6e1ab40b0d2b8e93c5773ce54d98e0" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::AlterationVisitor&lt; dim &gt;::h2o_index</definition>
+        <argsstring></argsstring>
+        <name>h2o_index</name>
+        <qualifiedname>csmp::AlterationVisitor::h2o_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="220" column="30" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a8bbd3c6f27345780f0b16d4d8d1982ed" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref></type>
+        <definition>ODE_StiffSolver csmp::AlterationVisitor&lt; dim &gt;::solver</definition>
+        <argsstring></argsstring>
+        <name>solver</name>
+        <qualifiedname>csmp::AlterationVisitor::solver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="223" column="51" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a0b2c8d3a53576c02f52594f8224abc72" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::time_increment</definition>
+        <argsstring></argsstring>
+        <name>time_increment</name>
+        <qualifiedname>csmp::AlterationVisitor::time_increment</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="224" column="49" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a5fc2b7e78c72f5546d1ee19d67043fbd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::tolerance</definition>
+        <argsstring></argsstring>
+        <name>tolerance</name>
+        <qualifiedname>csmp::AlterationVisitor::tolerance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="224" column="64" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1ae4e96db200eb9b6d6d9d4dafa55b97a4" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;int32_t,std::string&gt; &gt; csmp::AlterationVisitor&lt; dim &gt;::coefs</definition>
+        <argsstring></argsstring>
+        <name>coefs</name>
+        <qualifiedname>csmp::AlterationVisitor::coefs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="225" column="20" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1a5680b0af410d96731446f24bd0416083" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;int32_t,std::string&gt; &gt; csmp::AlterationVisitor&lt; dim &gt;::dependent_comps</definition>
+        <argsstring></argsstring>
+        <name>dependent_comps</name>
+        <qualifiedname>csmp::AlterationVisitor::dependent_comps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="225" column="26" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1aaa712e023418a1c717bd958e84d98bfe" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; int32_t, std::string &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;int32_t,std::string&gt; &gt; csmp::AlterationVisitor&lt; dim &gt;::independent_comps</definition>
+        <argsstring></argsstring>
+        <name>independent_comps</name>
+        <qualifiedname>csmp::AlterationVisitor::independent_comps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="225" column="42" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1aacf953d791999bc664e3541844264389" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::AlterationVisitor&lt; dim &gt;::amounts</definition>
+        <argsstring></argsstring>
+        <name>amounts</name>
+        <qualifiedname>csmp::AlterationVisitor::amounts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="227" column="27" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1adb41d122f866d7649941aa9dba43cf7c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;double&gt; &gt; csmp::AlterationVisitor&lt; dim &gt;::rates</definition>
+        <argsstring></argsstring>
+        <name>rates</name>
+        <qualifiedname>csmp::AlterationVisitor::rates</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="227" column="35" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_alteration_visitor_1ad9738bb2feef57f8106d07f7170e4a68" prot="private" static="no" mutable="no">
+        <type>std::map&lt; uint32_t, std::pair&lt; <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref>, <ref refid="classcsmp_1_1_reactant" kindref="compound">Reactant</ref> &gt; &gt;</type>
+        <definition>std::map&lt;uint32_t,std::pair&lt;Index,Reactant&gt; &gt; csmp::AlterationVisitor&lt; dim &gt;::phase_properties</definition>
+        <argsstring></argsstring>
+        <name>phase_properties</name>
+        <qualifiedname>csmp::AlterationVisitor::phase_properties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="231" column="15" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="231" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a4cfd1fd6aef4ec765b0bfde708c998a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::AlterationVisitor&lt; dim &gt;::AlterationVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *rea_file, double dt)</argsstring>
+        <name>AlterationVisitor</name>
+        <qualifiedname>csmp::AlterationVisitor::AlterationVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>rea_file</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The constructor of the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> reads the property indices of the required variables from the property database and initializes, from two corresponding text files(&quot;.txt&quot;, &quot;-prop.txt&quot;), the solver for the system of ordinary differential equations which describes the reactions. A check is performed whether the reactants in the 2 input files correspond to another or whether reactants are missing from the &quot;-prop.txt&quot; file. <linebreak/>
+</para>
+<para>The constructor also initializes the vectors which will hold the reactant quantities and reaction rates used to test whether the system is out of equilibrium such that the solver must be invoked. In order to always invoke the solver during first visitations, the absolute quantities are set to 0.0 and the rates are set to 1.0. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first constructor argument is a reference to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> which the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> uses to query and initialize a range of variables.</para>
+<para>The second input argument specifies the name of a text file. This name specifies from where the chemical reactions are input to initialize the ODE solver. It is specified without the extension &quot;.txt&quot; which is however expected to follow the filename. A second textfile must exist containing critical properties of the reactants (state: solid, aqueous, gas; charge or density, and molar weight). The name of this file must be the same as that of the reaction file, but with the suffix &quot;-props&quot; attached before the extension &quot;.txt&quot;.</para>
+<para>The third argument fixes the time increment over which reactions shall be carried out at each node that is visited. If equilibrium calculations shall be carried out the time increment must be set to a large value. 1.0e+10 will do. Because of a sophisticated algorithm used this larger increment will rarely noticeably slow the calculations down.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The input text files are read by the &apos;<ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref>&apos; and by the private method &apos;ReadDependentVariablePhaseState()&apos;. The variable indices are retrieved from the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The &apos;<ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref>&apos; and the method &apos;ReadDependentVariablePhaseState()&apos; will report reading problems and/or the absence of the necessary text files. In this constructor a test is performed whether the number of depedendent variables in the reaction file is the same as in the properties input file (it should be). If not, an error is reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="188" column="5" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="62" bodyend="133"/>
+        <references refid="classcsmp_1_1_alteration_visitor_1a4cfd1fd6aef4ec765b0bfde708c998a5" compoundref="_alteration_visitor_8cpp" startline="62" endline="133">csmp::AlterationVisitor&lt; dim &gt;::AlterationVisitor</references>
+        <references refid="group___c_s_m_p__global__enumerations_1ga8413f7c3b4f238c5a98a846198d49469">csmp::NAME_STRING</references>
+        <referencedby refid="classcsmp_1_1_alteration_visitor_1a4cfd1fd6aef4ec765b0bfde708c998a5" compoundref="_alteration_visitor_8cpp" startline="62" endline="133">csmp::AlterationVisitor&lt; dim &gt;::AlterationVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a38559c6275d2f8abb4fecd13a59e70e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::AlterationVisitor&lt; dim &gt;::~AlterationVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~AlterationVisitor</name>
+        <qualifiedname>csmp::AlterationVisitor::~AlterationVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="189" column="13" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="139" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a8740ecc7d1ef1230ba5e5779c4e3cb1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AlterationVisitor&lt; dim &gt;::Equilibrate</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, bool show_results=true)</argsstring>
+        <name>Equilibrate</name>
+        <qualifiedname>csmp::AlterationVisitor::Equilibrate</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_results</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Submits the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> initiating the visitation of all nodes during which the reaction calculations will be carried out.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the model (<ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>) to which the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> is applied and a boolean flag which determines whether the visitation is done quietly or whether the results of the speciation calculation are output as the nodes get visited. The default is verbose. Depending on the &apos;stdout&apos; interface of the computer system in use, calling the visitor in verbose mode is about 5-25 % slower than if the verbose mode is disabled. <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The <ref refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" kindref="member">Visit()</ref> method as well as the ODE solver report errors and other information during their execution. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="191" column="10" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="257" bodyend="265"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a70dc8e220ee89edd00b1ea0bfcd758b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AlterationVisitor&lt; dim &gt;::AdjustTimeIncrement</definition>
+        <argsstring>(double new_dt)</argsstring>
+        <name>AdjustTimeIncrement</name>
+        <qualifiedname>csmp::AlterationVisitor::AdjustTimeIncrement</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>new_dt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the integration time for the ODE solver. If the realistic reaction rates are used this time corresponds to the time which the chemical system has to evolve. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The new integration time for the ODE solver. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="193" column="10" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="165" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a402bd05256fb5261a7d472eced2db099" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AlterationVisitor&lt; dim &gt;::Precision</definition>
+        <argsstring>(double tol)</argsstring>
+        <name>Precision</name>
+        <qualifiedname>csmp::AlterationVisitor::Precision</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>tol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the accuracy to which a reactant or product concentration shall be calculated at each reaction step of the solver. The default value is 1.0e-12. This is a fairly high precision which is used to ascertain that the solver progresses to a final solution. At lower accuracy the risk that the solver stalls before integrating over the desired timespan is increased. The maximum accuracy that can be achieved theoretically is about 1.0e-16. This is due to the fact that the depedendent variables are represented in double precision (18 significant digits).</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The accuracy to which all reactant and product concentrations shall be calculated. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="195" column="10" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="188" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1afc928c2c9b6032e4856405e84fd0ed5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AlterationVisitor&lt; dim &gt;::ThresholdReactantChangeFactor</definition>
+        <argsstring>(double fac)</argsstring>
+        <name>ThresholdReactantChangeFactor</name>
+        <qualifiedname>csmp::AlterationVisitor::ThresholdReactantChangeFactor</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fac</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the factor which controls the invocation of the solver during a visitation. Thus, if a reactant concentration changed by more than the the total quantity times the factor, the solver will be called. The default factor is 1.5.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The multiplication factor for absolute reactant concentrations. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="197" column="10" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="206" bodyend="209"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a3860890769ecfd7ee651a7657c3c429f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AlterationVisitor&lt; dim &gt;::ThresholdReactantChangeRate</definition>
+        <argsstring>(double rate)</argsstring>
+        <name>ThresholdReactantChangeRate</name>
+        <qualifiedname>csmp::AlterationVisitor::ThresholdReactantChangeRate</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the threshold rate of change of any reactant concentration. If this rate was exceeded during the final step of the ODE solver in the last invocation of the solver, the solver will be called again in the current node visitation.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The new rate above which the solver shall be applied to the chemical system of interest. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="199" column="10" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="227" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::AlterationVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::AlterationVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The method <ref refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" kindref="member">Visit()</ref> provides the core functionality of the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref>. It queries the visited nodes for the aqueous species concentrations and mineral fractions, converting these into molalities. It then initializes the &apos;<ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref>&apos; object which carries out a speciation calculation evolving the chemical system toward a new equilibrium. If the timespan allotted for this evolution (= ODE integration time) is set to a large value, equilibrium will be obtained provided that the system of ordinary differential equations which are being integrated and which represent the chemical reactions is well posed. <linebreak/>
+</para>
+<para>The computed molalities are converted back into moles per cubic metre of fluid and mineral volume fractions. From these the new porosity and composite density of the fluid saturated rock are computed. The amount of water which was liberated or consumed by the reactions is translated into the variable &quot;nodal fluid source&quot;. If this quantity exceeds the tolerance specified for the solver, it is added to this CSMP variable stored in the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. <linebreak/>
+</para>
+<para>In summary, apart from the speciation calculation, <ref refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" kindref="member">Visit()</ref> calculates the variable &quot;nodal porosity&quot;, &quot;rock density&quot;, and &quot;nodal fluid source&quot;. The rock density is the composite density of the minerals and the fluid stored in the pore space. The effects of the aqueous solutes are ignored at this stage.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The method takes a pointer to the visited node as argument. It permits access to the public interface of the <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><orderedlist>
+<listitem><para>Dirichlet nodes are tested by checking the variable &quot;H2O_aq&quot; and ignoring these nodes ever after if &quot;H2O_aq&quot; is flagged DIRICH.</para>
+</listitem></orderedlist>
+</para>
+<para>The initial composition of the fluid rock system at a node is specified in terms of per-unit-volume properties. The composition of the pore fluid is specified in [moles m-3] and that of the rock in terms of mineral volume fractions. The latter is equivalent to the mode of a rock and is convienient to visualize using transparency. <linebreak/>
+</para>
+<para>It appears as a useful convention adhered to in chemical reaction calculations to consider what is happening in 1 kg of fluid with dissolved species and in contact with elements /minerals. To achieve this, one needs molalities of the aqueous species dissolved in the pore fluid of the rock and molar quantities for the minerals making up the rock matrix. This requires conversion of the fluid-flow / geologically oriented per-unit-volume quantities. <linebreak/>
+</para>
+<para>In CSP reactive-transport simulations we carry out these conversion before and after the speciation calculation, partly already because the scale of a model and the porosity of the represented rock may vary greatly such that a molality-based treatment is more illustrative. However, for a rock with a specific pore volume this requires a mapping of the solid phases to the per-kg reaction calculation. This mapping is done by first converting the mineral volume fractions into moles and then dividing the latter by the fluid mass which resides in the pore space of this unit volume of rock. In detail, the conversion steps are: <linebreak/>
+</para>
+<para><orderedlist>
+<listitem><para>Calculation of fluid mass M&apos;f from porosity, phi, and fluid density, rho&apos;f <linebreak/>
+</para>
+</listitem></orderedlist>
+</para>
+<para>M&apos;f = phi rho&apos;f <linebreak/>
+</para>
+<para><orderedlist>
+<listitem><para>Calculation of how many moles H2O reside in one kg of fluid <linebreak/>
+</para>
+</listitem></orderedlist>
+</para>
+<para>N&apos;h2o = 1000 / molar weight&apos;h2o</para>
+<para><orderedlist>
+<listitem><para>Conversion of dissolved aqueous species a&apos;i in moles per cubic metre of fluid into molalities am&apos;i (moles per kg fluid) <linebreak/>
+</para>
+</listitem></orderedlist>
+</para>
+<para>am&apos;i = a&apos;i / rho&apos;f <linebreak/>
+</para>
+<para><orderedlist>
+<listitem><para>Conversion of mineral fractions X&apos;i to molalities N&apos;i <linebreak/>
+</para>
+</listitem></orderedlist>
+</para>
+<para>N&apos;i = (X&apos;i rho&apos;i / molar-weight&apos;i) / M&apos;f <linebreak/>
+</para>
+<para><orderedlist>
+<listitem><para>Re-calculation of fluid mass after reaction occurred <linebreak/>
+</para>
+</listitem></orderedlist>
+</para>
+<para>M&apos;f(t+1) = N&apos;f(t+1) molar-weigth&apos;f phi <linebreak/>
+</para>
+<para><orderedlist>
+<listitem><para>Calculation of new porosity as 1 - sum of the newly calculated mineral fractions <linebreak/>
+</para>
+</listitem></orderedlist>
+</para>
+<para>phi(t+1) = 1 - sum&apos;1-n over (N&apos;i(t+1) molar-weigth&apos;i fmass(t+1)) / rho&apos;i <linebreak/>
+</para>
+<para>It follows that the molar weights of H2O and the minerals must be known in order to calculate the porosity changes due to the reactions. These are queried from the <ref refid="classcsmp_1_1_reactant" kindref="compound">Reactant</ref> objects which store the properties of the reactants and reside in the reactant STL map &apos;phase_properties&apos;. <linebreak/>
+</para>
+<para>Summing up the mineral-fraction mineral-density products and adding the porosity-fluid density product gives the new composite density of the fluid-saturated rock. <linebreak/>
+</para>
+<para>From the deviation of the H2O molality from 55.2 upon completion of the solver one finally calculates a &quot;nodal fluid source&quot;, src, for the next fluid-pressure computation step: <linebreak/>
+</para>
+<para>src = ((am&apos;h2o(t+1) - 55.2)/55.2) 18.02 1.0e-3 fmass) / rho&apos;f <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Reaction calculations where the reactants are specified as node variables.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para><ref refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" kindref="member">Visit()</ref> always reports to &apos;stdout&apos; how many successful as well as useless steps the ODE solver performed to obtain a solution. Many bad steps usually indicate a problematic reaction system. <linebreak/>
+</para>
+<para>If the &apos;verbose&apos; flag evaluates to true, <ref refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" kindref="member">Visit()</ref> will report initial and final molalities, final reaction rates, as well as new nodal porosities, fluid-rock system densities (kg m-3), and fluid sources or sinks caused by the reactions. <linebreak/>
+</para>
+<para>If the ODE solver cannot find a solution it will eventually terminate reporting errors. It can fail either because the matrix coupling the ODEs becomes singular or because the rate of change of some equations becomes so fast that the minimal timestep size limit is reached. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="201" column="18" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="402" bodyend="603"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a36f0d6a770e0f94666fde6a251859d04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::AlterationVisitor&lt; dim &gt;::Verbose</definition>
+        <argsstring>(bool print_all_results)</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::AlterationVisitor::Verbose</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>print_all_results</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="203" column="10" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="147" bodyend="150"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a221a99fd00cfab98c4532b7bbbe8a0fc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::AlterationVisitor&lt; dim &gt;::TestChargeBalance</definition>
+        <argsstring>()</argsstring>
+        <name>TestChargeBalance</name>
+        <qualifiedname>csmp::AlterationVisitor::TestChargeBalance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sums up the products aqueous-species concentrations with their charge for the current reaction system and returns these.</para>
+<para><simplesect kind="return"><para>a double which holds the sum of the concentration-charge products for the current reaction system.</para>
+</simplesect>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The species concentrations are queried from the ODE solver object.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To test whether charge balance is maintained in the reacting system. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="233" column="12" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="779" bodyend="790"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_alteration_visitor_1a2848b3f28c62a2fbfac6e87325afeda7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::AlterationVisitor&lt; dim &gt;::ReadDependentVariablePhaseState</definition>
+        <argsstring>(const char *fname)</argsstring>
+        <name>ReadDependentVariablePhaseState</name>
+        <qualifiedname>csmp::AlterationVisitor::ReadDependentVariablePhaseState</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads a text file which specifies for each of the reactants in the current system defined in the ODE solver, the phase state (solid, aqueous, gas), either charge (aqueous) or density (solids), and the molar weight. <linebreak/>
+</para>
+<para>The text file must have the format:</para>
+<para><programlisting><codeline><highlight class="normal">headline</highlight></codeline>
+<codeline><highlight class="normal">species-name-as-in-reaction-file<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SOLID-or-AQUEOUS-or-GAS<sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>charge-or-density-(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>kg<sp/>m-3)<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>molar-weigth</highlight></codeline>
+</programlisting></para>
+<para>Since solids cannot be charged (we ignore for the moment piezo effects) and the density of aqueous species is difficult to estimate, the third column in the file contains either the charge if the species is a solute or the density if the reactant is a mineral. <linebreak/>
+</para>
+<para>The reactant properties are stored in <ref refid="classcsmp_1_1_reactant" kindref="compound">Reactant</ref> objects. <linebreak/>
+</para>
+<para>The <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> is queried with the reactant name to retrieve the <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> of the reactant. <linebreak/>
+</para>
+<para>For each reactant, the information obtained from the file is stored in a map of <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> - <ref refid="classcsmp_1_1_reactant" kindref="compound">Reactant</ref> pairs. This map will be used by the <ref refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" kindref="member">Visit()</ref> method to query reactant data. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The name (with extension) of the file which contains the information about the reactants.</para>
+<para><simplesect kind="return"><para>The method returns for how many reactants it has retrieved information from the text file. <linebreak/>
+</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Currently, the method is used in the constructor of the A.V.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>Errors are reported if the file cannot be opened, if the reactant names do not correspond to those in the file from which the ODE solver is initialized, or if the reactant is unknown to the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. Also if the phase state is mispelled an error will be reported. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="234" column="14" bodyfile="source/modules/thmc/geochemistry/AlterationVisitor.cpp" bodystart="661" bodyend="758"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Permforms node-by-node computations of aqueous - solid phase equilibria using the <ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref> in a reaction based aproach. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="date"><para>1999</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>In order to carry out rate-dependent reaction calculations, one needs to visit the nodes or elements of the finite-element mesh, retrieve aqueous species concentrations (moles m-3) and mineral fractions (X), respectively, carry out speciation calculation for the alloted time increment, and map the results back to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>.</para>
+<para>Since full equilibrium calculations are meaningful only for fracture-channelled flow and its interaction with the matrix but not for matrix flow where disequilibrium may persist between pore fluid and matrix minerals, the scheme should also allow rate-dependent calculations. <linebreak/>
+</para>
+<para>The scheme should be simple. This is achieved by the SNIA approach.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>Encapsulation appears critical in order to deal accurately with the complexity of the aqueous systems. It is achieved by delegating the numerics of the equilibration calculation to a solver object for stiff systems of ordinary differential equations. Critical properties of aqueous solutes, minerals, and gases are encapsulated into <ref refid="classcsmp_1_1_reactant" kindref="compound">Reactant</ref> objects. <linebreak/>
+</para>
+<para>Zero-dimensional reaction calculations can be carried out outside of a more complex CSP-reactive-transport model. This is the method of choice for designing and testing chemical systems before looking at their spatial implications by means of a CSP model. Design and testing is done by iteratively creating and modifying a reaction file which is used to initialize the solver for ordinary differential equations, both inside and outside of CSP. The design-proofed text file is then read by the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> to initialize the reaction calculations. In this approach, the dependent variables defined in the input file must also be known to the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. Hence, they must be incorporated into the &apos;CSP_variables.txt&apos; file. In addition to the reactions file the constructor of the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> also expects a datafile which lists the reactants again, specifying their phase state (solid, aqueous, gas) charge, density, and molar weight, as applicable. This file is read after the ODE solver is initialized and it is tested for a mismatch of species names.</para>
+<para>Robustness is quint-essential since an inability of the A.V. to treat the chemical system at just a single node would bring the whole reactive transport model to a halt. This goal is achieved only partly. Importantly, as is documented in more detail for the &apos;<ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref>&apos; object, rate coefficients in a single system may not vary by more than about 12 orders of magnitude among the different dependent variables. Otherwise a solution cannot be assured, while a calculation may still perform correctly in most cases. Usually, a large number of bad steps taken by the ODE solver is an indication that a chemical system is problematic. <linebreak/>
+</para>
+<para>Flexibility is dictated by the need to iteratively refine the aqueous system calculation and to test the functionality of such refinements for the modeled geological system of interest. To achieve this goal, hardcoding of reactant names is avoided except for the variable H2O_aq which must be present and which is also used to decide whether a chemical calculation is carried out or not: If the variable H2O_aq is flagged DIRICH, chemical calculations are prohibited at the respective <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>. <linebreak/>
+</para>
+<para>Apart from the variable &quot;H2O_aq&quot; some physical properties are also hardwired since they are likely to be needed for every conceivable reactive transport calculation.Their names are <linebreak/>
+</para>
+<para><programlisting><codeline><highlight class="stringliteral">&quot;nodal<sp/>porosity&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;fluid<sp/>density&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;rock<sp/>density&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;nodal<sp/>fluid<sp/>source&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;H2O_aq&quot;</highlight></codeline>
+</programlisting></para>
+<para>They must be specified in the &quot;CSP_variables.txt&quot; file if the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> object shall be used.</para>
+<para>Efficiency of the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> is very important since calls to its <ref refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" kindref="member">Visit()</ref> method usually prove to be the main time sink of a transient CSP calculation (worse than advection requirements). The main culprit in terms of runtime is the <ref refid="classcsmp_1_1_o_d_e___stiff_solver_1a6c0b5900d596870a228a27e9370b0572" kindref="member">ODE_StiffSolver::Solve()</ref> method. For this reason, the invocation of the solver is limited to scenarios where, either, the absolute concentration / volume fraction of a mineral has changed by a user-specified factor. This factor can be set with the method &apos;<ref refid="classcsmp_1_1_alteration_visitor_1afc928c2c9b6032e4856405e84fd0ed5a" kindref="member">ThresholdReactantChangeFactor()</ref>&apos;, An additional criterion is whether equilibration was obtained in the previous timestep. The latter is indicated by the rates of change of the reactants in the final finite-difference timestep taken by the solver during the last visitation of the node. Again, a threshold rate above which the solver will be invoked can be set using the method &apos;<ref refid="classcsmp_1_1_alteration_visitor_1a3860890769ecfd7ee651a7657c3c429f" kindref="member">ThresholdReactantChangeRate()</ref>&apos;.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>This specific implementation of the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> is suitable for arbitrary chemical calculations in which the reactants are specified as CSP node variables.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_v_data_1structure">
+<title>Structure</title><para>See general description of visitors in the User&apos;s Guide.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_solver_1participants">
+<title>Participants</title><para>Participating objects are the &apos;<ref refid="classcsmp_1_1_o_d_e___stiff_solver" kindref="compound">ODE_StiffSolver</ref>&apos; and the &apos;<ref refid="classcsmp_1_1_reactant" kindref="compound">Reactant</ref>&apos; classes.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1collaboration">
+<title>Collaboration</title><para>Alike other visitors, the <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> achieves its functionality through collaborations with the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>, <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> and <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> objects.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Each visitation involves reading nodal properties from the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> storage (1), a conversion of these mineral fractions and concentrations per unit volume (m3) into molalities (2), an invocation of the ODE solver if reactant concentrations / fractions changed above a tolerance value since the last visitation or if the previous rate of change was still high (4). The computed molalities are converted back into concentrations and fractions and stored back into the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> (5). From these results, a new porosity and rock density is calculated (6), and a potential &quot;nodal fluid source&quot; term is computed and stored (7). Finally, the absolute reactant quantities and reaction rates for each dependent variable are stored as solver invocation criteria for the next timestep (8).</para>
+<para>The results of each visitation can be output if the visitor is set to verbose mode. This is done using the second argument of the <ref refid="classcsmp_1_1_alteration_visitor_1a8740ecc7d1ef1230ba5e5779c4e3cb1d" kindref="member">Equilibrate()</ref> method and is the default.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>An <ref refid="classcsmp_1_1_alteration_visitor" kindref="compound">AlterationVisitor</ref> is instantiated after a <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> was constructed: <linebreak/>
+</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_alteration_visitor_1a4cfd1fd6aef4ec765b0bfde708c998a5" kindref="member">AlterationVisitor</ref><sp/><sp/>reactor(<sp/>sg_model,<sp/></highlight><highlight class="stringliteral">&quot;rea-file1&quot;</highlight><highlight class="normal">,<sp/>time_increment<sp/>);</highlight></codeline>
+</programlisting></para>
+<para>and is applied, for instance in a time-stepping loop by calling: <linebreak/>
+</para>
+<para><programlisting><codeline><highlight class="normal">reactor.Equilibrate(<sp/>model,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+</programlisting></para>
+<para>In this example the verbose output of each speciation calculation is disabled by setting the second &apos;boolean&apos; argument. </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::AlterationVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_alteration_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::AlterationVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_alteration_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/geochemistry/AlterationVisitor.h" line="186" column="1" bodyfile="source/includes/thmc/geochemistry/AlterationVisitor.h" bodystart="186" bodyend="235"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_alteration_visitor_1a70dc8e220ee89edd00b1ea0bfcd758b7" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>AdjustTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a4cfd1fd6aef4ec765b0bfde708c998a5" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>AlterationVisitor</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1aacf953d791999bc664e3541844264389" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>amounts</name></member>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77baa5652f6bdb7f6f54cda726a52cffb765" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>AQUEOUS</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1ae4e96db200eb9b6d6d9d4dafa55b97a4" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>coefs</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a5680b0af410d96731446f24bd0416083" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>dependent_comps</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a0fb3ca953b5f094b7469c247abec5254" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>dirichlet</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a8740ecc7d1ef1230ba5e5779c4e3cb1d" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>Equilibrate</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1ab1c292a5cb7f484531b7557466447370" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>fmass</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a7ed43f0850a5513e532ba347683898e3" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>fsource</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a6165cd3c3f2d2db8fd8e7c551d5f9299" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>fvol</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77bad1dd2a6b84d38a7b0006fa2032b3518b" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>GAS</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a24ce384ddf3d1f990dc4a813c9020f04" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>group_name</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1aea6e1ab40b0d2b8e93c5773ce54d98e0" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>h2o_index</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a9363d0220c522e625d9639daf19b2d02" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>h2o_key</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1aaa712e023418a1c717bd958e84d98bfe" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>independent_comps</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1aef63c0ea2b1679c39fd5ee2a635bb997" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>node_porosity_key</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1ad9738bb2feef57f8106d07f7170e4a68" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>phase_properties</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77b" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>PHASE_STATE</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a2082a671876939456db45448b7347bee" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>phi</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a402bd05256fb5261a7d472eced2db099" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>Precision</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a67a4c21d6df281964cebba606d0e3cf8" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>pref</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1ad2e7ef66d569f4edeaec5bbc9a739bb1" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>rate_tolerance</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1adb41d122f866d7649941aa9dba43cf7c" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>rates</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a2848b3f28c62a2fbfac6e87325afeda7" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>ReadDependentVariablePhaseState</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a2df6df2bdd9d849eadfe6ccec2718bd4" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>rho_f</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a367b030092cccf9fc4c50bc752de52ac" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>rho_r_new</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a40d1595a19e0b4642104f4245d5bf9d1" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>rhof_key</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1abc9ae7957c3cea7d6dfda0f06060edc1" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>rhor_key</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a7dbf3466394ac4170fc85938102bdec7" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>sc</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::AlterationVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a2844d21f69b7d3265c6106b8ff50c77ba61c6e22ff0542cc435ae5f7010db23fd" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>SOLID</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a8bbd3c6f27345780f0b16d4d8d1982ed" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>solver</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1afbb6ae484ed3f525b9eb3750bbafdfcd" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>source_key</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a04408b857230c4fb3f946c6ec761096c" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>sum</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a221a99fd00cfab98c4532b7bbbe8a0fc" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>TestChargeBalance</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1afc928c2c9b6032e4856405e84fd0ed5a" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>ThresholdReactantChangeFactor</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a3860890769ecfd7ee651a7657c3c429f" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>ThresholdReactantChangeRate</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a0b2c8d3a53576c02f52594f8224abc72" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>time_increment</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a5fc2b7e78c72f5546d1ee19d67043fbd" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>tolerance</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1aa9b750b28f80c8a020f5d174799bf990" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>val_tolerance</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a36f0d6a770e0f94666fde6a251859d04" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1ac8eb22cfa2d6262b26ee25169e27623b" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>verbose</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1af6f6c494685fd0e92b0057787bcd8b4b" prot="public" virt="virtual"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::AlterationVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a4bad94c100b0bda48bae6ef316934c37" prot="private" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>visited</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::AlterationVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_alteration_visitor_1a38559c6275d2f8abb4fecd13a59e70e5" prot="public" virt="virtual"><scope>csmp::AlterationVisitor</scope><name>~AlterationVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::AlterationVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_e2b0d8af221b0534e54028dee0445310" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir/source/modules/interfaces/Maple</compoundname>
+    <innerfile refid="_maple_interface_8cpp_8o_8d">MapleInterface.cpp.o.d</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/source/modules/interfaces/Maple/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,333 @@
+\doxysection{EOS\+\_\+\+CO2\+H2\+ONa\+Cl\+\_\+\+Spycher2004.\+h}
+\hypertarget{_e_o_s___c_o2_h2_o_na_cl___spycher2004_8h_source}{}\label{_e_o_s___c_o2_h2_o_na_cl___spycher2004_8h_source}\index{source/includes/eos/EOS\_CO2H2ONaCl\_Spycher2004.h@{source/includes/eos/EOS\_CO2H2ONaCl\_Spycher2004.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{EOS\_CO2\_H2O\_NACL\_SPYCHER\_2004\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{EOS\_CO2\_H2O\_NACL\_SPYCHER\_2004\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{valarray}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{complex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{using}\ \textcolor{keyword}{namespace}\ std;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{double}\ \ psiToPa(\ \textcolor{keywordtype}{double}\ pressureInPsi\ );}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{double}\ \ paToPsi(\ \textcolor{keywordtype}{double}\ pressureInPa\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{double}\ \ paTobar(\ \textcolor{keywordtype}{double}\ pressureInPa\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ \ barTopa(\ \textcolor{keywordtype}{double}\ pressureInbar\ );}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \ degreeCToKelvin(\ \textcolor{keywordtype}{double}\ temperatureInC\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ KelvinTodegreeC(\ \textcolor{keywordtype}{double}\ temperatureInK\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04}{EOS\_CO2H2ONaCl\_Spycher04}}\ \{}
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a92fb6efa786b3a5c5a4bf644c45583d8}{EOS\_CO2H2ONaCl\_Spycher04}}();}
+\DoxyCodeLine{00033\ \ \ \ \ \string~EOS\_CO2H2ONaCl\_Spycher04();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{comment}{//\ thermodynamic\ properties\ as\ a\ function\ of\ P,\ T\ and\ salt\ molality}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ compressed\ volume\ molar\ CO2}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aba193f357734c78d5ac6fe60e589dc0f}{V\_Co2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ molar\ fractions}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ mole\ fraction\ (0..1)\ of\ CO2\ in\ carbonic\ phase\ (the\ rest\ is\ H2O)}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a4f2d3cafc60b55de099ee7a1d94e129f}{y\_Co2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ mole\ fraction\ (0..1)\ of\ H20\ in\ carbonic\ phase}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a74efbc1440ff4d9a809a471c2f6c0d71}{y\_H2o}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{///\ mole\ fraction\ (0..1)\ of\ CO2\ in\ aqueous\ phase}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a8cb658ac65a556eb54f1248bbc8b68c8}{x\_Co2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ mole\ fraction\ (0..1)\ of\ H20\ in\ aqueous\ phase\ (the\ rest\ is\ CO2)}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a58113b7bebf766b3743f2aeb5c42faa3}{x\_H2o}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{///\ mole\ fraction\ of\ salt\ from\ salt\ molality\ in\ aqueous\ phase\ (may\ contain\ CO2\ :\ molality)}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a66513c9bf0cc662b8adf8bdce91e807c}{x\_salt}}(\ \textcolor{keywordtype}{double}\ molalityCO2,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{///\ mass\ fraction\ (0..1)\ of\ salt\ in\ aqueous\ phase\ (weight\ percent)}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a07262e56a0f3346bcc9cb639df5b7ff1}{X\_salt}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ mass\ fraction\ of\ CO2\ in\ carbonic\ phase\ (weight\ percent)}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a4d69520deb96194b6b144f1eb0536447}{Y\_Co2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{///\ mass\ fraction\ of\ H2O\ in\ carbonic\ phase\ (weight\ percent)}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a25ddf8746c9bbb5c2a236417d8009589}{Y\_H2o}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ mass\ fraction\ of\ CO2\ in\ aqueous\ phase\ (weight\ percent)}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_af89ad2329b147952b788d3f5ed8948aa}{X\_Co2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ mass\ fraction\ H2O\ in\ aqueous\ phase\ (weight\ percent)}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_af21616a2c3e9edfcb3a1311e8fd19a0d}{X\_H2o}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{///\ mass\ fraction\ total\ dissolved\ salts\ in\ aqueous\ phase\ (weight\ percent)}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a8b008d3031c9062728a21a13b07f97c8}{X\_s}}(\ \textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{///\ molality\ of\ CO2\ in\ aqueous\ phase}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a805503dc13e596bc190c0a3d8fe19ad1}{m\_Co2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{comment}{//\ transport\ properties\ as\ a\ function\ of\ P,\ T\ and\ msalt}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{///\ molar\ volume\ of\ dissolved\ CO2\ in\ brine}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a53225e51464fbaa07765b12799681d0f}{Vdiss\_Co2}}(\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///\ density\ brine}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a585ee473d2a2d06ff4fc985076e79757}{Rho\_brine}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{///\ viscosity\ brine}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ac66917c0087ac490ff645d3f7f80d549}{mu\_brine}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{///\ compressibility\ of\ brine}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aa73eb9a9cfed7485eb2ccbc97ebb169f}{C\_brine}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{///\ density\ of\ aqueous\ phase\ with\ contained\ dissolved\ CO2}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a6dbf0f5cc7ad412cbc7879218d198baa}{Rho\_AqueousPhase}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{///\ viscosity\ of\ aqueous\ phase\ with\ contain\ dissolved\ CO2}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a3107a22407e034cb904c5df8343fee20}{mu\_AqueousPhase}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{///\ compressibility\ of\ aqueous\ phase\ with\ dissolved\ CO2}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_af2894f36e375258ef96e9a96eb2cd08e}{C\_AqueousPhase}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{///\ density\ of\ the\ carbonic\ phase}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a711301d767105454ad35ccd343e04db7}{Rho\_CarbonicPhase}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature);}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{///\ viscosity\ of\ the\ carbonic\ phase}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_afb9279c1db706ef595c229c3f8dba84d}{mu\_CarbonicPhase}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{///\ compressibility\ of\ the\ carbonic\ phase}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_abf483cbdd6129985d9d344cbbbbd67f7}{C\_CarbonicPhase}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{///\ Z\ compressibility\ factor\ for\ carbonic\ phase}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a20183b92e9c12edbd8a267b656601c4d}{Z\_CarbonicPhase}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature);}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{///\ molecular\ diffusion\ coefficient\ of\ CO2\ in\ brine}}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_af38f1f35dfc4b15bb051d404a66c17dd}{D\_Co2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{///\ equilibrium\ const\ KCO2}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a2086a72900df301b841dde3908e971e1}{KCo2}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{///\ equilibrium\ const\ KH2O}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a7b784d4f5a91a37fe7961424b167f5a1}{KH2o}}(\textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{comment}{//\ \ Reservoir\ properties\ as\ a\ function\ of\ T,\ P\ and\ msalt}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{///\ reservoir\ solution\ water-\/CO2\ ratio}}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a5589546dfe45b9651f6997362d279c81}{Rs}}(\textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature,\ \textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{///\ gas\ (CO2)\ formation\ volume\ factor,\ Bg}}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a54eda7d181afa7b385aa2be3dd1ad025}{Bg}}(\textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{///\ water\ formation\ volume\ factor,\ Bw}}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a26252ff434ea32a5d5dfa66e4031dd04}{Bw}}(\textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature\ ,\textcolor{keywordtype}{double}\ msalt);}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{comment}{//\ \ unit\ conversions}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a4ac3124577ae2ee9b5048d6b9abbf126}{molalNaClToMassFracNaClInAqueousPhase}}(\ \textcolor{keywordtype}{double}\ mSalt);\ \textcolor{comment}{//\ input\ NaCl\ molality}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aa04739429884e93379e17d61a970109e}{massFracNaClToMolalNaClInAqueousPhase}}(\ \textcolor{keywordtype}{double}\ massFracSalt);\ \textcolor{comment}{//\ input\ XNaCl}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{double}\ \ massFracNaClToMolarFracNaClInAqueousPhase(\ \textcolor{keywordtype}{double}\ massFracSalt);\textcolor{comment}{//\ input\ XNaCl}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{double}\ \ molalNaClToMolarFracNaClInAqueousPhase(\ \textcolor{keywordtype}{double}\ mSalt);\ \textcolor{comment}{//\ input\ NaCl\ molality}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordtype}{double}\ \ ppmNaClToMolalNaClInAqueousPhase(\ \textcolor{keywordtype}{double}\ ppmSalt\ );}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{double}\ \ molalNaClToPpmInAqueousPhase(\ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a62501eb7250b9755f378f5803a302d28}{CompressedVolumeCo2}}(\ \textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aaa041ed091d036d932bde93f3b382b06}{FugacityCo2}}(\ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phaseVolumeCo2\ );}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a1f91407fe0dbbfaa7a983fa23ca1537e}{FugacityH2o}}(\ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phaseVolumeH2o\ );}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a7bebc42253e66321b50baa44292387b4}{thermEquilConstCo2L}}(\ \textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a8309a70ac33d2235ab946d21b5b00585}{thermEquilConstCo2G}}(\ \textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ad91f5469dd2a2de597ff003450c0b399}{thermEquilConstH2o}}(\ \textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{//\ need\ conversion\ (iterative\ approach)\ Equation\ A8\ Spychler\ 2004}}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aa601fcece485db437e63dba3b1c55de0}{activityCoefficientDrummond1981}}(\ \textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a7f025230a96da96c6f9ff917a0b27427}{activityCoefficientDuanSun2003}}(\ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{///\ ready\ to\ use}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_af2315ad7ff2134fcf0b09c8be2cd8b22}{activityCoefficientBattistelliEtal1997}}(\ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{///\ needs\ conversion\ (iterative\ approach)\ Equation\ A8\ Spychler\ 2004}}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a838009bec9749cb53e4e3d2cfa9343f1}{activityCoefficientRumpf1994}}(\ \textcolor{keywordtype}{double}\ pressure,\textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aae46bcc6a3083999f6403a288ac41962}{calculateSpycherA}}(\ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ kH2o,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phiH2o\ );}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_abd86d4f882296aa81b7077df5799e3bb}{calculateSpycherB}}(\ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phaseVolumeCo2,}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ phiCo2,}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ kCo2L,}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ kCo2G,}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ activityCoeffCO2\ );}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aec512b061b8958862e14cda6b8462833}{molarFracH2oCarbon}}(\ \textcolor{keywordtype}{double}\ spycherA,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ spycherB,}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ad34b0984a7e4242e723e67d7a266fc10}{molarFracCO2Brine}}(\ \textcolor{keywordtype}{double}\ yH2o,}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ spycherB\ );}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_af0a23adbfc5251ddc227f650d5e32f7c}{molalNaClToMolarFracNaClInCo2SatAqueousPhase}}(\ \textcolor{keywordtype}{double}\ molalCo2,}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ab646279e39b582f6f43d3d8e56c4f9cd}{molarFracH2oBrine}}\ (\ \textcolor{keywordtype}{double}\ xCo2,}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ xSalt\ );}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ad36569b8f0ae897ac2dc64209ca81dfb}{molarFracCo2Carbon}}(\ \textcolor{keywordtype}{double}\ yH2oBrine\ );}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ massFracCo2InCarbonicPhase(\ \textcolor{keywordtype}{double}\ molarFracCo2InCarbonicPhase,}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracH2oInCarbonicPhase\ );}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ massFracH2oInCarbonicPhase(\ \textcolor{keywordtype}{double}\ molarFracCo2InCarbonicPhase,}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracH2oInCarbonicPhase\ );}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ massFracCo2inAqueousPhase(\ \textcolor{keywordtype}{double}\ molarFracCo2InAqueousPhase,}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracH2oInAqueousPhase,}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracNaclInAqueousPhase\ );}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ massFracH2oInAqueousPhase(\ \textcolor{keywordtype}{double}\ molarFracCo2InAqueousPhase,}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracH2oInAqueousPhase,}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracNaclInAqueousPhase\ );}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ massFracNaClInAqueousPhase(\ \textcolor{keywordtype}{double}\ molarFracCo2InAqueousPhase,}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracH2oInAqueousPhase,}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ molarFracNaclInAqueousPhase\ );}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ae401edffb91950ea5267577bbd41201a}{molalCo2FromBrineMoleFractionCo2}}(\ \textcolor{keywordtype}{double}\ xCo2,}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{//\ I\ havent\ used\ them???}}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ada245180783cd00637885dfe5276a6e3}{molalCo2FromPureWaterMolarFracCo2}}(\ \textcolor{keywordtype}{double}\ MolarFracCo2\ );}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a690e12dec1243089a8f7a2519949c105}{molalCo2FromPureWaterMolalCo2}}(\ \textcolor{keywordtype}{double}\ molalCo2Pure,}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ activityCoeff\ );}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a802e6b6a5e0bca2c53ddd1d79ace0358}{molarFracCo2FromBrineMolalCo2}}(\ \textcolor{keywordtype}{double}\ molalCo2,}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt);}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{comment}{//\ caculation\ of\ a\_co2\ =\ a\_mix\ as\ a\ function\ of\ T}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{//\ activity\ of\ Co2\ a\_co2}}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a011005facf6bac559db9a48bcc0edbba}{a\_Co2}}(\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{comment}{//\ activity\ of\ mixture\ a\_mix}}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a809be0c93aa4d76e041d6a51fd76d7e0}{a\_mix}}(\textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{comment}{//\ \ Auxilliary\ Functions}}
+\DoxyCodeLine{00251\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a4915eba8ac41d84b3387891182d82720}{complex}}<\textcolor{keywordtype}{double}>\ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a4915eba8ac41d84b3387891182d82720}{complex\_acos}}(\textcolor{keyword}{const}\ complex<\textcolor{keywordtype}{double}>\ \&\ x);}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{comment}{//\ \ Transport\ Properties}}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ae1d53269a354079f326f6be820f4730e}{volumePartialMolarCo2}}(\ \textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a3b5f4b3af31d0acfecb2babbf35e802d}{densityBrine}}(\ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ab45078ef7a6014b4d83e083ffb60c142}{viscosityBrine}}(\ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mSalt\ );}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a2d816c161bc37cda4a67218f9243f64a}{compressibilityBrine}}(\ \textcolor{keywordtype}{double}\ densBrine,}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ densBrineRef\ );}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a99d501dae1335cd100ee0a8d1ca43a6d}{densityAqueousPhase}}(\ \textcolor{keywordtype}{double}\ vPartialmolar,}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ densBrine,}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ xCo2\ );}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ab11a48c2adf63bb2f4536a3cd737684e}{densityCarbonicPhase}}(\ \textcolor{keywordtype}{double}\ phaseVolumeCo2\ );}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a95c442db128cb4169dbbc5bea34627d5}{compressibilityCarbonicPhase}}(\ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phaseVolumeCo2\ );}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a1e0460266e5d6c3e22a7cabb31f3d3e4}{compressibilityCarbonicPhaseZ}}(\ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phaseVolumeCo2\ );}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a06db8d509db2eb44ac0adbacfe9ba61b}{viscosityCarbonicPhase}}(\ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ phaseVolumeCo2\ );}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ae8cd545640cfb3e0dd5805f9c5aa2164}{molecularDiffCoeffCo2intoBrine}}(\ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ muBrine\ );}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a17ffdf96a444eac66d547367291070fb}{equilKH2o}}(\ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ kH2o\ );}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a3446228ce2339bfa361eae4e5057ce85}{equilKCo2}}(\ \textcolor{keywordtype}{double}\ temperature,}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ pressure,}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ kCo2G\ );}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{comment}{//\ \ Reservoir\ Properties}}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_ad27d7f23cc337badee730400a574677b}{solutionAqueousCarbonicRatio}}(\ \textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature\ ,\textcolor{keywordtype}{double}\ msalt\ );}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_a4d984744c1e2ba7d387ba62f31069fef}{GasFormationVolumeFactor}}(\ \textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature\ );}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aa179fe804c5befddba70f6a789ce205f}{WaterFormationVolumeFactor}}(\ \textcolor{keywordtype}{double}\ pressure,\ \textcolor{keywordtype}{double}\ temperature\ ,\textcolor{keywordtype}{double}\ msalt);}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{comment}{//\ plotting}}
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04_aaad3a92018500a8a8a533f5a60dbc299}{plot\_brine}}();}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordtype}{void}\ plot\_AqueousPhase();}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordtype}{void}\ plot\_CarbonicPhase();}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{keywordtype}{void}\ plot\_thermodynamics();}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ R,\ molarMassH2o,\ molarMassCo2,\ molarMassNacl;}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{comment}{//\ constants}}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ a\_h2oco2,\ b\_co2,\ b\_h2o,\ b\_mix,}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stoichio,p0,vH2o,\ vCo2,}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pSC,tSC;}
+\DoxyCodeLine{00322\ \};}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00325\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ \_EOS\_CO2H2ONaCl\_Spycher04\_SPYCHER\_2004\_H\ */}}
+
+\end{DoxyCode}

@@ -1,0 +1,80 @@
+\doxysection{Accumulator.\+h}
+\hypertarget{_accumulator_8h_source}{}\label{_accumulator_8h_source}\index{source/includes/integration/finite\_volumes/generic\_transport\_scheme/Accumulator.h@{source/includes/integration/finite\_volumes/generic\_transport\_scheme/Accumulator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_ACCUMULATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_ACCUMULATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_matrix_operator_8h}{"{}MatrixOperator.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_vector_operator_8h}{"{}VectorOperator.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_sparse_matrix_8h}{"{}SparseMatrix.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ Accumulator}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ Operations\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ +\ SetupSystem()}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ +\ AccumulateInteriorByFV(\ operator,\ operation\ )}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ +\ AccumulateInteriorByFE(\ range\ )}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ +\ LateAccumulateInteriorByFV()}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ +\ LateAccumulateInteriorByFE()}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ +\ AccumulatePerimeterByFV(\ operator,\ operation\ )}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ +\ AccumulatePerimeterByFE(\ range\ )}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ +\ LateAccumulatePerimeterByFV()}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ +\ LateAccumulatePerimeterByFE()=}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ Attributes}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ +\ halo\ elements}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ @attention\ the\ Accumulator\ uses\ stencil\ accumulation\ for\ the\ interior\ and\ finite\ volume\ accumulation\ for\ its\ perimeter.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ @attention\ the\ order\ in\ which\ LHS\ and\ RHS\ are\ accumulated\ is\ defined\ in\ Operation}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ USER>}
+\DoxyCodeLine{00029\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_accumulator}{Accumulator}}\ \{}
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{///\ initalises\ sparse\ matrix\ and\ vector,\ taking\ into\ account\ how\ many\ solution\ variables\ there\ are}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ TODO:\ look\ at\ cases\ with\ multiple\ solution\ variables}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_accumulator_ac95550d4f06c4da996bd0d9319db88ad}{SetUp}}();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{///\ accumuates\ finite\ volume\ /\ hybride\ FVM\ \_\ FEM\ transport\ equation\ into\ global\ system}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_accumulator_a8ca97b7f3f89dcaf4587af73d2bba464}{Accumulate}}(\ \textcolor{keywordtype}{double}\ time\_increment=1.\ );}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ compensate\ (+)\ balance\ at\ inflow\ boundaries,\ (-\/)\ balance\ at\ outflow\ boundaries,\ and\ any\ potential\ divergence\ of\ flow\ at\ no-\/flow\ boundaries\ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_accumulator_a6c2d4a41cb8e0ac047ff9ee329053dbf}{BalanceFlowsThroughTruncatedBoundaryFiniteVolumes}}(\ SparseMatrix\&\ lhs,\ std::vector<\textcolor{keywordtype}{double}>\&\ rhs,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ time\_increment=1.);}
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \ \textcolor{comment}{///\ accumulates\ individual\ finite\ element\ -\/\ finite\ volume\ stencils\ for\ interior\ and\ halo\ elements}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ AccumulateByStencil(\ \textcolor{keyword}{typename}\ std::vector<Element<dim>*>::const\_iterator\ begin,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ std::vector<Element<dim>*>::const\_iterator\ end,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ MatrixOperator<dim>*\ \textcolor{keyword}{const},\ \textcolor{comment}{///<\ modified\ to\ contain\ operation\ information}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SparseMatrix\&\ lhs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \textcolor{comment}{///\ accumulates\ individual\ finite\ element\ -\/\ finite\ volume\ stencils\ for\ interior\ and\ halo\ elements}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ AccumulateByStencil(\ \textcolor{keyword}{typename}\ std::vector<Element<dim>*>::const\_iterator\ begin,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ std::vector<Element<dim>*>::const\_iterator\ end,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ VectorOperator<dim>*\ \textcolor{keyword}{const},\ \textcolor{comment}{///<\ modified\ to\ contain\ operation\ information}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ rhs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{///\ accumulates\ individual\ finite\ volumes}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ AccumulateByFiniteVolume(\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ begin,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ end,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ MatrixOperator<dim>*\ \textcolor{keyword}{const},\ \textcolor{comment}{///<\ modified\ to\ contain\ operation\ information}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SparseMatrix\&\ lhs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ AccumulateByFiniteVolume(\ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ begin,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ std::vector<Node<dim>*>::const\_iterator\ end,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ VectorOperator<dim>*\ \textcolor{keyword}{const},\ \textcolor{comment}{///<\ modified\ to\ contain\ operation\ information}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ rhs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ shorthand\ for\ accessing\ the\ class\ that\ this\ is\ a\ policy\ of}}
+\DoxyCodeLine{00067\ \ \ \ \ USER<dim>*\ User()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ USER<dim>\ \textcolor{keyword}{const}*\ User()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keyword}{const}\ USER<dim>*>(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00069\ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_MATRIX\_ACCUMULATOR\_H\ */}}
+
+\end{DoxyCode}

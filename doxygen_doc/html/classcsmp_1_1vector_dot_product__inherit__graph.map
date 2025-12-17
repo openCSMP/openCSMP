@@ -1,0 +1,5 @@
+<map id="csmp::vectorDotProduct&lt; dim, T &gt;" name="csmp::vectorDotProduct&lt; dim, T &gt;">
+<area shape="rect" id="Node000001" title="scalar product of any two STL vectors (loop is unrolled)" alt="" coords="5,5,158,87"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1vector_dot_product_3_011_u_00_01_t_01_4.html" title="partial specialization of previous template needed to stop recursion" alt="" coords="5,158,158,239"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,102,84,158,79,158,79,102"/>
+</map>

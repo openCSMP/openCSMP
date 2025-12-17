@@ -1,0 +1,40 @@
+\doxysection{Num\+Integral\+\_\+op\+\_\+\+NT\+\_\+\+N\+\_\+d\+V.\+h}
+\hypertarget{_num_integral__op___n_t___n__d_v_8h_source}{}\label{_num_integral__op___n_t___n__d_v_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_op\_NT\_N\_dV.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_op\_NT\_N\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_OP\_NT\_N\_DV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_OP\_NT\_N\_DV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_operand_8h}{"{}Operand.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**\ \ "{}mass\ matrix"{},\ "{}fluid\ sources\ or\ sinks"{},\ or\ "{}capacitance\ matrix"{}\ for\ constant\ coefficients}}
+\DoxyCodeLine{00013\ \textcolor{comment}{}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@date\ 2000}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t___n__d_v}{NumIntegral\_op\_NT\_N\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t___n__d_v}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t___n__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t___n__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ NumIntegral\_op\_NT\_N\_dV(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__op___n_t___n__d_v_acdb4b1ddba237b01fcfa56edda70c664}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ \ \ \ \ uint32\_t\ \ nodal\_degrees\_of\_freedom;}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ copyright\ (c)\ 2000\ by\ Stephan\ K.\ Matthai\ \&\ Sebastian\ Geiger}}
+\DoxyCodeLine{00032\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

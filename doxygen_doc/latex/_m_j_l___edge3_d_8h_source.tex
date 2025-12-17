@@ -1,0 +1,122 @@
+\doxysection{MJL\+\_\+\+Edge3\+D.\+h}
+\hypertarget{_m_j_l___edge3_d_8h_source}{}\label{_m_j_l___edge3_d_8h_source}\index{source/includes/discretisation/MJL\_Edge3D.h@{source/includes/discretisation/MJL\_Edge3D.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MJL\_EDGE\_3D\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MJL\_EDGE\_3D\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___point3_d_8h}{"{}MJL\_Point3D.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacemjl}{mjl}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\ \{}
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ \ \ \ \ Edge3D();}
+\DoxyCodeLine{00011\ \ \ \ \ Edge3D(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ );}
+\DoxyCodeLine{00012\ \ \ \ \ Edge3D(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ );}
+\DoxyCodeLine{00013\ \ \ \ \ \string~Edge3D();}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ \ \ \ \ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ );}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ operator<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ Set(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ );}
+\DoxyCodeLine{00017\ \ \ \ \ INTERSECTION\ Intersect(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}}\&,\ \textcolor{keywordtype}{double}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ \ \ \ \ \ Origin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ \ \ \ \ \ Destination()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ \ \ \ \ \ Point(\ \textcolor{keywordtype}{double}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ MidPoint(\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge3_d_a2ae63c7ba0b22ba2fb9fe49658fe1231}{AngleTo}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ Length()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ Normalize();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ 90o\ clockwise\ rotation\ and\ normalization\ if\ so\ requested}}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_edge3_d_a123634a7e645399bb07768b1628a5fbc}{Rot}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ rot\_axis,\ \textcolor{keywordtype}{bool}\ normalize=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ org\_;}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ dest\_;}
+\DoxyCodeLine{00033\ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Edge3D()\ \{\}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::\string~Edge3D()\ \{\}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Edge3D(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ org,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ dest\ )}
+\DoxyCodeLine{00043\ \ \ \ \ \ :\ org\_(org),\ dest\_(dest)}
+\DoxyCodeLine{00044\ \ \{\}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ \ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ e\ )}
+\DoxyCodeLine{00050\ \ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \&e\ ==\ \textcolor{keyword}{this}\ )\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00052\ \ \ \ \ org\_\ \ =\ e.org\_;}
+\DoxyCodeLine{00053\ \ \ \ \ dest\_\ =\ e.dest\_;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00055\ \ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{keyword}{inline}\ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::operator<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ m\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00059\ \ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{return}\ ((org\_<m.org\_)\ ||\ (org\_==m.org\_\ \&\&\ (dest\_<m.dest\_))\ );}
+\DoxyCodeLine{00061\ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Edge3D(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ e\ )}
+\DoxyCodeLine{00065\ \ \{}
+\DoxyCodeLine{00066\ \ \ \ \ *\textcolor{keyword}{this}\ =\ e;}
+\DoxyCodeLine{00067\ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ \ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Origin()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ org\_;\ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ \ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Destination()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ dest\_;\ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Point(\ \textcolor{keywordtype}{double}\ t\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00075\ \ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordflow}{return}\ org\_\ +\ t\ *\ (dest\_\ -\/\ org\_);}
+\DoxyCodeLine{00077\ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Set(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ p1,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ p2\ )}
+\DoxyCodeLine{00082\ \ \{}
+\DoxyCodeLine{00083\ \ \ \ \ org\_\ \ =\ p1;}
+\DoxyCodeLine{00084\ \ \ \ \ dest\_\ =\ p2;}
+\DoxyCodeLine{00085\ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Length()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00089\ \ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\ p\ =\ dest\_\ -\/\ org\_;}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordflow}{return}\ p.Length();}
+\DoxyCodeLine{00092\ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::Normalize()}
+\DoxyCodeLine{00096\ \ \{}
+\DoxyCodeLine{00097\ \ \ \ \ dest\_\ \ =\ dest\_\ -\/\ org\_;}
+\DoxyCodeLine{00098\ \ \ \ \ org\_.x\_\ =\ org\_.y\_\ =\ org\_.z\_\ =\ 0.0;}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{double}\ len\ =\ dest\_.Length();}
+\DoxyCodeLine{00100\ \ \ \ \ dest\_\ /=\ len;}
+\DoxyCodeLine{00101\ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}::MidPoint(\ \mbox{\hyperlink{classmjl_1_1_point3_d}{Point3D}}\&\ mp\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00107\ \ \{}
+\DoxyCodeLine{00108\ \ \ \ \ mp.x\_\ =\ (org\_.x\_\ +\ dest\_.x\_)\ /\ 2.;}
+\DoxyCodeLine{00109\ \ \ \ \ mp.y\_\ =\ (org\_.y\_\ +\ dest\_.y\_)\ /\ 2.;}
+\DoxyCodeLine{00110\ \ \ \ \ mp.z\_\ =\ (org\_.z\_\ +\ dest\_.z\_)\ /\ 2.;}
+\DoxyCodeLine{00111\ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

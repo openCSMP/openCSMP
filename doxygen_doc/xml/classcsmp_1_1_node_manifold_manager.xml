@@ -1,0 +1,537 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_node_manifold_manager" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NodeManifoldManager</compoundname>
+    <includes refid="_node_manifold_manager_8h" local="no">NodeManifoldManager.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_node_manifold_manager_1af06adffee15b8ca14fc97c3063f5345c" prot="public" static="no">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>typedef plf::colony&lt;NodeManifold&lt;dim&gt;&gt;::iterator csmp::NodeManifoldManager&lt; dim &gt;::manifoldIterator</definition>
+        <argsstring></argsstring>
+        <name>manifoldIterator</name>
+        <qualifiedname>csmp::NodeManifoldManager::manifoldIterator</qualifiedname>
+        <briefdescription>
+<para>for sorting the manifolds by their pointers </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="35" column="46" bodyfile="source/includes/model/NodeManifoldManager.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_node_manifold_manager_1a1ff75bd8b71863ae07ef91fafa52f56b" prot="public" static="no">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref>&lt; dim &gt; &gt;::const_iterator</type>
+        <definition>typedef plf::colony&lt;NodeManifold&lt;dim&gt;&gt;::const_iterator csmp::NodeManifoldManager&lt; dim &gt;::manifoldConstIterator</definition>
+        <argsstring></argsstring>
+        <name>manifoldConstIterator</name>
+        <qualifiedname>csmp::NodeManifoldManager::manifoldConstIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="36" column="52" bodyfile="source/includes/model/NodeManifoldManager.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_node_manifold_manager_1aaa642dc0cc4fc3aa0c26d9fec9a1227c" prot="protected" static="no" mutable="no">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref>&lt; dim &gt; &gt;</type>
+        <definition>plf::colony&lt; NodeManifold&lt;dim&gt; &gt; csmp::NodeManifoldManager&lt; dim &gt;::node_manifolds_</definition>
+        <argsstring></argsstring>
+        <name>node_manifolds_</name>
+        <qualifiedname>csmp::NodeManifoldManager::node_manifolds_</qualifiedname>
+        <briefdescription>
+<para>sorted deque of pointers to manifolds created with new and delete </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="76" column="19" bodyfile="source/includes/model/NodeManifoldManager.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_manifold_manager_1adbb9373a0ba60440cca3afc0e7645003" prot="protected" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::NodeManifoldManager&lt; dim &gt;::current_sort_variable_</definition>
+        <argsstring></argsstring>
+        <name>current_sort_variable_</name>
+        <qualifiedname>csmp::NodeManifoldManager::current_sort_variable_</qualifiedname>
+        <initializer>= &quot;none&quot;</initializer>
+        <briefdescription>
+<para>TODO: update the sort order if some modifications are made. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="77" column="39" bodyfile="source/includes/model/NodeManifoldManager.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_node_manifold_manager_1ad8206f0f4ca703cb6b4d6b8843471168" prot="protected" static="no" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::NodeManifoldManager&lt; dim &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::NodeManifoldManager::verbose_</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="78" column="39" bodyfile="source/includes/model/NodeManifoldManager.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a5fdd0b4480e0a6a6b092dc3bfb64c755" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NodeManifoldManager&lt; dim &gt;::NodeManifoldManager</definition>
+        <argsstring>(plf::colony&lt; Node&lt; dim &gt; &gt; &amp;node_pointer_storage, VData::manifoldContainer::const_iterator first, VData::manifoldContainer::const_iterator last)</argsstring>
+        <name>NodeManifoldManager</name>
+        <qualifiedname>csmp::NodeManifoldManager::NodeManifoldManager</qualifiedname>
+        <param>
+          <type>plf::colony&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>node_pointer_storage</declname>
+          <defname>mesh_nodes</defname>
+        </param>
+        <param>
+          <type>VData::manifoldContainer::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>VData::manifoldContainer::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>Re-constructor when node manifolds are read back from a CSMP native binary fileset. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Preferred constructor of node manifolds, including the case where these are read back from a CSMP native binary fileset</para>
+<para><simplesect kind="attention"><para>do not use this constructor after nodes were deleted from the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>.</para>
+</simplesect>
+<xrefsect id="todo_1_todo000175"><xreftitle>Todo</xreftitle><xrefdescription><para>make sure that the map:key nodes are ideed contained in the manifolds. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="23" column="5" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="20" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1ab1a1ff81ad360b5a086c662b1a51bf68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NodeManifoldManager&lt; dim &gt;::NodeManifoldManager</definition>
+        <argsstring>()=default</argsstring>
+        <name>NodeManifoldManager</name>
+        <qualifiedname>csmp::NodeManifoldManager::NodeManifoldManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="27" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a49e666b0f1f700b581f54a701e533743" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NodeManifoldManager&lt; dim &gt;::NodeManifoldManager</definition>
+        <argsstring>(const NodeManifoldManager &amp;)=delete</argsstring>
+        <name>NodeManifoldManager</name>
+        <qualifiedname>csmp::NodeManifoldManager::NodeManifoldManager</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node_manifold_manager" kindref="compound">NodeManifoldManager</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="28" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a89e227d5e3dddd704abc0a965ffff5a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_node_manifold_manager" kindref="compound">NodeManifoldManager</ref> &amp;</type>
+        <definition>NodeManifoldManager &amp; csmp::NodeManifoldManager&lt; dim &gt;::operator=</definition>
+        <argsstring>(const NodeManifoldManager &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::NodeManifoldManager::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node_manifold_manager" kindref="compound">NodeManifoldManager</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="29" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1aa92c9344b70a5a3e6ab1aefd6b204228" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NodeManifoldManager&lt; dim &gt;::~NodeManifoldManager&lt; dim &gt;</definition>
+        <argsstring>()</argsstring>
+        <name>~NodeManifoldManager</name>
+        <qualifiedname>csmp::NodeManifoldManager::~NodeManifoldManager</qualifiedname>
+        <briefdescription>
+<para>deleting the dynamically allocated manifolds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="32" column="5" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="70" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1ad0d2e7eece630c03b74845985e1e5a3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_node_manifold_manager_1af06adffee15b8ca14fc97c3063f5345c" kindref="member">manifoldIterator</ref></type>
+        <definition>NodeManifoldManager&lt; dim &gt;::manifoldIterator csmp::NodeManifoldManager&lt; dim &gt;::ManifoldsBegin</definition>
+        <argsstring>()</argsstring>
+        <name>ManifoldsBegin</name>
+        <qualifiedname>csmp::NodeManifoldManager::ManifoldsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="38" column="28" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="75" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1ac5ec824266cce15928c3e262d0f39b48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_node_manifold_manager_1af06adffee15b8ca14fc97c3063f5345c" kindref="member">manifoldIterator</ref></type>
+        <definition>NodeManifoldManager&lt; dim &gt;::manifoldIterator csmp::NodeManifoldManager&lt; dim &gt;::ManifoldsEnd</definition>
+        <argsstring>()</argsstring>
+        <name>ManifoldsEnd</name>
+        <qualifiedname>csmp::NodeManifoldManager::ManifoldsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="39" column="28" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="80" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a710183678363f0fc16f9f2c2c8145f67" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>manifoldConstIterator</type>
+        <definition>NodeManifoldManager&lt; dim &gt;::manifoldConstIterator csmp::NodeManifoldManager&lt; dim &gt;::ManifoldsBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>ManifoldsBegin</name>
+        <qualifiedname>csmp::NodeManifoldManager::ManifoldsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="40" column="28" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="84" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a29df75517eab8e698d00e72b54357761" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>manifoldConstIterator</type>
+        <definition>NodeManifoldManager&lt; dim &gt;::manifoldConstIterator csmp::NodeManifoldManager&lt; dim &gt;::ManifoldsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>ManifoldsEnd</name>
+        <qualifiedname>csmp::NodeManifoldManager::ManifoldsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="41" column="28" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="89" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a2711529508b90df53862d32f13d93652" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::NodeManifoldManager&lt; dim &gt;::Manifolds</definition>
+        <argsstring>() const</argsstring>
+        <name>Manifolds</name>
+        <qualifiedname>csmp::NodeManifoldManager::Manifolds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="43" column="28" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="94" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1aa9697cedc4124082fc2c908909899233" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>plf::colony&lt; <ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>plf::colony&lt; NodeManifold&lt; dim &gt; &gt;::iterator csmp::NodeManifoldManager&lt; dim &gt;::AddManifold</definition>
+        <argsstring>(plf::colony&lt; Node&lt; dim &gt; &gt; &amp;nodes, Node&lt; dim &gt; *const inside, Node&lt; dim &gt; *const outside, ManifoldType)</argsstring>
+        <name>AddManifold</name>
+        <qualifiedname>csmp::NodeManifoldManager::AddManifold</qualifiedname>
+        <param>
+          <type>plf::colony&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>nodes</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *const</type>
+          <declname>inside</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *const</type>
+          <declname>outside</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1gaaf964c39623dfdbf0a48242aaa1253e9" kindref="member">ManifoldType</ref></type>
+          <defname>manifold_type</defname>
+        </param>
+        <briefdescription>
+<para>constructs a node manifold accessing the supplied node colony and node pointers </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a node manifold from the 2 pointers to co-located nodes. Additional nodes can be added to it later.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nodes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>reference to the primary storage of the nodes in the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>inside</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pointer to the node that will assumed to be on the INSIDE of the interface that that manifold is part of </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>outside</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>opposing yet collocated node in the manifold </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>manifold_type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>geometric classifier of the new manifold, default is INTERFACE but may need to be revised if the node is at a model boudary or other. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>an iterator to the new manifold stored in a colony in the <ref refid="classcsmp_1_1_node_manifold_manager" kindref="compound">NodeManifoldManager</ref>.</para>
+</simplesect>
+<simplesect kind="attention"><para>this method does not assign the nodes to the new manifold.; this must be done by calling Node::Assign( manifold ) after its successful creation which only happens on the return from this method. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="48" column="38" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="114" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a0863bbd5f3044657c43815b86c88c715" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeManifoldManager&lt; dim &gt;::SortManifoldsByVariableValue</definition>
+        <argsstring>(std::string var_name, const csmp::Index &amp;var_index)</argsstring>
+        <name>SortManifoldsByVariableValue</name>
+        <qualifiedname>csmp::NodeManifoldManager::SortManifoldsByVariableValue</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>var_index</declname>
+        </param>
+        <briefdescription>
+<para>puts the nodes inside of the manifolds into the ascending order of values of the user specified variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="54" column="10" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="203" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1aa8fab85fd50fa23651897c85c89127f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::NodeManifoldManager&lt; dim &gt;::MergeManifolds</definition>
+        <argsstring>(NodeManifold&lt; dim &gt; *, NodeManifold&lt; dim &gt; *)</argsstring>
+        <name>MergeManifolds</name>
+        <qualifiedname>csmp::NodeManifoldManager::MergeManifolds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref>&lt; dim &gt; *</type>
+          <defname>nmf1</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref>&lt; dim &gt; *</type>
+          <defname>nmf2</defname>
+        </param>
+        <briefdescription>
+<para>tries to replace two manifolds by a single one that connects all of their nodes; succeeds if there the two shares node returning true; fixes all node connections </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Tries to replace the two manifolds by a single one that connects all of their nodes; succeeds if the two share nodes. Will return true in this case; Fixes all node connections.</para>
+<para><simplesect kind="return"><para>true if it was possible to merge the manifolds because they did share nodes.</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nmf1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>if the operation is successful, the enlarged manifold is returned into the first manifold pointer, else both manifolds remain untouched. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="57" column="10" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="150" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a23e9a44a591c7f491a6653debc523def" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeManifoldManager&lt; dim &gt;::Delete</definition>
+        <argsstring>(NodeManifold&lt; dim &gt; *const)</argsstring>
+        <name>Delete</name>
+        <qualifiedname>csmp::NodeManifoldManager::Delete</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_node_manifold" kindref="compound">NodeManifold</ref>&lt; dim &gt; * const</type>
+          <defname>md</defname>
+        </param>
+        <briefdescription>
+<para>deletes = erases manifold from storage container, reordering / compacting as necessary </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="60" column="10" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="219" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1af427cf7ce9db965ce6c736e8cf9c17fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::NodeManifoldManager&lt; dim &gt;::DeleteSingleNodeManifolds</definition>
+        <argsstring>()</argsstring>
+        <name>DeleteSingleNodeManifolds</name>
+        <qualifiedname>csmp::NodeManifoldManager::DeleteSingleNodeManifolds</qualifiedname>
+        <briefdescription>
+<para>scans for manifolds with a single <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> only and deletes them </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If there are single-node manifolds, their nodes are deconnected and the manifolds are deleted. Later, the manager is searched for the remaining null pointers and these are removed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="63" column="12" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="232" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a2b1d731da2254094abafb3abd139ce2e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeManifoldManager&lt; dim &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::NodeManifoldManager::Out</qualifiedname>
+        <briefdescription>
+<para>prints manifolds and other stats to screen </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="66" column="10" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="430" bodyend="440"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1ad6cc2d35f8496e92af529373cb82c7bf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NodeManifoldManager&lt; dim &gt;::OutputNodeManifoldsToBinary</definition>
+        <argsstring>(const char *file_name, const char *node_sorting_variable) const</argsstring>
+        <name>OutputNodeManifoldsToBinary</name>
+        <qualifiedname>csmp::NodeManifoldManager::OutputNodeManifoldsToBinary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>node_sorting_variable</declname>
+        </param>
+        <briefdescription>
+<para>writes manifolds to binary file; relies on unique node indexes </para>
+        </briefdescription>
+        <detaileddescription>
+<para>writes manifolds to binary file; relies on unique node indexes</para>
+<para><simplesect kind="attention"><para>call <ref refid="classcsmp_1_1_node_manifold_manager_1af427cf7ce9db965ce6c736e8cf9c17fb" kindref="member">DeleteSingleNodeManifolds()</ref> before to avoid storing any defunct manifolds </para>
+</simplesect>
+<simplesect kind="attention"><para>make sure that the nodes have unique numbers that match those in the other binary files </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="69" column="10" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="257" bodyend="341"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_node_manifold_manager_1a6e991c7781ac45d44ab633db2fd3e74c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::NodeManifoldManager&lt; dim &gt;::InputNodeManifoldsFromBinary</definition>
+        <argsstring>(plf::colony&lt; Node&lt; dim &gt; &gt; &amp;nodes, const char *file_name)</argsstring>
+        <name>InputNodeManifoldsFromBinary</name>
+        <qualifiedname>csmp::NodeManifoldManager::InputNodeManifoldsFromBinary</qualifiedname>
+        <param>
+          <type>plf::colony&lt; <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &gt; &amp;</type>
+          <declname>nodes</declname>
+          <defname>mesh_nodes</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <briefdescription>
+<para>Reads manifolds from binary file, using indices to create pointer connections; the name of the sorting variable for the manifolds is returned. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads manifolds from binary file, using indices to create pointer connections </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/NodeManifoldManager.h" line="73" column="17" bodyfile="source/modules/model/NodeManifoldManager.cpp" bodystart="351" bodyend="423"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ggaaf964c39623dfdbf0a48242aaa1253e9a3f24196cfa20219ee66809795d5a737f" compoundref="_c_s_m_p__global__enumerations_8h" startline="118">csmp::SPLIT_BOUNDARY_END</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Policy of <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> class for the management of manifolds that consist of multiplicated nodes. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="note"><para>this class is not copy constructable because only a single instance is needed. </para>
+</simplesect>
+<simplesect kind="note"><para>just storage management for manifolds; no targeted access. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NodeManifoldManager&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_node_manifold_manager"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/NodeManifoldManager.h" line="20" column="1" bodyfile="source/includes/model/NodeManifoldManager.h" bodystart="20" bodyend="79"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_node_manifold_manager_1aa9697cedc4124082fc2c908909899233" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>AddManifold</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1adbb9373a0ba60440cca3afc0e7645003" prot="protected" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>current_sort_variable_</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a23e9a44a591c7f491a6653debc523def" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>Delete</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1af427cf7ce9db965ce6c736e8cf9c17fb" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>DeleteSingleNodeManifolds</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a6e991c7781ac45d44ab633db2fd3e74c" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>InputNodeManifoldsFromBinary</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a1ff75bd8b71863ae07ef91fafa52f56b" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>manifoldConstIterator</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1af06adffee15b8ca14fc97c3063f5345c" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>manifoldIterator</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a2711529508b90df53862d32f13d93652" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>Manifolds</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1ad0d2e7eece630c03b74845985e1e5a3e" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>ManifoldsBegin</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a710183678363f0fc16f9f2c2c8145f67" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>ManifoldsBegin</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1ac5ec824266cce15928c3e262d0f39b48" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>ManifoldsEnd</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a29df75517eab8e698d00e72b54357761" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>ManifoldsEnd</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1aa8fab85fd50fa23651897c85c89127f1" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>MergeManifolds</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1aaa642dc0cc4fc3aa0c26d9fec9a1227c" prot="protected" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>node_manifolds_</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a5fdd0b4480e0a6a6b092dc3bfb64c755" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>NodeManifoldManager</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1ab1a1ff81ad360b5a086c662b1a51bf68" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>NodeManifoldManager</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a49e666b0f1f700b581f54a701e533743" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>NodeManifoldManager</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a89e227d5e3dddd704abc0a965ffff5a7" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a2b1d731da2254094abafb3abd139ce2e" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1ad6cc2d35f8496e92af529373cb82c7bf" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>OutputNodeManifoldsToBinary</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1a0863bbd5f3044657c43815b86c88c715" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>SortManifoldsByVariableValue</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1ad8206f0f4ca703cb6b4d6b8843471168" prot="protected" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_node_manifold_manager_1aa92c9344b70a5a3e6ab1aefd6b204228" prot="public" virt="non-virtual"><scope>csmp::NodeManifoldManager</scope><name>~NodeManifoldManager</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

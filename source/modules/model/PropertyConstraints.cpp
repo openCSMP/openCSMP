@@ -143,7 +143,7 @@ their length and tensors for their Eigenvalues.
 @return whether the element satisfies the user-supplied constraints.
  */
 template<uint32_t dim, template<uint32_t> class CELL>
-bool PropertyConstraints::CheckConstraints( const CELL<dim>* const e, Index& failed_upon ) const
+bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_upon ) const
  {  
     if ( vector_length_check ) {
          throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::CheckConstraints",
@@ -307,7 +307,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* const e, Index& fai
 /**
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-bool PropertyConstraints::CheckConstraints( const CELL<dim>* const e ) const
+bool PropertyConstraints::CheckConstraints( const CELL<dim>* e ) const
  {  
     if ( one_node_only )
       return CheckSingleNodeConstraints( e );
@@ -368,7 +368,7 @@ void PropertyConstraints::Erase()
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* const e ) const
+bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* e ) const
  {
     uint32_t i, counter;
     
@@ -407,7 +407,7 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* const e )
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool PropertyConstraints::CheckNodeAverageConstraints( const CELL<dim>* const e ) const
+bool PropertyConstraints::CheckNodeAverageConstraints( const CELL<dim>* e ) const
  {
     for ( typename map<Index,pair<double,double> >::const_iterator
           it=check_list.begin(); it!=check_list.end(); it++ )
@@ -456,7 +456,7 @@ bool PropertyConstraints::CheckNodeAverageConstraints( const CELL<dim>* const e 
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool PropertyConstraints::VectorLengthCheck( const CELL<dim>* const e,
+bool PropertyConstraints::VectorLengthCheck( const CELL<dim>* e,
                                              const csmp::Index& idx,
                                              double vmin, double vmax ) const
  {
@@ -517,69 +517,69 @@ void PropertyConstraints::Out() const
  }
 
  // 1d
-template bool PropertyConstraints::CheckSingleNodeConstraints<1U>( const Element<1>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<1U>( const Element<1>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<1U>( const Element<1>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<1U>( const Element<1>* const ) const;
-template bool PropertyConstraints::CheckConstraints<1U>( const Element<1>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<1U>( const Element<1>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<1U>( const Element<1>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<1U>( const Element<1>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<1U>( const Element<1>* ) const;
+template bool PropertyConstraints::CheckConstraints<1U>( const Element<1>*, Index& ) const;
 
 // 2d
-template bool PropertyConstraints::CheckSingleNodeConstraints<2U>( const Element<2>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<2U>( const Element<2>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<2U>( const Element<2>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<2U>( const Element<2>* const ) const;
-template bool PropertyConstraints::CheckConstraints<2U>( const Element<2>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<2U>( const Element<2>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<2U>( const Element<2>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<2U>( const Element<2>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<2U>( const Element<2>* ) const;
+template bool PropertyConstraints::CheckConstraints<2U>( const Element<2>*, Index& ) const;
 
 // 3d
-template bool PropertyConstraints::CheckSingleNodeConstraints<3U>( const Element<3>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<3U>( const Element<3>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<3U>( const Element<3>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<3U>( const Element<3>* const ) const;
-template bool PropertyConstraints::CheckConstraints<3U>( const Element<3>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<3U>( const Element<3>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<3U>( const Element<3>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<3U>( const Element<3>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<3U>( const Element<3>* ) const;
+template bool PropertyConstraints::CheckConstraints<3U>( const Element<3>*, Index& ) const;
 
 
  // 1d
-template bool PropertyConstraints::CheckSingleNodeConstraints<1U>( const Face<1>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<1U>( const Face<1>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<1U>( const Face<1>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<1U>( const Face<1>* const ) const;
-template bool PropertyConstraints::CheckConstraints<1U>( const Face<1>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<1U>( const Face<1>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<1U>( const Face<1>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<1U>( const Face<1>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<1U>( const Face<1>* ) const;
+template bool PropertyConstraints::CheckConstraints<1U>( const Face<1>*, Index& ) const;
 
 // 2d
-template bool PropertyConstraints::CheckSingleNodeConstraints<2U>( const Face<2>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<2U>( const Face<2>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<2U>( const Face<2>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<2U>( const Face<2>* const ) const;
-template bool PropertyConstraints::CheckConstraints<2U>( const Face<2>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<2U>( const Face<2>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<2U>( const Face<2>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<2U>( const Face<2>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<2U>( const Face<2>* ) const;
+template bool PropertyConstraints::CheckConstraints<2U>( const Face<2>*, Index& ) const;
 
 // 3d
-template bool PropertyConstraints::CheckSingleNodeConstraints<3U>( const Face<3>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<3U>( const Face<3>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<3U>( const Face<3>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<3U>( const Face<3>* const ) const;
-template bool PropertyConstraints::CheckConstraints<3U>( const Face<3>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<3U>( const Face<3>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<3U>( const Face<3>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<3U>( const Face<3>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<3U>( const Face<3>* ) const;
+template bool PropertyConstraints::CheckConstraints<3U>( const Face<3>*, Index& ) const;
 
 
  // 1d
-template bool PropertyConstraints::CheckSingleNodeConstraints<1U>( const InterFace<1>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<1U>( const InterFace<1>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<1U>( const InterFace<1>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<1U>( const InterFace<1>* const ) const;
-template bool PropertyConstraints::CheckConstraints<1U>( const InterFace<1>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<1U>( const InterFace<1>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<1U>( const InterFace<1>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<1U>( const InterFace<1>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<1U>( const InterFace<1>* ) const;
+template bool PropertyConstraints::CheckConstraints<1U>( const InterFace<1>*, Index& ) const;
 
 // 2d
-template bool PropertyConstraints::CheckSingleNodeConstraints<2U>( const InterFace<2>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<2U>( const InterFace<2>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<2U>( const InterFace<2>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<2U>( const InterFace<2>* const ) const;
-template bool PropertyConstraints::CheckConstraints<2U>( const InterFace<2>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<2U>( const InterFace<2>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<2U>( const InterFace<2>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<2U>( const InterFace<2>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<2U>( const InterFace<2>* ) const;
+template bool PropertyConstraints::CheckConstraints<2U>( const InterFace<2>*, Index& ) const;
 
 // 3d
-template bool PropertyConstraints::CheckSingleNodeConstraints<3U>( const InterFace<3>* const ) const;
-template bool PropertyConstraints::CheckNodeAverageConstraints<3U>( const InterFace<3>* const ) const;
-template bool PropertyConstraints::VectorLengthCheck<3U>( const InterFace<3>* const, const csmp::Index&, double, double ) const;
-template bool PropertyConstraints::CheckConstraints<3U>( const InterFace<3>* const ) const;
-template bool PropertyConstraints::CheckConstraints<3U>( const InterFace<3>* const, Index& ) const;
+template bool PropertyConstraints::CheckSingleNodeConstraints<3U>( const InterFace<3>* ) const;
+template bool PropertyConstraints::CheckNodeAverageConstraints<3U>( const InterFace<3>* ) const;
+template bool PropertyConstraints::VectorLengthCheck<3U>( const InterFace<3>*, const csmp::Index&, double, double ) const;
+template bool PropertyConstraints::CheckConstraints<3U>( const InterFace<3>* ) const;
+template bool PropertyConstraints::CheckConstraints<3U>( const InterFace<3>*, Index& ) const;
 
 
 } // end namespace csp

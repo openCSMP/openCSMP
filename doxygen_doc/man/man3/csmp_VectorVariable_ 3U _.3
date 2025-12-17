@@ -1,0 +1,331 @@
+.TH "csmp::VectorVariable< 3U >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::VectorVariable< 3U > \- 3D full specialization of vector-type variable template (2D vectors are declared in files #1, #2)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <VectorVariable\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVectorVariable\fP ()"
+.br
+.RI "default constructor initialising values to NaN "
+.ti -1c
+.RI "\fBVectorVariable\fP (\fBVARIABLE_FLAG\fP, double)"
+.br
+.RI "sets all elements to fl, val "
+.ti -1c
+.RI "\fBVectorVariable\fP (\fBVARIABLE_FLAG\fP f1, \fBVARIABLE_FLAG\fP f2, \fBVARIABLE_FLAG\fP f3, double val1, double val2, double val3)"
+.br
+.RI "constructor for 3D version "
+.ti -1c
+.RI "\fBVectorVariable\fP (const std::vector< double > &)"
+.br
+.RI "initialize with an STL vector "
+.ti -1c
+.RI "\fBVectorVariable\fP (const \fBcsmp::Point\fP< 3U > &)"
+.br
+.RI "initialize with a \fBPoint\fP "
+.ti -1c
+.RI "double & \fBoperator()\fP (uint32_t)"
+.br
+.ti -1c
+.RI "const double & \fBoperator()\fP (uint32_t) const"
+.br
+.ti -1c
+.RI "double \fBoperator[]\fP (uint32_t) const"
+.br
+.ti -1c
+.RI "void \fBComponent\fP (uint32_t, double)"
+.br
+.ti -1c
+.RI "double \fBComponent\fP (uint32_t) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator=\fP (double)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator=\fP (const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator+\fP (double) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator\-\fP (double) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator*\fP (double) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator/\fP (double) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator^\fP (double) const"
+.br
+.RI "squares all elements of the vector "
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator+\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator\-\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator*\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator/\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator+=\fP (double)"
+.br
+.RI "vec1 += vec2 enables shorthand for vec1 = vec1 + vec2 "
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator\-=\fP (double)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator*=\fP (double)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator/=\fP (double)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator+=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator\-=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator*=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator/=\fP (const \fBScalarVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator+=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator\-=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator*=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP & \fBoperator/=\fP (const \fBVectorVariable\fP &)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBVectorVariable\fP &) const"
+.br
+.RI "comparison of flags and values "
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBVectorVariable\fP &) const"
+.br
+.RI "comparison by length (to allow ordering in containers) "
+.ti -1c
+.RI "double \fBoperator&\fP (const \fBVectorVariable\fP &) const"
+.br
+.RI "dot product = scalar product "
+.ti -1c
+.RI "\fBVectorVariable\fP \fBoperator%\fP (const \fBVectorVariable\fP &) const"
+.br
+.RI "cross product (vector perpendicular to input vectors "
+.ti -1c
+.RI "double \fBLength\fP () const"
+.br
+.RI "returns spatial i-th dimension "
+.ti -1c
+.RI "double \fBAngleTo\fP (const \fBVectorVariable\fP &v) const"
+.br
+.RI "return angle in degrees "
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBP\fP () const"
+.br
+.RI "returns \fBcsmp::Point\fP initialised with vector values; "
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (double vmin, double vmax) const"
+.br
+.RI "checks vector length against the value range supplied as arguments "
+.ti -1c
+.RI "bool \fBHas_NaN_Values\fP () const"
+.br
+.RI "tests whether variable contains NaN value(s) "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBFlag\fP (uint32_t i=0) const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP & \fBFlag\fP (uint32_t i=0)"
+.br
+.ti -1c
+.RI "uint32_t \fBSize\fP () const"
+.br
+.RI "for the PropertyStorage "
+.ti -1c
+.RI "double \fBDotProduct\fP (const \fBcsmp::Point\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "double \fBDotProduct\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBCrossProduct\fP (const \fBcsmp::Point\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBCrossProduct\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBProjectOnto\fP (const std::vector< double > &) const"
+.br
+.RI "projects this vector variable onto the supplied vector v and returns the projection vector "
+.ti -1c
+.RI "\fBVectorVariable\fP \fBProjectOnto\fP (const \fBVectorVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBVectorVariable\fP \fBFlip\fP ()"
+.br
+.RI "Multiplies by negative unity vector\&. "
+.ti -1c
+.RI "void \fBInvert\fP ()"
+.br
+.RI "reverts the sequence of entries "
+.ti -1c
+.RI "void \fBEuclideanNormalize\fP ()"
+.br
+.RI "normalizes the vector variable by its length given the unit normal "
+.ti -1c
+.RI "void \fBIn\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "bool \fBIn\fP (std::fstream &)"
+.br
+.ti -1c
+.RI "bool \fBOut\fP (std::fstream &) const"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static constexpr \fBVARIABLE_TYPE\fP \fBVariableType\fP = VECTOR"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBTensorVariable< 3U >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+3D full specialization of vector-type variable template (2D vectors are declared in files #1, #2) 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+
+.PP
+Stephen G\&. Roberts 
+
+.PP
+S\&. Geiger 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2001
+.RE
+.PP
+3D full specialization of vector-type variable template (2D vectors are in files #1, #2)\&.
+
+.PP
+Implements basic vector variable type that consists of dim=spatial dimensions entries (options are 2 x 1 and 3 x 1 for 2D and 3D models, respectively) plus as many variable flags as vector elements\&. The flags are of type enum \fBVARIABLE_FLAG\fP\&. 
+.br
+ \fBVectorVariable\fP is defined as a C++ template for the 2D and 3D cases (In 1D you should use \fBScalarVariable\fP to represent vector type properties)\&. 
+.br
+
+.PP
+NOTE: The definitions of the 2D constructors are in the file \fBVectorVariable2\&.h\fP\&. 
+.br
+.SH "Motivation"
+.PP
+A plain STL vector cannot be used to implement this datatype since there is a need to flag each vector entry so that it can receive a special treatment in a finite element computation, i\&.e\&. as a fixed (Dirichlet) boundary value or the like\&. Also there is a need to make vector operations as efficient as possible\&. This has been done by unrolling all loops\&.
+.SH "Applicability"
+.PP
+Any kind of computations that involve Scalar-, Vector-, or \fBTensorVariable\fP objects in CSMP\&. For standard element-by-element calculations, operators are provided\&. This includes special operators like '^' which will calculate the power of each vector element for the user-specified value\&. Slightly odd is the use of the operators & and % for the scalar and the cross products of vectors, respectively (there are no better options, try maybe templatized enums, suggestions are welcome)\&.
+
+.PP
+All vector operations are already unrolled to give best performance\&. Temporaries are eliminated as far as is possible and all *=, /=, +=, -=, dot and cross product, and \fBLength()\fP operators / member functions have no overhead due to assigments of flags\&. Hence there is nothing to be gained from additional handcoding of such operations\&.
+.SH "Application Examples"
+.PP
+Operations of the following types are possible:
+
+.PP
+.PP
+.nf
+VectorVariable<3U>  v1(PLAIN,PLAIN,PLAIN,1\&.,1\&.,1\&.);
+cout <<"\\main: Length of "<< v1 <<" is "<< v1\&.Length() << endl;
+
+VectorVariable<3U>  v2;
+v2 = sqrt(3\&.);
+VectorVariable<3U>  v3 = v2 & v1; // dot product
+
+v3\&.Out();
+.fi
+.PP
+ 
+.SH "Member Function Documentation"
+.PP 
+.SS "void \fBcsmp::VectorVariable\fP< 3U >::EuclideanNormalize ()"
+
+.PP
+normalizes the vector variable by its length given the unit normal normalize L2
+
+.PP
+\fBTodo\fP
+.RS 4
+replace with more generic function 
+.RE
+.PP
+
+.SS "void \fBcsmp::VectorVariable\fP< 3U >::Invert ()"
+
+.PP
+reverts the sequence of entries Multiplies by negative unity vector\&. 
+.SS "\fBVectorVariable\fP< 3U > \fBcsmp::VectorVariable\fP< 3U >::operator% (const \fBVectorVariable\fP< 3U > & ) const"
+
+.PP
+cross product (vector perpendicular to input vectors cross product ' % ' of two vectors 
+.SS "bool \fBcsmp::VectorVariable\fP< 3U >::operator< (const \fBVectorVariable\fP< 3U > & ) const"
+
+.PP
+comparison by length (to allow ordering in containers) compare the length of two vectors 
+.SS "\fBPoint\fP< 3U > \fBcsmp::VectorVariable\fP< 3U >::P () const"
+
+.PP
+returns \fBcsmp::Point\fP initialised with vector values; 
+.PP
+\fBNote\fP
+.RS 4
+name avoids GNU clash 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

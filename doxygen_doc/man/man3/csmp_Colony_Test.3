@@ -1,0 +1,113 @@
+.TH "csmp::Colony_Test" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Colony_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Colony_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestColonyWith_int\fP ()"
+.br
+.RI "using a quadrilateral element for testing "
+.ti -1c
+.RI "void \fBTestThatElementIsCopyableAssignableMovable\fP ()"
+.br
+.ti -1c
+.RI "bool \fBTestColonyWith_Element\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Tests how plf::colony manages csmp \fBElement\fP objects\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::Colony_Test::run ()\fR [virtual]\fP"
+Testing:
+
+.PP
+.IP "1." 4
+LengthInDirection() - quadrilateral 2D
+.IP "2." 4
+LengthInDirection() - quadrilateral 3D
+.IP "3." 4
+UnitNormalToFace() - actually testing FEPolicy functionality 
+.PP
+
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "void csmp::Colony_Test::TestThatElementIsCopyableAssignableMovable ()"
+Check that \fBElement\fP meets the pre-requisites for storage in the colony\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

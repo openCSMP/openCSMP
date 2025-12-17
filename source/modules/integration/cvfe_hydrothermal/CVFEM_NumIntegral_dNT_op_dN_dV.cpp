@@ -8,10 +8,6 @@ using namespace std;
 
 namespace csmp {
 
-/** default destructor */
-template<uint32_t dim, template<uint32_t> class CELL>
-CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>::~CVFEM_NumIntegral_dNT_op_dN_dV() {}
-
 /** custom constructor */
 template<uint32_t dim, template<uint32_t> class CELL>
 CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>::CVFEM_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,

@@ -1,0 +1,14 @@
+<map id="csmp::FiniteVolumeStencilSpeed_Test::TestFlowThroughModel" name="csmp::FiniteVolumeStencilSpeed_Test::TestFlowThroughModel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,239,96"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_volume_stencil_speed___test.html#afbcc5a193ceea973fc00fcfd5f0f1eac" title="thickness, permeability, porosity, total velocity" alt="" coords="287,55,512,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="239,73,271,73,271,78,239,78"/>
+<area shape="rect" id="Node000004" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="588,5,718,31"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="219,52,286,41,438,26,572,18,573,23,439,31,287,46,220,57"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_vector_variable_3_013_u_01_4.html#a9f25b6eea3e09c5afd9dabac74240040" title="constructor for 3D version" alt="" coords="576,144,730,185"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="228,94,287,105,561,149,560,154,286,110,227,99"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_vector_variable_3_013_u_01_4.html#a1d69d50797a81ddc146071aec74f2ceb" title="normalizes the vector variable by its length given the unit normal" alt="" coords="560,55,746,96"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="513,73,544,73,544,78,513,78"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="492,52,577,32,578,38,493,57"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="460,94,580,136,578,141,459,99"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="606,145,603,134,611,125,628,120,653,118,680,120,697,126,695,131,679,125,653,123,629,125,614,130,608,136,611,143"/>
+</map>

@@ -1,0 +1,103 @@
+.TH "csmp::NaClSaturatedVapor" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NaClSaturatedVapor \- Mass fraction NaCl of halite-saturated vapor in the system H2O-NaCl as a function of temperature and pressure\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include 'eos/h2o_nacl/NaClSaturatedVapor\&.h'\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNaClSaturatedVapor\fP (const double &externaltemperature, const double &externalpressure)"
+.br
+.ti -1c
+.RI "\fB~NaClSaturatedVapor\fP ()"
+.br
+.ti -1c
+.RI "double \fBMassFractionNaCl\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Mass fraction NaCl of halite-saturated vapor in the system H2O-NaCl as a function of temperature and pressure\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich, thomas.driesner@erdw.ethz.ch
+.RE
+.PP
+.SH "Motivation"
+.PP
+"NaClSaturatedVapor" is legacy code from Thomas Driesner's developments for the H2O-NaCl system, and computes the composition of halite-saturated vapor as a function of temperature and pressure\&. It can be used standalone if only this information is needed\&. Otherwise, it is only used in the CSMP++ context for building accurate lookup tables for the H2O-NaCl system, which are significantly faster if the full system properties are needed\&.
+
+.PP
+Details of the underlying formulation can be found in
+
+.PP
+Driesner T\&. and Heinrich C\&.A\&. (2007): The system H2O-NaCl\&. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl\&. Geochimica et Cosmochimica Acta 71, 4880-4901\&.
+.SH "Usage"
+.PP
+Construct an instance of "NaClSaturatedVapor" with the temperature (in C) and pressure (in Pa) as constructor arguments\&. "NaClSaturatedVapor" has an internal mechanism to make sure that it always uses the current value of that temperature and pressure as they exist in your code\&. Public member names should be self-explanatory, I hope\&.
+
+.PP
+The NaCl concentration can be retrieved in units of mass fraction\&. If you want to convert these or need values for molar masses of NaCl and H2O, please use \fBConvertConcentrationUnitsNaCl\&.h\fP to stay consistent\&.
+
+.PP
+.PP
+.nf
+double t(somevalue), p(anothervalue); // temperature [C] and pressure [in Pa] in user's application
+\&.\&.\&.
+NaClSaturatedVapor naclsatvap(t,p); 
+\&.\&.\&.
+// here, t and p may be updated
+\&.\&.\&.
+x = naclsatvap\&.MassFractionNaCl(); // compute and assign to x the mass fraction of NaCl in halite\-saturated vapor for current t and p
+.fi
+.PP
+.SH "Testing"
+.PP
+Manual testing against CSP version - OK
+
+.PP
+\fBAttention\fP
+.RS 4
+No range check for temperature and pressure is being performed; these check are considered the responsibility of the user if using this class directly 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::NaClSaturatedVapor::NaClSaturatedVapor (const double & externaltemperature, const double & externalpressure)"
+custom constructor
+
+.PP
+\fBAttention\fP
+.RS 4
+Use only this conctructor\&. \fBNaClSaturatedVapor\fP computes the NaCl concentration of halite-saturated brine as a function of temperature and pressure\&. These are typically computed somewhere outside this class\&. By using const refs to those external variables as constructor argument, \fBNaClSaturatedVapor\fP is able to decipher their current values when being queried for the NaCl concentration\&. Only this constructor is allowed to ensure that functionality, default constructor has been made private\&. 
+.RE
+.PP
+
+.SS "csmp::NaClSaturatedVapor::~NaClSaturatedVapor ()"
+destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "double csmp::NaClSaturatedVapor::MassFractionNaCl ()"
+Value of mass fraction of dissolved NaCl in halite-saturated brine 
+.PP
+\fBAttention\fP
+.RS 4
+The value is based on converting the mole fraction computed from equation 9 in Driesner & Heinrich (2007)\&. Conversion is based on \fBConvertConcentrationUnitsNaCl\&.h\fP; to stay consistent, use values and functions provide therein if you need other units 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

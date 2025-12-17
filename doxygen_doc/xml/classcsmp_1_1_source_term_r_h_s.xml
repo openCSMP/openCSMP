@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_source_term_r_h_s" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SourceTermRHS</compoundname>
+    <basecompoundref refid="classcsmp_1_1_vector_operator" prot="public" virt="non-virtual">csmp::VectorOperator&lt; dim &gt;</basecompoundref>
+    <includes refid="_source_term_r_h_s_8h" local="no">SourceTermRHS.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_source_term_r_h_s_1a2bd1ca6189a397be2420fb8da9ccecfb" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        <definition>const csmp::Index&amp; csmp::SourceTermRHS&lt; dim &gt;::esrc_key_</definition>
+        <argsstring></argsstring>
+        <name>esrc_key_</name>
+        <qualifiedname>csmp::SourceTermRHS::esrc_key_</qualifiedname>
+        <briefdescription>
+<para>area/volume source placed on the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="39" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_source_term_r_h_s_1acb92fd4656d789907c78532074415485" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        <definition>const csmp::Index&amp; csmp::SourceTermRHS&lt; dim &gt;::nsrc_key_</definition>
+        <argsstring></argsstring>
+        <name>nsrc_key_</name>
+        <qualifiedname>csmp::SourceTermRHS::nsrc_key_</qualifiedname>
+        <briefdescription>
+<para>point source </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="40" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_source_term_r_h_s_1a6ea34dadd1edfd031ec5847c917249ff" prot="private" static="no" mutable="no">
+        <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        <definition>const csmp::Index&amp; csmp::SourceTermRHS&lt; dim &gt;::adv_key_</definition>
+        <argsstring></argsstring>
+        <name>adv_key_</name>
+        <qualifiedname>csmp::SourceTermRHS::adv_key_</qualifiedname>
+        <briefdescription>
+<para>transport variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="41" column="23" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_source_term_r_h_s_1a1a26e75ef7ee904658d514c18174be38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SourceTermRHS&lt; dim &gt;::SourceTermRHS</definition>
+        <argsstring>(const csmp::INDEX&lt; SCALAR, ELEMENT &gt; &amp;source_variable_key, const csmp::INDEX&lt; SCALAR, NODE &gt; &amp;nodal_source_variable_key, const csmp::INDEX&lt; SCALAR, NODE &gt; &amp;transported_variable_key)</argsstring>
+        <name>SourceTermRHS</name>
+        <qualifiedname>csmp::SourceTermRHS::SourceTermRHS</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, ELEMENT &gt; &amp;</type>
+          <declname>source_variable_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, NODE &gt; &amp;</type>
+          <declname>nodal_source_variable_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_i_n_d_e_x" kindref="compound">csmp::INDEX</ref>&lt; SCALAR, NODE &gt; &amp;</type>
+          <declname>transported_variable_key</declname>
+        </param>
+        <briefdescription>
+<para>note that this source variable may be an element or a nodal one </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="24" column="5" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/SourceTermRHS.cpp" bodystart="19" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_source_term_r_h_s_1ab9348145598e6985ccda254f243875d0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::SourceTermRHS&lt; dim &gt;::~SourceTermRHS</definition>
+        <argsstring>()</argsstring>
+        <name>~SourceTermRHS</name>
+        <qualifiedname>csmp::SourceTermRHS::~SourceTermRHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="28" column="13" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_source_term_r_h_s_1a485ebc52855a458d2bd659ff43435845" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::SourceTermRHS&lt; dim &gt;::AccumulateFiniteVolume</definition>
+        <argsstring>(const Node&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;rhs) const</argsstring>
+        <name>AccumulateFiniteVolume</name>
+        <qualifiedname>csmp::SourceTermRHS::AccumulateFiniteVolume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_vector_operator_1aca459bd1ce411180b8228870a18a22ae">AccumulateFiniteVolume</reimplements>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; &amp;</type>
+          <defname>n</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>accumulates integrated (single) values of source term onto the finite volume centered on the <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="31" column="18" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/SourceTermRHS.cpp" bodystart="30" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_source_term_r_h_s_1a7b6144de8609449f08ebafb50b95bbbd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::SourceTermRHS&lt; dim &gt;::AccumulateStencil</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;, std::vector&lt; double &gt; &amp;rhs) const</argsstring>
+        <name>AccumulateStencil</name>
+        <qualifiedname>csmp::SourceTermRHS::AccumulateStencil</qualifiedname>
+        <reimplements refid="classcsmp_1_1_vector_operator_1a422ae8cf614ec17de2e71aad9ab451f2">AccumulateStencil</reimplements>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>accumulates distributed values of the source term on the finite volume </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="34" column="18" bodyfile="source/modules/integration/finite_volumes/generic_transport_scheme/source/SourceTermRHS.cpp" bodystart="38" bodyend="47"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Either an areal/volumetric source specified on the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> or <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> or a nodal (point) source term to be accumulated into the righthand vector. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::SourceTermRHS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_source_term_r_h_s"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::VectorOperator&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_vector_operator"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SourceTermRHS&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_source_term_r_h_s"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::VectorOperator&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_vector_operator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" line="21" column="1" bodyfile="source/includes/integration/finite_volumes/generic_transport_scheme/SourceTermRHS.h" bodystart="21" bodyend="42"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_source_term_r_h_s_1a485ebc52855a458d2bd659ff43435845" prot="public" virt="virtual"><scope>csmp::SourceTermRHS</scope><name>AccumulateFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_source_term_r_h_s_1a7b6144de8609449f08ebafb50b95bbbd" prot="public" virt="virtual"><scope>csmp::SourceTermRHS</scope><name>AccumulateStencil</name></member>
+      <member refid="classcsmp_1_1_source_term_r_h_s_1a6ea34dadd1edfd031ec5847c917249ff" prot="private" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>adv_key_</name></member>
+      <member refid="classcsmp_1_1_source_term_r_h_s_1a2bd1ca6189a397be2420fb8da9ccecfb" prot="private" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>esrc_key_</name></member>
+      <member refid="classcsmp_1_1_vector_operator_1a00ae75725c21698b6c0a5681664158bb" prot="public" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>Factor</name></member>
+      <member refid="classcsmp_1_1_vector_operator_1a829760f624e7820455db39c4988b8773" prot="public" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>Factor</name></member>
+      <member refid="classcsmp_1_1_vector_operator_1a19d157262fbef6ad30f61041f87b9149" prot="public" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_source_term_r_h_s_1acb92fd4656d789907c78532074415485" prot="private" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>nsrc_key_</name></member>
+      <member refid="classcsmp_1_1_source_term_r_h_s_1a1a26e75ef7ee904658d514c18174be38" prot="public" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>SourceTermRHS</name></member>
+      <member refid="classcsmp_1_1_vector_operator_1a5d3304f9dfafc551fb0d832da5d43b4c" prot="public" virt="non-virtual"><scope>csmp::SourceTermRHS</scope><name>VectorOperator</name></member>
+      <member refid="classcsmp_1_1_source_term_r_h_s_1ab9348145598e6985ccda254f243875d0" prot="public" virt="virtual"><scope>csmp::SourceTermRHS</scope><name>~SourceTermRHS</name></member>
+      <member refid="classcsmp_1_1_vector_operator_1a5ba2b2716903c2949d022111f6b38a68" prot="public" virt="virtual"><scope>csmp::SourceTermRHS</scope><name>~VectorOperator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

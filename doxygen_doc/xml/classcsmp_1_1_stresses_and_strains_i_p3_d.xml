@@ -1,0 +1,1003 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_stresses_and_strains_i_p3_d" kind="class" language="C++" prot="public">
+    <compoundname>csmp::StressesAndStrainsIP3D</compoundname>
+    <basecompoundref refid="classcsmp_1_1_math_operator_l_h_s" prot="public" virt="non-virtual">csmp::MathOperatorLHS&lt; 3U &gt;</basecompoundref>
+    <includes refid="_stresses_and_strains_i_p3_d_8h" local="no">StressesAndStrainsIP3D.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1aed693f8dc9678078c0890e6d5571bc2e" prot="private" static="no" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t csmp::StressesAndStrainsIP3D::components_</definition>
+        <argsstring></argsstring>
+        <name>components_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::components_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="39" column="19" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a03fb039a1d3cd4756e59abcd34f93886" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::strain_key_</definition>
+        <argsstring></argsstring>
+        <name>strain_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::strain_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="41" column="17" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a07d1f950f0e68342d9d46d793eec62ec" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::stress_key_</definition>
+        <argsstring></argsstring>
+        <name>stress_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::stress_key_</qualifiedname>
+        <briefdescription>
+<para>tensor variables </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="41" column="29" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1aba1fd39296130efbc518f6312d1181bd" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::strain1_key_</definition>
+        <argsstring></argsstring>
+        <name>strain1_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::strain1_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="42" column="17" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ac7e2c6ae3bb44e28abca6daf32c1fa5e" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::strain2_key_</definition>
+        <argsstring></argsstring>
+        <name>strain2_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::strain2_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="42" column="30" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1acdc7a31e4103133b4cd5e6b798e0353e" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::strain3_key_</definition>
+        <argsstring></argsstring>
+        <name>strain3_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::strain3_key_</qualifiedname>
+        <briefdescription>
+<para><ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> variables (Eigenvectors) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="42" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a8fe75348af5db640aee10556b434e507" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::sigma1_key_</definition>
+        <argsstring></argsstring>
+        <name>sigma1_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::sigma1_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="43" column="17" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a431634ac23d5dd5fdba0702998522bdb" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::sigma2_key_</definition>
+        <argsstring></argsstring>
+        <name>sigma2_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::sigma2_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="43" column="29" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a5276a428ef55eb0eb57e08f77c726e19" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::sigma3_key_</definition>
+        <argsstring></argsstring>
+        <name>sigma3_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::sigma3_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="43" column="41" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a02276747861b2df42947c9fca50e7082" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::means_key_</definition>
+        <argsstring></argsstring>
+        <name>means_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::means_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="44" column="17" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1afb2c7d7fdedfa135beca59607721aeb3" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::dilat_key_</definition>
+        <argsstring></argsstring>
+        <name>dilat_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::dilat_key_</qualifiedname>
+        <briefdescription>
+<para>mean stress (scalar), dilatation (scalar) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="44" column="28" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a6c684504585bc43c0eccf869ed4401c1" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::StressesAndStrainsIP3D::shear_key_</definition>
+        <argsstring></argsstring>
+        <name>shear_key_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::shear_key_</qualifiedname>
+        <briefdescription>
+<para>maximum shear stress (scalar) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="45" column="17" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a2497deb597dce0973098345f4de8ff62" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::StressesAndStrainsIP3D::DISPL_</definition>
+        <argsstring></argsstring>
+        <name>DISPL_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::DISPL_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="47" column="35" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1accb3e669e88f4d31afc07d65c8064c20" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::StressesAndStrainsIP3D::STRESS_</definition>
+        <argsstring></argsstring>
+        <name>STRESS_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::STRESS_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="48" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ae396a3ef3473b86b78930aa389858d66" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::StressesAndStrainsIP3D::STRAIN_</definition>
+        <argsstring></argsstring>
+        <name>STRAIN_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::STRAIN_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="48" column="51" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a0e8eb9874aaf3785c33b6ed7b8ceb09e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::StressesAndStrainsIP3D::EGP_</definition>
+        <argsstring></argsstring>
+        <name>EGP_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::EGP_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="49" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1aed067fc96f7fd75a275424ab86dfeec7" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::StressesAndStrainsIP3D::SGP_</definition>
+        <argsstring></argsstring>
+        <name>SGP_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::SGP_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="49" column="48" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a80198b1dcd72c9717ecb348ed8bdd4e9" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::StressesAndStrainsIP3D::PEGP_</definition>
+        <argsstring></argsstring>
+        <name>PEGP_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::PEGP_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="49" column="53" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a42dd3aab5eae9a7315495e4e904af351" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::StressesAndStrainsIP3D::PSGP_</definition>
+        <argsstring></argsstring>
+        <name>PSGP_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::PSGP_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="49" column="59" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a6ff1c24de4ad8b5c94252121d4ea7401" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &gt;</type>
+        <definition>std::vector&lt;DenseMatrix&lt;DM_MIN&gt; &gt; csmp::StressesAndStrainsIP3D::STIFF_</definition>
+        <argsstring></argsstring>
+        <name>STIFF_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::STIFF_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="50" column="21" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ab4c17644ac733c2bb1b8a32e1b10a8e0" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::StressesAndStrainsIP3D::IPSTRAIN_</definition>
+        <argsstring></argsstring>
+        <name>IPSTRAIN_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IPSTRAIN_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="51" column="35" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a8e57ebc274c2f9a6a9ec486bcc573e6e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::StressesAndStrainsIP3D::IPSTRESS_</definition>
+        <argsstring></argsstring>
+        <name>IPSTRESS_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IPSTRESS_</qualifiedname>
+        <briefdescription>
+<para>stresses and strains at the element integration points </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="51" column="45" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a1aa593ef8eb1efeab98b3c4646ac5bbb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::StressesAndStrainsIP3D::NSTRAIN_</definition>
+        <argsstring></argsstring>
+        <name>NSTRAIN_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::NSTRAIN_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="52" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a111aa27ba0747d733f365960f8c382f3" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::StressesAndStrainsIP3D::NSTRESS_</definition>
+        <argsstring></argsstring>
+        <name>NSTRESS_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::NSTRESS_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="52" column="53" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a662646764bf8e863a6a0fd97fe9d40ea" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::StressesAndStrainsIP3D::eps_</definition>
+        <argsstring></argsstring>
+        <name>eps_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::eps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="53" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ae8b14726cab4047cd9d3c4a07824200f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::StressesAndStrainsIP3D::sigma_</definition>
+        <argsstring></argsstring>
+        <name>sigma_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::sigma_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="53" column="48" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a6fa0e44337ec3d1298dbf1295197628f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::StressesAndStrainsIP3D::sum_</definition>
+        <argsstring></argsstring>
+        <name>sum_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::sum_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="53" column="55" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1aa63f6e5e8baba4caaf1e3fba786fffda" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt;</type>
+        <definition>TensorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::ts_</definition>
+        <argsstring></argsstring>
+        <name>ts_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::ts_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="54" column="39" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1abf19354037d974af910388eee78b1f14" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt;</type>
+        <definition>TensorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::evecs_</definition>
+        <argsstring></argsstring>
+        <name>evecs_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::evecs_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="54" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a45b4cd6920f873af722f761b4779a251" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt;</type>
+        <definition>TensorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_STRAIN_TENSOR_</definition>
+        <argsstring></argsstring>
+        <name>IP_STRAIN_TENSOR_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_STRAIN_TENSOR_</qualifiedname>
+        <briefdescription>
+<para>for averaging of integration point variables to barycentre </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="55" column="39" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a552f9d9b49fb3006d70efc86a7633ca5" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt;</type>
+        <definition>TensorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_STRESS_TENSOR_</definition>
+        <argsstring></argsstring>
+        <name>IP_STRESS_TENSOR_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_STRESS_TENSOR_</qualifiedname>
+        <briefdescription>
+<para>for averaging of integration point variables to barycentre </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="56" column="39" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a50908ffa7cbd51ce058bda78a8c9bdec" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::vc_</definition>
+        <argsstring></argsstring>
+        <name>vc_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::vc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="57" column="39" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a4245eca39c356da89403d88aa6f094ec" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::evals_</definition>
+        <argsstring></argsstring>
+        <name>evals_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::evals_</qualifiedname>
+        <briefdescription>
+<para>some universally useful vector variable, eigen values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="57" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a7ea25ba70cd35b6d65452aefefbf60e7" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_e1_</definition>
+        <argsstring></argsstring>
+        <name>IP_e1_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_e1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="58" column="39" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a688037742efb946fad236d3a165135b6" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_e2_</definition>
+        <argsstring></argsstring>
+        <name>IP_e2_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_e2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="58" column="46" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ad3627f7b61b478bbdfce8b6d1337abe2" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_e3_</definition>
+        <argsstring></argsstring>
+        <name>IP_e3_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_e3_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="58" column="53" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1adb37baabe3cc9b134d66ab54fc38783b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_s1_</definition>
+        <argsstring></argsstring>
+        <name>IP_s1_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_s1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="59" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a9ead4d34862a8129b083f0ee6dde0387" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_s2_</definition>
+        <argsstring></argsstring>
+        <name>IP_s2_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_s2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="59" column="50" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1aae2173de283b567b62fc05fa42c6dafb" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt;3U&gt; csmp::StressesAndStrainsIP3D::IP_s3_</definition>
+        <argsstring></argsstring>
+        <name>IP_s3_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::IP_s3_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="59" column="57" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a596602368edaf87635ade42830186d07" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::StressesAndStrainsIP3D::sc_</definition>
+        <argsstring></argsstring>
+        <name>sc_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::sc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="60" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ab725843ed18c94ec8f81d39ac0874800" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable&gt; csmp::StressesAndStrainsIP3D::youngs_</definition>
+        <argsstring></argsstring>
+        <name>youngs_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::youngs_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="61" column="27" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1aa08cb602e557a8339d66837976b5b17b" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable&gt; csmp::StressesAndStrainsIP3D::pratio_</definition>
+        <argsstring></argsstring>
+        <name>pratio_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::pratio_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="61" column="35" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a77c0f5c5379c3464e590264e071b5432" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &gt;</type>
+        <definition>std::vector&lt;VectorVariable&lt;3U&gt; &gt; csmp::StressesAndStrainsIP3D::NVAR_</definition>
+        <argsstring></argsstring>
+        <name>NVAR_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::NVAR_</qualifiedname>
+        <briefdescription>
+<para>temporary container for nodal displacements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="62" column="22" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a2531f38c19ed2fb6971f3f8681cd9b04" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::StressesAndStrainsIP3D::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="63" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a458a7965c1a21877e65412bf4889eb5e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::StressesAndStrainsIP3D::principal_e_and_sigma_</definition>
+        <argsstring></argsstring>
+        <name>principal_e_and_sigma_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::principal_e_and_sigma_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="64" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1af5b2ec55d866921d2d4b10fd9ffbf442" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::StressesAndStrainsIP3D::geomechanics_conventions_</definition>
+        <argsstring></argsstring>
+        <name>geomechanics_conventions_</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::geomechanics_conventions_</qualifiedname>
+        <briefdescription>
+<para>as opposed to civil engineering where tensile stresses are positive </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="65" column="43" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a0b4adf4caca4a317c9c83d27418b6627" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StressesAndStrainsIP3D::StressesAndStrainsIP3D</definition>
+        <argsstring>(const Model&lt; 3U &gt; &amp;, const char *oper, const char *basic, const char *test, bool principal_vectors, bool geomechanics_conventions=true)</argsstring>
+        <name>StressesAndStrainsIP3D</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::StressesAndStrainsIP3D</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>basic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>principal_vectors</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>geomechanics_conventions</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>3D constructor: note that - in contrast with civil engineering - in geomechanics compressive stresses are positive </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="20" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ad251595258372ddc6d89e514421e33dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void csmp::StressesAndStrainsIP3D::GetOperands</definition>
+        <argsstring>(Element&lt; 3U &gt; &amp;)</argsstring>
+        <name>GetOperands</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::GetOperands</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <briefdescription>
+<para>get displacement values to compute {d} vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="28" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1ab7e26ea0dc2b334e3518ffe550d35b44" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void csmp::StressesAndStrainsIP3D::ComputeContribution</definition>
+        <argsstring>(Element&lt; 3U &gt; &amp;)</argsstring>
+        <name>ComputeContribution</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::ComputeContribution</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <briefdescription>
+<para>{e} = [B]{d}, {s} = [D]{e} at integration points </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="31" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1a64b66243af52707bb8279aa067b76cc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void csmp::StressesAndStrainsIP3D::WriteOperands</definition>
+        <argsstring>(Element&lt; 3U &gt; &amp;)</argsstring>
+        <name>WriteOperands</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::WriteOperands</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3U &gt; &amp;</type>
+        </param>
+        <briefdescription>
+<para>write {e} to each elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="34" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stresses_and_strains_i_p3_d_1aa5bcb311d8795b125629098a20754e65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StressesAndStrainsIP3D::PrincipalStrainsAndStresses</definition>
+        <argsstring>(bool yes_no)</argsstring>
+        <name>PrincipalStrainsAndStresses</name>
+        <qualifiedname>csmp::StressesAndStrainsIP3D::PrincipalStrainsAndStresses</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>yes_no</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="36" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>3D stress &amp; strain tensor variables placed at integration points </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorLHS&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::StressesAndStrainsIP3D</label>
+        <link refid="classcsmp_1_1_stresses_and_strains_i_p3_d"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="9">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="8">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="6">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="10">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorLHS&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::StressesAndStrainsIP3D</label>
+        <link refid="classcsmp_1_1_stresses_and_strains_i_p3_d"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" line="17" column="1" bodyfile="source/includes/thmc/mechanics/StressesAndStrainsIP3D.h" bodystart="17" bodyend="66"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a071174805944988e79eb90d220825fc6" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6e8ba5063d8f63ae9be81cf35707ce45" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>add_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac7b08a240ef6983652e87ae66b9bb89d" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>add_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a656e2058fe8befd10867c14daf913fb4" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>AddAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1adc666d51a1d079eb31768b937b575d15" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>AddAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2d4eb297a16ea6a4ee4f352fac80595b" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>AddLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a03e47eec17a8af0f737d899ab20aeb9f" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>application_cycle_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad64786ff609174d2370889cbab765780" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>application_cycles_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1afb93bb032bf499e831315fb542610f6a" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6b5f4238adbb0777f28fdc4fc74d5e4b" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ab63fa0d4cdd2e842a7bd9e72cad20760" prot="public" virt="virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>AssignToGlobal</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa3596e878f26280060468a9bdec46dca" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>BasicOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a58c2a9a26dd513f31518787e3db2b0f4" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>BasicOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af4a984063854fb3cae9a7540a04b5c03" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>BasicOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a4ff9ba8ce51005017b733dc19c81d515" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>BasicOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acc4999e50046c13accb00f8d107b2c96" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>BasicOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad9337ca684d7bcb3ec3e95962896a8b6" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>BasicOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2a7e46d92ed93c59de74ed51316892ff" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>BasicOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa9df1530e82365639a558cf33d23aa4a" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>bop</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ab834fae1d8f3c54fe7eea683273aab17" prot="public" virt="pure-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>clone</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1aed693f8dc9678078c0890e6d5571bc2e" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>components_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ab7e26ea0dc2b334e3518ffe550d35b44" prot="public" virt="virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>ComputeContribution</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad218c9a90bfa910a988f540a8fe802ea" prot="public" virt="virtual" ambiguityscope="csmp::MathOperatorLHS&lt; 3U &gt;::"><scope>csmp::StressesAndStrainsIP3D</scope><name>ComputeContribution</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a9f509141a8a09632215b8ae825ed0d86" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>DERIV</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1afb2c7d7fdedfa135beca59607721aeb3" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>dilat_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a2497deb597dce0973098345f4de8ff62" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>DISPL_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a11b450090896b6cea8c30e824c1ee873" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>DivideByTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a0e8eb9874aaf3785c33b6ed7b8ceb09e" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>EGP_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a662646764bf8e863a6a0fd97fe9d40ea" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>eps_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a4245eca39c356da89403d88aa6f094ec" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>evals_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1abf19354037d974af910388eee78b1f14" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>evecs_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aca21df7e825c1c079e50ac88762ff309" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>factor_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1af5b2ec55d866921d2d4b10fd9ffbf442" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>geomechanics_conventions_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ad251595258372ddc6d89e514421e33dc" prot="public" virt="virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acaaa0a607351dfb0c857249573a26e47" prot="public" virt="virtual" ambiguityscope="csmp::MathOperatorLHS&lt; 3U &gt;::"><scope>csmp::StressesAndStrainsIP3D</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a7ea25ba70cd35b6d65452aefefbf60e7" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_e1_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a688037742efb946fad236d3a165135b6" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_e2_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ad3627f7b61b478bbdfce8b6d1337abe2" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_e3_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1adb37baabe3cc9b134d66ab54fc38783b" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_s1_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a9ead4d34862a8129b083f0ee6dde0387" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_s2_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1aae2173de283b567b62fc05fa42c6dafb" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_s3_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a45b4cd6920f873af722f761b4779a251" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_STRAIN_TENSOR_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a552f9d9b49fb3006d70efc86a7633ca5" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IP_STRESS_TENSOR_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a84eb241e3c064c802e1344eb587fc403" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IPOL</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ab4c17644ac733c2bb1b8a32e1b10a8e0" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IPSTRAIN_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a8e57ebc274c2f9a6a9ec486bcc573e6e" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>IPSTRESS_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a62aa16ddf9b80b53fd8b71ab6c8cc348" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>LHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a34ca5ce934dec80b9a82ec99abb43a22" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>lump_matrices_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a381dab79b9e88de89392fe9d2f4125af" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a98c6cf1dbe2d55bce775249a985e04cf" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MaterialOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae2b75f9c674166a0f7c65505a4a766c1" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MaterialOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1adb94e7db577721029487225af1acc83a" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MaterialOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2630c48202f13587ecf0ce8c04f85207" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MaterialOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a06d7da89656114db3efb370b760f2174" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MaterialOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ada8f0c4132529a89c9def2a1ec94db62" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MaterialOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af7fa5ce4bebcb0332eb22f8f72866014" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MathOperatorLHS</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a02276747861b2df42947c9fca50e7082" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>means_key_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MTRL</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a80caf626696a711f04c0ed1acd14ab2e" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a11a964940ae410af4cbd9c33f03d5a9f" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>multiply_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a60cb3c4a87feb41ce07cb229e1341f35" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MultiplyAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae76aa6b2c8d1fca49eaf5baeef46819d" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0e51a52a9730c9733a40058dfb65d7f7" prot="public" virt="virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MultiplyWithTimeFactor</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a87d8c6442bfa7e06d796210bf2ea61b2" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2fa244d3942f5dd01ffa311db88fe0ea" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a68c1743b2d8b239538b1de4bc647757c" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a1aa593ef8eb1efeab98b3c4646ac5bbb" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>NSTRAIN_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a111aa27ba0747d733f365960f8c382f3" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>NSTRESS_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a77c0f5c5379c3464e590264e071b5432" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>NVAR_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2d15a8ce98eaf9fe68bb64f7a08fc969" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>op</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a93c785d11a531c3e9371d3588900ba0a" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a63cf7c372948f3c06e163252b6e4e42d" prot="public" virt="virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a80198b1dcd72c9717ecb348ed8bdd4e9" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>PEGP_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1aa08cb602e557a8339d66837976b5b17b" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>pratio_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a458a7965c1a21877e65412bf4889eb5e" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>principal_e_and_sigma_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1aa5bcb311d8795b125629098a20754e65" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>PrincipalStrainsAndStresses</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a3e0f634988ada2fc5655833a1d0b8ded" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>PropertyAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a42dd3aab5eae9a7315495e4e904af351" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>PSGP_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a596602368edaf87635ade42830186d07" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>sc_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1aed067fc96f7fd75a275424ab86dfeec7" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>SGP_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a6c684504585bc43c0eccf869ed4401c1" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>shear_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a8fe75348af5db640aee10556b434e507" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>sigma1_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a431634ac23d5dd5fdba0702998522bdb" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>sigma2_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a5276a428ef55eb0eb57e08f77c726e19" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>sigma3_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ae8b14726cab4047cd9d3c4a07824200f" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>sigma_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a6ff1c24de4ad8b5c94252121d4ea7401" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>STIFF_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1aba1fd39296130efbc518f6312d1181bd" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>strain1_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ac7e2c6ae3bb44e28abca6daf32c1fa5e" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>strain2_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1acdc7a31e4103133b4cd5e6b798e0353e" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>strain3_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ae396a3ef3473b86b78930aa389858d66" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>STRAIN_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a03fb039a1d3cd4756e59abcd34f93886" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>strain_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1accb3e669e88f4d31afc07d65c8064c20" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>STRESS_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a07d1f950f0e68342d9d46d793eec62ec" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>stress_key_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a0b4adf4caca4a317c9c83d27418b6627" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>StressesAndStrainsIP3D</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a12809a59cb96c185152239f7708cc50d" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a414bbbf7690a21c7b80a20eda75926df" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>subtract_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a5e1d45c6cbf6aebf197093ac5a40bf37" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>subtract_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acceb5f9b0a038e6d49fbbf3aff3e4b70" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>SubtractAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1afb45ea755a584e29e8dcc9f705cfd941" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>SubtractAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a4539598cf1ba6c874c918861213a2de0" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>SubtractLater</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a6fa0e44337ec3d1298dbf1295197628f" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>sum_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae5e3432ee76f4911b81ad13ccf2286de" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>TestOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af3ace5585d1d9835499792d8c8797c21" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>TestOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0f538bbce5bc1a0deac458a8b8dd1b7b" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>TestOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a1d12fc442933080ca6c939d42440cc60" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>TestOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a20ff9915e8e84050a01bc585a6696b12" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>TestOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae28df9f0db9f00bff29cd6aea77d8f81" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>TestOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad0e65ecc822a0cd27a3464067ca6be85" prot="public" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>TestOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1abb898750a0af12e4f2346998a7870202" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>time_divide_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac28e437cd2e78cb8be5c0140d511ad28" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>time_multiply_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6e1a9ac42d450cbbb0b00edeb2b56874" prot="protected" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>top</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1aa63f6e5e8baba4caaf1e3fba786fffda" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>ts_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a50908ffa7cbd51ce058bda78a8c9bdec" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>vc_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a2531f38c19ed2fb6971f3f8681cd9b04" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1a64b66243af52707bb8279aa067b76cc1" prot="public" virt="virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>WriteOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0972c226f26ae57084c7d22343560e3e" prot="public" virt="virtual" ambiguityscope="csmp::MathOperatorLHS&lt; 3U &gt;::"><scope>csmp::StressesAndStrainsIP3D</scope><name>WriteOperands</name></member>
+      <member refid="classcsmp_1_1_stresses_and_strains_i_p3_d_1ab725843ed18c94ec8f81d39ac0874800" prot="private" virt="non-virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>youngs_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac8bb4ff902250b18d841cacccd0b5dee" prot="public" virt="virtual"><scope>csmp::StressesAndStrainsIP3D</scope><name>~MathOperatorLHS</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1240 @@
+.TH "CSMPglobalFunctions" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+CSMPglobalFunctions \- Global CSMP Functions
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename T> bool \fBcsmp::withinTolerance\fP (T value1, T value2, T tolerance)"
+.br
+.RI "returns whether values are within tolerance "
+.ti -1c
+.RI "template<typename T> bool \fBcsmp::smallerThanWithinTolerance\fP (T valueInQuestion, T referenceValue, T tolerance)"
+.br
+.RI "returns whether values are within tolerance "
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class NodeOrElement> double \fBcsmp::maximumDifference\fP (\fBModel\fP< dim > &model, const char *nodeProp1, const char *nodeProp2, const char *region='Model')"
+.br
+.RI "returns the maximum difference found on any node/element between two properties property "
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class NodeOrElement> double \fBcsmp::averageDifference\fP (\fBModel\fP< dim > &model, const char *nodeProp1, const char *nodeProp2, const char *region='Model')"
+.br
+.RI "returns the averaged difference found on all nodes/elements between two properties property "
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class NodeOrElement> double \fBcsmp::maximumOfProperty\fP (\fBModel\fP< dim > &model, const char *prop, const char *region='Model')"
+.br
+.RI "returns the maximum value on any node/element of a property "
+.ti -1c
+.RI "template<uint32_t dim> double \fBcsmp::elementToNodeProperty\fP (\fBNode\fP< dim > *node, \fBIndex\fP key)"
+.br
+.RI "returns arithmetic average of parent elements prop to node "
+.ti -1c
+.RI "template<typename T> void \fBcsmp::vectorOut\fP (const std::vector< T > &v, std::string message='')"
+.br
+.RI "prints the content of a vector to std::cout, optional title std::string 'message' "
+.ti -1c
+.RI "void \fBcsmp::ignoreIstream\fP (std::istream &iStream, size_t noOfTerms)"
+.br
+.RI "discards given number of istream objects "
+.ti -1c
+.RI "bool \fBcsmp::copyFile\fP (std::string fileSource, std::string fileCopy)"
+.br
+.RI "copies any given file "
+.ti -1c
+.RI "void \fBcsmp::bubbleSortNodes1D\fP (std::vector< \fBNode\fP< 1U > * >::iterator NODES_BEGIN, std::vector< \fBNode\fP< 1U > * >::iterator NODES_END)"
+.br
+.RI "orders node indices so that the follow the x position(distance from 0) "
+.ti -1c
+.RI "void \fBcsmp::scaleModelByFactor\fP (\fBModel\fP< 3U > &model, double xFactor, double yFactor, double zFactor)"
+.br
+.RI "adjusts the size of the model by the provided factor "
+.ti -1c
+.RI "void \fBcsmp::minMaxXYZ\fP (\fBPoint\fP< 3U > &min, \fBPoint\fP< 3U > &max, const \fBModel\fP< 3U > &model, const char *regionName='Model')"
+.br
+.RI "returns points which CONTAIN the lowest and largest x,y,z coordinates\&. not equal to MinMaxCoordinates() !!! "
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBcsmp::modelMidpoint\fP (const \fBModel\fP< 3U > &model, const char *regionName='Model')"
+.br
+.RI "returns the true center of a csmp model "
+.ti -1c
+.RI "template<uint32_t dim> double \fBcsmp::boundaryInflow\fP (\fBModel\fP< dim > &model, \fBcsmp::Boundary\fP< dim > &boundary)"
+.br
+.RI "NCFVT bug workaround to calculate inflow across a boundary with PP conditions\&. Requires add\&. 'nodal volume flux'\&. "
+.ti -1c
+.RI "template<uint32_t dim> double \fBcsmp::regionInflow\fP (\fBModel\fP< dim > &model, \fBcsmp::Region\fP< dim > &region)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::singlePhaseVelocity\fP (\fBModel\fP< dim > &model, const std::string &regionName, const std::string velocityName='velocity', const std::string pressureName='fluid pressure', const std::string conductivityName='conductivity', const std::string volumeFluxName='volume flux')"
+.br
+.RI "establishes 'velocity' and 'volume flux' for a single phase system ('conductivity'), beware of surface elements "
+.ti -1c
+.RI "template<typename KeyType, typename ValueType> bool \fBcsmp::mapFind\fP (const KeyType &KEY, ValueType &VALUE, const std::map< KeyType, ValueType > &mapToWriteTo)"
+.br
+.RI "looks up value for given key and passes it to parameter; returns true if found, false otherwise "
+.ti -1c
+.RI "template<typename KeyType, typename ValueType> bool \fBcsmp::mapFind\fP (const KeyType &KEY, const std::map< KeyType, ValueType > &mapToWriteTo)"
+.br
+.RI "returns if value is to be found "
+.ti -1c
+.RI "template<typename KeyType, typename ValueType> bool \fBcsmp::mapOut\fP (const std::map< KeyType, ValueType > &mapToOutput, const char *filename)"
+.br
+.RI "Writes map to tab-seperated ascii file, (given types have '<<' overload) and returns success\&. "
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class Domain> bool \fBcsmp::connected\fP (const Domain< dim > &d1, const Domain< dim > &d2)"
+.br
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class Domain> double \fBcsmp::averageDistanceBetween\fP (const Domain< dim > &d1, const Domain< dim > &d2)"
+.br
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class Domain> double \fBcsmp::minimumDistanceBetween\fP (const Domain< dim > &d1, const Domain< dim > &d2)"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBcsmp::splitString\fP (std::string str, char delimiter)"
+.br
+.RI "utility that tokenises string into substrings using the supplied delimiter(s)\&. "
+.ti -1c
+.RI "void \fBcsmp::replaceWhiteSpaceBy\fP (std::string &, char ascii_char)"
+.br
+.RI "to fill whitespace in strings with character of choice, for instance '_' "
+.ti -1c
+.RI "template<typename T> std::string \fBcsmp::number_to_string\fP (const T &value)"
+.br
+.RI "converts types to strings without loss of precision (std::to_string limits to 6 significant digits) "
+.ti -1c
+.RI "template<typename T> std::string \fBcsmp::numberToString\fP (const T &value, bool verbose=false)"
+.br
+.RI "scientific-format string with appropriate digits (without loss of precision (std::to_string limits to 6 significant digits) "
+.ti -1c
+.RI "bool \fBcsmp::areFartherApartThan\fP (const double *pn, const double *pw, double \fBdistance\fP)"
+.br
+.RI "evaluates the distance between 2 points "
+.ti -1c
+.RI "size_t \fBcsmp::renumberElementNodes\fP (std::vector< \fBElement\fP< 1U > * >::iterator first, std::vector< \fBElement\fP< 1U > * >::iterator last)"
+.br
+.ti -1c
+.RI "size_t \fBcsmp::renumberElementNodes\fP (std::vector< \fBElement\fP< 2U > * >::iterator first, std::vector< \fBElement\fP< 2U > * >::iterator last)"
+.br
+.ti -1c
+.RI "size_t \fBcsmp::renumberElementNodes\fP (std::vector< \fBElement\fP< 3U > * >::iterator first, std::vector< \fBElement\fP< 3U > * >::iterator last)"
+.br
+.ti -1c
+.RI "template<typename T> size_t \fBcsmp::removeVectorElements\fP (std::vector< T > &toRemoveFrom, std::vector< T > &toRemove)"
+.br
+.RI "Vector element subtraction\&. "
+.ti -1c
+.RI "template<typename intType> size_t \fBcsmp::createUniqueCombinations\fP (std::vector< intType > &sequence, intType samples, std::deque< std::vector< intType > > &combinations)"
+.br
+.RI "find all possible combinations of the numbers provided in 'sequence', where 'samples' specified how many numbers shall be combined; combinations are returned into deque\&. "
+.ti -1c
+.RI "bool \fBcsmp::isInputFileEmpty\fP (std::ifstream &)"
+.br
+.RI "Returns true if file on ifstream is empty\&. "
+.ti -1c
+.RI "double \fBcsmp::triangleArea\fP (const \fBPoint\fP< 3U > &, const \fBPoint\fP< 3U > &, const \fBPoint\fP< 3U > &)"
+.br
+.RI "triangle area "
+.ti -1c
+.RI "double \fBcsmp::triangleArea\fP (const \fBPoint\fP< 2U > &, const \fBPoint\fP< 2U > &, const \fBPoint\fP< 2U > &)"
+.br
+.RI "area in 2D "
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBcsmp::normalOfTriangle\fP (const \fBPoint\fP< 3U > &, const \fBPoint\fP< 3U > &, const \fBPoint\fP< 3U > &)"
+.br
+.RI "returns the normal of a triangle "
+.ti -1c
+.RI "\fBPoint\fP< 2U > \fBcsmp::normalOfTriangle\fP (const \fBPoint\fP< 2U > &, const \fBPoint\fP< 2U > &, const \fBPoint\fP< 2U > &)"
+.br
+.RI "returns zero because the normal is not captured by coordinate system "
+.ti -1c
+.RI "double \fBcsmp::degreesToRadians\fP (double deg)"
+.br
+.RI "all trigonomic functions in C++ take arguments in radians "
+.ti -1c
+.RI "double \fBcsmp::radiansToDegrees\fP (double rad)"
+.br
+.ti -1c
+.RI "double \fBcsmp::quantiseToScale\fP (double x, double scale)"
+.br
+.ti -1c
+.RI "template<typename T> T \fBcsmp::sign\fP (T val)"
+.br
+.RI "sign function to determine a positive or negative multiplier= -1 0 1 extracting the sign of a number "
+.ti -1c
+.RI "template<typename T> T \fBcsmp::square\fP (T val)"
+.br
+.RI "Square function\&. "
+.ti -1c
+.RI "double \fBcsmp::rsqrt\fP (double val)"
+.br
+.RI "Reciprocal square root function\&. "
+.ti -1c
+.RI "double \fBcsmp::erf_Chebyshev\fP (double)"
+.br
+.RI "for conversion of numbers to strings use to_string() function "
+.ti -1c
+.RI "double \fBcsmp::erfc_Chebyshev\fP (double x)"
+.br
+.RI "approximation of the complementary error function using a Chebyshev polynomial "
+.ti -1c
+.RI "double \fBcsmp::vector_norm1\fP (std::vector< double > &x, std::vector< double > &scale)"
+.br
+.RI "L1 norm\&. "
+.ti -1c
+.RI "double \fBcsmp::vector_norm2\fP (std::vector< double > &x, std::vector< double > &scale)"
+.br
+.RI "L2 norm\&. "
+.ti -1c
+.RI "double \fBcsmp::vector_norm_inf\fP (std::vector< double > &x, std::vector< double > &scale)"
+.br
+.RI "L-infinity norm\&. "
+.ti -1c
+.RI "void \fBcsmp::vector_randomize\fP (std::vector< double > &x, double scale_fac=1\&.)"
+.br
+.RI "randomly perturbs the values stored in the supplied floating-point vector "
+.ti -1c
+.RI "template<typename Var> void \fBcsmp::average\fP (const std::vector< Var > &, Var &)"
+.br
+.RI "averaging the floating-point values of scalar, vector and tensor variables in CSMP "
+.ti -1c
+.RI "void \fBcsmp::dN_To2DOF\fP (uint32_t nodes, \fBDenseMatrix\fP< DM_MIN > &DN)"
+.br
+.RI "FEM matrix transformations, for the case where the solution variable is a vector in 2D, Zienkewicz, volume 1, p\&. 22\&. "
+.ti -1c
+.RI "void \fBcsmp::dN_To3DOF\fP (uint32_t nodes, \fBDenseMatrix\fP< DM_MIN > &DN)"
+.br
+.RI "FEM matrix transformations, for the case where the solution variable is a vector in 3D, Zienkewicz, volume 1, p\&. 133\&. "
+.ti -1c
+.RI "double \fBcsmp::splineValue\fP (double x, double x1, double x2, double y1, double y2, double k1, double k2)"
+.br
+.RI "auxiliary functions for spline interpolation "
+.ti -1c
+.RI "double \fBcsmp::splineDerivative\fP (double x, double x1, double x2, double y1, double y2, double k1, double k2)"
+.br
+.ti -1c
+.RI "double \fBcsmp::splineSecondDerivative\fP (double x, double x1, double x2, double y1, double y2, double k1, double k2)"
+.br
+.ti -1c
+.RI "double \fBcsmp::secant_method\fP (double xmin, double xmax, double(*function)(double), double tolerance)"
+.br
+.RI "finding root of function f(x) by Secant method within the x range [xmin,xmax] "
+.ti -1c
+.RI "double \fBcsmp::secant_line\fP (double x_intercept, double xmin, double xmax, double(*flinear)(double), double(*fnonlinear)(double), double tolerance)"
+.br
+.RI "in the range [xmin,xmax], finds the intersection of the nonlinear function (flinear) with a linear function (fnonlinear) with the given x-axis intercept "
+.ti -1c
+.RI "double \fBcsmp::maximum_of_function\fP (double xmin, double xmax, double(*function)(double), double tolerance)"
+.br
+.RI "finding the x value, in the range [xmin,xmax], where function f(x) is maximum by using golden-section search "
+.ti -1c
+.RI "double \fBcsmp::minimum_of_function\fP (double xmin, double xmax, double(*function)(double), double tolerance)"
+.br
+.RI "finding the x value, in the range [xmin,xmax], where function f(x) is minimum by using golden-section search "
+.ti -1c
+.RI "double \fBcsmp::g\fP (double x, double x1, double(*function)(double), double(*dfunction)(double))"
+.br
+.RI "finding the x value, in the range [xmin,xmax], where function the "df(x)/dx=(f(x)-f(x1))/(x-x1)"\&.\&. this line is the secant and tangent to f(x) at that point "
+.ti -1c
+.RI "\fBPolygon\fP * \fBmjl::insertionHull\fP (const std::vector< \fBmjl::Point\fP > &)"
+.br
+.RI "convex hull around a point cloud "
+.ti -1c
+.RI "\fBPolygon\fP * \fBmjl::starShapedPolygon\fP (const std::vector< \fBmjl::Point\fP > &pts)"
+.br
+.RI "builds star-shaped polygon around vector which must contain its first point "
+.ti -1c
+.RI "\fBPolygon\fP * \fBmjl::convexPolygonIntersect\fP (\fBPolygon\fP &P, \fBPolygon\fP &Q)"
+.br
+.RI "Laszlo, p\&. 158\&. "
+.ti -1c
+.RI "\fBPolygon\fP * \fBmjl::merge\fP (\fBPolygon\fP &L, \fBPolygon\fP &R)"
+.br
+.ti -1c
+.RI "void \fBmjl::advance\fP (const \fBPolygon\fP &, \fBPolygon\fP &, bool)"
+.br
+.ti -1c
+.RI "void \fBmjl::bridge\fP (\fBPolygon\fP &L, \fBPolygon\fP &R, \fBVertex\fP *vl, \fBVertex\fP *vr, int type)"
+.br
+.ti -1c
+.RI "void \fBmjl::supportingLine\fP (const \fBmjl::Point\fP &s, \fBPolygon\fP *p, LOCATION side)"
+.br
+.ti -1c
+.RI "bool \fBmjl::pointInConvexPolygon\fP (const \fBmjl::Point\fP &s, \fBPolygon\fP &p)"
+.br
+.RI "Laszlo, p\&. 87\&. "
+.ti -1c
+.RI "POINT_CLASSIFICATION \fBmjl::pointInPolygonRS\fP (const \fBmjl::Point\fP a, const \fBPolygon\fP &p)"
+.br
+.RI "Ray shooting method for arbitrary polygons\&. "
+.ti -1c
+.RI "POINT_CLASSIFICATION \fBmjl::pointInPolygonSA\fP (const \fBmjl::Point\fP a, const \fBPolygon\fP &p)"
+.br
+.RI "signed angle method for arbitrary polygons "
+.ti -1c
+.RI "bool \fBmjl::firstContainsSecondRS\fP (const \fBPolygon\fP &first, const \fBPolygon\fP &second)"
+.br
+.ti -1c
+.RI "INTERSECTION \fBmjl::lineTriangle3DIntersect\fP (const \fBEdge3D\fP &e, const \fBTriangle3D\fP &p, double &t)"
+.br
+.RI "Lazlo, p\&. 102\&. "
+.ti -1c
+.RI "\fBPolygon\fP * \fBmjl::project\fP (const \fBTriangle3D\fP &p, int \fBh\fP, int v)"
+.br
+.ti -1c
+.RI "bool \fBmjl::clipPolygonToEdge\fP (const \fBPolygon\fP &s, const \fBEdge\fP &e, \fBPolygon\fP &result)"
+.br
+.ti -1c
+.RI "bool \fBmjl::clipEdgeToPolygon\fP (const \fBPolygon\fP &, \fBEdge\fP &)"
+.br
+.RI "variation of clipPolygonToEdge(), MJL, p\&. 127 "
+.ti -1c
+.RI "void \fBcsmp::print\fP (\fBvector\fP< pair< pair< uint32_t, uint32_t >, \fBvector\fP< bool > > > &v)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isEdge\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether supplied boundary flag refers to a model edge "
+.ti -1c
+.RI "bool \fBcsmp::isCorner\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether flag is a corner "
+.ti -1c
+.RI "bool \fBcsmp::isSide\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether flag is a side of the model "
+.ti -1c
+.RI "bool \fBcsmp::isLEFT\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary LEFT "
+.ti -1c
+.RI "bool \fBcsmp::isRIGHT\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary RIGHT "
+.ti -1c
+.RI "bool \fBcsmp::isTOP\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary TOP "
+.ti -1c
+.RI "bool \fBcsmp::isBOTTOM\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary BOTTOM "
+.ti -1c
+.RI "bool \fBcsmp::isFRONT\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary FRONT (3D only) "
+.ti -1c
+.RI "bool \fBcsmp::isBACK\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether boundary flag belongs to boundary BACK (3D only) "
+.ti -1c
+.RI "bool \fBcsmp::canBeIRREGULAR\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns true also for edges and corners "
+.ti -1c
+.RI "\fBNode\fP< 1U > *const \fBcsmp::cornerFlaggedNode\fP (\fBModel\fP< 1U > &, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns nodes that are either flagged CNR1 or CNR2 from one-dimensional model "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::intToBOX_BOUNDARY\fP (int8_t i)"
+.br
+.ti -1c
+.RI "std::string \fBcsmp::parseBoundary\fP (\fBBOX_BOUNDARY\fP)"
+.br
+.RI "turn enumeration into string "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::parseBoundary\fP (const string &i)"
+.br
+.RI "text to boundary enum "
+.ti -1c
+.RI "bool \fBcsmp::belongsToEdge\fP (\fBBOX_BOUNDARY\fP edge, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether supplied boundary flag is located at a model boundary edge "
+.ti -1c
+.RI "bool \fBcsmp::belongsToSide\fP (\fBBOX_BOUNDARY\fP side, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "returns whether supplied boundary flag is located at a model boundary side "
+.ti -1c
+.RI "void \fBcsmp::boundaryMinMaxCoordinates\fP (\fBBOX_BOUNDARY\fP, \fBcsmp::Point\fP< 1U > &model_coord_min, \fBcsmp::Point\fP< 1U > &model_coord_max)"
+.br
+.RI "gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 1D model "
+.ti -1c
+.RI "void \fBcsmp::boundaryMinMaxCoordinates\fP (\fBBOX_BOUNDARY\fP, \fBcsmp::Point\fP< 2U > &, \fBcsmp::Point\fP< 2U > &)"
+.br
+.RI "gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 2D model "
+.ti -1c
+.RI "void \fBcsmp::boundaryMinMaxCoordinates\fP (\fBBOX_BOUNDARY\fP, \fBcsmp::Point\fP< 3U > &, \fBcsmp::Point\fP< 3U > &)"
+.br
+.RI "gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 3D model "
+.ti -1c
+.RI "bool \fBcsmp::isDiagnosticBoxBoundaryClassifier\fP (const string &i)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::printBoxBoundaryFlags\fP (const \fBModel\fP< dim > &)"
+.br
+.RI "prints a summary of the current flags of the nodes and elements to screen\&. "
+.ti -1c
+.RI "template void \fBcsmp::printBoxBoundaryFlags\fP (const \fBModel\fP< 1U > &)"
+.br
+.ti -1c
+.RI "template void \fBcsmp::printBoxBoundaryFlags\fP (const \fBModel\fP< 2U > &)"
+.br
+.ti -1c
+.RI "template void \fBcsmp::printBoxBoundaryFlags\fP (const \fBModel\fP< 3U > &)"
+.br
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlags\fP (\fBModel\fP< 1U > &)"
+.br
+.RI "using existing \fBBoundary\fP objects, establish node and element \fBBOX_BOUNDARY\fP flagging "
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlags\fP (\fBModel\fP< 2U > &)"
+.br
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlags\fP (\fBModel\fP< 3 > &model)"
+.br
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlagsForQuadrilateralModel\fP (\fBModel\fP< 2U > &)"
+.br
+.RI "boundary flags for 2D models consisting of quadrilaterals only; since these models are regular method is rather fast "
+.ti -1c
+.RI "void \fBcsmp::recreateBoxBoundaryFlagsForHexahedralModel\fP (\fBModel\fP< 3U > &)"
+.br
+.RI "boundary flags for 3D models consisting of hexahedra only; since these models are regular method is rather fast "
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class CELL> \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary\fP (const CELL< dim > *const, uint32_t boundary_face)"
+.br
+.RI "infers from node flags and cell type, which boundary the element face lies on including INTERNAL boundaries "
+.ti -1c
+.RI "template \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary\fP (const \fBElement\fP< 1U > *const, uint32_t)"
+.br
+.ti -1c
+.RI "template \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary\fP (const \fBElement\fP< 2U > *const, uint32_t)"
+.br
+.ti -1c
+.RI "template \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary\fP (const \fBElement\fP< 3U > *const, uint32_t)"
+.br
+.ti -1c
+.RI "template<uint32_t dim, template< uint32_t > class CELL> bool \fBcsmp::atBoundary\fP (const CELL< dim > *const)"
+.br
+.RI "is the cell located at a model boundary? - for line or surface element in 3D models this is inferred when all their nodes are on boundary; for volume elements all nodes of one face must be "
+.ti -1c
+.RI "template bool \fBcsmp::atBoundary\fP (const \fBElement\fP< 1U > *const)"
+.br
+.ti -1c
+.RI "template bool \fBcsmp::atBoundary\fP (const \fBElement\fP< 2U > *const)"
+.br
+.ti -1c
+.RI "template bool \fBcsmp::atBoundary\fP (const \fBElement\fP< 3U > *const)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary\fP (const set< \fBBOX_BOUNDARY\fP > &node_flags, uint32_t boundary_face_corner_nodes)"
+.br
+.RI "identifying the boundary that a lower dimensional element is located on from the \fBBOX_BOUNDARY\fP flags assigned to its nodes "
+.ti -1c
+.RI "template \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary< 2 >\fP (const set< \fBBOX_BOUNDARY\fP > &, uint32_t)"
+.br
+.ti -1c
+.RI "template \fBBOX_BOUNDARY\fP \fBcsmp::atBoundary< 3 >\fP (const set< \fBBOX_BOUNDARY\fP > &, uint32_t)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isStrictlyBoxShaped\fP (const \fBModel\fP< 2U > &)"
+.br
+.RI "returns true if the model contains the complete set of box boundary identifiers "
+.ti -1c
+.RI "bool \fBcsmp::isStrictlyBoxShaped\fP (const \fBModel\fP< 3U > &)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::hasAllSideBoundaries\fP (const \fBModel\fP< 3U > &)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::hasAllSideBoundaries\fP (const \fBModel\fP< 2U > &)"
+.br
+.RI "returns true if the model contains some box boundary identifiers, but also irregular boundaries "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::boxFlagsToVariable\fP (\fBModel\fP< dim > &, const char *node_variable, const char *elmt_variable)"
+.br
+.RI "permits to create variables values from \fBBOX_BOUNDARY\fP flag enumeration values "
+.ti -1c
+.RI "template void \fBcsmp::boxFlagsToVariable\fP (\fBModel\fP< 2 > &, const char *, const char *)"
+.br
+.ti -1c
+.RI "template void \fBcsmp::boxFlagsToVariable\fP (\fBModel\fP< 3 > &, const char *, const char *)"
+.br
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::boxBoundaryPropertyRange\fP (const \fBModel\fP< dim > &sg, \fBBOX_BOUNDARY\fP boundary, const char *node_property, double &bmin, double &bmax)"
+.br
+.RI "reports the range of property values on the nodes flagged with the \fBBOX_BOUNDARY\fP identifier "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::whichEdge\fP (\fBBOX_BOUNDARY\fP side1, \fBBOX_BOUNDARY\fP side2)"
+.br
+.RI "returns the dim-2 edge (if any) that lies between the sides of the box that are given as arguments "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::whichCorner\fP (\fBBOX_BOUNDARY\fP side1, \fBBOX_BOUNDARY\fP side2, \fBBOX_BOUNDARY\fP side3)"
+.br
+.RI "returns the corner of the BOX (1-6) that is shared by the side boundaries "
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBcsmp::whichBoundary\fP (\fBBOX_BOUNDARY\fP node_flag1, \fBBOX_BOUNDARY\fP node_flag2)"
+.br
+.RI "return which boundary the edge or lower-dim face with the two end-node flags is on "
+.ti -1c
+.RI "double \fBcsmp::bilinearInterpolate\fP (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 1U > &xy1, const \fBPoint\fP< 1U > &xy2, const \fBPoint\fP< 1U > &coord, double p1, double p2, double, double)"
+.br
+.RI "just a stub (ignores the bilinear) "
+.ti -1c
+.RI "double \fBcsmp::bilinearInterpolate\fP (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 2U > &xy1, const \fBPoint\fP< 2U > &xy2, const \fBPoint\fP< 2U > &coord, double p1, double p2, double p3, double p4)"
+.br
+.ti -1c
+.RI "double \fBcsmp::bilinearInterpolate\fP (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 3U > &xy1, const \fBPoint\fP< 3U > &xy2, const \fBPoint\fP< 3U > &coord, double p1, double p2, double p3, double p4)"
+.br
+.ti -1c
+.RI "double \fBcsmp::linearInterpolate\fP (const pair< \fBPoint\fP< 1U >, double > &p1, const pair< \fBPoint\fP< 1U >, double > &p2, const \fBPoint\fP< 1U > &pt)"
+.br
+.RI "interpolate along boundaries of 2D rectangle-shaped model "
+.ti -1c
+.RI "double \fBcsmp::linearInterpolate\fP (const pair< \fBPoint\fP< 2U >, double > &p1, const pair< \fBPoint\fP< 2U >, double > &p2, const \fBPoint\fP< 2U > &pt)"
+.br
+.RI "interpolate along boundaries of 2D rectangle-shaped model "
+.ti -1c
+.RI "double \fBcsmp::linearInterpolate\fP (const pair< \fBPoint\fP< 3U >, double > &p1, const pair< \fBPoint\fP< 3U >, double > &p2, const \fBPoint\fP< 3U > &pt)"
+.br
+.RI "interpolate along boundaries of 2D rectangle-shaped model "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::flagEdges\fP (\fBVSet\fP< dim > &, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)"
+.br
+.RI "Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG\&. "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::flagCornerNodes\fP (\fBVSet\fP< dim > &, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)"
+.br
+.RI "using the coordinate locations of the vertices defining the bounding rectangle; node flagging is performed; error prone method! "
+.ti -1c
+.RI "template<uint32_t dim> void \fBcsmp::establishBoundaryFlagsForBoxModel\fP (\fBVSet\fP< dim > &vset, double tolerance)"
+.br
+.RI "Applies box boundary flags assuming that the model stored in the \fBVSet\fP is box-shaped with the sides aligned with the coordinate axes\&. "
+.ti -1c
+.RI "template void \fBcsmp::establishBoundaryFlagsForBoxModel\fP (\fBVSet\fP< 3U > &, double)"
+.br
+.ti -1c
+.RI "template void \fBcsmp::establishBoundaryFlagsForBoxModel\fP (\fBVSet\fP< 2U > &, double)"
+.br
+.ti -1c
+.RI "template void \fBcsmp::establishBoundaryFlagsForBoxModel\fP (\fBVSet\fP< 1U > &, double)"
+.br
+.ti -1c
+.RI "template<typename Var> \fBVARIABLE_TYPE\fP \fBcsmp::variableType\fP (const Var &)"
+.br
+.ti -1c
+.RI "void \fBcsmp::planeStressMatrix\fP (double E, double nu, \fBDenseMatrix\fP< DM_MIN > &D)"
+.br
+.ti -1c
+.RI "void \fBcsmp::planeStrainMatrix\fP (double E, double nu, \fBDenseMatrix\fP< DM_MIN > &D)"
+.br
+.ti -1c
+.RI "void \fBcsmp::stiffnessMatrix\fP (double E, double nu, \fBDenseMatrix\fP< DM_MIN > &D)"
+.br
+.ti -1c
+.RI "void \fBcsmp::stiffnessMatrix\fP (double E, \fBDenseMatrix\fP< DM_MIN > &D, double length)"
+.br
+.RI "1D linear bar "
+.ti -1c
+.RI "void \fBcsmp::planeStressMatrix\fP (const \fBvector\fP< \fBScalarVariable\fP > &E, const \fBvector\fP< \fBScalarVariable\fP > &nu, \fBvector\fP< \fBDenseMatrix\fP< DM_MIN > > &D)"
+.br
+.ti -1c
+.RI "void \fBcsmp::planeStrainMatrix\fP (const \fBvector\fP< \fBScalarVariable\fP > &E, const \fBvector\fP< \fBScalarVariable\fP > &nu, \fBvector\fP< \fBDenseMatrix\fP< DM_MIN > > &D)"
+.br
+.ti -1c
+.RI "void \fBcsmp::stiffnessMatrix\fP (const \fBvector\fP< \fBScalarVariable\fP > &E, const \fBvector\fP< \fBScalarVariable\fP > &nu, \fBvector\fP< \fBDenseMatrix\fP< DM_MIN > > &D)"
+.br
+.ti -1c
+.RI "void \fBcsmp::sortEigenVectorsAndValues\fP (\fBVectorVariable\fP< 2U > &vc, \fBTensorVariable\fP< 2U > &ts)"
+.br
+.RI "in the order of the biggest positive to the smallest eigenvalue "
+.ti -1c
+.RI "void \fBcsmp::sortEigenVectorsAndValues\fP (\fBVectorVariable\fP< 3U > &vc, \fBTensorVariable\fP< 3U > &ts)"
+.br
+.ti -1c
+.RI "void \fBcsmp::normalAndShearStressOnPlane\fP (const \fBTensorVariable\fP< 3U > &cartesian_stress, const \fBPoint\fP< 3U > &plane_normal, double &sigma_n, double &sigma_s)"
+.br
+.RI "uses Cauchy's formula to resolve normal and magnitude of shear stress on a surface defined by its normal "
+.ti -1c
+.RI "void \fBcsmp::normalAndShearStressOnPlane\fP (const \fBTensorVariable\fP< 3U > &cartesian_stress, const \fBPoint\fP< 3U > &plane_normal, double &sigma_n, \fBVectorVariable\fP< 3U > &sigma_s)"
+.br
+.RI "uses Cauchy's formula to resolve normal and shear stress on a surface defined by its normal "
+.ti -1c
+.RI "void \fBcsmp::Box::UnitNormalTo\fP (\fBBOX_BOUNDARY\fP bdry, uint32_t dim, std::vector< double > &nrml) const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions available globally in the csmp Namespace
+.SH "Function Documentation"
+.PP 
+.SS "void mjl::advance (const \fBPolygon\fP & A, \fBPolygon\fP & R, bool inside)\fR [inline]\fP"
+
+.PP
+\fBWarning\fP
+.RS 4
+polygon must have been built in counterclockwise way (positive) for this to work ! 
+.br
+.RE
+.PP
+advances the current edge of polygon A clockwise and inserts this edge's (destination) endpoint x into intersection polygon R in counter-clockwise fashion, if x of A is inside R and x was not the last point inserted into R\&. 
+.SS "bool csmp::areFartherApartThan (const double * pn, const double * pw, double distance)"
+
+.PP
+evaluates the distance between 2 points Evaluates distance between 2 points\&. If it is smaller that supplied value, the method returns false, else it returns true\&.
+.SH "Input Arguments"
+.PP
+The locations of the points that shall be evaluated\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The minimum distance that the points should be apart from one another\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class CELL> bool csmp::atBoundary (const CELL< dim > * const cptr)"
+
+.PP
+is the cell located at a model boundary? - for line or surface element in 3D models this is inferred when all their nodes are on boundary; for volume elements all nodes of one face must be returns whether the cell is at the model boundary; this is so if all nodes of a line or surface element are flagged boundary or one face of a volume element 
+.SS "template<uint32_t dim, template< uint32_t > class CELL> \fBBOX_BOUNDARY\fP csmp::atBoundary (const CELL< dim > *const eptr, uint32_t b_face)"
+
+.PP
+infers from node flags and cell type, which boundary the element face lies on including INTERNAL boundaries Infers from the node flags and the boundary face (local) number, which boundary the cell lies on; returns INTERNAL if all flags are not but the cell has no neighbor
+
+.PP
+\fBAttention\fP
+.RS 4
+only cells which have a face on the \fBBOX_BOUNDARY\fP are considered boundary elements
+
+.PP
+lower dimensional cells may be flagged as INTERNAL boundary if they have no neighbor but occur inside of the model\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+14/10/21 
+.RE
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "template<typename Var> void csmp::average (const \fBvector\fP< Var > & var_vec, Var & var)"
+
+.PP
+averaging the floating-point values of scalar, vector and tensor variables in CSMP averaging the floating-point values of scalar, vector and tensor variables in CSMP 
+.SS "bool csmp::belongsToEdge (\fBBOX_BOUNDARY\fP edge, \fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether supplied boundary flag is located at a model boundary edge Returns true if
+.PP
+\fBParameters\fP
+.RS 4
+\fIbd\fP belongs to the corresponding edge\&. \fBExample\fP: CNR1 and CNR2 belong to EDGE1\&. 
+.RE
+.PP
+
+.SS "bool csmp::belongsToSide (\fBBOX_BOUNDARY\fP side, \fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether supplied boundary flag is located at a model boundary side Returns true if
+.PP
+\fBParameters\fP
+.RS 4
+\fIbd\fP belongs to the corresponding side of the box-shaped model\&. \fBExample\fP: CNR1 - CNR4 belong to BACK\&. 
+.RE
+.PP
+
+.SS "double csmp::bilinearInterpolate (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 2U > & xy1, const \fBPoint\fP< 2U > & xy2, const \fBPoint\fP< 2U > & coord, double p1, double p2, double p3, double p4)"
+interpolateXY() uses bilinear interpolation to find the value of a property specified at the corner points of a rectangle, at the coordinates of a point located inside of this rectangle\&.
+
+.PP
+Since interpolateXY() carries out an interpolation on a planar surface in 3D space, it also needs the integer indices which give the axis in the reference coordinate system\&.
+.SH "Input Arguments"
+.PP
+The first two arguments of interpolateXY() specify the coordinate axis indices of the following \fBPoint<dim>\fP arguments which shall be used in the interpolation\&. For instance, for i=0, j=1, the interpolation will be carried out in the XY plane\&.
+
+.PP
+The three following \fBVectorVariable<2U>\fP arguments specify the lower left and upper right right corners of the rectangle in which the variable value shall be interpolated at a point given by the third \fBVectorVariable<2U>\fP argument\&.
+
+.PP
+The last four floating point arguments define the values of the variable which is to be interpolated\&. They are the corner points of the rectangle listed in counter-clockwise fashion (e\&.g\&., lower left, lower right, upper right and upper left corners, respectively)\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The result of the interpolation is returned into a double type variable\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Function is used by AssignBoundaryValues()\&.
+.SH "Messages"
+.PP
+The function will report an error and return the average value of the four cornerpoints if their coordinates are identical\&. 
+.SS "double csmp::bilinearInterpolate (uint32_t idx_x, uint32_t idx_y, const \fBPoint\fP< 3U > & xy1, const \fBPoint\fP< 3U > & xy2, const \fBPoint\fP< 3U > & coord, double p1, double p2, double p3, double p4)"
+interpolateXY() uses bilinear interpolation to find the value of a property specified at the corner points of a rectangle, at the coordinates of a point located inside of this rectangle\&.
+
+.PP
+Since interpolateXY() carries out an interpolation on a planar surface in 3D space, it also needs the integer indices which give the axis in the reference coordinate system\&.
+.SH "Input Arguments"
+.PP
+The first two arguments of interpolateXY() specify the coordinate axis indices of the following \fBVectorVariable<dim>\fP arguments which shall be used in the interpolation\&. For instance, for i=0, j=1, the interpolation will be carried out in the XY plane\&.
+
+.PP
+The three following \fBVectorVariable<dim>\fP arguments specify the lower left and upper right right corners of the rectangle in which the variable value shall be interpolated at a point given by the third \fBVectorVariable<dim>\fP argument\&.
+
+.PP
+The last four floating point arguments define the values of the variable which is to be interpolated\&. They are the corner points of the rectangle listed in counter-clockwise fashion (e\&.g\&., lower left, lower right, upper right and upper left corners, respectively)\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The result of the interpolation is returned into a double type variable\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Function is used by AssignBoundaryValues()\&.
+.SH "Messages"
+.PP
+The function will report an error and return the average value of the four cornerpoints if their coordinates are identical\&. 
+.SS "void csmp::boundaryMinMaxCoordinates (\fBBOX_BOUNDARY\fP boundary, \fBcsmp::Point\fP< 1U > & , \fBcsmp::Point\fP< 1U > & )"
+
+.PP
+gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 1D model Sets supplied model min, max coordinates to the coordinate value range that applies to the specified model boundary\&. 
+.SS "template<uint32_t dim> void csmp::boxFlagsToVariable (\fBModel\fP< dim > & model, const char * node_variable, const char * elmt_variable)"
+
+.PP
+permits to create variables values from \fBBOX_BOUNDARY\fP flag enumeration values Encodes boundary flag values into scalar variables which can be examined for correctness\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 7/3/16 
+.RE
+.PP
+
+.SS "bool csmp::canBeIRREGULAR (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns true also for edges and corners For irregular shaped boundaries that were created from surfaces 
+.PP
+\fBTodo\fP
+.RS 4
+figure out whether edges and corners should be included? 
+.RE
+.PP
+
+.SS "bool mjl::clipEdgeToPolygon (const \fBPolygon\fP & s, \fBEdge\fP & e)"
+
+.PP
+variation of clipPolygonToEdge(), MJL, p\&. 127 the supplied edge is clipped where it extends beyond the polygon, p if e does not intersect p, the method returns false variation of clipPolygonToEdge(), MJL, p\&. 127
+
+.PP
+\fBWarning\fP
+.RS 4
+works only for convex polygons which yield exactly two crossing points\&. 
+.RE
+.PP
+
+.SS "\fBNode\fP< 1U > *const csmp::cornerFlaggedNode (\fBModel\fP< 1U > & model, \fBBOX_BOUNDARY\fP corner_flag)"
+
+.PP
+returns nodes that are either flagged CNR1 or CNR2 from one-dimensional model Finds the corner nodes of a boxed shaped model so that boundary conditions can be assigned\&. Function uses domain '\fBModel\fP' to avoid linear search\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+returns nodes that are either flagged CNR1, CNR2 or INTERNAL from one-dimensional model 
+.RE
+.PP
+
+.SS "void csmp::dN_To2DOF (uint32_t nodes, \fBDenseMatrix\fP< DM_MIN > & B)"
+
+.PP
+FEM matrix transformations, for the case where the solution variable is a vector in 2D, Zienkewicz, volume 1, p\&. 22\&. Converts (global) interpolation function derivative matrix into form where it can be multiplied, for instance, with a 2DOF material property matrix or for computation of 2D stiffness matrix\&. 
+.br
+
+.PP
+Original B: 
+.PP
+.nf
+| dN0dx dN1dx \&.\&.\&. dN(nodes)dx |
+
+.fi
+.PP
+ B = | dN0dy dN1dy \&.\&.\&. dN(nodes)dy |
+
+.PP
+Transformed B (see Zienkiewicz Vol\&.1 p\&. 48, eq\&. 3\&.10b): 
+.PP
+.nf
+| dN0dx   0   dN1dx  \&.\&.\&. dN(nodes)dx   0   |
+
+.fi
+.PP
+ B = | 0 dN0dy 0 \&.\&.\&. 0 dN(nodes)dy | | dN0dy dN0dx dN1dy \&.\&.\&. dN5dy dN(nodes)dx |
+.SH "Input Arguments"
+.PP
+The shape function derivative matrix DN for 1 degree of freedom per node\&.
+
+.PP
+The expanded matrix is returned into the input matrix\&.
+.SH "Application Examples"
+.PP
+To pre-process DN matrices in multi-DOF computations\&. 
+.br
+ 
+.PP
+.nf
+@test OK SKM refactored and retested 2/12/2014
+
+.fi
+.PP
+ 
+.SS "void csmp::dN_To3DOF (uint32_t nodes, \fBDenseMatrix\fP< DM_MIN > & B)"
+
+.PP
+FEM matrix transformations, for the case where the solution variable is a vector in 3D, Zienkewicz, volume 1, p\&. 133\&. Transformation of interpolation function derivative matrix to 3 vectorial degrees of freedom per node as shown in Zienkewicz, vol\&. 1, p\&.133\&.
+
+.PP
+\fBTest\fP
+.RS 4
+OK SKM retested 2/12/2014 
+.RE
+.PP
+
+.SS "double csmp::erf_Chebyshev (double x)"
+
+.PP
+for conversion of numbers to strings use to_string() function erf() and erfc() approximated with Chebyshev polynomials 
+.SS "template<uint32_t dim> void csmp::establishBoundaryFlagsForBoxModel (\fBVSet\fP< dim > & vset, double tol)"
+
+.PP
+Applies box boundary flags assuming that the model stored in the \fBVSet\fP is box-shaped with the sides aligned with the coordinate axes\&. 
+.PP
+.nf
+ Applies box boundary flags assuming that the model stored in the VSet is box-shaped\&.
+ Brute force approach: based on the position the nodes are flagged as boundary nodes
+
+ @param tol gives the precision with which the nodes must be matched\&.
+
+.fi
+.PP
+
+.PP
+tested: O\&.K\&. 
+.SS "template<uint32_t dim> void csmp::flagEdges (\fBVSet\fP< dim > & vset, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)"
+
+.PP
+Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG\&. Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG dependent on their location\&. 
+.SS "double csmp::g (double x, double x1, double(* function )(double), double(* dfunction )(double))"
+
+.PP
+finding the x value, in the range [xmin,xmax], where function the "df(x)/dx=(f(x)-f(x1))/(x-x1)"\&.\&. this line is the secant and tangent to f(x) at that point finding the x value, in the range [xmin,xmax], where function the df(x)/dx-(f(x)-f(x1))/(x-x1)\&.\&. this line is the secant and tangent to f(x) at the shock point Mahyar: this is a basic function for two phase shock velocity analysis\&. 
+.SS "bool csmp::hasAllSideBoundaries (const \fBModel\fP< 2U > & model)"
+
+.PP
+returns true if the model contains some box boundary identifiers, but also irregular boundaries 2D side boudaries only 
+.SS "bool csmp::hasAllSideBoundaries (const \fBModel\fP< 3U > & model)"
+returns true if the model contains all the side boundary identifiers of the box 
+.SS "\fBBOX_BOUNDARY\fP csmp::intToBOX_BOUNDARY (int8_t i)"
+Parses the \fBBOX_BOUNDARY\fP identifier (see \fBBox\&.h\fP)\&. If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+use this only to convert ANSYS or outside-of CSMP generated flags of the enlisted names into \fBBOX_BOUNDARY\fP enums 
+.RE
+.PP
+
+.SS "bool csmp::isBACK (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether boundary flag belongs to boundary BACK (3D only) of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "bool csmp::isBOTTOM (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether boundary flag belongs to boundary BOTTOM of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "bool csmp::isCorner (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether flag is a corner of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "bool csmp::isDiagnosticBoxBoundaryClassifier (const string & i)"
+compares the supplied string with valid \fBBOX_BOUNDARY\fP classifications; returns true if string is equivaled to identifiers, except for NOT, INTERNAL, IRREGULAR
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM (10/2/2016) 
+.RE
+.PP
+
+.SS "bool csmp::isEdge (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether supplied boundary flag refers to a model edge returns wether a node (or line element) lies on an edge of the model 
+.SS "bool csmp::isFRONT (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether boundary flag belongs to boundary FRONT (3D only) of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "bool csmp::isLEFT (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether boundary flag belongs to boundary LEFT of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "bool csmp::isRIGHT (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether boundary flag belongs to boundary RIGHT of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "bool csmp::isSide (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether flag is a side of the model of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "bool csmp::isStrictlyBoxShaped (const \fBModel\fP< 2U > & model)"
+
+.PP
+returns true if the model contains the complete set of box boundary identifiers returns true if the model contains the complete set of box boundary identifiers all nodes are considered\&. 
+.SS "bool csmp::isStrictlyBoxShaped (const \fBModel\fP< 3U > & model)"
+tests (only) if all boundary identifiers are there 
+.SS "bool csmp::isTOP (\fBBOX_BOUNDARY\fP bd)"
+
+.PP
+returns whether boundary flag belongs to boundary TOP of rectangular (brick-shaped) model;
+
+.PP
+\fBTest\fP
+.RS 4
+OK 
+.RE
+.PP
+
+.SS "double csmp::maximum_of_function (double xmin, double xmax, double(* function )(double), double tolerance)"
+
+.PP
+finding the x value, in the range [xmin,xmax], where function f(x) is maximum by using golden-section search finding maximum of a function using golden-section search, see:
+
+.PP
+https://en.wikipedia.org/wiki/Golden-section_search 
+.SS "\fBPolygon\fP * mjl::merge (\fBPolygon\fP & L, \fBPolygon\fP & R)"
+If a and b intersect eachother their union is return as potentially non-convex polygon into res\&. 
+.SS "double csmp::minimum_of_function (double xmin, double xmax, double(* function )(double), double tolerance)"
+
+.PP
+finding the x value, in the range [xmin,xmax], where function f(x) is minimum by using golden-section search finding minimum of a function using golden-section search, see:
+
+.PP
+https://en.wikipedia.org/wiki/Golden-section_search 
+.SS "template<uint32_t dim, template< uint32_t > class Domain> double csmp::minimumDistanceBetween (const Domain< dim > & d1, const Domain< dim > & d2)"
+
+.PP
+\fBTodo\fP
+.RS 4
+(2-F) (2-C) Should return a vector instead 
+.RE
+.PP
+
+.SS "void csmp::normalAndShearStressOnPlane (const \fBTensorVariable\fP< 3U > & ts, const \fBPoint\fP< 3U > & un, double & sigma_n, double & sigma_s)"
+
+.PP
+uses Cauchy's formula to resolve normal and magnitude of shear stress on a surface defined by its normal Solves for the surface normal and tangential stresses, i\&.e\&. the first and second term in the equation, 
+.br
+
+.PP
+t = (t \&. n) n + n x (t x n) 
+.br
+
+.PP
+respectively, using Cauchy's formula\&. For description see Pollard & Fletcher, p\&. 215\&. 
+.br
+.SH "Input Arguments"
+.PP
+The first argument is a tensor of the Cartesian stresses (as opposed to the principal stresses)\&. The second argument is the outward-pointing unit normal to the surface of interest\&. 
+.br
+
+.PP
+\fBNote\fP
+.RS 4
+The computed stress components are returned into the 3rd and 4th function arguments\&. 
+.RE
+.PP
+
+.SS "void csmp::normalAndShearStressOnPlane (const \fBTensorVariable\fP< 3U > & ts, const \fBPoint\fP< 3U > & un, double & sigma_n, \fBVectorVariable\fP< 3U > & sigma_s)"
+
+.PP
+uses Cauchy's formula to resolve normal and shear stress on a surface defined by its normal As previous method, but returning the shear stress as a vector variable\&. 
+.SS "\fBPoint\fP< 2U > csmp::normalOfTriangle (const \fBPoint\fP< 2U > & , const \fBPoint\fP< 2U > & , const \fBPoint\fP< 2U > & )"
+
+.PP
+returns zero because the normal is not captured by coordinate system normal is zero as it points into the coordinate direction that does not exist 
+.SS "\fBPoint\fP< 3U > csmp::normalOfTriangle (const \fBPoint\fP< 3U > & pt0, const \fBPoint\fP< 3U > & pt1, const \fBPoint\fP< 3U > & pt2)"
+
+.PP
+returns the normal of a triangle creates the unit normal to the triangle defined by the points in counter-clockwise order\&. 
+.SS "std::string csmp::parseBoundary (\fBBOX_BOUNDARY\fP i)"
+
+.PP
+turn enumeration into string Parses the \fBBOX_BOUNDARY\fP identifier (see \fBBox\&.h\fP)\&. If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative\&. 
+.SS "void csmp::planeStrainMatrix (const \fBvector\fP< \fBScalarVariable\fP > & E, const \fBvector\fP< \fBScalarVariable\fP > & nu, \fBvector\fP< \fBDenseMatrix\fP< DM_MIN > > & D)"
+All strain is confined to the plane of the model\&. 
+.SS "void csmp::planeStrainMatrix (double E, double nu, \fBDenseMatrix\fP< DM_MIN > & D)"
+Cook et al\&. p\&. 21; Young's modulus, Poisson's ratio
+
+.PP
+stiffness form: to compute stresses from strains 
+.SS "void csmp::planeStressMatrix (const \fBvector\fP< \fBScalarVariable\fP > & E, const \fBvector\fP< \fBScalarVariable\fP > & nu, \fBvector\fP< \fBDenseMatrix\fP< DM_MIN > > & D)"
+Deformation only leads to in-plane stresses, but material gets extruded perpendicular to the plane of the model\&. 
+.SS "void csmp::planeStressMatrix (double E, double nu, \fBDenseMatrix\fP< DM_MIN > & D)"
+Computes the 2D material property matrix for plane strain computations, see Cook et al\&. p\&. 21\&. 
+.br
+.SH "Input Arguments"
+.PP
+Young's modulus and Poisson's ratio as double variables and a Meschach matrix into which the result is returned\&. 
+.SS "bool mjl::pointInConvexPolygon (const \fBmjl::Point\fP & s, \fBPolygon\fP & p)"
+
+.PP
+Laszlo, p\&. 87\&. convex polygon method 
+.SS "POINT_CLASSIFICATION mjl::pointInPolygonSA (const \fBmjl::Point\fP a, const \fBPolygon\fP & p)"
+
+.PP
+signed angle method for arbitrary polygons signed angle method for arbitrary polygons (NB: function has a tolerance issue 
+.SS "template<uint32_t dim> void csmp::printBoxBoundaryFlags (const \fBModel\fP< dim > & model)"
+
+.PP
+prints a summary of the current flags of the nodes and elements to screen\&. prints a summary of the current flags of the nodes and elements to screen\&. 
+.SS "\fBPolygon\fP * mjl::project (const \fBTriangle3D\fP & p, int h, int v)"
+assumes that the projection of the triangle into the h,v plane is non-degenerate, i\&.e\&. it is a triangle 
+.PP
+\fBWarning\fP
+.RS 4
+watch out! - the returned triangle pointer must be deleted by the user of the function 
+.RE
+.PP
+
+.SS "double csmp::quantiseToScale (double x, double scale)\fR [inline]\fP"
+Shave off decimal places from floating point values so that numbers that contain noise match at the given target precision\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIscale\fP 10^decimal places, i\&.e\&. 1e-5 to get 5 decimal places 
+.RE
+.PP
+
+.SS "void csmp::recreateBoxBoundaryFlags (\fBModel\fP< 2U > & model)"
+Using already existing side csmp::Bboundary objects in the model, method recreates a corresponding, consistent box-boundary flagging\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+the boundaries LEFT, RIGHT, TOP(or IRREGULAR), BOTTOM must be present 
+.RE
+.PP
+
+.SS "void csmp::recreateBoxBoundaryFlags (\fBModel\fP< 3 > & model)"
+re-establishes (in as much is possible) the \fBBox\fP boundary flagging of nodes and elements using existing model \fBBoundary\fP objects, including sides, edges and corners\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+methods assumes that nodes and elements on the interior of the domain are already flagged as NOT\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 10/3/2016 
+.RE
+.PP
+
+.SS "void csmp::recreateBoxBoundaryFlagsForHexahedralModel (\fBModel\fP< 3U > & model)"
+
+.PP
+boundary flags for 3D models consisting of hexahedra only; since these models are regular method is rather fast Establishes the \fBBOX_BOUNDARY\fP flagging for a 3D model consisting out of hexahedral elements\&.
+
+.PP
+\fBNote\fP
+.RS 4
+this method is quick\&. 
+.RE
+.PP
+
+.SS "void csmp::recreateBoxBoundaryFlagsForQuadrilateralModel (\fBModel\fP< 2U > & model)"
+
+.PP
+boundary flags for 2D models consisting of quadrilaterals only; since these models are regular method is rather fast Establishes the \fBBOX_BOUNDARY\fP flagging for a 2D model consisting out of quadrilateral elements\&.
+
+.PP
+\fBNote\fP
+.RS 4
+this method is quick\&. 
+.RE
+.PP
+
+.SS "template<typename T> size_t csmp::removeVectorElements (std::vector< T > & toRemoveFrom, std::vector< T > & toRemove)"
+
+.PP
+Vector element subtraction\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+06/11/2012
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fItoRemoveFrom\fP vector from which elements are deleted\&. 
+.br
+\fItoRemove\fP vector which contains elements to be deleted from toRemoveFrom
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+new size of vector\&. 
+.RE
+.PP
+
+.SS "size_t csmp::renumberElementNodes (std::vector< \fBElement\fP< 1U > * >::iterator first, std::vector< \fBElement\fP< 1U > * >::iterator last)"
+renumber node index values for a range of elements in a continuous sequence from (0\&.\&.n-1); the number of unique nodes is returned 
+.SS "double csmp::rsqrt (double val)"
+
+.PP
+Reciprocal square root function\&. rsqrt -- computes reciprocal square root 
+.SS "double csmp::secant_method (double xmin, double xmax, double(* function )(double), double tolerance)"
+
+.PP
+finding root of function f(x) by Secant method within the x range [xmin,xmax] Finding the root of the function by the Secant method 
+.SS "double csmp::splineDerivative (double x, double x1, double x2, double y1, double y2, double k1, double k2)"
+Central finite-difference approximation of the function\&. 
+.SS "double csmp::splineValue (double x, double x1, double x2, double y1, double y2, double k1, double k2)"
+
+.PP
+auxiliary functions for spline interpolation spline interpolation of values 
+.SS "void csmp::stiffnessMatrix (const \fBvector\fP< \fBScalarVariable\fP > & E, const \fBvector\fP< \fBScalarVariable\fP > & nu, \fBvector\fP< \fBDenseMatrix\fP< DM_MIN > > & D)"
+Creates array of 3D stiffness matrices, one for each element integration point\&. 
+.SS "void csmp::stiffnessMatrix (double E, double nu, \fBDenseMatrix\fP< DM_MIN > & D)"
+3D version: Smith & Griffith (1998), p\&. 40
+
+.PP
+is this in compliance form? - i\&.e\&. e = D * signma
+
+.PP
+void \fBstiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )\fP { D\&.Resize(6,6); assert( nu < 0\&.5 ); assert( E > 0\&. ); const double frac = nu / (1\&. - nu); const double coeff = (E*(1\&. - nu)) / ((1\&. + nu)*(1\&. - 2\&.*nu));
+
+.PP
+D\&.Zero(); D(0,0) = D(1,1) = D(2,2) = 1\&.; D(3,3) = D(4,4) = D(5,5) = (1\&. - 2\&.*nu) / (2\&.*(1\&. - nu)); D(0,1) = D(0,2) = D(1,2) = frac; D(1,0) = D(2,0) = D(2,1) = frac; D *= coeff; } Stresses from strains (Wikipedia), isotropic material
+
+.PP
+\fBAttention\fP
+.RS 4
+inverse relationship to get from strains to stresses
+.RE
+.PP
+sigma = D * e
+
+.PP
+\fBAttention\fP
+.RS 4
+for multiplication, the last 3 terms of the strain vector must be multiplied by 2\&.
+.RE
+.PP
+see also AFEM\&.Ch09, p\&. 9-14 
+.SS "void csmp::Box::UnitNormalTo (\fBBOX_BOUNDARY\fP bdry, uint32_t dim, std::vector< double > & nrml) const"
+Returns a normal (vector) to the specified boundary of a box-shaped model\&. 
+.SS "template<typename Var> \fBVARIABLE_TYPE\fP csmp::variableType (const Var & )"
+Checks Variable for Type
+
+.PP
+\fBReturns\fP
+.RS 4
+the value of the corresponding csmp enumeration \fBVARIABLE_TYPE\fP\&. This method uses RunTimeTypeIdentification with corresponding implications for speed\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+achieve this with a compile time computation\&.
+.RE
+.PP
+
+.SS "double csmp::vector_norm1 (\fBvector\fP< double > & x, \fBvector\fP< double > & scale)"
+
+.PP
+L1 norm\&. _v_norm1 -- computes (scaled) 1-norms of vectors 
+.SS "double csmp::vector_norm_inf (\fBvector\fP< double > & x, \fBvector\fP< double > & scale)"
+
+.PP
+L-infinity norm\&. _v_norm_inf -- computes (scaled) infinity-norm (supremum norm) of vectors 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

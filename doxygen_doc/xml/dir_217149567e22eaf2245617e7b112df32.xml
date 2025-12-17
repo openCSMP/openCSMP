@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_217149567e22eaf2245617e7b112df32" kind="dir">
+    <compoundname>source/includes/interfaces/GeoModeller</compoundname>
+    <innerfile refid="_intrepid_interface_8h">IntrepidInterface.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/interfaces/GeoModeller/"/>
+  </compounddef>
+</doxygen>

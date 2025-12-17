@@ -1,0 +1,36 @@
+\doxysection{Region\+\_\+\+Test.\+h}
+\hypertarget{_region___test_8h_source}{}\label{_region___test_8h_source}\index{tests/unit/Region\_Test.h@{tests/unit/Region\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{REGION\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{REGION\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \ \textcolor{comment}{//\ class\ Index;}}
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region___test}{Region\_Test}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00011\ \ \ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_region___test_a8758bbbdf4e87a4aeef282d3fe504c1c}{run}}();}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00016\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TestBoundaryFaceFunctionality(\ \textcolor{comment}{/*\ "{}VSET\_MAKER"{}\ */}\ );}
+\DoxyCodeLine{00017\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TestBoundaryFaceFunctionality(\ \textcolor{keyword}{const}\ std::string\&\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \textcolor{comment}{///\ test\ covers\ functionality\ of\ the\ base\ class\ ModelSubDomain}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TestRegionFileInputOutput(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ model,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00023\ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{comment}{///\ checks\ whether\ the\ neighbor\ information\ matches\ the\ boundary\ face\ info\ for\ region\ "{}Model"{}}}
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a7f7773332784692d4a590435aded6590}{consistencyCheckNeighborVersusPerimeterFaces}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<3U>\&\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ REGION\_TEST\_H}}
+
+\end{DoxyCode}

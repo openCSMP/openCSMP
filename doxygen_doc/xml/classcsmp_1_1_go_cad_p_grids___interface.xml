@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_go_cad_p_grids___interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::GoCadPGrids_Interface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_go_cad_p_grids___interface_1ac19236e9e367b0115055dad25026e1e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GoCadPGrids_Interface::GoCadPGrids_Interface</definition>
+        <argsstring>()</argsstring>
+        <name>GoCadPGrids_Interface</name>
+        <qualifiedname>csmp::GoCadPGrids_Interface::GoCadPGrids_Interface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GoCadPGrids_Interface.h" line="9" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GoCadPGrids_Interface.cpp" bodystart="6" bodyend="8"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::GoCadPGrids_Interface</label>
+        <link refid="classcsmp_1_1_go_cad_p_grids___interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/gOcad_SKUA/GoCadPGrids_Interface.h" line="6" column="1" bodyfile="source/includes/interfaces/gOcad_SKUA/GoCadPGrids_Interface.h" bodystart="7" bodyend="10"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_go_cad_p_grids___interface_1ac19236e9e367b0115055dad25026e1e9" prot="public" virt="non-virtual"><scope>csmp::GoCadPGrids_Interface</scope><name>GoCadPGrids_Interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

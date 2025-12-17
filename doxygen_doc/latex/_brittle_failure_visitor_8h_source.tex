@@ -1,0 +1,65 @@
+\doxysection{Brittle\+Failure\+Visitor.\+h}
+\hypertarget{_brittle_failure_visitor_8h_source}{}\label{_brittle_failure_visitor_8h_source}\index{source/includes/thmc/mechanics/BrittleFailureVisitor.h@{source/includes/thmc/mechanics/BrittleFailureVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BRITTLE\_FAILURE\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BRITTLE\_FAILURE\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_tensor_variable_8h}{"{}TensorVariable.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_mechanical_properties_8h}{"{}MechanicalProperties.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ \ Evaluates\ (brittle)\ shear\ and\ tensile\ failure\ criteria\ that\ are\ output}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ \ to\ the\ element\ integration\ points.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ \ Input\ variables:}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ -\/\ friction\ angle\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ -\/\ cohesion\ (scalar)}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ -\/\ stress\ (tensor)\ =\ Cartesian\ stress}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ -\/\ fluid\ pressure\ (if\ this\ variable\ is\ not\ specified\ its\ value\ is\ assumed\ to\ be\ zero)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ -\/\ Biot\ coefficient}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ @todo\ SKM:\ this\ visitor\ should\ include\ the\ influence\ of\ pore\ pressure.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00029\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00030\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_brittle_failure_visitor}{BrittleFailureVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_brittle_failure_visitor}{Visitor}}<\mbox{\hyperlink{classcsmp_1_1_brittle_failure_visitor}{dim}}>\ \{}
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_brittle_failure_visitor_add74625f323e7c618c43a758fbd65c48}{BrittleFailureVisitor}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~BrittleFailureVisitor();}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_brittle_failure_visitor_a23f93dab10d3970cd4229b22691d1201}{Visit}}(\ Element<dim>*\ );}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ InitializeInputProperties(\ Element<dim>*\ );}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ Youngs\_key\_,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Poissons\_key\_,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Stress\_key\_,\ \ \ \ \ \textcolor{comment}{///<\ stress}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Biot\_key\_,\ \ \ \ \ \ \ \textcolor{comment}{///<\ Biot\ coefficient\ alpha}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Cohesion\_key\_,\ \ \ \textcolor{comment}{///<\ cohesion}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Friction\_key\_,\ \ \ \textcolor{comment}{///<\ friction\ angle\ 0..90o}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Failure\_key\_,\ \ \ \ \textcolor{comment}{///<\ failure}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Pressure\_key\_;\ \ \ \textcolor{comment}{///<\ fluid\ pressure}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ \ \ Cartesian\_stress\_;}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_mechanical_properties}{MechanicalProperties}}\ \ mprops\_;}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ \ fluid\_pressure\_;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ verbose\_;}
+\DoxyCodeLine{00055\ \};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ BRITTLE\_FAILURE\_VISITOR\_H\ */}}
+
+\end{DoxyCode}

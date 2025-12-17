@@ -1,0 +1,96 @@
+.TH "csmp::EigenSolver" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::EigenSolver
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Solver\fP\&.
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBSolveMatrixEquation\fP (\fBSparseMatrix\fP &A, std::vector< double > &b, std::vector< double > &x, size_t no_unknowns)"
+.br
+.RI "solves matrix equation A x = b using direct Eigen \fBMatrix\fP solver\&. "
+.ti -1c
+.RI "virtual void \fBSolveMatrixEquation\fP (\fBCompressedRowMatrix\fP &A, std::vector< double > &b, std::vector< double > &x, size_t no_unknowns)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Public Member Functions inherited from \fBcsmp::Solver\fP
+.in +1c
+.ti -1c
+.RI "\fBSolver\fP ()"
+.br
+.ti -1c
+.RI "\fBSolver\fP (\fBSolverSettings\fP *settings)"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verb)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP () const"
+.br
+.ti -1c
+.RI "void \fBSolve\fP (\fBSparseMatrix\fP &G, std::vector< double > &rh, std::vector< double > &x, size_t no_unknowns=1U)"
+.br
+.ti -1c
+.RI "void \fBSolve\fP (\fBCompressedRowMatrix\fP &G, std::vector< double > &rh, std::vector< double > &x, size_t no_unknowns=1U)"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const \fBSparseMatrix\fP &mat, const char *fname='SparseMatrix') const"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const std::vector< double > &vec, const char *fname='CSP_Vec') const"
+.br
+.ti -1c
+.RI "double \fBCalculateResidual\fP (const \fBSparseMatrix\fP &A, const std::vector< double > &b, const std::vector< double > &x) const"
+.br
+.ti -1c
+.RI "virtual void \fBInputSolverSettings\fP (\fBSolverSettings\fP &settings)"
+.br
+.ti -1c
+.RI "virtual \fBSolverSettings\fP * \fBGetSolverSettings\fP ()"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Solver\fP
+.in +1c
+.ti -1c
+.RI "\fBSolverSettings\fP * \fBsolver_settings_\fP = nullptr"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::EigenSolver::SolveMatrixEquation (\fBCompressedRowMatrix\fP & A, std::vector< double > & b, std::vector< double > & x, size_t no_unknowns)\fR [protected]\fP, \fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Solver\fP\&.
+.SS "void csmp::EigenSolver::SolveMatrixEquation (\fBSparseMatrix\fP & A, std::vector< double > & b, std::vector< double > & x, size_t no_unknowns)\fR [protected]\fP, \fR [virtual]\fP"
+
+.PP
+solves matrix equation A x = b using direct Eigen \fBMatrix\fP solver\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIA\fP csmp sparse matrix 
+.br
+\fIb\fP RHS vector 
+.br
+\fIx\fP vector of unknowns 
+.br
+\fIno_unknowns\fP degrees of freedom of the problem 
+.RE
+.PP
+
+.PP
+Implements \fBcsmp::Solver\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="struct_isalpha" kind="struct" language="C++" prot="public">
+    <compoundname>Isalpha</compoundname>
+    <includes refid="_b_e___token_iterator_8h" local="no">BE_TokenIterator.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_isalpha_1a745de82cfc8aa46b10f9b0aad5bdd86b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Isalpha::operator()</definition>
+        <argsstring>(char c)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>Isalpha::operator()</qualifiedname>
+        <param>
+          <type>char</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/BE_TokenIterator.h" line="18" column="8" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="18" bodyend="18"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>C07:TokenIterator.h From &quot;Thinking in C++, Volume 2&quot;, by Bruce Eckel &amp; Chuck Allison. (c) 1995-2004 MindView, Inc. All Rights Reserved. See source code use permissions stated in the file &apos;License.txt&apos;, distributed with the code package available at www.MindView.net. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Isalpha</label>
+        <link refid="struct_isalpha"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/BE_TokenIterator.h" line="17" column="1" bodyfile="source/includes/utilities/BE_TokenIterator.h" bodystart="17" bodyend="19"/>
+    <listofallmembers>
+      <member refid="struct_isalpha_1a745de82cfc8aa46b10f9b0aad5bdd86b" prot="public" virt="non-virtual"><scope>Isalpha</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

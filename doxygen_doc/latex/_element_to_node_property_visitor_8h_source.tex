@@ -1,0 +1,48 @@
+\doxysection{Element\+To\+Node\+Property\+Visitor.\+h}
+\hypertarget{_element_to_node_property_visitor_8h_source}{}\label{_element_to_node_property_visitor_8h_source}\index{source/includes/model/ElementToNodePropertyVisitor.h@{source/includes/model/ElementToNodePropertyVisitor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_ELEMENT\_TO\_NODE\_PROPERTY\_VISITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_ELEMENT\_TO\_NODE\_PROPERTY\_VISITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_a_p___bool_vector_8h}{"{}AP\_BoolVector.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_database}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{///\ replaces\ value\ of\ property\ a\ with\ propery\ b}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Var,\ uint32\_t\ dim>}
+\DoxyCodeLine{00016\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor}{ElementToNodePropertyVisitor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\ \{}
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor_a03a2ee308fc8d5ede80c2ab6ff242eae}{ElementToNodePropertyVisitor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ elmt\_prop,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_prop,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ nodes\ );}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~ElementToNodePropertyVisitor();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor_ab5866420246629ee7d269eb4c61806be}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ );}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_element_to_node_property_visitor_a19fd6af6adf383da7d46876b965c9b1e}{Visit}}(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ ApplyWeightingToExtrapolatedValues();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ eprop\_key\_,\ nprop\_key\_;}
+\DoxyCodeLine{00032\ \ \ \ \ Var\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ evariable\_,\ nvariable\_;}
+\DoxyCodeLine{00033\ \ \ \ \ std::vector<Var>\ \ vars\_vector\_;}
+\DoxyCodeLine{00034\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ summed\_weights\_;}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_bool_vector}{BoolVector}}\ \ \ \ \ \ \ \ weighting\_completed\_;}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

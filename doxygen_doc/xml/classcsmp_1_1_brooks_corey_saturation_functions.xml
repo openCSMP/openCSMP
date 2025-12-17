@@ -1,0 +1,692 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_brooks_corey_saturation_functions" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BrooksCoreySaturationFunctions</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>USER</declname>
+        <defname>USER</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_saturation_functions_1a5284d8fbfe4f8e93073e6ff1c03aa12a" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::max_derivative_</definition>
+        <argsstring></argsstring>
+        <name>max_derivative_</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::max_derivative_</qualifiedname>
+        <initializer>= 1.0e+8</initializer>
+        <briefdescription>
+<para>the absolute value of any derivative calculated herein must be less than this value </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="74" column="18" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_saturation_functions_1aefb8e749e2d6c40c9af03eb88adae2e9" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::max_pc_</definition>
+        <argsstring></argsstring>
+        <name>max_pc_</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::max_pc_</qualifiedname>
+        <initializer>= 5.0e+7</initializer>
+        <briefdescription>
+<para>the absolute value of any capillary pressure must not exceed the tensile strength of the rock </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="75" column="18" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1ab329496b268027a07ad2bc72cc9091d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::BrooksCoreySaturationFunctions</definition>
+        <argsstring>()</argsstring>
+        <name>BrooksCoreySaturationFunctions</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::BrooksCoreySaturationFunctions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The default constructor of Brooks <ref refid="classcsmp_1_1_corey" kindref="compound">Corey</ref> Saturation Functions class </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="16" column="9" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="15" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1ad640bed7a5a1cab2c8aaaa07200f8b54" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::EffectiveSaturation_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>EffectiveSaturation_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::EffectiveSaturation_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>get seff from the supplied saturation value </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="20" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="41" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1af4ac9a6ef8c69252b72c6b7c2ec6f7a6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::pc_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>pc_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::pc_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="22" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="99" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1abfa28d4fe963809ae5ea30bb959376c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dpcds_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>dpcds_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dpcds_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="24" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="184" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1ac5f9de140661bd07636c60c3e8c4392f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::krw_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>krw_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::krw_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="26" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="241" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a3fb5fc4efa6fd421a794973066d037f8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::krn_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>krn_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::krn_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="28" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="279" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1aaa7ad64bd64454f34d96d0e35f881eee" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrwds_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>dkrwds_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrwds_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>calculating the 1st derivative of water relative permeability for any water saturation </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="30" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="327" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a2e5c73e54871c63c2cc88d23ba09729d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrnds_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw) const</argsstring>
+        <name>dkrnds_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrnds_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>calculating the 1st derivative of oil relative permeability for any water saturations </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="32" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="375" bodyend="390"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a75f1b4129c3eb02b377809fdafc7b89d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dpcds_at_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw, double h=0.00001) const</argsstring>
+        <name>dpcds_at_Numerical</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dpcds_at_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.00001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="34" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="530" bodyend="547"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a6724c832828868d6b6b6d529ffa6dca4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrwds_at_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw, double delta_s=0.001) const</argsstring>
+        <name>dkrwds_at_Numerical</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrwds_at_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="36" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="417" bodyend="431"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a27e955437b90ace46bdbca7dd5240b1d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrnds_at_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double sw, double delta_s=0.001) const</argsstring>
+        <name>dkrnds_at_Numerical</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrnds_at_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="38" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="459" bodyend="473"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a4c58b5d158da6ce022e6c07d211269b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::EffectiveSaturation</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>EffectiveSaturation</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::EffectiveSaturation</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>get seff at the element barycentre </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="43" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="24" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a6244c3e9246a9dfa37e4b6b341c739d4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::pc</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>pc</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::pc</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="45" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="54" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1ab90547bbea254f2ea4d94d77f66cd7d5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dpcds</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>dpcds</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dpcds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="47" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="148" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1ab1713a1ebfaa24bd3011379ea0c6616b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::krw</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>krw</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::krw</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="49" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="223" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a780aa1eab4faffd3a84540172ec3c726" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::krn</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>krn</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::krn</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="51" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="261" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a2ee3d5df826948768f9928b699e637c7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrwds</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>dkrwds</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrwds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>calculating the 1st derivative of water relative permeability </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="53" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="305" bodyend="314"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1ad1d96bf645b5c9d8084a8a3309731d5c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrnds</definition>
+        <argsstring>(Element&lt; dim &gt; *const) const</argsstring>
+        <name>dkrnds</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrnds</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>calculating the 1st derivative of oil relative permeability </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="55" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="351" bodyend="363"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1aa9eea84447cd2681c9b4febcaed8ad95" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::MaxCapillaryPressure</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxCapillaryPressure</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::MaxCapillaryPressure</qualifiedname>
+        <briefdescription>
+<para>maximum value of pc (Pa) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="58" column="16" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a3b234ad0f6180bd66a96874e44c7da8f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrwds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double delta_s=0.001) const</argsstring>
+        <name>dkrwds_Numerical</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrwds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+<para>Numerical derivatives of first derivatives of relative permeability of water and CO2. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="61" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="399" bodyend="410"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a28eb6d88386dfe031da60679cf4c6a52" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dkrnds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double delta_s=0.001) const</argsstring>
+        <name>dkrnds_Numerical</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dkrnds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta_s</declname>
+          <defval>0.001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="63" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="440" bodyend="451"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a16d6fcdd5e3e1fa9c606f167edf00dd9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::dpcds_Numerical</definition>
+        <argsstring>(Element&lt; dim &gt; *const, double h=0.00001) const</argsstring>
+        <name>dpcds_Numerical</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::dpcds_Numerical</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>e</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>h</declname>
+          <defval>0.00001</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="65" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="510" bodyend="525"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1af3d598aaac42a613136543a5ea2afbeb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::seff_to_sw</definition>
+        <argsstring>(Element&lt; dim &gt; *const e, double seff) const</argsstring>
+        <name>seff_to_sw</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::seff_to_sw</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>seff</declname>
+        </param>
+        <briefdescription>
+<para>return wetting-phase saturation based on effective saturation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="67" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="553" bodyend="558"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1a316bed9da91b970fb9cc3973fde513fc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::sw_from_pc_at</definition>
+        <argsstring>(Element&lt; dim &gt; *const e, double pc, double sw) const</argsstring>
+        <name>sw_from_pc_at</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::sw_from_pc_at</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *const</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>pc</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>sw</declname>
+        </param>
+        <briefdescription>
+<para>inverse capillary pressure function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="69" column="16" bodyfile="source/modules/thmc/two_phase_flow/BrooksCoreySaturationFunctions.cpp" bodystart="564" bodyend="616"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1af318eda22372c4e12892b41dc3a7db65" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; *</type>
+        <definition>USER&lt; dim &gt; * csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::User</definition>
+        <argsstring>()</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="71" column="10" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_saturation_functions_1aee88b3cda3151762216be74d99a8c130" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>USER&lt; dim &gt; const *</type>
+        <definition>USER&lt; dim &gt; const  * csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;::User</definition>
+        <argsstring>() const</argsstring>
+        <name>User</name>
+        <qualifiedname>csmp::BrooksCoreySaturationFunctions::User</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="72" column="16" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" bodystart="72" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::BrooksCoreySaturationFunctions&lt; dim, FlowFunctionsModule1 &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule1 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::BrooksCoreySaturationFunctions&lt; dim, FlowFunctionsModule4 &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, FlowFunctionsModule4 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions"/>
+      </node>
+      <node id="4">
+        <label>csmp::FlowFunctionsModule1&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module1"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FlowFunctionsModule1&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module1"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::FlowFunctionsModule4&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module4"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::FlowFunctionsModule4&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_flow_functions_module4"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BrooksCoreySaturationFunctions&lt; dim, USER &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey_saturation_functions"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" line="14" column="1" bodyfile="source/includes/thmc/two_phase_flow/BrooksCoreySaturationFunctions.h" bodystart="14" bodyend="76"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1ab329496b268027a07ad2bc72cc9091d1" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>BrooksCoreySaturationFunctions</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1ad1d96bf645b5c9d8084a8a3309731d5c" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrnds</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a2e5c73e54871c63c2cc88d23ba09729d" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrnds_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a27e955437b90ace46bdbca7dd5240b1d" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrnds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a28eb6d88386dfe031da60679cf4c6a52" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrnds_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a2ee3d5df826948768f9928b699e637c7" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrwds</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1aaa7ad64bd64454f34d96d0e35f881eee" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrwds_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a6724c832828868d6b6b6d529ffa6dca4" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrwds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a3b234ad0f6180bd66a96874e44c7da8f" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dkrwds_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1ab90547bbea254f2ea4d94d77f66cd7d5" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dpcds</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1abfa28d4fe963809ae5ea30bb959376c3" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dpcds_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a75f1b4129c3eb02b377809fdafc7b89d" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dpcds_at_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a16d6fcdd5e3e1fa9c606f167edf00dd9" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>dpcds_Numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a4c58b5d158da6ce022e6c07d211269b7" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>EffectiveSaturation</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1ad640bed7a5a1cab2c8aaaa07200f8b54" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>EffectiveSaturation_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a780aa1eab4faffd3a84540172ec3c726" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>krn</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a3fb5fc4efa6fd421a794973066d037f8" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>krn_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1ab1713a1ebfaa24bd3011379ea0c6616b" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>krw</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1ac5f9de140661bd07636c60c3e8c4392f" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>krw_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a5284d8fbfe4f8e93073e6ff1c03aa12a" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>max_derivative_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1aefb8e749e2d6c40c9af03eb88adae2e9" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>max_pc_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1aa9eea84447cd2681c9b4febcaed8ad95" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>MaxCapillaryPressure</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a6244c3e9246a9dfa37e4b6b341c739d4" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>pc</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1af4ac9a6ef8c69252b72c6b7c2ec6f7a6" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>pc_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1af3d598aaac42a613136543a5ea2afbeb" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>seff_to_sw</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1a316bed9da91b970fb9cc3973fde513fc" prot="public" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>sw_from_pc_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1af318eda22372c4e12892b41dc3a7db65" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>User</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_saturation_functions_1aee88b3cda3151762216be74d99a8c130" prot="private" virt="non-virtual"><scope>csmp::BrooksCoreySaturationFunctions</scope><name>User</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

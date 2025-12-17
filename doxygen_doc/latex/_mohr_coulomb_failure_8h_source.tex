@@ -1,0 +1,61 @@
+\doxysection{Mohr\+Coulomb\+Failure.\+h}
+\hypertarget{_mohr_coulomb_failure_8h_source}{}\label{_mohr_coulomb_failure_8h_source}\index{source/includes/thmc/mechanics/MohrCoulombFailure.h@{source/includes/thmc/mechanics/MohrCoulombFailure.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MOHR\_COULOMB\_FAILURE\_CRITERION\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MOHR\_COULOMB\_FAILURE\_CRITERION\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ \ \ \ \ Using\ the\ current\ local\ stress\ state\ stored\ on\ the\ model\ in\ the\ variable\ "{}stress"{},}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ \ \ \ \ this\ Interrelation\ subclass\ computes\ the\ failure\ criterion\ 'failure'\ performing\ a\ Mohr\ Coulomb\ analysis,}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ \ \ \ but\ without\ consideration\ of\ the\ fluid\ pressure.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ \ \ \ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ \ \ \ To\ apply\ this\ interrelation\ the\ following\ discretised\ variables\ need\ to\ be\ defined:}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ \ \ \ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ \ \ \ "{}stress"{},\ "{}mean\ stress"{},\ "{}cohesion"{},\ "{}failure"{}.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure}{MohrCoulombFailure}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ MohrCoulombFailure(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keywordtype}{double}\ friction\_angle\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~MohrCoulombFailure();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{///\ computes\ the\ local\ value\ of\ result\ property\ "{}failure"{}\ which\ gets\ written\ back\ to\ the\ model}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a2742855b607aa3cd67a4559a1751368f}{Calculate}}();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{///\ \ average\ of\ the\ magnitude\ of\ the\ principal\ stress}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_af8f1c17bf254acd57cae1691d9d877b5}{MeanStress}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{///\ computes\ the\ shear-\/stress\ related\ stress\ invariant,\ \ returning\ into\ second\ argument;\ method\ difference\ between\ sigma1\ and\ sigma3}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a2efccb8eeaf32ae18a70692415b0cade}{DeviatoricStress}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&,\ \textcolor{keywordtype}{double}\&\ t\_stress\_invariant\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ computes\ stress\ state\ invariance\ theta\ (Smith\ \&\ Griffith,\ 2014,\ p.\ 236}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a85347f24d95fd1a11df23e797f46a0d4}{Theta}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&,\ \textcolor{keywordtype}{double}\ t\_stress\_invariant\ );}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{///\ computes\ stress\ state\ invariance,\ see\ Zienkiewitz\ II,\ p.\ 89}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_mohr_coulomb_failure_a760d3677232b206e5fa290700d79d499}{G\_OfTheta}}(\ \textcolor{keywordtype}{double}\ theta\ );}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ MS;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ mean\ stress}}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ STRESS;}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ CRIT;}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ COH;\ \ \ \ \ \ \ \textcolor{comment}{///<\ cohesion\ of\ material}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ phi;\ \ \ \ \ \ \ \textcolor{comment}{///<\ angle\ of\ friction}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ Ts;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ tensile\ strength}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ \ ts\_;}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ ch\_;}
+\DoxyCodeLine{00050\ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,30 @@
+\doxysection{Hydraulic\+Head.\+h}
+\hypertarget{_hydraulic_head_8h_source}{}\label{_hydraulic_head_8h_source}\index{source/includes/thmc/single\_phase\_flow/HydraulicHead.h@{source/includes/thmc/single\_phase\_flow/HydraulicHead.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HYDRAULIC\_HEAD\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HYDRAULIC\_HEAD\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_hydraulic_head}{HydraulicHead}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ P;\ \ \ \ \textcolor{comment}{///<\ absolute\ fluid\ pressure}}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ E;\ \ \ \ \textcolor{comment}{///<\ vertical\ elevation\ (zero\ at\ model\ base)}}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ H;\ \ \ \ \textcolor{comment}{///<\ hydraulic\ head}}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ height,\ pres;}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ rho0,\ g;\ \textcolor{comment}{///<\ acceleration\ of\ gravity}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ HydraulicHead(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keywordtype}{double}\ ref\_density=1000.\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \string~HydraulicHead()\ \{\};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_hydraulic_head_a840d582955f79935e73525af2b4b74f1}{Calculate}}();}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

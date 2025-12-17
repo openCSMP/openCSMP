@@ -1,0 +1,350 @@
+.TH "csmp::NumIntegral_dNT_op_dN_dV_InterFace< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NumIntegral_dNT_op_dN_dV_InterFace< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <NumIntegral_dNT_op_dN_dV_InterFace\&.h>\fP
+.PP
+Inherits \fBcsmp::MathOperatorLHS< dim, InterFace >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNumIntegral_dNT_op_dN_dV_InterFace\fP (const \fBModel\fP< dim > &, const char *oper, const char *basic, const char *test)"
+.br
+.ti -1c
+.RI "void \fBGetOperands\fP (const \fBInterFace\fP< dim > &) override final"
+.br
+.ti -1c
+.RI "void \fBComputeContribution\fP (const \fBInterFace\fP< dim > &) override final"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::MathOperatorLHS< dim, InterFace >\fP
+.in +1c
+.ti -1c
+.RI "\fBMathOperatorLHS\fP (const \fBPropertyDatabase\fP< dim > &, const char *basic, const char *test)"
+.br
+.ti -1c
+.RI "\fBMathOperatorLHS\fP & \fBoperator=\fP (const \fBMathOperatorLHS\fP &)"
+.br
+.ti -1c
+.RI "std::string \fBName\fP () const"
+.br
+.RI "\fBOperand\fP Functions\&. "
+.ti -1c
+.RI "virtual void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBMaterialOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBMaterialOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBMaterialOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBMaterialOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBMaterialOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBMaterialOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBBasicOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBBasicOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBBasicOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBBasicOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBBasicOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBBasicOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBBasicOperandOffset\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBTestOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBTestOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBTestOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBTestOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBTestOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBTestOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBTestOperandOffset\fP () const"
+.br
+.ti -1c
+.RI "bool \fBAdd\fP () const"
+.br
+.RI "Accumulation Process Settings\&. "
+.ti -1c
+.RI "bool \fBSubtract\fP () const"
+.br
+.ti -1c
+.RI "bool \fBAddLater\fP () const"
+.br
+.ti -1c
+.RI "bool \fBSubtractLater\fP () const"
+.br
+.ti -1c
+.RI "bool \fBMultiply\fP () const"
+.br
+.ti -1c
+.RI "bool \fBLumpedFormulation\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBApplicationCycle\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBApplicationCycles\fP () const"
+.br
+.ti -1c
+.RI "double \fBMultiplyBy\fP () const"
+.br
+.ti -1c
+.RI "bool \fBMultiplyWithTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "bool \fBDivideByTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "void \fBAddAccumulate\fP ()"
+.br
+.RI "Set flags and properties\&. "
+.ti -1c
+.RI "void \fBSubtractAccumulate\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddAccumulateLater\fP ()"
+.br
+.ti -1c
+.RI "void \fBSubtractAccumulateLater\fP ()"
+.br
+.ti -1c
+.RI "void \fBMultiplyAccumulate\fP ()"
+.br
+.ti -1c
+.RI "void \fBPropertyAtIntegrationPoint\fP (const \fBInterFace\fP< dim > &, const \fBcsmp::Index\fP &, uint32_t ip, \fBDenseMatrix\fP< DM_MIN > &)"
+.br
+.RI "interpolation of property if isoparametric elements are used "
+.ti -1c
+.RI "virtual void \fBGetOperands\fP (const \fBInterFace\fP< dim > &)"
+.br
+.RI "getting data from the \fBElement\fP, \fBFace\fP, \fBInterFace\fP "
+.ti -1c
+.RI "virtual void \fBComputeContribution\fP (const \fBInterFace\fP< dim > &)"
+.br
+.RI "integration performed on \fBElement\fP, \fBFace\fP, \fBInterFace\fP "
+.ti -1c
+.RI "virtual void \fBWriteOperands\fP (\fBInterFace\fP< dim > &)"
+.br
+.RI "writing data to the \fBElement\fP, \fBFace\fP, \fBInterFace\fP "
+.ti -1c
+.RI "virtual void \fBMultiplyWithTimeFactor\fP (double dt)"
+.br
+.RI "multiply with time increment if this is desired "
+.ti -1c
+.RI "virtual void \fBAssignToGlobal\fP (const \fBInterFace\fP< dim > &, \fBSparseMatrix\fP &)"
+.br
+.RI "assigment to the left hand side global matrix (after everything was calculated ) "
+.ti -1c
+.RI "virtual \fBMathOperatorLHS\fP< dim, \fBInterFace\fP > * \fBclone\fP () const=0"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBInitialiseCoordinateMatrix\fP (const \fBInterFace\fP< dim > &, \fBDenseMatrix\fP< DM_MIN > &) const"
+.br
+.RI "separates opposing nodes and writes new coordinates to XY matrix of corresponding finite element type "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::MathOperatorLHS< dim, InterFace >\fP
+.in +1c
+.ti -1c
+.RI "std::string \fBname_\fP"
+.br
+.RI "name of operator "
+.ti -1c
+.RI "\fBParameter\fP \fBop\fP"
+.br
+.RI "material property operand "
+.ti -1c
+.RI "std::pair< \fBParameter\fP, size_t > \fBbop\fP"
+.br
+.RI "basic function operand and calculation offset "
+.ti -1c
+.RI "std::pair< \fBParameter\fP, size_t > \fBtop\fP"
+.br
+.RI "test function operand and calculation offset "
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBLHS\fP"
+.br
+.RI "solution matrix to be accumulated "
+.ti -1c
+.RI "std::vector< \fBDenseMatrix\fP< DM_MIN > > \fBMTRL\fP"
+.br
+.RI "material property matrix(es) needed for PDE operand "
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBDERIV\fP"
+.br
+.RI "shape function derivative matrix "
+.ti -1c
+.RI "std::vector< double > \fBIPOL\fP"
+.br
+.RI "shape function vector "
+.ti -1c
+.RI "double \fBfactor_\fP"
+.br
+.RI "constant scaling factor "
+.ti -1c
+.RI "bool \fBadd_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBsubtract_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBadd_accumulate_later_\fP"
+.br
+.ti -1c
+.RI "bool \fBsubtract_accumulate_later_\fP"
+.br
+.ti -1c
+.RI "bool \fBmultiply_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBlump_matrices_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBapplication_cycles_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBapplication_cycle_\fP"
+.br
+.ti -1c
+.RI "bool \fBtime_multiply_\fP"
+.br
+.ti -1c
+.RI "bool \fBtime_divide_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::NumIntegral_dNT_op_dN_dV_InterFace< dim >"Couples the nodes on the opposite sides of the \fBInterFace\fP, using an operand (thermal or hydraulic conductivity) and the thickness attribute "thickness" for the interface\&. (the latter needs to be defined as a separate variable with the placement INTER_FACE)\&.
+
+.PP
+The coupling is created by emulating a thin-shell element (prism or hexahedron)\&. For this purpose the opposing collocated nodes are separated from one-another an amount equivalent to the thickness before the coordinate matrix is initialised\&.
+
+.PP
+The separation of the nodes creates prism or hexahedral elements, from triangular and quadrilateral \fBInterFace\fP objects\&. The \fBInterFace\fP normal is used in the construction of the edges of these elements\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+18/8/22 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::NumIntegral_dNT_op_dN_dV_InterFace\fP< dim >::NumIntegral_dNT_op_dN_dV_InterFace (const \fBModel\fP< dim > & model, const char * oper, const char * basic, const char * test)"
+Constructor gets the finite element types that \fBNumIntegral_dNT_op_dN_dV_InterFace\fP needs to turn the \fBInterFace\fP into the equivalent of a volumetric element from the \fBFiniteElementManager\fP\&. Since InterFaces can either be triangles or quadrilaterals, their extruded volumetric pendants are prism and hexahedral elements\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+the variable 'thickness' needs to be defined on the \fBInterFace\fP, else the pde operator will not work\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::NumIntegral_dNT_op_dN_dV_InterFace\fP< dim >::ComputeContribution (const \fBInterFace\fP< dim > & iface)\fR [final]\fP, \fR [override]\fP"
+Computes integral over shape function derivatives squared\&. These are the shape functions of the volumetric elements that match the lower-dimensional \fBInterFace\fP\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+The connections could also be established using line elements, but this would require a more complicated accumulation process\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+in GetOperands implement the collection of material operands from integration points otherwise second part of method will not work 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::NumIntegral_dNT_op_dN_dV_InterFace\fP< dim >::GetOperands (const \fBInterFace\fP< dim > & e)\fR [final]\fP, \fR [override]\fP"
+Reads the material operand and the interface thickness from the current interface cell\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+this is a first draft of the method that only works for piecewise constant scalar variables\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+fix for vector or tensor material operands which may be needed if the permeability is a vector or tensor 
+
+.PP
+use harmonic mean of the permeabilities of the parent elements on the inside and outside\&. 
+
+.PP
+implement for integration point variables 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::NumIntegral_dNT_op_dN_dV_InterFace\fP< dim >::InitialiseCoordinateMatrix (const \fBInterFace\fP< dim > & iface, \fBDenseMatrix\fP< DM_MIN > & XYX) const\fR [protected]\fP"
+
+.PP
+separates opposing nodes and writes new coordinates to XY matrix of corresponding finite element type Spatially separates opposing nodes in the direction of the unit normal of the \fBInterFace\fP\&. It follows that the extrusion direction is perpendicular to the \fBInterFace\fP and the extrusion amount is given by the \fBInterFace\fP "thickness\&. The method writes the new coordinates to the XY matrix of the \fBInterFace\fP cell, following the node numbering convention of the corresponding (resulting) prism or hexahedral element\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+Before using this in computations test that the finite element swap works and that the node numbering of the contribution matches that of the prism or hexa\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

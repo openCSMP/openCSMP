@@ -1,0 +1,112 @@
+.TH "csmp::FemFromGridVisitor< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FemFromGridVisitor< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFemFromGridVisitor\fP (const \fBPropertyDatabase\fP< dim > &p, const \fBFiniteDifferenceGrid\fP &\fBg\fP, const char *var, size_t elements)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::FemFromGridVisitor< dim >"
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1998
+.RE
+.PP
+class '\fBFemFromGridVisitor\fP' uses arithmetic means of values from supplied grid to assign these to variables placed on the finite ELEMENTS\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::FemFromGridVisitor\fP< dim >::Visit (\fBElement\fP< dim > * n)\fR [virtual]\fP"
+
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

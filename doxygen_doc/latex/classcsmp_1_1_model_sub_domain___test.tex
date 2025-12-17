@@ -1,0 +1,183 @@
+\doxysection{csmp\+::Model\+Sub\+Domain\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_model_sub_domain___test}{}\label{classcsmp_1_1_model_sub_domain___test}\index{csmp::ModelSubDomain\_Test@{csmp::ModelSubDomain\_Test}}
+
+
+{\ttfamily \#include $<$Model\+Sub\+Domain\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Model\+Sub\+Domain\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=262pt]{classcsmp_1_1_model_sub_domain___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Model\+Sub\+Domain\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=262pt]{classcsmp_1_1_model_sub_domain___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test_afe7329263a099250faec64ad329e477a}{run}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test_a65fd6d69a0b13edad52be4346a4953f5}{Test\+\_\+\+Establish\+Neighbor\+Connectivity}} ()
+\begin{DoxyCompactList}\small\item\em tests method that creates neighbor connectivity inside of CSMP \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_model_sub_domain___test_a0419b2fab36d1a2a3a78cead0d7c7a71}\label{classcsmp_1_1_model_sub_domain___test_a0419b2fab36d1a2a3a78cead0d7c7a71} 
+void {\bfseries Test\+\_\+\+Rebuild\+Cell\+And\+Node\+Vectors} ()
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class simplicial\+\_\+complex$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_model_sub_domain___test_a851b5401af4af54fb07b27d22fb361cb}{Compare\+Model\+Subdomains}} (const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, simplicial\+\_\+complex $>$ \&, const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, simplicial\+\_\+complex $>$ \&, bool verbose)
+\begin{DoxyCompactList}\small\item\em compares node locations and connectivity \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Tests the functionality of the base class of \doxylink{classcsmp_1_1_region}{Region}, \doxylink{classcsmp_1_1_boundary}{Boundary} and \doxylink{classcsmp_1_1_split_boundary}{Split\+Boundary} Only tests selected less frequently used, less obvious functionality that requires testing. Functions involving variables require testing in 2 and 3D.
+
+/ deletes nullptr cells, rebuilds node vector, sorts everything and re-\/establishes the perimeter face vectors after modifications of cells \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000251}{Todo}}]void Rebuild\+Sub\+Domain\+After\+Change\+Of\+Cell\+Vector();\end{DoxyRefDesc}
+
+
+/ rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints void Update\+Cell\+Membership\+Applying\+Constraints( typename std\+::vector\texorpdfstring{$<$}{<}CELL$<$dim$>${\itshape \texorpdfstring{$>$}{>}\doxylink{structcsmp_1_1_inter_face_parent_elements}{const\+\_\+iterator} master\+\_\+domain\+\_\+start, typename std\+::vector\texorpdfstring{$<$}{<}CELL$<$dim$>$}\texorpdfstring{$>$}{>}\doxylink{structcsmp_1_1_inter_face_parent_elements}{const\+\_\+iterator} master\+\_\+domain\+\_\+end, const \doxylink{classcsmp_1_1_property_constraints}{Property\+Constraints}\& );
+
+/ removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed size\+\_\+t Remove\+Null\+Pointer\+Cells();
+
+/ reference counting-\/based unique domain identifier (0..n-\/1) size\+\_\+t Domain\+Index() const;
+
+bool Is\+Contiguous() const;
+
+std\+::pair$<$\+CELL\+\_\+\+SHAPE,bool$>$ Single\+Cell\+Shape\+Domain() const;
+
+/ output coordinates to user-\/defined vector variable \mbox{[}x1,y1,z1,...xn,yn,zn\mbox{]} void Assign\+Node\+Coordinates\+To( const char\texorpdfstring{$\ast$}{*} vector\+\_\+prop );
+
+/ assigment of coordinate component \textquotesingle{}x\textquotesingle{},\textquotesingle{}y\textquotesingle{},\textquotesingle{}z\textquotesingle{} to scalar variable of choice void Assign\+Node\+Coordinates\+To( const char\texorpdfstring{$\ast$}{*} scalar\+\_\+prop, char coord );
+
+/ characteristics like \textquotesingle{}length\textquotesingle{}, \textquotesingle{}area\textquotesingle{}, \textquotesingle{}volume\textquotesingle{} , \textquotesingle{}aspect ratio\textquotesingle{}, \textquotesingle{}inner radius\textquotesingle{} are assigned to user-\/defined variable void Assign\+Cell\+Characteristics\+To( const char\texorpdfstring{$\ast$}{*} characteristic, const char\texorpdfstring{$\ast$}{*} var );
+
+template$<$typename Var$>$ void Input\+Property\+Value( const char\texorpdfstring{$\ast$}{*} input\+\_\+prop, const Var\& new\+\_\+value, \doxylink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART} sd=COMPLETE );
+
+/ as Input\+Property\+Value, but with overwrite protection for variable components that have the flag \textquotesingle{}do\+\_\+not\+\_\+overwrite\textquotesingle{} template$<$typename Var$>$ void Input\+Property\+Value( const char\texorpdfstring{$\ast$}{*} input\+\_\+prop, const Var\& new\+\_\+value, \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} do\+\_\+not\+\_\+overwrite, \doxylink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART} sd=COMPLETE );
+
+/ changes the flag of the scalar variable \textquotesingle{}property\textquotesingle{} to new value; applied either in the entire subdomain or its interior or perimeter void Change\+Property\+Status( const char\texorpdfstring{$\ast$}{*} property, \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} new\+\_\+status\+\_\+of\+\_\+scalar, \doxylink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}=COMPLETE );
+
+/ changes the flag of the scalar variable \textquotesingle{}property\textquotesingle{} to new value if the scalar variable is withing the specified range void Change\+Property\+Status\+Where( const char\texorpdfstring{$\ast$}{*} property,                                     VARIABLE\+\_\+\+FLAG new\+\_\+status\+\_\+of\+\_\+scalar,                                     double min\+\_\+value\+\_\+to\+\_\+change,                                     double max\+\_\+value\+\_\+to\+\_\+change );
+
+/ changes the flags of the vector variable \textquotesingle{}property\textquotesingle{} to new value; applied either in the entire subdomain or its interior or perimeter void Change\+Property\+Status( const char\texorpdfstring{$\ast$}{*} property, const std\+::vector$<$\+VARIABLE\+\_\+\+FLAG$>$\& new\+\_\+status, \doxylink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}=COMPLETE );
+
+/ changes the flag of the vector variable \textquotesingle{}property\textquotesingle{} to new value if the scalar variable is withing the specified range void Change\+Property\+Status\+Where( const char\texorpdfstring{$\ast$}{*} property,                                     const std\+::vector$<$\+VARIABLE\+\_\+\+FLAG$>$\& new\+\_\+status,                                     double min\+\_\+value\+\_\+to\+\_\+change,                                     double max\+\_\+value\+\_\+to\+\_\+change );
+
+/ changes the flag of a particular variable component to new value; applied either in the entire subdomain or its interior or perimeter void Change\+Property\+Status( const char\texorpdfstring{$\ast$}{*} property, uint32\+\_\+t component, \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} new\+\_\+status, \doxylink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART}=COMPLETE );
+
+/ changes the flag of a particular variable component to new value if the scalar variable is withing the specified range void Change\+Property\+Status\+Where( const char\texorpdfstring{$\ast$}{*} property,                                     uint32\+\_\+t component,                                     VARIABLE\+\_\+\+FLAG new\+\_\+status,                                     double min\+\_\+value\+\_\+to\+\_\+change,                                     double max\+\_\+value\+\_\+to\+\_\+change );
+
+/ by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i\texorpdfstring{$>$}{>}0 flag of corresponding component is returned \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} Property\+Status( const char\texorpdfstring{$\ast$}{*} variable, \doxylink{namespacecsmp_a4b8f1ad9f1a09a957714679ce72aee3f}{SUBDOMAIN\+\_\+\+PART} flag=COMPLETE , uint32\+\_\+t i=0 ) const;
+
+void Interpolate\+Node\+To\+Cell\+Property( const char\texorpdfstring{$\ast$}{*} nprop, const char\texorpdfstring{$\ast$}{*} eprop ); void Interpolate\+Node\+To\+Integration\+Point\+Property( const char\texorpdfstring{$\ast$}{*} nprop, const char\texorpdfstring{$\ast$}{*} eprop ); void Interpolate\+Integration\+Point\+To\+Cell\+Property( const char\texorpdfstring{$\ast$}{*} cprop, const char\texorpdfstring{$\ast$}{*} eprop ); void Extrapolate\+Cell\+To\+Integration\+Point\+Property( const char\texorpdfstring{$\ast$}{*} eprop, const char\texorpdfstring{$\ast$}{*} cprop ); void Extrapolate\+Cell\+To\+Facet\+Integration\+Point\+Property( const char\texorpdfstring{$\ast$}{*} eprop, const char\texorpdfstring{$\ast$}{*} fipprop ); void Extrapolate\+Cell\+To\+Node\+Property( const char\texorpdfstring{$\ast$}{*} eprop, const char\texorpdfstring{$\ast$}{*} nprop, bool by\+\_\+distance=true ); void Extrapolate\+Integration\+Point\+To\+Node\+Property( const char\texorpdfstring{$\ast$}{*} cprop, const char\texorpdfstring{$\ast$}{*} nprop );
+
+/ arithmetic (number as opposed to volume weighted) average double Average( const char\texorpdfstring{$\ast$}{*} property ) const; bool Copy\+Gradient\+Of\+Property\+\_\+\+A\+\_\+\+To\+\_\+\+B( const char\texorpdfstring{$\ast$}{*} node\+\_\+prop, const char\texorpdfstring{$\ast$}{*} cell\+\_\+prop ); void Copy\+Replace( const char\texorpdfstring{$\ast$}{*} from, const char\texorpdfstring{$\ast$}{*} to ); 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_model_sub_domain___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_model_sub_domain___test_a851b5401af4af54fb07b27d22fb361cb}\index{csmp::ModelSubDomain\_Test@{csmp::ModelSubDomain\_Test}!CompareModelSubdomains@{CompareModelSubdomains}}
+\index{CompareModelSubdomains@{CompareModelSubdomains}!csmp::ModelSubDomain\_Test@{csmp::ModelSubDomain\_Test}}
+\doxysubsubsection{\texorpdfstring{CompareModelSubdomains()}{CompareModelSubdomains()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_model_sub_domain___test_a851b5401af4af54fb07b27d22fb361cb} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class simplicial\+\_\+complex$>$ \\
+template bool csmp\+::\+Model\+Sub\+Domain\+\_\+\+Test\+::\+Compare\+Model\+Subdomains (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, simplicial\+\_\+complex $>$ \&}]{}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_model_sub_domain}{Model\+Sub\+Domain}}$<$ dim, simplicial\+\_\+complex $>$ \&}]{}{, }\item[{bool}]{verbose}{}\end{DoxyParamCaption})}
+
+
+
+compares node locations and connectivity 
+
+compares node locations and connectivity
+\begin{DoxyItemize}
+\item uses point locations for node comparison 
+\end{DoxyItemize}\Hypertarget{classcsmp_1_1_model_sub_domain___test_afe7329263a099250faec64ad329e477a}\index{csmp::ModelSubDomain\_Test@{csmp::ModelSubDomain\_Test}!run@{run}}
+\index{run@{run}!csmp::ModelSubDomain\_Test@{csmp::ModelSubDomain\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_model_sub_domain___test_afe7329263a099250faec64ad329e477a} 
+void csmp\+::\+Model\+Sub\+Domain\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Observations
+\begin{DoxyItemize}
+\item All\+Elements in single domain model is non-\/unique, but should be unique
+\end{DoxyItemize}
+
+add tests for the other important parts of the functionality. 
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+\Hypertarget{classcsmp_1_1_model_sub_domain___test_a65fd6d69a0b13edad52be4346a4953f5}\index{csmp::ModelSubDomain\_Test@{csmp::ModelSubDomain\_Test}!Test\_EstablishNeighborConnectivity@{Test\_EstablishNeighborConnectivity}}
+\index{Test\_EstablishNeighborConnectivity@{Test\_EstablishNeighborConnectivity}!csmp::ModelSubDomain\_Test@{csmp::ModelSubDomain\_Test}}
+\doxysubsubsection{\texorpdfstring{Test\_EstablishNeighborConnectivity()}{Test\_EstablishNeighborConnectivity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_model_sub_domain___test_a65fd6d69a0b13edad52be4346a4953f5} 
+bool csmp\+::\+Model\+Sub\+Domain\+\_\+\+Test\+::\+Test\+\_\+\+Establish\+Neighbor\+Connectivity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+tests method that creates neighbor connectivity inside of CSMP 
+
+Using vsets from \textquotesingle{}vset\+\_\+makers\textquotesingle{} as input data, this tests weither Model\+Sub\+Doman\+::\+Establish\+Neighbor\+Connectivity() recreates the correct neighbor connectivity \begin{DoxyVerb}@author SKM 5/12/20
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_model_sub_domain___test_a65fd6d69a0b13edad52be4346a4953f5_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Model\+Sub\+Domain\+\_\+\+Test.\+h\item 
+tests/unit/Model\+Sub\+Domain\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

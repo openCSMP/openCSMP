@@ -144,6 +144,7 @@ void MatlabInterface::WriteSavedTimeStepsFile( long step, const char* name )
     ofs << step << endl;
  }
 
+
 void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, const char* variable_name, long step, const char* region_name )
  {
     const Index       key(mdl.Database().StorageKey(variable_name));
@@ -188,14 +189,14 @@ void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, 
 	        // quadrilaterals are split into 2 triangles  
                 else if ( (*it2)->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) {
 	            // upper triangle
-                    for ( auto i=1; i<(*it2)->Nodes(); i++ ) {
+                    for ( uint32_t i=1; i<(*it2)->Nodes(); i++ ) {
                         if ( i<((*it2)->Nodes()-1) )
                             elements << (*it2)->N(i)->Idx()+1 << "\t";
 	                else
                             elements << (*it2)->N(i)->Idx()+1 << endl;
 	              }
 	            // lower triangle
-                    for ( auto i{0U}; i<(*it2)->Nodes(); i++ ) {
+                    for ( uint32_t i{0U}; i<(*it2)->Nodes(); i++ ) {
                         if ( i<((*it2)->Nodes()-2) )
                             elements << (*it2)->N(i)->Idx()+1 << "\t";
                         if ( i==((*it2)->Nodes()-1) )

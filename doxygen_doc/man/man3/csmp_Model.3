@@ -1,0 +1,1733 @@
+.TH "csmp::Model< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Model< dim > \- \fBModel\fP the playground for the physics of interest\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <Model\&.h>\fP
+.PP
+Inherits \fBcsmp::RegionInterface< dim, Model >\fP, \fBcsmp::BoundaryInterface< dim, Model >\fP, \fBcsmp::SplitBoundaryInterface< dim, Model >\fP, and \fBcsmp::LocalVariableStorage< dim, Model >\fP\&.
+.PP
+Inherited by \fBcsmp::Model1D< 1U >\fP, and \fBcsmp::CGNS_Model< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBModel\fP (\fBModelTopology\fP &, \fBVSet\fP< dim > &, const char *var_file, bool treat_domains_as_regions_and_use_regions_file_if_any)"
+.br
+.RI "constructs model with subdomains (\fBRegion\fP, \fBBoundary\fP, \fBSplitBoundary\fP), variables file name with extension "*-variables\&.txt" where * is the name of the model "
+.ti -1c
+.RI "\fBModel\fP (const std::string &binaryFiles)"
+.br
+.RI "Reconstructor: reads model from set of CSMP's native binary files\&. "
+.ti -1c
+.RI "\fBModel\fP (const std::string &binaryFiles, const std::string &variable_txt_file)"
+.br
+.RI "Reconstructor: reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file\&. "
+.ti -1c
+.RI "\fBModel\fP (const std::string &binaryFileName, const std::set< std::string > &subset_variables)"
+.br
+.RI "Reconstructor: reads model from set of CSMP's native binary file, but only reading the specified subset of variables\&. "
+.ti -1c
+.RI "\fBModel\fP (\fBVSet\fP< dim > &, const char *var_file)"
+.br
+.RI "using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries "
+.ti -1c
+.RI "\fBModel\fP (\fBVSet\fP< dim > &)"
+.br
+.RI "constructs purely topological unnamed single-domain model without regions, boundaries nor variable storage "
+.ti -1c
+.RI "virtual \fB~Model\fP ()"
+.br
+.RI "destructor that needs to be overloaded when a subclass is derived from model "
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBDatabase\fP () const"
+.br
+.RI "returns const (read-only) reference to database object where all variable access and type specifications are stored "
+.ti -1c
+.RI "\fBPropertyDatabase\fP< dim > & \fBDatabase\fP ()"
+.br
+.RI "returns reference to database object where all variable access and type specifications are stored "
+.ti -1c
+.RI "const \fBMeshManager\fP< dim > & \fBMesh\fP () const"
+.br
+.RI "read-only access the mesh container (nodes, elements, faces, interfaces and associated variable storage) "
+.ti -1c
+.RI "\fBMeshManager\fP< dim > & \fBMesh\fP ()"
+.br
+.RI "access the mesh container (nodes, elements, faces, interfaces and associated variable storage) "
+.ti -1c
+.RI "const \fBFiniteElementManager\fP & \fBFE_Manager\fP () const"
+.br
+.RI "read-only access to the finite element types that are needed to support the current mesh "
+.ti -1c
+.RI "void \fBInstantiateFiniteVolumes\fP ()"
+.br
+.RI "prompts the finite volume manager to connect the elements and faces with finite volume stencils "
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBPlacement\fP () const"
+.br
+.ti -1c
+.RI "void \fBOutputToBinaryFile\fP (const char *)"
+.br
+.RI "writes entire model with associated properties to disk; non-constant because this involves region creation; not const because mesh is updated "
+.ti -1c
+.RI "void \fBInputFromBinaryFile\fP (const char *model_name, const std::set< std::string > &subset_variables)"
+.br
+.RI "reads model written by \fBOutputToBinaryFile()\fP including all associated properties; if subset of variables is not empty only these will be read "
+.ti -1c
+.RI "void \fBOutputMeshTo\fP (\fBVSet\fP< dim > &, bool get_indices_from_stored_variables=false)"
+.br
+.RI "computes deques of numbered \fBNode\fP, \fBElement\fP, \fBFace\fP and \fBInterFace\fP objects, and outputs mesh as polygonal dataset (\fBVSet\fP, see HDF doc of NCSA, Urbana, Champagne, Il, US) "
+.ti -1c
+.RI "template<class Var> void \fBOutputVariableTo\fP (const char *var, \fBFEM_Data\fP< Var > &) const"
+.br
+.RI "writes discretised variable to generic variable container "
+.ti -1c
+.RI "template<class T> void \fBInputVariableFrom\fP (const char *input_prop, const \fBFEM_Data\fP< T > &)"
+.br
+.RI "initialised the input property using the data supplied via the \fBVSet\fP "
+.ti -1c
+.RI "void \fBInputVariablesFrom\fP (const \fBVSet\fP< dim > &)"
+.br
+.RI "inputs all discretised variables stored in the supplied \fBVSet\fP into the model "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBCreateProperty\fP (const char *new_prop, const char *notation, const char *unit, \fBVARIABLE_TYPE\fP type=SCALAR, \fBPLACEMENT\fP place=NODE, uint32_t vsize=1, double vmin=\-1\&.0e+30, double vmax=1\&.0e+30, std::string usage='???')"
+.br
+.RI "inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized "
+.ti -1c
+.RI "void \fBDeleteProperty\fP (const char *property)"
+.br
+.RI "deletes property from the database and the distributed containers all across the model "
+.ti -1c
+.RI "void \fBIndexByPropertyValues\fP ()"
+.br
+.RI "renumbers everything, using stored "node number" etc\&. if available, else \fBMeshManager\fP is prompted to created unique numbering "
+.ti -1c
+.RI "template<class T> void \fBInputPropertyValue\fP (const char *input_prop, const T &value)"
+.br
+.RI "sets the values of the distributed variable all across the model; to enter scalar value use makeScalar(flag,value) helper function "
+.ti -1c
+.RI "template<class T> void \fBInputBoundaryValue\fP (\fBBOX_BOUNDARY\fP, const char *input_prop, const T &value)"
+.br
+.RI "sets the value of the property on those sites (nodes, elements) whose AtBoundary() function matches the \fBBOX_BOUNDARY\fP value "
+.ti -1c
+.RI "void \fBInputBoundaryFlags\fP (\fBBOX_BOUNDARY\fP, const char *property, const std::vector< \fBVARIABLE_FLAG\fP > &flags)"
+.br
+.RI "uses the vector of variable flags (ANY, DIRICH etc\&.) to change the status of the target variable at the given \fBBOX_BOUNDARY\fP "
+.ti -1c
+.RI "void \fBInterpolateBoundaryValues\fP (\fBBOX_BOUNDARY\fP, const char *input_prop, const std::vector< \fBScalarVariable\fP > &bvalues)"
+.br
+.RI "the supplied 4 scalar node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model "
+.ti -1c
+.RI "void \fBInterpolateBoundaryValues\fP (\fBBOX_BOUNDARY\fP, const char *input_prop, const std::vector< \fBVectorVariable\fP< dim > > &bvalues)"
+.br
+.RI "the supplied 4 vector node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model "
+.ti -1c
+.RI "void \fBCopyReplace\fP (const char *from, const char *to)"
+.br
+.RI "replaces the values of the target propery (to) with the values of property (from); both variables must have the same type and placement "
+.ti -1c
+.RI "bool \fBCopyGradientOfProperty_A_To_B\fP (const char *node_prop, const char *element_prop)"
+.br
+.RI "computes the (constant valued) first spatial derivative of the node property and assigns it to the element property / barycenter of the element "
+.ti -1c
+.RI "void \fBInterpolateIntegrationPointToCellProperty\fP (const char *ipoint_prop, const char *eprop)"
+.br
+.RI "linearly interpolates the value of the integration point property to the barycentre of element; result is stored as element property "
+.ti -1c
+.RI "void \fBInterpolateNodeToCellProperty\fP (const char *nprop, const char *eprop, bool verbose=true)"
+.br
+.RI "interpolates node property values to the barycentre of element and stores results in element property "
+.ti -1c
+.RI "void \fBInterpolateNodeToIntegrationPointProperty\fP (const char *nprop, const char *ipoint_prop)"
+.br
+.RI "interpolates distributed node property values the quadrature points of numerically integrated finite elements "
+.ti -1c
+.RI "void \fBExtrapolateIntegrationPointToNodeProperty\fP (const char *ipoint_prop, const char *eprop)"
+.br
+.RI "linearly extrapolates the values of the integration point variable to the element nodes where an averaging with the neighbor elements is performed "
+.ti -1c
+.RI "void \fBExtrapolateCellToNodeProperty\fP (const char *eprop, const char *nprop, bool by_distance=true)"
+.br
+.RI "piecewise constant element property values are extrapolated to nodes using a choice of averaging schemes (1/distance vs\&. element-volume weighted) "
+.ti -1c
+.RI "void \fBChangePropertyStatus\fP (const char *input_prop, \fBVARIABLE_FLAG\fP new_status)"
+.br
+.RI "changes the flags of the target variable all across the model "
+.ti -1c
+.RI "void \fBChangePropertyStatusWhere\fP (const char *var, double min, double max, \fBVARIABLE_FLAG\fP new_status)"
+.br
+.RI "where the values of the target property are within the given range the flag of the target variables are changed to the new status "
+.ti -1c
+.RI "void \fBMinMaxCoordinates\fP (\fBPoint\fP< dim > &xyz_min, \fBPoint\fP< dim > &xyz_max) const"
+.br
+.RI "returns the opposite corners of the bounding box that encloses the model "
+.ti -1c
+.RI "void \fBMinMaxOf\fP (const char *prop, double &min, double &max) const"
+.br
+.RI "returns the value range of the target property within the entire model "
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (const char *prop, const char *model_subdomain='Model') const"
+.br
+.RI "checks the value range of a variable against the range specified in its \fBParameter\fP record in the PropertyDatabse "
+.ti -1c
+.RI "void \fBAssignNodeCoordinatesTo\fP (const char *scalar_variable, char coord)"
+.br
+.RI "permits to transfer node coordinate components to the target scalar node variable; char options are 'x', 'y', 'z' "
+.ti -1c
+.RI "void \fBAssignNodeCoordinatesTo\fP (const char *vector_variable)"
+.br
+.RI "transfers node coordinates to target \fBVectorVariable<dim>\fP "
+.ti -1c
+.RI "void \fBMoveNodeCoordinatesBy\fP (const char *vector_variable)"
+.br
+.RI "shifts the node coordinates by an amount that is determined by the value of the target \fBVectorVariable<dim>\fP "
+.ti -1c
+.RI "void \fBAssignCellCharacteristicsTo\fP (const char *characteristic, const char *var)"
+.br
+.RI "'characteristic' options are: volume, inner radius, and aspect ratio "
+.ti -1c
+.RI "void \fBApply\fP (\fBInterrelation\fP< dim > &relation, const char *region='Model')"
+.br
+.RI "prompts the region-by-region, element-by-element or node-by-node calculation of the target variable via the interrelation "
+.ti -1c
+.RI "void \fBAccept\fP (\fBcsmp::Visitor\fP< dim > &)"
+.br
+.RI "support of the visitor pattern giving visitors access to the model "
+.ti -1c
+.RI "void \fBApply\fP (\fBPDE_Integrator\fP< dim, \fBElement\fP > &, bool debug=false)"
+.br
+.RI "application of integration scheme to model, subregions thereof or boundary or split-boundary objects "
+.ti -1c
+.RI "void \fBApply\fP (\fBPDE_Integrator\fP< dim, \fBFace\fP > &, bool debug=false)"
+.br
+.RI "application to all boundaries "
+.ti -1c
+.RI "void \fBApply\fP (\fBPDE_Integrator\fP< dim, \fBElement\fP > &, const char *region_name, bool debug=false)"
+.br
+.RI "application of integration scheme to a particular region, boundary of split-boundary identified by name "
+.ti -1c
+.RI "void \fBApply\fP (\fBPDE_Integrator\fP< dim, \fBFace\fP > &, const std::string &boundary_name, bool debug=false)"
+.br
+.ti -1c
+.RI "const char * \fBName\fP () const"
+.br
+.RI "the name of the computational model "
+.ti -1c
+.RI "void \fBName\fP (const char *)"
+.br
+.ti -1c
+.RI "void \fBOutputVariableToScreen\fP (const char *prop) const"
+.br
+.RI "console output "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP () const"
+.br
+.ti -1c
+.RI "template<class Var> void \fBInputVariableFrom\fP (const char *input_prop, const \fBFEM_Data\fP< Var > &vdata)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::RegionInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "bool \fBContainsRegion\fP (const std::string &regionname) const"
+.br
+.RI "checks whether region exists considering both unique and non-unique regions "
+.ti -1c
+.RI "const \fBcsmp::Region\fP< dim > & \fBRegion\fP (const std::string &region_name) const"
+.br
+.RI "returns const reference to region "
+.ti -1c
+.RI "bool \fBIsUnique\fP (const std::string &regionname) const"
+.br
+.RI "checks whether the region is space exclusive, i\&.e\&. does not contain any other regions "
+.ti -1c
+.RI "\fBcsmp::Region\fP< dim > & \fBRegionByDomainIndex\fP (int32_t domain_index)"
+.br
+.RI "checks whether all elements within the region are interconnected (if the region has multi-dimensional elements this is never the case) "
+.ti -1c
+.RI "bool \fBHasValidModelRegion\fP () const"
+.br
+.RI "checks that there is a model region and that it contains elements "
+.ti -1c
+.RI "size_t \fBRegionsOut\fP () const"
+.br
+.ti -1c
+.RI "void \fBPrintDomainIndices\fP () const"
+.br
+.RI "prints \fBModelSubDomain::domain_idx_\fP assigned automatically using reference count mechanism "
+.ti -1c
+.RI "void \fBOutputRegionsToBinary\fP (const char *file_name) const"
+.br
+.RI "writes unique and non-unique regions to binary file, including, interior/perimeter/boundary face information; relies on unique indexes "
+.ti -1c
+.RI "void \fBInputRegionsFromBinary\fP (const char *file_name, const std::set< std::string > &subset_variables)"
+.br
+.RI "Reads unique and non-unique regions from binary file as written by OutputAllRegionsToBinary(); it can also read only a subset of variables\&. "
+.ti -1c
+.RI "\fBregionIterator\fP \fBRegionsBegin\fP ()"
+.br
+.ti -1c
+.RI "\fBregionIterator\fP \fBRegionsEnd\fP ()"
+.br
+.ti -1c
+.RI "\fBregionIterator\fP \fBUniqueRegionsBegin\fP ()"
+.br
+.ti -1c
+.RI "\fBregionIterator\fP \fBUniqueRegionsEnd\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBRegions\fP () const"
+.br
+.RI "number of non-unique regions that potentially overlap "
+.ti -1c
+.RI "size_t \fBUniqueRegions\fP () const"
+.br
+.RI "number of regions that are space eclusive like the subvolumes of a water tight CAD model "
+.ti -1c
+.RI "bool \fBRenameRegion\fP (const std::string &old_name, const std::string &new_name)"
+.br
+.RI "changes the subdomain name and the search key in the region map with deletion or copying of elements "
+.ti -1c
+.RI "size_t \fBFormModelRegion\fP (bool is_unique)"
+.br
+.RI "builds master region '\fBModel\fP' (discontigous or not) including all elements (line, surface, or volume if any); this regions is then used to build others "
+.ti -1c
+.RI "size_t \fBFormRegionFrom\fP (const char *regionname, typename std::vector< \fBElement\fP< dim > * >::iterator first, typename std::vector< \fBElement\fP< dim > * >::iterator last, bool unique=false)"
+.br
+.RI "forms unique or non-unique region including entire range of elements; returns number of elements created (USED TO CREATE MODEL REGION 22/5/21) "
+.ti -1c
+.RI "size_t \fBFormRegionsFromPropertyValues\fP (const char *prop, std::set< std::string > &region_names)"
+.br
+.RI "treats the values of the property as discrete, forming one region per value and returning their names into the set; returns number of regions "
+.ti -1c
+.RI "size_t \fBFormRegionsFrom\fP (const \fBModelTopology\fP &, bool ignore_domain_type_identifiers=false)"
+.br
+.RI "forms unique regions from the supplied element ids (0\&.\&.n-1) stored in \fBModelTopology\fP; assigns region number to element material IDs if empty; returns # of regions formed "
+.ti -1c
+.RI "size_t \fBFormRegionsFromMaterialIDs\fP ()"
+.br
+.RI "creates unique regions from material IDs which must have been defined earlier; returns number of regions formed; returns number of regions "
+.ti -1c
+.RI "size_t \fBFormRegionInBoundingBox\fP (const char *regionName, const \fBPoint\fP< dim > &cnr_min, const \fBPoint\fP< dim > &cnr_max, bool all_nodes_must_be_within)"
+.br
+.ti -1c
+.RI "size_t \fBCountAndLabelUniqueRegions\fP (const char *region_identifier, std::vector< std::string > &region_names)"
+.br
+.RI "assigns unique region-indicative variable values to the elements of all unique regions and returns name value mapping vector[value]=name "
+.ti -1c
+.RI "bool \fBCheckRegionIdentifierIsUpToDate\fP (const char *region_identifier)"
+.br
+.ti -1c
+.RI "size_t \fBPartitionRegionIntoContiguousSubRegions\fP (const char *region)"
+.br
+.RI "finds disconnected subregions in region, dividing it into these\&. The new subregion are numbered and their total # is returned "
+.ti -1c
+.RI "size_t \fBPartitionRegionIntoContiguousSubRegions_Bromage\fP (const char *region)"
+.br
+.ti -1c
+.RI "size_t \fBRemoveRegionPartitionsFor\fP (const char *name)"
+.br
+.RI "removes all regions with the given name followed by an arbitrary number; returns number of removed regions=partitions "
+.ti -1c
+.RI "size_t \fBFormRectangularRegion\fP (const char *regionname, const \fBcsmp::Point\fP< dim > &xyz_min, const \fBcsmp::Point\fP< dim > &xyz_max)"
+.br
+.RI "forms a non-unique rectangular region of elements whose barycenter falls into the bounding box defined by the points "
+.ti -1c
+.RI "void \fBCopyRegion\fP (const char *existing_region, const char *copied_region, bool place_copy_in_unique_regions=false)"
+.br
+.RI "replicates region and gives duplicate a new name ( "
+.ti -1c
+.RI "void \fBAssimilateRegion\fP (const char *region_to_add, const char *region_to_be_added_to)"
+.br
+.RI "adds the region specified by first argument to the existing region given by second argument "
+.ti -1c
+.RI "void \fBMergeRegions\fP (const std::set< std::string > &input_regions, const char *ensemble_region)"
+.br
+.RI "merges multiple regions as identified by their names into a new master region "
+.ti -1c
+.RI "void \fBRemoveRegion\fP (const char *regionname, bool erase_elements=false)"
+.br
+.RI "removes region and associated variable storage; \fBMeshManager\fP removes elements and rebuilds connectivity if requested, but only if region is unique "
+.ti -1c
+.RI "bool \fBRemoveFromRegion\fP (const char *region, const char *region_to_subtract)"
+.br
+.RI "excludes the intersection of elements of the 2 regions from the non-unique region "
+.ti -1c
+.RI "bool \fBMoveToNonUniqueRegions\fP (const char *unique_region)"
+.br
+.RI "moves region to from the unique- to the non-unique regions map "
+.ti -1c
+.RI "bool \fBMoveToUniqueRegions\fP (const char *non_unique_region)"
+.br
+.ti -1c
+.RI "bool \fBRegionIncludes\fP (const char *region_a, const char *region_b) const"
+.br
+.RI "boolean operation: include "
+.ti -1c
+.RI "bool \fBRegionUnion\fP (const char *region_a, const char *region_b, const char *region_union)"
+.br
+.RI "boolean operation: union "
+.ti -1c
+.RI "bool \fBRegionIntersection\fP (const char *region_a, const char *region_b, const char *region_intersection)"
+.br
+.RI "boolean operation: intersection "
+.ti -1c
+.RI "bool \fBRegionDifference\fP (const char *region_a, const char *region_b, const char *region_diff)"
+.br
+.RI "boolean operation: difference (returns the data in region a that is not in region b) "
+.ti -1c
+.RI "bool \fBRegionSymmetricDifference\fP (const char *region_a, const char *region_b, const char *region_symdiff)"
+.br
+.RI "boolean operation: symmetric difference (the symmetric difference is the union without the intersection) "
+.ti -1c
+.RI "size_t \fBSharedPerimeterFaces\fP (const char *region_a, const char *region_b, std::vector< std::tuple< \fBElement\fP< dim > *, \fBElement\fP< dim > *, size_t, size_t > > &shared) const"
+.br
+.RI "finds the contact area between regions a and b, logging pairs of element pointers and face numbers; "
+.ti -1c
+.RI "void \fBUpdateRegions\fP ()"
+.br
+.RI "if the mesh changed this safe but model-wide method rebuilds the node and element vectors of all regions "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::BoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "\fBcsmp::Boundary\fP< dim > & \fBBoundary\fP (const std::string &bName)"
+.br
+.ti -1c
+.RI "bool \fBContainsBoundary\fP (const std::string &bName) const"
+.br
+.ti -1c
+.RI "boundaryIterator \fBBoundariesBegin\fP ()"
+.br
+.ti -1c
+.RI "boundaryIterator \fBBoundariesEnd\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBBoundaries\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBCreateBoundaryName\fP (const std::string &inside_region, const std::string &outside_region)"
+.br
+.RI "creates a name for a new boundary that shall be created between two touching unique (non-overlapping) regions "
+.ti -1c
+.RI "std::string \fBFindBoundaryByName\fP (const std::set< std::string > &intersected_regions) const"
+.br
+.RI "searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string ('\\0') if not found "
+.ti -1c
+.RI "size_t \fBFindBoundaryByNames\fP (const std::set< std::string > &intersected_regions, std::set< std::string > &region_patches_found) const"
+.br
+.RI "searches for the boundaries whose name contains the supplied strings (region names etc\&.) "
+.ti -1c
+.RI "bool \fBIsBoundaryName\fP (const std::string &regionName) const"
+.br
+.RI "checks whether name contains the strings BOUNDARY or any of the predefined boundary names "
+.ti -1c
+.RI "bool \fBBoxShaped\fP () const"
+.br
+.RI "checks whether the model contains the \fBBOX_BOUNDARY\fP=equivalent boundaries TOP, BOTTOM etc\&. "
+.ti -1c
+.RI "size_t \fBFormBoundariesFrom\fP (const \fBModelTopology\fP &)"
+.br
+.RI "uses the \fBFace\fP ids stored in the model topology object to form boundaries using \fBFace\fP objects which already exist; returns number of boundaries formed "
+.ti -1c
+.RI "std::pair< std::set< std::string >, bool > \fBCreateInternalBoundaryFrom\fP (const char *dimension_minus1_region)"
+.br
+.RI "converts lower-dimensional \fBRegion\fP into uniquely named \fBBoundary\fP patches, assigning more specific names to these; the input \fBRegion\fP and its elements are removed "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBCreateExternalBoundaryFrom\fP (const char *dimension_minus1_region, bool check_topo_attributes_of_nodes)"
+.br
+.RI "converts lower-dimensional \fBRegion\fP on the outside of the model into a \fBBoundary\fP; returns whether this conversion was successful as well as the boundary name "
+.ti -1c
+.RI "bool \fBCreateBoundaryAround\fP (const char *region)"
+.br
+.RI "creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBCreateBoundaryBetween\fP (const char *region1, const char *region2)"
+.br
+.RI "insert lower-dimensional \fBRegion\fP between two equidimensional unique regions, and then converts it into \fBBoundary\fP; returns boundary name "
+.ti -1c
+.RI "bool \fBEstablishEdgeBoundariesOfBoxShapedModel\fP ()"
+.br
+.RI "creates EDGE# \fBBoundary\fP line objects for box-shaped model by intersecting side boundaries objects "
+.ti -1c
+.RI "bool \fBEstablishBoxBoundaries\fP ()"
+.br
+.RI "creates \fBcsmp::Boundary\fP objects replacing lower-dimensional \fBBOX_BOUNDARY\fP named regions with boundaries with the same names "
+.ti -1c
+.RI "std::set< std::string > \fBEstablishBoundariesFromRegions\fP ()"
+.br
+.RI "inserts box boundary or irregular \fBcsmp::Boundary\fP objects for all eligible regions in the model; returns the names of the created boudaries "
+.ti -1c
+.RI "bool \fBEstablishBoxBoundariesFromOrientation\fP ()"
+.br
+.RI "tries to create \fBBox\fP \fBBoundary\fP objects surrounding '\fBModel\fP' into TOP, BOTTOM, IRREGULAR if possible; updates \fBBOX_BOUNDARY\fP flags "
+.ti -1c
+.RI "void \fBEstablishBoxBoundariesFromNodeFlags\fP (bool recreate_box_boundary_flags_before)"
+.br
+.RI "creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing "
+.ti -1c
+.RI "void \fBRemoveBoundary\fP (const char *boundary, bool erase_faces)"
+.br
+.RI "Removes boundary with deletion of its faces in the \fBMeshManager\fP\&. "
+.ti -1c
+.RI "size_t \fBBoundariesOut\fP () const"
+.br
+.RI "prints boundary names and other stats to screen; returns number of boundaries "
+.ti -1c
+.RI "bool \fBOutputBoundariesToBinary\fP (const char *file_name) const"
+.br
+.RI "method used in the storage of a model to binary file "
+.ti -1c
+.RI "void \fBInputBoundariesFromBinary\fP (const char *file_name, const std::set< std::string > &subset_variables)"
+.br
+.RI "reads boundaries stored in CSMP native binary file written by OutputBoundariesToBinary; if set non-empty will only read subset of variables "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::SplitBoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "\fBcsmp::SplitBoundary\fP< dim > & \fBSplitBoundary\fP (const std::string &)"
+.br
+.ti -1c
+.RI "bool \fBContainsSplitBoundary\fP (const std::string &) const"
+.br
+.ti -1c
+.RI "splitBoundaryIterator \fBSplitBoundariesBegin\fP ()"
+.br
+.ti -1c
+.RI "splitBoundaryIterator \fBSplitBoundariesEnd\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBSplitBoundaries\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBFormSplitBoundariesFrom\fP (const \fBModelTopology\fP &)"
+.br
+.RI "uses the \fBInterFace\fP ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed "
+.ti -1c
+.RI "std::pair< std::set< std::string >, bool > \fBDetectAndCreateSplitBoundaries\fP ()"
+.br
+.RI "Creates SplitBoundaries detecting disconnected but node-matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions\&. "
+.ti -1c
+.RI "size_t \fBSeparateUniqueRegionsBySplitBoundaries\fP ()"
+.br
+.RI "creates consistently named split boundaries between all unique regions in the model "
+.ti -1c
+.RI "std::pair< std::set< std::string >, bool > \fBCreateSplitBoundaryFrom\fP (const char *dim_1_region, bool retain_elmts_as_intervening_elements)"
+.br
+.RI "creation of one or multiple SplitBoundaries from a lower dimensional region "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBCreateSplitBoundaryBetween\fP (const char *region1, const char *region2)"
+.br
+.RI "creates \fBSplitBoundary\fP between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBInsertRegionIntoSplitBoundary\fP (const char *split_boundary, int32_t material_id_for_new_elements)"
+.br
+.RI "inserts a lower-dimensional \fBRegion\fP inside of the \fBSplitBoundary\fP, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the \fBSplitBoundary\fP followed by _REGION "
+.ti -1c
+.RI "std::set< std::string > \fBInsertLowerDimensionalRegionsIntoSplitBoundaries\fP (int32_t material_id_for_new_elements)"
+.br
+.RI "Creates isolated lower-dimensional mesh regions between split boundaries with unique names matching those of the \fBSplitBoundary\fP objects; set will be empty if none created\&. "
+.ti -1c
+.RI "void \fBRemoveSplitBoundary\fP (const char *split_boundary, bool erase_interfaces)"
+.br
+.RI "Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful\&. "
+.ti -1c
+.RI "std::string \fBMergeSplitBoundaries\fP (const char *new_sb_name, std::set< std::string > splitboundaries)"
+.br
+.ti -1c
+.RI "size_t \fBSplitBoundariesOut\fP () const"
+.br
+.RI "prints current split boundaries to screen and returns how many there are "
+.ti -1c
+.RI "bool \fBOutputSplitBoundariesToBinary\fP (const char *fileName) const"
+.br
+.ti -1c
+.RI "bool \fBInputSplitBoundariesFromBinary\fP (const char *fileName, const std::set< std::string > &subset_variables)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::LocalVariableStorage< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBLocalVariableStorage\fP< dim, \fBModel\fP > &) const"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBResizePropertyStorage\fP (const \fBLocalVariables\fP &)"
+.br
+.RI "Goto overload for storees without \fBIntegrationPointVariables\fP\&. "
+.ti -1c
+.RI "void \fBAddProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Creates an empty space in the storage preserving the original variable values\&. \fBLocalVariables\fP in \fBIndex\fP have to reflect NEW state (incl added) "
+.ti -1c
+.RI "void \fBDeleteProperty\fP (const \fBcsmp::Index\fP &)"
+.br
+.RI "Deletes data and flags of property \fBLocalVariables\fP in \fBIndex\fP have to reflect CURRENT state (incl property to be removed) "
+.ti -1c
+.RI "bool \fBIsWithinRange\fP (const \fBcsmp::Index\fP &, double, double) const"
+.br
+.ti -1c
+.RI "double \fBRead\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar variable value\&. "
+.ti -1c
+.RI "void \fBStore\fP (const \fBcsmp::Index\fP &, const \fBScalarVariable\fP &)"
+.br
+.RI "Scalar variable\&. "
+.ti -1c
+.RI "\fBVARIABLE_FLAG\fP \fBStatus\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "Scalar & Array variable flag\&. "
+.ti -1c
+.RI "void \fBStoreArrayEntry\fP (const \fBcsmp::Index\fP &, double array_elmt_value, int_type)"
+.br
+.ti -1c
+.RI "double \fBReadArrayEntry\fP (const \fBcsmp::Index\fP &, int_type array_elmt) const"
+.br
+.RI "reads single double element inside of the target array "
+.ti -1c
+.RI "bool \fBEmptyLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBOutLVS\fP () const"
+.br
+.ti -1c
+.RI "void \fBAssertPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBAssertFiniteVolumeIntegrationPointPlacement\fP (const \fBcsmp::Index\fP &) const"
+.br
+.RI "We check in debug only\&. "
+.ti -1c
+.RI "void \fBStoreLocalState\fP (const \fBLocalVariables\fP &lv)"
+.br
+.RI "We store in debug only\&. "
+.ti -1c
+.RI "void \fBLVS\fP (const Data &data)"
+.br
+.RI "copy or move supplied data into storage "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBModel\fP ()"
+.br
+.RI "default constructor that is custom-made "
+.ti -1c
+.RI "\fBModel\fP (const char *complete_variables_file_name)"
+.br
+.RI "to construct model as a base class to a derived model built from an external dataset using a variable file in ASCII format "
+.ti -1c
+.RI "void \fBInitialize\fP (\fBVSet\fP< dim > &)"
+.br
+.RI "builds with model without specifically named subdomains other than "Model"\&. If model is box-shaped corresponding boundary flags will exist\&. "
+.ti -1c
+.RI "void \fBInitialize\fP (const char *regions_file_prefix, \fBModelTopology\fP &, \fBVSet\fP< dim > &)"
+.br
+.RI "builds model treating any topologic entities from regions file as unique regions; later converts correspondingly labelled ones into boundaries and split boundaries "
+.ti -1c
+.RI "void \fBInitialize\fP (\fBModelTopology\fP &, \fBVSet\fP< dim > &)"
+.br
+.RI "builds model with regions, boundaries, and splitboundaries as identified by "BOX_BOUNDARY", "boundary" or "splitboundary" strings in the domain names "
+.ti -1c
+.RI "void \fBInitializeLocalVariableStorage\fP ()"
+.br
+.RI "Instantiates MODEL \fBLocalVariables\fP\&. "
+.ti -1c
+.RI "bool \fBUpdateSubdomainPropertyStorage\fP ()"
+.br
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::RegionInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "void \fBRebuildUniqueRegions\fP ()"
+.br
+.RI "rebuilds unique regions, but only if they contain some nulled element pointers "
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::BoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "std::string \fBCreateBoundaryNameFrom\fP (const \fBFaceConstructionData\fP< dim > &, const std::vector< std::string > &region_names) const"
+.br
+.RI "combines strings (including 'BOUNDARY') into a unique name of the boundary "
+.ti -1c
+.RI "bool \fBAddBoundary\fP (const char *name, typename std::vector< \fBFace\fP< dim > * >::iterator facesBegin, typename std::vector< \fBFace\fP< dim > * >::iterator facesEnd, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "creates boundary from already interconnected faces that also know their parent elements "
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::SplitBoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "std::string \fBCreateSplitBoundaryName\fP (const std::pair< std::string, std::string > &juxtaposed_regions) const"
+.br
+.RI "creating name for the case when the \fBSplitBoundary\fP was already present in the input mesh "
+.ti -1c
+.RI "std::string \fBCreateSplitBoundaryNameFrom\fP (const \fBFaceConstructionData\fP< dim > &, const std::vector< std::string > &region_names) const"
+.br
+.RI "creates name for one specific patch of the new split boundary "
+.ti -1c
+.RI "size_t \fBFindSplitBoundaryByNames\fP (const std::set< std::string > &intersected_regions, std::set< std::string > &region_patches_found) const"
+.br
+.RI "searches the split boundary map for split-boundary names that contain the names of the regions stored in the first set "
+.ti -1c
+.RI "bool \fBAddSplitBoundary\fP (const char *name, typename std::vector< \fBInterFace\fP< dim > * >::iterator first, typename std::vector< \fBInterFace\fP< dim > * >::iterator last, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "creates split boundary from already interconnected faces that also know their parent elements "
+.in -1c
+.SS "Static Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBBinaryVsetFileName\fP (const char *base_file_name)"
+.br
+.ti -1c
+.RI "static std::string \fBBinaryRegionsFileName\fP (const char *base_file_name)"
+.br
+.ti -1c
+.RI "static std::string \fBBinaryBoundariesFileName\fP (const char *base_file_name)"
+.br
+.ti -1c
+.RI "static std::string \fBBinarySplitBoundariesFileName\fP (const char *base_file_name)"
+.br
+.ti -1c
+.RI "static std::string \fBBinaryVariablesFileName\fP (const char *base_file_name)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Public Types inherited from \fBcsmp::RegionInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::Region\fP< dim > >::iterator \fBregionIterator\fP"
+.br
+.RI "iterators to associative containers of regions "
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::Region\fP< dim > >::const_iterator \fBregionConstIterator\fP"
+.br
+.in -1c
+
+Public Types inherited from \fBcsmp::BoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::Boundary\fP< dim > >::iterator \fBboundaryIterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::Boundary\fP< dim > >::const_iterator \fBboundaryConstIterator\fP"
+.br
+.in -1c
+
+Public Types inherited from \fBcsmp::SplitBoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::SplitBoundary\fP< dim > >::iterator \fBsplitBoundaryIterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::SplitBoundary\fP< dim > >::const_iterator \fBsplitBoundaryConstIterator\fP"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::RegionInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::Region\fP< dim > > \fBuniqueRegionMap_\fP"
+.br
+.RI "map of unique regions that do not overlap "
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::Region\fP< dim > > \fBregionMap_\fP"
+.br
+.RI "map of non-unique (potentially overlapping) regions "
+.ti -1c
+.RI "std::map< std::string, \fBPropertyConstraints\fP > \fBregionTraits_\fP"
+.br
+.RI "criteria how non-unique regions were created "
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::BoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::Boundary\fP< dim > > \fBboundaryMap_\fP"
+.br
+.RI "storage of the boundaries "
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::SplitBoundaryInterface< dim, Model >\fP
+.in +1c
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::SplitBoundary\fP< dim > > \fBsplitBoundaryMap_\fP"
+.br
+.RI "boundary name & boundary container of key-value pairs "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::Model< dim >"\fBModel\fP the playground for the physics of interest\&. 
+
+incomplete forward declaration
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+
+.PP
+Stephen G\&. Roberts 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999
+.RE
+.PP
+.SH "Motivation"
+.PP
+Finite-element models typically are characterized by arrays of data that need to be accessed via complex indexing operations and whose interconnectedness is not explicit\&. Also it is relatively error prone to change the size of these arrays at runtime and to update the connectivity of represented finite elements\&. Tohe design of the \fBModel\fP class was therefore motivated by the need to hide this complexity from the user such that he/she can focus their undivided attention on the geological complexity of the problem at hand\&.
+.SH "Design Intent"
+.PP
+The design intent was to have an object representation of the mass and space occupancy of a real world system of interest\&. One should be able to work with and observe this system through the interfaces of the \fBModel\fP object\&.
+.SH "Applicability"
+.PP
+A \fBModel\fP representation can be built for any geometrical model which represents a finite-element discretization of a real-world system\&. Computations on a \fBModel\fP are carried out through its interface \fBApply()\fP\&. Through this interface you can carry out finite-element computations specified by Algorithms or own types derived from the classes Algorithm, and 'Algorithm'\&. You can also calculate interrelations among variables (including the dependent variables that are computed at each timestep)\&. You do this with your own classes that you derive from the \fBInterrelation\fP base class\&. An example for such an Interrelation-derived calculation would be to calculate a permeability that is dependent on fluid pressure\&. Any derived algorithm or interrelation can also be restricted to Regions of Elements inside the \fBModel\fP\&.
+.SH "Structure"
+.PP
+The \fBModel\fP is an agglomerate of objects representing the finite-element mesh, implemented as a connectivity scheme and a storage scheme for physical variables that are assigned to nodes, constraint points, or elements themselves\&. Regions of elements that make up geological entities in the model are referred to as \fBRegion\fP objects\&.
+
+.PP
+The \fBModel\fP contains a class hierarchy of \fBRegion\fP, \fBElement\fP, IntegrationPoint, and \fBNode\fP objects\&. Their connections reflect the connectivity of the mesh and they are handled internally by the \fBMeshManager\fP\&. The complementary MemoryManager object manages the storage for the distributed physical variables of a computation\&. The \fBPropertyDatabase\fP object keeps track of the existing properties, their storage locations and specifications\&.
+.SH "Participants"
+.PP
+The \fBModel\fP functionality is instrumentalized through instances of \fBNode\fP, IntegrationPoint, and \fBElement\fP classes managed by the \fBMeshManager\fP; basic CSMP variables managed by the MemoryManager; a \fBPropertyDatabase\fP, and a map of Regions\&.
+.SH "Collaborations"
+.PP
+In a typical CSMP simulation, the \fBModel\fP collaborates with Algorithm, \fBInterrelation\fP, and \fBVisitor\fP objects via its \fBApply()\fP and \fBAccept()\fP interfaces, respectively\&. For data transfer, the \fBModel\fP can also exchange properties with a \fBFiniteDifferenceGrid\fP object using the \fBElement\fP interpolation functions\&.
+.SH "Consequences"
+.PP
+A \fBModel\fP encapsulates the discretization of a geological object with associated properties\&. It thereby creates an interface to this object which allows to carry out computations on the object, modify property values, input and output these to other tools, and to address and manipulate sub- regions of the object\&. Sub-regions can be identified on the basis of property values and they can be associated with a name\&. Once this is done, most of the \fBModel\fP interface can also be used for individual Regions\&.
+.SH "Implementation"
+.PP
+The public interfaces of the \fBModel\fP invoke a data-access process for the discretized real-world model\&. The key steps in this process are:
+
+.PP
+(1) The Property Database is queried for the variable specifications of a variable defined as an input string (for instance "permeability")\&. The database returns a \fBcsmp::Index\fP that uniquely identifies the variable for efficient access in the computations\&.
+
+.PP
+(2) The placement of the variable (\fBNode\fP, IntegrationPoint or \fBElement\fP) determines the depth of the search for the variable in the hierarchy of the mesh in the \fBModel\fP object\&.
+
+.PP
+(3) Once a variable location object (\fBNode\fP, IntegrationPoint, or \fBElement\fP) is found, its ID is used to retrieve the value or status of the variable from the MemoryManager via methods like \fBRead()\fP or \fBStore()\fP\&. These methods are overloaded to retrieve Scalar-, Vector-, and \fBTensorVariable<dim>\fP instances\&.
+
+.PP
+(4) Within the MemoryManager object the variables live in STL vectors that were instantiated for the specific variable types\&. The length of such vectors depends on the placement of the variables\&. Originally the MemoryManager object is build for the variables that were specified in the variable database from your input file\&. When you create a new variable at runtime (using \fBPropertyHandle\fP objects), a new vector is build and inserted for this variable\&. The addresses of other variables remain valid in this process\&. Thus, you can efficiently create new variables at runtime\&.
+.SH "Application Examples"
+.PP
+In the following example, the element type \fBLinearTriangle\fP is set as default finite-element\&. A \fBTriangulator\fP mesh generator object is used by the \fBModel\fP constructor to generate a mesh of triangular finite-elements\&. This mesh is build from regular-gridded input data for which the user is prompted and the mesh in used further to buid a \fBModel\fP object named 'model'\&. In this process, the default variable text file 'CSP_variables\&.txt' is read to initialize the variable database\&. The porosity of the new model is set to a uniform value of 3% and \fBDIRICH(let)\fP boundary conditions are applied at the model top (cross-sectional model)\&. Now, instances of subclasses of Algorithms, Interrelations and Visitors are applied by 'passing' them to the \fBModel\fP\&. This invokes global (mesh-wide) and local (finite-element restricted) computations\&. Finally the variable 'temperature' is output to the HDF file 'computed_temperature'\&.
+
+.PP
+.PP
+.nf
+Triangulator mesher;
+
+Model   model( "CM\-simulation", mesher );
+
+model\&.InputUniformValueWhere ( PLAIN, "porosity", 0\&.03 );
+
+model\&.AssignBoundaryValues( TOP, "temperature", DIRICH, top_T, top_T );
+
+model\&.Apply( interrelation_subclass );
+
+model\&.Apply( csp_algorithm_subclass );
+
+model\&.OutputDataToHDF ( "computed_temperature", "temperature" );
+.fi
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+(3) Put Apply(PDE_Int) back into domain classes (from \fBModel\fP to Boundaries etc\&.\&.\&.) 
+
+.PP
+(3) Replace references to groupMap_ and uniqueGroupMap_ in Model\&.cpp by corresponding Interface functionality 
+
+.PP
+(3) \fBTest\fP binary IO of SplitBoundaries 
+.RE
+.PP
+
+.PP
+\fBAuthor\fP
+.RS 4
+Lukas Mosser 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2013 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::Model\fP< dim >::Model (\fBModelTopology\fP & mesh_topology, \fBVSet\fP< dim > & vset, const char * var_file, bool treat_domains_as_regions_and_use_regions_file)"
+
+.PP
+constructs model with subdomains (\fBRegion\fP, \fBBoundary\fP, \fBSplitBoundary\fP), variables file name with extension "*-variables\&.txt" where * is the name of the model Constructor is similar to previous one, but only a subset of the model geometry stored in the vset will be used according to the specifications given by the data of the model topology object\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvset\fP A \fBVSet\fP is supplied as constructor argument and should contain a finite-element mesh and associated properties with names which must correspond to the properties specified in the Property input file (default: CSMP_variables\&.txt)\&.
+.br
+\fImesh_topology\fP a \fBModelTopology\fP object which should be initialized as is done for instance by methods of the \fBANSYS_Interface\fP\&. The model topology object has a rich interface which allows the user to select sub portions of the model stored in the vset\&.
+.br
+\fItreat_domains_as_regions_and_use_regions_file\fP when there is a "-regions\&.txt" file, any elements of regions that are not mentioned in there will be eliminated from the mesh when the CSMP models gets build\&. This is important because meshing tools like ANSYS mesh every part of the BREP using lines, surfaces and volumes\&. However intervening lines or surfaces are normally not desired because element integral contributions would be duplicated for elements which share the same nodes\&. This is also why \fBANSYS_Interface\fP eliminates the lower-dimensional elements from regions if all these element groups have the same name\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The constructor first initializes the \fBMeshManager\fP and then the MemoryManager with the data from the \fBVSet\fP\&. Then property data stored in the \fBVSet\fP as \fBFEM_Data\fP are used to initialize some of the properties for which memory was allocated for by the MemoryManager\&.
+.SH "Application Examples"
+.PP
+Constructor will build a \fBModel\fP for 2D meshes from 'Triangle' as well as 3D meshes from GoCad or NASTRAN input data\&.
+.SH "Messages"
+.PP
+If no properties are supplied, the constructor will issue a Warning message\&. In this case, property values have to be assigned before a computation is carried out since all basic variables are initialized to NAN (not a number) by default\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+per default this constructor will not create any boundaries
+
+.PP
+the regions file is used only if there is one 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBcsmp::Model\fP< dim >::Model (\fBVSet\fP< dim > & vset, const char * var_file)"
+
+.PP
+using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries Builds 2 and 3D, finite-element meshes according to the element specifications given in the supplied \fBVSet\fP\&. The vset will contain elements of different types, for instance, tetrahedra and prism elements\&. If, these are not already stored in the \fBVSet\fP, different material properties can be assigned to regions inside the the calculation\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvset\fP A \fBVSet\fP is supplied as constructor argument and should contain a finite-element mesh and associated properties with names which must correspond to the properties specified in the Property input file (default: CSMP_variables\&.txt)\&. Note that \fBVSet\fP is not const because it may be shrunk in construction process)\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Constructor is used when an ANSYS \fBModel\fP is built from topology and \fBVData\fP\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+No boundaries or regions can be created here because there is no way to store corresponding information in the \fBVSet\fP\&. Use a constructor with \fBModel\fP topology to achieve this\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBcsmp::Model\fP< dim >::Model (\fBVSet\fP< dim > & vset)\fR [explicit]\fP"
+
+.PP
+constructs purely topological unnamed single-domain model without regions, boundaries nor variable storage Build model without variable storage\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+No boundaries or regions are created either because there is no way to store corresponding information in the \fBVSet\fP\&. Use a constructor with \fBModel\fP topology to achieve this\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBcsmp::Model\fP< dim >::~\fBModel\fP ()\fR [virtual]\fP"
+
+.PP
+destructor that needs to be overloaded when a subclass is derived from model removes dynamically allocated finite volume stencil manager 
+.SS "template<uint32_t dim> \fBcsmp::Model\fP< dim >::Model ()\fR [protected]\fP"
+
+.PP
+default constructor that is custom-made Constructs a completely empty model\&. It is used by one of the ANSYS \fBModel\fP interfaces\&.
+
+.PP
+\fBNote\fP
+.RS 4
+model will contain a single region called 'model' and it will be considered unique\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+SKM deprecate; make the default constructor private to comply with inheritance principles 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBcsmp::Model\fP< dim >::Model (const char * varTextFile)\fR [explicit]\fP, \fR [protected]\fP"
+
+.PP
+to construct model as a base class to a derived model built from an external dataset using a variable file in ASCII format Constructor used for base class construction in subclasses of the model\&. \fBExample\fP: \fBANSYS_Model3D\fP where model construction input data are read from text file, initializing \fBVSet\fP and \fBModelTopology\fP classes that serve as an input for model construction\&.
+
+.PP
+\fBNote\fP
+.RS 4
+this is not a stand-alone constructor and leaves the model in an incomplete state\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Accept (\fBcsmp::Visitor\fP< dim > & v)"
+
+.PP
+support of the visitor pattern giving visitors access to the model The User's guide describes the \fBVisitor\fP design pattern which was adopted from Gamma et al\&. 1994 (Design Patterns, Addison Wesley, p\&. 331)\&. Depending on its internally specified ApplicationLevel, \fBAccept()\fP either applies the \fBVisitor\fP to the entire \fBModel\fP or passes it down to members of the \fBModel\fP hierarchy (\fBRegion\fP > > \fBBoundary\fP > \fBElement\fP > \fBFace\fP > \fBInterFace\fP > \fBNode\fP\&. In the last case, the visitor is passed to all nodes of the entire \fBModel\fP\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIv\fP Any visitor derived from the \fBVisitor\fP base class\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The method consists a of switch( visitor\&.ApplicationLevel() ) statement with iterator loops through the different object collections\&. These deliver the visitor to its ApplicationTarget()\&.
+.SH "Application Examples"
+.PP
+Standard method to give visitors access to the \fBModel\fP\&. 
+.PP
+\fBAttention\fP
+.RS 4
+visitors will only be applied to the unique regions in the model in order to avoid duplicate application\&. If a non-unique region is the target, the visitor should be passed directly to it\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+\fBAccept()\fP will report an error if the visitors destination is a specific region, which is not defined\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM (1) Reorganize this so that no confusion remains where the visitor goes\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Apply (\fBInterrelation\fP< dim > & relation, const char * region = \fR'Model< dim >'\fP)"
+
+.PP
+prompts the region-by-region, element-by-element or node-by-node calculation of the target variable via the interrelation Applies a calculation recipe which is specified in an \fBInterrelation\fP subclass to every element/face/node etc\&. in the current \fBModel\fP\&. If the \fBInterrelation\fP applies to a single \fBRegion\fP (subregion of the \fBModel\fP) it is passed on to the interface of the corresponding \fBRegion\fP object\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIrelation\fP A user-defined subclass of an \fBInterrelation\fP base class\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Executes the method \fBApply()\fP on interrelation objects derived from the \fBInterrelation\fP base class\&. \fBApply()\fP will in turn call Calculate() in the class derived from the \fBInterrelation\fP base class (subclass)\&. Remember that Interrelations are defined as calculations that do not require the inversion of a global matrix\&.
+.SH "Application Examples"
+.PP
+Examples of interrelations include the calculation of strains from displacements, the horizontal and vertical components of the fluid-flow velocity from nodal pressures and/or elemental permeabilities and porosities\&.
+.SH "Messages"
+.PP
+Please consult the documentation of the \fBInterrelation\fP class and the derived subclasses for a description of the output which results when these objects are applied to the \fBModel\fP or a \fBRegion\fP\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Apply (\fBPDE_Integrator\fP< dim, \fBElement\fP > & problem, bool debug = \fRfalse\fP)"
+
+.PP
+application of integration scheme to model, subregions thereof or boundary or split-boundary objects An Algorithm object is passed either directly to the \fBModel\fP or to a subdomain of it to which it applies\&. In this process, the Algorithm is provided with iterators to the target collection of (default = Elements) to accumulate data, assign boundary conditions and to carry out a global matrix inversion using the '\fBSolver\fP' or any other calculation tool\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIproblem\fP An initialized Algorithm object, i\&.e\&. an algorithm to which partial differential operators have been assigned (see MathOperator\&.\&.\&. objects)\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The \fBApply()\fP method calls on the interface of the Algorithm object to carry out a sequence of operations which will build, initialize, and invert a global solution matrix in order to find distributed values of the dependent \fBvariable(s)\fP of interest\&. In detail, this sequence will vary, dependent on whether the calculation establishes transient or steady-state variable values\&. The more complicated transient calculation will call (see interface documentation of the Algorithm class):
+
+.PP
+.PP
+.nf
+EstablishMatrixSetup()       to allocate the solution matrix etc\&.
+Accumulate()                 to assemble the solution matrix\&.
+AssignInitialConditions()    to put the present model state into the
+righthand vector
+LateAccumulate()             to add source or sink rates into the
+righthandside
+AssignEssentialConditions()  assign Neumann or Dirichlet conditions
+Solve()                      invert the solution matrix with the Solver
+OutputResults()              test and map the solution vector back into
+the Model / MemoryManager storage
+PostProcess()                calculate further variable values on the
+basis of the calculation results
+.fi
+.PP
+.SH "Application Examples"
+.PP
+Standard interface for 2 and 3D global computations\&.
+.SH "Messages"
+.PP
+The interface methods of the Algorithm class Accumulate() and Solve() will report the progress of a computation in a fashion that depends on the type of problem which is solved and on the solution technique\&. Please refer to the documentation of the Algorithm interface and the \fBSolver\fP to learn more about this specific output\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Apply (\fBPDE_Integrator\fP< dim, \fBElement\fP > & problem, const char * region_name, bool debug = \fRfalse\fP)"
+
+.PP
+application of integration scheme to a particular region, boundary of split-boundary identified by name specific regions 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::AssignCellCharacteristicsTo (const char * characteristic, const char * var)"
+
+.PP
+'characteristic' options are: volume, inner radius, and aspect ratio \fBAssignCellCharacteristicsTo()\fP allows to assign a number of \fBElement\fP characteristics as identified by strings (second argument) to scalar physical variables\&. These characteristics are:
+
+.PP
+"volume" (3D)
+.br
+ "inner radius"
+.br
+ "aspect ratio" (longest / shortest segment)
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIcharacteristic\fP The element characteristic is assigned to 
+.br
+\fIvar\fP a property of the user's choice and as identified by its name in the variable database\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The method was implemented mainly for two-dimensional calculations\&. Therefore, height and width only work in two-dimensional calculations\&. The characteristics are obtained from the \fBFiniteElement\fP which is bridged to the current \fBElement\fP that is queried\&.
+.SH "Application Examples"
+.PP
+The characteristic "inner radius" is commonly used to find the appropriate resolution for an advection or visualization grid on which a variable is to be mapped on\&.
+
+.PP
+\fBAssignCellCharacteristicsTo()\fP can be used to:
+.IP "\(bu" 2
+test the shape of elements in a mesh for their suitability for a computation (aspect ratio)\&.
+.IP "\(bu" 2
+testing how skewed the elements got by deformation
+.IP "\(bu" 2
+integrate element properties in specific calculations, for instance, if a fracture is just one element wide, the minimum height of these fracture elements may be equivalent to the fracture aperture\&.
+.PP
+.SH "Messages"
+.PP
+Firstly, the method will report an error and return, if the target property to which the element characteristic shall be assigned to is not an element variable\&.
+
+.PP
+Further errors may be reported if the user tries to use the characteristic area in a 3D computation, or volume in a 2D computation\&. Also, element height and width are thus far only available in 2D\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::AssignNodeCoordinatesTo (const char * vector_variable)"
+
+.PP
+transfers node coordinates to target \fBVectorVariable<dim>\fP Assigns node coordinates to the supplied node variable which may be either of scalar or vector type\&. If either the X, Y, or Z coordinate are to be assigned to a scalar variable an index from 0\&.\&.\&.dim-1 must be supplied to indicate which coordinate axis shall be mapped\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvector_variable\fP The name of the physical variable to which the node coordinate shall be assigned to, and, if a scalar property shall be initialized with coordinate values, an int index to indicate which coordinate axis is desired (0=X, 1=Y, 2=Z)\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Method uses the Coordinates() and X(), Y(), and Z() interfaces of the \fBNode\fP class\&.
+.SH "Application Examples"
+.PP
+To arrive at coordinate values for a model where topography is important etc\&.
+.SH "Messages"
+.PP
+The method will report a fatal error and terminate the computation, if the target variable is not placed on the node or if it is not of the correct type\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::ChangePropertyStatus (const char * input_prop, \fBVARIABLE_FLAG\fP new_status)"
+
+.PP
+changes the flags of the target variable all across the model The status of the distributed physical variable as identified by the string char*, is changed from the first \fBVARIABLE_FLAG\fP argument to the second\&. This is done only where the distributed physical variable has a status equivalent to that given by the first \fBVARIABLE_FLAG\fP argument of this method\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIinput_prop\fP Name of property the status of which shall be changed at where it is flagged equivalent to argument two\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+To drop Dirichlet boundary conditions from a previous timestep etc\&.
+.SH "Messages"
+.PP
+If no assignments can be made by ChangeConditionFromTo(), because no object properties with the desired flags are found, an error is reported\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::ChangePropertyStatusWhere (const char * var, double vmin, double vmax, \fBVARIABLE_FLAG\fP new_status)"
+
+.PP
+where the values of the target property are within the given range the flag of the target variables are changed to the new status Where the specified property has a value within the range given by min-max, its status is changed\&.
+
+.PP
+The status of the distributed physical variable as identified by the string char*, is changed to the status defined by the \fBVARIABLE_FLAG\fP argument of this method, if the value of the distributed variable lies within the range given as open interval by the fTs min and max\&. This method only works for scalar and vector variables\&. The status of vector variables is changed only if all elements of the \fBVectorVariable<dim>\fP are within the defined value range\&.
+.SH "Application Examples"
+.PP
+Data in the specified range may be preserved if set to a DIRICH value or one may choose to form a group on the basis of their status or by intersecting a \fBRegion\fP with such a group\&.
+.SH "Messages"
+.PP
+Thus far this method cannot change the status of \fBTensorVariable<dim>\fP's and will therefore issue a warning if this is attempted\&.
+
+.PP
+Also if no status changes were made, the method will report this\&. 
+.SS "template<uint32_t dim> bool \fBcsmp::Model\fP< dim >::CopyGradientOfProperty_A_To_B (const char * prop_a, const char * prop_b)"
+
+.PP
+computes the (constant valued) first spatial derivative of the node property and assigns it to the element property / barycenter of the element Provided that property 'a' is a scalar node variable and property 'b' is a vector variable placed on the element, \fBCopyGradientOfProperty_A_To_B()\fP will calculate the gradient of property 'a' for each element and assign the result to the element variable 'b'\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIprop_a\fP specifies the scalar node variable of which the gradient will be calculated second string identifies the vector variable placed on the element which will store the calculated gradient of property 'a'\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+The definition of many geophysical or geochemical interrelations requires a knowledge of property gradients which can be calculated with this method, using the element interpolation functions of type of finite element which was used to build the mesh\&. The method can also be used for post-processing following the application of algorithms\&.
+.SH "Messages"
+.PP
+\fBCopyGradientOfProperty_A_To_B()\fP will return without completing any calculations, if the input variables do not comply with the specifications outlined above\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::CopyReplace (const char * from, const char * to)"
+
+.PP
+replaces the values of the target propery (to) with the values of property (from); both variables must have the same type and placement \fBCopyReplace()\fP replaces the values of the variable 'to' with the values of the variable 'from'\&. Note, that this operation can only be defined for variables which have the same type and the same placement\&. Note also, that variable flags such as DIRICH are also copied to the target variable\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIfrom\fP The variable names of the physical variable (property) which is copied 
+.br
+\fIto\fP the variable name that will be replaced\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+Use \fBCopyReplace()\fP, for instance to make backups of variable values before applying time-dependent calculations or to calculate time derivatives (via self-defined interrelations) from the second before last, the last and the present variable value\&.
+.SH "Messages"
+.PP
+The method will return without modifying any variable values if the type or the placement of the input variables are not the same\&. In this case an error will be reported\&. 
+.SS "template<uint32_t dim> \fBcsmp::Index\fP \fBcsmp::Model\fP< dim >::CreateProperty (const char * new_prop, const char * notation, const char * unit, \fBVARIABLE_TYPE\fP type = \fRSCALAR\fP, \fBPLACEMENT\fP place = \fRNODE\fP, uint32_t vsize = \fR1\fP, double vmin = \fR\-1\&.0e+30\fP, double vmax = \fR1\&.0e+30\fP, std::string usage = \fR'???'\fP)"
+
+.PP
+inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized Add a property at runtime 
+.PP
+\fBWarning\fP
+.RS 4
+Any runtime change in variables invalidates existing \fBIndex\fP objects! They need to be refreshed\&. 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+(1-F) Support for BOUNDARY\&.\&.\&. / SPLIT_BOUNDARY (create overload taking index) 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBPropertyDatabase\fP< dim > & \fBcsmp::Model\fP< dim >::Database ()"
+
+.PP
+returns reference to database object where all variable access and type specifications are stored \fBDatabase()\fP comes in a constant and a volatile version, giving you access to the \fBPropertyDatabase\fP object inside the \fBModel\fP\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+Either a constant or a volatile reference to the \fBPropertyDatabase\fP object\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::DeleteProperty (const char * property)"
+
+.PP
+deletes property from the database and the distributed containers all across the model Removes a property from the model\&. 
+.PP
+\fBWarning\fP
+.RS 4
+All indices have to be updated\&. 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+(1-F) Support for new placements 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+Existing \fBIndex\fP objects may be invalidated after invoking this function 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::ExtrapolateCellToNodeProperty (const char * eprop, const char * nprop, bool by_distance = \fRtrue\fP)"
+
+.PP
+piecewise constant element property values are extrapolated to nodes using a choice of averaging schemes (1/distance vs\&. element-volume weighted) In a finite-element mesh, each node is shared by a variable number of elements which also may differ in their area\&. This method extrapolates element properties to node properties by calculating the element property average of all elements which share the node, weighted by element area for each node of the mesh\&.
+
+.PP
+'by_distance' means that weighting is not by the area/volume of the neighbouring element but by the distance of its barycenter to the node to which the extrapolation is done\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIeprop\fP The name of the element property which is extrapolated, 
+.br
+\fInprop\fP the name of the node property to which the extrapolation is written to\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The element property values are weighted by the area of the element and then added for each node to a property array vector, the number of additions to each node is counted\&.
+.SH "Application Examples"
+.PP
+To obtain higher order (more continuous) velocity fields, the TransportVisitor object uses the element property 'velocity' and the 'nodal velocity' at the same time\&. Other applications include interrelations where the output property is a node variable, but which require element properties in the calculations\&.
+
+.PP
+While the extrapolation approach used in this method is topologically sound, the method may still produce somewhat patchy looking results in meshes where the element size varies greatly and a node lies on the boundary of 2 regions with strongly differing material properties\&.
+.SH "Messages"
+.PP
+The method checks the placement of the specified variables and reports an error if it does not match the specifications from above\&. In this case it will return without carrying out the extrapolation\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::ExtrapolateIntegrationPointToNodeProperty (const char * cprop, const char * nprop)"
+
+.PP
+linearly extrapolates the values of the integration point variable to the element nodes where an averaging with the neighbor elements is performed Using the element interpolation functions, this method extrapolates the desired constraint point property to the nodes\&. Constributions of adjacent elements are averaged but no weighting by element size or proximity of barycentre to the node is applied\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIcprop\fP The names of the targeted constraint point 
+.br
+\fInprop\fP and node variables\&.
+.RE
+.PP
+The result of the extrapolation is returned into the \fBModel\fP property storage\&.
+.SH "Implementation"
+.PP
+The method depends on a corresponding function of the \fBFiniteElement\fP which is not implemented for all finite element types but for all isoparametric elements\&. In quadratic isoparametric elements the method uses a linear extrapolation which is justified for stresses or strains, for instance, because they define a trilinear field on the IntegrationPoints\&.
+.SH "Messages"
+.PP
+A consistency check on variable type and placement is performed\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::IndexByPropertyValues ()"
+
+.PP
+renumbers everything, using stored "node number" etc\&. if available, else \fBMeshManager\fP is prompted to created unique numbering Sets the Idx values of the nodes, elements, faces, and interfaces of the model according to the stored values, if any\&. 
+.PP
+.nf
+"node number", "element number", "face number", "interface number"
+
+.fi
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+if elements were created or deleted, then there may now be gaps in the numbering\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Initialize (const char * regions_file_prefix, \fBModelTopology\fP & mesh_topology, \fBVSet\fP< dim > & vset)\fR [protected]\fP"
+
+.PP
+builds model treating any topologic entities from regions file as unique regions; later converts correspondingly labelled ones into boundaries and split boundaries must not contain any \fBFace\fP or \fBInterFace\fP objects which will be built by this method
+
+.PP
+Initialise( topology, vset, create boundary \&.\&.\&.)
+
+.PP
+Performs the following steps:
+
+.PP
+.IP "0." 4
+Using the regions file, selects wanted mesh regions topology and corresponding elements from vset
+.IP "1." 4
+Reduces mesh size and element types to those left over in the topology object
+.IP "2." 4
+initializing the finite-element manager
+.IP "3." 4
+builds finite element mesh and property storage -> done by \fBMeshManager\fP
+.IP "4." 4
+forms unique \fBRegion\fP called \fBModel\fP (is in unique regions if there are no other unique regions) else in non-unique Regions
+.IP "5." 4
+Tests with a flood-fill whether the model is contiguous
+.IP "6." 4
+Assigns node and element material properties and variable values to model -> done by InputVariablesFrom(vset)
+.IP "7." 4
+Associates supplied subregions with regions (model subdomains) -> done by FormRegionsFrom(topology)
+.IP "8." 4
+Forms Boundaries -> done by EstablishBoundaries() or \fBEstablishBoxBoundaries()\fP if the model is box-shaped
+.IP "9." 4
+Adds required property storage for regions and boundaries (however their properties are not initialised here)
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+MOST COMMONLY USED MODEL CONSTRUCTION METHOD FOR INPUT FROM ANSYS via the CSP interface
+
+.PP
+a fully valid \fBVSet\fP is expected by this method\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+should only be used for models created externally\&. 
+.RE
+.PP
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIregions_file_prefix\fP use to select regions in ANSYS or other mesh  
+.br
+\fImesh_topology\fP stores tbe model name as well as the regions in the form of element idx 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Initialize (\fBModelTopology\fP & mesh_topology, \fBVSet\fP< dim > & vset)\fR [protected]\fP"
+
+.PP
+builds model with regions, boundaries, and splitboundaries as identified by "BOX_BOUNDARY", "boundary" or "splitboundary" strings in the domain names must store corresponding \fBElement\fP, \fBFace\fP and \fBInterFace\fP objects matching the idx integers stored in topology
+
+.PP
+NEW (2022)! - builds model assuming that all information about regions, boundaries or split boundaries is stored in \fBModelTopology\fP\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+if there are domains in the \fBVSet\fP which consist of elements of diffierent spatial dimensions, only those of the highest one are kept\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+If the \fBModel\fP topology object enlists a \fBBoundary\fP object, the corresponding stored idx values are interpreted as \fBFace\fP ids, noting that the all entries in the \fBVSet\fP are numbered consecutively and continuously starting with \fBElement\fP followed by \fBFace\fP and \fBInterFace\fP objects\&. 
+.RE
+.PP
+
+.PP
+\fBParameters\fP
+.RS 4
+\fImesh_topology\fP must store \fBRegion\fP, \fBBoundary\fP, and \fBSplitBoundary\fP objects 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Initialize (\fBVSet\fP< dim > & vset)\fR [protected]\fP"
+
+.PP
+builds with model without specifically named subdomains other than "Model"\&. If model is box-shaped corresponding boundary flags will exist\&. Initialises model from \fBVSet\fP\&. Similar to Initialise(VSet,ModelTopology), but without the creation of regions other than '\fBModel\fP'\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+a fully (boundary) flagged valid \fBVSet\fP is expected by this method\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> template<class T> template void \fBcsmp::Model\fP< dim >::InputBoundaryValue< \fBVectorVariable\fP< 3U > > (\fBBOX_BOUNDARY\fP , const char * input_prop, const T & value)"
+
+.PP
+sets the value of the property on those sites (nodes, elements) whose AtBoundary() function matches the \fBBOX_BOUNDARY\fP value Given a box-shaped model, ie\&. a model whose boundaries are rectangular, this method assigns uniform variable values to each of these specific boundaries including edges and model corner points\&.
+
+.PP
+Assignments to individual edges or corners are also supported\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+elements are considered boundary elements if at least one of their faces is on this boundary\&.
+
+.PP
+each side boundary shares edges and corner points with the adjacent one\&. Therefore methods like 'belongsToSide" must be used to capture all the nodes that belong to an individual boundary\&.
+.RE
+.PP
+\fBTest\fP
+.RS 4
+updated by SKM 29/5/14\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::InputFromBinaryFile (const char * model_name, const std::set< std::string > & subset_variables)"
+
+.PP
+reads model written by \fBOutputToBinaryFile()\fP including all associated properties; if subset of variables is not empty only these will be read Reads model written by \fBOutputToBinaryFile()\fP including all associated properties or a subset of variables
+
+.PP
+\fBParameters\fP
+.RS 4
+\fImodel_name\fP of the saved model that is to be retrieved from the binary file 
+.br
+\fIsubset_variables\fP selected variables that shall be read from the binary file; if empty, all variables are read
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+If the variable subset is empty and variables are encoutered in the \fBVSet\fP which are not yet contained in the current database, extra storage is created for these\&.
+
+.PP
+if any of the variables in the subset is not known to the database an error is reported\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> template<class T> template void \fBcsmp::Model\fP< dim >::InputPropertyValue< \fBFlaggedArrayVariable\fP > (const char * input_prop, const T & value)"
+
+.PP
+sets the values of the distributed variable all across the model; to enter scalar value use makeScalar(flag,value) helper function Allows assignment of uniform property values for all CSMP variable types\&. Any previous values are overwritten irrespective of their flags and will receive the flag of the input variable\&. It follows that potential boundary conditions need to be reassigned after this method has been called\&.
+
+.PP
+Note that the method checks the input variables against the ranges specified in the variables database (see '*-variables\&.txt' file)\&. If the values fall out of these ranges, the method will reset values to the nearest range bound\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIinput_prop\fP The name of the input property (which is checked against the property database), 
+.br
+\fIvalue\fP and the initialized CSP basic variable of scalar, vector, or tensor type\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+If the variable name is not defined or the variable value falls outside of the range that was specified in the current '-variables\&.txt' file the method will report errors\&.
+
+.PP
+Similarly when the property placement (i\&.e\&. element, node etc\&.) is not recognized, an error will be reported\&. 
+.SS "template<uint32_t dim> template<class Var> void \fBcsmp::Model\fP< dim >::InputVariableFrom (const char * input_prop, const \fBFEM_Data\fP< Var > & vdata)"
+\fBInputVariableFrom()\fP lets you input variable data stored in a \fBFEM_Data\fP template class object to a \fBModel\fP variable\&. class T here is a place holder for the data type which may be a double or any basic CSP variable\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIinput_prop\fP the name of the variable to which the data are to be assigned\&. 
+.br
+\fIvdata\fP is a reference to the \fBFEM_Data\fP data object\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+How much do I await the day when member templates defined outside of class declarations will be mastered by the gang of C++ compilers\&. Since this is not currently the case you have to bear with overloaded method cluttered class interfaces\&.
+.SH "Application Examples"
+.PP
+\fBFEM_Data\fP class objects are convinient containers for CSP property data and are used also by peripheral programs such as the OpenGL viewing tool\&. They can also be used to compare values of different properties of the same type and placement using STL algorithms\&.
+.SH "Messages"
+.PP
+\fBInputVariableFrom()\fP will report an error and return without completing its task, if the variable type or placement in the Property database does not match the specifications of the \fBFEM_Data\fP dataset\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+all elements and nodes need to be numbered uniquely and in the same fashion as they were output to file for this method to work correctly\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::InputVariablesFrom (const \fBVSet\fP< dim > & vset)"
+
+.PP
+inputs all discretised variables stored in the supplied \fBVSet\fP into the model Reads the values of scalar, vector, tensor, array and flagged array variables stored in the \fBVSet\fP and assigns them to the current model\&.
+
+.PP
+All the placements node, element, element integration point, finite volue facet and sector integration point as well as region are read from file\&. However, the region placement works only if there is only a single region in the model\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::InstantiateFiniteVolumes ()"
+
+.PP
+prompts the finite volume manager to connect the elements and faces with finite volume stencils Instantiates \fBFiniteVolumeStencilManager\fP and initialises FiniteVolumeStencils if correpoding pointers are NULL\&.
+
+.PP
+delegates this step to \fBMeshManager::InitializeFiniteVolumeStencils()\fP 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::InterpolateBoundaryValues (\fBBOX_BOUNDARY\fP side, const char * input_prop, const std::vector< \fBScalarVariable\fP > & bvalues)"
+
+.PP
+the supplied 4 scalar node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model Uses linear interpolation to interpolate boundary values across model boundary\&.
+
+.PP
+Last argument is a vector because there may either be two or four boundary endpoints depending on whether a 2 or three-dimensional model is used\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+This method is about to be deprecated\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::InterpolateBoundaryValues (\fBBOX_BOUNDARY\fP side, const char * input_prop, const std::vector< \fBVectorVariable\fP< dim > > & bvalues)"
+
+.PP
+the supplied 4 vector node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model vector variable version of previous method 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::InterpolateIntegrationPointToCellProperty (const char * cprop, const char * eprop)"
+
+.PP
+linearly interpolates the value of the integration point property to the barycentre of element; result is stored as element property This method interpolates the specified constraint point property to the target element property\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIcprop\fP The name of the constraint point property which shall be interpolated to the 
+.br
+\fIeprop\fP element property\&.
+.RE
+.PP
+The results are returned to the \fBModel\fP\&.
+.SH "Implementation"
+.PP
+Currently the method averages the IntegrationPoint variable values to find the element property value\&.
+.SH "Application Examples"
+.PP
+To visualise constraint point properties as CELL_CENTERED variables in VTK they have to have a unique value in the element = CELL\&.
+
+.PP
+Alternatively, one could integrate the property over the element and divide the result value by the element area\&. However, this would work only for scalar properties\&.
+.SH "Messages"
+.PP
+Consistency checks are performed on the placement and type of the input variables\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::InterpolateNodeToCellProperty (const char * nprop, const char * eprop, bool verbose = \fRtrue\fP)"
+
+.PP
+interpolates node property values to the barycentre of element and stores results in element property InterpolateNodePropertyToCellProperty() interpolates node property to the 'barycenter' of the triangle\&. The resulting value is different from the result obtained by applying the interrelation subclass NodeToCellProperty\&. The Calculate() method of the latter assigns the average value of the 3 element nodes to the element property 'eprop'\&.
+.SH "Input Arguments"
+.PP
+The two string arguments define the name of the node property which is interpolated and the name of the element property to which the interpolated value is written\&.
+.SH "Application Examples"
+.PP
+This method was developed for two-dimensional convection calculations where the fluid density as element property must be exactly the same for in the two adjacent triangles which make up a square in regular-gridded meshes\&.
+.SH "Messages"
+.PP
+If the variable placement or type of the specified properties fails to match the specifications outlined above, InterpolateNodePropertyToCellProperty() will report an error and return without completing its task\&. 
+.SS "template<uint32_t dim> bool \fBcsmp::Model\fP< dim >::IsWithinRange (const char * var_name, const char * model_subdomain = \fR'Model< dim >'\fP) const"
+
+.PP
+checks the value range of a variable against the range specified in its \fBParameter\fP record in the PropertyDatabse For vector and tensor variables, this method uses the length and the range of Eigenvalues as a measure\&. For array variables, the min and max values (L1 norm) are used\&. 
+.SS "template<uint32_t dim> \fBMeshManager\fP< dim > & \fBcsmp::Model\fP< dim >::Mesh ()"
+
+.PP
+access the mesh container (nodes, elements, faces, interfaces and associated variable storage) \fBMesh()\fP comes in a constant and in a volatile version, giving you access to the \fBMeshManager\fP object inside of the \fBModel\fP object\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+Either a constant or a volatile reference to the \fBMeshManager\fP\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::MinMaxCoordinates (\fBPoint\fP< dim > & xyz_min, \fBPoint\fP< dim > & xyz_max) const"
+
+.PP
+returns the opposite corners of the bounding box that encloses the model \fBMinMaxCoordinates()\fP returns the coordinate extrema of a supplied list of either \fBNode\fP, IntegrationPoint, or \fBElement\fP objects into two supplied \fBVectorVariable<dim>\fPs\&. This is equivalent to finding a bounding box which contains the enlisted objects given that they all lie in the same plane\&. If this is not the case, the results refer to a rectangular bounding box\&.
+
+.PP
+The two \fBVectorVariable<dim>\fP arguments will store the mininum and maximum coordinates of the bounding rectangle (2D) or bounding box (3D) which is defined by the object coordinates\&.
+.SH "Implementation"
+.PP
+Depending on the specified placement, the method loops over the \fBNode\fP, IntegrationPoint, or \fBElement\fP objects to find their coordinate extrema\&. In the case of \fBElement\fP objects, the method uses the BaryCentre (centre of gravity) of the elements as coordinate point\&.
+.SH "Application Examples"
+.PP
+Method is used by AssignBoundaryValues()\&.
+.SH "Messages"
+.PP
+\fBMinMaxCoordinates()\fP will report an error if the placement was input incorrectly\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::MinMaxOf (const char * prop, double & vmin, double & vmax) const"
+
+.PP
+returns the value range of the target property within the entire model Finds the minimum and maximum values of a physical variable which is distributed over the current finite-element mesh\&. If the property is a vector variable, the vector length, and if it is a tensor variable, the tensors determinant will be reported\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIprop\fP The name of the physical variable
+.RE
+.PP
+The results of the range search will be returned into the second and third method arguments\&. If the variable has not been initialized, the value NAN (not a number) is returned\&.
+.SH "Application Examples"
+.PP
+For example, \fBMinMaxOf()\fP is useful to find maximum property values which do not depend on Dirichlet boundary conditions but on applied sources and sinks\&.
+.SH "Messages"
+.PP
+\fBMinMaxOf()\fP will report an error if the property of interest is unknown to the \fBPropertyDatabase\fP\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::MoveNodeCoordinatesBy (const char * vector_variable)"
+
+.PP
+shifts the node coordinates by an amount that is determined by the value of the target \fBVectorVariable<dim>\fP Displaces the node coordinates by displacements supplied as through the VECTOR variable (dim = dimensions of the model)\&. For each element, the nodes of which were displaced, the private boolean variable shape_to_date is set to false such that its volume is newly calculated once it is requested\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvector_variable\fP The name of the nodal vector variable which holds the node coordinate displacement\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+After the assignment of the nodal displacements, \fBMoveNodeCoordinatesBy()\fP will set the \fBElement\fP state variable 'shape_to_data' to false\&. This will prompt re-calculation of elemental volumes if these are queried in subsequent computations\&.
+.SH "Application Examples"
+.PP
+If a mesh shall be deformed using the diplacements of a deformation calculation stored in a vector variable, ChangeNodeCoordinatesTo() can be used displace the node coordinates by these displacements\&.
+.SH "Messages"
+.PP
+Due to the total garbage results that may arise, \fBMoveNodeCoordinatesBy()\fP will halt the simulation reporting a fatal error, if the target property is node a node or vector type property\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::Out () const"
+OutputMesh() will print to 'stdout' the mesh connectivity and boundary flags of each \fBNode\fP, IntegrationPoint, and \fBElement\fP\&.
+.SH "Implementation"
+.PP
+Method calls the \fBOut()\fP interface of the \fBMeshManager\fP\&.
+.SH "Application Examples"
+.PP
+For model testing, for instance, to test whether the boundaries of a model have been flagged correctly\&. Use only for very small meshes since the text output of large meshes will be prohibitively large\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::OutputToBinaryFile (const char * file_string)"
+
+.PP
+writes entire model with associated properties to disk; non-constant because this involves region creation; not const because mesh is updated writes entire model with associated properties / variables to CSMP native set of binary files\&. 
+.SS "template<uint32_t dim> template<class Var> template void \fBcsmp::Model\fP< dim >::OutputVariableTo (const char * var, \fBFEM_Data\fP< Var > & ) const"
+
+.PP
+writes discretised variable to generic variable container \fBOutputVariableTo()\fP is an overloaded method which will output any kind of property to the supplied \fBFEM_Data\fP object\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIout_var\fP the name of the output variable\&.
+.RE
+.PP
+The second method argument is a reference to a \fBFEM_Data\fP object which will store the output property values\&. All previous property values in this object will be deleted\&.
+.SH "Application Examples"
+.PP
+The method is used, for instance, to add property information to a \fBVSet\fP which is output from the \fBModel\fP\&. The output \fBFEM_Data\fP object can however also be used for variable visualization or transfer to another \fBModel\fP object\&.
+.SH "Messages"
+.PP
+When \fBOutputVariableTo()\fP is called one must ascertain that the property type matches the supplied \fBFEM_Data\fP template, else a fatal error will be reported\&. 
+.SS "template<uint32_t dim> void \fBcsmp::Model\fP< dim >::OutputVariableToScreen (const char * prop) const"
+
+.PP
+console output Prints the values and flags of the distributed variable of interest on stdout\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIprop\fP The name of the physical variable of interest\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+To check variable values in small test problems\&.
+.SH "Messages"
+.PP
+\fBOutputVariableToScreen()\fP will report the variable type, its placement, and property index\&. Then it will print the host object IDs followed by the variable flags and values\&. 
+.SS "template<uint32_t dim> bool \fBcsmp::Model\fP< dim >::UpdateSubdomainPropertyStorage ()\fR [protected]\fP"
+Property storage for the geometric primitives that form the mesh is created before Regions, Boundaries, and / or SplitBoundaries are formed\&.
+
+.PP
+This method fulfills the job at a later stage, updating only if such variables exist\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

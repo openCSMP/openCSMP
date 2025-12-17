@@ -1,0 +1,179 @@
+.TH "csmp::SplitBoundaryInterface_Test< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SplitBoundaryInterface_Test< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <SplitBoundaryInterface_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "void \fBTest_splitboundary_from_lower_dim_region\fP ()"
+.br
+.ti -1c
+.RI "void \fBTest_splitboundary_between_regions\fP (const std::string &model_name)"
+.br
+.ti -1c
+.RI "void \fBDetect_and_create_splitboundaries\fP (const std::string &model_name)"
+.br
+.RI "TODO: NOT FINISHED\&. "
+.ti -1c
+.RI "void \fBDetect_and_create_splitboundaries_from_constructor\fP (const std::string &model_name)"
+.br
+.ti -1c
+.RI "void \fBVisualiseSplitBoundaries\fP (\fBcsmp::Model\fP< dim > &, const std::string &test_name)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBTest_NodeCorrespondance_2D\fP (const char *mesh_file)"
+.br
+.ti -1c
+.RI "bool \fBTest_NodeAndElementsCorrespondance_3D\fP (const char *mesh_file)"
+.br
+.ti -1c
+.RI "bool \fBTest_NodeAndElementsCorrespondance_3D_X_Intersection\fP (const char *mesh_file)"
+.br
+.ti -1c
+.RI "bool \fBTest_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse\fP (const char *mesh_file)"
+.br
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::SplitBoundaryInterface_Test< dim >"\fBSplitBoundaryInterface_Test\fP unit test tests all functionality related to the creation and destruction of \fBSplitBoundary\fP objects\&. Refer to \fBSplitBoundary_Test\fP for tests of the functionality of the \fBSplitBoundary\fP itself\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+Revised testst originally conceived by Roman Manasipov in 2013, 
+
+.PP
+refactored by Junchul Kim (2019)\&. 
+
+.PP
+refactored by Edoardo Pezzulli (2022) 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+ported to 2016 version by SKM\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::SplitBoundaryInterface_Test\fP< dim >::run ()\fR [virtual]\fP"
+E\&.P These remaining tests are not working yet
+
+.PP
+E\&.P These remaining tests are not working yet
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "template<uint32_t dim> bool \fBcsmp::SplitBoundaryInterface_Test\fP< dim >::Test_NodeAndElementsCorrespondance_3D (const char * mesh_file)\fR [protected]\fP"
+A VERY RIGOROUS TEST: \fBTest\fP that splitboundary is properly created from Lowerdim \fBRegion\fP\&. Intersections are not handled\&.
+
+.PP
+0) Tests nodes are matching when using Interface::MatchingN(i,side) 1) \fBTest\fP Unit normals 2) \fBTest\fP Inside nodes of Interface match exactly with the face of the Inner Parent nodes (and not slightly rotated, which is not good enough)\&. 3) Tests all OUTSIDE elements parents have the CORRECT new nodes on OUTSIDE, including elements that do not share a face with the interface Testing splitboundary creation
+
+.PP
+Inserting lower dimensional region in each
+.SS "template<uint32_t dim> bool \fBcsmp::SplitBoundaryInterface_Test\fP< dim >::Test_NodeAndElementsCorrespondance_3D_X_Intersection (const char * mesh_file)\fR [protected]\fP"
+A VERY RIGOROUS TEST: \fBTest\fP that splitboundary is properly created from Lowerdim \fBRegion\fP WITH an X Intersection being handled and incrementally split\&.
+
+.PP
+This test requires the split boundaries to be partly seperating four Regions (bottom left, bottom right, Top left, Top right) for it to work
+
+.PP
+0) Tests nodes are matching when using Interface::MatchingN(i,side) 1) \fBTest\fP Unit normals 2) \fBTest\fP Inside nodes of Interface match exactly with the face of the Inner Parent nodes (and not slightly rotated, which is not good enough)\&. 3) Tests all OUTSIDE elements parents have the CORRECT new nodes on OUTSIDE, including elements that do not share a face with the interface Testing splitboundary creation
+.SS "template<uint32_t DIM> bool \fBcsmp::SplitBoundaryInterface_Test\fP< DIM >::Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse (const char * mesh_file)\fR [protected]\fP"
+Very Rigorous \fBTest\fP:
+
+.PP
+Duplicate of previous test Test_NodeCorrespondance_Intersection_3D but with splitboundary creation in reverse order Testing splitboundary creation
+.SS "template<uint32_t dim> bool \fBcsmp::SplitBoundaryInterface_Test\fP< dim >::Test_NodeCorrespondance_2D (const char * mesh_file)\fR [protected]\fP"
+A Semi Rigorous test: \fBTest\fP that nodes match on either side of splitboundary (Basic test, more rigorous to follow)\&.
+
+.PP
+0) Tests nodes are matching when using Interface::MatchingN(i,side) 1) \fBTest\fP Unit Normal Testing Differnt model creations
+
+.PP
+Inserting lower dimensional region in each
+.SS "template<uint32_t dim> void \fBcsmp::SplitBoundaryInterface_Test\fP< dim >::Test_splitboundary_between_regions (const std::string & model_name)"
+TESTS SPLITBOUNDARY BETWEEN REGIONS - NOT FINISHED \&.\&. TODO 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

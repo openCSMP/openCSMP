@@ -1,0 +1,214 @@
+.TH "csmp::PVTX_Calculator_H2O_CO2_NaCl< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PVTX_Calculator_H2O_CO2_NaCl< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PVTX_Calculator_H2O_CO2_NaCl\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPVTX_Calculator_H2O_CO2_NaCl\fP (const variables::VariableSet_CO2GeoSequestration &)"
+.br
+.ti -1c
+.RI "void \fBInitialisePVTX_FromFieldData\fP (const \fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "\fBSYSTEM_STATE\fP \fBEquilibrate\fP (\fBNode\fP< dim > *)"
+.br
+.ti -1c
+.RI "\fBSYSTEM_STATE\fP \fBEquilibrate\fP (\fBElement\fP< dim > *)"
+.br
+.RI "element version with properties interpolated to the element barycentre "
+.ti -1c
+.RI "double \fBAqueousPhaseDensity\fP () const"
+.br
+.ti -1c
+.RI "double \fBCarbonicPhaseDensity\fP () const"
+.br
+.ti -1c
+.RI "double \fBAqueousPhaseViscosity\fP () const"
+.br
+.ti -1c
+.RI "double \fBCarbonicPhaseViscosity\fP () const"
+.br
+.ti -1c
+.RI "double \fBAqueousPhaseCompressibility\fP () const"
+.br
+.ti -1c
+.RI "double \fBCarbonicPhaseCompressibility\fP () const"
+.br
+.ti -1c
+.RI "double \fBWaterSaturation\fP () const"
+.br
+.RI "computes water saturation from the mass balance; "
+.ti -1c
+.RI "double \fBHaliteVolumeFraction\fP () const"
+.br
+.RI "saturation of halite in the presence of water and carbonic phase else NaN is returned "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::PVTX_Calculator_H2O_CO2_NaCl< dim >"
+.PP
+\fBNote\fP
+.RS 4
+uses 2 fitted functions to establish relations between aqueous and carbonic phase as function of salinity\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+lookup tables not considered yet\&. 
+
+.PP
+salt only case fails 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::AqueousPhaseCompressibility () const\fR [inline]\fP"
+
+.PP
+\fBReturns\fP
+.RS 4
+compressibility of aqueous phase (1/Pa) or NaN if the phase is not present 
+.RE
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::AqueousPhaseDensity () const\fR [inline]\fP"
+
+.PP
+\fBReturns\fP
+.RS 4
+density of aqueous phase (kg/m3) or NaN if the phase is not present 
+.RE
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::AqueousPhaseViscosity () const\fR [inline]\fP"
+
+.PP
+\fBReturns\fP
+.RS 4
+viscosity of aqueous phase (Pa\&.s) or NaN if the phase is not present 
+.RE
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::CarbonicPhaseCompressibility () const\fR [inline]\fP"
+
+.PP
+\fBReturns\fP
+.RS 4
+compressibility of carbonic phase (1/Pa) or NaN if the phase is not present 
+.RE
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::CarbonicPhaseDensity () const\fR [inline]\fP"
+
+.PP
+\fBReturns\fP
+.RS 4
+density of carbonic phase (kg/m3) or NaN if the phase is not present 
+.RE
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::CarbonicPhaseViscosity () const\fR [inline]\fP"
+
+.PP
+\fBReturns\fP
+.RS 4
+viscosity of carbonic phase (Pa\&.s) or NaN if the phase is not present 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBSYSTEM_STATE\fP \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::Equilibrate (\fBElement\fP< dim > * e)"
+
+.PP
+element version with properties interpolated to the element barycentre 
+.PP
+\fBAttention\fP
+.RS 4
+does not compute source term\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBSYSTEM_STATE\fP \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::Equilibrate (\fBNode\fP< dim > * n)"
+(2) Determines phase stabilities in the triangular compositional diagram with the 3 end-member compositions: aqueous - carbonic - salt\&. Computes mass_aq, mass_carb, sw, the mass fractions of the phases YCO2, YH2O, XCO2, XH2O, XNaCl, and stores the results in aq_ph_composition_, carb_ph_composition_, and the variable (NaCl_cr = crystalline salt as a volume) Proceeds with the computation of the physical properties of the fluids: density, viscosity and compressibility\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+the phase state that the system is in which is useful for the simulator as a whole and the DES evolution predictions in particular\&.
+.RE
+.PP
+MASTER FUNCTION to be executed after each transport step to establish saturations, densities etc\&.
+
+.PP
+Input: (read from \fBModel\fP via the \fBArrayVariable\fP key_Xbulk)
+.IP "\(bu" 2
+pf, T
+.IP "\(bu" 2
+composition: total_mass, Xaq, Xcarb, Xsalt
+.PP
+
+.PP
+Output: (everything gets stored directly on the model
+.IP "\(bu" 2
+mass_aq_phase
+.IP "\(bu" 2
+mass_carb_phase (-water saturation)
+.IP "\(bu" 2
+aq_ph_composition_, CO2composition - composition of the phases in terms of new mass fractions
+.IP "\(bu" 2
+the densities, viscosities and compressibilities of the phases 
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::HaliteVolumeFraction () const"
+
+.PP
+saturation of halite in the presence of water and carbonic phase else NaN is returned Calculate the halite saturation\&. 
+.SS "template<uint32_t dim> void \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::InitialisePVTX_FromFieldData (const \fBNode\fP< dim > * n)"
+(1) Computes input mass fractions (Xbulk) for \fBEquilibrate()\fP method from saturations, phase compositions, halite volume fraction and fluid densities: Inputs: saturations, halite (volume fraction of pore space), mass_NaCl_aq (kg/m3), Pf_, ToC_, rho_aq, rho_carb\&. Outputs: The results are written to the "bulk mass and fractions" array variable with the entries totalmass, Xaq, Xcarb and Xsalt\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+use this method before calling \fBEquilibrate()\fP when the model is first initialised\&.
+.RE
+.PP
+TODO: deal with the salt-only case, in terms of saturations and mass balances, or use trick that there is always some water left 
+.SS "template<uint32_t dim> double \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl\fP< dim >::WaterSaturation () const"
+
+.PP
+computes water saturation from the mass balance; 
+.PP
+\fBAttention\fP
+.RS 4
+use only if all 3 components are there
+.RE
+.PP
+Calculates the volume fraction of water from the masses of the aqueous, carbonic and salt phase\&.
+
+.PP
+\fBNote\fP
+.RS 4
+Vi = mass_i / density_i, the volume fraction is the phase volume over the total volume\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+since precipitatated salt also occupies a fraction of the pore space, the water and carbondioxide saturations will be reduced correspondingly\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

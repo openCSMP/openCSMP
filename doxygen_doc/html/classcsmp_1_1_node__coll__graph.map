@@ -1,0 +1,7 @@
+<map id="csmp::Node&lt; dim &gt;" name="csmp::Node&lt; dim &gt;">
+<area shape="rect" id="Node000001" title="Node = lowest class of the model hierarchy." alt="" coords="28,695,155,965"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="5,361,178,646"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,660,94,695,89,695,89,660"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="5,5,178,290"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,305,94,361,89,361,89,305"/>
+</map>

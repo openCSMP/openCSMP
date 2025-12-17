@@ -1,0 +1,635 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_f_r_a_c_m_a_n___fracture" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FRACMAN_Fracture</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a41bfeeb1785a203f0364bffbdfc26438" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FRACMAN_Fracture::aperture</definition>
+        <argsstring></argsstring>
+        <name>aperture</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::aperture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="53" column="13" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a72e7314b93f0c569a0644b1c0e29ddad" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FRACMAN_Fracture::compressibility</definition>
+        <argsstring></argsstring>
+        <name>compressibility</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::compressibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="54" column="13" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aed0a79bf841a23affa459fbf6af51d63" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::FRACMAN_Fracture::permeability</definition>
+        <argsstring></argsstring>
+        <name>permeability</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::permeability</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="55" column="13" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a573a2e7ee44f72601f7565f021ee744f" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FRACMAN_Fracture::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="56" column="17" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1abc2edc529e8bb7ed2c81547ea21674b7" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::FRACMAN_Fracture::fracture_set_id</definition>
+        <argsstring></argsstring>
+        <name>fracture_set_id</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::fracture_set_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="57" column="13" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ad28591c5f33d62c804172ce1c5313c57" prot="private" static="no" mutable="no">
+        <type>std::list&lt; double &gt;</type>
+        <definition>std::list&lt;double&gt; csmp::FRACMAN_Fracture::props</definition>
+        <argsstring></argsstring>
+        <name>props</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::props</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="60" column="19" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a4e50b7892a7fec9db27ad9267f912d72" prot="private" static="no" mutable="no">
+        <type>std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt;</type>
+        <definition>std::list&lt;mjl::Point3D&gt; csmp::FRACMAN_Fracture::boundary</definition>
+        <argsstring></argsstring>
+        <name>boundary</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::boundary</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="61" column="16" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1af481fac65b110689bbe03677f9789d7b" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_edge3_d" kindref="compound">mjl::Edge3D</ref></type>
+        <definition>mjl::Edge3D csmp::FRACMAN_Fracture::unit_normal</definition>
+        <argsstring></argsstring>
+        <name>unit_normal</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::unit_normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="62" column="30" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aed603ab7e9d8a259840e9e9416a58c36" prot="private" static="yes" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FRACMAN_Fracture::global_id</definition>
+        <argsstring></argsstring>
+        <name>global_id</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::global_id</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="58" column="22" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1abe218e2e20f4044036eb9dd2b041a3f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRACMAN_Fracture::FRACMAN_Fracture</definition>
+        <argsstring>()</argsstring>
+        <name>FRACMAN_Fracture</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::FRACMAN_Fracture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="13" column="5" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="13" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aa5335539f52b565804af9fa105a44c61" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRACMAN_Fracture::FRACMAN_Fracture</definition>
+        <argsstring>(const FRACMAN_Fracture &amp;ffr)</argsstring>
+        <name>FRACMAN_Fracture</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::FRACMAN_Fracture</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture" kindref="compound">FRACMAN_Fracture</ref> &amp;</type>
+          <declname>ffr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="14" column="5" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="47" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a969251c00002d76592d13209ee113c3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRACMAN_Fracture::FRACMAN_Fracture</definition>
+        <argsstring>(double ap, double compr, double perm, const std::list&lt; double &gt; &amp;properties, const std::list&lt; mjl::Point3D &gt; &amp;boundary)</argsstring>
+        <name>FRACMAN_Fracture</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::FRACMAN_Fracture</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>ap</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>compr</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>perm</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; double &gt; &amp;</type>
+          <declname>properties</declname>
+        </param>
+        <param>
+          <type>const std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt; &amp;</type>
+          <declname>boundary</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="16" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a475bda4eb8210bca348e25f14b1d327e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FRACMAN_Fracture::~FRACMAN_Fracture</definition>
+        <argsstring>()</argsstring>
+        <name>~FRACMAN_Fracture</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::~FRACMAN_Fracture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="22" column="5" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="41" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a23670a364fe70a5ce1d4a733ac380ad9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture" kindref="compound">FRACMAN_Fracture</ref> &amp;</type>
+        <definition>FRACMAN_Fracture &amp; csmp::FRACMAN_Fracture::operator=</definition>
+        <argsstring>(const FRACMAN_Fracture &amp;ffr)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture" kindref="compound">FRACMAN_Fracture</ref> &amp;</type>
+          <declname>ffr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="23" column="22" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="83" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a49910ebbe821668c1209c9c248978267" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FRACMAN_Fracture::InitializeFrom</definition>
+        <argsstring>(long nprops, std::ifstream &amp;ifs)</argsstring>
+        <name>InitializeFrom</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::InitializeFrom</qualifiedname>
+        <param>
+          <type>long</type>
+          <declname>nprops</declname>
+        </param>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Explanation and file entries:</para>
+<para><programlisting><codeline><highlight class="normal">ID#<sp/><sp/>#points<sp/>#fset<sp/>permeability<sp/><sp/><sp/><sp/><sp/><sp/>compressibility<sp/><sp/><sp/>aperture</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/>4<sp/><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/><sp/>1.000000e+000<sp/><sp/><sp/><sp/><sp/>3.000000e-006<sp/><sp/><sp/><sp/><sp/>1.000000e-001</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>1<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/>-1.000000e+002<sp/><sp/><sp/><sp/><sp/>1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>2<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/>-1.000000e+002<sp/><sp/><sp/><sp/>-1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>3<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/><sp/>1.000000e+002<sp/><sp/><sp/><sp/>-1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>4<sp/><sp/><sp/><sp/><sp/>3.333330e+001<sp/><sp/><sp/><sp/><sp/>1.000000e+002<sp/><sp/><sp/><sp/><sp/>1.000000e+002</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>0<sp/><sp/><sp/><sp/><sp/>1.000000e+000<sp/><sp/><sp/><sp/><sp/>0.000000e+000<sp/><sp/><sp/><sp/><sp/>0.000000e+000</highlight></codeline>
+</programlisting> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="25" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="117" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a5d578a7b552e4dce8c5f2e68cef29238" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::FRACMAN_Fracture::operator&lt;</definition>
+        <argsstring>(const FRACMAN_Fracture &amp;ffr) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture" kindref="compound">FRACMAN_Fracture</ref> &amp;</type>
+          <declname>ffr</declname>
+        </param>
+        <briefdescription>
+<para>compare perimeter length </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="28" column="5" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="231" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ab193d5abbbc58163613fab8f86b7af51" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FRACMAN_Fracture::ID</definition>
+        <argsstring>() const</argsstring>
+        <name>ID</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::ID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="30" column="17" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aaf5bab31bc47d43b55ef869db44bd002" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::FRACMAN_Fracture::TextID</definition>
+        <argsstring>() const</argsstring>
+        <name>TextID</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::TextID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="31" column="18" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="59" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aad790c5c9176d7c2f55f5db64af995a0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int csmp::FRACMAN_Fracture::SetID</definition>
+        <argsstring>() const</argsstring>
+        <name>SetID</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::SetID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="32" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="68" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a6b503b169edd904e7f9eff9a8fe65e8d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::FRACMAN_Fracture::TextSetID</definition>
+        <argsstring>() const</argsstring>
+        <name>TextSetID</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::TextSetID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="33" column="18" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="74" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a51f58761e30a15430e2d1a20fe7aefb6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRACMAN_Fracture::BaryCenter</definition>
+        <argsstring>(mjl::Point3D &amp;ctr) const</argsstring>
+        <name>BaryCenter</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::BaryCenter</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &amp;</type>
+          <declname>ctr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="34" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="237" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aa5315266ab149b96e0820572ab5deab1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRACMAN_Fracture::BaryCenter</definition>
+        <argsstring>(double &amp;x, double &amp;y, double &amp;z) const</argsstring>
+        <name>BaryCenter</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::BaryCenter</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="35" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="251" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a9e4af8740e4a225aa3f2c45e09682215" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FRACMAN_Fracture::Perimeter</definition>
+        <argsstring>() const</argsstring>
+        <name>Perimeter</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::Perimeter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="36" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="262" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a8f094064dc6be9600291a13d0447a9c8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FRACMAN_Fracture::Diameter</definition>
+        <argsstring>() const</argsstring>
+        <name>Diameter</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::Diameter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="37" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="284" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a6137641be4d74498477e74c7c0a568e1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRACMAN_Fracture::BoundingBox</definition>
+        <argsstring>(mjl::Point3D &amp;cnr1, mjl::Point3D &amp;cnr8) const</argsstring>
+        <name>BoundingBox</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::BoundingBox</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &amp;</type>
+          <declname>cnr1</declname>
+        </param>
+        <param>
+          <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &amp;</type>
+          <declname>cnr8</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="38" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="292" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a5657ecae61725cafefa224613e9b67a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRACMAN_Fracture::Move</definition>
+        <argsstring>(double dx, double dy, double dz)</argsstring>
+        <name>Move</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::Move</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="39" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="315" bodyend="322"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a134e27b7a9e14c5e9a8aa3a95fbe0ebf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRACMAN_Fracture::Scale</definition>
+        <argsstring>(double xfac, double dfac, double zfac)</argsstring>
+        <name>Scale</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::Scale</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>xfac</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>dfac</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>zfac</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="40" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="326" bodyend="337"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a5925e1f82881a4bd211545b3489b2f0f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt;::const_iterator</type>
+        <definition>std::list&lt; mjl::Point3D &gt;::const_iterator csmp::FRACMAN_Fracture::Begin</definition>
+        <argsstring>() const</argsstring>
+        <name>Begin</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::Begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="42" column="33" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aa20ae6117b3c2f13371708c1bd8a7409" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; <ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref> &gt;::const_iterator</type>
+        <definition>std::list&lt; mjl::Point3D &gt;::const_iterator csmp::FRACMAN_Fracture::End</definition>
+        <argsstring>() const</argsstring>
+        <name>End</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::End</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="43" column="33" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="72" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ae7751c1a39d5febc9741965790426b0d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::FRACMAN_Fracture::PolygonPoints</definition>
+        <argsstring>() const</argsstring>
+        <name>PolygonPoints</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::PolygonPoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="44" column="45" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="78" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a1b4b2c51a25026239e51c044e642b72e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; double &gt;::const_iterator</type>
+        <definition>std::list&lt; double &gt;::const_iterator csmp::FRACMAN_Fracture::PropertiesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>PropertiesBegin</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::PropertiesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="45" column="35" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="84" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a73a04d2dee14d6b03fe23afbe2652eed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::list&lt; double &gt;::const_iterator</type>
+        <definition>std::list&lt; double &gt;::const_iterator csmp::FRACMAN_Fracture::PropertiesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>PropertiesEnd</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::PropertiesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="46" column="35" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ae4fad5ca01194bb804f9c59ba67e184b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRACMAN_Fracture::Erase</definition>
+        <argsstring>()</argsstring>
+        <name>Erase</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::Erase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="48" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="300" bodyend="312"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a54184019010d9565fd27a1feec6f0cb7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FRACMAN_Fracture::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::FRACMAN_Fracture::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="50" column="13" bodyfile="source/modules/interfaces/Fracman/FracMan_Fracture.cpp" bodystart="340" bodyend="373"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FRACMAN_Fracture</label>
+        <link refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Fracman/FracMan_Fracture.h" line="11" column="1" bodyfile="source/includes/interfaces/Fracman/FracMan_Fracture.h" bodystart="11" bodyend="63"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a41bfeeb1785a203f0364bffbdfc26438" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>aperture</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a51f58761e30a15430e2d1a20fe7aefb6" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>BaryCenter</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aa5315266ab149b96e0820572ab5deab1" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>BaryCenter</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a5925e1f82881a4bd211545b3489b2f0f" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>Begin</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a4e50b7892a7fec9db27ad9267f912d72" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>boundary</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a6137641be4d74498477e74c7c0a568e1" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>BoundingBox</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a72e7314b93f0c569a0644b1c0e29ddad" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>compressibility</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a8f094064dc6be9600291a13d0447a9c8" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>Diameter</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aa20ae6117b3c2f13371708c1bd8a7409" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>End</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ae4fad5ca01194bb804f9c59ba67e184b" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>Erase</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1abe218e2e20f4044036eb9dd2b041a3f1" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>FRACMAN_Fracture</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aa5335539f52b565804af9fa105a44c61" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>FRACMAN_Fracture</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a969251c00002d76592d13209ee113c3b" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>FRACMAN_Fracture</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1abc2edc529e8bb7ed2c81547ea21674b7" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>fracture_set_id</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aed603ab7e9d8a259840e9e9416a58c36" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>global_id</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ab193d5abbbc58163613fab8f86b7af51" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>ID</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a573a2e7ee44f72601f7565f021ee744f" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>id</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a49910ebbe821668c1209c9c248978267" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>InitializeFrom</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a5657ecae61725cafefa224613e9b67a4" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>Move</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a5d578a7b552e4dce8c5f2e68cef29238" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a23670a364fe70a5ce1d4a733ac380ad9" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a54184019010d9565fd27a1feec6f0cb7" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a9e4af8740e4a225aa3f2c45e09682215" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>Perimeter</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aed0a79bf841a23affa459fbf6af51d63" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>permeability</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ae7751c1a39d5febc9741965790426b0d" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>PolygonPoints</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a1b4b2c51a25026239e51c044e642b72e" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>PropertiesBegin</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a73a04d2dee14d6b03fe23afbe2652eed" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>PropertiesEnd</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1ad28591c5f33d62c804172ce1c5313c57" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>props</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a134e27b7a9e14c5e9a8aa3a95fbe0ebf" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>Scale</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aad790c5c9176d7c2f55f5db64af995a0" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>SetID</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1aaf5bab31bc47d43b55ef869db44bd002" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>TextID</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a6b503b169edd904e7f9eff9a8fe65e8d" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>TextSetID</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1af481fac65b110689bbe03677f9789d7b" prot="private" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>unit_normal</name></member>
+      <member refid="classcsmp_1_1_f_r_a_c_m_a_n___fracture_1a475bda4eb8210bca348e25f14b1d327e" prot="public" virt="non-virtual"><scope>csmp::FRACMAN_Fracture</scope><name>~FRACMAN_Fracture</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

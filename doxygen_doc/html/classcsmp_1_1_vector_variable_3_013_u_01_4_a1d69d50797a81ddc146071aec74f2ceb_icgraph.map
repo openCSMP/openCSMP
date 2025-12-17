@@ -1,0 +1,7 @@
+<map id="csmp::VectorVariable&lt; 3U &gt;::EuclideanNormalize" name="csmp::VectorVariable&lt; 3U &gt;::EuclideanNormalize">
+<area shape="rect" id="Node000001" title="normalizes the vector variable by its length given the unit normal" alt="" coords="560,5,746,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_volume_stencil_speed___test.html#afbcc5a193ceea973fc00fcfd5f0f1eac" title="thickness, permeability, porosity, total velocity" alt="" coords="287,5,512,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="544,28,513,28,513,23,544,23"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_finite_volume_stencil_speed___test.html#a5641c71658839637ad4d7bf323a3aa80" title=" " alt="" coords="5,5,239,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="271,28,239,28,239,23,271,23"/>
+</map>

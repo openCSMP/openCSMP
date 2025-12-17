@@ -126,7 +126,7 @@ class BoundaryInterface {
     // -----------------------------------------------
     
     /// prints boundary names and other stats to screen; returns number of boundaries
-    size_t BoundariesOut() const;
+    long BoundariesOut() const;
 
     /// method used in the storage of a model to binary file
     bool OutputBoundariesToBinary( const char* file_name ) const;

@@ -1,0 +1,521 @@
+\doxysection{csmp\+::Finite\+Element\+Policy\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_finite_element_policy}{}\label{classcsmp_1_1_finite_element_policy}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+
+
+finite element policy for class \doxylink{classcsmp_1_1_element}{Element}  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Element\+Policy.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Finite\+Element\+Policy\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_finite_element_policy__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Finite\+Element\+Policy\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{classcsmp_1_1_finite_element_policy__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_ac67ae122f6fc20e8e3b9a6dc1bb864e0}\label{classcsmp_1_1_finite_element_policy_ac67ae122f6fc20e8e3b9a6dc1bb864e0} 
+{\bfseries Finite\+Element\+Policy} (const CELL$<$ dim $>$ \&) noexcept
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a955f49472c044bca3cd5844ac815d31c}\label{classcsmp_1_1_finite_element_policy_a955f49472c044bca3cd5844ac815d31c} 
+{\bfseries Finite\+Element\+Policy} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}) noexcept
+\begin{DoxyCompactList}\small\item\em takes pointer reference to avoid copying \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a626dfe4893817b90e1e16b543ea23eb0}\label{classcsmp_1_1_finite_element_policy_a626dfe4893817b90e1e16b543ea23eb0} 
+{\bfseries Finite\+Element\+Policy} (const \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \&p) noexcept
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_afd8da63bf06786e9891316717ef7c11e}\label{classcsmp_1_1_finite_element_policy_afd8da63bf06786e9891316717ef7c11e} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \&p) noexcept
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a611a4787eb95a633adcb3caafc286c07}\label{classcsmp_1_1_finite_element_policy_a611a4787eb95a633adcb3caafc286c07} 
+{\bfseries Finite\+Element\+Policy} (\mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \&\&p) noexcept
+\begin{DoxyCompactList}\small\item\em move semantics \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a0ef6a641b57da3f80b868cc3e161ac67}\label{classcsmp_1_1_finite_element_policy_a0ef6a641b57da3f80b868cc3e161ac67} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{Finite\+Element\+Policy}} \&\&p) noexcept
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a8a6b224d1d3482c35e577ffc3b9a1230}{Assign}} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}fe\+\_\+ptr)
+\begin{DoxyCompactList}\small\item\em for deferred assignment or changing the element at runtime \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a77c9cbf8fea9ea9683280d459a384347}\label{classcsmp_1_1_finite_element_policy_a77c9cbf8fea9ea9683280d459a384347} 
+void {\bfseries Assign\+Finite\+Element\+Null\+Ptr} () noexcept
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a37cbda0c98719c47bbf4104117b026f3}\label{classcsmp_1_1_finite_element_policy_a37cbda0c98719c47bbf4104117b026f3} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries FE\+\_\+\+Type} () const noexcept
+\begin{DoxyCompactList}\small\item\em the type is an enumeration that is used in the generation of finite elements \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_aa15ab6c8637cfc881bba2a5068034fa1}\label{classcsmp_1_1_finite_element_policy_aa15ab6c8637cfc881bba2a5068034fa1} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries FE} () const noexcept
+\begin{DoxyCompactList}\small\item\em you are allowed to switch the element at runtime and modifies the volatile data it stores \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_aa2437e1836f4fa229a5e24f71b5e6a3e}\label{classcsmp_1_1_finite_element_policy_aa2437e1836f4fa229a5e24f71b5e6a3e} 
+bool {\bfseries Is\+Equidimensional} () const
+\begin{DoxyCompactList}\small\item\em true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a2fe99256fef0cd21787f1d1dbeffc88f}\label{classcsmp_1_1_finite_element_policy_a2fe99256fef0cd21787f1d1dbeffc88f} 
+bool {\bfseries Is\+Line} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a6191121afc6f9bf442f7fcc1dd24d901}\label{classcsmp_1_1_finite_element_policy_a6191121afc6f9bf442f7fcc1dd24d901} 
+bool {\bfseries Is\+Surface} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_abcab5f98eb7b23a5c94e508dfc7a236f}\label{classcsmp_1_1_finite_element_policy_abcab5f98eb7b23a5c94e508dfc7a236f} 
+bool {\bfseries Is\+Volume} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a9eb9b6e65e131b645fd24a69d85bf882}\label{classcsmp_1_1_finite_element_policy_a9eb9b6e65e131b645fd24a69d85bf882} 
+uint32\+\_\+t {\bfseries Interpolation} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a48a4fcb34ff6390dce61d7bdb3f29f95}\label{classcsmp_1_1_finite_element_policy_a48a4fcb34ff6390dce61d7bdb3f29f95} 
+bool {\bfseries Uses\+Local\+Coordinates} () const
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_ac5f3d16eb6043c3009d924142f10dc43}{Integration\+Points}} () const
+\begin{DoxyCompactList}\small\item\em number of element integration points for current quadrature scheme \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_ab081bcacc1a48b61826173e6457d2de1}{Integration\+Point}} (uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em returns the location of the integration point in global coordinates \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a0de66f788ab5a4f42f68918243a2c993}\label{classcsmp_1_1_finite_element_policy_a0de66f788ab5a4f42f68918243a2c993} 
+double {\bfseries Weight\+At\+Integration\+Point} (uint32\+\_\+t i) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a77e05282a77bb85927eb55bdaaa68d2a}{Rst\+To\+XYZ}} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ rst) const
+\begin{DoxyCompactList}\small\item\em mapping of local points from local to global coordinates \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a59be5ecef2c9588aee1dd0948b81b471}{N\+\_\+\+At}} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&rst) const
+\begin{DoxyCompactList}\small\item\em interpolation function values at local points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a0a366834502cce5800fb051ed7160b73}{N\+\_\+\+At}} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&rst, std\+::vector$<$ double $>$ \&N) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a6a65623b4219d8f3da0aa5a33272ebea}{N\+\_\+\+At\+Global\+Point}} (std\+::vector$<$ double $>$ \&N, const std\+::vector$<$ double $>$ \&xyz) const
+\begin{DoxyCompactList}\small\item\em for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_aa967d6caae742df669ff92562519c060}\label{classcsmp_1_1_finite_element_policy_aa967d6caae742df669ff92562519c060} 
+void {\bfseries N\+\_\+\+At\+Bary\+Center} (std\+::vector$<$ double $>$ \&N) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a59c801ea0a73c350dfba1c62e8adee18}\label{classcsmp_1_1_finite_element_policy_a59c801ea0a73c350dfba1c62e8adee18} 
+void {\bfseries N\+\_\+\+At\+Integration\+Point} (uint32\+\_\+t ipoint, std\+::vector$<$ double $>$ \&N) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_adb0e04d0ca6e1d778c7d661c712d8489}\label{classcsmp_1_1_finite_element_policy_adb0e04d0ca6e1d778c7d661c712d8489} 
+void {\bfseries Integral\+\_\+d\+NT\+\_\+\+K\+\_\+dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&M, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&K) const
+\begin{DoxyCompactList}\small\item\em first (constant) derivatives of linear interpolation functions of analytically integrated simplex \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a56a0f54fe5711fd30028e7aab917ac61}\label{classcsmp_1_1_finite_element_policy_a56a0f54fe5711fd30028e7aab917ac61} 
+void {\bfseries dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a020acd46aa1d08723694e6999ecbf355}\label{classcsmp_1_1_finite_element_policy_a020acd46aa1d08723694e6999ecbf355} 
+double {\bfseries d\+N\+\_\+\+At\+Node} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t nd, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_ace23ba2a8014a0cf2608c57ff23971ca}\label{classcsmp_1_1_finite_element_policy_ace23ba2a8014a0cf2608c57ff23971ca} 
+double {\bfseries d\+N\+\_\+\+At\+Bary\+Center} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at the (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a687f5a139fe956d5e4f77a395888665a}\label{classcsmp_1_1_finite_element_policy_a687f5a139fe956d5e4f77a395888665a} 
+double {\bfseries d\+N\+\_\+\+At\+Integration\+Point} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, uint32\+\_\+t gp, uint32\+\_\+t dof=1) const
+\begin{DoxyCompactList}\small\item\em first derivatives of interpolation functions at Gauss point gp (returned is determinant of Jacobian matrix at i,j) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a60755a7783f5fa3e148bdebbc262e313}\label{classcsmp_1_1_finite_element_policy_a60755a7783f5fa3e148bdebbc262e313} 
+double {\bfseries det\+\_\+\+JINV\+\_\+\+At\+Integration\+Point} (uint32\+\_\+t ipoint) const
+\begin{DoxyCompactList}\small\item\em returned is determinant of Jacobian matrix at given Gauss point \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_ae0d1e7bd37d3df2466c6b19d19104861}\label{classcsmp_1_1_finite_element_policy_ae0d1e7bd37d3df2466c6b19d19104861} 
+void {\bfseries Integral\+NN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&M) const
+\begin{DoxyCompactList}\small\item\em interpolation function products matrix for analytically integrated element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a8f08eac65fbebe1bf083a13e507d20d1}{Coordinate\+Matrix}} () const
+\begin{DoxyCompactList}\small\item\em initialises the nodes x dim matrix XY stored in the connected finite element class \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a1a3f3d3a4ab8c43e54b64f7491453d15}\label{classcsmp_1_1_finite_element_policy_a1a3f3d3a4ab8c43e54b64f7491453d15} 
+double {\bfseries Property\+Integral} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&scalar\+\_\+property) const
+\begin{DoxyCompactList}\small\item\em integrates a scalar property over the element and returns this value \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a97425cbfdb7e21eaa48d9fc455c73cb5}{Property\+Value\+At}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const std\+::vector$<$ double $>$ \&xyz, Var \&) const
+\begin{DoxyCompactList}\small\item\em interpolates node property values to the point of interest (in global coordinates); \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a3d9a3f6ac945618254cbd41d857a59da}\label{classcsmp_1_1_finite_element_policy_a3d9a3f6ac945618254cbd41d857a59da} 
+double {\bfseries Property\+Value\+At} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const std\+::vector$<$ double $>$ \&xyz) const
+\begin{DoxyCompactList}\small\item\em scalar version \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a765acd90b4a49d2f309b31451f347bd2}{Property\+Value\+At\+Bary\+Center}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, Var \&) const
+\begin{DoxyCompactList}\small\item\em returns the value of any property interpolated to the element\textquotesingle{}s center of gravity \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a85157c3f4808316fe28005d2db4fbdf2}\label{classcsmp_1_1_finite_element_policy_a85157c3f4808316fe28005d2db4fbdf2} 
+double {\bfseries Property\+Value\+At\+Bary\+Center} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em scalar version \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a9bb80abd0181bcc607f9fe6f76207b10}{Property\+Value\+At\+Integration\+Point}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&node\+\_\+prop, uint32\+\_\+t integration\+\_\+point, Var \&) const
+\begin{DoxyCompactList}\small\item\em returns the value of any property interpolated to the integration point of interest \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_adca039430088d273302fd665a6963fe4}{Property\+Value\+At\+Integration\+Point}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&node\+\_\+prop, uint32\+\_\+t integration\+\_\+point) const
+\begin{DoxyCompactList}\small\item\em returns the value of a scalar property interpolated to the integration point of interest \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a4e01522e7321abe783521bb9720134ee}{Integration\+Point\+Property\+Vector}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, std\+::vector$<$ Var $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns property values at the integration points \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a1499c9885a547d55b3749ccf3321195f}{Extrapolate\+Integration\+Point\+Variable\+To\+Nodes}} (uint32\+\_\+t nvars, const std\+::vector$<$ double $>$ \&integration\+\_\+point\+\_\+var, std\+::vector$<$ double $>$ \&node\+\_\+variable) const
+\begin{DoxyCompactList}\small\item\em uses linear extrapolation of property values from the integration points to the nodes \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_ad8f1ad92fc4e66b0ccb44191228b0b45}\label{classcsmp_1_1_finite_element_policy_ad8f1ad92fc4e66b0ccb44191228b0b45} 
+double {\bfseries Volume} () const
+\begin{DoxyCompactList}\small\item\em reports volume, area\texorpdfstring{$\ast$}{*}1, and length\texorpdfstring{$\ast$}{*}1\texorpdfstring{$\ast$}{*}1 products for volumetric, surfacic and line elements respectively \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a098d98840070560812b4983f70e3e3ee}\label{classcsmp_1_1_finite_element_policy_a098d98840070560812b4983f70e3e3ee} 
+double {\bfseries Aspect\+Ratio} () const
+\begin{DoxyCompactList}\small\item\em ratio of longest to shortest edge=segment \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_aedac4e85507af8472d150919bbdcd596}\label{classcsmp_1_1_finite_element_policy_aedac4e85507af8472d150919bbdcd596} 
+double {\bfseries Inner\+Radius} () const
+\begin{DoxyCompactList}\small\item\em the radius of an inscribed circle / sphere \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_ab1ecfed7e08324946dc91638abde4d0a}\label{classcsmp_1_1_finite_element_policy_ab1ecfed7e08324946dc91638abde4d0a} 
+uint32\+\_\+t {\bfseries Segments} () const
+\begin{DoxyCompactList}\small\item\em number of edges = segments in the finite element of interest \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a043f97fcd42926600cb944592e40f075}{Segment\+Mid\+Point}} (uint32\+\_\+t segm) const
+\begin{DoxyCompactList}\small\item\em retrieve position of the segment (element edge) mid-\/points \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a20aa7fe21942056f9ef670b28bfadfa8}{Segment\+Length}} (uint32\+\_\+t segm) const
+\begin{DoxyCompactList}\small\item\em returns the length of the nth segment=edge of the finite element \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a39e2379c97598a8e6f33be8a6bfcf035}{Segment\+Lengths}} (std\+::vector$<$ double $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns a vector with the lengths of all finite element segments = edges \end{DoxyCompactList}\item 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a060eafe8a4ad9ba2317bed9340c68b3a}{Corner\+Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns search key to match element faces; pointers in order so that they can be searched \end{DoxyCompactList}\item 
+std\+::set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_acdaccbd7a5d2c7414b7313e73f29dd78}{Corner\+Nodes\+Connected\+To}} (uint32\+\_\+t node\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns set of nodes that are neighbors of the target node in this element \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_af6c030a937fbfecd002756d67353271e}{Face\+Bary\+Center}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em retrieve barycenter of element face \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_a202387b7bb52a9ff75f00ae354ba8ef2}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns unit normal to face of element i \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_ab827c661721ba213ee1d5f6a336424c8}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns unit normal to face of element i into STL vector; fastest version! \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_ac910d493cc2e4922a47602044fbb0fb3}\label{classcsmp_1_1_finite_element_policy_ac910d493cc2e4922a47602044fbb0fb3} 
+void {\bfseries Unit\+Normal\+To\+Face} (uint32\+\_\+t face, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\begin{DoxyCompactList}\small\item\em returns unit normal to face of element i into supplied csmp \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a27fe90e4049b19e610807f4e15186c78}\label{classcsmp_1_1_finite_element_policy_a27fe90e4049b19e610807f4e15186c78} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ {\bfseries Unit\+Normal} () const
+\begin{DoxyCompactList}\small\item\em computes unit normal to element if it is planar (3D) or linear (2D); vector components are returned into point \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a4515ed0ffddfc91618d64beed5e083b5}\label{classcsmp_1_1_finite_element_policy_a4515ed0ffddfc91618d64beed5e083b5} 
+void {\bfseries Unit\+Normal} (std\+::vector$<$ double $>$ \&nrml) const
+\begin{DoxyCompactList}\small\item\em fastest\+: computes unit normal to element if it is planar (3D) or linear (2D); vector components are returned into argument vector \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy_acd78a73ad337c05e43f68b845b6a45ef}{Unit\+Normal}} (\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&nrml) const
+\begin{DoxyCompactList}\small\item\em computes unit normal to element if it is planar (3D) or linear (2D), vector components are returned into \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a8ce0b33bbc4b521ed938adffd77cdd55}\label{classcsmp_1_1_finite_element_policy_a8ce0b33bbc4b521ed938adffd77cdd55} 
+void {\bfseries Output\+Property\+To\+VTK} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const char \texorpdfstring{$\ast$}{*}var\+\_\+name) const
+\begin{DoxyCompactList}\small\item\em outputs finite element and discretised variable to VTK file \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a38c0f3a15df0f8057647004c1051ae29}\label{classcsmp_1_1_finite_element_policy_a38c0f3a15df0f8057647004c1051ae29} 
+class {\bfseries Element$<$ dim $>$}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a11dd5def32898b656a4ad8ccd0c77364}\label{classcsmp_1_1_finite_element_policy_a11dd5def32898b656a4ad8ccd0c77364} 
+class {\bfseries Face$<$ dim $>$}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_policy_a92e4aab7d1c79bb35ae6a1b8aa994761}\label{classcsmp_1_1_finite_element_policy_a92e4aab7d1c79bb35ae6a1b8aa994761} 
+class {\bfseries Inter\+Face$<$ dim $>$}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$\newline
+class csmp\+::\+Finite\+Element\+Policy$<$ dim, CELL $>$}
+finite element policy for class \doxylink{classcsmp_1_1_element}{Element} 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_element_policy_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a8a6b224d1d3482c35e577ffc3b9a1230}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!Assign@{Assign}}
+\index{Assign@{Assign}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{Assign()}{Assign()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a8a6b224d1d3482c35e577ffc3b9a1230} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Assign (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*}}]{fe\+\_\+ptr}{}\end{DoxyParamCaption})}
+
+
+
+for deferred assignment or changing the element at runtime 
+
+\begin{DoxyAttention}{Attention}
+call by reference is used to avoid assignment to copy of pointer 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a8f08eac65fbebe1bf083a13e507d20d1}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!CoordinateMatrix@{CoordinateMatrix}}
+\index{CoordinateMatrix@{CoordinateMatrix}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{CoordinateMatrix()}{CoordinateMatrix()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a8f08eac65fbebe1bf083a13e507d20d1} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Coordinate\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+initialises the nodes x dim matrix XY stored in the connected finite element class 
+
+Writes the Elements node coordinates into a matrix of rows=nodes, columns=spatial dimensions. The coordinate matrix is internally initialized for connected \doxylink{classcsmp_1_1_finite_element}{Finite\+Element} subclass.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+During the visitation of an element the coordinate matrix is initialized only once, if the method is called without argument.
+
+\begin{DoxyAttention}{Attention}
+for efficiency this method checks an element id in the connected finite element against that of the current element that it is called by. If they are the same, nothing is done. Thus, YOU MUST SET THE ELEMENT ID for this method to have an effect. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_element_policy_acdaccbd7a5d2c7414b7313e73f29dd78}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!CornerNodesConnectedTo@{CornerNodesConnectedTo}}
+\index{CornerNodesConnectedTo@{CornerNodesConnectedTo}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{CornerNodesConnectedTo()}{CornerNodesConnectedTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_acdaccbd7a5d2c7414b7313e73f29dd78} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Corner\+Nodes\+Connected\+To (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{node\+\_\+id}{}\end{DoxyParamCaption}) const}
+
+
+
+returns set of nodes that are neighbors of the target node in this element 
+
+returns search key to match element faces; pointers in order so that they can be searched \Hypertarget{classcsmp_1_1_finite_element_policy_a060eafe8a4ad9ba2317bed9340c68b3a}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!CornerNodesOfFace@{CornerNodesOfFace}}
+\index{CornerNodesOfFace@{CornerNodesOfFace}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{CornerNodesOfFace()}{CornerNodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a060eafe8a4ad9ba2317bed9340c68b3a} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+set$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Corner\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const}
+
+
+
+returns search key to match element faces; pointers in order so that they can be searched 
+
+returns search key to match element faces \Hypertarget{classcsmp_1_1_finite_element_policy_a1499c9885a547d55b3749ccf3321195f}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}}
+\index{ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ExtrapolateIntegrationPointVariableToNodes()}{ExtrapolateIntegrationPointVariableToNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a1499c9885a547d55b3749ccf3321195f} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Extrapolate\+Integration\+Point\+Variable\+To\+Nodes (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nvars}{, }\item[{const std\+::vector$<$ double $>$ \&}]{integration\+\_\+point\+\_\+var}{, }\item[{std\+::vector$<$ double $>$ \&}]{node\+\_\+variable}{}\end{DoxyParamCaption}) const}
+
+
+
+uses linear extrapolation of property values from the integration points to the nodes 
+
+Linear extrapolation of a variable placed on the element\textquotesingle{}s integration points to its nodes. \Hypertarget{classcsmp_1_1_finite_element_policy_af6c030a937fbfecd002756d67353271e}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!FaceBaryCenter@{FaceBaryCenter}}
+\index{FaceBaryCenter@{FaceBaryCenter}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{FaceBaryCenter()}{FaceBaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_af6c030a937fbfecd002756d67353271e} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Face\+Bary\+Center (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{}\end{DoxyParamCaption}) const}
+
+
+
+retrieve barycenter of element face 
+
+Finds the centre of gravity of the face, using the coordinates of all of its nodes. \Hypertarget{classcsmp_1_1_finite_element_policy_ab081bcacc1a48b61826173e6457d2de1}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!IntegrationPoint@{IntegrationPoint}}
+\index{IntegrationPoint@{IntegrationPoint}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPoint()}{IntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_ab081bcacc1a48b61826173e6457d2de1} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the location of the integration point in global coordinates 
+
+Returns the position of the element integration point i in physical space. The coordinate value is transformed into global coordinates by the finite element. Therefore the coordinate matrix must be initialized. \Hypertarget{classcsmp_1_1_finite_element_policy_a4e01522e7321abe783521bb9720134ee}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!IntegrationPointPropertyVector@{IntegrationPointPropertyVector}}
+\index{IntegrationPointPropertyVector@{IntegrationPointPropertyVector}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPointPropertyVector()}{IntegrationPointPropertyVector()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a4e01522e7321abe783521bb9720134ee} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+template$<$class Var$>$ \\
+template void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Integration\+Point\+Property\+Vector$<$ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ 3U $>$ $>$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{}{, }\item[{std\+::vector$<$ Var $>$ \&}]{}{}\end{DoxyParamCaption}) const}
+
+
+
+returns property values at the integration points 
+
+Returns the ELEMENT\+\_\+\+INTEGRATION\+\_\+\+POINT variable values into the parameter vector. \Hypertarget{classcsmp_1_1_finite_element_policy_ac5f3d16eb6043c3009d924142f10dc43}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!IntegrationPoints@{IntegrationPoints}}
+\index{IntegrationPoints@{IntegrationPoints}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPoints()}{IntegrationPoints()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_ac5f3d16eb6043c3009d924142f10dc43} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Integration\+Points (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+number of element integration points for current quadrature scheme 
+
+Returns number of integration points per element, 0 if no \doxylink{classcsmp_1_1_finite_element}{Finite\+Element} assigned. \Hypertarget{classcsmp_1_1_finite_element_policy_a59be5ecef2c9588aee1dd0948b81b471}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!N\_At@{N\_At}}
+\index{N\_At@{N\_At}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{N\_At()}{N\_At()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a59be5ecef2c9588aee1dd0948b81b471} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+N\+\_\+\+At (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&}]{rst}{}\end{DoxyParamCaption}) const}
+
+
+
+interpolation function values at local points 
+
+Calculates local interpolation function values at the supplied parametric coordinate-\/\texorpdfstring{$>$}{>} \Hypertarget{classcsmp_1_1_finite_element_policy_a0a366834502cce5800fb051ed7160b73}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!N\_At@{N\_At}}
+\index{N\_At@{N\_At}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{N\_At()}{N\_At()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a0a366834502cce5800fb051ed7160b73} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+N\+\_\+\+At (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \&}]{rst}{, }\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption}) const}
+
+Returns element interpolation functions at point rst in local coordinate system into argument vector IPOL. \Hypertarget{classcsmp_1_1_finite_element_policy_a6a65623b4219d8f3da0aa5a33272ebea}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!N\_AtGlobalPoint@{N\_AtGlobalPoint}}
+\index{N\_AtGlobalPoint@{N\_AtGlobalPoint}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{N\_AtGlobalPoint()}{N\_AtGlobalPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a6a65623b4219d8f3da0aa5a33272ebea} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+N\+\_\+\+At\+Global\+Point (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption}) const}
+
+
+
+for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space 
+
+Returns the value of the interpolation functions at a point in physical space. \Hypertarget{classcsmp_1_1_finite_element_policy_a97425cbfdb7e21eaa48d9fc455c73cb5}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!PropertyValueAt@{PropertyValueAt}}
+\index{PropertyValueAt@{PropertyValueAt}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyValueAt()}{PropertyValueAt()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a97425cbfdb7e21eaa48d9fc455c73cb5} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+template$<$class Var$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Property\+Value\+At (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{, }\item[{Var \&}]{var}{}\end{DoxyParamCaption}) const}
+
+
+
+interpolates node property values to the point of interest (in global coordinates); 
+
+\begin{DoxyAttention}{Attention}
+costly for isoparametric elements
+\end{DoxyAttention}
+Interpolates property value to a point within the element as specified using physical coordinates.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+If this method is used on an element with a local coordinate system the point in local coordinates has to be found iteratively. This is a much slower procedure than direct interpolation.
+
+\begin{DoxyAttention}{Attention}
+If variable is an element property, method will simply return this value. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a765acd90b4a49d2f309b31451f347bd2}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!PropertyValueAtBaryCenter@{PropertyValueAtBaryCenter}}
+\index{PropertyValueAtBaryCenter@{PropertyValueAtBaryCenter}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyValueAtBaryCenter()}{PropertyValueAtBaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a765acd90b4a49d2f309b31451f347bd2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+template$<$class Var$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Property\+Value\+At\+Bary\+Center (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{Var \&}]{var}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the value of any property interpolated to the element\textquotesingle{}s center of gravity 
+
+\doxylink{classcsmp_1_1_node}{Node} variables are interpolated to barycenter. Integration point variables (ELEMENT\+\_\+\+INTEGRATION\+\_\+\+POINT) are averaged.
+
+\begin{DoxyAttention}{Attention}
+If variable is an element property, method will simply return this value. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_element_policy_adca039430088d273302fd665a6963fe4}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!PropertyValueAtIntegrationPoint@{PropertyValueAtIntegrationPoint}}
+\index{PropertyValueAtIntegrationPoint@{PropertyValueAtIntegrationPoint}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyValueAtIntegrationPoint()}{PropertyValueAtIntegrationPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_adca039430088d273302fd665a6963fe4} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Property\+Value\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the value of a scalar property interpolated to the integration point of interest 
+
+Interpolates SCALAR node properties to the integration points.
+
+\begin{DoxyAttention}{Attention}
+If variable is an element property, method will simply return this value. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a9bb80abd0181bcc607f9fe6f76207b10}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!PropertyValueAtIntegrationPoint@{PropertyValueAtIntegrationPoint}}
+\index{PropertyValueAtIntegrationPoint@{PropertyValueAtIntegrationPoint}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyValueAtIntegrationPoint()}{PropertyValueAtIntegrationPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a9bb80abd0181bcc607f9fe6f76207b10} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+template$<$class Var$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Property\+Value\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{Var \&}]{var}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the value of any property interpolated to the integration point of interest 
+
+Interpolates node properties to the integration points.
+
+\begin{DoxyAttention}{Attention}
+If variable is an element property, method will simply return this value. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a77e05282a77bb85927eb55bdaaa68d2a}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!RstToXYZ@{RstToXYZ}}
+\index{RstToXYZ@{RstToXYZ}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{RstToXYZ()}{RstToXYZ()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a77e05282a77bb85927eb55bdaaa68d2a} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Rst\+To\+XYZ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$}]{rst}{}\end{DoxyParamCaption}) const}
+
+
+
+mapping of local points from local to global coordinates 
+
+Transforms point location from local to global coordinates.
+
+\begin{DoxyNote}{Note}
+passing the point by value is intentional because the copy is reused by the function. 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a20aa7fe21942056f9ef670b28bfadfa8}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!SegmentLength@{SegmentLength}}
+\index{SegmentLength@{SegmentLength}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{SegmentLength()}{SegmentLength()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a20aa7fe21942056f9ef670b28bfadfa8} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Segment\+Length (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segm}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the length of the nth segment=edge of the finite element 
+
+Computes the length of the finite element edges = segments.
+
+\begin{DoxyAttention}{Attention}
+this method assumes that the first two nodes returned by Nodes\+Of\+Segment() are the corner nodes, i.\+e. do not include midside nodes. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a39e2379c97598a8e6f33be8a6bfcf035}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!SegmentLengths@{SegmentLengths}}
+\index{SegmentLengths@{SegmentLengths}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{SegmentLengths()}{SegmentLengths()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a39e2379c97598a8e6f33be8a6bfcf035} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Segment\+Lengths (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{lengths}{}\end{DoxyParamCaption}) const}
+
+
+
+returns a vector with the lengths of all finite element segments = edges 
+
+returns the length of all element segments=edges \Hypertarget{classcsmp_1_1_finite_element_policy_a043f97fcd42926600cb944592e40f075}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!SegmentMidPoint@{SegmentMidPoint}}
+\index{SegmentMidPoint@{SegmentMidPoint}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{SegmentMidPoint()}{SegmentMidPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a043f97fcd42926600cb944592e40f075} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Segment\+Mid\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segm}{}\end{DoxyParamCaption}) const}
+
+
+
+retrieve position of the segment (element edge) mid-\/points 
+
+returns the mid-\/point (in physical space) of the finite element segment = edge. \Hypertarget{classcsmp_1_1_finite_element_policy_acd78a73ad337c05e43f68b845b6a45ef}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!UnitNormal@{UnitNormal}}
+\index{UnitNormal@{UnitNormal}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{UnitNormal()}{UnitNormal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_acd78a73ad337c05e43f68b845b6a45ef} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Unit\+Normal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{nrml}{}\end{DoxyParamCaption}) const}
+
+
+
+computes unit normal to element if it is planar (3D) or linear (2D), vector components are returned into \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} 
+
+Computes outward pointing normal and returns the result into supplied vector variable.
+
+\begin{DoxyNote}{Note}
+not as efficient as version that uses standard vector. 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_finite_element_policy_a202387b7bb52a9ff75f00ae354ba8ef2}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!UnitNormalToFace@{UnitNormalToFace}}
+\index{UnitNormalToFace@{UnitNormalToFace}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{UnitNormalToFace()}{UnitNormalToFace()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_a202387b7bb52a9ff75f00ae354ba8ef2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Unit\+Normal\+To\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{}\end{DoxyParamCaption}) const}
+
+
+
+returns unit normal to face of element i 
+
+Method calculates the unit normal that is outward pointing to to the queried face.
+
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000004}{Test}}]SKM 22/9/2014\+: fixed 3D normals so that they are outward pointing.\end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_finite_element_policy_ab827c661721ba213ee1d5f6a336424c8}\index{csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}!UnitNormalToFace@{UnitNormalToFace}}
+\index{UnitNormalToFace@{UnitNormalToFace}!csmp::FiniteElementPolicy$<$ dim, CELL $>$@{csmp::FiniteElementPolicy$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{UnitNormalToFace()}{UnitNormalToFace()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_element_policy_ab827c661721ba213ee1d5f6a336424c8} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_element_policy}{csmp\+::\+Finite\+Element\+Policy}}$<$ dim, CELL $>$\+::\+Unit\+Normal\+To\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{, }\item[{std\+::vector$<$ double $>$ \&}]{nrml}{}\end{DoxyParamCaption}) const}
+
+
+
+returns unit normal to face of element i into STL vector; fastest version! 
+
+Fastest version to compute outward-\/pointing normal to target face. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+elements/Finite\+Element\+Policy.\+h\item 
+source/modules/integration/finite\+\_\+elements/Finite\+Element\+Policy.\+cpp\end{DoxyCompactItemize}

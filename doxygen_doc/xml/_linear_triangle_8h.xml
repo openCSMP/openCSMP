@@ -1,0 +1,464 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_linear_triangle_8h" kind="file" language="C++">
+    <compoundname>LinearTriangle.h</compoundname>
+    <includes refid="_finite_element_8h" local="yes">FiniteElement.h</includes>
+    <includedby refid="_finite_element_manager__stack__version_8h" local="yes">source/includes/model/FiniteElementManager_stack_version.h</includedby>
+    <includedby refid="_triangulator_8cpp" local="yes">source/modules/discretisation/Triangulator.cpp</includedby>
+    <includedby refid="_linear_triangle_8cpp" local="yes">source/modules/integration/finite_elements/LinearTriangle.cpp</includedby>
+    <includedby refid="_t_r_i_a_n_g_l_e___interface_8cpp" local="yes">source/modules/interfaces/TRIANGLE_Interface.cpp</includedby>
+    <includedby refid="_finite_element_manager_8cpp" local="yes">source/modules/model/FiniteElementManager.cpp</includedby>
+    <includedby refid="_local_variable_storage___test_8cpp" local="yes">tests/unit/LocalVariableStorage_Test.cpp</includedby>
+    <includedby refid="_node___test_8cpp" local="yes">tests/unit/Node_Test.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>FiniteElement.h</label>
+        <link refid="_finite_element_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/integration/finite_elements/LinearTriangle.h</label>
+        <link refid="_linear_triangle_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>DenseMatrix.h</label>
+        <link refid="_dense_matrix_8h"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>ArrayVariable.h</label>
+        <link refid="_array_variable_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>FlaggedArrayVariable.h</label>
+        <link refid="_flagged_array_variable_8h_source"/>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="13">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>TensorVariable.h</label>
+        <link refid="_tensor_variable_8h_source"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>TensorVariable1.h</label>
+        <link refid="_tensor_variable1_8h_source"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>TensorVariable2.h</label>
+        <link refid="_tensor_variable2_8h_source"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>algorithm</label>
+      </node>
+      <node id="12">
+        <label>array</label>
+      </node>
+      <node id="25">
+        <label>cassert</label>
+      </node>
+      <node id="20">
+        <label>cctype</label>
+      </node>
+      <node id="23">
+        <label>cfloat</label>
+      </node>
+      <node id="27">
+        <label>chrono</label>
+      </node>
+      <node id="24">
+        <label>climits</label>
+      </node>
+      <node id="15">
+        <label>cmath</label>
+      </node>
+      <node id="19">
+        <label>cstdarg</label>
+      </node>
+      <node id="18">
+        <label>cstddef</label>
+      </node>
+      <node id="8">
+        <label>cstdint</label>
+      </node>
+      <node id="16">
+        <label>cstdio</label>
+      </node>
+      <node id="17">
+        <label>cstdlib</label>
+      </node>
+      <node id="21">
+        <label>cstring</label>
+      </node>
+      <node id="22">
+        <label>ctime</label>
+      </node>
+      <node id="28">
+        <label>deque</label>
+      </node>
+      <node id="29">
+        <label>exception</label>
+      </node>
+      <node id="30">
+        <label>filesystem</label>
+      </node>
+      <node id="31">
+        <label>fstream</label>
+      </node>
+      <node id="32">
+        <label>functional</label>
+      </node>
+      <node id="33">
+        <label>iomanip</label>
+      </node>
+      <node id="34">
+        <label>iostream</label>
+      </node>
+      <node id="35">
+        <label>istream</label>
+      </node>
+      <node id="36">
+        <label>iterator</label>
+      </node>
+      <node id="7">
+        <label>limits</label>
+      </node>
+      <node id="37">
+        <label>list</label>
+      </node>
+      <node id="38">
+        <label>map</label>
+      </node>
+      <node id="39">
+        <label>memory</label>
+      </node>
+      <node id="40">
+        <label>numeric</label>
+      </node>
+      <node id="41">
+        <label>ostream</label>
+      </node>
+      <node id="42">
+        <label>random</label>
+      </node>
+      <node id="5">
+        <label>set</label>
+      </node>
+      <node id="43">
+        <label>sstream</label>
+      </node>
+      <node id="10">
+        <label>stdexcept</label>
+      </node>
+      <node id="6">
+        <label>string</label>
+      </node>
+      <node id="44">
+        <label>type_traits</label>
+      </node>
+      <node id="11">
+        <label>typeinfo</label>
+      </node>
+      <node id="47">
+        <label>unordered_map</label>
+      </node>
+      <node id="46">
+        <label>unordered_set</label>
+      </node>
+      <node id="45">
+        <label>utility</label>
+      </node>
+      <node id="3">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>source/includes/integration/finite_elements/LinearTriangle.h</label>
+        <link refid="_linear_triangle_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>source/includes/model/FiniteElementManager_stack_version.h</label>
+        <link refid="_finite_element_manager__stack__version_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_linear_triangle" prot="public">csmp::LinearTriangle</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>LINEAR_TRIANGLE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LINEAR_TRIANGLE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_finite_element_8h" kindref="compound">FiniteElement.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="classcsmp_1_1_linear_triangle" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">LinearTriangle<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>FiniteElement<sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>LinearTriangle();</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" kindref="member">Volume</ref>();</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1aa602f72f185e39d5e42359c85f0830ba" kindref="member">AspectRatio</ref>();</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1adf570523d3e8910b5269393d414abc11" kindref="member">InnerRadius</ref>();</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a32a777cc1f54021c18f8c668052ed433" kindref="member">EdgeLengths</ref>(<sp/>std::vector&lt;double&gt;&amp;<sp/>vec<sp/>);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a9b6c262e1c52692cbc5f7286689a7a9a" kindref="member">NodesOfSegment</ref>(<sp/>uint32_t<sp/>segm_id,<sp/>std::vector&lt;uint32_t&gt;&amp;<sp/>snids<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>std::vector&lt;uint32_t&gt;<sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a5234fb11dc29caa9a2b12b4a9a7b8b23" kindref="member">NodesOfFace</ref>(<sp/>uint32_t<sp/>face_id<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>std::vector&lt;uint32_t&gt;<sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a1d43cd42879fdfa02779be4c3cccb729" kindref="member">CornerNodesOfFace</ref>(<sp/>uint32_t<sp/>face_id<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>std::vector&lt;uint32_t&gt;<sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a57540dda59880c9d405cf90153cd819e" kindref="member">NodesConnectedTo</ref>(<sp/>uint32_t<sp/>node_id<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>uint32_t<sp/><sp/><sp/><sp/><sp/><sp/><sp/>CornerNodes()</highlight><highlight class="keyword"><sp/>const<sp/><sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>3U;<sp/>}</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CornerNodes(<sp/>std::vector&lt;uint32_t&gt;&amp;<sp/>ids<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a4de3c63de75763821476e3d63bae7d4a" kindref="member">ElementTypeOfFace</ref>(<sp/>uint32_t<sp/>face<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="25" refid="classcsmp_1_1_linear_triangle_1adc2ce515c9efe0fb5ac3096fa1099132" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1adc2ce515c9efe0fb5ac3096fa1099132" kindref="member">ElementTypeOfSegment</ref>(<sp/>uint32_t<sp/></highlight><highlight class="comment">/*<sp/>segment<sp/>*/</highlight><highlight class="normal"><sp/>)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>LINEAR_BAR;<sp/>};</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a8deb43a50229ce96f937fe6f5cc3f6f1" kindref="member">UnitNormalToFace</ref>(<sp/>uint32_t<sp/>face,<sp/>std::vector&lt;double&gt;&amp;<sp/>unrml<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">N</ref>(<sp/>std::vector&lt;double&gt;&amp;<sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">N</ref>,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>xyz<sp/>);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a6c1d1cc28bfb1440182e2c8b8ec27791" kindref="member">N_AtBaryCenter</ref>(<sp/>std::vector&lt;double&gt;&amp;<sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">N</ref><sp/>);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a417549c0ef71e52089017c961bd91f42" kindref="member">dN</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a5ce801f35372d6f7f47a8c67c8ac4a8d" kindref="member">dN_At</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>xyz<sp/>);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" kindref="member">dN_AtBarycenter</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a4c3fcf8b458ea3468424d63d91d4deba" kindref="member">IntegralNN</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1af01a417ecaa31effbbf43a27a32dbb2e" kindref="member">OutputNodeDataToVTK</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>file_name,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>var_name,</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>DATA<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>TestFunctionCoefficients(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/><ref refid="classcsmp_1_1_finite_element_1a64381c8d0e2f4840551c2da986fb9a25" kindref="member">M</ref><sp/>);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>a[3U],<sp/>b[3U],<sp/>c[3U];<sp/></highlight></codeline>
+<codeline lineno="49"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>namespace<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/integration/finite_elements/LinearTriangle.h"/>
+  </compounddef>
+</doxygen>

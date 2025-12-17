@@ -1,0 +1,609 @@
+\doxysection{csmp\+::H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+
+
+\doxylink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}\+: Saturation functions and fluid properties combined into flow functions for the H2O + CO2+ Na\+Cl system.  
+
+
+
+
+{\ttfamily \#include $<$H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa00cd636db46b34fcdfc6257aad99dd2}{Interpolate\+Aqueous\+Phase}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double \&sw, double \&rhow, double \&muw) const
+\begin{DoxyCompactList}\small\item\em returns aqueous phase properties at element barycentre, if there is a value at at least a single node, else returns false \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a464b6fb337b0c1fcdb16f546f7d3723e}{Interpolate\+Carbonic\+Phase}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double \&snw, double \&rhon, double \&mun) const
+\begin{DoxyCompactList}\small\item\em returns carbonic phase properties at element barycentre, if there is a value at at least a single node, else returns false \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a289bf1d39048d6bafef8bcdaddb86795}{Sw}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const e) const
+\begin{DoxyCompactList}\small\item\em water saturation interpolated to element barycentre; use Read( key\+\_\+s\+H2\+O ) to get nodal value \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a4d1cd069ad9d1464cc0c62c09e25fea5}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a4d1cd069ad9d1464cc0c62c09e25fea5} 
+double {\bfseries Snw} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const e) const
+\begin{DoxyCompactList}\small\item\em non-\/wetting phase saturation interpolated to element barycentre; use Read( key\+\_\+s\+CO2 ) to get nodal value \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a751a829774354ce9b6bbea7dfac93d72}{Mobility}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em density \texorpdfstring{$\ast$}{*} lambda = kri(sw)/mu\+\_\+i of the phase i\+: 0 for water, 1 for the non-\/wetting phase \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab0826a1c513cc3d19292b8fec113f9a5}{Mobility\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double sw) const
+\begin{DoxyCompactList}\small\item\em density \texorpdfstring{$\ast$}{*} lambda\+\_\+i\+: i=0 for water, 1 for the non-\/wetting phase (using prescribed sw) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a35a0c73785eb10bc4d2c91638a1e5920}{Mobility\+Derivative}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em d lambda\+\_\+i / dsw \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a0cb73e52afc60dbf3f7b59491559f97e}{Mobility\+Derivative\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double sw) const
+\begin{DoxyCompactList}\small\item\em d lambda\+\_\+i / dsw \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a0975e6a55a120e8aa3cff8552819362c}{Total\+Mobility}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em lambda\+\_\+t\+: sum of phase-\/mobility \texorpdfstring{$\ast$}{*} density products \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a37262a459e53bf3045313cdaa14a1f36}{Total\+Mobility\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\begin{DoxyCompactList}\small\item\em lambda\+\_\+t\+: sum of phase-\/mobility \texorpdfstring{$\ast$}{*} density products \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a96113bb2fb9f05f18284552222c2e661}{Mobility\+Product}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em lambda overbar\+: mobility product l\+\_\+overbar = (li \texorpdfstring{$\ast$}{*} rhow \texorpdfstring{$\ast$}{*} lj \texorpdfstring{$\ast$}{*} rhonw) / (li\texorpdfstring{$\ast$}{*}rhow + lj\texorpdfstring{$\ast$}{*}rhonw), also known as G \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3f4a9b26a957b80b4c3f235f4f59ae96}{Mobility\+Product\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\begin{DoxyCompactList}\small\item\em lambda overbar\+: mobility product l\+\_\+overbar = (li \texorpdfstring{$\ast$}{*} rhow \texorpdfstring{$\ast$}{*} lj \texorpdfstring{$\ast$}{*} rhonw) / (li\texorpdfstring{$\ast$}{*}rhow + lj\texorpdfstring{$\ast$}{*}rhonw), also known as G \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a593adc2a393242e31520addcbf893d8b}{Mobility\+Product\+Derivative}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, bool evaluate\+\_\+numerically=false) const
+\begin{DoxyCompactList}\small\item\em d lambda overbar / dsw also known as d\+Gds \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_af45b6af244e230265ed9cc4064db5704}{Mobility\+Product\+Derivative\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a7991ea0aca533b5146ba1032435aacb2}{f}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em fractional mass flow; 0=water, 1=non-\/wetting phase \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a67e49875f4c9858bbf8e2b707733797e}{f\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double sw) const
+\begin{DoxyCompactList}\small\item\em fractional mass flow; 0=water, 1=non-\/wetting phase (using prescribed sw) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a703eb63c8751c115bcb691af9ec28b4e}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a703eb63c8751c115bcb691af9ec28b4e} 
+double {\bfseries Permeability} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em permeability \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a4517188bf94b04433d0528d5a9f9920d}{dfds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em derivative of fractional flow w.\+r.\+t water saturation (used in advection multiplier); note that fw+fn=1, dfw\+\_\+dsw=dfn\+\_\+dsn \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ad2a592d411c632badeb976115eabdbc7}{dfds\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double sw) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a277639491e2eea1875fbd65a73b021c9}{Max\+Fractional\+Flow\+Derivative}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em maximum value of fractional flow / saturation derivative \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ac4d17d57cab18e02ca12088a123c5fb5}{Advection\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em multiplier for advection viscosity coefficient in the case of non-\/linear advection \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a55f190b7703e3c5ea28dc92666e27e70}{Shock\+Speed}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em outputs the shock wave celerity for mass flow \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a1129a423b506e1758b9fd6a055d40f95}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a1129a423b506e1758b9fd6a055d40f95} 
+double {\bfseries Shock\+Height} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em outputs the characteristic water saturation at the shock (tied to rock properties in viscous dominated flow) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a56e04605d232797eda7ad17d31436d17}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a56e04605d232797eda7ad17d31436d17} 
+void {\bfseries Shock\+Speed\+And\+Height} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double \&speed, double \&height) const
+\begin{DoxyCompactList}\small\item\em calculated shock height and mass flow rate (all-\/in-\/one function) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3c52b93a8d415ccde41b356356806076}{Shock\+Front\+Velocity}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em speed (m/s) of the shock front in current cell \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a1968602579c72889ea11631c3efabf67}{Gravity\+Term}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec) const
+\begin{DoxyCompactList}\small\item\em k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 projected onto the dip vector of the current element; writes result to dip vector \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab6d17f24ac6489c0ee2c6da3e27579c4}{Gravity\+Multiplier\+\_\+phase}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec, uint32\+\_\+t phase) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a583e29efef6c09b174f0254d69ad7ab2}{Gravity\+Multiplier\+\_\+G}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec) const
+\begin{DoxyCompactList}\small\item\em gravity multiplier, gmult = k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 \texorpdfstring{$\ast$}{*} G (=mobility product); writes result on dip vector \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3f9feb7393b64017879c912260d72c23}{Gravity\+Multiplier\+\_\+d\+Gds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec) const
+\begin{DoxyCompactList}\small\item\em gravity multiplier, gmult = k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 \texorpdfstring{$\ast$}{*} saturation derivative of the mobility product d\+G/ds, writes result on dip vectpor \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_afab2f3608e028d43a996ebcff8d591cc}{Diffusion\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a6e139b0b228024acf00d52878a11906b}{Capillary\+Diffusion\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em mass diffusion coefficient for the non-\/linear diffusion of saturation due to the saturation dependent dpc/ds \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa0c6c6d56708746c509247f21c79b6a7}{Capillary\+Diffusion\+Multiplier\+\_\+at}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\begin{DoxyCompactList}\small\item\em k \texorpdfstring{$\ast$}{*} dpds(sw) \texorpdfstring{$\ast$}{*} mobility\+\_\+product(sw), \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a5bf34ca0ab6d4826b00a251b6c63fd8d}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a5bf34ca0ab6d4826b00a251b6c63fd8d} 
+double {\bfseries Dpcds\+\_\+at} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw) const
+\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a544db5e50ca67fcb87d9669c5da02ef2}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a544db5e50ca67fcb87d9669c5da02ef2} 
+double {\bfseries Mobility} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em density \texorpdfstring{$\ast$}{*} lambda = kri(sw)/mu\+\_\+i of the phase i\+: 0 for water, 1 for the non-\/wetting phase \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a9a8f40156aff485554a68b81162b9e2b}{Mobility\+Derivative}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em d lambda\+\_\+i / dsw \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a6268e49381576ccdd55d916352df3db7}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a6268e49381576ccdd55d916352df3db7} 
+double {\bfseries Total\+Mobility} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em lambda\+\_\+t\+: sum of phase-\/mobility \texorpdfstring{$\ast$}{*} density products \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a24550d23f1459592c96e19b4fd8d888d}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a24550d23f1459592c96e19b4fd8d888d} 
+double {\bfseries Mobility\+Product} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em lambda overbar\+: mobility product l\+\_\+overbar = (li \texorpdfstring{$\ast$}{*} rhow \texorpdfstring{$\ast$}{*} lj \texorpdfstring{$\ast$}{*} rhonw) / (li\texorpdfstring{$\ast$}{*}rhow + lj\texorpdfstring{$\ast$}{*}rhonw), also known as G \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa545b5491c50e6adcacc1dc90a1cc547}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa545b5491c50e6adcacc1dc90a1cc547} 
+double {\bfseries Mobility\+Product\+Derivative} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node, bool evaluate\+\_\+numerically=false) const
+\begin{DoxyCompactList}\small\item\em d lambda overbar / dsw also known as d\+Gds \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a46b0a253b5e07d97eca8a6e2c2262373}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a46b0a253b5e07d97eca8a6e2c2262373} 
+double {\bfseries f} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em fractional mass flow; 0=water, 1=non-\/wetting phase \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa9e82d8327c8c62c124d0415879f319b}{dfds}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em derivative of fractional flow w.\+r.\+t water saturation (used in advection multiplier); note that fw+fn=1, dfw\+\_\+dsw=dfn\+\_\+dsn \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ad44513ecbfa70b2df7137e79b769a815}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ad44513ecbfa70b2df7137e79b769a815} 
+double {\bfseries Advection\+Multiplier} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em multiplier for advection viscosity coefficient in the case of non-\/linear advection \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab328ef09dc1c1df097c94131beabd8fa}{Gravity\+Term}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&dip\+\_\+vec) const
+\begin{DoxyCompactList}\small\item\em k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 projected onto the dip vector of the current element; writes result to dip vector \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aca092d05254b427292bd6665637aa335}{Capillary\+Diffusion\+Multiplier}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 and get from \doxylink{classcsmp_1_1_element}{Element} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ac7947214f3af5cb415b75d515b625ea1}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ac7947214f3af5cb415b75d515b625ea1} 
+double {\bfseries dfds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, uint32\+\_\+t phase, double delta\+\_\+s=0.\+001) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a68f3bdfd72c83966cf18845ab0517100}{dfds\+\_\+at\+\_\+\+Numerical}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double sw, double delta\+\_\+s=0.\+001) const
+\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_af3be9700cfca1afd0ab255d6ca65d1dc}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_af3be9700cfca1afd0ab255d6ca65d1dc} 
+double {\bfseries d\+Gds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s=0.\+000001) const
+\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a72530c31d19b6c31de7cfeb12b385300}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a72530c31d19b6c31de7cfeb12b385300} 
+double {\bfseries dlwds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s=0.\+001) const
+\begin{DoxyCompactList}\small\item\em derivative of wetting phase mobility \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ae137d680479a7846132a6295aff1665d}\label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ae137d680479a7846132a6295aff1665d} 
+double {\bfseries dlnds\+\_\+\+Numerical} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double delta\+\_\+s=0.\+001) const
+\begin{DoxyCompactList}\small\item\em derivative of non-\/wetting phase mobility \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$\newline
+class csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions$<$ dim, USER $>$}
+\doxylink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}\+: Saturation functions and fluid properties combined into flow functions for the H2O + CO2+ Na\+Cl system. 
+
+Use in conjunction with the \doxylink{classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl}{Phase\+State\+Finder\+\_\+\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl} for compositional simulation in a mass-\/based transport framework. Plugs into a suitable Flow\+Functions\+Module within the Colleoli class framework for a multiphase-\/multicomponent transport scheme.
+
+Generate all relevant input values for transport scheme from Saturation\+Functions and \doxylink{classcsmp_1_1_fluid}{Fluid} modules, using the constitutive relationships specified therein. Gets the fluid properties by interpolation from the \doxylink{classcsmp_1_1_element}{Element} nodes to its barycentre.
+
+Expects that the water saturation, the fluid densities and viscosities to be placed on the element nodes, while all material (k, phi, bcp etc.), and rocktype related parameters are placed on the element.
+
+\begin{DoxyNote}{Note}
+all parameters are weighted by the element thickness which is 1 for iso-\/dimensional elements.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+Stephan Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+7/1/2019
+\end{DoxyDate}
+@discussion Phase state cannot be interpolated between nodes ! If we read the system state from the element, in the case of an element-\/based phase state calculation, it may be entirely different from that computed at the nodes and therefore, we may try to fetch densities and viscosities which do not exist ?! 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ac4d17d57cab18e02ca12088a123c5fb5}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!AdvectionMultiplier@{AdvectionMultiplier}}
+\index{AdvectionMultiplier@{AdvectionMultiplier}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{AdvectionMultiplier()}{AdvectionMultiplier()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ac4d17d57cab18e02ca12088a123c5fb5} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Advection\+Multiplier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+multiplier for advection viscosity coefficient in the case of non-\/linear advection 
+
+fractional flow derivative for wetting phase = 0.
+
+If not overloaded, this returns the derivative of the fractional flow function at the current saturation of the wetting phase (see Helmig, 1997, p. 108, eqn. 3.\+74, term 2 (first part). \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a6e139b0b228024acf00d52878a11906b}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!CapillaryDiffusionMultiplier@{CapillaryDiffusionMultiplier}}
+\index{CapillaryDiffusionMultiplier@{CapillaryDiffusionMultiplier}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{CapillaryDiffusionMultiplier()}{CapillaryDiffusionMultiplier()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a6e139b0b228024acf00d52878a11906b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Capillary\+Diffusion\+Multiplier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+mass diffusion coefficient for the non-\/linear diffusion of saturation due to the saturation dependent dpc/ds 
+
+When capillary spreading is simulated using the FE method, it can be modelled as a nonlinear diffusion process. Nonlinear because the driving gradient varies with saturation.
+
+qm\+\_\+capillary = rhon \texorpdfstring{$\ast$}{*} k \texorpdfstring{$\ast$}{*} lambda\+\_\+overbar \texorpdfstring{$\ast$}{*} dpc/dsw \texorpdfstring{$\ast$}{*} grad\+\_\+sw \texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^}\texorpdfstring{$^\wedge$}{\string^} diffusion multiplier
+
+See Helmig, 1997, p. 108, eqn. 3.\+74, term 1. This takes into account the permeability in direction of flow x lambda\+\_\+overbar x pc-\/gradient.
+
+\begin{DoxyNote}{Note}
+lambda overbar contains the fluid densities and viscosities. 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aca092d05254b427292bd6665637aa335}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!CapillaryDiffusionMultiplier@{CapillaryDiffusionMultiplier}}
+\index{CapillaryDiffusionMultiplier@{CapillaryDiffusionMultiplier}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{CapillaryDiffusionMultiplier()}{CapillaryDiffusionMultiplier()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aca092d05254b427292bd6665637aa335} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Capillary\+Diffusion\+Multiplier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{eptr}{, }\item[{uint32\+\_\+t}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 and get from \doxylink{classcsmp_1_1_element}{Element} 
+
+mass-\/based coefficient for non-\/linear diffusion of saturation due to saturation-\/dependent dpc/ds, \begin{DoxyAttention}{Attention}
+value can be zero
+\end{DoxyAttention}
+Saturation dependent mass diffusion coefficient for capillary spreading as a non-\/linear diffusion process. The nonlinearity stems from the saturation dependent dpc/ds. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa0c6c6d56708746c509247f21c79b6a7}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!CapillaryDiffusionMultiplier\_at@{CapillaryDiffusionMultiplier\_at}}
+\index{CapillaryDiffusionMultiplier\_at@{CapillaryDiffusionMultiplier\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{CapillaryDiffusionMultiplier\_at()}{CapillaryDiffusionMultiplier\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa0c6c6d56708746c509247f21c79b6a7} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Capillary\+Diffusion\+Multiplier\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+
+
+k \texorpdfstring{$\ast$}{*} dpds(sw) \texorpdfstring{$\ast$}{*} mobility\+\_\+product(sw), 
+
+\begin{DoxyAttention}{Attention}
+value can be zero.
+\end{DoxyAttention}
+Same as \doxylink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a6e139b0b228024acf00d52878a11906b}{Capillary\+Diffusion\+Multiplier()}, but for a user-\/specified aqueous phase saturation. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a4517188bf94b04433d0528d5a9f9920d}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!dfds@{dfds}}
+\index{dfds@{dfds}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dfds()}{dfds()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a4517188bf94b04433d0528d5a9f9920d} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::dfds (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const}
+
+
+
+derivative of fractional flow w.\+r.\+t water saturation (used in advection multiplier); note that fw+fn=1, dfw\+\_\+dsw=dfn\+\_\+dsn 
+
+Derivative of fractional flow function with regard to the water saturation. Positivie if phase=aqueous, negative otherwise.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000226}{Todo}}]TODO\+: test whether this produces plausible results \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa9e82d8327c8c62c124d0415879f319b}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!dfds@{dfds}}
+\index{dfds@{dfds}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dfds()}{dfds()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa9e82d8327c8c62c124d0415879f319b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::dfds (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{, }\item[{uint32\+\_\+t}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+derivative of fractional flow w.\+r.\+t water saturation (used in advection multiplier); note that fw+fn=1, dfw\+\_\+dsw=dfn\+\_\+dsn 
+
+Derivative of fractional flow function w.\+r.\+t water saturation; note that fw+fn=1, dfw\+\_\+dsw = -\/dfn\+\_\+dsn.
+
+\begin{DoxyAttention}{Attention}
+In the absence of gravitational forces dfds is positive for the derivative w.\+r.\+t. the fractional flow of the aqueous phase and negative with regard to the fractional flow of the carbonic phase. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ad2a592d411c632badeb976115eabdbc7}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!dfds\_at@{dfds\_at}}
+\index{dfds\_at@{dfds\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dfds\_at()}{dfds\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ad2a592d411c632badeb976115eabdbc7} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::dfds\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+Derivative of fractional flow function at specific sw, for wetting phase 0
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000227}{Todo}}]check whether code for end-\/member cases has to be reinstated. \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a68f3bdfd72c83966cf18845ab0517100}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!dfds\_at\_Numerical@{dfds\_at\_Numerical}}
+\index{dfds\_at\_Numerical@{dfds\_at\_Numerical}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{dfds\_at\_Numerical()}{dfds\_at\_Numerical()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a68f3bdfd72c83966cf18845ab0517100} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::dfds\+\_\+at\+\_\+\+Numerical (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double}]{sw}{, }\item[{double}]{h}{ = {\ttfamily 0.001}}\end{DoxyParamCaption}) const}
+
+Derivative of fractional flow function at specific sw, for a particular phase (0 = wetting, 1 = non-\/wetting)
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000228}{Todo}}]check whether code for end-\/member cases has to be reinstated. \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_afab2f3608e028d43a996ebcff8d591cc}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!DiffusionMultiplier@{DiffusionMultiplier}}
+\index{DiffusionMultiplier@{DiffusionMultiplier}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{DiffusionMultiplier()}{DiffusionMultiplier()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_afab2f3608e028d43a996ebcff8d591cc} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Diffusion\+Multiplier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const}
+
+
+
+mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 
+
+Returns the diffusivity of CO2 in the porous medium saturated with water, using the diffusivity calculated by the Phase\+State\+Finder as an input. The calculation of the diffusivity of water in CO2 (phase == 0) is not implemented yet.
+
+The scaling of the diffusivity is done with the porosity, not the permeability.
+
+\begin{DoxyNote}{Note}
+For phase=1 this coefficient is defined only for aq, aq\+\_\+carb and aq\+\_\+carb\+\_\+salt phase states, else zero is returned.
+\end{DoxyNote}
+@discussion Diffusion caclulations make sense only for a higher order accurate transport scheme because the first-\/order scheme already is more diffusive than is physically realistic. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a7991ea0aca533b5146ba1032435aacb2}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!f@{f}}
+\index{f@{f}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{f()}{f()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a7991ea0aca533b5146ba1032435aacb2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::f (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const}
+
+
+
+fractional mass flow; 0=water, 1=non-\/wetting phase 
+
+Computes the fractional mass flow of the wetting (phase=0) or non-\/wetting (phase=1) phases using the relative k\textquotesingle{}s. and viscosities. Note that Initialize() must be called first. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a67e49875f4c9858bbf8e2b707733797e}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!f\_at@{f\_at}}
+\index{f\_at@{f\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{f\_at()}{f\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a67e49875f4c9858bbf8e2b707733797e} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::f\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+
+
+fractional mass flow; 0=water, 1=non-\/wetting phase (using prescribed sw) 
+
+Computes the fractional flow of the wetting (phase=0) and non-\/wetting (phase=1) phases using the prescribed water saturation value, in stead of the intepolated value. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3f9feb7393b64017879c912260d72c23}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!GravityMultiplier\_dGds@{GravityMultiplier\_dGds}}
+\index{GravityMultiplier\_dGds@{GravityMultiplier\_dGds}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{GravityMultiplier\_dGds()}{GravityMultiplier\_dGds()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3f9feb7393b64017879c912260d72c23} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Gravity\+Multiplier\+\_\+d\+Gds (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{dip\+\_\+vc}{}\end{DoxyParamCaption}) const}
+
+
+
+gravity multiplier, gmult = k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 \texorpdfstring{$\ast$}{*} saturation derivative of the mobility product d\+G/ds, writes result on dip vectpor 
+
+Computes multiplier for advection gravity coefficient. The divergence lamda\+\_\+ div k g (rhw-\/rhn) must be dealt with separately, see Helmig, 1997, p. 108, eqn. 3.\+74, term 2 (second part). \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a583e29efef6c09b174f0254d69ad7ab2}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!GravityMultiplier\_G@{GravityMultiplier\_G}}
+\index{GravityMultiplier\_G@{GravityMultiplier\_G}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{GravityMultiplier\_G()}{GravityMultiplier\_G()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a583e29efef6c09b174f0254d69ad7ab2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Gravity\+Multiplier\+\_\+G (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{dip\+\_\+vc}{}\end{DoxyParamCaption}) const}
+
+
+
+gravity multiplier, gmult = k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 \texorpdfstring{$\ast$}{*} G (=mobility product); writes result on dip vector 
+
+Gravity term multiplied with lambda\+\_\+overbar for the mass-\/based transport scheme. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab6d17f24ac6489c0ee2c6da3e27579c4}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!GravityMultiplier\_phase@{GravityMultiplier\_phase}}
+\index{GravityMultiplier\_phase@{GravityMultiplier\_phase}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{GravityMultiplier\_phase()}{GravityMultiplier\_phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab6d17f24ac6489c0ee2c6da3e27579c4} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Gravity\+Multiplier\+\_\+phase (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{dip\+\_\+vc}{, }\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const}
+
+Mass-\/based formulation for transport equation\+: k \texorpdfstring{$\ast$}{*} (kri/mui \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2) g grad\+\_\+Y
+
+\begin{DoxyNote}{Note}
+Since the gravity term is a vector variable in the case of lower dimensional elements it is written back to the model.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em dip\+\_\+vc} & the resulting gravity term is returned into the supplied vector. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab328ef09dc1c1df097c94131beabd8fa}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!GravityTerm@{GravityTerm}}
+\index{GravityTerm@{GravityTerm}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{GravityTerm()}{GravityTerm()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab328ef09dc1c1df097c94131beabd8fa} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Gravity\+Term (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{eptr}{, }\item[{uint32\+\_\+t}]{n}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{dip\+\_\+vc}{}\end{DoxyParamCaption}) const}
+
+
+
+k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 projected onto the dip vector of the current element; writes result to dip vector 
+
+Computes kV \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 projected onto the dip vector of the current element; writes result to dip vector The value of the vertical permeability is used only if k is a tensor property. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a1968602579c72889ea11631c3efabf67}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!GravityTerm@{GravityTerm}}
+\index{GravityTerm@{GravityTerm}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{GravityTerm()}{GravityTerm()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a1968602579c72889ea11631c3efabf67} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Gravity\+Term (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{eptr}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{dip\+\_\+vc}{}\end{DoxyParamCaption}) const}
+
+
+
+k \texorpdfstring{$\ast$}{*} kri(sw)/mi \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 projected onto the dip vector of the current element; writes result to dip vector 
+
+Mass-\/based formulation for pressure equation\+: k \texorpdfstring{$\ast$}{*} (kri/mui \texorpdfstring{$\ast$}{*} rho\+\_\+i\texorpdfstring{$^\wedge$}{\string^}2 + kri/muj \texorpdfstring{$\ast$}{*} rhoj\texorpdfstring{$^\wedge$}{\string^}2) g grad\+\_\+Y
+
+\begin{DoxyNote}{Note}
+Since the gravity term is a vector variable in the case of lower dimensional elements it is written back to the model.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em dip\+\_\+vc} & the resulting gravity term is returned into the supplied vector. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa00cd636db46b34fcdfc6257aad99dd2}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!InterpolateAqueousPhase@{InterpolateAqueousPhase}}
+\index{InterpolateAqueousPhase@{InterpolateAqueousPhase}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{InterpolateAqueousPhase()}{InterpolateAqueousPhase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_aa00cd636db46b34fcdfc6257aad99dd2} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Interpolate\+Aqueous\+Phase (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double \&}]{sw}{, }\item[{double \&}]{rhow}{, }\item[{double \&}]{muw}{}\end{DoxyParamCaption}) const}
+
+
+
+returns aqueous phase properties at element barycentre, if there is a value at at least a single node, else returns false 
+
+Interpolates the properties of the aqueous phase, if there is any, else returns false.
+
+\begin{DoxyReturn}{Returns}
+true if method was able to interpolate a density and false if it was not.
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000225}{Todo}}]TODO\+: check whether this could be improved by reading the element phase state.\end{DoxyRefDesc}
+
+
+\begin{DoxyNote}{Note}
+compared to NEITHER as a state where no phase is continous across the nodes, looking at the saturations offers more information ? 
+\end{DoxyNote}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a464b6fb337b0c1fcdb16f546f7d3723e}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!InterpolateCarbonicPhase@{InterpolateCarbonicPhase}}
+\index{InterpolateCarbonicPhase@{InterpolateCarbonicPhase}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{InterpolateCarbonicPhase()}{InterpolateCarbonicPhase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a464b6fb337b0c1fcdb16f546f7d3723e} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Interpolate\+Carbonic\+Phase (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double \&}]{snw}{, }\item[{double \&}]{rhon}{, }\item[{double \&}]{mun}{}\end{DoxyParamCaption}) const}
+
+
+
+returns carbonic phase properties at element barycentre, if there is a value at at least a single node, else returns false 
+
+\begin{DoxyReturn}{Returns}
+true if method was able to interpolate a density and false if it was not. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a277639491e2eea1875fbd65a73b021c9}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MaxFractionalFlowDerivative@{MaxFractionalFlowDerivative}}
+\index{MaxFractionalFlowDerivative@{MaxFractionalFlowDerivative}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MaxFractionalFlowDerivative()}{MaxFractionalFlowDerivative()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a277639491e2eea1875fbd65a73b021c9} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Max\+Fractional\+Flow\+Derivative (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const}
+
+
+
+maximum value of fractional flow / saturation derivative 
+
+@attension\+: Generally "{}\+Max\+Fractionalq\+Flow\+Derivative"{} is not speed. It is after Buckley-\/\+Leverett problem \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a751a829774354ce9b6bbea7dfac93d72}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!Mobility@{Mobility}}
+\index{Mobility@{Mobility}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{Mobility()}{Mobility()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a751a829774354ce9b6bbea7dfac93d72} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const}
+
+
+
+density \texorpdfstring{$\ast$}{*} lambda = kri(sw)/mu\+\_\+i of the phase i\+: 0 for water, 1 for the non-\/wetting phase 
+
+Mobility of phase i, lambda\+\_\+i = rho\+\_\+i \texorpdfstring{$\ast$}{*} kri(sw) / mu\+\_\+i. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab0826a1c513cc3d19292b8fec113f9a5}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!Mobility\_at@{Mobility\_at}}
+\index{Mobility\_at@{Mobility\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{Mobility\_at()}{Mobility\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_ab0826a1c513cc3d19292b8fec113f9a5} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+
+
+density \texorpdfstring{$\ast$}{*} lambda\+\_\+i\+: i=0 for water, 1 for the non-\/wetting phase (using prescribed sw) 
+
+Mobility of phase i, lambda\+\_\+i = rho\+\_\+i \texorpdfstring{$\ast$}{*} kri(sw) / mu\+\_\+i.
+
+Using prescribed sw value, instead of value intepolated to element barycentre. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a35a0c73785eb10bc4d2c91638a1e5920}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MobilityDerivative@{MobilityDerivative}}
+\index{MobilityDerivative@{MobilityDerivative}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MobilityDerivative()}{MobilityDerivative()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a35a0c73785eb10bc4d2c91638a1e5920} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+Derivative (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const}
+
+
+
+d lambda\+\_\+i / dsw 
+
+Mobility saturation derivative for phase i. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a9a8f40156aff485554a68b81162b9e2b}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MobilityDerivative@{MobilityDerivative}}
+\index{MobilityDerivative@{MobilityDerivative}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MobilityDerivative()}{MobilityDerivative()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a9a8f40156aff485554a68b81162b9e2b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+Derivative (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{eptr}{, }\item[{uint32\+\_\+t}]{phase}{, }\item[{uint32\+\_\+t}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+d lambda\+\_\+i / dsw 
+
+d lambda\+\_\+i / dsw
+
+@discussion as currently implemented, the mobility derivative is zero outside of the range where both phases are mobile. Is this what we want? \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a0cb73e52afc60dbf3f7b59491559f97e}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MobilityDerivative\_at@{MobilityDerivative\_at}}
+\index{MobilityDerivative\_at@{MobilityDerivative\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MobilityDerivative\_at()}{MobilityDerivative\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a0cb73e52afc60dbf3f7b59491559f97e} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+Derivative\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{uint32\+\_\+t}]{phase}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+
+
+d lambda\+\_\+i / dsw 
+
+Mobility saturation derivative for aqueous (i=0) or carbonic (i=1) phase. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a96113bb2fb9f05f18284552222c2e661}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MobilityProduct@{MobilityProduct}}
+\index{MobilityProduct@{MobilityProduct}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MobilityProduct()}{MobilityProduct()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a96113bb2fb9f05f18284552222c2e661} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+Product (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+lambda overbar\+: mobility product l\+\_\+overbar = (li \texorpdfstring{$\ast$}{*} rhow \texorpdfstring{$\ast$}{*} lj \texorpdfstring{$\ast$}{*} rhonw) / (li\texorpdfstring{$\ast$}{*}rhow + lj\texorpdfstring{$\ast$}{*}rhonw), also known as G 
+
+G -\/ parameter known as mobility product, lambda overbar.
+
+Computes G = lamdba\+\_\+w \texorpdfstring{$\ast$}{*} lambda\+\_\+n / (lambda\+\_\+w + lambda\+\_\+n), cf., van Duijn and de Neef (1998). Note that Initialize() must be called first. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3f4a9b26a957b80b4c3f235f4f59ae96}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MobilityProduct\_at@{MobilityProduct\_at}}
+\index{MobilityProduct\_at@{MobilityProduct\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MobilityProduct\_at()}{MobilityProduct\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3f4a9b26a957b80b4c3f235f4f59ae96} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+Product\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+
+
+lambda overbar\+: mobility product l\+\_\+overbar = (li \texorpdfstring{$\ast$}{*} rhow \texorpdfstring{$\ast$}{*} lj \texorpdfstring{$\ast$}{*} rhonw) / (li\texorpdfstring{$\ast$}{*}rhow + lj\texorpdfstring{$\ast$}{*}rhonw), also known as G 
+
+Mobility product evaluated at the users supplied water saturation. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a593adc2a393242e31520addcbf893d8b}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MobilityProductDerivative@{MobilityProductDerivative}}
+\index{MobilityProductDerivative@{MobilityProductDerivative}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MobilityProductDerivative()}{MobilityProductDerivative()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a593adc2a393242e31520addcbf893d8b} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+Product\+Derivative (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{bool}]{evaluate\+\_\+numerically}{ = {\ttfamily false}}\end{DoxyParamCaption}) const}
+
+
+
+d lambda overbar / dsw also known as d\+Gds 
+
+Saturation derivative of mobility product.
+
+rhow\texorpdfstring{$\ast$}{*}rhon\texorpdfstring{$\ast$}{*}((diff(lw(sw), sw))\texorpdfstring{$\ast$}{*}ln(sw)\texorpdfstring{$^\wedge$}{\string^}2\texorpdfstring{$\ast$}{*}rhon\texorpdfstring{$\ast$}{*}sw+lw(sw)\texorpdfstring{$^\wedge$}{\string^}2\texorpdfstring{$\ast$}{*}rhow)/((rhow\texorpdfstring{$\ast$}{*}lw(sw)+rhon\texorpdfstring{$\ast$}{*}ln(sw))\texorpdfstring{$^\wedge$}{\string^}2\texorpdfstring{$\ast$}{*}sw); \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_af45b6af244e230265ed9cc4064db5704}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!MobilityProductDerivative\_at@{MobilityProductDerivative\_at}}
+\index{MobilityProductDerivative\_at@{MobilityProductDerivative\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{MobilityProductDerivative\_at()}{MobilityProductDerivative\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_af45b6af244e230265ed9cc4064db5704} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Mobility\+Product\+Derivative\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+Saturation derivative of mobility product. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3c52b93a8d415ccde41b356356806076}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!ShockFrontVelocity@{ShockFrontVelocity}}
+\index{ShockFrontVelocity@{ShockFrontVelocity}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{ShockFrontVelocity()}{ShockFrontVelocity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a3c52b93a8d415ccde41b356356806076} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Shock\+Front\+Velocity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+speed (m/s) of the shock front in current cell 
+
+The Shock front wave calculated after estimation of tangent Saturation point. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a55f190b7703e3c5ea28dc92666e27e70}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!ShockSpeed@{ShockSpeed}}
+\index{ShockSpeed@{ShockSpeed}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{ShockSpeed()}{ShockSpeed()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a55f190b7703e3c5ea28dc92666e27e70} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Shock\+Speed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+outputs the shock wave celerity for mass flow 
+
+shock speed base on Buckley Leverett theory \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a289bf1d39048d6bafef8bcdaddb86795}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!Sw@{Sw}}
+\index{Sw@{Sw}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{Sw()}{Sw()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a289bf1d39048d6bafef8bcdaddb86795} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Sw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+water saturation interpolated to element barycentre; use Read( key\+\_\+s\+H2\+O ) to get nodal value 
+
+Saturation is always expected to have a value between 0..1. \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a0975e6a55a120e8aa3cff8552819362c}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!TotalMobility@{TotalMobility}}
+\index{TotalMobility@{TotalMobility}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{TotalMobility()}{TotalMobility()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a0975e6a55a120e8aa3cff8552819362c} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Total\+Mobility (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{}\end{DoxyParamCaption}) const}
+
+
+
+lambda\+\_\+t\+: sum of phase-\/mobility \texorpdfstring{$\ast$}{*} density products 
+
+Sum of mass mobilities (not multiplied with permeability). \Hypertarget{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a37262a459e53bf3045313cdaa14a1f36}\index{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}!TotalMobility\_at@{TotalMobility\_at}}
+\index{TotalMobility\_at@{TotalMobility\_at}!csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$@{csmp::H2O\_CO2\_NaCl\_FlowFunctions$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{TotalMobility\_at()}{TotalMobility\_at()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions_a37262a459e53bf3045313cdaa14a1f36} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_h2_o___c_o2___na_cl___flow_functions}{csmp\+::\+H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions}}$<$ dim, USER $>$\+::\+Total\+Mobility\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{e}{, }\item[{double}]{sw}{}\end{DoxyParamCaption}) const}
+
+
+
+lambda\+\_\+t\+: sum of phase-\/mobility \texorpdfstring{$\ast$}{*} density products 
+
+Sum of mobilities (not multiplied with permeability). Using prescribed sw value, instead of intepolated value. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/two\+\_\+phase\+\_\+flow/H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions.\+h\item 
+source/modules/thmc/two\+\_\+phase\+\_\+flow/H2\+O\+\_\+\+CO2\+\_\+\+Na\+Cl\+\_\+\+Flow\+Functions.\+cpp\end{DoxyCompactItemize}

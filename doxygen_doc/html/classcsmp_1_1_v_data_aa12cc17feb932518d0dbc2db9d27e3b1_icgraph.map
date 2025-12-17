@@ -1,0 +1,9 @@
+<map id="csmp::VData::ResizeBFlags" name="csmp::VData::ResizeBFlags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="239,55,427,80"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_set.html#af4cf0571e7b6cb5853771594ed48cca9" title="adds BOX_BOUNDARY flag values to VData" alt="" coords="17,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,53,162,34,163,29,254,48"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_v_data.html#aa6a7afa105430fb89eee07213c1f0a73" title="resizes for a single&#45;element type mesh" alt="" coords="24,55,172,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,70,172,70,172,65,223,65"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_v_data.html#a49d54c31881e4095fffa5092691a5351" title=" " alt="" coords="5,104,191,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="254,87,163,106,162,101,252,82"/>
+</map>

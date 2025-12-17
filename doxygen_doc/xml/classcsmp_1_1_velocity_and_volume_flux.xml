@@ -1,0 +1,1255 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_velocity_and_volume_flux" kind="class" language="C++" prot="public">
+    <compoundname>csmp::VelocityAndVolumeFlux</compoundname>
+    <basecompoundref refid="classcsmp_1_1_math_operator_l_h_s" prot="public" virt="non-virtual">csmp::MathOperatorLHS&lt; dim, Element &gt;</basecompoundref>
+    <includes refid="_velocity_and_volume_flux_8h" local="no">VelocityAndVolumeFlux.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+        <defval><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref></defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1ac4b07d93ffada0434ea8784ef961adc4" prot="private" static="no" mutable="no">
+        <type>const uint32_t</type>
+        <definition>const uint32_t csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::components_</definition>
+        <argsstring></argsstring>
+        <name>components_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::components_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="139" column="20" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1ae558022ad0c374adeab28caf30867b24" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::velo_key_</definition>
+        <argsstring></argsstring>
+        <name>velo_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::velo_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="141" column="18" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a0b7540f4a3ee1a842ae9dff09f5d27d9" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::ivelo_key_</definition>
+        <argsstring></argsstring>
+        <name>ivelo_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::ivelo_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="141" column="28" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a05055c3b0d57459f227a9298d3a7557f" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::nvelo_key_</definition>
+        <argsstring></argsstring>
+        <name>nvelo_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::nvelo_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="141" column="39" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a91030d2b4382826b3eab874acd6365d1" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::nivelo_key_</definition>
+        <argsstring></argsstring>
+        <name>nivelo_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::nivelo_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="141" column="50" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1abf543fadeecce65cb19dd32b4eac1a4e" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::flux_key_</definition>
+        <argsstring></argsstring>
+        <name>flux_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::flux_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="142" column="18" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1aae6fe369f4774670cc50d734041e58db" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::nflux_key_</definition>
+        <argsstring></argsstring>
+        <name>nflux_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::nflux_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="142" column="28" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a821f346c2cc62c6eea7b68510b7391b2" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::rhor_key_</definition>
+        <argsstring></argsstring>
+        <name>rhor_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::rhor_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="142" column="39" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1abbc91ccde889803d64bcc666c5798c3d" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::mult_key_</definition>
+        <argsstring></argsstring>
+        <name>mult_key_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::mult_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="142" column="49" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1ad34197c45e7343c420981f0f74d2434e" prot="private" static="no" mutable="no">
+        <type>std::pair&lt; double, double &gt;</type>
+        <definition>std::pair&lt;double,double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::minmaxV_</definition>
+        <argsstring></argsstring>
+        <name>minmaxV_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::minmaxV_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="144" column="19" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1acffaa24fa9ab7a929a74a7f7b8f71eef" prot="private" static="no" mutable="no">
+        <type>std::pair&lt; double, double &gt;</type>
+        <definition>std::pair&lt;double,double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::minmaxF_</definition>
+        <argsstring></argsstring>
+        <name>minmaxF_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::minmaxF_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="144" column="28" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a5873389b86580a1571e3c39bb4e44187" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::DERIV_</definition>
+        <argsstring></argsstring>
+        <name>DERIV_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::DERIV_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="145" column="26" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a995cd7160d1019172a60488943c7eaf3" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt;DM_MIN&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::RESULT_</definition>
+        <argsstring></argsstring>
+        <name>RESULT_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::RESULT_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="145" column="33" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a7227a7661f676c34379b17d0201a4646" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::VELOFLUX_</definition>
+        <argsstring></argsstring>
+        <name>VELOFLUX_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::VELOFLUX_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="146" column="26" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a6d42e360c227aa1fc9ba4a5db8d915dd" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::IVELOFLUX_</definition>
+        <argsstring></argsstring>
+        <name>IVELOFLUX_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::IVELOFLUX_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="146" column="36" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1abc7a6919765f79f5fcd52c5df6c427d9" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::IPVF_</definition>
+        <argsstring></argsstring>
+        <name>IPVF_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::IPVF_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="147" column="26" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a3441cde902e6e66d610ba7406dfb2978" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::NVF_</definition>
+        <argsstring></argsstring>
+        <name>NVF_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::NVF_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="147" column="32" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1afb33188940a0999088fafe0f39248989" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::veloflux_</definition>
+        <argsstring></argsstring>
+        <name>veloflux_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::veloflux_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="147" column="37" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a9cdce5e2d64fe84b8f050970a86aa5f8" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::IPOL_</definition>
+        <argsstring></argsstring>
+        <name>IPOL_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::IPOL_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="148" column="26" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a123a519cfa97bf7f87e01f80f465cb50" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable &gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::PF_</definition>
+        <argsstring></argsstring>
+        <name>PF_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::PF_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="149" column="17" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a0afcf601c0f7f7fc7b5c2bb1e2d536b7" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable &gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::mult_vec_</definition>
+        <argsstring></argsstring>
+        <name>mult_vec_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::mult_vec_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="149" column="21" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1ac33e907d9dc4e05064073e3c9db45540" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable &gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::rho_vec_</definition>
+        <argsstring></argsstring>
+        <name>rho_vec_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::rho_vec_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="149" column="31" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a04a31731b9d9e2feb438357f571bc7d0" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::velo_</definition>
+        <argsstring></argsstring>
+        <name>velo_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::velo_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="150" column="29" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a7a75a7f10e6f039cc6fb0f42584e93b5" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::ivelo_</definition>
+        <argsstring></argsstring>
+        <name>ivelo_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::ivelo_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="150" column="35" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a13cb8b686463673455b2fc33c5fa60af" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::phi_</definition>
+        <argsstring></argsstring>
+        <name>phi_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::phi_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="151" column="34" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a9c0e499fb9c98092a76e3ca03a56e55b" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::flux_</definition>
+        <argsstring></argsstring>
+        <name>flux_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::flux_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="151" column="39" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1adc9152ad6e7e2f611ca157dc7cb481cd" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::rhor_</definition>
+        <argsstring></argsstring>
+        <name>rhor_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::rhor_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="151" column="45" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a165efa84bc262f7ae5a3d40667bbdba5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="152" column="34" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a94ca6328390e8ce9b2bcaf3f8dce62d8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::nodal_averaging_</definition>
+        <argsstring></argsstring>
+        <name>nodal_averaging_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::nodal_averaging_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="152" column="43" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a067301e627accdff1d24390618368e55" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::with_gravity_</definition>
+        <argsstring></argsstring>
+        <name>with_gravity_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::with_gravity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="152" column="60" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1ac540fe170b4bc510a279e2f8fbb5aab8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::with_multiplier_</definition>
+        <argsstring></argsstring>
+        <name>with_multiplier_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::with_multiplier_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="152" column="74" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a8340695c29c4ce72370478bbdd8cf812" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::sum_</definition>
+        <argsstring></argsstring>
+        <name>sum_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::sum_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="153" column="34" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1ab808ad418e14e0d5b9cb64c3f2ce7405" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::ac_gravity_</definition>
+        <argsstring></argsstring>
+        <name>ac_gravity_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::ac_gravity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="153" column="39" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a2a90d867beb85e698935b7d50cf8a954" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::rho_fac_</definition>
+        <argsstring></argsstring>
+        <name>rho_fac_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::rho_fac_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="153" column="51" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a399d6509f1e3f6e59bceeeda99dcc712" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::mult_fac_</definition>
+        <argsstring></argsstring>
+        <name>mult_fac_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::mult_fac_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="153" column="60" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1a9e1613ba2988ab6e6e7a6ff2605d2f69" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; bool &gt;</type>
+        <definition>std::vector&lt;bool&gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::node_output_</definition>
+        <argsstring></argsstring>
+        <name>node_output_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::node_output_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="154" column="28" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1ab16034938984fbd4ff5a9ed80b2097a6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::list&lt; std::vector&lt; double &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::list&lt;std::vector&lt;double&gt; &gt; &gt; csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::temp_veloflux_</definition>
+        <argsstring></argsstring>
+        <name>temp_veloflux_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::temp_veloflux_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="155" column="18" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_velocity_and_volume_flux_1aff47c7e4d132ea2e3a0debf83ec2f2b1" prot="private" static="no" mutable="no">
+        <type>const uint32_t</type>
+        <definition>const uint32_t csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::VERTICAL_AXIS_</definition>
+        <argsstring></argsstring>
+        <name>VERTICAL_AXIS_</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::VERTICAL_AXIS_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="156" column="34" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="156" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a351492d984d1c51089a440b7b58552de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::VelocityAndVolumeFlux</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const char *oper, const char *basic, const char *test, bool node_averaging=false, const char *velocity=&quot;velocity&quot;, const char *pore_velocity=&quot;pore velocity&quot;, const char *volume_flux=&quot;volume flux&quot;, const char *nodal_velocity=&quot;nodal velocity&quot;, const char *nodal_pore_velocity=&quot;nodal pore velocity&quot;, const char *nodal_volume_flux=&quot;nodal volume flux&quot;)</argsstring>
+        <name>VelocityAndVolumeFlux</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::VelocityAndVolumeFlux</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>basic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>node_averaging</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>velocity</declname>
+          <defval>&quot;velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pore_velocity</declname>
+          <defval>&quot;pore velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>volume_flux</declname>
+          <defval>&quot;volume flux&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_velocity</declname>
+          <defval>&quot;nodal velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_pore_velocity</declname>
+          <defval>&quot;nodal pore velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_volume_flux</declname>
+          <defval>&quot;nodal volume flux&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructs the post-processing math operator for velocity/ flux calculations.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Three character strings for the input variables of the calculation &apos;conductivity&apos;, &apos;porosity&apos;, and &apos;fluid pressure&apos;, a boolean variable to toggle node averaging on in which case the velocities and fluxes are extrapolated to the nodes. <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The names of the output variables are hard-wired in this operator. Thus, checks are performed whether these variables actually exist in the variable database and errors are reported if they don&apos;t or if they have the wrong placement or type. <linebreak/>
+</para>
+<para>tested: </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="79" column="5" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="33" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1ab8545296d053c57974dd1a3763cf1c32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::VelocityAndVolumeFlux</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const char *oper, const char *basic, const char *test, const char *relative_density, bool node_averaging=false, const char *velocity=&quot;velocity&quot;, const char *pore_velocity=&quot;pore velocity&quot;, const char *volume_flux=&quot;volume flux&quot;, const char *nodal_velocity=&quot;nodal velocity&quot;, const char *nodal_pore_velocity=&quot;nodal pore velocity&quot;, const char *nodal_volume_flux=&quot;nodal volume flux&quot;)</argsstring>
+        <name>VelocityAndVolumeFlux</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::VelocityAndVolumeFlux</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>basic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>relative_density</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>node_averaging</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>velocity</declname>
+          <defval>&quot;velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pore_velocity</declname>
+          <defval>&quot;pore velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>volume_flux</declname>
+          <defval>&quot;volume flux&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_velocity</declname>
+          <defval>&quot;nodal velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_pore_velocity</declname>
+          <defval>&quot;nodal pore velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_volume_flux</declname>
+          <defval>&quot;nodal volume flux&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Like in first case, but considering buoyancy forces.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>relative_density</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>&apos;relative density&apos; is the fluid density - a reference density, for instance 1000 kg/m3 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="92" column="5" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="138" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1ab258a1c62ea856c2b013b35d016962ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::VelocityAndVolumeFlux</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const char *oper, const char *basic, const char *test, const char *relative_density, const char *prop_multiplier, bool node_averaging=false, const char *velocity=&quot;velocity&quot;, const char *pore_velocity=&quot;pore velocity&quot;, const char *volume_flux=&quot;volume flux&quot;, const char *nodal_velocity=&quot;nodal velocity&quot;, const char *nodal_pore_velocity=&quot;nodal pore velocity&quot;, const char *nodal_volume_flux=&quot;nodal volume flux&quot;)</argsstring>
+        <name>VelocityAndVolumeFlux</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::VelocityAndVolumeFlux</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>basic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>relative_density</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>prop_multiplier</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>node_averaging</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>velocity</declname>
+          <defval>&quot;velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pore_velocity</declname>
+          <defval>&quot;pore velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>volume_flux</declname>
+          <defval>&quot;volume flux&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_velocity</declname>
+          <defval>&quot;nodal velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_pore_velocity</declname>
+          <defval>&quot;nodal pore velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_volume_flux</declname>
+          <defval>&quot;nodal volume flux&quot;</defval>
+        </param>
+        <briefdescription>
+<para>as previous but offering possibility to multiply operand by a distributed variable </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="106" column="5" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="244" bodyend="351"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a4294d944249453f59d740c5dd8451dad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::Verbose</definition>
+        <argsstring>(bool stdoutput)</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::Verbose</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>stdoutput</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Switch to verbose mode (results are reported to stdout). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="120" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="360" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a7ab86424f42b2dddc8fa1683086e4fb1" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::GetOperands</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;) override final</argsstring>
+        <name>GetOperands</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::GetOperands</qualifiedname>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="122" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="415" bodyend="494"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a563d33d2eb173a421bd0e522dca51bba" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::ComputeContribution</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;) override final</argsstring>
+        <name>ComputeContribution</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::ComputeContribution</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_l_h_s_1ad218c9a90bfa910a988f540a8fe802ea">ComputeContribution</reimplements>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>{V} = [grad P]{k} </para>
+        </briefdescription>
+        <detaileddescription>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> for which the post-processing is done. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="125" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="508" bodyend="708"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a8d2461f909c1c818dd99fcc41588a211" prot="public" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::WriteOperands</definition>
+        <argsstring>(CELL&lt; dim &gt; &amp;) override final</argsstring>
+        <name>WriteOperands</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::WriteOperands</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_l_h_s_1a0972c226f26ae57084c7d22343560e3e">WriteOperands</reimplements>
+        <param>
+          <type>CELL&lt; dim &gt; &amp;</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs the computed velocities and fluxes to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> storage checking the range of each variable using the ranges associated with each of the Operands.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>A reference to the property memory manager and the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> for which the variables are output. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="127" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="728" bodyend="761"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a2e8f5c7cb49c112a5ddb7581a5710ded" prot="public" static="no" const="yes" explicit="no" inline="yes" final="yes" virt="virtual">
+        <type><ref refid="classcsmp_1_1_velocity_and_volume_flux" kindref="compound">VelocityAndVolumeFlux</ref>&lt; dim, CELL &gt; *</type>
+        <definition>VelocityAndVolumeFlux&lt; dim, CELL &gt; * csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::clone</definition>
+        <argsstring>() const override final</argsstring>
+        <name>clone</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::clone</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_l_h_s_1ab834fae1d8f3c54fe7eea683273aab17">clone</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="129" column="27" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="129" bodyend="129"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a9ce41c25cdaaa8602dfae2b9bc6bb8f2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::ExtractVelocity</definition>
+        <argsstring>(const DenseMatrix&lt; DM_MIN &gt; &amp;INP, uint32_t col, VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>ExtractVelocity</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::ExtractVelocity</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>INP</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="133" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="772" bodyend="777"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1ab6136c63e9f283df8581f313e1a32461" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::ExtractVolumeFlux</definition>
+        <argsstring>(const DenseMatrix&lt; DM_MIN &gt; &amp;INP, uint32_t col, ScalarVariable &amp;)</argsstring>
+        <name>ExtractVolumeFlux</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::ExtractVolumeFlux</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>INP</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="134" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="786" bodyend="791"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a381df0a1455eafec081a76e4598d911d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::ExtractInterstitialVelocity</definition>
+        <argsstring>(const DenseMatrix&lt; DM_MIN &gt; &amp;INP, uint32_t col, VectorVariable&lt; dim &gt; &amp;)</argsstring>
+        <name>ExtractInterstitialVelocity</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::ExtractInterstitialVelocity</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>INP</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="135" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="796" bodyend="801"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a00a666cf41be46ccc5abf65efbbbf9cd" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::TestRangeOfOutputVariables</definition>
+        <argsstring>() const</argsstring>
+        <name>TestRangeOfOutputVariables</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::TestRangeOfOutputVariables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Using the physically meaningful range which was specified in the Property- Database, the output variables are tested for the correctness. Note that this method assumes that the interstital velocity &quot;pore velocity&quot; should be in the same range as the Darcy velocity.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>If the range constraint is violated, a message is printed to &apos;cout&apos;. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="136" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="375" bodyend="392"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_velocity_and_volume_flux_1a943482d5d283ad8901ae3f6388caf112" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;::WithLowerDimensionalElements</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;) const</argsstring>
+        <name>WithLowerDimensionalElements</name>
+        <qualifiedname>csmp::VelocityAndVolumeFlux::WithLowerDimensionalElements</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>m</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>If there are elements from more than one spatial dimension in the model, we have a problem. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="137" column="10" bodyfile="source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp" bodystart="402" bodyend="409"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Post-processes flow &quot;velocity&quot; &amp; &quot;volume flux&quot; that are output as <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> and scalar variables, respectively upon request these properties are extrapolated to the nodes and averaged between adjacent elements. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>2005</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Post-Processing: Compute flow velocities and their magnitudes from the fluid pressure field, the conductivity, and the porosity of the medium. The flow velocities are computed at the element centers or integration points but they can be extrapolated to the nodes if this option is chosen. The variable names which are hardwired into this math operator are:</para>
+<para><programlisting><codeline><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>element<sp/><sp/><sp/>vector</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;pore<sp/>velocity&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>element<sp/><sp/><sp/><sp/><sp/><sp/><sp/>vector</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;volume<sp/>flux&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>element<sp/><sp/><sp/><sp/><sp/><sp/><sp/>scalar</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;nodal<sp/>velocity&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>node<sp/><sp/><sp/><sp/><sp/><sp/>vector</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;nodal<sp/>pore<sp/>velocity&quot;</highlight><highlight class="normal"><sp/><sp/><sp/>node<sp/><sp/><sp/><sp/><sp/><sp/>vector</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="stringliteral">&quot;nodal<sp/>volume<sp/>flux&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>element<sp/><sp/><sp/><sp/><sp/>scalar</highlight></codeline>
+</programlisting></para>
+<para>Those with a the &quot;nodal&quot; prefix are used only when the option for output to the nodes is chosen. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Procedure: In 2 post-processing application cycles of this class object the following is performed:</para>
+<para><orderedlist>
+<listitem><para>From the nodal &quot;fluid pressure&quot; and the shape function derivatives, the &quot;fluid pressure gradient&quot; at the element center (for elements with linear interpolation functions), or at the integration points is computed. For higher order elements these locations are optimal locations, see Barlow, 1977). <linebreak/>
+</para>
+</listitem><listitem><para>The product of the fluid pressure gradient, the conductivity, and the porosity (in case of the interstitial velocity) and -1.0, gives the flow velocity. The volume flux, as a scalar property, is given by the magnitude of the Darcy velocity vector. <linebreak/>
+</para>
+</listitem><listitem><para>If the properties shall be mapped to the nodes, they are linearly extrapolated to these from the element center or the integration points. In the case of linear elements, nodal velocities represent the averages of adjacent elements. These are not weighted by element area !</para>
+<para>For quadratic elements, bilinear extrapolation is carried out by the specific finite element used. Only linear variations in the velocity over the element are supported at this stage. The nodal velocities are averaged among the adjacent elements since they diverge at these locations from one-another. <linebreak/>
+</para>
+</listitem></orderedlist>
+</para>
+<para>Steps 1 and 2 are accomplished in the first application cycle of the post-processing operator. The nodal averaging and following operations are done in a second cycle. </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorLHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_velocity_and_volume_flux"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="9">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="8">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="6">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="10">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorLHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::VelocityAndVolumeFlux&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_velocity_and_volume_flux"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" line="77" column="1" bodyfile="source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h" bodystart="77" bodyend="157"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ab808ad418e14e0d5b9cb64c3f2ce7405" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ac_gravity_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a071174805944988e79eb90d220825fc6" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6e8ba5063d8f63ae9be81cf35707ce45" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>add_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac7b08a240ef6983652e87ae66b9bb89d" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>add_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a656e2058fe8befd10867c14daf913fb4" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>AddAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1adc666d51a1d079eb31768b937b575d15" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>AddAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2d4eb297a16ea6a4ee4f352fac80595b" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>AddLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a03e47eec17a8af0f737d899ab20aeb9f" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>application_cycle_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad64786ff609174d2370889cbab765780" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>application_cycles_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1afb93bb032bf499e831315fb542610f6a" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6b5f4238adbb0777f28fdc4fc74d5e4b" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ab63fa0d4cdd2e842a7bd9e72cad20760" prot="public" virt="virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>AssignToGlobal</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa3596e878f26280060468a9bdec46dca" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>BasicOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a58c2a9a26dd513f31518787e3db2b0f4" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>BasicOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af4a984063854fb3cae9a7540a04b5c03" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>BasicOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a4ff9ba8ce51005017b733dc19c81d515" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>BasicOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acc4999e50046c13accb00f8d107b2c96" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>BasicOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad9337ca684d7bcb3ec3e95962896a8b6" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>BasicOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2a7e46d92ed93c59de74ed51316892ff" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>BasicOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa9df1530e82365639a558cf33d23aa4a" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>bop</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a2e8f5c7cb49c112a5ddb7581a5710ded" prot="public" virt="virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>clone</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ac4b07d93ffada0434ea8784ef961adc4" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>components_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a563d33d2eb173a421bd0e522dca51bba" prot="public" virt="virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ComputeContribution</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a9f509141a8a09632215b8ae825ed0d86" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>DERIV</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a5873389b86580a1571e3c39bb4e44187" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>DERIV_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a11b450090896b6cea8c30e824c1ee873" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>DivideByTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a381df0a1455eafec081a76e4598d911d" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ExtractInterstitialVelocity</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a9ce41c25cdaaa8602dfae2b9bc6bb8f2" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ExtractVelocity</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ab6136c63e9f283df8581f313e1a32461" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ExtractVolumeFlux</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aca21df7e825c1c079e50ac88762ff309" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>factor_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a9c0e499fb9c98092a76e3ca03a56e55b" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>flux_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1abf543fadeecce65cb19dd32b4eac1a4e" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>flux_key_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a7ab86424f42b2dddc8fa1683086e4fb1" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acaaa0a607351dfb0c857249573a26e47" prot="public" virt="virtual" ambiguityscope="csmp::MathOperatorLHS&lt; dim, Element &gt;::"><scope>csmp::VelocityAndVolumeFlux</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a84eb241e3c064c802e1344eb587fc403" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>IPOL</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a9cdce5e2d64fe84b8f050970a86aa5f8" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>IPOL_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1abc7a6919765f79f5fcd52c5df6c427d9" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>IPVF_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a7a75a7f10e6f039cc6fb0f42584e93b5" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ivelo_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a0b7540f4a3ee1a842ae9dff09f5d27d9" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>ivelo_key_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a6d42e360c227aa1fc9ba4a5db8d915dd" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>IVELOFLUX_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a62aa16ddf9b80b53fd8b71ab6c8cc348" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>LHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a34ca5ce934dec80b9a82ec99abb43a22" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>lump_matrices_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a381dab79b9e88de89392fe9d2f4125af" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a98c6cf1dbe2d55bce775249a985e04cf" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MaterialOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae2b75f9c674166a0f7c65505a4a766c1" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MaterialOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1adb94e7db577721029487225af1acc83a" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MaterialOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2630c48202f13587ecf0ce8c04f85207" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MaterialOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a06d7da89656114db3efb370b760f2174" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MaterialOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ada8f0c4132529a89c9def2a1ec94db62" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MaterialOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af7fa5ce4bebcb0332eb22f8f72866014" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MathOperatorLHS</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1acffaa24fa9ab7a929a74a7f7b8f71eef" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>minmaxF_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ad34197c45e7343c420981f0f74d2434e" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>minmaxV_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MTRL</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a399d6509f1e3f6e59bceeeda99dcc712" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>mult_fac_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1abbc91ccde889803d64bcc666c5798c3d" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>mult_key_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a0afcf601c0f7f7fc7b5c2bb1e2d536b7" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>mult_vec_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a80caf626696a711f04c0ed1acd14ab2e" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a11a964940ae410af4cbd9c33f03d5a9f" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>multiply_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a60cb3c4a87feb41ce07cb229e1341f35" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MultiplyAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae76aa6b2c8d1fca49eaf5baeef46819d" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0e51a52a9730c9733a40058dfb65d7f7" prot="public" virt="virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MultiplyWithTimeFactor</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a87d8c6442bfa7e06d796210bf2ea61b2" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2fa244d3942f5dd01ffa311db88fe0ea" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a68c1743b2d8b239538b1de4bc647757c" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1aae6fe369f4774670cc50d734041e58db" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>nflux_key_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a91030d2b4382826b3eab874acd6365d1" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>nivelo_key_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a94ca6328390e8ce9b2bcaf3f8dce62d8" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>nodal_averaging_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a9e1613ba2988ab6e6e7a6ff2605d2f69" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>node_output_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a05055c3b0d57459f227a9298d3a7557f" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>nvelo_key_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a3441cde902e6e66d610ba7406dfb2978" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>NVF_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2d15a8ce98eaf9fe68bb64f7a08fc969" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>op</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a93c785d11a531c3e9371d3588900ba0a" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a63cf7c372948f3c06e163252b6e4e42d" prot="public" virt="virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a123a519cfa97bf7f87e01f80f465cb50" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>PF_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a13cb8b686463673455b2fc33c5fa60af" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>phi_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a3e0f634988ada2fc5655833a1d0b8ded" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>PropertyAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a995cd7160d1019172a60488943c7eaf3" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>RESULT_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a2a90d867beb85e698935b7d50cf8a954" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>rho_fac_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ac33e907d9dc4e05064073e3c9db45540" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>rho_vec_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1adc9152ad6e7e2f611ca157dc7cb481cd" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>rhor_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a821f346c2cc62c6eea7b68510b7391b2" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>rhor_key_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a12809a59cb96c185152239f7708cc50d" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a414bbbf7690a21c7b80a20eda75926df" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>subtract_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a5e1d45c6cbf6aebf197093ac5a40bf37" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>subtract_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acceb5f9b0a038e6d49fbbf3aff3e4b70" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>SubtractAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1afb45ea755a584e29e8dcc9f705cfd941" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>SubtractAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a4539598cf1ba6c874c918861213a2de0" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>SubtractLater</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a8340695c29c4ce72370478bbdd8cf812" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>sum_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ab16034938984fbd4ff5a9ed80b2097a6" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>temp_veloflux_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae5e3432ee76f4911b81ad13ccf2286de" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af3ace5585d1d9835499792d8c8797c21" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0f538bbce5bc1a0deac458a8b8dd1b7b" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a1d12fc442933080ca6c939d42440cc60" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a20ff9915e8e84050a01bc585a6696b12" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae28df9f0db9f00bff29cd6aea77d8f81" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad0e65ecc822a0cd27a3464067ca6be85" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestOperandType</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a00a666cf41be46ccc5abf65efbbbf9cd" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>TestRangeOfOutputVariables</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1abb898750a0af12e4f2346998a7870202" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>time_divide_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac28e437cd2e78cb8be5c0140d511ad28" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>time_multiply_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6e1a9ac42d450cbbb0b00edeb2b56874" prot="protected" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>top</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a04a31731b9d9e2feb438357f571bc7d0" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>velo_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ae558022ad0c374adeab28caf30867b24" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>velo_key_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a351492d984d1c51089a440b7b58552de" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>VelocityAndVolumeFlux</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ab8545296d053c57974dd1a3763cf1c32" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>VelocityAndVolumeFlux</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ab258a1c62ea856c2b013b35d016962ba" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>VelocityAndVolumeFlux</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a7227a7661f676c34379b17d0201a4646" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>VELOFLUX_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1afb33188940a0999088fafe0f39248989" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>veloflux_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a4294d944249453f59d740c5dd8451dad" prot="public" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a165efa84bc262f7ae5a3d40667bbdba5" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1aff47c7e4d132ea2e3a0debf83ec2f2b1" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>VERTICAL_AXIS_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a067301e627accdff1d24390618368e55" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>with_gravity_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1ac540fe170b4bc510a279e2f8fbb5aab8" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>with_multiplier_</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a943482d5d283ad8901ae3f6388caf112" prot="private" virt="non-virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>WithLowerDimensionalElements</name></member>
+      <member refid="classcsmp_1_1_velocity_and_volume_flux_1a8d2461f909c1c818dd99fcc41588a211" prot="public" virt="virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>WriteOperands</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac8bb4ff902250b18d841cacccd0b5dee" prot="public" virt="virtual"><scope>csmp::VelocityAndVolumeFlux</scope><name>~MathOperatorLHS</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

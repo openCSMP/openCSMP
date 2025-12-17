@@ -1,0 +1,51 @@
+\doxysection{Linear\+Solver.\+h}
+\hypertarget{_linear_solver_8h_source}{}\label{_linear_solver_8h_source}\index{source/includes/integration/solver/LinearSolver.h@{source/includes/integration/solver/LinearSolver.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_LINEAR\_SOLVER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_LINEAR\_SOLVER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00005\ \textcolor{comment}{========================}}
+\DoxyCodeLine{00006\ \textcolor{comment}{Linear\ Solvers\ Interface}}
+\DoxyCodeLine{00007\ \textcolor{comment}{========================}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ define\ CSMP\_DEFAULT\_LINEAR\_SOLVER\ by\ the\ priority\ order}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{EigenSolver}\ \ \ \textcolor{comment}{//\ csmp::LUdcmp\_Solver}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{SolverSettings}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_eigen_solver_8h}{"{}EigenSolver.h"{}}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ LUdcmp\_Solver.h"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_MESCHACH}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{Gauss\_Solver}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{Gauss\_SolverSettings}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}Gauss\_Solver.h"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_DUNE\_ISTL}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DUNE\_VECTOR\_BLOCK\_FORMAT}\ \textcolor{preprocessor}{Dune}\textcolor{preprocessor}{::}\textcolor{preprocessor}{FieldVector}\textcolor{preprocessor}{<}\textcolor{preprocessor}{double}\textcolor{preprocessor}{,}1\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DUNE\_MATRIX\_BLOCK\_FORMAT}\ \textcolor{preprocessor}{Dune}\textcolor{preprocessor}{::}\textcolor{preprocessor}{FieldMatrix}\textcolor{preprocessor}{<}\textcolor{preprocessor}{double}\textcolor{preprocessor}{,}1\textcolor{preprocessor}{,}1\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DUNE\_VECTOR\_FORMAT}\ \textcolor{preprocessor}{Dune}\textcolor{preprocessor}{::}\textcolor{preprocessor}{BlockVector}\textcolor{preprocessor}{<}\ \textcolor{preprocessor}{DUNE\_VECTOR\_BLOCK\_FORMAT}\ \textcolor{preprocessor}{>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DUNE\_MATRIX\_FORMAT}\ \textcolor{preprocessor}{Dune}\textcolor{preprocessor}{::}\textcolor{preprocessor}{BCRSMatrix}\textcolor{preprocessor}{<}\ \textcolor{preprocessor}{DUNE\_MATRIX\_BLOCK\_FORMAT}\ \textcolor{preprocessor}{>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DUNE\_SOLVER\_INTERFACE}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{DuneISTL\_SEQ\_BCGS\_AMG\_SOR}\textcolor{preprocessor}{<}\ 3\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{DUNE\_MATRIX\_FORMAT}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{DUNE\_VECTOR\_FORMAT}\ \textcolor{preprocessor}{>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{DuneISTL\_Solver}\textcolor{preprocessor}{<}\ \textcolor{preprocessor}{DUNE\_MATRIX\_FORMAT}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{DUNE\_VECTOR\_FORMAT}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{DUNE\_VECTOR\_FORMAT}\textcolor{preprocessor}{,}\ \textcolor{preprocessor}{DUNE\_SOLVER\_INTERFACE}\ \textcolor{preprocessor}{>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{DuneISTL\_Settings}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}DuneISTL\_Solver.h"{}}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{CSMP\_WITH\_SAMG\_SOLVER}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{SAMG\_Solver}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_DEFAULT\_LINEAR\_SOLVER\_SETTINGS}\ \textcolor{preprocessor}{csmp}\textcolor{preprocessor}{::}\textcolor{preprocessor}{SAMG\_Settings}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}SAMG\_Solver.h"{}}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}SAMG\_Settings.h"{}}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

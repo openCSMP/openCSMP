@@ -1,0 +1,99 @@
+\doxysection{csmp\+::Finite\+Element\+Manager Class Reference}
+\hypertarget{classcsmp_1_1_finite_element_manager}{}\label{classcsmp_1_1_finite_element_manager}\index{csmp::FiniteElementManager@{csmp::FiniteElementManager}}
+
+
+Container storing instances of the finite element types used in any particular instance of the class \doxylink{classcsmp_1_1_model}{Model}.  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Element\+Manager.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Finite\+Element\+Manager\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{classcsmp_1_1_finite_element_manager__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_ab3038d671df8260ead2ea07d1a744853}\label{classcsmp_1_1_finite_element_manager_ab3038d671df8260ead2ea07d1a744853} 
+{\bfseries Finite\+Element\+Manager} (uint32\+\_\+t dimensions, uint32\+\_\+t interpolation\+\_\+order, bool isoparametric)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a1539f54f62edd8198eb24a85af489a14}\label{classcsmp_1_1_finite_element_manager_a1539f54f62edd8198eb24a85af489a14} 
+{\bfseries Finite\+Element\+Manager} (const \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}} \&mgr)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a65ad0f912701e655c7cc2fda5cdfd228}\label{classcsmp_1_1_finite_element_manager_a65ad0f912701e655c7cc2fda5cdfd228} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{Finite\+Element\+Manager}} \&mgr)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a5c25c45f0e271cca74aa08c06a80b33d}\label{classcsmp_1_1_finite_element_manager_a5c25c45f0e271cca74aa08c06a80b33d} 
+void {\bfseries Initialize\+Elements} (uint32\+\_\+t dim, uint32\+\_\+t interpolation\+\_\+order, bool isoparametric)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a8de2549104e0c990e578c38c7d682ec7}\label{classcsmp_1_1_finite_element_manager_a8de2549104e0c990e578c38c7d682ec7} 
+uint32\+\_\+t {\bfseries Dimensions} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a4ca5c280905ef2f123f199e63875f421}\label{classcsmp_1_1_finite_element_manager_a4ca5c280905ef2f123f199e63875f421} 
+bool {\bfseries Contains\+Element\+Type} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} etype) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a3baf945490660c426e50e699b4b76a22}\label{classcsmp_1_1_finite_element_manager_a3baf945490660c426e50e699b4b76a22} 
+void {\bfseries Current\+Element\+Types} (std\+::list$<$ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} $>$ \&etypes) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a160b6a69baec2f363c538f92c214ef24}\label{classcsmp_1_1_finite_element_manager_a160b6a69baec2f363c538f92c214ef24} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries E} (int8\+\_\+t csmp\+\_\+etype) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_ada8d1cd920dc4c7ebad9c3bfec0bf156}\label{classcsmp_1_1_finite_element_manager_ada8d1cd920dc4c7ebad9c3bfec0bf156} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries E} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+\_\+etype) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_ad9075f22dff522d2a212ebd41aee3722}\label{classcsmp_1_1_finite_element_manager_ad9075f22dff522d2a212ebd41aee3722} 
+uint32\+\_\+t {\bfseries Nodes\+Of\+Element\+Type} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} etype) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a564522a8d7e57de542db537ca43af938}\label{classcsmp_1_1_finite_element_manager_a564522a8d7e57de542db537ca43af938} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries Linear\+Bar\+Element} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_ab4f417bf8a8551a05403a5e527d7f220}\label{classcsmp_1_1_finite_element_manager_ab4f417bf8a8551a05403a5e527d7f220} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries Linear\+Triangle\+Element} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a9f508274b09c6010a1c3e4245cd79598}\label{classcsmp_1_1_finite_element_manager_a9f508274b09c6010a1c3e4245cd79598} 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \texorpdfstring{$\ast$}{*} {\bfseries Linear\+Tetrahedron\+Element} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_ad817f7cbba2788c9b780f1d800563bf9}\label{classcsmp_1_1_finite_element_manager_ad817f7cbba2788c9b780f1d800563bf9} 
+void {\bfseries Interpolation\+Order} (uint32\+\_\+t interpolation\+\_\+order)
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a76dd825224551f39a986ca579b27497f}\label{classcsmp_1_1_finite_element_manager_a76dd825224551f39a986ca579b27497f} 
+uint32\+\_\+t {\bfseries Interpolation\+Order} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a41b6a7056b7809e612acd01833e44ffe}\label{classcsmp_1_1_finite_element_manager_a41b6a7056b7809e612acd01833e44ffe} 
+bool {\bfseries Uses\+Elements\+With\+Local\+Coordinate\+System} () const
+\item 
+\Hypertarget{classcsmp_1_1_finite_element_manager_a0f16b26a2cc25831fc679d89e2ed2c50}\label{classcsmp_1_1_finite_element_manager_a0f16b26a2cc25831fc679d89e2ed2c50} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Container storing instances of the finite element types used in any particular instance of the class \doxylink{classcsmp_1_1_model}{Model}. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+Stephen G. Roberts 
+
+S. Geiger 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2001
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000012}{Todo}}]SKM\+: currently all the existing element types are hardwired into this class and must always be present. Make this dynamic, loading elements only on demand.\end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Finite\+Element\+Manager.\+h\item 
+source/modules/model/Finite\+Element\+Manager.\+cpp\end{DoxyCompactItemize}

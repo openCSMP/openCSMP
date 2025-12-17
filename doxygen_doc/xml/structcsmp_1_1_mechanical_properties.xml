@@ -1,0 +1,344 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_mechanical_properties" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::MechanicalProperties</compoundname>
+    <includes refid="_mechanical_properties_8h" local="no">MechanicalProperties.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a8d60095b812751fede002c973ebc9a86" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::E_</definition>
+        <argsstring></argsstring>
+        <name>E_</name>
+        <qualifiedname>csmp::MechanicalProperties::E_</qualifiedname>
+        <briefdescription>
+<para>Young&apos;s modulus. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="48" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="48" bodyend="-1"/>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a6ce7e084d293502c647530c81758c5d3" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::B_</definition>
+        <argsstring></argsstring>
+        <name>B_</name>
+        <qualifiedname>csmp::MechanicalProperties::B_</qualifiedname>
+        <briefdescription>
+<para>bulk modulus = compressibility of rock skeleton = K_dry </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="49" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="49" bodyend="-1"/>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1aa6b07b53f262a9a01f29fc93b84ca8f3" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::G_</definition>
+        <argsstring></argsstring>
+        <name>G_</name>
+        <qualifiedname>csmp::MechanicalProperties::G_</qualifiedname>
+        <briefdescription>
+<para>shear modulus = modulus of rigidity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="50" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="50" bodyend="-1"/>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a18979820fa9278cb7eac7706704e250f" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::alpha_</definition>
+        <argsstring></argsstring>
+        <name>alpha_</name>
+        <qualifiedname>csmp::MechanicalProperties::alpha_</qualifiedname>
+        <briefdescription>
+<para>Biot coefficient alpha = 1 - K_dry/K_grain. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="51" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="51" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" compoundref="_brittle_failure_8cpp" startline="116" endline="168">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a43985b8aa00f82d516409adbf189b5d9" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::TS_</definition>
+        <argsstring></argsstring>
+        <name>TS_</name>
+        <qualifiedname>csmp::MechanicalProperties::TS_</qualifiedname>
+        <briefdescription>
+<para>tensile strength </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="52" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="52" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1ae425db83e4bf557fdd129ed251988fbf" compoundref="_brittle_failure_8cpp" startline="47" endline="96">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" compoundref="_brittle_failure_8cpp" startline="116" endline="168">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a68734fb2b8efaf757ac9ffc1ed53d3f5" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::UCS_</definition>
+        <argsstring></argsstring>
+        <name>UCS_</name>
+        <qualifiedname>csmp::MechanicalProperties::UCS_</qualifiedname>
+        <briefdescription>
+<para>unconfined compressive strength </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="53" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="53" bodyend="-1"/>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a6dfd02a87a6d575b35affdc3066a5926" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::pstar_</definition>
+        <argsstring></argsstring>
+        <name>pstar_</name>
+        <qualifiedname>csmp::MechanicalProperties::pstar_</qualifiedname>
+        <briefdescription>
+<para>crushing pressure of the rock, see Fjaer et al. 08&apos;, p. 68 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="54" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="54" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1ae425db83e4bf557fdd129ed251988fbf" compoundref="_brittle_failure_8cpp" startline="47" endline="96">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" compoundref="_brittle_failure_8cpp" startline="116" endline="168">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a02466d663d4b98028e2dfe5e57694a4d" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::mu_</definition>
+        <argsstring></argsstring>
+        <name>mu_</name>
+        <qualifiedname>csmp::MechanicalProperties::mu_</qualifiedname>
+        <briefdescription>
+<para>friction coefficient </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="55" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="55" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1ae425db83e4bf557fdd129ed251988fbf" compoundref="_brittle_failure_8cpp" startline="47" endline="96">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" compoundref="_brittle_failure_8cpp" startline="116" endline="168">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a0e16ee565eb7917500eebf223c38597b" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::nu_</definition>
+        <argsstring></argsstring>
+        <name>nu_</name>
+        <qualifiedname>csmp::MechanicalProperties::nu_</qualifiedname>
+        <briefdescription>
+<para>Poisson&apos;s ratio. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="56" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="56" bodyend="-1"/>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_mechanical_properties_1a23f0425b75a0dc654b1a229abca80cbe" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::MechanicalProperties::C_</definition>
+        <argsstring></argsstring>
+        <name>C_</name>
+        <qualifiedname>csmp::MechanicalProperties::C_</qualifiedname>
+        <briefdescription>
+<para>cohesive strength = inherent shear strength </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="57" column="12" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="57" bodyend="-1"/>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1ae425db83e4bf557fdd129ed251988fbf" compoundref="_brittle_failure_8cpp" startline="47" endline="96">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" compoundref="_brittle_failure_8cpp" startline="116" endline="168">csmp::BrittleFailure::Evaluate</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" compoundref="_mechanical_properties_8cpp" startline="18" endline="30">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" compoundref="_mechanical_properties_8cpp" startline="35" endline="49">MechanicalProperties</referencedby>
+        <referencedby refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" compoundref="_mechanical_properties_8cpp" startline="54" endline="68">MechanicalProperties</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MechanicalProperties::MechanicalProperties</definition>
+        <argsstring>()</argsstring>
+        <name>MechanicalProperties</name>
+        <qualifiedname>csmp::MechanicalProperties::MechanicalProperties</qualifiedname>
+        <briefdescription>
+<para>granite properties as default </para>
+        </briefdescription>
+        <detaileddescription>
+<para>granite </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="39" column="4" bodyfile="source/modules/thmc/mechanics/MechanicalProperties.cpp" bodystart="18" bodyend="30"/>
+        <references refid="structcsmp_1_1_mechanical_properties_1a18979820fa9278cb7eac7706704e250f" compoundref="_mechanical_properties_8h" startline="51">alpha_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6ce7e084d293502c647530c81758c5d3" compoundref="_mechanical_properties_8h" startline="49">B_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a23f0425b75a0dc654b1a229abca80cbe" compoundref="_mechanical_properties_8h" startline="57">C_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a8d60095b812751fede002c973ebc9a86" compoundref="_mechanical_properties_8h" startline="48">E_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1aa6b07b53f262a9a01f29fc93b84ca8f3" compoundref="_mechanical_properties_8h" startline="50">G_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a02466d663d4b98028e2dfe5e57694a4d" compoundref="_mechanical_properties_8h" startline="55">mu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a0e16ee565eb7917500eebf223c38597b" compoundref="_mechanical_properties_8h" startline="56">nu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6dfd02a87a6d575b35affdc3066a5926" compoundref="_mechanical_properties_8h" startline="54">pstar_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a43985b8aa00f82d516409adbf189b5d9" compoundref="_mechanical_properties_8h" startline="52">TS_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a68734fb2b8efaf757ac9ffc1ed53d3f5" compoundref="_mechanical_properties_8h" startline="53">UCS_</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MechanicalProperties::MechanicalProperties</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;properties)</argsstring>
+        <name>MechanicalProperties</name>
+        <qualifiedname>csmp::MechanicalProperties::MechanicalProperties</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>properties</declname>
+        </param>
+        <briefdescription>
+<para>from property values supplied as a vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="42" column="13" bodyfile="source/modules/thmc/mechanics/MechanicalProperties.cpp" bodystart="35" bodyend="49"/>
+        <references refid="structcsmp_1_1_mechanical_properties_1a18979820fa9278cb7eac7706704e250f" compoundref="_mechanical_properties_8h" startline="51">alpha_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6ce7e084d293502c647530c81758c5d3" compoundref="_mechanical_properties_8h" startline="49">B_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a23f0425b75a0dc654b1a229abca80cbe" compoundref="_mechanical_properties_8h" startline="57">C_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a8d60095b812751fede002c973ebc9a86" compoundref="_mechanical_properties_8h" startline="48">E_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1aa6b07b53f262a9a01f29fc93b84ca8f3" compoundref="_mechanical_properties_8h" startline="50">G_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a02466d663d4b98028e2dfe5e57694a4d" compoundref="_mechanical_properties_8h" startline="55">mu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a0e16ee565eb7917500eebf223c38597b" compoundref="_mechanical_properties_8h" startline="56">nu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6dfd02a87a6d575b35affdc3066a5926" compoundref="_mechanical_properties_8h" startline="54">pstar_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a43985b8aa00f82d516409adbf189b5d9" compoundref="_mechanical_properties_8h" startline="52">TS_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a68734fb2b8efaf757ac9ffc1ed53d3f5" compoundref="_mechanical_properties_8h" startline="53">UCS_</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::MechanicalProperties::MechanicalProperties</definition>
+        <argsstring>(double E, double K, double nu, double tensile_strength, double fric_coeff)</argsstring>
+        <name>MechanicalProperties</name>
+        <qualifiedname>csmp::MechanicalProperties::MechanicalProperties</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>E</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>K</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>nu</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tensile_strength</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fric_coeff</declname>
+        </param>
+        <briefdescription>
+<para>partial initialisation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="45" column="4" bodyfile="source/modules/thmc/mechanics/MechanicalProperties.cpp" bodystart="54" bodyend="68"/>
+        <references refid="structcsmp_1_1_mechanical_properties_1a18979820fa9278cb7eac7706704e250f" compoundref="_mechanical_properties_8h" startline="51">alpha_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6ce7e084d293502c647530c81758c5d3" compoundref="_mechanical_properties_8h" startline="49">B_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a23f0425b75a0dc654b1a229abca80cbe" compoundref="_mechanical_properties_8h" startline="57">C_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a8d60095b812751fede002c973ebc9a86" compoundref="_mechanical_properties_8h" startline="48">E_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1aa6b07b53f262a9a01f29fc93b84ca8f3" compoundref="_mechanical_properties_8h" startline="50">G_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a02466d663d4b98028e2dfe5e57694a4d" compoundref="_mechanical_properties_8h" startline="55">mu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a0e16ee565eb7917500eebf223c38597b" compoundref="_mechanical_properties_8h" startline="56">nu_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a6dfd02a87a6d575b35affdc3066a5926" compoundref="_mechanical_properties_8h" startline="54">pstar_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a43985b8aa00f82d516409adbf189b5d9" compoundref="_mechanical_properties_8h" startline="52">TS_</references>
+        <references refid="structcsmp_1_1_mechanical_properties_1a68734fb2b8efaf757ac9ffc1ed53d3f5" compoundref="_mechanical_properties_8h" startline="53">UCS_</references>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_mechanical_properties_1a244d325364a2696fa47a4cf181dece31" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::MechanicalProperties::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::MechanicalProperties::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="62" column="9" bodyfile="source/modules/thmc/mechanics/MechanicalProperties.cpp" bodystart="102" bodyend="115"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Regional properties shared by multiple elements, but have variations that can be calculated knowing other local properties discretized on the elements.</para>
+<para><ref refid="classcsmp_1_1_example" kindref="compound">Example</ref>: Young&apos;s modulus can be calculated from the value stored here with corrections based on the deviation of the local porosity from that for which E was determined.</para>
+<para>Such calculations must be informed by petrophysical correlations and the results might have to be perturbed by some randon variable to reflect natural variations. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::MechanicalProperties</label>
+        <link refid="structcsmp_1_1_mechanical_properties"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/mechanics/MechanicalProperties.h" line="37" column="1" bodyfile="source/includes/thmc/mechanics/MechanicalProperties.h" bodystart="37" bodyend="63"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_mechanical_properties_1a18979820fa9278cb7eac7706704e250f" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>alpha_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a6ce7e084d293502c647530c81758c5d3" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>B_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a23f0425b75a0dc654b1a229abca80cbe" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>C_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a8d60095b812751fede002c973ebc9a86" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>E_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1aa6b07b53f262a9a01f29fc93b84ca8f3" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>G_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a2c51e4fa685aac81bc22ef81bbb68405" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>MechanicalProperties</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a7d527a166ec61ea5dfddae38221b9546" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>MechanicalProperties</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1ad83bcdbde0525000da56225c7131c7da" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>MechanicalProperties</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a02466d663d4b98028e2dfe5e57694a4d" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>mu_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a0e16ee565eb7917500eebf223c38597b" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>nu_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a244d325364a2696fa47a4cf181dece31" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>Out</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a6dfd02a87a6d575b35affdc3066a5926" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>pstar_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a43985b8aa00f82d516409adbf189b5d9" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>TS_</name></member>
+      <member refid="structcsmp_1_1_mechanical_properties_1a68734fb2b8efaf757ac9ffc1ed53d3f5" prot="public" virt="non-virtual"><scope>csmp::MechanicalProperties</scope><name>UCS_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

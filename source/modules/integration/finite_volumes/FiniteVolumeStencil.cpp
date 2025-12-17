@@ -7,35 +7,6 @@ using namespace std;
 namespace csmp { 
  
 
-/**
- 
- Parametrised constructor for the FiniteVolumeStencil class, setting up
- stencil for given CSMP type of the FE. 
-
-@param csp_finite_element_type is the @enum CSMP_FEM_TYPE
-
- const char* csp_finite_element_type - pointer to the character array of the FE type.  
-
-@section application Application 
-
- Standard as for any parametrised constructor. Method parameter should be CSP
- FE type.
-*/
-template<uint32_t dim>
-FiniteVolumeStencil<dim>::FiniteVolumeStencil( const char* csp_finite_element_type )
- : parent_element_("not initialized")
- {
-    Initialize( csp_finite_element_type );
- }
-
-
-
-
-template<uint32_t dim>
-FiniteVolumeStencil<dim>::~FiniteVolumeStencil()
- {
- }
-
 
 /**
  
@@ -51,27 +22,29 @@ FiniteVolumeStencil<dim>::~FiniteVolumeStencil()
 */
 template<uint32_t dim>
 FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& fvs )
- : edges_of_element(fvs.edges_of_element),
-   facets_surrounding_node(fvs.facets_surrounding_node),
-   facet_integration_points(fvs.facet_integration_points),
-   facet_integration_weights(fvs.facet_integration_weights),
-   facet_normals(fvs.facet_normals),
-   facet_parametric_normals(fvs.facet_parametric_normals),
-   facet_projection_weights(fvs.facet_projection_weights),
-   facet_normal_xforms(fvs.facet_normal_xforms),
-   sector_integration_points(fvs.sector_integration_points),
-   sector_integration_weights(fvs.sector_integration_weights),
-   parent_element_(fvs.parent_element_),
-   facet_edge_midpoints(fvs.facet_edge_midpoints),
-   barycenter(fvs.barycenter),
-   facet_points(fvs.facet_points),
-   facet_types(fvs.facet_types),
+ : facet_integration_weights_(fvs.facet_integration_weights_),
+   facet_projection_weights_(fvs.facet_projection_weights_),
+   facet_normals_(fvs.facet_normals_),
+   facet_parametric_normals_(fvs.facet_parametric_normals_),
+   facet_edge_midpoints_(fvs.facet_edge_midpoints_),
+   sector_integration_weights_(fvs.sector_integration_weights_),
+   facet_normal_xforms_(fvs.facet_normal_xforms_),
+   facet_points_(fvs.facet_points_),
+   facet_integration_points_(fvs.facet_integration_points_),
    sector_points_(fvs.sector_points_),
-   sector_edges_(fvs.sector_edges_),
+   sector_integration_points_(fvs.sector_integration_points_),
+   facets_surrounding_node_(fvs.facets_surrounding_node_),
+   edges_of_element_(fvs.edges_of_element_),
+   edges_of_sectors_(fvs.edges_of_sectors_),
+   facet_types_(fvs.facet_types_),
+   barycenter_(fvs.barycenter_),
+   parent_element_(fvs.parent_element_),
+   parent_element_type_(fvs.parent_element_type_),
    space_dimension_(fvs.space_dimension_)
 {
 }
- 
+
+
  
 /**
  
@@ -83,32 +56,35 @@ FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& f
 @section application Application 
 
  Standard as for any "equals" operator.
-*/ 
+*/
 template<uint32_t dim>
 FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolumeStencil<dim>& fvs )
  {
      if ( &fvs != this ) {
-          edges_of_element           = fvs.edges_of_element;
-          facets_surrounding_node    = fvs.facets_surrounding_node;   // [node][facet]
-          facet_integration_points   = fvs.facet_integration_points;  // [isrf][spts][dim]
-          facet_integration_weights  = fvs.facet_integration_weights; // [isrf][spts]
-          facet_normals              = fvs.facet_normals;             // [isrf][dim]
-          facet_projection_weights   = fvs.facet_projection_weights;
-          facet_normal_xforms        = fvs.facet_normal_xforms;       // [isrf][node]
-          facet_parametric_normals   = fvs.facet_parametric_normals;  // [isrf][dim]
-          sector_integration_points  = fvs.sector_integration_points;   // [ivol][vpts][dim]
-          sector_integration_weights = fvs.sector_integration_weights;  // [ivol][vpts]
-          parent_element_            = fvs.parent_element_;
-          facet_edge_midpoints       = fvs.facet_edge_midpoints;
-     	    barycenter                 = fvs.barycenter;
-    	    facet_points  		         = fvs.facet_points;
-    	    facet_types  		           = fvs.facet_types;
-    	    sector_points_             = fvs.sector_points_;
-     	    sector_edges_              = fvs.sector_edges_;
-          space_dimension_           = fvs.space_dimension_;
+          edges_of_element_           = fvs.edges_of_element_;
+          facets_surrounding_node_    = fvs.facets_surrounding_node_;   // [node][facet]
+          facet_integration_points_   = fvs.facet_integration_points_;  // [isrf][spts][dim]
+          facet_integration_weights_  = fvs.facet_integration_weights_; // [isrf][spts]
+          facet_projection_weights_   = fvs.facet_projection_weights_;
+          facet_normals_              = fvs.facet_normals_;             // [isrf][dim]
+          facet_normal_xforms_        = fvs.facet_normal_xforms_;       // [isrf][node]
+          facet_parametric_normals_   = fvs.facet_parametric_normals_;  // [isrf][dim]
+          sector_integration_points_  = fvs.sector_integration_points_;   // [ivol][vpts][dim]
+          sector_integration_weights_ = fvs.sector_integration_weights_;  // [ivol][vpts]
+          parent_element_             = fvs.parent_element_;
+          parent_element_type_        = fvs.parent_element_type_;
+          facet_edge_midpoints_       = fvs.facet_edge_midpoints_;
+     	    barycenter_                 = fvs.barycenter_;
+    	    facet_points_  		          = fvs.facet_points_;
+    	    facet_types_  		          = fvs.facet_types_;
+    	    sector_points_              = fvs.sector_points_;
+     	    edges_of_sectors_           = fvs.edges_of_sectors_;
+          space_dimension_            = fvs.space_dimension_;
        }
      return *this;
  }
+
+
 
 
 /**
@@ -133,558 +109,161 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
 @section messages Messages 
 */
 template<uint32_t dim>
-void FiniteVolumeStencil<dim>::Resize(  uint32_t n_isrf,
-                                        uint32_t srfs_per_node,
-                                        uint32_t n_ivol,
-                                        uint32_t n_spts,
-                                        uint32_t n_vpts
-                                     )
+void FiniteVolumeStencil<dim>::Resize( uint32_t n_isrf,
+                                       uint32_t srfs_per_node,
+                                       uint32_t n_ivol,
+                                       uint32_t n_spts,
+                                       uint32_t n_vpts )
  {
-    facet_integration_points.resize( n_isrf );
-    facet_integration_weights.resize( n_isrf );
-    facet_normals.resize( n_isrf );
-    facet_normal_xforms.resize( n_isrf );
-    facet_parametric_normals.resize( n_isrf );
-    facet_projection_weights.resize( n_isrf );    
-    facets_surrounding_node.resize( n_ivol ); // ivol = nodes
-    facet_edge_midpoints.resize( n_isrf );
-    facet_points.resize( n_isrf );
-    facet_types.resize( n_isrf );
-    edges_of_element.resize(n_isrf);
-
-    for ( uint32_t i{0U}; i<n_ivol; i++ )
-      facets_surrounding_node[i].resize( srfs_per_node );
-    
-    for ( uint32_t i{0U}; i<n_isrf; i++ ) {
-         facet_integration_points[i].resize( n_spts );
-         facet_projection_weights[i].resize( n_spts );
-         facet_integration_weights[i].resize( n_spts );
-         facet_normal_xforms[i].resize( n_ivol ); // ivol = nodes
-      } 
-    
-    sector_integration_points.resize( n_ivol );
-    sector_integration_weights.resize( n_ivol );
-    //par_sector_integration_points.resize( n_ivol );
-
-    for ( uint32_t i{0U}; i<n_ivol; i++ ) {
-         sector_integration_points[i].resize( n_vpts );
-         //par_sector_integration_points[i].resize( n_vpts );
-           //par_sector_integration_points[i][j].resize(pdim);
-         sector_integration_weights[i].resize(n_vpts);
-      }
+#ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
+    sector_integration_points_.resize( n_ivol, n_vpts, dim );
+    sector_integration_weights_.resize( n_ivol, n_vpts );      // [isrf][spts]
+    sector_points_.resize( n_ivol );
+    facet_integration_points_.resize( n_isrf, n_spts, dim );
+    facet_integration_weights_.resize( n_isrf, n_spts );
+    facet_normal_xforms_.resize( n_isrf );                    // [isrf][node][2] (was pair)
+    facet_projection_weights_.resize( n_isrf, n_spts );       // [isrf][spts]
+    facets_surrounding_node_.resize( n_ivol );                // [node][facet], ivol = nodes
+    facet_points_.resize( n_isrf );
+#else
+    sector_integration_points_.resize( n_ivol, dim );
+    sector_integration_weights_.resize( n_ivol );      // [isrf][spts]
+    sector_points_.resize( n_ivol );
+    facet_integration_points_.resize( n_isrf, dim );
+    facet_integration_weights_.resize( n_isrf );
+    facet_normal_xforms_.resize( n_isrf );        // [isrf][node][2] (was pair)
+    facet_projection_weights_.resize( n_isrf );       // [isrf]
+    facets_surrounding_node_.resize( n_ivol ); // [node][facet], ivol = nodes
+    facet_points_.resize( n_isrf );
+#endif
+    facet_normals_.resize( n_isrf, dim );
+    facet_parametric_normals_.resize(  n_isrf, dim );
+    facet_edge_midpoints_.resize( n_isrf, dim );
+    facet_types_.resize( n_isrf );
+    edges_of_element_.resize( n_isrf, 2u ); // 2 edges per surface (formerly pair)
 
  } // end Resize
 
 
 
 /**
-    Irrespective of the dimension of the model,
-    this method reports whether the stencil corresponds to a line, surface or volumetric
-    finite element.
-*/
-template<uint32_t dim>
-CELL_SHAPE  FiniteVolumeStencil<dim>::Geometry() const
- {
-    return space_dimension_;
- }
-
-
-
-/**
-
-Returns the number of internal facets - division walls inside the FE.
-
-@return Returns the number of the internal facets.
-
-@section implementation Implementation
-
-Accesses the private data of the class, retreiving the value.
-*/
-template<uint32_t dim>
-uint32_t  FiniteVolumeStencil<dim>::Facets() const
- {
-    return static_cast<uint32_t>(edges_of_element.size());
- }
  
- 
- 
-/**
+ Parametrised constructor for the FiniteVolumeStencil class, setting up
+ stencil for given CSMP type of the FE. 
 
-Returns number of facets, opposite to the given node - this corresponds to
-the number of facets, adding flux to the given node.
+@param csp_finite_element_type is the @enum CSMP_FEM_TYPE
 
-@return the number of the facets in front of the node of given element type.
+ const char* csp_finite_element_type - pointer to the character array of the FE type.  
 
-@section implementation Implementation
+@section application Application 
 
-Accesses the private data of the class, retrieving the value.
+ Standard as for any parametrised constructor. Method parameter should be CSP
+ FE type.
 */
 template<uint32_t dim>
-uint32_t  FiniteVolumeStencil<dim>::FacetsPerSector( uint32_t iSector ) const
+FiniteVolumeStencil<dim>::FiniteVolumeStencil( const char* csp_finite_element_type )
+ : parent_element_("not initialized"), parent_element_type_(UNKNOWN)
  {
-    assert( iSector < facets_surrounding_node.size() );
-
-    return static_cast<uint32_t>(facets_surrounding_node[iSector].size());
+    Initialize( csp_finite_element_type );
  }
 
 
 
+
 /**
-
-Returns number of internal FV sectors, given FE is divided to.
-
-@return the number of sectors.
-
-@section implementation Implementation
-
-Accesses the private data of the class, retreiving the value.
+Temporary storage used to convert vectors of vectors to the dynamic array based storage
 */
 template<uint32_t dim>
-uint32_t  FiniteVolumeStencil<dim>::Sectors() const
- {
-    // since this is a vector of vectors of points per sector
-    return static_cast<uint32_t>(sector_integration_points.size());
- }
-
-
+struct TempVecs {
+    std::vector<std::vector<Point<dim> > >      facet_integration_points;     ///< [isrf][spts][dim]
+    std::vector<std::vector<double> >           facet_integration_weights;    ///< [isrf][spts]
+    std::vector<Point<dim> >                    facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
+    std::vector<std::vector<std::pair<double,double>>> facet_normal_xforms; ///< [isrf][node]
+    std::vector<Point<dim> >                    facet_parametric_normals;     ///< [isrf][dim] //[node*3][dim] -3d
+    std::vector<std::vector<double> >           facet_projection_weights;     ///< [isrf][spts]
+    std::vector<std::vector<uint32_t> >         facets_surrounding_node;      ///< [node][facet]
+    std::vector<Point<dim> >                    facet_edge_midpoints;
+    std::vector<std::vector<Point<dim> > >      facet_points;
+    std::vector<FV_FACET_TYPE>                  facet_types;                  ///< [isrf]
+    std::vector<std::pair<uint32_t,uint32_t> >  edges_of_element;             ///< = facets
+    std::vector<std::vector<Point<dim> > >      sector_integration_points;    ///< [ivol][vpts][dim]
+    std::vector<std::vector<double> >           sector_integration_weights;   ///< [ivol][vpts]
+    std::vector<std::vector<Point<dim> > >      sector_points;
+    std::vector<std::vector<std::pair<uint32_t,uint32_t> > >  sector_edges;
+};
 
 /**
+ 
+@brief The method is setting up dynamic storage vectors for integration points and weights.
 
-Returns number of integration points per facet.
-
-@return the number of integration points per facet.
-
+ uint32_t n_isrf          - number of internal facets inside FE;
+ uint32_t srfs_per_node   - number of internal facets in front of the node;
+ uint32_t n_ivol          - number of internal sectors inside FE;
+ uint32_t n_spts          - number of integration points per facet;
+ uint32_t n_vpts          - number of integration points per sector;
+ 
 @section implementation Implementation 
 
-Accesses the private data of the class, retreiving the value.
-For current implementation this value is 1.
+ The method is setting up dynamic storage vectors for the tabulated points, 
+ associated with the sectors.
 
+@section application Application 
+
+ Can be used at the stencil initialization procedure.
+
+@section messages Messages 
 */
 template<uint32_t dim>
-uint32_t  FiniteVolumeStencil<dim>::IntegrationPointsPerFacet( uint32_t iFacet ) const
+void FiniteVolumeStencil<dim>::ResizeTemporaryVectors( TempVecs<dim>& tvecs,
+                                                       uint32_t n_isrf,
+                                                       uint32_t srfs_per_node,
+                                                       uint32_t n_ivol,
+                                                       uint32_t n_spts,
+                                                       uint32_t n_vpts )
  {
-    assert( iFacet < facet_integration_weights.size() );
-
-    // assuming that each facet has the same number of ip's
-    return static_cast<uint32_t>(facet_integration_weights[iFacet].size());
- }
-
-
-
-/**
-
-Returns number of integration points per sectortric sector of given FE
-type.
-
-@return the number of integration points per volumetric sector.
-
-@section implementation Implementation
-
-Accesses the private data of the class, retreiving the value.
-For current implementation this value is 1.
-*/
-template<uint32_t dim>
-uint32_t  FiniteVolumeStencil<dim>::IntegrationPointsPerSector( uint32_t iSector ) const
- {
-    assert( iSector < sector_integration_weights.size() );
-
-    return static_cast<uint32_t>(sector_integration_weights[iSector].size());
- }
-
-
-
-
-/**
-
-Returns to argument rst the reference to STL vector of the parametric coordinates
-of the given facet integration point.
-
-@param iFacet index (No) of the internal facet isnside the FE
-@param ip index (No) of the integration point on the facet
-
-@return reference to STL vector of the parametric coordinates 
-of the given facet integration point
-
-@section implementation Implementation
-
-Accesses the private data of the tabulated points, associated with the facet.
-
-@section application  Application
-
-For current implementation index ip is constrained to 0 only, i.e. the
-FVPEM method is working with 1 facet integration point only.
-*/
-template<uint32_t dim>
-const Point<dim>&  FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
-                                                                    uint32_t ip ) const
- {
-    assert( iFacet < Facets() );
-    assert( ip < IntegrationPointsPerFacet(iFacet) );
-    return facet_integration_points[iFacet][ip];
- }
-
-
-
-template<uint32_t dim>
-void FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
-                                                      uint32_t ip,
-                                                      vector<double>& rst ) const
- {
-    assert( iFacet < Facets() );
-    assert( ip < IntegrationPointsPerFacet(iFacet) );
-    rst = facet_integration_points[iFacet][ip].Coordinates();
- }
-
-
-
-// SKM addon
-template<uint32_t dim>
-double FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
-                                                        uint32_t ip,
-                                                         uint32_t rst ) const
- {
-    assert( iFacet < Facets() );
-    assert( ip < IntegrationPointsPerFacet(iFacet) );
-
-    return facet_integration_points[iFacet][ip][rst];
- }
-
-
-
-/**
-
-Defines FE edge, associated with that facet of interest. For a given
-facet method returns local indices of the FE start node and 
-the end node. The end node is the one on the side of the facet into
-which the outward pointing normal points.  
-
-@param iFacet index of the internal dividing facet in the FE.
-@param estart local index of the FE edge start  node
-@param eend   local index of the FE edge end node
-
-@section implementation Implementation
-
-Accesses the private pair of nodes, associated with the facet.
-*/
-template<uint32_t dim>
-void FiniteVolumeStencil<dim>::FacetEdgeNodes( uint32_t iFacet,
-                                               uint32_t& estart,
-                                               uint32_t& eend ) const
-{
-    assert( iFacet < Facets() );
-
-    estart=edges_of_element[iFacet].first;
-    eend= edges_of_element[iFacet].second;
-}
-
-
-template<uint32_t dim>
-uint32_t FiniteVolumeStencil<dim>::InsideNode( uint32_t iFacet ) const
-{
-    assert( iFacet < Facets() );
-
-    return edges_of_element[iFacet].first;
-}
-
-
-template<uint32_t dim>
-uint32_t FiniteVolumeStencil<dim>::OutsideNode( uint32_t iFacet ) const
-{
-    assert( iFacet < Facets() );
-
-    return edges_of_element[iFacet].second;
-}
-
-
-
-/**
-
-Returns to argument rst the reference to STL vector of the parametric coordinates
-of the given sector integration point, associated with given sector "volume".
-
-@param iSector number of the internal sector isnside the FE
-@param ip index (No) of the integration point on the facet
-
-@return reference to STL vector of the parametric coordinates
-of the given facet integration point
-
-@section implementation Implementation
-
-Accesses the private data of the tabulated points, associated with the sector.
-
-@section application Application
-
-For current implementation index ip is constrained to 0 only, i.e. the
-FVPEM method is working with 1 facet integration point only.
-*/
-template<uint32_t dim>
-const Point<dim>&  FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
-                                                                     uint32_t ip ) const
-{
-    assert( iSector < Sectors() );
-    assert( ip < IntegrationPointsPerSector(iSector) );
-
-    return sector_integration_points[iSector][ip];
- }
-
-
-template<uint32_t dim>
-void FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
-                                                       uint32_t ip,
-                                                       vector<double>& rst ) const
-{
-    assert( iSector < Sectors() );
-    assert( ip < IntegrationPointsPerSector(iSector) );
-
-    rst = sector_integration_points[iSector][ip].Coordinates();
- }
-
-
-
-template<uint32_t dim>
-double FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
-                                                         uint32_t ip,
-                                                         uint32_t rst ) const
-{
-    assert( iSector < Sectors() );
-    assert( ip < IntegrationPointsPerSector(iSector) );
-
-    return sector_integration_points[iSector][ip][rst];
- }
-
-
-/**
-
-Returns for the given facet integration point integration weight,
-associated with given facet "facet".
-
-@param iFacet index (No) of the internal facet  isnside the FE
-@param ip index (No) of the integration point on the facet
-
-@return the value of the facet integration weight.
-
-@section implementation Implementation
-
-Accesses the private data of the tabulated points, associated with the facet.
-
-@section application Application
-
-For current implementation index ip is constrained to 0 only, i.e. the
-FVPEM method is working with 1 facet integration point only.
-*/    
-template<uint32_t dim>
-double FiniteVolumeStencil<dim>::FacetIntegrationWeight( uint32_t iFacet,
-                                                         uint32_t ip ) const
- {
-    assert( iFacet < Facets() );
-    assert( ip < IntegrationPointsPerFacet(iFacet) );
-
-    return facet_integration_weights[iFacet][ip];
- }
-
-
-/**
-
-Returns for the given sector integration point projection weight,
-associated with given facet "facet". Projection weight is an extra multiplier,
-which is bringing to the same scale the size of the unit parametric
-spaces of different element types.
-
-@param iFacet index (No) of the internal facet  isnside the FE
-@param ip index (No) of the integration point on the facet
-
-@return the value of the facet projection weight.
-
-@section implementation Implementation
-
-Accesses the private data of the tabulated points, associated with the facet.
-
-@section application Application
-
-For current implementation index ip is constrained to 0 only, i.e. the
-FVPEM method is working with 1 facet integration point only.
-*/
- 
-template<uint32_t dim>
-double FiniteVolumeStencil<dim>::FacetProjectionWeight( uint32_t iFacet, uint32_t ip ) const
- {
-    assert( iFacet < Facets() );
-    assert( ip < IntegrationPointsPerFacet(iFacet) );
+    assert( n_spts == 1U ); // change projection_weights, facet_integration_weights & volume_integration_weights into 2D arrays if
+    assert( n_vpts == 1U ); // there are more than 1 integration points per facet and sector
+    tvecs.facet_integration_points.resize( n_isrf );
+    tvecs.facet_integration_weights.resize( n_isrf );
+    tvecs.facet_normals.resize( n_isrf );
+    tvecs.facet_normal_xforms.resize( n_isrf );
+    tvecs.facet_parametric_normals.resize( n_isrf );
+    tvecs.facet_projection_weights.resize( n_isrf );
+    tvecs.facets_surrounding_node.resize( n_ivol ); // ivol = nodes
+    tvecs.sector_edges.resize( n_ivol ); // ivol = nodes
+    tvecs.facet_edge_midpoints.resize( n_isrf );
+    tvecs.facet_points.resize( n_isrf );
+    tvecs.facet_types.resize( n_isrf );
+    tvecs.edges_of_element.resize(n_isrf);
+
+    for ( uint32_t i{0U}; i<n_ivol; i++ ) {
+         tvecs.facets_surrounding_node[i].resize( srfs_per_node );
+         tvecs.sector_edges[i].resize( srfs_per_node ); // no further resize, since vec[vec[pairs]]]
+      }
     
-    return facet_projection_weights[iFacet][ip];
- } 
-
-
-
-/**
-
-Returns for the given sector integration point integration weight,
-associated with given sector "volume".
-
-@param iSector corresponding to the finite element node with the same number
-@param ip represents the n-th integration point on the facet
-
-@return the value of the sector integration weight=volume in parametric space.
-
-@section implementation Implementation
-
-Accesses the private data of the tabulated points, associated with the sector.
-
-@section application Application
-
-For current implementation index ip is constrained to 0 only, i.e. the
-FVPEM method is working with 1 facet integration point only.
-*/
-template<uint32_t dim>
-double FiniteVolumeStencil<dim>::SectorIntegrationWeight( uint32_t iSector, uint32_t ip ) const
- {
-    assert( iSector < Sectors() );
-    assert( ip < IntegrationPointsPerSector(iSector) );
-
-    return sector_integration_weights[iSector][ip];
- }
- 
- 
- 
-  // overloaded method, returns specific index of a facet 
-template<uint32_t dim>
-uint32_t  FiniteVolumeStencil<dim>::FacetSurroundingSector( uint32_t iSector, uint32_t n ) const
- {
-    assert( iSector < Sectors() );
-    assert( n < FacetsPerSector(iSector) );
-
-    return facets_surrounding_node[iSector][n];
- }
-
- 
- 
-
- 
-
-
-
-
-
-/**
-
-Returns the normal vector in parametric space of the FE.
- 
-@param iFacet is the number 0..n-1 of the internal facet inside of the FE
-
-@return to argument "nrml" reference to STL vector of the normal vector
- coordinates in parametric space of the FE. 
-
-@section implementation Implementation
- 
-Accesses the private data of the class, retreiving tabulated vector.
-*/ 
-template<uint32_t dim>
-const Point<dim>& FiniteVolumeStencil<dim>::UnitParametricNormalTo( uint32_t iFacet ) const
-{
-    assert( iFacet < edges_of_element.size() );
-
-    return facet_parametric_normals[iFacet];
-}
-
-
-template<uint32_t dim>
-double FiniteVolumeStencil<dim>::UnitParametricNormalComponent( uint32_t iFacet,
-                                                                uint32_t x_or_y_or_z ) const
-{
-    assert( iFacet < edges_of_element.size() );
-
-   return facet_parametric_normals[iFacet][x_or_y_or_z];
-} 
-
-
-/**
-
-Returns the component of the transformation from nodes to normals in physical space.
- 
-@param iFacet is the number 0..n-1 of the internal facet inside of the FE
-
-@param iNode is the number 0..n-1 of the FE node
-
-@return a pair of weights, one for each tangent vector
-
-@section implementation Implementation
-
-Accesses the private data of the class, retreiving tabulated vector.
-
-*/
-
-template<uint32_t dim>
-std::pair<double,double>
-FiniteVolumeStencil<dim>::FacetNormalTransformationNodeWeights( uint32_t iFacet, uint32_t iNode ) const
-{
-    assert( iFacet < facet_normal_xforms.size() );
-    assert( iNode < facet_normal_xforms[iFacet].size() );
-    return facet_normal_xforms[iFacet][iNode];
-}
-
-
-template<uint32_t dim>
-const Point<dim>& FiniteVolumeStencil<dim>::FacetEdgeMidPoint( uint32_t iFacet ) const
-{
-    assert( iFacet < edges_of_element.size() );
-
-	return facet_edge_midpoints[iFacet];
-}
-
-template<uint32_t dim>
-const Point<dim>& FiniteVolumeStencil<dim>::Barycenter() const
-{
-	 return barycenter;
-}
-
-
-template<uint32_t dim>
-const Point<dim>&  FiniteVolumeStencil<dim>::FacetPoint( uint32_t iFacet, uint32_t iPoint ) const
-{
-	 return facet_points[iFacet][iPoint];
-}
-
-
-template<uint32_t dim>
-FV_FACET_TYPE  FiniteVolumeStencil<dim>::FacetType( uint32_t iFacet ) const
-{
-     assert( iFacet < facet_types.size() );
-
-	 return facet_types[iFacet];
-}
-
+    for ( uint32_t i{0U}; i<n_isrf; i++ ) {
+         tvecs.facet_integration_points[i].resize( n_spts );
+         tvecs.facet_projection_weights[i].resize( n_spts );
+         tvecs.facet_integration_weights[i].resize( n_spts );
+         tvecs.facet_points[i].resize( n_spts );
+         tvecs.facet_normal_xforms[i].resize( n_ivol ); // ivol = nodes
+      }
     
-    
-template<uint32_t dim>
-const csmp::Point<dim>&  FiniteVolumeStencil<dim>::SectorPoint( uint32_t iSector, uint32_t iPoint ) const
-{
-	 return sector_points_[iSector][iPoint];
-}
-  
-template<uint32_t dim>
-std::pair<csmp::Point<dim>,csmp::Point<dim> >  FiniteVolumeStencil<dim>::SectorEdgePoints( uint32_t iSector, uint32_t iEdge ) const
-{
-   const uint32_t pt1(sector_edges_[iSector][iEdge].first);
-   const uint32_t pt2(sector_edges_[iSector][iEdge].second);
-   
-	 return make_pair( sector_points_[iSector][pt1], sector_points_[iSector][pt2] );
-}       
+    tvecs.sector_integration_points.resize( n_ivol );
+    tvecs.sector_integration_weights.resize( n_ivol );
+    //par_sector_integration_points.resize( n_ivol );
 
-template<uint32_t dim>
-const std::pair<uint32_t,uint32_t>&  FiniteVolumeStencil<dim>::SectorEdge( uint32_t iSector, uint32_t iEdge ) const
-{
-	 return sector_edges_[iSector][iEdge];
-}       
-    
-template<uint32_t dim>
-uint32_t FiniteVolumeStencil<dim>::SectorPoints( uint32_t iSector ) const
-{ return static_cast<uint32_t>(sector_points_[iSector].size()); }
+    for ( uint32_t i{0U}; i<n_ivol; i++ ) {
+         tvecs.sector_integration_points[i].resize( n_vpts );
+         //par_sector_integration_points[i].resize( n_vpts );
+           //par_sector_integration_points[i][j].resize(pdim);
+         tvecs.sector_integration_weights[i].resize(n_vpts);
+      }
+      
+    tvecs.sector_points.resize(n_ivol);
 
-template<uint32_t dim>
-uint32_t FiniteVolumeStencil<dim>::SectorEdges( uint32_t iSector ) const
-{ return static_cast<uint32_t>(sector_edges_[iSector].size()); }
-    
-  
+ } // end ResizeTemporaryVectors
+
 
 
 
@@ -727,256 +306,149 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
    uint32_t NumOfIPperVolume=1U;
    uint32_t NumOfIPperFacet=1U;
    
-   if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_BAR) ) {
+   TempVecs<dim> temp_vecs;
+   
+   if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_BAR) )
+     {
+          parent_element_      = "ISOPARAMETRIC_LINEAR_BAR";
+          parent_element_type_ = ISOPARAMETRIC_LINEAR_BAR;
+          space_dimension_     = LINE;
 
           NumOfInternalFacets=1U;
           NumOfInternalFacetsPerNode=1U;
           NumOfInternalVolumes=2U;
 
-          Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
-                 NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
-
           FV_IntegrationPointsAndWeights<dim> FV(ISOPARAMETRIC_LINEAR_BAR);
-             
-          FV.SectorIntegrationWeights(sector_integration_weights); 
 
-          FV.SectorIntegrationPoints(sector_integration_points);
-             
-          FV.FacetIntegrationWeights(facet_integration_weights); 
-             
-          FV.FacetIntegrationPoints(facet_integration_points);
-             
-          FV.FacetNormals(facet_parametric_normals);
+          // containers in FV_IntegrationPointsAndWeights
+          ResizeTemporaryVectors( temp_vecs, NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
+          // local ones
+          Resize( NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
 
-          FV.FacetNormalTransformations(facet_normal_xforms);
+          InitializeDataMembers( temp_vecs, FV );
 
-          FV.FacetsSurroundingNode(facets_surrounding_node);
-             
-          FV.EdgePairs(edges_of_element);
-
-		      FV.EdgeMidpoints(facet_edge_midpoints);
-		  
-		      FV.Barycenter(barycenter);
-    
-    	    FV.FacetPoints(facet_points);
-    	      	  
-    	    FV.FacetTypes(facet_types);
-    	      	  
-    	    FV.SectorPoints(sector_points_);
-    	    
-     	    FV.SectorEdgePairs(sector_edges_);
-     
-          space_dimension_ = LINE;
-
-          if(debug) {
-             cout<<"\nISOPARAMETRIC_LINEAR_BAR:" <<endl;
-             Out();         
-           }
-           
-          parent_element_ = "ISOPARAMETRIC_LINEAR_BAR";
+          if (debug) {
+               cout<<"\nISOPARAMETRIC_LINEAR_BAR:" <<endl;
+               Out();
+             }
           return;
       }
+      
    if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_TRIANGLE) ) {
 
+          parent_element_ = "ISOPARAMETRIC_LINEAR_TRIANGLE";
+          parent_element_type_ = ISOPARAMETRIC_LINEAR_TRIANGLE;
+          space_dimension_ = SURFACE;
+     
           NumOfInternalFacets=3U;
           NumOfInternalFacetsPerNode=2U;
           NumOfInternalVolumes=3U;
 
-          Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
-                 NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
-
           FV_IntegrationPointsAndWeights<dim> FV(ISOPARAMETRIC_LINEAR_TRIANGLE);
+
+          ResizeTemporaryVectors( temp_vecs, NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
+
+          Resize( NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
+
+          InitializeDataMembers( temp_vecs, FV );
              
-          FV.SectorIntegrationWeights(sector_integration_weights); 
-
-          FV.SectorIntegrationPoints(sector_integration_points);
-             
-          FV.FacetIntegrationWeights(facet_integration_weights); 
-             
-          FV.FacetIntegrationPoints(facet_integration_points);
-             
-          FV.FacetNormals(facet_parametric_normals);
-
-          FV.FacetNormalTransformations(facet_normal_xforms);
-
-          FV.FacetsSurroundingNode(facets_surrounding_node);
-             
-          FV.EdgePairs(edges_of_element);
-
-          FV.EdgeMidpoints(facet_edge_midpoints);
-		  
-          FV.Barycenter(barycenter);
-
-          FV.FacetPoints(facet_points);
-       
-          FV.FacetTypes(facet_types);
-
-    	    FV.SectorPoints(sector_points_);
-    	    
-     	    FV.SectorEdgePairs(sector_edges_); 
-    	  
-          space_dimension_ = SURFACE;
-     
-          if(debug) {
-              cout<<"\nISOPARAMETRIC_LINEAR_TRIANGLE:" <<endl;
-              Out();         
-          }
-           
-          parent_element_ = "ISOPARAMETRIC_LINEAR_TRIANGLE";
+          if (debug) {
+                cout<<"\nISOPARAMETRIC_LINEAR_TRIANGLE:" <<endl;
+                Out();
+            }
           return;
       }
+      
     if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_TETRAHEDRON) ) {
+
+         parent_element_ = "ISOPARAMETRIC_LINEAR_TETRAHEDRON";
+         parent_element_type_ = ISOPARAMETRIC_LINEAR_TETRAHEDRON;
+         space_dimension_ = VOLUME;
 
          NumOfInternalFacets=6U;
          NumOfInternalFacetsPerNode=3U;
          NumOfInternalVolumes=4U;
 
-         Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
-                 NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
-
          FV_IntegrationPointsAndWeights<dim> FVT(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-         
-             FVT.SectorIntegrationWeights(sector_integration_weights); 
 
-             FVT.SectorIntegrationPoints(sector_integration_points);
-             
-             FVT.FacetIntegrationWeights(facet_integration_weights); 
-             
-             FVT.FacetIntegrationPoints(facet_integration_points);
-             
-             FVT.FacetNormals(facet_parametric_normals);
+         ResizeTemporaryVectors( temp_vecs, NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                                 NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
 
-             FVT.FacetNormalTransformations(facet_normal_xforms);
+          Resize( NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
 
-             FVT.FacetsSurroundingNode(facets_surrounding_node);
+         InitializeDataMembers( temp_vecs, FVT );
              
-             FVT.EdgePairs(edges_of_element);
-             
-             FVT.ProjectionWeights(facet_projection_weights);
-             
-     		     FVT.EdgeMidpoints(facet_edge_midpoints);
-		  
-             FVT.Barycenter(barycenter);
-             
-             FVT.FacetPoints(facet_points);
-             
-             FVT.FacetTypes(facet_types);
-             
-    	       FVT.SectorPoints(sector_points_);
-    	    
-        	   FVT.SectorEdgePairs(sector_edges_); 
-             
-             space_dimension_ = VOLUME;
-
-             if(debug) {
+         if (debug) {
                 cout<<"\nISOPARAMETRIC_LINEAR_TETRAHEDRON: "<<endl;
                 Out();         
              }
-       parent_element_ = "ISOPARAMETRIC_LINEAR_TETRAHEDRON";
-       return;
+          return;
      }
+     
     if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_QUADRILATERAL) ) {
 
-         NumOfInternalFacets=4U;
-         NumOfInternalFacetsPerNode=2U;
-         NumOfInternalVolumes=4U; // == VolMultipliers
+          parent_element_      = "ISOPARAMETRIC_LINEAR_QUADRILATERAL";
+          parent_element_type_ = ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          space_dimension_     = SURFACE;
 
-         Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
-                 NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
-                 
+          NumOfInternalFacets=4U;
+          NumOfInternalFacetsPerNode=2U;
+          NumOfInternalVolumes=4U; // == VolMultipliers
+
           FV_IntegrationPointsAndWeights<dim> FVQ(ISOPARAMETRIC_LINEAR_QUADRILATERAL);
-          
-          FVQ.SectorIntegrationWeights(sector_integration_weights); 
 
-          FVQ.SectorIntegrationPoints(sector_integration_points);
-         
-          FVQ.FacetIntegrationWeights(facet_integration_weights); 
-             
-          FVQ.FacetIntegrationPoints(facet_integration_points);
-             
-          FVQ.FacetNormals(facet_parametric_normals);
+          ResizeTemporaryVectors( temp_vecs, NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
+                 
+          Resize( NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
 
-          FVQ.FacetNormalTransformations(facet_normal_xforms);
+          InitializeDataMembers( temp_vecs, FVQ );
 
-          FVQ.FacetsSurroundingNode(facets_surrounding_node);
-            
-          FVQ.EdgePairs(edges_of_element);
-
-		      FVQ.EdgeMidpoints(facet_edge_midpoints);
-		  
-		      FVQ.Barycenter(barycenter);
-
-          FVQ.FacetPoints(facet_points);
-
-          FVQ.FacetTypes(facet_types);
-
-    	    FVQ.SectorPoints(sector_points_);
-    	    
-     	    FVQ.SectorEdgePairs(sector_edges_); 
-
-          space_dimension_ = SURFACE;
-
-          if(debug) {
-              cout<<"\nISOPARAMETRIC_LINEAR_QUADRILATERAL:"<<endl;
-              Out();         
-           }
-
-         parent_element_ = "ISOPARAMETRIC_LINEAR_QUADRILATERAL";
-         return;
-        
+          if (debug) {
+                cout<<"\nISOPARAMETRIC_LINEAR_QUADRILATERAL:"<<endl;
+                Out();
+             }
+          return;
       }
+      
     if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_HEXAHEDRON) ) {
+
+          parent_element_      = "ISOPARAMETRIC_LINEAR_HEXAHEDRON";
+          parent_element_type_ = ISOPARAMETRIC_LINEAR_HEXAHEDRON;
+          space_dimension_     = VOLUME;
 
           NumOfInternalFacets=12U;
           NumOfInternalFacetsPerNode=3U;
           NumOfInternalVolumes=8U;
 
-          Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
-                 NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
-                 
           FV_IntegrationPointsAndWeights<dim> FVH(ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-         
-          FVH.SectorIntegrationWeights(sector_integration_weights); 
 
-          FVH.SectorIntegrationPoints(sector_integration_points);
-             
-          FVH.FacetIntegrationWeights(facet_integration_weights); 
-             
-          FVH.FacetIntegrationPoints(facet_integration_points);
-             
-          FVH.FacetNormals(facet_parametric_normals);
+          ResizeTemporaryVectors( temp_vecs, NumOfInternalFacets, NumOfInternalFacetsPerNode, 
+                                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
+                 
+          Resize( NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
 
-          FVH.FacetNormalTransformations(facet_normal_xforms);
-             
-          FVH.FacetsSurroundingNode(facets_surrounding_node);
+          InitializeDataMembers( temp_vecs, FVH );
 
-          FVH.EdgePairs(edges_of_element);
-          
-          FVH.ProjectionWeights(facet_projection_weights);
-
-		      FVH.EdgeMidpoints(facet_edge_midpoints);
-		  
-		      FVH.Barycenter(barycenter);
-          
-          FVH.FacetPoints(facet_points);
-
-          FVH.FacetTypes(facet_types);
-
-    	    FVH.SectorPoints(sector_points_);
-    	    
-     	    FVH.SectorEdgePairs(sector_edges_); 
-
-          space_dimension_ = VOLUME;
-
-         if(debug) {
+         if (debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_HEXAHEDRON:"<<endl;
               Out();         
           }
-
-      parent_element_ = "ISOPARAMETRIC_LINEAR_HEXAHEDRON";
-      return;       
+         return;
       }
+      
     if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_PYRAMID) ) {
+
+          parent_element_ = "ISOPARAMETRIC_LINEAR_PYRAMID";
+          parent_element_type_ = ISOPARAMETRIC_LINEAR_PYRAMID;
+          space_dimension_ = VOLUME;
 
  #ifdef PYRAMID_TRIANGULAR_FACETS
           NumOfInternalFacets=12U;
@@ -987,98 +459,49 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           NumOfInternalFacetsPerNode=4U; // Special case of the Pyramid vertex require 4
           NumOfInternalVolumes=5U;       // == VolMultipliers
  #endif
- 
-          Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
-                 NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
+
+          FV_IntegrationPointsAndWeights<dim> FVP(ISOPARAMETRIC_LINEAR_PYRAMID);
+
+          ResizeTemporaryVectors( temp_vecs, NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
                  
-          FV_IntegrationPointsAndWeights<dim> FVPy(ISOPARAMETRIC_LINEAR_PYRAMID);
-         
-          FVPy.SectorIntegrationWeights(sector_integration_weights); 
+          Resize( NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
 
-          FVPy.SectorIntegrationPoints(sector_integration_points);
-             
-          FVPy.FacetIntegrationWeights(facet_integration_weights); 
-             
-          FVPy.FacetIntegrationPoints(facet_integration_points);
-             
-          FVPy.FacetNormals(facet_parametric_normals);
-
-          FVPy.FacetNormalTransformations(facet_normal_xforms);
-             
-          FVPy.FacetsSurroundingNode(facets_surrounding_node);
-          
-          FVPy.EdgePairs(edges_of_element);
-          
-          FVPy.ProjectionWeights(facet_projection_weights);
-
-		      FVPy.EdgeMidpoints(facet_edge_midpoints);
-		  
-		      FVPy.Barycenter(barycenter);
-          
-          FVPy.FacetPoints(facet_points);
-
-          FVPy.FacetTypes(facet_types);
-
-    	    FVPy.SectorPoints(sector_points_);
-    	    
-     	    FVPy.SectorEdgePairs(sector_edges_); 
-
-          space_dimension_ = VOLUME;
+          InitializeDataMembers( temp_vecs, FVP );
 
          if ( debug ) {
               cout<<"\nISOPARAMETRIC_LINEAR_PYRAMID:"<<endl;
               Out();         
-        }
-
-      parent_element_ = "ISOPARAMETRIC_LINEAR_PYRAMID";
-      return;     
-    }  
+          }
+         return;
+      }
+    
     if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_PRISM) ) {
+
+          parent_element_      = "ISOPARAMETRIC_LINEAR_PRISM";
+          parent_element_type_ = ISOPARAMETRIC_LINEAR_PRISM;
+          space_dimension_     = VOLUME;
 
           NumOfInternalFacets=9U;
           NumOfInternalFacetsPerNode=3U;
           NumOfInternalVolumes=6U;
 
-          Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
-                 NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
-                 
           FV_IntegrationPointsAndWeights<dim> FVP(ISOPARAMETRIC_LINEAR_PRISM);
-         
-          FVP.SectorIntegrationWeights(sector_integration_weights); 
 
-          FVP.SectorIntegrationPoints(sector_integration_points);
-             
-          FVP.FacetIntegrationWeights(facet_integration_weights); 
-             
-          FVP.FacetIntegrationPoints(facet_integration_points);
-             
-          FVP.FacetNormals(facet_parametric_normals);
+          ResizeTemporaryVectors( temp_vecs, NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
+                 
+          Resize( NumOfInternalFacets, NumOfInternalFacetsPerNode,
+                  NumOfInternalVolumes, NumOfIPperFacet, NumOfIPperVolume );
 
-          FVP.FacetNormalTransformations(facet_normal_xforms);
-             
-          FVP.FacetsSurroundingNode(facets_surrounding_node);
-          
-          FVP.EdgePairs(edges_of_element);
-          
-          FVP.ProjectionWeights(facet_projection_weights);
-
-		      FVP.EdgeMidpoints(facet_edge_midpoints);
+          InitializeDataMembers( temp_vecs, FVP );
 		  
-		      FVP.Barycenter(barycenter);
-
-          FVP.FacetPoints(facet_points);
-		  
-          FVP.FacetTypes(facet_types);
-		  
-          space_dimension_ = VOLUME;
-
-         if(debug) {
+          if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_PRISM:"<<endl;
               Out();         
-          }
-
-      parent_element_ = "ISOPARAMETRIC_LINEAR_PRISM";
-      return; 
+           }
+          return;
       }
     else {
          cerr <<"\nFiniteVolumeStencil::Initialize: Element type not recognized: ";
@@ -1091,80 +514,406 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
 
 
+template<uint32_t dim>
+void FiniteVolumeStencil<dim>::InitializeDataMembers( TempVecs<dim>& tvecs,
+                                                      const FV_IntegrationPointsAndWeights<dim>& FV )
+ {
+    // TODO: why is fictitious dimension needed for line and surface elements?
+    const uint32_t parametric_space_dimension = dim; // static_cast<int8_t>(space_dimension_);
+    
+    // facet integration weights
+    {
+       FV.FacetIntegrationWeights(tvecs.facet_integration_weights);
+#ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
+       facet_integration_weights_.resize( tvecs.facet_integration_weights.size(),
+                                          tvecs.facet_integration_weights[0].size() );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_integration_weights ) {
+            uint32_t j{0u};
+            for ( const auto& jit : iit )
+               facet_integration_weights_(i,j++) = jit;
+            i++;
+         }
+#else
+       facet_integration_weights_.resize( tvecs.facet_integration_weights.size() );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_integration_weights )
+         for ( const auto& jit : iit )
+           facet_integration_weights_[i++] = jit;
+#endif
+    }
 
-// SKM modified version
+    // facet projection weights
+    {
+       FV.ProjectionWeights(tvecs.facet_projection_weights);
+#ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
+       facet_projection_weights_.resize( tvecs.facet_projection_weights.size(),
+                                         tvecs.facet_projection_weights[0].size() );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_projection_weights ) {
+            uint32_t j{0u};
+            for ( const auto& jit : iit )
+               facet_projection_weights_(i,j++) = jit;
+            i++;
+         }
+#else
+       facet_projection_weights_.resize( tvecs.facet_projection_weights.size() );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_projection_weights )
+         for ( const auto& jit : iit )
+           facet_projection_weights_[i++] = jit;
+#endif
+    }
+
+    // facet normals
+    {
+       FV.FacetNormals(tvecs.facet_normals);
+       facet_normals_.resize( tvecs.facet_normals.size(), parametric_space_dimension );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_normals ) {
+           for ( uint32_t j{0u}; j<parametric_space_dimension; ++j )
+             facet_normals_.at(i,j) = iit[j];
+           ++i;
+        }
+    }
+
+    // facet parametric normals
+    {
+       FV.FacetNormals(tvecs.facet_parametric_normals);
+       facet_parametric_normals_.resize( tvecs.facet_parametric_normals.size(), parametric_space_dimension );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_parametric_normals ) {
+           for ( uint32_t j{0u}; j<parametric_space_dimension; ++j )
+             facet_parametric_normals_.at(i,j) = iit[j];
+           ++i;
+        }
+    }
+
+    // facet edge midpoints
+    {
+       FV.EdgeMidpoints(tvecs.facet_edge_midpoints);
+       facet_edge_midpoints_.resize( tvecs.facet_edge_midpoints.size(), parametric_space_dimension );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_edge_midpoints ) {
+           for ( uint32_t j{0u}; j<parametric_space_dimension; ++j )
+             facet_edge_midpoints_.at(i,j) = iit[j];
+           ++i;
+        }
+    }
+
+    // sector integration weights
+    {
+       FV.SectorIntegrationWeights(tvecs.sector_integration_weights);
+#ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
+       sector_integration_weights_.resize( tvecs.sector_integration_weights.size(),
+                                           tvecs.sector_integration_weights[0].size() );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.sector_integration_weights ) {
+            uint32_t j{0u};
+            for ( const auto& jit : iit )
+               sector_integration_weights_(i,j++) = jit;
+            i++;
+         }
+#else
+       sector_integration_weights_.resize( tvecs.sector_integration_weights.size() );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.sector_integration_weights )
+         for ( const auto& jit : iit )
+           sector_integration_weights_[i++] = jit;
+#endif
+    }
+    
+    
+  // THREE-DIMENSIONAL ARRAYS
+   
+   // facet transformations (parametric to physical)
+   {
+      FV.FacetNormalTransformations(tvecs.facet_normal_xforms);
+      facet_normal_xforms_ = tvecs.facet_normal_xforms;
+      /*
+       facet_normal_xforms_.resize( tvecs.facet_normal_xforms.size(),
+                                    tvecs.facet_normal_xforms[0].size(), 2u ); // pair
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facet_normal_xforms ) {
+           uint32_t j{0u};
+           for ( const auto& jit : iit ) {
+                 facet_normal_xforms_.at(i,j,0u) = jit.first;
+                 facet_normal_xforms_.at(i,j,1u) = jit.second;
+               ++j;
+             }
+           ++i;
+        }
+      */
+   }
+    
+   // facet points
+   {
+      FV.FacetPoints(tvecs.facet_points);
+      facet_points_ = tvecs.facet_points;
+      /*
+      facet_points_.resize( tvecs.facet_points.size(), tvecs.facet_points[0].size(), parametric_space_dimension );
+      uint32_t i{0u};
+      for ( const auto& iit : tvecs.facet_points ) {
+          uint32_t j{0u};
+          for ( const auto& jit : iit ) {
+              for ( uint32_t k{0u}; k<parametric_space_dimension; ++k )
+                facet_points_.at(i,j,k) = jit[j];
+              ++j;
+            }
+          ++i;
+       }
+      */
+    }
+
+   // sector points
+   {
+      FV.SectorPoints(tvecs.sector_points);
+      sector_points_ = tvecs.sector_points;
+      /*
+      sector_points_.resize( tvecs.sector_points.size(), tvecs.sector_points[0].size(), parametric_space_dimension );
+      uint32_t i{0u};
+      for ( const auto& iit : tvecs.sector_points ) {
+          uint32_t j{0u};
+          for ( const auto& jit : iit ) {
+              for ( uint32_t k{0u}; k<parametric_space_dimension; ++k )
+                sector_points_.at(i,j,k) = jit[j];
+              ++j;
+            }
+          ++i;
+       }
+      */
+    }
+
+#ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
+   // facet integration points
+   {
+      FV.FacetIntegrationPoints(tvecs.facet_integration_points);
+      facet_integration_points_.resize( tvecs.facet_integration_points.size(),
+                                        tvecs.facet_integration_points[0].size(), parametric_space_dimension );
+
+      for ( uint32_t i{0u}; i<tvecs.facet_integration_points.size(); ++i )
+        for ( uint32_t j{0u}; j<tvecs.facet_integration_points[i].size(); ++j )
+          for ( uint32_t k{0u}; k<parametric_space_dimension; ++k )
+            facet_integration_points_.at(i,j,k) = tvecs.facet_integration_points[i][j][k];
+    }
+
+   // sector integration points
+   {
+      FV.SectorIntegrationPoints(tvecs.sector_integration_points);
+      sector_integration_points_.resize( tvecs.sector_integration_points.size(),
+                                         tvecs.sector_integration_points[0].size(), parametric_space_dimension );
+
+      for ( uint32_t i{0u}; i<tvecs.sector_integration_points.size(); ++i )
+        for ( uint32_t j{0u}; j<tvecs.sector_integration_points[i].size(); ++j )
+          for ( uint32_t k{0u}; k<parametric_space_dimension; ++k )
+            sector_integration_points_.at(i,j,k) = tvecs.sector_integration_points[i][j][k];
+    }
+#else // single integration point
+   {
+      FV.FacetIntegrationPoints(tvecs.facet_integration_points);
+      facet_integration_points_.resize( tvecs.facet_integration_points.size(), parametric_space_dimension );
+
+      for ( uint32_t i{0u}; i<tvecs.facet_integration_points.size(); ++i )
+        for ( uint32_t j{0u}; j<tvecs.facet_integration_points[i].size(); ++j )
+          for ( uint32_t k{0u}; k<parametric_space_dimension; ++k )
+            facet_integration_points_.at(i,k) = tvecs.facet_integration_points[i][j][k];
+    }
+   {
+      FV.SectorIntegrationPoints(tvecs.sector_integration_points);
+      sector_integration_points_.resize( tvecs.sector_integration_points.size(), parametric_space_dimension );
+
+      for ( uint32_t i{0u}; i<tvecs.sector_integration_points.size(); ++i )
+        for ( uint32_t j{0u}; j<tvecs.sector_integration_points[i].size(); ++j )
+          for ( uint32_t k{0u}; k<parametric_space_dimension; ++k )
+            sector_integration_points_.at(i,k) = tvecs.sector_integration_points[i][j][k];
+    }
+#endif
+
+    // edges of elements
+    {
+       FV.EdgePairs(tvecs.edges_of_element);
+       edges_of_element_.resize( tvecs.edges_of_element.size(), 2u ); // pair
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.edges_of_element ) {
+             edges_of_element_.at(i,0u) = iit.first;
+             edges_of_element_.at(i,1u) = iit.second;
+           ++i;
+        }
+    }
+
+    // facets surrounding node
+    {
+       // jagged array
+       FV.FacetsSurroundingNode(tvecs.facets_surrounding_node);
+       facets_surrounding_node_ = tvecs.facets_surrounding_node;
+       /*
+       facets_surrounding_node_.resize( tvecs.facets_surrounding_node.size(),
+                                        tvecs.facets_surrounding_node[0].size() );
+       uint32_t i{0u};
+       for ( const auto& iit : tvecs.facets_surrounding_node ) {
+           uint32_t j{0u};
+           for ( const auto& jit : iit ) {
+                facets_surrounding_node_.at(i,j) = jit;
+                ++j;
+             }
+           ++i;
+        }
+       */
+    }
+
+   // sector edges
+   {
+      FV.SectorEdgePairs(tvecs.sector_edges);
+      // jagged array!
+      edges_of_sectors_ = tvecs.sector_edges;
+      /*
+      edges_of_sectors_.resize( tvecs.sector_edges.size() );
+      for ( uint32_t i{0u}; i<tvecs.sector_edges[i].size(); ++i )
+        edges_of_sectors_[i].resize(tvecs.sector_edges[i].size());
+        
+      uint32_t i{0u};
+      for ( const auto& iit : tvecs.sector_edges ) {
+          uint32_t j{0u};
+          for ( const auto& jit : iit ) {
+               edges_of_sectors_[i][j++] = jit;
+            }
+          ++i;
+       }
+      */
+    }
+
+    FV.Barycenter(barycenter_);
+    FV.FacetTypes(facet_types_);
+          
+ } // InitializeDataMembers
+
+
+
+
+
+
+// SKM modified version TODO: check assumption that n-columns in these arrays is the same for all rows
 template<uint32_t dim>
 void FiniteVolumeStencil<dim>::Out() const
 {
-   cout<<"\nFiniteVolumeStencil<dim>::Out: \nVolume Weights ";
-   cout <<"("<< sector_integration_weights.size() <<","<< sector_integration_weights[0].size() <<"):";
-   for( uint32_t i{0U}; i<sector_integration_weights.size(); i++)
-      for( uint32_t j{0U}; j<sector_integration_weights[i].size(); j++)
-        cout<<" "<<sector_integration_weights[i][j];
-   
-   cout<<endl<<endl<<" Volume IPs "<<endl;
-   cout <<"("<< sector_integration_points.size() <<","<< sector_integration_points[0].size() <<",rst):";
-   for( uint32_t i{0U}; i<sector_integration_points.size(); i++) {
-     for( uint32_t j{0U}; j<sector_integration_points[i].size(); j++) {
-        for( uint32_t k{0U}; k<dim; k++) cout<<" "<<sector_integration_points[i][j][k];
-          cout<<endl;
-        }
-   }
-                
-   cout<<endl<<" Facet Weights ";
-   cout <<"("<< facet_integration_weights.size() <<","<< facet_integration_weights[0].size() <<"):";
-   for( uint32_t i{0U}; i<facet_integration_weights.size(); i++) {
-     for( uint32_t j{0U}; j<facet_integration_weights[i].size(); j++) {
-       cout<<" "<<facet_integration_weights[i][j] ;
-      }
-   }
-   cout<<endl;
-   
-   cout<<endl<<" Facet IPs: "<<endl;
-   cout <<"("<< facet_integration_points.size() <<","<< facet_integration_points[0].size() <<",rst):";
-   for( uint32_t i{0U}; i<facet_integration_points.size(); i++) {
-     for( uint32_t j{0U}; j<facet_integration_points[i].size(); j++) {
-       for( uint32_t k{0U}; k<dim; k++) cout<<" "<<facet_integration_points[i][j][k];
-       cout<<endl;
-     }
-   }
+   cout<<"\nFiniteVolumeStencil<dim>::Out: \nsector integration points"; // 2d array
+   cout<<endl<<endl<<" Volume IPs "<<endl; // 3d array
 
-  cout<<endl<<" Facet parametric normals inside the element "<<endl;
-  cout <<"("<< facet_parametric_normals.size() <<",rst):";
-  for( uint32_t i{0U}; i<facet_parametric_normals.size(); i++) {
-    for( uint32_t j{0U}; j<dim; j++) {
-       cout<<" "<<facet_parametric_normals[i][j] ;
-     }
-     cout<<endl;
-   }
-     
-   if ( !facet_normals.empty() && !facet_normals[0].empty() ) {
-       cout<<endl<<" Facet physical normals inside the element: "<<endl;
-       cout <<"("<< facet_normals.size() <<",xyz):";
-       for( uint32_t i{0U}; i<facet_normals.size(); i++) {
-         if ( !facet_normals[i].empty() )
-           for( uint32_t j{0U}; j<dim; j++) {
-             cout<<" "<<facet_normals[i][j] ;
-         }
+#ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
+   // sectors
+   cout <<"("<< sector_integration_points_.depth() <<","<< sector_integration_points_.rows() <<", rst):";
+   for( uint32_t i{0U}; i<sector_integration_points_.depth(); i++)
+     for( uint32_t j{0U}; j<sector_integration_points_.rows(); j++) {
+             for( uint32_t k{0U}; k<dim; k++) cout<<" "<< sector_integration_points_(i,j,k);
+             cout<<endl;
+          }
+   cout<<"\n Volume weights (sectors)"; // 2d array
+   cout <<"("<< sector_integration_weights_.rows() <<","<< sector_integration_weights_.cols() <<"):";
+   for( uint32_t i{0U}; i<sector_integration_weights_.rows(); i++)
+      for( uint32_t j{0U}; j<sector_integration_weights_.cols(); j++)
+        cout<<" "<< sector_integration_weights_(i,j);
+   
+   //facets
+   cout<<endl<<" Facet IPs: "<<endl; // 3d array
+   cout <<"("<< facet_integration_points_.depth() <<","<< facet_integration_points_.rows() <<",rst):";
+   for( uint32_t i{0U}; i<facet_integration_points_.depth(); i++)
+     for( uint32_t j{0U}; j<facet_integration_points_.rows(); j++) {
+          for( uint32_t k{0U}; k<dim; k++) cout<<" "<< facet_integration_points_(i,j,k);
+          cout<<endl;
+       }
+
+   cout<<endl<<" Facet weights (facets) "; // 2d array
+   cout <<"("<< facet_integration_weights_.rows() <<","<< facet_integration_weights_.cols() <<"):";
+   for( uint32_t i{0U}; i<facet_integration_weights_.rows(); i++)
+     for( uint32_t j{0U}; j<facet_integration_weights_.cols(); j++) {
+         cout<<" "<< facet_integration_weights_(i,j);
+       }
+   cout<<endl;
+
+   cout<<endl<<" Facet projection weights (facets) "; // 2d array
+   cout <<"("<< facet_projection_weights_.rows() <<","<< facet_projection_weights_.cols() <<"):";
+   for( uint32_t i{0U}; i<facet_projection_weights_.size(); i++)
+     for( uint32_t j{0U}; j<facet_integration_weights_.cols(); j++) {
+         cout<<" "<< facet_projection_weights_(i,j);
+      }
+   cout<<endl;
+
+#else
+   // sectors
+   // ---------------------------
+   // integration points 2D array
+   cout <<"("<< sector_integration_points_.rows() <<","<< sector_integration_points_.cols() <<",rst):";
+   for( uint32_t i{0U}; i<sector_integration_points_.rows(); i++ )
+     for( uint32_t j{0U}; j<sector_integration_points_.cols(); j++ ) {
+             cout<<" "<< sector_integration_points_(i,j);
+             cout<<endl;
+          }
+   // 1D vector
+   cout <<"("<< sector_integration_weights_.size() <<"):";
+   for( uint32_t i{0U}; i<sector_integration_weights_.size(); i++)
+     cout<<" "<< sector_integration_weights_[i];
+   
+   // facets
+   // --------------------------
+   cout<<endl<<" Facet IPs: "<<endl; // 2d array
+   cout <<"("<< facet_integration_points_.rows() <<","<< facet_integration_points_.cols() <<"=rst):";
+   for( uint32_t i{0U}; i<facet_integration_points_.rows(); i++) {
+     for( uint32_t j{0U}; j<facet_integration_points_.cols(); j++) {
+         cout<<" "<< facet_integration_points_(i,j);
          cout<<endl;
        }
      }
 
-    cout<<endl<<" Facet surrounding node in the element "<<endl;
-    cout <<"("<< Sectors() <<","<< facets_surrounding_node[0].size() <<"):";
-    for( uint32_t i{0U}; i<Sectors(); i++) {
-      for( uint32_t j{0U}; j<facets_surrounding_node[i].size(); j++) {
-        cout<<" "<<facets_surrounding_node[i][j] ;
-      }
-      cout<<endl;
+   // facet (integration) weights 1D vector
+   cout<<endl<<" Facet weights (facets) "; // 1d array
+   cout <<"("<< facet_integration_weights_.size() <<"):";
+   for( uint32_t i{0U}; i<facet_integration_weights_.size(); i++) {
+        cout<<" "<< facet_integration_weights_[i];
+     }
+   cout<<endl;
+
+   cout<<endl<<" Facet projection weights (facets) "; // 1d vector
+   cout <<"("<< facet_projection_weights_.size() <<"):";
+   for( uint32_t i{0U}; i<facet_projection_weights_.size(); i++) {
+        cout<<" "<< facet_projection_weights_[i];
+     }
+   cout<<endl;
+
+#endif
+
+   cout<<endl<<" Facet parametric normals inside the element (vector) "<<endl; // 2d array
+   cout <<"("<< facet_parametric_normals_.rows() <<",rst):";
+   for( uint32_t i{0U}; i<facet_parametric_normals_.rows(); i++) {
+       for( uint32_t j{0U}; j<dim; j++) cout<<" "<< facet_parametric_normals_(i,j);
+       cout<<endl;
     }
-    
-    cout<<endl<<" Edges pairs in the element "<<endl;
-    cout <<"("<< edges_of_element.size() <<",2):";
-    for( uint32_t i{0U}; i<edges_of_element.size(); i++) {
-      cout<<" "<< edges_of_element[i].first <<", "<< edges_of_element[i].second <<" ";
-    }
-  cout << endl << endl; 
+     
+   if ( !facet_normals_.empty() && facet_normals_.cols() == 0U ) {
+       cout<<endl<<" Facet physical normals inside the element (may not be initialised): "<<endl;
+       cout <<"("<< facet_normals_.rows() <<",xyz):";
+       for( uint32_t i{0U}; i<facet_normals_.rows(); i++) {
+         for( uint32_t j{0U}; j<dim; j++) {
+             cout<<" "<< facet_normals_(i,j);
+           }
+         cout<<endl;
+       }
+   }
+
+   cout<<endl<<" Facets surrounding node (corresponding to sector) in the element "<<endl; // 2d array
+   cout <<"("<< Sectors() <<","<< dim <<"):";
+   for( uint32_t i{0U}; i<Sectors(); i++) {
+     for( uint32_t j{0U}; j<FacetsPerSector(i); j++) {
+       cout<<" "<< FacetSurroundingSector(i,j);
+     }
+     cout<<endl;
+   }
+  
+   cout<<endl<<" Edge pairs in the element "<<endl; // 2d array
+   cout <<"("<< edges_of_element_.rows() <<",2):";
+   for( uint32_t i{0U}; i<edges_of_element_.rows(); i++) {
+     cout<<" "<< edges_of_element_(i,0U) <<", "<< edges_of_element_(i,1U) <<" ";
+   }
+   cout << endl << endl;
    
 } // end Out
 

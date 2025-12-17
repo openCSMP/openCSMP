@@ -1,0 +1,160 @@
+\doxysection{csmp\+::Time\+Step\+Evaluator\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_time_step_evaluator}{}\label{classcsmp_1_1_time_step_evaluator}\index{csmp::TimeStepEvaluator$<$ dim, USER $>$@{csmp::TimeStepEvaluator$<$ dim, USER $>$}}
+
+
+for application to individual FVs  
+
+
+
+
+{\ttfamily \#include $<$Time\+Step\+Evaluator.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Time\+Step\+Evaluator\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_time_step_evaluator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Time\+Step\+Evaluator\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=262pt]{classcsmp_1_1_time_step_evaluator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_time_step_evaluator_ae54325d28e1d746d0d72e2ecda70861e}\label{classcsmp_1_1_time_step_evaluator_ae54325d28e1d746d0d72e2ecda70861e} 
+{\bfseries Time\+Step\+Evaluator} (double step\+\_\+size\+\_\+reduction\+\_\+factor=0.\+5, double max\+\_\+time\+\_\+increment=86400. \texorpdfstring{$\ast$}{*}365.)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_a53957c45ebe0604c44166069d27a247e}{Out\+Flow\+Less\+Than\+Content\+Increment}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double outflow) const
+\begin{DoxyCompactList}\small\item\em returns robust delta\+\_\+t criterion in the presence of fluid sources and sinks; also computes and stores flux balance \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_affb53a4c2312861a7fbde2f0f92fe8a3}{Out\+Flow\+Less\+Than\+Content\+Increment\+Boundary}} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const, double outflow) const
+\begin{DoxyCompactList}\small\item\em returns robust delta\+\_\+t criterion in the presence of fluid sources and sinks at model boundary (no variables are touched) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator_a2720b6533d5a66a6df4aab74a669d6f1}{Streamline\+CFL}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}const) const
+\begin{DoxyCompactList}\small\item\em anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_time_step_evaluator_abf66bdc0fdac41bd8bb65c96464f1960}\label{classcsmp_1_1_time_step_evaluator_abf66bdc0fdac41bd8bb65c96464f1960} 
+void {\bfseries Step\+Size\+Reduction\+Factor} (double=0.\+5)
+\begin{DoxyCompactList}\small\item\em adjust setting for the solve (default=0.\+5) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_time_step_evaluator_ae51be0d9eff1d6a2ee2e1afde14a853c}\label{classcsmp_1_1_time_step_evaluator_ae51be0d9eff1d6a2ee2e1afde14a853c} 
+double {\bfseries Step\+Size\+Reduction\+Factor} () const
+\item 
+\Hypertarget{classcsmp_1_1_time_step_evaluator_aaa2371cf5c9b7140722ce10aebe6e8d1}\label{classcsmp_1_1_time_step_evaluator_aaa2371cf5c9b7140722ce10aebe6e8d1} 
+double {\bfseries Max\+Time\+Increment} () const
+\begin{DoxyCompactList}\small\item\em return maximum time-\/increment that is applied if there is \texorpdfstring{$\sim$}{\string~}no flow \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$\newline
+class csmp\+::\+Time\+Step\+Evaluator$<$ dim, USER $>$}
+for application to individual FVs 
+
+Face-\/by-\/face calculation of CFL like timestepping criteria.
+
+Part of Colleoli transport scheme. \begin{DoxyAuthor}{Author}
+Stephan K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1a 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+21/2/2013 
+\end{DoxyDate}
+\begin{DoxyPrecond}{Precondition}
+high-\/level class depending on CSMP++ API 
+\end{DoxyPrecond}
+\begin{DoxyWarning}{Warning}
+
+\end{DoxyWarning}
+\begin{DoxyCopyright}{Copyright}
+Stephan K. Matthai
+\end{DoxyCopyright}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+
+\begin{DoxyCode}{0}
+
+\end{DoxyCode}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_time_step_evaluator_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_time_step_evaluator_a53957c45ebe0604c44166069d27a247e}\index{csmp::TimeStepEvaluator$<$ dim, USER $>$@{csmp::TimeStepEvaluator$<$ dim, USER $>$}!OutFlowLessThanContentIncrement@{OutFlowLessThanContentIncrement}}
+\index{OutFlowLessThanContentIncrement@{OutFlowLessThanContentIncrement}!csmp::TimeStepEvaluator$<$ dim, USER $>$@{csmp::TimeStepEvaluator$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{OutFlowLessThanContentIncrement()}{OutFlowLessThanContentIncrement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_time_step_evaluator_a53957c45ebe0604c44166069d27a247e} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator}{csmp\+::\+Time\+Step\+Evaluator}}$<$ dim, USER $>$\+::\+Out\+Flow\+Less\+Than\+Content\+Increment (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{nptr}{, }\item[{double}]{outflow}{}\end{DoxyParamCaption}) const}
+
+
+
+returns robust delta\+\_\+t criterion in the presence of fluid sources and sinks; also computes and stores flux balance 
+
+Computes 1) volumetric flow-\/based time-\/increment that ascertains that the amount of tracer that leaves the FV is less than is stored in its pore volume.
+
+This is robust criterion in the presence of fluid sources and sinks. \Hypertarget{classcsmp_1_1_time_step_evaluator_affb53a4c2312861a7fbde2f0f92fe8a3}\index{csmp::TimeStepEvaluator$<$ dim, USER $>$@{csmp::TimeStepEvaluator$<$ dim, USER $>$}!OutFlowLessThanContentIncrementBoundary@{OutFlowLessThanContentIncrementBoundary}}
+\index{OutFlowLessThanContentIncrementBoundary@{OutFlowLessThanContentIncrementBoundary}!csmp::TimeStepEvaluator$<$ dim, USER $>$@{csmp::TimeStepEvaluator$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{OutFlowLessThanContentIncrementBoundary()}{OutFlowLessThanContentIncrementBoundary()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_time_step_evaluator_affb53a4c2312861a7fbde2f0f92fe8a3} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator}{csmp\+::\+Time\+Step\+Evaluator}}$<$ dim, USER $>$\+::\+Out\+Flow\+Less\+Than\+Content\+Increment\+Boundary (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{nptr}{, }\item[{double}]{outflow}{}\end{DoxyParamCaption}) const}
+
+
+
+returns robust delta\+\_\+t criterion in the presence of fluid sources and sinks at model boundary (no variables are touched) 
+
+Special case where inflow or outflow needs to be established, differently because the FV is sliced by the model boundary.
+
+2 boundary cases are considered\+:
+
+
+\begin{DoxyEnumerate}
+\item No-\/flow boundary where flux balance is known because no in-\/ or outflow should occur
+\item Dirichlet in-\/ or outflow boundary where balance has to be guessed and compensation is necessary, else there is a saturation buildup at out-\/flow boundaries. 
+\end{DoxyEnumerate}\Hypertarget{classcsmp_1_1_time_step_evaluator_a2720b6533d5a66a6df4aab74a669d6f1}\index{csmp::TimeStepEvaluator$<$ dim, USER $>$@{csmp::TimeStepEvaluator$<$ dim, USER $>$}!StreamlineCFL@{StreamlineCFL}}
+\index{StreamlineCFL@{StreamlineCFL}!csmp::TimeStepEvaluator$<$ dim, USER $>$@{csmp::TimeStepEvaluator$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{StreamlineCFL()}{StreamlineCFL()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_time_step_evaluator_a2720b6533d5a66a6df4aab74a669d6f1} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_time_step_evaluator}{csmp\+::\+Time\+Step\+Evaluator}}$<$ dim, USER $>$\+::\+Streamline\+CFL (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} const}]{eit}{}\end{DoxyParamCaption}) const}
+
+
+
+anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance 
+
+CFL for the strictly hyperbolic case in multiphase flow
+
+Computes the Courant time increment (CFL citerion) taking into account viscous, gravitational and capillary fluid displacements using the contraints from the provided relative permeability model. The CFL criterion is calculated using the element length in the direction of the flow but not account for the deviation from this vector of the flow of the considered phase. ~\newline
+
+
+For the viscous flow the shock speed is used as a multiplier for the total velocity. This may lead to a too tight constraint but is safe for the case where CFL is computed only once at the onset of series of advection steps with an explicit scheme. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+First, a const reference to the current model, a reference to the \doxylink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model} used (this will be a subclass), and, third, the maximum time-\/increment imposed by external constraints. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The CFL criterion.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The criterion is computed sector by sector for all the finite elements in the entire model. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Method has been designed primarily to give stability to an explicit transport scheme but it also serves as a guide for the timestepping using an implicit approach.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The method alerts the user to the case where CFL is larger than the input max\+\_\+time\+\_\+increment which may be the case if there is no flow at all in the domain. Equally, the user is informed if the CFL increment is less than a millisecond (usually a prohibitively small increment). 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/Time\+Step\+Evaluator.\+h\item 
+source/modules/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/source/Time\+Step\+Evaluator.\+cpp\end{DoxyCompactItemize}

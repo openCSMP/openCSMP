@@ -63,7 +63,7 @@ class CVFEM_MathOperatorLHS : public MathOperatorLHS<dim,CELL> {
     
     virtual DenseMatrix<DM_MIN> GetContribution( );
     
-    virtual CVFEM_MathOperatorLHS<dim,CELL>* clone() const { return new CVFEM_MathOperatorLHS<dim,CELL>(*this); }
+    virtual CVFEM_MathOperatorLHS<dim,CELL>* clone() const override { return new CVFEM_MathOperatorLHS<dim,CELL>(*this); }
 
   private:
     CVFEM_MathOperatorLHS();

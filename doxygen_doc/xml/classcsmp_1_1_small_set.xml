@@ -1,0 +1,317 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_small_set" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SmallSet</compoundname>
+    <includes refid="_small_set_8h" local="no">SmallSet.h</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>unsigned</type>
+        <declname>N</declname>
+        <defname>N</defname>
+        <defval>32</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_small_set_1a18a98a9daddf51e250392676629fca54" prot="public" static="no">
+        <type>T</type>
+        <definition>typedef T csmp::SmallSet&lt; T, N &gt;::value_type</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>csmp::SmallSet::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="17" column="15" bodyfile="source/includes/utilities/SmallSet.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_small_set_1a4093bff560dc52e2a3efc019faeaa514" prot="public" static="no">
+        <type>std::vector&lt; T &gt;::iterator</type>
+        <definition>typedef std::vector&lt;T&gt;::iterator csmp::SmallSet&lt; T, N &gt;::iterator</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>csmp::SmallSet::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="18" column="45" bodyfile="source/includes/utilities/SmallSet.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_small_set_1a62def62859625ef6ba67a8480bf8be80" prot="public" static="no">
+        <type>std::vector&lt; T &gt;::const_iterator</type>
+        <definition>typedef std::vector&lt;T&gt;::const_iterator csmp::SmallSet&lt; T, N &gt;::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>csmp::SmallSet::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="19" column="51" bodyfile="source/includes/utilities/SmallSet.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_small_set_1a2c9838a97af87ccd271c4fe18b170a70" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; T &gt;</type>
+        <definition>std::vector&lt;T&gt; csmp::SmallSet&lt; T, N &gt;::storage_</definition>
+        <argsstring></argsstring>
+        <name>storage_</name>
+        <qualifiedname>csmp::SmallSet::storage_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="119" column="17" bodyfile="source/includes/utilities/SmallSet.h" bodystart="119" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a3e7782a20d512e40a39a9e19c01f6354" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SmallSet&lt; T, N &gt;::SmallSet</definition>
+        <argsstring>()</argsstring>
+        <name>SmallSet</name>
+        <qualifiedname>csmp::SmallSet::SmallSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="21" column="5" bodyfile="source/includes/utilities/SmallSet.h" bodystart="21" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a393b9b065886d9123edba47511ea01e4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::pair&lt; iterator, bool &gt;</type>
+        <definition>std::pair&lt; iterator, bool &gt; csmp::SmallSet&lt; T, N &gt;::insert</definition>
+        <argsstring>(const value_type &amp;value)</argsstring>
+        <name>insert</name>
+        <qualifiedname>csmp::SmallSet::insert</qualifiedname>
+        <param>
+          <type>const value_type &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="26" column="15" bodyfile="source/includes/utilities/SmallSet.h" bodystart="26" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a13353b3ec4ca76503739ed5846c52a0e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::pair&lt; iterator, bool &gt;</type>
+        <definition>std::pair&lt; iterator, bool &gt; csmp::SmallSet&lt; T, N &gt;::insert</definition>
+        <argsstring>(value_type &amp;&amp;value)</argsstring>
+        <name>insert</name>
+        <qualifiedname>csmp::SmallSet::insert</qualifiedname>
+        <param>
+          <type>value_type &amp;&amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="39" column="15" bodyfile="source/includes/utilities/SmallSet.h" bodystart="39" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1aa2c94760d02e5633163255696756963c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SmallSet&lt; T, N &gt;::empty</definition>
+        <argsstring>() const</argsstring>
+        <name>empty</name>
+        <qualifiedname>csmp::SmallSet::empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="51" column="10" bodyfile="source/includes/utilities/SmallSet.h" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a922e22acd96ede115e079694a4cae7c0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SmallSet&lt; T, N &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>csmp::SmallSet::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="56" column="12" bodyfile="source/includes/utilities/SmallSet.h" bodystart="56" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a8e26f364835849471275f093c3f5be8d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator csmp::SmallSet&lt; T, N &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>csmp::SmallSet::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="61" column="14" bodyfile="source/includes/utilities/SmallSet.h" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a974233037fa2aca5042ed2cef693e9a3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator csmp::SmallSet&lt; T, N &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>csmp::SmallSet::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="66" column="20" bodyfile="source/includes/utilities/SmallSet.h" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1aeadfe47ef5e021cd87423a4f107aca38" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator csmp::SmallSet&lt; T, N &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>csmp::SmallSet::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="71" column="14" bodyfile="source/includes/utilities/SmallSet.h" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a0ed5dde423481988bd3d8f53eec7e12e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator csmp::SmallSet&lt; T, N &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>csmp::SmallSet::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="76" column="20" bodyfile="source/includes/utilities/SmallSet.h" bodystart="76" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1ac902284f4a9988a4362ef3818db72464" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator csmp::SmallSet&lt; T, N &gt;::find</definition>
+        <argsstring>(const value_type &amp;value)</argsstring>
+        <name>find</name>
+        <qualifiedname>csmp::SmallSet::find</qualifiedname>
+        <param>
+          <type>const value_type &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="81" column="14" bodyfile="source/includes/utilities/SmallSet.h" bodystart="81" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1aa3adddeb82f63ec2e5815732b4e221b9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator csmp::SmallSet&lt; T, N &gt;::find</definition>
+        <argsstring>(const value_type &amp;value) const</argsstring>
+        <name>find</name>
+        <qualifiedname>csmp::SmallSet::find</qualifiedname>
+        <param>
+          <type>const value_type &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="92" column="20" bodyfile="source/includes/utilities/SmallSet.h" bodystart="92" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1ad5e04cce537e1e067969b2a7a24b4925" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SmallSet&lt; T, N &gt;::erase</definition>
+        <argsstring>(const value_type &amp;value)</argsstring>
+        <name>erase</name>
+        <qualifiedname>csmp::SmallSet::erase</qualifiedname>
+        <param>
+          <type>const value_type &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="103" column="10" bodyfile="source/includes/utilities/SmallSet.h" bodystart="103" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_small_set_1a12fbcdf8b5827013e03f62931be8f7e5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SmallSet&lt; T, N &gt;::count</definition>
+        <argsstring>(const value_type &amp;value) const</argsstring>
+        <name>count</name>
+        <qualifiedname>csmp::SmallSet::count</qualifiedname>
+        <param>
+          <type>const value_type &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/SmallSet.h" line="111" column="12" bodyfile="source/includes/utilities/SmallSet.h" bodystart="111" bodyend="115"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>A small set of trivial types, represented as a sorted vector. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SmallSet&lt; T, N &gt;</label>
+        <link refid="classcsmp_1_1_small_set"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/SmallSet.h" line="12" column="15" bodyfile="source/includes/utilities/SmallSet.h" bodystart="12" bodyend="120"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_small_set_1a8e26f364835849471275f093c3f5be8d" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>begin</name></member>
+      <member refid="classcsmp_1_1_small_set_1a974233037fa2aca5042ed2cef693e9a3" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>begin</name></member>
+      <member refid="classcsmp_1_1_small_set_1a62def62859625ef6ba67a8480bf8be80" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>const_iterator</name></member>
+      <member refid="classcsmp_1_1_small_set_1a12fbcdf8b5827013e03f62931be8f7e5" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>count</name></member>
+      <member refid="classcsmp_1_1_small_set_1aa2c94760d02e5633163255696756963c" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>empty</name></member>
+      <member refid="classcsmp_1_1_small_set_1aeadfe47ef5e021cd87423a4f107aca38" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>end</name></member>
+      <member refid="classcsmp_1_1_small_set_1a0ed5dde423481988bd3d8f53eec7e12e" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>end</name></member>
+      <member refid="classcsmp_1_1_small_set_1ad5e04cce537e1e067969b2a7a24b4925" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>erase</name></member>
+      <member refid="classcsmp_1_1_small_set_1ac902284f4a9988a4362ef3818db72464" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>find</name></member>
+      <member refid="classcsmp_1_1_small_set_1aa3adddeb82f63ec2e5815732b4e221b9" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>find</name></member>
+      <member refid="classcsmp_1_1_small_set_1a393b9b065886d9123edba47511ea01e4" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>insert</name></member>
+      <member refid="classcsmp_1_1_small_set_1a13353b3ec4ca76503739ed5846c52a0e" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>insert</name></member>
+      <member refid="classcsmp_1_1_small_set_1a4093bff560dc52e2a3efc019faeaa514" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>iterator</name></member>
+      <member refid="classcsmp_1_1_small_set_1a922e22acd96ede115e079694a4cae7c0" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>size</name></member>
+      <member refid="classcsmp_1_1_small_set_1a3e7782a20d512e40a39a9e19c01f6354" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>SmallSet</name></member>
+      <member refid="classcsmp_1_1_small_set_1a2c9838a97af87ccd271c4fe18b170a70" prot="private" virt="non-virtual"><scope>csmp::SmallSet</scope><name>storage_</name></member>
+      <member refid="classcsmp_1_1_small_set_1a18a98a9daddf51e250392676629fca54" prot="public" virt="non-virtual"><scope>csmp::SmallSet</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

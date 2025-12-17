@@ -1,0 +1,411 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_matrix_8h" kind="file" language="C++">
+    <compoundname>Matrix.h</compoundname>
+    <includes refid="_c_s_m_p__definitions_8h" local="yes">CSMP_definitions.h</includes>
+    <includes refid="_dynamic_array2_d_8h" local="yes">DynamicArray2D.h</includes>
+    <includedby refid="_triangulator___example_8cpp" local="yes">examples/source/Triangulator_Example.cpp</includedby>
+    <includedby refid="_quadrilaterator_8h" local="yes">source/includes/discretisation/Quadrilaterator.h</includedby>
+    <includedby refid="_random_field_generator_8h" local="yes">source/includes/math/RandomFieldGenerator.h</includedby>
+    <includedby refid="_triangulator_8cpp" local="yes">source/modules/discretisation/Triangulator.cpp</includedby>
+    <includedby refid="_text_interface_8cpp" local="yes">source/modules/interfaces/TextInterface.cpp</includedby>
+    <includedby refid="_sparse_matrix_8cpp" local="yes">source/modules/math/SparseMatrix.cpp</includedby>
+    <includedby refid="_matrix_8cpp" local="yes">source/modules/model/Matrix.cpp</includedby>
+    <includedby refid="_c_s_m_p__high_level_utilities_8cpp" local="yes">source/modules/utilities/CSMP_highLevelUtilities.cpp</includedby>
+    <includedby refid="convert_color_to_permeability_8cpp" local="yes">source/modules/utilities/convertColorToPermeability.cpp</includedby>
+    <includedby refid="_matrix___test_8h" local="yes">tests/unit/Matrix_Test.h</includedby>
+    <includedby refid="_sparse_matrix___test_8cpp" local="yes">tests/unit/SparseMatrix_Test.cpp</includedby>
+    <incdepgraph>
+      <node id="48">
+        <label>DynamicArray2D.h</label>
+        <link refid="_dynamic_array2_d_8h_source"/>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/model/Matrix.h</label>
+        <link refid="_matrix_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>algorithm</label>
+      </node>
+      <node id="15">
+        <label>array</label>
+      </node>
+      <node id="13">
+        <label>cassert</label>
+      </node>
+      <node id="8">
+        <label>cctype</label>
+      </node>
+      <node id="11">
+        <label>cfloat</label>
+      </node>
+      <node id="16">
+        <label>chrono</label>
+      </node>
+      <node id="12">
+        <label>climits</label>
+      </node>
+      <node id="3">
+        <label>cmath</label>
+      </node>
+      <node id="7">
+        <label>cstdarg</label>
+      </node>
+      <node id="6">
+        <label>cstddef</label>
+      </node>
+      <node id="45">
+        <label>cstdint</label>
+      </node>
+      <node id="4">
+        <label>cstdio</label>
+      </node>
+      <node id="5">
+        <label>cstdlib</label>
+      </node>
+      <node id="9">
+        <label>cstring</label>
+      </node>
+      <node id="10">
+        <label>ctime</label>
+      </node>
+      <node id="17">
+        <label>deque</label>
+      </node>
+      <node id="18">
+        <label>exception</label>
+      </node>
+      <node id="19">
+        <label>filesystem</label>
+      </node>
+      <node id="20">
+        <label>fstream</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="22">
+        <label>iomanip</label>
+      </node>
+      <node id="23">
+        <label>iostream</label>
+      </node>
+      <node id="24">
+        <label>istream</label>
+      </node>
+      <node id="25">
+        <label>iterator</label>
+      </node>
+      <node id="26">
+        <label>limits</label>
+      </node>
+      <node id="27">
+        <label>list</label>
+      </node>
+      <node id="28">
+        <label>map</label>
+      </node>
+      <node id="29">
+        <label>memory</label>
+      </node>
+      <node id="30">
+        <label>numeric</label>
+      </node>
+      <node id="31">
+        <label>ostream</label>
+      </node>
+      <node id="32">
+        <label>random</label>
+      </node>
+      <node id="33">
+        <label>set</label>
+      </node>
+      <node id="34">
+        <label>sstream</label>
+      </node>
+      <node id="35">
+        <label>stdexcept</label>
+      </node>
+      <node id="36">
+        <label>string</label>
+      </node>
+      <node id="38">
+        <label>type_traits</label>
+      </node>
+      <node id="37">
+        <label>typeinfo</label>
+      </node>
+      <node id="42">
+        <label>unordered_map</label>
+      </node>
+      <node id="41">
+        <label>unordered_set</label>
+      </node>
+      <node id="39">
+        <label>utility</label>
+      </node>
+      <node id="40">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>source/includes/discretisation/Quadrilaterator.h</label>
+        <link refid="_quadrilaterator_8h_source"/>
+      </node>
+      <node id="3">
+        <label>source/includes/math/RandomFieldGenerator.h</label>
+        <link refid="_random_field_generator_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/model/Matrix.h</label>
+        <link refid="_matrix_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>tests/unit/Matrix_Test.h</label>
+        <link refid="_matrix___test_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_matrix" prot="public">csmp::Matrix</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>CSMP_MATRIX_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_MATRIX_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;DynamicArray2D.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="classcsmp_1_1_matrix" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">Matrix<sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix()<sp/>{}</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>m,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n<sp/>);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>m,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1a402662d6fcfe9c3f57282718e127dcc1" kindref="member">Rows</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1a6e6e53dd0e01107619820ba8b28da0a7" kindref="member">Cols</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Resize(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>m,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n<sp/>);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_matrix_1a57a5eddf5bbb292526cb926c60efa2e9" kindref="member">operator()</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>m,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n<sp/>);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><ref refid="classcsmp_1_1_matrix_1a57a5eddf5bbb292526cb926c60efa2e9" kindref="member">operator()</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>m,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix&amp;<sp/><ref refid="classcsmp_1_1_matrix_1a415d3271adb382777f2941c1a9a53ec1" kindref="member">operator=</ref>(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix&amp;<sp/>operator+=(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>M<sp/>);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix&amp;<sp/>operator-=(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>M<sp/>);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix&amp;<sp/><ref refid="classcsmp_1_1_matrix_1ada91936624c494d010255ac296658dd0" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>M<sp/>);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix&amp;<sp/><ref refid="classcsmp_1_1_matrix_1ada91936624c494d010255ac296658dd0" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix&amp;<sp/><ref refid="classcsmp_1_1_matrix_1ada91936624c494d010255ac296658dd0" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>v<sp/>);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix<sp/><sp/><ref refid="classcsmp_1_1_matrix_1ac58f4367dd296d850d06597fc0ec046f" kindref="member">operator+</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>M<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix<sp/><sp/>operator-(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>M<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix<sp/><sp/><ref refid="classcsmp_1_1_matrix_1adf341aae1ef982dab46be5a6ce753d38" kindref="member">operator*</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>M<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Identity();</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1a404f594a5c59ce84ef02810490041e5f" kindref="member">RowCondenseTo</ref>(<sp/>std::vector&lt;double&gt;&amp;<sp/>vec<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Zero();</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ZeroRow(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row<sp/>);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ZeroCol(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>col<sp/>);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Fill(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FillRow(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FillCol(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>col,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;double&gt;<sp/>ReturnRow(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;double&gt;<sp/>ReturnCol(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>col<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignToRow(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row,<sp/>std::vector&lt;double&gt;&amp;<sp/>vec<sp/>);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignToCol(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row,<sp/>std::vector&lt;double&gt;&amp;<sp/>vec<sp/>);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1a9ef1da71fe2dc2d8b41062cb5ae2fb33" kindref="member">Transposed</ref>(<sp/>Matrix&amp;<sp/>RES<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1a3b0ffc6795e7e19d127645af54da2491" kindref="member">TransposedProduct</ref>(<sp/>Matrix&amp;<sp/>RES<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1af7f96de422740e5074d457c3e05df6a7" kindref="member">MultiplyWithTransposedOf</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>B,<sp/>Matrix&amp;<sp/>RES<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1a06ff85bb325f7c07f8ce7af9354cf790" kindref="member">MultiplyTransposedOfWith</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>B,<sp/>Matrix&amp;<sp/>RES<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/>RowSum(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/>ColSum(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>col<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_matrix_1a01e2e650d691137e6577a5a9c7a70bbe" kindref="member">NormL1</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_matrix_1af34b6abb397621b826061502b2064fcc" kindref="member">NormL_Infinity</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>Matrix<sp/><sp/><ref refid="classcsmp_1_1_matrix_1aa6d3b9c6e6ea7874ff4b21e183f36f44" kindref="member">Minor</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>row,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>col<sp/>);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>In();</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Out(<sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>digits=5L<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix_1ad54c112959c0096592b37b7d6b7c018b" kindref="member">LUDecomposition</ref>(std::vector&lt;uint32_t&gt;&amp;<sp/>index,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>d);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>LUBackSubstitution(std::vector&lt;uint32_t&gt;&amp;<sp/>index,<sp/>std::vector&lt;double&gt;&amp;<sp/>b);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><ref refid="class_dynamic_array2_d" kindref="compound">DynamicArray2D&lt;double&gt;</ref><sp/><sp/>data;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/>CheckRange(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>m,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>originator<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/>CheckSizes(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Matrix&amp;<sp/>mat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>originator<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="100"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal">std::vector&lt;double&gt;<sp/><sp/><ref refid="namespacecsmp_1a83cd60f16044ec4c01401467e6748a77" kindref="member">operator*</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref>&amp;<sp/>mat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>v<sp/>);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref><sp/><sp/><ref refid="namespacecsmp_1a83cd60f16044ec4c01401467e6748a77" kindref="member">operator*</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>v,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref>&amp;<sp/>M<sp/>);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="source/includes/model/Matrix.h"/>
+  </compounddef>
+</doxygen>

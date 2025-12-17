@@ -1,0 +1,127 @@
+.TH "csmp::FiniteElement_Test" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FiniteElement_Test \- Generic \fBTest\fP for any FEM subclass\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FiniteElement_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFiniteElement_Test\fP (\fBFiniteElement\fP *testee, const char *results_file, bool verbose)"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.RI "tests fem operations against provided data in text file "
+.ti -1c
+.RI "void \fBTestLocalCoordinateFunctionsReturnedAs_vector\fP (int interpolation_order)"
+.br
+.RI "testing declerative programming extensions "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Generic \fBTest\fP for any FEM subclass\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Philipp Lang
+.RE
+.PP
+Uses the \fBFiniteElement_TestData\fP class to test FEMs\&. Please see there for instructions on the text file that is used for testing\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+(3) ConsecutiveNodesAtBoundary Test(not implemented for most FEMs) 
+
+.PP
+(3) Think about _equal vs _test in some cases 
+
+.PP
+(3) Add more feedback when ordering matters
+.RE
+.PP
+.SH "FEM Prerequisites"
+.PP
+Coordinate matrix has to be at least of size 2x2, meaning no less than a 2D line element may be tested\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::FiniteElement_Test::run ()\fR [virtual]\fP"
+
+.PP
+tests fem operations against provided data in text file 
+.PP
+Implements \fBcsmp::Test\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

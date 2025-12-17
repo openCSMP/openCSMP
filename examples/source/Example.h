@@ -66,8 +66,10 @@ void Example1ForSuite::Execute()
 friend class ExampleSuite;
 
 public:
-  Example( std::ostream *osptr = 0 );
-  virtual ~Example(){}
+  explicit Example( std::ostream *osptr = nullptr );
+  Example( const Example& ) = delete;
+  Example& operator=( const Example& ) = delete;
+  virtual ~Example() = default;
 
   // Run Function
   virtual void Run() = 0;
@@ -83,26 +85,27 @@ public:
   void AddAuthor( const std::string& text );
 
   // Return functions
-  std::string  GetTitle() const;
-  int          GetDifficulty() const;
-  std::string  GetCategory() const;
+  [[nodiscard]] std::string  GetTitle() const;
+  [[nodiscard]] int          GetDifficulty() const;
+  [[nodiscard]] std::string  GetCategory() const;
 
 protected:
   void Initialize();
   // Stream interface
-  std::ostream *GetStream() { return ostream_; }
+  [[nodiscard]] std::ostream *GetStream() const { return ostream_; }
   void SetStream( std::ostream *ostream ) { ostream_ = ostream; }
-  std::string GetExampleFileName(const char* path);
-  void CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
+
+static std::string GetExampleFileName(const char* path);
+  static void CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
                                                     std::string& variable_file, std::string config_file = "");
 public:
   // DB
   std::list<std::string>::const_iterator GetDescriptionsBegin();
-  std::list<std::string>::const_iterator GetDescriptionsEnd() const;
+  [[nodiscard]] std::list<std::string>::const_iterator GetDescriptionsEnd() const;
   std::list<std::string>::const_iterator GetAuthorsBegin();
-  std::list<std::string>::const_iterator GetAuthorsEnd() const;
+  [[nodiscard]] std::list<std::string>::const_iterator GetAuthorsEnd() const;
   std::list<std::string>::const_iterator GetRequirementsBegin();
-  std::list<std::string>::const_iterator GetRequirementsEnd() const;
+  [[nodiscard]] std::list<std::string>::const_iterator GetRequirementsEnd() const;
 
 private:
   // output stream
@@ -114,10 +117,7 @@ private:
   std::list<std::string> requirements_;
   std::list<std::string> authors_;
   int difficulty_;                       ///< Example Difficulty: 1-5
-  // disabled
-  Example( const Example& );
-  Example& operator = ( const Example& );
-};
+ };
 
 
 } // csmp

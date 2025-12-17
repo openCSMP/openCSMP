@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_loop_unroller" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LoopUnroller</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_loop_unroller_1ab1f60f427d4c4616b198a8e9c4deaebd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LoopUnroller::LoopUnroller</definition>
+        <argsstring>()</argsstring>
+        <name>LoopUnroller</name>
+        <qualifiedname>csmp::LoopUnroller::LoopUnroller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/LoopUnroller.h" line="10" column="5" bodyfile="source/modules/utilities/LoopUnroller.cpp" bodystart="7" bodyend="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_loop_unroller_1ac9fa44a2aaf9badc03978bedd5eae464" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LoopUnroller::~LoopUnroller</definition>
+        <argsstring>()</argsstring>
+        <name>~LoopUnroller</name>
+        <qualifiedname>csmp::LoopUnroller::~LoopUnroller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/LoopUnroller.h" line="11" column="5" bodyfile="source/modules/utilities/LoopUnroller.cpp" bodystart="9" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_loop_unroller_1adbf4c3dc2700c00a8ff7b2095941ec99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LoopUnroller::Unroll</definition>
+        <argsstring>(const char *file, int i, const char *var1, const char *var2, const char *expression)</argsstring>
+        <name>Unroll</name>
+        <qualifiedname>csmp::LoopUnroller::Unroll</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var1</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var2</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>expression</declname>
+        </param>
+        <briefdescription>
+<para>simple i loop, e.g. data[i] += obj.data[j] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/LoopUnroller.h" line="14" column="10" bodyfile="source/modules/utilities/LoopUnroller.cpp" bodystart="12" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_loop_unroller_1aa5f37ed7e104d45b2f264115a1899f13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LoopUnroller::Unroll</definition>
+        <argsstring>(const char *file, int i, int j, const char *var1, const char *var2, const char *expression)</argsstring>
+        <name>Unroll</name>
+        <qualifiedname>csmp::LoopUnroller::Unroll</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var1</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var2</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>expression</declname>
+        </param>
+        <briefdescription>
+<para>simple i,j loop, e.g. data[i][j] += obj.data[j][j] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/LoopUnroller.h" line="20" column="10" bodyfile="source/modules/utilities/LoopUnroller.cpp" bodystart="35" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_loop_unroller_1a1f9c694e677f4a2c68636eea4d2277af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LoopUnroller::Unroll</definition>
+        <argsstring>(const char *file, const char *rows, const char *cols, int i, int j, const char *var1, const char *expression1, const char *var2)</argsstring>
+        <name>Unroll</name>
+        <qualifiedname>csmp::LoopUnroller::Unroll</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>rows</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>cols</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+          <defname>isz</defname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>j</declname>
+          <defname>jsz</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var1</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>expression1</declname>
+          <defname>var2</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var2</declname>
+          <defname>expression</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>version with inbuilt checks for the current size of the matrix assumes that loop variables are called i,j simple i,j loop, e.g. data[i][j] += obj.data[j][j] </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/LoopUnroller.h" line="25" column="10" bodyfile="source/modules/utilities/LoopUnroller.cpp" bodystart="65" bodyend="91"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::LoopUnroller</label>
+        <link refid="classcsmp_1_1_loop_unroller"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/LoopUnroller.h" line="8" column="1" bodyfile="source/includes/utilities/LoopUnroller.h" bodystart="8" bodyend="32"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_loop_unroller_1ab1f60f427d4c4616b198a8e9c4deaebd" prot="public" virt="non-virtual"><scope>csmp::LoopUnroller</scope><name>LoopUnroller</name></member>
+      <member refid="classcsmp_1_1_loop_unroller_1adbf4c3dc2700c00a8ff7b2095941ec99" prot="public" virt="non-virtual"><scope>csmp::LoopUnroller</scope><name>Unroll</name></member>
+      <member refid="classcsmp_1_1_loop_unroller_1aa5f37ed7e104d45b2f264115a1899f13" prot="public" virt="non-virtual"><scope>csmp::LoopUnroller</scope><name>Unroll</name></member>
+      <member refid="classcsmp_1_1_loop_unroller_1a1f9c694e677f4a2c68636eea4d2277af" prot="public" virt="non-virtual"><scope>csmp::LoopUnroller</scope><name>Unroll</name></member>
+      <member refid="classcsmp_1_1_loop_unroller_1ac9fa44a2aaf9badc03978bedd5eae464" prot="public" virt="non-virtual"><scope>csmp::LoopUnroller</scope><name>~LoopUnroller</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

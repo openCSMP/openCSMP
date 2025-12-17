@@ -1,0 +1,182 @@
+.TH "csmp::Point< 3U >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Point< 3U >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherited by \fBcsmp::GridNode\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP (double=0\&.)"
+.br
+.ti -1c
+.RI "\fBPoint\fP (double, double, double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP (const std::array< double, 3U > &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP (const std::vector< double > &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator=\fP (double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator+\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator\-\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator*\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator/\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator+\fP (double) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator\-\fP (double) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator*\fP (double) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator/\fP (double) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator+=\fP (const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator\-=\fP (const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator*=\fP (const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator/=\fP (const \fBPoint\fP< 3U > &)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator+=\fP (double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator\-=\fP (double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator*=\fP (double)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > & \fBoperator/=\fP (double)"
+.br
+.ti -1c
+.RI "double & \fBoperator[]\fP (uint32_t)"
+.br
+.ti -1c
+.RI "const double & \fBoperator[]\fP (uint32_t) const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator>\fP (const \fBPoint\fP< 3U > &) const"
+.br
+.ti -1c
+.RI "void \fBSet\fP (const std::array< double, 3U > &)"
+.br
+.ti -1c
+.RI "void \fBSet\fP (const std::vector< double > &)"
+.br
+.ti -1c
+.RI "void \fBSet\fP (double, double, double)"
+.br
+.ti -1c
+.RI "double \fBLength\fP () const"
+.br
+.ti -1c
+.RI "double \fBSquaredLength\fP () const"
+.br
+.ti -1c
+.RI "void \fBNormalizeLengthTo\fP (double len=1\&.)"
+.br
+.ti -1c
+.RI "double \fBDistanceTo\fP (const \fBPoint\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBCoincidesWithWithinTolerance\fP (const \fBPoint\fP &, double tolerance=1\&.0e\-5) const"
+.br
+.ti -1c
+.RI "bool \fBIsBetween\fP (const \fBPoint\fP &pt1, const \fBPoint\fP &pt2)"
+.br
+.ti -1c
+.RI "std::vector< double > \fBCoordinates\fP () const"
+.br
+.ti -1c
+.RI "std::array< double, 3U > \fBCoordinateArray\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "double \fBx_\fP"
+.br
+.ti -1c
+.RI "double \fBy_\fP"
+.br
+.ti -1c
+.RI "double \fBz_\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator\-\fP (double val, const \fBPoint\fP< 3U > &pt)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator+\fP (double val, const \fBPoint\fP< 3U > &pt)"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoperator*\fP (double val, const \fBPoint\fP< 3U > &pt)"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "bool \fBcsmp::Point\fP< 3U >::operator< (const \fBPoint\fP< 3U > & p) const"
+Lexicographical compare via standard array as needed by predicate less<> to store points in std containers\&.\&. Else one would need iterators\&.
+
+.PP
+.PP
+.nf
+std::lexicographical_compare()
+.fi
+.PP
+
+.PP
+Old code does not implement a strict weak ordering and might cause undefined behaviour if used in a map 
+.PP
+.nf
+return x_<p\&.x_ || (x_==p\&.x_ && y_<p\&.y_) || (x_==p\&.x_ &&  y_==p\&.y_ && z_<p\&.z_);
+
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

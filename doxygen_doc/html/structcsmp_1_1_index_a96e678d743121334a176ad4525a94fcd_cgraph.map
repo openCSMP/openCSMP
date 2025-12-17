@@ -1,0 +1,18 @@
+<map id="csmp::Index::operator=" name="csmp::Index::operator=">
+<area shape="rect" id="Node000001" title="move assignment operator" alt="" coords="5,56,162,82"/>
+<area shape="rect" id="Node000002" href="$structcsmp_1_1_index.html#abb874a9f4479e5436f285b7c65b26524" title="Registers an IndexTracker (does not detach from current!)" alt="" coords="212,5,351,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,53,213,33,214,38,137,58"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_index_tracker.html#a6cf491413a4fce44db086a25038727c4" title="Called when a new Index is copied using an existing Index." alt="" coords="401,44,538,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,65,386,63,386,68,162,71"/>
+<area shape="rect" id="Node000006" href="$structcsmp_1_1_index.html#a4f25345b8d8bb3230dc0f84a0775dcee" title="Detaches itself from IndexTracker (i.e. called upon destruction)" alt="" coords="210,111,353,136"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="133,80,218,103,217,109,132,85"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="434,44,432,35,438,26,451,20,470,18,490,20,502,27,500,31,489,25,470,23,452,25,441,30,437,36,439,43"/>
+<area shape="rect" id="Node000004" href="$structcsmp_1_1_index.html#a459d7e434854a790a303dcc20cc47949" title=" " alt="" coords="608,56,731,82"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="539,64,593,65,593,70,539,69"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_index_tracker.html#aab0c0d4cbc7ccf5495c08f87e1909aeb" title="print all currently registered Index objects" alt="" coords="586,109,753,135"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="540,82,608,102,607,107,538,87"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_index_tracker.html#a12c60cf0bf7c1f496809ca15b7f60e07" title="Called when an existing Index is destroyed." alt="" coords="401,110,538,150"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="353,123,386,125,386,130,353,129"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="538,107,610,84,612,89,539,112"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="539,125,571,123,571,129,539,130"/>
+</map>

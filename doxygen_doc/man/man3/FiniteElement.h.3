@@ -1,0 +1,134 @@
+.TH "source/includes/integration/finite_elements/FiniteElement.h" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+source/includes/integration/finite_elements/FiniteElement.h
+.SH SYNOPSIS
+.br
+.PP
+\fR#include <vector>\fP
+.br
+\fR#include 'CSMP_global_enumerations\&.h'\fP
+.br
+\fR#include 'DenseMatrix\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBcsmp::FiniteElement\fP"
+.br
+.RI "CSMP's base class of all finite elements whose functionality is provided through polymorphism\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBcsmp\fP"
+.br
+.RI "Complex System Modeling Platform\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBcsmp::CSMP_FEM_TYPE\fP : std::int8_t { \fBUNKNOWN\fP, \fBLINEAR_BAR\fP, \fBQUADRATIC_BAR\fP, \fBCUBIC_BAR\fP, \fBLINEAR_TRIANGLE\fP, \fBLINEAR_TRIANGLE3D\fP, \fBLINEAR_QUADRILATERAL\fP, \fBLINEAR_CUBOID\fP, \fBLINEAR_RECTANGLE\fP, \fBBARYCENTRIC_LINEAR_TRIANGLE\fP, \fBQUADRATIC_TRIANGLE\fP, \fBBARYCENTRIC_QUADRATIC_TRIANGLE\fP, \fBCUBIC_TRIANGLE\fP, \fBLINEAR_TETRAHEDRON\fP, \fBQUADRATIC_TETRAHEDRON\fP, \fBBARYCENTRIC_QUADRATIC_TETRAHEDRON\fP, \fBCUBIC_TETRAHEDRON\fP, \fBISOPARAMETRIC_LINEAR_BAR\fP, \fBISOPARAMETRIC_QUADRATIC_BAR\fP, \fBISOPARAMETRIC_CUBIC_BAR\fP, \fBISOPARAMETRIC_LINEAR_TRIANGLE\fP, \fBISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE\fP, \fBISOPARAMETRIC_QUADRATIC_TRIANGLE\fP, \fBISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE\fP, \fBISOPARAMETRIC_CUBIC_TRIANGLE\fP, \fBISOPARAMETRIC_LINEAR_TETRAHEDRON\fP, \fBISOPARAMETRIC_QUADRATIC_TETRAHEDRON\fP, \fBISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON\fP, \fBISOPARAMETRIC_CUBIC_TETRAHEDRON\fP, \fBISOPARAMETRIC_LINEAR_PYRAMID\fP, \fBISOPARAMETRIC_QUADRATIC_PYRAMID13\fP, \fBISOPARAMETRIC_QUADRATIC_PYRAMID14\fP, \fBISOPARAMETRIC_CUBIC_PYRAMID\fP, \fBISOPARAMETRIC_LINEAR_PRISM\fP, \fBISOPARAMETRIC_QUADRATIC_PRISM15\fP, \fBISOPARAMETRIC_QUADRATIC_PRISM18\fP, \fBISOPARAMETRIC_CUBIC_PRISM\fP, \fBISOPARAMETRIC_LINEAR_QUADRILATERAL\fP, \fBISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL\fP, \fBISOPARAMETRIC_QUADRATIC_QUADRILATERAL\fP, \fBISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL\fP, \fBISOPARAMETRIC_QUADRATIC_QUADRILATERAL9\fP, \fBISOPARAMETRIC_CUBIC_QUADRILATERAL\fP, \fBISOPARAMETRIC_LINEAR_HEXAHEDRON\fP, \fBISOPARAMETRIC_QUADRATIC_HEXAHEDRON20\fP, \fBISOPARAMETRIC_QUADRATIC_HEXAHEDRON27\fP, \fBISOPARAMETRIC_CUBIC_HEXAHEDRON\fP, \fBZERO_DIMENSIONAL_FACE\fP, \fBPOINT_ELEMENT\fP, \fBPOLYGONAL_ELEMENT\fP, \fBPOLYHEDRAL_ELEMENT\fP, \fBEXPERIMENTAL_ELEMENT\fP }"
+.br
+.RI "Data class to deduce properties of the CSMP finite-element types prior to the establishment of a \fBcsmp::Model\fP from the type information that is provided by declared in file "FiniteElment\&.h"\&. "
+.ti -1c
+.RI "enum \fBFV_FACET_TYPE\fP : std::int8_t { \fBPOINT_FACET\fP, \fBUNIT_LINEAR_FACET\fP, \fBTRIANGULAR_FACET\fP, \fBQUADRILATERAL_FACET\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBcsmp::isTriangularElement\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isQuadrilateralElement\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isLineElement\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isTriangular\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isQuadrilateral\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isSurfaceElement\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isTetrahedral\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isHexahedral\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isPrism\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isPyramid\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "bool \fBcsmp::isVolumeElement\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "\fBCELL_SHAPE\fP \fBcsmp::parseFiniteElementDimension\fP (\fBCSMP_FEM_TYPE\fP)"
+.br
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBcsmp::parseFiniteElementTypeEnum\fP (int8_t etype)"
+.br
+.RI "converts enum names "
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBcsmp::parseFiniteElementType\fP (const std::string &etype)"
+.br
+.RI "converts enum names into text "
+.ti -1c
+.RI "const char * \fBcsmp::parseFiniteElementType\fP (int8_t etype)"
+.br
+.RI "converts enum names into text "
+.ti -1c
+.RI "const char * \fBcsmp::parseAbbreviated_FE_Type\fP (int8_t etype)"
+.br
+.RI "converts enum names into text "
+.ti -1c
+.RI "FV_FACET_TYPE \fBcsmp::parseFacetType\fP (const std::string &ftype)"
+.br
+.ti -1c
+.RI "const char * \fBcsmp::parseFacetType\fP (int8_t ftype)"
+.br
+.ti -1c
+.RI "\fBCSMP_FEM_TYPE\fP \fBcsmp::finiteElementTypeOfSharedFace\fP (\fBCSMP_FEM_TYPE\fP csp_etype1, \fBCSMP_FEM_TYPE\fP csp_etype2, bool isoparametric=true)"
+.br
+.RI "returns UNKNOWN if more information is required "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1996
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+(3) Make FiniteElements singletons 
+
+.PP
+(3) Manage elements in a more generic way 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

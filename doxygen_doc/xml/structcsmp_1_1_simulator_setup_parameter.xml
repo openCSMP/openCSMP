@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_simulator_setup_parameter" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::SimulatorSetupParameter</compoundname>
+    <basecompoundref refid="structcsmp_1_1_parameter" prot="public" virt="non-virtual">csmp::Parameter</basecompoundref>
+    <includes refid="_simulator_setup_parameter_8h" local="no">SimulatorSetupParameter.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_simulator_setup_parameter_1a6c3866837a7d81a76ce9f681f629e901" prot="public" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::SimulatorSetupParameter::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="92" column="22" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_simulator_setup_parameter_1a05c3a846c5fafa04c9be7be9b6663785" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::SimulatorSetupParameter::vsize</definition>
+        <argsstring></argsstring>
+        <name>vsize</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::vsize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="93" column="22" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_simulator_setup_parameter_1aceca867347d07c9c54095632b17d4b3c" prot="public" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::SimulatorSetupParameter::placement</definition>
+        <argsstring></argsstring>
+        <name>placement</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="94" column="22" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_simulator_setup_parameter_1a11216f8ae22fa95e612594e4fd86437f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SimulatorSetupParameter::SimulatorSetupParameter</definition>
+        <argsstring>()</argsstring>
+        <name>SimulatorSetupParameter</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::SimulatorSetupParameter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="16" column="5" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="16" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_simulator_setup_parameter_1a0e806ec02c52cdd585d6c86c20005127" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SimulatorSetupParameter::SimulatorSetupParameter</definition>
+        <argsstring>(const SimulatorSetupParameter &amp;p)</argsstring>
+        <name>SimulatorSetupParameter</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::SimulatorSetupParameter</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_simulator_setup_parameter" kindref="compound">SimulatorSetupParameter</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="31" column="5" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="31" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_simulator_setup_parameter_1a5bc5963d7127e3de2feb5672829623c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_simulator_setup_parameter" kindref="compound">SimulatorSetupParameter</ref> &amp;</type>
+        <definition>SimulatorSetupParameter &amp; csmp::SimulatorSetupParameter::operator=</definition>
+        <argsstring>(const SimulatorSetupParameter &amp;p)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_simulator_setup_parameter" kindref="compound">SimulatorSetupParameter</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="46" column="29" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="46" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_simulator_setup_parameter_1a281b9e939cc5561ed76327dbaad946f5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetupParameter::operator==</definition>
+        <argsstring>(const SimulatorSetupParameter &amp;p) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_simulator_setup_parameter" kindref="compound">SimulatorSetupParameter</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="64" column="10" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="64" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_simulator_setup_parameter_1ab4a7e883e580d9a9e3b41a242e004b05" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SimulatorSetupParameter::operator!=</definition>
+        <argsstring>(const SimulatorSetupParameter &amp;p) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_simulator_setup_parameter" kindref="compound">SimulatorSetupParameter</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="77" column="10" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="77" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_simulator_setup_parameter_1ab129fc93b4c9d89ef9652ad67cabd89a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SimulatorSetupParameter::~SimulatorSetupParameter</definition>
+        <argsstring>()</argsstring>
+        <name>~SimulatorSetupParameter</name>
+        <qualifiedname>csmp::SimulatorSetupParameter::~SimulatorSetupParameter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulatorSetupParameter.h" line="90" column="5" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="90" bodyend="90"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Relates to the geothermal simulator application</para>
+<para><xrefsect id="todo_1_todo000218"><xreftitle>Todo</xreftitle><xrefdescription><para>documentation is needed (probably Julian Mindel)</para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000219"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM move to applications, geothermal energy storage simulator </para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+      </node>
+      <node id="1">
+        <label>csmp::SimulatorSetupParameter</label>
+        <link refid="structcsmp_1_1_simulator_setup_parameter"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="5">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="2">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::SimulatorSetupParameter</label>
+        <link refid="structcsmp_1_1_simulator_setup_parameter"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/SimulatorSetupParameter.h" line="15" column="1" bodyfile="source/includes/run_control/SimulatorSetupParameter.h" bodystart="15" bodyend="95"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_parameter_1ab0addaa017dcca8bb981d9fcb2fdf7f1" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>DefineFromStdin</name></member>
+      <member refid="structcsmp_1_1_parameter_1a04882f9555060d0e2dbf66bf4ae1b7c7" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>explanation</name></member>
+      <member refid="structcsmp_1_1_parameter_1a69b7de5e6144dd88c2ece04c3635496c" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>In</name></member>
+      <member refid="structcsmp_1_1_parameter_1a82b62daf14ee5dbb201f771bcd6e687a" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>IsWithinRange</name></member>
+      <member refid="structcsmp_1_1_parameter_1a86d8a4c9b06424663af8ad98c43a1d92" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>key</name></member>
+      <member refid="structcsmp_1_1_parameter_1adf8461db474be0f6796afad96ad60c2d" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>max</name></member>
+      <member refid="structcsmp_1_1_parameter_1a135ebc823e4b6ceb06d5bcf09bf8d0c5" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>MaxValue</name></member>
+      <member refid="structcsmp_1_1_parameter_1ae83eeb6f63be2396f294bc3bf7274e5a" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>min</name></member>
+      <member refid="structcsmp_1_1_parameter_1a3df6172385f50aed87630fd9a1702989" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>MinValue</name></member>
+      <member refid="structcsmp_1_1_parameter_1a4bc99142bdcf01a769243e4e9797ec5c" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>name</name></member>
+      <member refid="structcsmp_1_1_parameter_1a7d55b9b928470c551ce78d4ac19c70b8" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>notation</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1ab4a7e883e580d9a9e3b41a242e004b05" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>operator!=</name></member>
+      <member refid="structcsmp_1_1_parameter_1a8e8c474e78b725ba0109ca2497867078" prot="public" virt="non-virtual" ambiguityscope="csmp::Parameter::"><scope>csmp::SimulatorSetupParameter</scope><name>operator!=</name></member>
+      <member refid="structcsmp_1_1_parameter_1a484346f95582c5339b9feaff39621047" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>operator&lt;</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1a5bc5963d7127e3de2feb5672829623c2" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>operator=</name></member>
+      <member refid="structcsmp_1_1_parameter_1a5d071e006297d36b1faab8b87266b095" prot="public" virt="non-virtual" ambiguityscope="csmp::Parameter::"><scope>csmp::SimulatorSetupParameter</scope><name>operator=</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1a281b9e939cc5561ed76327dbaad946f5" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>operator==</name></member>
+      <member refid="structcsmp_1_1_parameter_1a0ff58fff4e71da3b6d5af52e8bb9a876" prot="public" virt="non-virtual" ambiguityscope="csmp::Parameter::"><scope>csmp::SimulatorSetupParameter</scope><name>operator==</name></member>
+      <member refid="structcsmp_1_1_parameter_1a6322aed5b5e8bec35b7bc1d452e3fbef" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>Out</name></member>
+      <member refid="structcsmp_1_1_parameter_1ab3899525b130cb7d333fcc8e8a91cf8a" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>Out</name></member>
+      <member refid="structcsmp_1_1_parameter_1a50b0a94a6cb1194d7b2e0131601d4781" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>Parameter</name></member>
+      <member refid="structcsmp_1_1_parameter_1ae5502cdd186a4e3f54fc15221c96ea8f" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>Parameter</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1aceca867347d07c9c54095632b17d4b3c" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>placement</name></member>
+      <member refid="structcsmp_1_1_parameter_1ae4bc69b0db56bb80f9054230a56801a7" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>Range</name></member>
+      <member refid="structcsmp_1_1_parameter_1a5a88c8deb8444fee2d206e6e6a22c3ec" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>reference</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1a11216f8ae22fa95e612594e4fd86437f" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>SimulatorSetupParameter</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1a0e806ec02c52cdd585d6c86c20005127" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>SimulatorSetupParameter</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1a6c3866837a7d81a76ce9f681f629e901" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>type</name></member>
+      <member refid="structcsmp_1_1_parameter_1a6c51b10e7b20939096b0afc1a4a3c30b" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>unit</name></member>
+      <member refid="structcsmp_1_1_parameter_1a92826c316c5e6bec1a4165af5d8583bf" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>usage</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1a05c3a846c5fafa04c9be7be9b6663785" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>vsize</name></member>
+      <member refid="structcsmp_1_1_parameter_1a7c989de4aacbca1b12e710aa1817849e" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>~Parameter</name></member>
+      <member refid="structcsmp_1_1_simulator_setup_parameter_1ab129fc93b4c9d89ef9652ad67cabd89a" prot="public" virt="non-virtual"><scope>csmp::SimulatorSetupParameter</scope><name>~SimulatorSetupParameter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

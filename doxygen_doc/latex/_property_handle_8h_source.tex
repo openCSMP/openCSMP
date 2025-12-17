@@ -1,0 +1,246 @@
+\doxysection{Property\+Handle.\+h}
+\hypertarget{_property_handle_8h_source}{}\label{_property_handle_8h_source}\index{source/includes/property\_manipulation/PropertyHandle.h@{source/includes/property\_manipulation/PropertyHandle.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_PROPERTY\_HANDLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_PROPERTY\_HANDLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_element_8h}{"{}Element.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_vector_variable}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{@brief\ PropertyHandle\ -\/\ a\ global\ accessor\ and\ mutator\ of\ distributed\ data}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{Especially\ for\ test\ computations,\ one\ would\ like\ write\ arithmetic}}
+\DoxyCodeLine{00026\ \textcolor{comment}{expressions\ which\ apply\ to\ distributed\ physical\ variables.\ To\ make}}
+\DoxyCodeLine{00027\ \textcolor{comment}{these\ expressions\ concise\ it\ is\ useful\ to\ replace\ lengthy\ variable\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{names\ by\ a\ notation\ of\ choice,\ for\ instance,\ to\ define\ a\ variation}}
+\DoxyCodeLine{00029\ \textcolor{comment}{of\ porosity\ with\ depth:}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{phi\ =\ phi\ -\/\ 1\ /\ z\string^2}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{Finally,\ there\ is\ a\ need\ to\ create\ variables\ for\ such\ mathematical\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{expressions\ at\ runtime.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00037\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{The\ PropertyHandle\ was\ designed\ following\ the\ motivation\ from\ above,\ but\ }}
+\DoxyCodeLine{00040\ \textcolor{comment}{also\ by\ using\ the\ existing\ Operand\ classs\ as\ a\ model.\ Thus,\ an\ PropertyHandle\ shares}}
+\DoxyCodeLine{00041\ \textcolor{comment}{many\ of\ the\ Operand\ interfaces,\ but\ as\ a\ difference,\ it\ will\ currently}}
+\DoxyCodeLine{00042\ \textcolor{comment}{apply\ to\ the\ associated\ variable\ on\ all\ the\ elements,\ nodes,\ or\ constraint\ }}
+\DoxyCodeLine{00043\ \textcolor{comment}{points\ of\ a\ mesh,\ depending\ on\ where\ the\ PropertyHandle\ variable\ is\ placed.\ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{}}
+\DoxyCodeLine{00045\ \textcolor{comment}{The\ desired\ capability\ of\ writing\ arithmetic\ expressions\ is\ implemented}}
+\DoxyCodeLine{00046\ \textcolor{comment}{via\ C++\ operator\ overloading.\ Notably,\ there\ is\ no\ assignment\ operator\ for}}
+\DoxyCodeLine{00047\ \textcolor{comment}{operands\ to\ operands,\ since\ the\ expected\ result\ of\ a\ C++\ assignment\ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{would\ imply\ a\ complete\ overwriting\ of\ the\ lefthand\ physical\ variable\ with\ }}
+\DoxyCodeLine{00049\ \textcolor{comment}{the\ one\ on\ the\ right\ of\ the\ assignment\ operator.\ }}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{Self-\/assignment\ is\ provided\ to\ write\ expressions\ which\ are\ efficient,}}
+\DoxyCodeLine{00052\ \textcolor{comment}{since\ they\ do\ not\ require\ the\ creation\ of\ temporary\ variables.\ Thus,\ the}}
+\DoxyCodeLine{00053\ \textcolor{comment}{expression\ }}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00055\ \textcolor{comment}{phi\ =\ phi\ -\/\ 1\ /\ z\string^2}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00057\ \textcolor{comment}{can\ be\ replaced\ by}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00059\ \textcolor{comment}{phi\ -\/=\ 1\ /\ z\string^2}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{which\ avoids\ the\ creation\ of\ a\ temporary\ variable\ for\ the\ righthand\ side}}
+\DoxyCodeLine{00062\ \textcolor{comment}{which\ would\ subsequently\ be\ assigned\ to\ 'phi'\ on\ the\ left.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00065\ \textcolor{comment}{@section\ applicability\ Applicability}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{PropertyHandles\ can\ be\ applied\ anywhere\ in\ a\ main\ program\ or\ a\ high-\/level\ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{class\ object\ or\ function\ which\ has\ access\ to\ the\ CSMP\ library.\ To\ create}}
+\DoxyCodeLine{00069\ \textcolor{comment}{a\ PropertyHandle\ its\ constructor\ takes\ arguments\ which\ allow\ it\ to\ associate\ }}
+\DoxyCodeLine{00070\ \textcolor{comment}{itself\ with\ an\ existing\ variable\ in\ the\ Model\ or\ to\ request\ a\ new\ }}
+\DoxyCodeLine{00071\ \textcolor{comment}{Model\ variable\ which\ will\ be\ globally\ known\ until\ the\ PropertyHandle\ is}}
+\DoxyCodeLine{00072\ \textcolor{comment}{destructed\ again.\ If\ a\ new\ variable\ is\ created,\ it\ will\ be\ destroyed\ when\ }}
+\DoxyCodeLine{00073\ \textcolor{comment}{the\ destructor\ of\ the\ PropertyHandle\ is\ called.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00076\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00077\ \textcolor{comment}{}}
+\DoxyCodeLine{00078\ \textcolor{comment}{The\ PropertyHandle\ has\ references\ to\ the\ Mesh\ and\ Memory\ managers,\ and}}
+\DoxyCodeLine{00079\ \textcolor{comment}{the\ PropertyDatabase\ and\ it\ stores\ the\ csmp::Index\ of\ the\ associated\ }}
+\DoxyCodeLine{00080\ \textcolor{comment}{physical\ variable\ for\ rapid\ variable\ access.\ }}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00083\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00084\ \textcolor{comment}{}}
+\DoxyCodeLine{00085\ \textcolor{comment}{The\ PropertyHandle\ collaborates\ with\ the\ Model\ and\ its\ contained\ }}
+\DoxyCodeLine{00086\ \textcolor{comment}{managers\ in\ order\ to\ carry\ out\ its\ arithmetic\ operations.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00089\ \textcolor{comment}{@section\ consequences\ Consequences}}
+\DoxyCodeLine{00090\ \textcolor{comment}{}}
+\DoxyCodeLine{00091\ \textcolor{comment}{PropertyHandles\ allow\ the\ user\ to\ add,\ subtract,\ multiply,\ and\ divide}}
+\DoxyCodeLine{00092\ \textcolor{comment}{distributed\ physical\ variables\ among\ eachother,\ to\ assign\ values\ to}}
+\DoxyCodeLine{00093\ \textcolor{comment}{them,\ or\ to\ add,\ subtract,\ multiply,\ and\ divide\ CSP\ basic\ variables\ to}}
+\DoxyCodeLine{00094\ \textcolor{comment}{the\ distributed\ physical\ variables.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00097\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00098\ \textcolor{comment}{}}
+\DoxyCodeLine{00099\ \textcolor{comment}{For\ clarity,\ the\ placement\ and\ type\ of\ the\ physical\ variables\ which}}
+\DoxyCodeLine{00100\ \textcolor{comment}{are\ associated\ with\ PropertyHandles\ are\ used\ to\ impose\ restrictions\ on\ }}
+\DoxyCodeLine{00101\ \textcolor{comment}{whether\ PropertyHandles\ can\ be\ used\ together\ in\ arithmetic\ expressions.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{Only\ if\ the\ placement\ and\ variable\ type\ is\ the\ same\ this\ can\ be}}
+\DoxyCodeLine{00103\ \textcolor{comment}{done.\ }}
+\DoxyCodeLine{00104\ \textcolor{comment}{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{The\ user\ is\ requested\ to\ make\ recommendations\ of\ how\ PropertyHandles\ can}}
+\DoxyCodeLine{00106\ \textcolor{comment}{be\ made\ more\ flexibility\ while\ avoiding\ ambiguities\ of\ assigning\ }}
+\DoxyCodeLine{00107\ \textcolor{comment}{variables\ of\ different\ type\ to\ one\ another.\ }}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00111\ \textcolor{comment}{}}
+\DoxyCodeLine{00112\ \textcolor{comment}{Below\ the\ full\ source\ code\ for\ the\ porosity\ example\ from\ above\ is\ listed:}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00114\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00115\ \textcolor{comment}{//\ existing\ property\ using\ default\ arguments\ }}
+\DoxyCodeLine{00116\ \textcolor{comment}{PropertyHandle\ \ phi(\ current\_supergroup,\ "{}porosity"{},\ SCALAR,\ ELEMENT\ );}}
+\DoxyCodeLine{00117\ \textcolor{comment}{phi\ =\ 0.4;}}
+\DoxyCodeLine{00118\ \textcolor{comment}{}}
+\DoxyCodeLine{00119\ \textcolor{comment}{//\ new\ property\ }}
+\DoxyCodeLine{00120\ \textcolor{comment}{PropertyHandle\ \ z(\ current\_supergroup,\ "{}depth"{},\ SCALAR,\ ELEMENT\ );}}
+\DoxyCodeLine{00121\ \textcolor{comment}{}}
+\DoxyCodeLine{00122\ \textcolor{comment}{//\ initialize\ the\ new\ property\ using\ an\ Interrelation\ subclass}}
+\DoxyCodeLine{00123\ \textcolor{comment}{AssignDepthToProperty\ \ make\_depth(\ reference\_to\_property\_database\ );}}
+\DoxyCodeLine{00124\ \textcolor{comment}{current\_supergroup.Apply(\ make\_depth\ );}}
+\DoxyCodeLine{00125\ \textcolor{comment}{}}
+\DoxyCodeLine{00126\ \textcolor{comment}{//\ desired\ arithmetic\ expression}}
+\DoxyCodeLine{00127\ \textcolor{comment}{phi\ -\/=\ 1\ /\ z\string^2;}}
+\DoxyCodeLine{00128\ \textcolor{comment}{phi.OutMatlab();}}
+\DoxyCodeLine{00129\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00131\ \textcolor{comment}{In\ this\ example,\ the\ existing\ scalar\ element\ variable\ 'porosity'\ is\ assigned}}
+\DoxyCodeLine{00132\ \textcolor{comment}{to\ the\ PropertyHandle\ 'phi'\ and\ intialized\ to\ 40\%.\ The\ construction\ of\ the\ }}
+\DoxyCodeLine{00133\ \textcolor{comment}{PropertyHandle\ 'z'\ prompts\ the\ generation\ of\ a\ new\ variable\ "{}depth"{}\ as}}
+\DoxyCodeLine{00134\ \textcolor{comment}{a\ scalar\ placed\ on\ the\ element\ and\ initialized\ to\ NAN\ (not\ a\ number).\ }}
+\DoxyCodeLine{00135\ \textcolor{comment}{The\ interrelation\ AssignDepthToProperty\ assigns\ the\ z-\/coordinate\ of\ the\ }}
+\DoxyCodeLine{00136\ \textcolor{comment}{element\ centers\ to\ the\ new\ variable\ 'depth'.\ Now\ the\ following\ arithmetic\ }}
+\DoxyCodeLine{00137\ \textcolor{comment}{expression\ has\ the\ necessary\ input\ values\ and\ can\ be\ applied.\ The\ result}}
+\DoxyCodeLine{00138\ \textcolor{comment}{is\ output\ to\ a\ text\ file\ in\ Matlab\ format.\ }}
+\DoxyCodeLine{00139\ \textcolor{comment}{}}
+\DoxyCodeLine{00140\ \textcolor{comment}{PropertyHandles\ also\ allow\ to\ create\ temporary\ variables,\ then\ apply}}
+\DoxyCodeLine{00141\ \textcolor{comment}{standard\ mathematical\ operations\ on\ these,\ and\ subsequently\ output\ }}
+\DoxyCodeLine{00142\ \textcolor{comment}{the\ results\ to\ a\ file\ for\ visualization.\ In\ the\ following\ example,\ the\ }}
+\DoxyCodeLine{00143\ \textcolor{comment}{natural\ logarithm\ of\ the\ variable\ porosity\ is\ output\ to\ a\ textfile:\ }}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00145\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00146\ \textcolor{comment}{PropertyHandle\ \ phi(\ current\_supergroup,\ "{}porosity"{},\ SCALAR,\ ELEMENT\ );}}
+\DoxyCodeLine{00147\ \textcolor{comment}{PropertyHandle\ \ log\_phi(\ current\_supergroup,\ "{}log\ porosity"{},\ SCALAR,\ ELEMENT\ );}}
+\DoxyCodeLine{00148\ \textcolor{comment}{}}
+\DoxyCodeLine{00149\ \textcolor{comment}{//\ assign\ the\ porosity\ to\ the\ new\ variable\ without\ direct\ assignment}}
+\DoxyCodeLine{00150\ \textcolor{comment}{log\_phi\ \ =\ 0.0;}}
+\DoxyCodeLine{00151\ \textcolor{comment}{log\_phi\ +=\ phi;}}
+\DoxyCodeLine{00152\ \textcolor{comment}{//\ logarithmitize\ the\ values}}
+\DoxyCodeLine{00153\ \textcolor{comment}{}}
+\DoxyCodeLine{00154\ \textcolor{comment}{log\_phi.Log();}}
+\DoxyCodeLine{00155\ \textcolor{comment}{log\_phi.Out(\ logarithmitized\_porosity\ );}}
+\DoxyCodeLine{00156\ \textcolor{comment}{}}
+\DoxyCodeLine{00157\ \textcolor{comment}{//\ delete\ the\ temporary\ variable}}
+\DoxyCodeLine{00158\ \textcolor{comment}{log\_phi.\string~PropertyHandle();}}
+\DoxyCodeLine{00159\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00160\ \textcolor{comment}{}}
+\DoxyCodeLine{00161\ \textcolor{comment}{@todo\ !!!\ SKM:\ fix\ math\ function\ calls\ and\ catch\ IEEE\ exceptions\ }}
+\DoxyCodeLine{00162\ \textcolor{comment}{@todo\ SKM:\ deal\ with\ new\ variable\ placements}}
+\DoxyCodeLine{00163\ \textcolor{comment}{@todo\ (1)\ Crashes\ when\ it\ wants\ to\ create\ a\ REGION\ property\ (A)}}
+\DoxyCodeLine{00164\ \textcolor{comment}{@todo\ (3)\ A\ range\ of\ switch\ statements\ must\ be\ extended\ for\ type\ REGION,\ FACE,\ INTER\_FACE\ (A)}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00166\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00167\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00168\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\ \{}
+\DoxyCodeLine{00169\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00170\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a88ec60b31e8b46b2303ff3905892ce32}{PropertyHandle}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ type=SCALAR,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ place=NODE,\ uint32\_t\ vsize=1U\ );}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ PropertyHandle(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ target\_region,}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name,}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ type=SCALAR,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ place=NODE,\ uint32\_t\ vsize=1U\ );}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a9620c267a912260d48e250c0a9b288ea}{PropertyHandle}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ op\ );}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_property_handle_a4011b4168bc76a2f37befabb526a5541}{PropertyHandle}}();}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{//\ assignment}}
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ op\ );}
+\DoxyCodeLine{00183\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a1d41759b0c37af5b9ca55b7ce9dfa4e1}{operator}}=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00184\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ s\ );}
+\DoxyCodeLine{00185\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ v\ );}
+\DoxyCodeLine{00186\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_abfa726dfa7a711c6562c97e3ca5775fc}{operator}}=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\&\ t\ );}
+\DoxyCodeLine{00187\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator=(\ \textcolor{keyword}{const}\ std::vector<VectorVariable<dim>\ >\&\ vc\ );}
+\DoxyCodeLine{00188\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator=(\ \textcolor{keyword}{const}\ std::vector<TensorVariable<dim>\ >\&\ ts\ );}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{//\ "{}self-\/assign"{}\ calculation\ result\ to\ PropertyHandle\ on\ the\ left}}
+\DoxyCodeLine{00191\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a98836987275c992cb1a5e3c500560f16}{operator}}+=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00192\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator-\/=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00193\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a750f4ec00439262023c978683cb06f75}{operator}}*=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00194\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator/=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{comment}{//\ "{}self-\/assign"{}\ results\ from\ spatially\ variable\ calculations}}
+\DoxyCodeLine{00197\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a52956c8f9403dcddf16534cc58605a49}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ op\ );}
+\DoxyCodeLine{00198\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ op\ );}
+\DoxyCodeLine{00199\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a9276977e5bddb6c879a0c0c5c4a4555e}{operator}}*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ op\ );}
+\DoxyCodeLine{00200\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}\&\ op\ );}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{//\ standard\ math}}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a3ec98d66d13a356309d8ff8da4ec9937}{Squared}}();}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a32c64de5c8a180f1d1fad710c0846fa5}{Sqrt}}();}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a38a6053488aad9313b7c98acee490adf}{Ln}}();\ \ \ \ \ \ \textcolor{comment}{//\ natural\ logarithm}}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a052b7ad27853f4eb928bc81377d287fe}{Log10}}();\ \ \ \textcolor{comment}{//\ decadic\ logarithm}}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_ae9f9081d7346eb4b755dae919c5b6013}{Exp}}();}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a61bd7e7d9a8ec2a72ee1ed598d7065d6}{Pow}}(\ \textcolor{keywordtype}{double}\ raised\_to\ );}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a678ba1e51e0663d58ffb83069d946f04}{ZapNAN}}(\ \textcolor{keywordtype}{double}\ with\ );}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a3dfd0c830c886a5031f462750687d380}{Sin}}();}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_ab39d3c22028fb93f77ffda61ddcb5026}{Cos}}();}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a4ae5a13329a2f2cf6b1c08e4cde7f6de}{Tan}}();}
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a20ce3529dc7f43cc4d6a4ac1d9f3ba22}{Acos}}();}
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a996904b678b66f3b48a6a3a8f39d6293}{Asin}}();}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_af5214a1b159ce7819f5ee1c431aecbe9}{Atan}}();}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{//\ various\ operations}}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \ \ VariableName()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a12c56e037bf4d1d9530766c90c207c60}{Key}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a01ea8480651da5462789dce112d34fb6}{Range}}(\ \textcolor{keywordtype}{double}\&\ omin,\ \textcolor{keywordtype}{double}\&\ omax\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a2eda2263970fa36bcfc1ad6a03949469}{IsWithinRange}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00222\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_a03ad5576ac87af17cb875efbea818dd6}{OutputCondition}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle_aab5a4dbf66b9b312273ba68c33205e35}{OutputCondition}}(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ c\ );}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_handle_aa75a1204703bb356d83c6361b549e235}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_property_handle_a9b3bb027a58437a87dc7b566852f46bc}{Out}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ text\_file\_name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00229\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ \ \ \ \ \ \ \ \ \ \ model\_domain;}
+\DoxyCodeLine{00230\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ group\_name;}
+\DoxyCodeLine{00231\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ \ \ \ \ \ \ \ \ \ group;}
+\DoxyCodeLine{00232\ \ \ \ \ std::string\ \ \ \ \ \ \ \ \ \ \ var\_name;}
+\DoxyCodeLine{00233\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ key\_;}
+\DoxyCodeLine{00234\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \ \ \ \ \ \ \ flag\_output;}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ new\_variable\_created;}
+\DoxyCodeLine{00236\ \};}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

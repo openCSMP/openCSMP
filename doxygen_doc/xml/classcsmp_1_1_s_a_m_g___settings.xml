@@ -1,0 +1,2695 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_s_a_m_g___settings" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SAMG_Settings</compoundname>
+    <basecompoundref refid="classcsmp_1_1_solver_settings" prot="public" virt="non-virtual">csmp::SolverSettings</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a19eb331dcccc6231705a2c0d48d59cb2" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::isym_</definition>
+        <argsstring></argsstring>
+        <name>isym_</name>
+        <qualifiedname>csmp::SAMG_Settings::isym_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="103" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a2f1c703b01705d041c311d6ffcfb26b0" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::irow_</definition>
+        <argsstring></argsstring>
+        <name>irow_</name>
+        <qualifiedname>csmp::SAMG_Settings::irow_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="104" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a95a59fee69ee571334b59d9c0932357d" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::itypu_</definition>
+        <argsstring></argsstring>
+        <name>itypu_</name>
+        <qualifiedname>csmp::SAMG_Settings::itypu_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="105" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a25082363990a9fe24b6ad2925d7b8001" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::eps_</definition>
+        <argsstring></argsstring>
+        <name>eps_</name>
+        <qualifiedname>csmp::SAMG_Settings::eps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="106" column="17" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a69b24243a7b6e13dde4ebd02c48b2776" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::rel_eps_</definition>
+        <argsstring></argsstring>
+        <name>rel_eps_</name>
+        <qualifiedname>csmp::SAMG_Settings::rel_eps_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="107" column="17" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1accf96252cf4980ab50cf1e746dffd860" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::napproach_</definition>
+        <argsstring></argsstring>
+        <name>napproach_</name>
+        <qualifiedname>csmp::SAMG_Settings::napproach_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="108" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a9e6b3b8458b0e4c3ec19ffc092fdd73b" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nxtyp_</definition>
+        <argsstring></argsstring>
+        <name>nxtyp_</name>
+        <qualifiedname>csmp::SAMG_Settings::nxtyp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="109" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a9e31fc8f0d46b8d99f84564666de105c" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nrd_</definition>
+        <argsstring></argsstring>
+        <name>nrd_</name>
+        <qualifiedname>csmp::SAMG_Settings::nrd_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="110" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1aa208263dd71c5d492c711628186e4e4c" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nru_</definition>
+        <argsstring></argsstring>
+        <name>nru_</name>
+        <qualifiedname>csmp::SAMG_Settings::nru_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="111" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a30f1c7212ba33c644dc20c22a774b835" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::internal_</definition>
+        <argsstring></argsstring>
+        <name>internal_</name>
+        <qualifiedname>csmp::SAMG_Settings::internal_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="112" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a455d9ddabfb55d08afabeeb152055176" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nprim_</definition>
+        <argsstring></argsstring>
+        <name>nprim_</name>
+        <qualifiedname>csmp::SAMG_Settings::nprim_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="113" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ac7d18dd5c3d2ade70d8b21fda038e210" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::npr_is_dummy_</definition>
+        <argsstring></argsstring>
+        <name>npr_is_dummy_</name>
+        <qualifiedname>csmp::SAMG_Settings::npr_is_dummy_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="114" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a54a60089f7f1b1dcb7d9e12dab0d81b8" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nint_weights_</definition>
+        <argsstring></argsstring>
+        <name>nint_weights_</name>
+        <qualifiedname>csmp::SAMG_Settings::nint_weights_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="115" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1aedae8276204b4fb2b831450db0047ce6" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nint_pat_</definition>
+        <argsstring></argsstring>
+        <name>nint_pat_</name>
+        <qualifiedname>csmp::SAMG_Settings::nint_pat_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="116" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a9ca5994e2415afa3a52116b9806a2539" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::igam_</definition>
+        <argsstring></argsstring>
+        <name>igam_</name>
+        <qualifiedname>csmp::SAMG_Settings::igam_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="117" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1aab8dc19bb18c0f500d35522ecc1f009b" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ncgrad_</definition>
+        <argsstring></argsstring>
+        <name>ncgrad_</name>
+        <qualifiedname>csmp::SAMG_Settings::ncgrad_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="118" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1acf93cb75497f543d0bdf84f42b490abe" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nkdim_</definition>
+        <argsstring></argsstring>
+        <name>nkdim_</name>
+        <qualifiedname>csmp::SAMG_Settings::nkdim_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="119" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a1eaecd5e6f7266d2b016f9d3895bf96f" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ncycle_</definition>
+        <argsstring></argsstring>
+        <name>ncycle_</name>
+        <qualifiedname>csmp::SAMG_Settings::ncycle_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="120" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a6877846fea8d226b80937ca5c33b007f" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ncyc_done_</definition>
+        <argsstring></argsstring>
+        <name>ncyc_done_</name>
+        <qualifiedname>csmp::SAMG_Settings::ncyc_done_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="121" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a39d5f1d8c8943cc67f973bc170c50056" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ncyc_best_</definition>
+        <argsstring></argsstring>
+        <name>ncyc_best_</name>
+        <qualifiedname>csmp::SAMG_Settings::ncyc_best_</qualifiedname>
+        <briefdescription>
+<para>&lt; total number of cycles (iterations) performed </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="122" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1af1cbe88b981b21727296a73fcc2e70e7" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::iswit_</definition>
+        <argsstring></argsstring>
+        <name>iswit_</name>
+        <qualifiedname>csmp::SAMG_Settings::iswit_</qualifiedname>
+        <briefdescription>
+<para>&lt; stores lowest number of cycles achieved </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="123" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1add0d51a89d69c447a6066943da25fba5" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::iextent_</definition>
+        <argsstring></argsstring>
+        <name>iextent_</name>
+        <qualifiedname>csmp::SAMG_Settings::iextent_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="124" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a71cb6e4b95fcafe183155bba6f78ecd5" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ndefault_</definition>
+        <argsstring></argsstring>
+        <name>ndefault_</name>
+        <qualifiedname>csmp::SAMG_Settings::ndefault_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="125" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1aba3af9890d8b2c3e0acc7bd8704b9eb3" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::norm_typ_</definition>
+        <argsstring></argsstring>
+        <name>norm_typ_</name>
+        <qualifiedname>csmp::SAMG_Settings::norm_typ_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="126" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1aa20c2c951e8b50c65d4947affb931438" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ioscratch_</definition>
+        <argsstring></argsstring>
+        <name>ioscratch_</name>
+        <qualifiedname>csmp::SAMG_Settings::ioscratch_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="127" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1acd1d81e839c69174f6ebe484ea2857bf" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::chktol_</definition>
+        <argsstring></argsstring>
+        <name>chktol_</name>
+        <qualifiedname>csmp::SAMG_Settings::chktol_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="128" column="17" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ad7b6fc5c768549ca064a3543debbce21" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::idmp_</definition>
+        <argsstring></argsstring>
+        <name>idmp_</name>
+        <qualifiedname>csmp::SAMG_Settings::idmp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="129" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a2d1419de6d416df7c991cf95136dd4a4" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::igdp_</definition>
+        <argsstring></argsstring>
+        <name>igdp_</name>
+        <qualifiedname>csmp::SAMG_Settings::igdp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="130" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1aefc4ec6d3676a62c0d8a321307f3a685" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::iadp_</definition>
+        <argsstring></argsstring>
+        <name>iadp_</name>
+        <qualifiedname>csmp::SAMG_Settings::iadp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="131" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1afe032163b72c6d0578109d766cca7f9e" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::iwdp_</definition>
+        <argsstring></argsstring>
+        <name>iwdp_</name>
+        <qualifiedname>csmp::SAMG_Settings::iwdp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="132" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a832386b1acce6938b84f07ef55852aa2" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::iout1_</definition>
+        <argsstring></argsstring>
+        <name>iout1_</name>
+        <qualifiedname>csmp::SAMG_Settings::iout1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="133" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a4691cdf6ba0be08b38554f1d4c0172f3" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::iout2_</definition>
+        <argsstring></argsstring>
+        <name>iout2_</name>
+        <qualifiedname>csmp::SAMG_Settings::iout2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="134" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ac43d8bd6758e4d70fe30f6f0de06d6c8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::a_cmplx_</definition>
+        <argsstring></argsstring>
+        <name>a_cmplx_</name>
+        <qualifiedname>csmp::SAMG_Settings::a_cmplx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="135" column="17" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a536de6aa0cb940a9c7a245cd9ba6f850" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::g_cmplx_</definition>
+        <argsstring></argsstring>
+        <name>g_cmplx_</name>
+        <qualifiedname>csmp::SAMG_Settings::g_cmplx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="136" column="17" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a87163835db4d10f379f3d9edf78f3414" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::p_cmplx_</definition>
+        <argsstring></argsstring>
+        <name>p_cmplx_</name>
+        <qualifiedname>csmp::SAMG_Settings::p_cmplx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="137" column="17" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a28f2cc57adc645663c8e1d16bf0d7aed" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::w_avrge_</definition>
+        <argsstring></argsstring>
+        <name>w_avrge_</name>
+        <qualifiedname>csmp::SAMG_Settings::w_avrge_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="138" column="17" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a58cfc9b22e80ef4bfe7800efcc7c3c24" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ncgtyp_</definition>
+        <argsstring></argsstring>
+        <name>ncgtyp_</name>
+        <qualifiedname>csmp::SAMG_Settings::ncgtyp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="139" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ab8106ab0d68e5e6e587e7cfe96b6b51e" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ioform_</definition>
+        <argsstring></argsstring>
+        <name>ioform_</name>
+        <qualifiedname>csmp::SAMG_Settings::ioform_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="140" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a92996bb62c605b1420807eea776abeed" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::ioform_length_</definition>
+        <argsstring></argsstring>
+        <name>ioform_length_</name>
+        <qualifiedname>csmp::SAMG_Settings::ioform_length_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="141" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1aaafcd81de6d0288134b868e3054993b0" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::levelx_</definition>
+        <argsstring></argsstring>
+        <name>levelx_</name>
+        <qualifiedname>csmp::SAMG_Settings::levelx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="142" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a7061e87b1af22af30bbc7e7748271b58" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::SAMG_Settings::filnam_dump_</definition>
+        <argsstring></argsstring>
+        <name>filnam_dump_</name>
+        <qualifiedname>csmp::SAMG_Settings::filnam_dump_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="143" column="19" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a8e765042979c2d9a3605e7a2604e9219" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::filnam_dump_length_</definition>
+        <argsstring></argsstring>
+        <name>filnam_dump_length_</name>
+        <qualifiedname>csmp::SAMG_Settings::filnam_dump_length_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="144" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a9d1174340dc6cc62a33e50c243875652" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::SAMG_Settings::filnam_dump_Array_[50]</definition>
+        <argsstring>[50]</argsstring>
+        <name>filnam_dump_Array_</name>
+        <qualifiedname>csmp::SAMG_Settings::filnam_dump_Array_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="145" column="19" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1adfac48edad9a8683283cb81239d09843" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int csmp::SAMG_Settings::neg_diag_</definition>
+        <argsstring></argsstring>
+        <name>neg_diag_</name>
+        <qualifiedname>csmp::SAMG_Settings::neg_diag_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="146" column="19" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a534aad3ee54cf4d4d81d5c9d1478f718" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nred_</definition>
+        <argsstring></argsstring>
+        <name>nred_</name>
+        <qualifiedname>csmp::SAMG_Settings::nred_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="147" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a1676e81f6fa15a353b96009963360067" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nredlev_</definition>
+        <argsstring></argsstring>
+        <name>nredlev_</name>
+        <qualifiedname>csmp::SAMG_Settings::nredlev_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="148" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a6446cdf8a8fbd91766ffd42de1271251" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::nxf_clean_</definition>
+        <argsstring></argsstring>
+        <name>nxf_clean_</name>
+        <qualifiedname>csmp::SAMG_Settings::nxf_clean_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="149" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a33ccf5633469bde6404c2b69210071f4" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::npcol_</definition>
+        <argsstring></argsstring>
+        <name>npcol_</name>
+        <qualifiedname>csmp::SAMG_Settings::npcol_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="150" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ace41c8731a97f5636fe5a3b0d0b32dd5" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::solver_instance_</definition>
+        <argsstring></argsstring>
+        <name>solver_instance_</name>
+        <qualifiedname>csmp::SAMG_Settings::solver_instance_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="151" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a0251c3f8edc4b6a7677d924e98f04ebc" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::iter_pre_</definition>
+        <argsstring></argsstring>
+        <name>iter_pre_</name>
+        <qualifiedname>csmp::SAMG_Settings::iter_pre_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="152" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ab9bb3c917bdc288ca4d8071f272b02eb" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::mode_mess_</definition>
+        <argsstring></argsstring>
+        <name>mode_mess_</name>
+        <qualifiedname>csmp::SAMG_Settings::mode_mess_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="153" column="21" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1a32484b15ad804af1210fcde3595c37a0" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SAMG_Settings::negative_nsolve_</definition>
+        <argsstring></argsstring>
+        <name>negative_nsolve_</name>
+        <qualifiedname>csmp::SAMG_Settings::negative_nsolve_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="155" column="12" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ac4956196df2867c303506519861f5258" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SAMG_Settings::negative_ncyc_</definition>
+        <argsstring></argsstring>
+        <name>negative_ncyc_</name>
+        <qualifiedname>csmp::SAMG_Settings::negative_ncyc_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="156" column="12" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1adfbb593d7afa767ab494a434ff44b5dd" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SAMG_Settings::negative_idump_</definition>
+        <argsstring></argsstring>
+        <name>negative_idump_</name>
+        <qualifiedname>csmp::SAMG_Settings::negative_idump_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="157" column="12" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1afb11502e69b104edef2f12cf24a147c5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SAMG_Settings::negative_iout_</definition>
+        <argsstring></argsstring>
+        <name>negative_iout_</name>
+        <qualifiedname>csmp::SAMG_Settings::negative_iout_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="158" column="12" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_s_a_m_g___settings_1ab79455e935ce0464f5a3f2a37cb8c66b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::SAMG_Settings::explicit_secondary_</definition>
+        <argsstring></argsstring>
+        <name>explicit_secondary_</name>
+        <qualifiedname>csmp::SAMG_Settings::explicit_secondary_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="159" column="12" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="159" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a395c7c2bbe9dac79150d8b0fa9a89d24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SAMG_Settings::SAMG_Settings</definition>
+        <argsstring>()</argsstring>
+        <name>SAMG_Settings</name>
+        <qualifiedname>csmp::SAMG_Settings::SAMG_Settings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor. The standard settings are according to the SAMG user manual for version 21b1, if available. These standard settings apply well to scalar problems. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="11" column="7" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="15" bodyend="93"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a395c7c2bbe9dac79150d8b0fa9a89d24" compoundref="_s_a_m_g___settings_8cpp" startline="15" endline="93">SAMG_Settings</references>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1a395c7c2bbe9dac79150d8b0fa9a89d24" compoundref="_s_a_m_g___settings_8cpp" startline="15" endline="93">SAMG_Settings</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a875a5d34c0445d4a109707e93777efcd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_matrix</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_matrix</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_matrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of matrix switch.</para>
+<para>Involved subswitches: isym, irow </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="13" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="99" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a4df3d1468d1da6eeb0735853f5487fa0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_ifirst</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_ifirst</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_ifirst</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of ifirst switch</para>
+<para>Involved subswitches: itypu</para>
+<para>If ifirst == 1, (end residual) &lt;= eps, if ifirst == 0, (end residual) / (start residual) &lt;= eps</para>
+<para>rel_eps can be accessed with the function Get_rel_eps </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="14" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="113" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aef019fe4871af64ad18045b7a5af4cda" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::Get_eps</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_eps</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_eps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of eps switch</para>
+<para>Involved subswitches: eps </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="15" column="14" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="121" bodyend="123"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a5cabe2962708504865237759f11fe2b8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::Get_rel_eps</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_rel_eps</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_rel_eps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of eps switch in the case of an explicit first guess vector (itypu == 0).</para>
+<para>Involved subswitches: eps </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="16" column="14" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="130" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1af8a615e3c94b76cd21340175e8511512" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_nsolve</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_nsolve</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_nsolve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of nsolve switch</para>
+<para>Involved subswitches: napproach, nxtyp, internal, nprim, npr_is_dummy, nint_weights, nint_pat</para>
+<para>For negative values of nsolve, call SetNegative_nsolve(true) first </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="17" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="141" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aee44168121d5bf2838a6934eb2ad258d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_ncyc</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_ncyc</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_ncyc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of ncyc switch</para>
+<para>Involved subswitches: igam, ncgrad, nkdim, ncycle</para>
+<para>For negative values of ncyc, call SetNegative_ncyc( true ) first </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="18" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="153" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ae990026044c19faf0ac9884473bd298c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_iswit</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_iswit</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_iswit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of iswit</para>
+<para>Involved subswitches: iswit, iextent, ndefault, norm_typ, ioscratch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="19" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="165" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ace60c434ddcf1c9d9305adc1fc2ccfa4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_iswtch</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_iswtch</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_iswtch</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of iswtch switch</para>
+<para>Involved subswitches: iswit, iextent, ndefault, norm_typ, ioscratch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="20" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="173" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a4fbdd2f1a26fd2455c1ed857ebdc0ee5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::Get_chktol</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_chktol</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_chktol</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of chktol switch</para>
+<para>Involved subswitches: chktol </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="21" column="14" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="181" bodyend="183"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a9fb7dcfe246be60f65704e1233f8a5e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_idump</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_idump</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_idump</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of idump switch</para>
+<para>Involved subswitches: idmp, igdp, iadp, iwdp</para>
+<para>For negative values of idump, call SetNegative_idump( true ) first </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="22" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="191" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a583d77f0a34e159565739896984356d8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_idmp</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_idmp</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_idmp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="23" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="196" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a9ff42ee1d2530ea98e1e9cc6f762628f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_iout</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_iout</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_iout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of iout switch</para>
+<para>Involved subswitches: iout1, iout2</para>
+<para>For negative values of iout, call SetNegative_iout( true ) first </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="24" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="206" bodyend="209"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a7228f05b416fff914d63d3acb93e64bf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::Get_a_cmplx</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_a_cmplx</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_a_cmplx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of a_cmplx switch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="25" column="14" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="213" bodyend="215"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ab8a19be3953546a3f9614753abfba4ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::Get_g_cmplx</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_g_cmplx</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_g_cmplx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of g_cmplx switch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="26" column="14" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="219" bodyend="221"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a6665da74b5be8915fe23b0cffa7950cc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::Get_p_cmplx</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_p_cmplx</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_p_cmplx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of p_cmplx switch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="27" column="14" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="225" bodyend="227"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a3e8e96fa86944079bbbfa0ade2571ae3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::SAMG_Settings::Get_w_avrge</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_w_avrge</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_w_avrge</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of w_avrge switch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="28" column="14" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="231" bodyend="233"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a336c079053df9ae15af4af32d886036d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_ncg</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_ncg</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_ncg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of optional ncg switch</para>
+<para>Involved subswitches: ncgtyp, nred, nredlev, nxf_clean, npcol</para>
+<para>Whether the optional switch should be set can be determined with the function <ref refid="classcsmp_1_1_s_a_m_g___settings_1a4e8ff1270735cc2c8f400695761d0eea" kindref="member">ExplicitSecondary()</ref>. <ref refid="classcsmp_1_1_s_a_m_g___solver" kindref="compound">SAMG_Solver</ref> uses this method to decide whether to stick to the defaults or to use the settings stored in the <ref refid="classcsmp_1_1_s_a_m_g___settings" kindref="compound">SAMG_Settings</ref> object. A modification of a subswitch of ncg triggers the use of the ncg switch automatically. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="29" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="274" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a99346d7fe45700a8dd4d511f60391e19" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_ncyc_done</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_ncyc_done</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_ncyc_done</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Query to determine how many iteration cycles have been performed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="30" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="280" bodyend="282"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aba47058088e1b76e0e91a3d1c8ce873e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_ncyc_best</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_ncyc_best</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_ncyc_best</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Query to determine the minimum number of iteration cycles performed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="31" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="286" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a65f091e77d409ebd463d3290a845c87b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_levelx</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_levelx</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_levelx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of optional levelx switch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="32" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="236" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aa6807b1ec83b0c08fa26c86107097a6a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_ioform</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_ioform</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_ioform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of optional ioform switch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="33" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="241" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a6e1b10d7a21a7b23f38a2fbda038e445" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_ioform_length</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_ioform_length</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_ioform_length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of ioform ASCII character length </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="34" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="246" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a793f1f9a197f8bcacf740ac312fed9ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_iter_pre</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_iter_pre</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_iter_pre</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Gets iter_pre which allows using SAMG as pre-conditioner for Bi-CGStab </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="35" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="292" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ae20db7c97fab82850b71cc83ed688eb0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int *</type>
+        <definition>int * csmp::SAMG_Settings::Get_filnam_dump</definition>
+        <argsstring>()</argsstring>
+        <name>Get_filnam_dump</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_filnam_dump</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of optional filnam_dump switch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="36" column="11" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="252" bodyend="255"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a804d145933ca01882c19975903940ad2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_filnam_dump_length</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_filnam_dump_length</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_filnam_dump_length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns value of filnam_dump ASCII character length </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="37" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="258" bodyend="263"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a4e8ff1270735cc2c8f400695761d0eea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SAMG_Settings::ExplicitSecondary</definition>
+        <argsstring>() const</argsstring>
+        <name>ExplicitSecondary</name>
+        <qualifiedname>csmp::SAMG_Settings::ExplicitSecondary</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Query to determine whether user defined ncg values should be used. This function is called in the <ref refid="classcsmp_1_1_s_a_m_g___solver" kindref="compound">SAMG_Solver</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="38" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="299" bodyend="301"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ad9378e650f7998f76c951fe4b5c34fa1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SAMG_Settings::UsePointBasedApproach</definition>
+        <argsstring>() const</argsstring>
+        <name>UsePointBasedApproach</name>
+        <qualifiedname>csmp::SAMG_Settings::UsePointBasedApproach</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Query to determine if point-based approach is used. When the function returns false, an unknown-based approach is selected by the <ref refid="classcsmp_1_1_s_a_m_g___settings" kindref="compound">SAMG_Settings</ref> object. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="39" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="306" bodyend="308"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1af849b38b8bf9f8500590777e5fd1e7d7" compoundref="_s_a_m_g___solver_8cpp" startline="148" endline="679">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___solver_1a6a4dbbe3dd011d95514026e4bcd52e33" compoundref="_s_a_m_g___solver_8cpp" startline="689" endline="1235">csmp::SAMG_Solver::SolveMatrixEquation</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a28f0ed70d67c89fd1b27ad431ee8ac4b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::GetSolverInstance</definition>
+        <argsstring>() const</argsstring>
+        <name>GetSolverInstance</name>
+        <qualifiedname>csmp::SAMG_Settings::GetSolverInstance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Query to determine which SAMG multiple instance is used. The returned number indicates the SAMG library instance used. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="40" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="311" bodyend="313"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a2e98f76daedb4fcee2f4aa56889942fc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_mode_mess</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_mode_mess</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_mode_mess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Query to determine which SAMG multiple instance is used. The returned number indicates the SAMG library instance used. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="41" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="317" bodyend="319"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a6fd162ef9eabc81fd93c3342837fd4ef" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_nxtyp</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_nxtyp</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_nxtyp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="42" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="434" bodyend="436"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aadef75b86df63b6b0027c9cc77b51cf4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_nrd</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_nrd</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_nrd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="43" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="445" bodyend="447"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1add06bc56bc932401980ae1b6176a751c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::SAMG_Settings::Get_nru</definition>
+        <argsstring>() const</argsstring>
+        <name>Get_nru</name>
+        <qualifiedname>csmp::SAMG_Settings::Get_nru</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="44" column="15" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="456" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ad37c20f2c0f4a43c8e1b0e2b36277f55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_isym</definition>
+        <argsstring>(int32_t isym)</argsstring>
+        <name>Set_isym</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_isym</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>isym</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of matrix.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[1:1], isym 1 A is symmetric 2 A is not symmetric </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="46" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="330" bodyend="335"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1afbc068c31732a3b57905cb4918fb8977" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_irow</definition>
+        <argsstring>(int32_t irow)</argsstring>
+        <name>Set_irow</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_irow</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>irow</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of matrix.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[2:2], irow0 1 A is a zero rowsum matrix. (For such matrices, the solution will be normalized) 2 A is not a zero rowsum matrix </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="47" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="344" bodyend="349"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a5cd58b5684f2fedc69b4288bc97ea116" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_itypu</definition>
+        <argsstring>(int32_t itypu)</argsstring>
+        <name>Set_itypu</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_itypu</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>itypu</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ifirst.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[1:1], itypu 0 Actual content of u is chosen as first approximation 1 First approximation u==0 2 First approximation u==1 3 First approximation is a random function</para>
+<para>If itypu == 0, a different convergence criterion should be set based on the norm of the right-hand side vector:</para>
+<para>eps = ||b|| * rel_eps</para>
+<para>rel_eps can be accessed with the function Get_rel_eps </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="48" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="368" bodyend="373"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a72fa17aa2de68cab81d8ff5d5903cdc6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_eps</definition>
+        <argsstring>(double eps)</argsstring>
+        <name>Set_eps</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_eps</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>eps</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Stopping criterion.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>= 0.0 Stopping criteria based in eps is deactivated (only round-off error) <blockquote><para>0.0 Iteration stops if res &lt;= eps.res0 (res0 = starting residual) &lt; 0.0 Iteration stops if res &lt;= |eps| </para>
+</blockquote></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="49" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="383" bodyend="385"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ab34c6c11d96839b2ab48530ef5d6815b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_rel_eps</definition>
+        <argsstring>(double rel_eps)</argsstring>
+        <name>Set_rel_eps</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_rel_eps</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rel_eps</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Stopping criterion when first guess is set ( itypu == 0 ).</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Relative convergence is used as stopping criterion &quot;res &lt;= eps.res0&quot; (res0 = starting residual). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="50" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="393" bodyend="398"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ac6cf9828b7e596ef57bdb0bb9ca4d64e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_napproach</definition>
+        <argsstring>(int32_t napproach)</argsstring>
+        <name>Set_napproach</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_napproach</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>napproach</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of nsolve.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[1:1],napproach 1 Scalar approach (regardless of nsys) 2 Unknown-based (if used in scalar system napproach will be reset to 1) 3-5 Point32_t based approaches - selects type of interpolation to use 3: interp. is separate for each unknown 4: interp. is same &quot; &quot; " 5: interp. is point- (block-) wise </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="51" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="411" bodyend="416"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a261061368b1c44405cdab02c150a8ff1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nxtyp</definition>
+        <argsstring>(int32_t nxtyp)</argsstring>
+        <name>Set_nxtyp</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nxtyp</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nxtyp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of nsolve.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[2:2],nxtyp 0 Gauss-Seidel relaxation 1 ILU(0) (substantial increase in required memory) 2 ILUT 3 Special box relaxation 5 Gauss-Seidel blockwise </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="52" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="427" bodyend="432"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a9632697c56bc3a4296192fbc6c616046" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nrd</definition>
+        <argsstring>(int32_t nrd)</argsstring>
+        <name>Set_nrd</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nrd</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nrd</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="53" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="438" bodyend="443"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a73fe4519e2b01e3335e405aeea14e85f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nru</definition>
+        <argsstring>(int32_t nrd)</argsstring>
+        <name>Set_nru</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nru</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nrd</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="54" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="449" bodyend="454"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a3992138ef2c48828c943acc5f750c24e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_internal</definition>
+        <argsstring>(int32_t internal)</argsstring>
+        <name>Set_internal</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_internal</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>internal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of nsolve.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[3:3],internal = 0 primary matrix P is user-defined (nprim has to be !0) &gt; 0 P is defined internally </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="55" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="469" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ab574bef8e15a5c8459065a02b84c6b6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nprim</definition>
+        <argsstring>(int32_t nprim)</argsstring>
+        <name>Set_nprim</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nprim</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nprim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of nsolve.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[4:5],nprim </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="56" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="481" bodyend="486"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a90c2e0a940cf6ba9dc72511f7f9d61e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_npr_is_dummy</definition>
+        <argsstring>(int32_t npr_is_dummy)</argsstring>
+        <name>Set_npr_is_dummy</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_npr_is_dummy</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>npr_is_dummy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of nsolve.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[6:6],npr_is_dummy 0 Primary unknown is a physical unknown 1 Primary unknown is a dummy </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="57" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="496" bodyend="501"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a2b8f4a65962059fcd32685370dbae613" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nint_weights</definition>
+        <argsstring>(int32_t nint_weights)</argsstring>
+        <name>Set_nint_weights</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nint_weights</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nint_weights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of nsolve.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[7:7], nint_weights </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="58" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="508" bodyend="513"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a5ede318d5de8bf863c893d14b4879574" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nint_pat</definition>
+        <argsstring>(int32_t nint_pat)</argsstring>
+        <name>Set_nint_pat</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nint_pat</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nint_pat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of nsolve.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[8:8], nint_pat </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="59" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="520" bodyend="525"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a3ed327f5a5ede7ecf3f542caf259ac69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_igam</definition>
+        <argsstring>(int32_t igam)</argsstring>
+        <name>Set_igam</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_igam</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>igam</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncyc.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[1:1],igam 1 V-cycle (standard) 2 F-cycle 3 W-cycle 4 WW-cycle (very expensive) </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="60" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="536" bodyend="541"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ab40aa8b15154aa63297430e9414136f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ncgrad</definition>
+        <argsstring>(int32_t ncgrad)</argsstring>
+        <name>Set_ncgrad</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ncgrad</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>ncgrad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncyc.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[2:2],ncgrad 0 default accelerator (accelerator) 1 Preconditioner for CG (standard) 2 Precon. for BI-CGSTAB 3 Precon. for GMRES </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="61" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="552" bodyend="557"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a8d4b19c9e2c580faad43522c76d70ae2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nkdim</definition>
+        <argsstring>(int32_t nkdim)</argsstring>
+        <name>Set_nkdim</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nkdim</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nkdim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch for ncyc.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[3:3],nkdim 0 Select default dimension (Krylov space 1-8 Dimension = nkdim+1 dimension) 9 Dimension = 20 </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="62" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="568" bodyend="573"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a600d9118ee183f13def64aed07e0dab0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ncycle</definition>
+        <argsstring>(int32_t ncycle)</argsstring>
+        <name>Set_ncycle</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ncycle</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>ncycle</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncyc.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[4: ] Max. number of cycles to be performed </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="63" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="580" bodyend="585"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a367c47eb36a9805de631897c7c5d3242" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ncyc_done</definition>
+        <argsstring>(int32_t ncyc_done)</argsstring>
+        <name>Set_ncyc_done</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ncyc_done</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>ncyc_done</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Storage for cycle iterations performed</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[4: ] Number of cycles performed </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="64" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="592" bodyend="594"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a783ff22f6b82749e3e22cab89818fae6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ncyc_best</definition>
+        <argsstring>(int32_t ncyc_best)</argsstring>
+        <name>Set_ncyc_best</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ncyc_best</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>ncyc_best</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Storage for best cycle iterations performed</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[4: ] Benchmark variable for best number of cycles performed </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="65" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="601" bodyend="603"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a74369a853f16f6db93fa0355913fd1e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_iswit</definition>
+        <argsstring>(int32_t iswit)</argsstring>
+        <name>Set_iswit</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_iswit</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iswit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of iswitch.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[1:1], iswit Controls re-use of SAMG decompositions during repeated calls. <verbatim>      5   Complete SAMG run. Upon return, memory is released
+      4   Same as 5 except memory not released
+      3   partial setup: Re-use coarser grids and interpolation but update
+          Galerkin operators. Memory not released
+      2   No setup: Re-use coarser grids, interp. and Galerkin from prev. run
+      1   Same as 2 except SAMG assumes matrix A to be the same as prev. run
+</verbatim></para>
+<para>With settings iswit(4 ,..., 1), it is the user’s responsibility to employ some kind of “outer” convergence control. Such a control is done automatically if the primary solver control is activated. This is done by just using the settings iswit( 6,..., 9) instead of iswit(4 ,..., 1). More precisely, in solving a series of linear systems, the primary control process starts automatically whenever some iswit(&gt;5) is used, and it will terminate as soon as some iswit(≤ 5) is used. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="66" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="625" bodyend="630"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a615c8ab146f10718cd986b8d27ef1d32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_iextent</definition>
+        <argsstring>(int32_t iextent)</argsstring>
+        <name>Set_iextent</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_iextent</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iextent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of iswitch.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[2:2],iextent Memory extension switch. Selects beahaviour when limits of initial dimensioning have been reached</para>
+<para>0 SAMG returns with error code 1 SAMG allocates extra memory and continues (if no core space, writes prev. allocated data to disk 2 SAMG allocates ext. memory and continues (if no core space, SAMG terminates) 3 SAMG allocates ext. memory and continues (prev. allocated data is written to disk) </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="67" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="647" bodyend="652"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a72bb4df4e140054d81e2a846c6609f74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ndefault</definition>
+        <argsstring>(int32_t ndefault)</argsstring>
+        <name>Set_ndefault</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ndefault</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>ndefault</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of iswitch.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[3:4],n_default Selects default secondary parameters (if n_default = 0, no defaults are set and must be expicitly defined) 10-13 Used if no &apos;critical&apos;positive off-diagonal entries 15-18 Same as prev but more effort in construction of interpolation 20-23 alternative to 10-13 for &apos;critical&apos; positive off-diagonal entries 25-28 Same as prev with more effort in construction of interpolation</para>
+<para>tested: </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="68" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="665" bodyend="676"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a0b97e6da76b0e91dff71ad78096ce29c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_norm_typ</definition>
+        <argsstring>(int32_t norm_typ)</argsstring>
+        <name>Set_norm_typ</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_norm_typ</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>norm_typ</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of iswitch.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[5:5],norm_typ Selects type of norm to be used in computing residuals <verbatim>      0 L2-norm
+      1 L1-norm
+      2 Maximum norm
+</verbatim> </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="69" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="688" bodyend="693"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a9f3d0e9bff5132ae041c3a25f8eb8794" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ioscratch</definition>
+        <argsstring>(int32_t ioscratch)</argsstring>
+        <name>Set_ioscratch</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ioscratch</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>ioscratch</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of iswitch.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[6:7],ioscratch Unit number for scratch files used by SAMG for memory management </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="70" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="702" bodyend="707"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aba60e860252688f01bfbffdebc07cce4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_chktol</definition>
+        <argsstring>(double chktol)</argsstring>
+        <name>Set_chktol</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_chktol</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>chktol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Checking of input matrix</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Used to control the amount of checking of the input matrix.</para>
+<para>&lt;0.0d0 No checking. This is the standard for production runs. =0.0d0 Standard checking for logical correctness. &gt;0.0d0 Enhanced checking. The concrete value of chktol serves as a tolerance. Standard value: 1.0d-7. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="71" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="720" bodyend="725"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aba88a0651dc8006158379069f69afaaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_idmp</definition>
+        <argsstring>(int32_t idmp)</argsstring>
+        <name>Set_idmp</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_idmp</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>idmp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of idump.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[1:1], idmp 0 Coarsening history 1 Standard print output (coarsening history). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="72" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="734" bodyend="739"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a48fb75259090aa74d98a54d33b078893" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_igdp</definition>
+        <argsstring>(int32_t igdp)</argsstring>
+        <name>Set_igdp</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_igdp</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>igdp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of idump.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Selects print output regarding the coarse levels.</para>
+<para>[2:2], igdp &gt;1 is only relevant for coupled systems. Otherwise: ignored. 0 No particular output. 1 Display table on grids (full problem). 2 Same for all submatrices (only if nsys&gt;1). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="73" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="752" bodyend="757"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a097169a647170ddb972bf30c02920a1b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_iadp</definition>
+        <argsstring>(int32_t iadp)</argsstring>
+        <name>Set_iadp</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_iadp</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iadp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of idump.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Selects print output regarding the coarse-level matrices.</para>
+<para>[3:3], iadp &gt;1 is only relevant for coupled systems. 0 No particular output. 1 Display table on coarse-level matrices (full problem). 2 In addition: same info for all submatrices. 3 In addition: connectivity info between unknowns. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="74" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="771" bodyend="776"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a9c90ecd4249ab38feff01f4b2dacdb34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_iwdp</definition>
+        <argsstring>(int32_t iwdp)</argsstring>
+        <name>Set_iwdp</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_iwdp</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iwdp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of idump.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Selects print output regarding the interpolation matrices.</para>
+<para>[4:4], iwdp &gt;1 is only relevant for coupled systems. 0 No particular output. 1 Display table on interpolation matrices (full problem). 2 In addition: same info for all submatrices. 3 In addition: connectivity info between unknowns. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="75" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="790" bodyend="795"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a427236e642c2f321b779bcfc0432a895" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_iout1</definition>
+        <argsstring>(int32_t iout1)</argsstring>
+        <name>Set_iout1</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_iout1</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iout1</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of iout.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[1:1], iout1, 1 Table of input data and work statistics. 2 Standard history of cycling process. 3 Extended history: including all levels, full smoothing steps. 4 Extended history: including all levels and even partial smoothing steps. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="76" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="807" bodyend="812"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a7a1c8be2718439fe1572f0b7db5911b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_iout2</definition>
+        <argsstring>(int32_t iout2)</argsstring>
+        <name>Set_iout2</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_iout2</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iout2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of iout.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>[2:2], iout2 0 No action. 1 Display most relevant SAMG hidden parameters. 2 Display all SAMG hidden parameters. 3 Display all SAMG hidden parameters in a single list. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="77" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="824" bodyend="829"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aab7a9d7f169ae9df3b8eb9002982202e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_a_cmplx</definition>
+        <argsstring>(double a_cmplx)</argsstring>
+        <name>Set_a_cmplx</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_a_cmplx</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>a_cmplx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of a_cmplx.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>a_cmplx - Should be an upper limit for the operator complexity which is defined as the ratio between the total number of matrix entries (summed over all AMG levels) and the number of entries in the given matrix (= nna). Depending on the problem and the strategy chosen, this may be a value as low as 1.2, but it may also be as high as 4.0, say. Typical values are 1.5-3.0. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="78" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="840" bodyend="845"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ad522dabc38cc716b089702053faea1d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_g_cmplx</definition>
+        <argsstring>(double g_cmplx)</argsstring>
+        <name>Set_g_cmplx</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_g_cmplx</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>g_cmplx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of g_cmplx.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>g_cmplx - Should be an upper limit for the grid complexity which is defined as the ratio between the total number of variables (summed over all AMG levels) and the number of variables in the given problem (= nnu). Depending on the problem and the strategy chosen, this may be a value as low as 1.2. Usually, an upper limit is 2.0. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="79" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="856" bodyend="861"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1abda817a3347f03ae20a4443684c35571" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_p_cmplx</definition>
+        <argsstring>(double p_cmplx)</argsstring>
+        <name>Set_p_cmplx</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_p_cmplx</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_cmplx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of p_cmplx.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>p_cmplx - This parameter is relevant only if any of the point-based approaches is selected. p_cmplx should then be an upper limit for the point complexity which is defined as the ratio between the total number of points (summed over all AMG levels) and the number of points in the given problem. Depending on the problem and the strategy chosen, this may be a value as low as 1.2. Usually, an upper limit is 2.0. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="80" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="873" bodyend="878"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a276ea5b079d7a48ca000f90bebdbb44d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_w_avrge</definition>
+        <argsstring>(double w_avrge)</argsstring>
+        <name>Set_w_avrge</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_w_avrge</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>w_avrge</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of w_avrge.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>w_avrge - Should be an upper limit for the average row length of interpolation, that is, the total number of interpolation weights used by SAMG, summed over all levels, divided by the total number of variables (summed over all levels). Depending on the problem and the strategy chosen, this may be a value as low as 1.5, but it may also be as high as 6.0, say. A typical average value is 3.0. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="81" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="889" bodyend="894"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1ad5a9a06b1fd1a9a2e5d9fa7b562a5dec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ncgtyp</definition>
+        <argsstring>(int32_t ncgtyp)</argsstring>
+        <name>Set_ncgtyp</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ncgtyp</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>ncgtyp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncg.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Selects the process of defining strong connectivity. Standard choices: ncgtyp=1 or ncgtyp=4.</para>
+<para>[1:1], ncgtyp 1 Standard process. This is supposed to be used if A has mostly negative off-diagonals. Positive off-diagonal elements (if any) should be small. Variables with only positive couplings will become C-variables.</para>
+<para>2 Standard process except that variables which have only positive couplings are treated by absolute value.</para>
+<para>3 Standard process except that, for mixed-sign rows, all &quot;large&quot; positive entries (threshold parameter ewt2) are eliminated before a decision on strong connectivity is made. If, for some variable i, this does not lead to a clear decision, i will become a C-variable.</para>
+<para>4 Same as 3 except that, if the elimination of positive couplings of variable i fails to give a clear picture, this option temporarily switches to the standard process 1.</para>
+<para>5 Same as 4 except that variables which have only positive couplings are treated by absolute value. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="82" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="926" bodyend="932"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aa6299bb67ec4883ff4db4defccebcd8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nred</definition>
+        <argsstring>(int32_t nred)</argsstring>
+        <name>Set_nred</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nred</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nred</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncg.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Specifies speed of coarsening, ie, how fast the number of variables is reduced from one level to the next. Standard choice: nred=0.</para>
+<para>[2:2], nred 0 Standard coarsening. 1-4 Aggressive coarsening. 1 is most, 4 is least aggressive; 2-3 are in between. Recommendation: use 1 for anisotropic and 2 for isotropic problems. 5 Cluster coarsening &amp; piecewise constant interpolation. 6 Cluster coarsening &amp; multi-pass interpolation. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="83" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="951" bodyend="957"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a0da0980c072c08e8a66a68336157a77c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nredlev</definition>
+        <argsstring>(int32_t nredlev)</argsstring>
+        <name>Set_nredlev</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nredlev</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nredlev</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncg.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Specifies the levels where aggressive or cluster coarsening is to be used. On the remaining levels, standard coarsening will be applied. Only relevant if nred&gt;0. Standard choice: nredlev=0.</para>
+<para>[3:3], nredlev 0-8 From level 1 up to level nredlev+1. 9 On all levels (not recommended). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="84" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="971" bodyend="977"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aa3d1496e2c9790212928d3f89a3443b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_nxf_clean</definition>
+        <argsstring>(int32_t nxf_clean)</argsstring>
+        <name>Set_nxf_clean</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_nxf_clean</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>nxf_clean</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncg.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Defines how to treat exceptional F-variables (XF) left over at the end of standard or cluster coarsening. Standard choice: nxf_clean=0.</para>
+<para>[4:4], nxf_clean 0 Standard procedure (currently equivalent to 1). 1 Ensure that all XF-variables have a strong coupling to (at least) one regular F-variable. 2 Re-set all XF-variables to C-variables. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="85" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="992" bodyend="998"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a23ff34598faacbf31e1dce66b82d37e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_neg_diag</definition>
+        <argsstring>(int neg_diag)</argsstring>
+        <name>Set_neg_diag</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_neg_diag</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>neg_diag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Deals with the handling of negative values in the diagonal of the solution matrix (SAMG manual on Galerkin coarse-;eve; matrices.</para>
+<para>Integer. Defines the maximum number of non‐positive diagonal entries allowed in computing the Galerkin operators before SAMG gives up its attempts to modify interpolation and continues without further checks. If neg_diag&lt;0, checking of the diagonal is completely de‐activated. Warning: In the latter case you should know what you are doing! </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="86" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1029" bodyend="1032"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a535dbf4a13da94c7e990ac8a385b115e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_npcol</definition>
+        <argsstring>(int32_t npcol)</argsstring>
+        <name>Set_npcol</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_npcol</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>npcol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswitch of ncg.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Enforce particular conditions. This is done a posteriori by adding extra C-variables. Thus, npcol&gt;0 should not be used in combination with aggressive or cluster coarsening. Standard choice: npcol=0.</para>
+<para>[5:5], npcol 0 No action. 1 Enforce weak F-to-F diagonal dominance (1.0). 2 Enforce strong F-to-F diagonal dominance (0.75). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="87" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1013" bodyend="1019"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a33676b3573b025b256a7577eb911d798" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_levelx</definition>
+        <argsstring>(int32_t levelx)</argsstring>
+        <name>Set_levelx</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_levelx</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>levelx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Switch levelx</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>SAMG Safety limit: maximim number of levels to be created. Special debug option: Giving levelx a negative sign causes SAMG to display its convergence history also on coarser levels. Default = 25 </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="88" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1048" bodyend="1054"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1aafb2aae21f46593832d045e9f5861c99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_ioform</definition>
+        <argsstring>(std::string ioform)</argsstring>
+        <name>Set_ioform</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_ioform</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>ioform</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Switch ioform</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Reading or writing can be formatted, unformatted or binary. In case of reading, SAMG knows the format by looking into a special “format” file (suffix “.frm”, → Section 7.8.2). In case of writing (→Sections 7.8.3‐7.8.5), the hidden char*1 variable ioform defines the format SAMG is supposed to use. That is, with the char*1 variable ch being ‘f’, ‘u’, or ‘b’, issue &quot;call samg_set_ioform(ch,1)&quot; to specify the requested format, the default being formatted. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="89" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1067" bodyend="1082"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a5cdaf4c233167fb35059b0d1d33d62d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_filnam_dump</definition>
+        <argsstring>(const std::string &amp;filnam_dump)</argsstring>
+        <name>Set_filnam_dump</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_filnam_dump</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>filnam_dump</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Switch filnam_dump</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Character. File root name which SAMG tries to find for reading. If idmp&gt;1, the matrices as described above are dumped to files using the root name filnam_dump, the default name being ‘level’. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="90" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1092" bodyend="1103"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a2615319866163d0c4de8b43a4ac003f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_iter_pre</definition>
+        <argsstring>(int32_t iter_pre)</argsstring>
+        <name>Set_iter_pre</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_iter_pre</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>iter_pre</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subswich of ncg. Sets the hidden parameter iter_pre. If iter_pre &gt; 0, SAMG will be used as a pre-conditioner for the BI-CGStab solution. A maximum of 2 SAMG pre- condition calls is possible, i.e. 0 &lt;= iter_pre &lt;= 2; </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="91" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1109" bodyend="1115"/>
+        <references refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" compoundref="_s_a_m_g___settings_8cpp" startline="1133" endline="1135">ExplicitSecondary</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a2f0e2e1f7e4c89f1c118d8303df63c69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::Set_mode_mess</definition>
+        <argsstring>(int32_t)</argsstring>
+        <name>Set_mode_mess</name>
+        <qualifiedname>csmp::SAMG_Settings::Set_mode_mess</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <defname>mode</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="92" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1147" bodyend="1162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a953164b5316da06c2ffef7b2e3996cb7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::SetNegative_nsolve</definition>
+        <argsstring>(bool negative_nsolve)</argsstring>
+        <name>SetNegative_nsolve</name>
+        <qualifiedname>csmp::SAMG_Settings::SetNegative_nsolve</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>negative_nsolve</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="94" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1117" bodyend="1119"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a38bfcd0408d91778510f564bc94054fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::SetNegative_ncyc</definition>
+        <argsstring>(bool negative_ncyc)</argsstring>
+        <name>SetNegative_ncyc</name>
+        <qualifiedname>csmp::SAMG_Settings::SetNegative_ncyc</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>negative_ncyc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="95" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1121" bodyend="1123"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a1b0eccbdb279aa7ebfd0c203453a61bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::SetNegative_idump</definition>
+        <argsstring>(bool negative_idump)</argsstring>
+        <name>SetNegative_idump</name>
+        <qualifiedname>csmp::SAMG_Settings::SetNegative_idump</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>negative_idump</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="96" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1125" bodyend="1127"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a64991891d3c3388e710e8ed30070b9b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::SetNegative_iout</definition>
+        <argsstring>(bool negative_iout)</argsstring>
+        <name>SetNegative_iout</name>
+        <qualifiedname>csmp::SAMG_Settings::SetNegative_iout</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>negative_iout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="97" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1129" bodyend="1131"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::ExplicitSecondary</definition>
+        <argsstring>(bool explicit_secondary)</argsstring>
+        <name>ExplicitSecondary</name>
+        <qualifiedname>csmp::SAMG_Settings::ExplicitSecondary</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>explicit_secondary</declname>
+        </param>
+        <briefdescription>
+<para>if this is not set &apos;true&apos; all attempts to set secondary parameters will fail (default=false) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="99" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1133" bodyend="1135"/>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1a5cdaf4c233167fb35059b0d1d33d62d6" compoundref="_s_a_m_g___settings_8cpp" startline="1092" endline="1103">Set_filnam_dump</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1aafb2aae21f46593832d045e9f5861c99" compoundref="_s_a_m_g___settings_8cpp" startline="1067" endline="1082">Set_ioform</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1a2615319866163d0c4de8b43a4ac003f9" compoundref="_s_a_m_g___settings_8cpp" startline="1109" endline="1115">Set_iter_pre</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1a33676b3573b025b256a7577eb911d798" compoundref="_s_a_m_g___settings_8cpp" startline="1048" endline="1054">Set_levelx</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1ad5a9a06b1fd1a9a2e5d9fa7b562a5dec" compoundref="_s_a_m_g___settings_8cpp" startline="926" endline="932">Set_ncgtyp</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1a535dbf4a13da94c7e990ac8a385b115e" compoundref="_s_a_m_g___settings_8cpp" startline="1013" endline="1019">Set_npcol</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1aa6299bb67ec4883ff4db4defccebcd8c" compoundref="_s_a_m_g___settings_8cpp" startline="951" endline="957">Set_nred</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1a0da0980c072c08e8a66a68336157a77c" compoundref="_s_a_m_g___settings_8cpp" startline="971" endline="977">Set_nredlev</referencedby>
+        <referencedby refid="classcsmp_1_1_s_a_m_g___settings_1aa3d1496e2c9790212928d3f89a3443b9" compoundref="_s_a_m_g___settings_8cpp" startline="992" endline="998">Set_nxf_clean</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_s_a_m_g___settings_1a0768850864743804baca11c31de2ab9b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SAMG_Settings::SetSolverInstance</definition>
+        <argsstring>(int32_t instance)</argsstring>
+        <name>SetSolverInstance</name>
+        <qualifiedname>csmp::SAMG_Settings::SetSolverInstance</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/SAMG_Settings.h" line="100" column="12" bodyfile="source/modules/integration/solver/SAMG_Settings.cpp" bodystart="1137" bodyend="1144"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="author"><para>G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>2001</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Factoring out SAMG tuning parameter in a separate class so that they can be changed indepently of the solver object.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para><ref refid="classcsmp_1_1_s_a_m_g___settings" kindref="compound">SAMG_Settings</ref> objects store SAMG tuning parameter. These tuning parameter are divided into switches and their subswitches.</para>
+<para>Each switch can be accessed by its respective Get-method and its subswitches can be set using the respective Set-methods.</para>
+<para>Every Set-method checks if the input data conforms to the restrictions imposed by the SAMG solver. If the input value is invald, a domain_error exception is thrown.</para>
+<para><simplesect kind="warning"><para>Only the rules for the subswitch itself are checked! Interdependencies between subswitches are NOT checked! The user is responsible to guarantee that all subswitches together form a meaniful parametrization for the SAMG solver. </para>
+</simplesect>
+</para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::SAMG_Settings</label>
+        <link refid="classcsmp_1_1_s_a_m_g___settings"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::SolverSettings</label>
+        <link refid="classcsmp_1_1_solver_settings"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SAMG_Settings</label>
+        <link refid="classcsmp_1_1_s_a_m_g___settings"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::SolverSettings</label>
+        <link refid="classcsmp_1_1_solver_settings"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/solver/SAMG_Settings.h" line="9" column="3" bodyfile="source/includes/integration/solver/SAMG_Settings.h" bodystart="9" bodyend="160"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ac43d8bd6758e4d70fe30f6f0de06d6c8" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>a_cmplx_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1acd1d81e839c69174f6ebe484ea2857bf" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>chktol_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a25082363990a9fe24b6ad2925d7b8001" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>eps_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ab79455e935ce0464f5a3f2a37cb8c66b" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>explicit_secondary_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a4e8ff1270735cc2c8f400695761d0eea" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ExplicitSecondary</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a2b169597e6d88b23a8ae6da35494e15d" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ExplicitSecondary</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a7061e87b1af22af30bbc7e7748271b58" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>filnam_dump_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9d1174340dc6cc62a33e50c243875652" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>filnam_dump_Array_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a8e765042979c2d9a3605e7a2604e9219" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>filnam_dump_length_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a536de6aa0cb940a9c7a245cd9ba6f850" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>g_cmplx_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a7228f05b416fff914d63d3acb93e64bf" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_a_cmplx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a4fbdd2f1a26fd2455c1ed857ebdc0ee5" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_chktol</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aef019fe4871af64ad18045b7a5af4cda" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_eps</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ae20db7c97fab82850b71cc83ed688eb0" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_filnam_dump</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a804d145933ca01882c19975903940ad2" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_filnam_dump_length</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ab8a19be3953546a3f9614753abfba4ca" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_g_cmplx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a583d77f0a34e159565739896984356d8" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_idmp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9fb7dcfe246be60f65704e1233f8a5e6" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_idump</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a4df3d1468d1da6eeb0735853f5487fa0" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_ifirst</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aa6807b1ec83b0c08fa26c86107097a6a" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_ioform</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a6e1b10d7a21a7b23f38a2fbda038e445" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_ioform_length</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9ff42ee1d2530ea98e1e9cc6f762628f" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_iout</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ae990026044c19faf0ac9884473bd298c" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_iswit</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ace60c434ddcf1c9d9305adc1fc2ccfa4" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_iswtch</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a793f1f9a197f8bcacf740ac312fed9ca" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_iter_pre</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a65f091e77d409ebd463d3290a845c87b" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_levelx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a875a5d34c0445d4a109707e93777efcd" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_matrix</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a2e98f76daedb4fcee2f4aa56889942fc" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_mode_mess</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a336c079053df9ae15af4af32d886036d" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_ncg</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aee44168121d5bf2838a6934eb2ad258d" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_ncyc</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aba47058088e1b76e0e91a3d1c8ce873e" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_ncyc_best</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a99346d7fe45700a8dd4d511f60391e19" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_ncyc_done</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aadef75b86df63b6b0027c9cc77b51cf4" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_nrd</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1add06bc56bc932401980ae1b6176a751c" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_nru</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1af8a615e3c94b76cd21340175e8511512" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_nsolve</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a6fd162ef9eabc81fd93c3342837fd4ef" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_nxtyp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a6665da74b5be8915fe23b0cffa7950cc" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_p_cmplx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a5cabe2962708504865237759f11fe2b8" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_rel_eps</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a3e8e96fa86944079bbbfa0ade2571ae3" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Get_w_avrge</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a28f0ed70d67c89fd1b27ad431ee8ac4b" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>GetSolverInstance</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aefc4ec6d3676a62c0d8a321307f3a685" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>iadp_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ad7b6fc5c768549ca064a3543debbce21" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>idmp_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1add0d51a89d69c447a6066943da25fba5" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>iextent_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9ca5994e2415afa3a52116b9806a2539" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>igam_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a2d1419de6d416df7c991cf95136dd4a4" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>igdp_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a30f1c7212ba33c644dc20c22a774b835" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>internal_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ab8106ab0d68e5e6e587e7cfe96b6b51e" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ioform_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a92996bb62c605b1420807eea776abeed" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ioform_length_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aa20c2c951e8b50c65d4947affb931438" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ioscratch_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a832386b1acce6938b84f07ef55852aa2" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>iout1_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a4691cdf6ba0be08b38554f1d4c0172f3" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>iout2_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a2f1c703b01705d041c311d6ffcfb26b0" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>irow_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1af1cbe88b981b21727296a73fcc2e70e7" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>iswit_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a19eb331dcccc6231705a2c0d48d59cb2" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>isym_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a0251c3f8edc4b6a7677d924e98f04ebc" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>iter_pre_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a95a59fee69ee571334b59d9c0932357d" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>itypu_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1afe032163b72c6d0578109d766cca7f9e" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>iwdp_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aaafcd81de6d0288134b868e3054993b0" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>levelx_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ab9bb3c917bdc288ca4d8071f272b02eb" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>mode_mess_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1accf96252cf4980ab50cf1e746dffd860" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>napproach_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aab8dc19bb18c0f500d35522ecc1f009b" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ncgrad_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a58cfc9b22e80ef4bfe7800efcc7c3c24" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ncgtyp_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a39d5f1d8c8943cc67f973bc170c50056" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ncyc_best_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a6877846fea8d226b80937ca5c33b007f" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ncyc_done_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a1eaecd5e6f7266d2b016f9d3895bf96f" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ncycle_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a71cb6e4b95fcafe183155bba6f78ecd5" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>ndefault_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1adfac48edad9a8683283cb81239d09843" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>neg_diag_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1adfbb593d7afa767ab494a434ff44b5dd" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>negative_idump_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1afb11502e69b104edef2f12cf24a147c5" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>negative_iout_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ac4956196df2867c303506519861f5258" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>negative_ncyc_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a32484b15ad804af1210fcde3595c37a0" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>negative_nsolve_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aedae8276204b4fb2b831450db0047ce6" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nint_pat_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a54a60089f7f1b1dcb7d9e12dab0d81b8" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nint_weights_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1acf93cb75497f543d0bdf84f42b490abe" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nkdim_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aba3af9890d8b2c3e0acc7bd8704b9eb3" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>norm_typ_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a33ccf5633469bde6404c2b69210071f4" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>npcol_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ac7d18dd5c3d2ade70d8b21fda038e210" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>npr_is_dummy_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a455d9ddabfb55d08afabeeb152055176" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nprim_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9e31fc8f0d46b8d99f84564666de105c" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nrd_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a534aad3ee54cf4d4d81d5c9d1478f718" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nred_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a1676e81f6fa15a353b96009963360067" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nredlev_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aa208263dd71c5d492c711628186e4e4c" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nru_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a6446cdf8a8fbd91766ffd42de1271251" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nxf_clean_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9e6b3b8458b0e4c3ec19ffc092fdd73b" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>nxtyp_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a87163835db4d10f379f3d9edf78f3414" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>p_cmplx_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a69b24243a7b6e13dde4ebd02c48b2776" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>rel_eps_</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a395c7c2bbe9dac79150d8b0fa9a89d24" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>SAMG_Settings</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aab7a9d7f169ae9df3b8eb9002982202e" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_a_cmplx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aba60e860252688f01bfbffdebc07cce4" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_chktol</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a72fa17aa2de68cab81d8ff5d5903cdc6" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_eps</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a5cdaf4c233167fb35059b0d1d33d62d6" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_filnam_dump</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ad522dabc38cc716b089702053faea1d7" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_g_cmplx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a097169a647170ddb972bf30c02920a1b" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_iadp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aba88a0651dc8006158379069f69afaaa" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_idmp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a615c8ab146f10718cd986b8d27ef1d32" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_iextent</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a3ed327f5a5ede7ecf3f542caf259ac69" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_igam</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a48fb75259090aa74d98a54d33b078893" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_igdp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a3992138ef2c48828c943acc5f750c24e" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_internal</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aafb2aae21f46593832d045e9f5861c99" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ioform</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9f3d0e9bff5132ae041c3a25f8eb8794" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ioscratch</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a427236e642c2f321b779bcfc0432a895" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_iout1</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a7a1c8be2718439fe1572f0b7db5911b3" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_iout2</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1afbc068c31732a3b57905cb4918fb8977" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_irow</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a74369a853f16f6db93fa0355913fd1e8" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_iswit</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ad37c20f2c0f4a43c8e1b0e2b36277f55" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_isym</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a2615319866163d0c4de8b43a4ac003f9" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_iter_pre</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a5cd58b5684f2fedc69b4288bc97ea116" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_itypu</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9c90ecd4249ab38feff01f4b2dacdb34" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_iwdp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a33676b3573b025b256a7577eb911d798" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_levelx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a2f0e2e1f7e4c89f1c118d8303df63c69" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_mode_mess</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ac6cf9828b7e596ef57bdb0bb9ca4d64e" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_napproach</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ab40aa8b15154aa63297430e9414136f2" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ncgrad</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ad5a9a06b1fd1a9a2e5d9fa7b562a5dec" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ncgtyp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a783ff22f6b82749e3e22cab89818fae6" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ncyc_best</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a367c47eb36a9805de631897c7c5d3242" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ncyc_done</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a600d9118ee183f13def64aed07e0dab0" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ncycle</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a72bb4df4e140054d81e2a846c6609f74" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_ndefault</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a23ff34598faacbf31e1dce66b82d37e7" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_neg_diag</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a5ede318d5de8bf863c893d14b4879574" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nint_pat</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a2b8f4a65962059fcd32685370dbae613" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nint_weights</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a8d4b19c9e2c580faad43522c76d70ae2" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nkdim</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a0b97e6da76b0e91dff71ad78096ce29c" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_norm_typ</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a535dbf4a13da94c7e990ac8a385b115e" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_npcol</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a90c2e0a940cf6ba9dc72511f7f9d61e3" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_npr_is_dummy</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ab574bef8e15a5c8459065a02b84c6b6d" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nprim</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a9632697c56bc3a4296192fbc6c616046" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nrd</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aa6299bb67ec4883ff4db4defccebcd8c" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nred</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a0da0980c072c08e8a66a68336157a77c" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nredlev</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a73fe4519e2b01e3335e405aeea14e85f" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nru</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1aa3d1496e2c9790212928d3f89a3443b9" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nxf_clean</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a261061368b1c44405cdab02c150a8ff1" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_nxtyp</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1abda817a3347f03ae20a4443684c35571" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_p_cmplx</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ab34c6c11d96839b2ab48530ef5d6815b" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_rel_eps</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a276ea5b079d7a48ca000f90bebdbb44d" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>Set_w_avrge</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a1b0eccbdb279aa7ebfd0c203453a61bc" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>SetNegative_idump</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a64991891d3c3388e710e8ed30070b9b1" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>SetNegative_iout</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a38bfcd0408d91778510f564bc94054fd" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>SetNegative_ncyc</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a953164b5316da06c2ffef7b2e3996cb7" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>SetNegative_nsolve</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a0768850864743804baca11c31de2ab9b" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>SetSolverInstance</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ace41c8731a97f5636fe5a3b0d0b32dd5" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>solver_instance_</name></member>
+      <member refid="classcsmp_1_1_solver_settings_1aabb21ca1d0ed257fdf333bf0dd5f8eb9" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>SolverSettings</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1ad9378e650f7998f76c951fe4b5c34fa1" prot="public" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>UsePointBasedApproach</name></member>
+      <member refid="classcsmp_1_1_s_a_m_g___settings_1a28f2cc57adc645663c8e1d16bf0d7aed" prot="private" virt="non-virtual"><scope>csmp::SAMG_Settings</scope><name>w_avrge_</name></member>
+      <member refid="classcsmp_1_1_solver_settings_1a8ba8a5640e78244178947ecfd9c1fec8" prot="public" virt="virtual"><scope>csmp::SAMG_Settings</scope><name>~SolverSettings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -18,36 +18,34 @@ class BrooksCoreyWithHysteresis : public TwoPhaseModel<dim> {
 
     BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
                                const char* lamda, const char* pc_entry );
-                           
-    virtual ~BrooksCoreyWithHysteresis() {}
   
     /// not constant as it sets the saturation inflection point
-    virtual void InitializeAndStore( Element<dim>& );
+    void InitializeAndStore( Element<dim>& ) override final;
     
     // relative permeabilities
-    virtual double krn_Phase() const;
-    virtual double krw_Phase() const;
+    double krn_Phase() const override final;
+    double krw_Phase() const override final;
 
     // derivative of fractional flow (advection multipliers)
-    virtual double dfds() const;
+    double dfds() const override final;
     
     // maximum absolute value returned by dfdS                              
-    virtual double MaxFractionalFlowDerivative() const;
+    double MaxFractionalFlowDerivative() const override final;
 
     // derivatives of gravitational flow (advection multipliers)                                      
-    virtual double dGds() const;
+    double dGds() const override final;
     
     // capillary pressure
-    virtual double pc_Phase( size_t phase ) const;
+    double pc_Phase() const override final;
     
     // capillary pressure derivatives
-    virtual double dpcds_Phase( size_t phase ) const;
+    double dpcds_Phase() const override final;
       
     // linearized fractional flow derivative
-    virtual double ShockSpeed() const;
-    virtual double ShockHeight() const;
+    double ShockSpeed() const override final;
+    double ShockHeight() const override final;
     
-    virtual void Out( uint32_t phase ) const;
+    void Out( uint32_t phase ) const override final;
 
   private:
     BrooksCoreyWithHysteresis();

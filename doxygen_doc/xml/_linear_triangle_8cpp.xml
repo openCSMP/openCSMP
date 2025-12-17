@@ -1,0 +1,948 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_linear_triangle_8cpp" kind="file" language="C++">
+    <compoundname>LinearTriangle.cpp</compoundname>
+    <includes refid="_linear_triangle_8h" local="yes">LinearTriangle.h</includes>
+    <includes refid="_exception_8h" local="yes">Exception.h</includes>
+    <includes refid="_m_j_l___edge_8h" local="yes">MJL_Edge.h</includes>
+    <incdepgraph>
+      <node id="62">
+        <label>MJL_Edge.h</label>
+        <link refid="_m_j_l___edge_8h_source"/>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>MJL_Point.h</label>
+        <link refid="_m_j_l___point_8h_source"/>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>MJL_geometry.h</label>
+        <link refid="_m_j_l__geometry_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>FiniteElement.h</label>
+        <link refid="_finite_element_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>LinearTriangle.h</label>
+        <link refid="_linear_triangle_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>DenseMatrix.h</label>
+        <link refid="_dense_matrix_8h"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>ArrayVariable.h</label>
+        <link refid="_array_variable_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>FlaggedArrayVariable.h</label>
+        <link refid="_flagged_array_variable_8h_source"/>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="14">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>TensorVariable.h</label>
+        <link refid="_tensor_variable_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>TensorVariable1.h</label>
+        <link refid="_tensor_variable1_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>TensorVariable2.h</label>
+        <link refid="_tensor_variable2_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>Exception.h</label>
+        <link refid="_exception_8h_source"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/modules/integration/finite_elements/LinearTriangle.cpp</label>
+        <link refid="_linear_triangle_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>algorithm</label>
+      </node>
+      <node id="13">
+        <label>array</label>
+      </node>
+      <node id="26">
+        <label>cassert</label>
+      </node>
+      <node id="21">
+        <label>cctype</label>
+      </node>
+      <node id="24">
+        <label>cfloat</label>
+      </node>
+      <node id="28">
+        <label>chrono</label>
+      </node>
+      <node id="25">
+        <label>climits</label>
+      </node>
+      <node id="16">
+        <label>cmath</label>
+      </node>
+      <node id="20">
+        <label>cstdarg</label>
+      </node>
+      <node id="19">
+        <label>cstddef</label>
+      </node>
+      <node id="9">
+        <label>cstdint</label>
+      </node>
+      <node id="17">
+        <label>cstdio</label>
+      </node>
+      <node id="18">
+        <label>cstdlib</label>
+      </node>
+      <node id="22">
+        <label>cstring</label>
+      </node>
+      <node id="23">
+        <label>ctime</label>
+      </node>
+      <node id="29">
+        <label>deque</label>
+      </node>
+      <node id="30">
+        <label>exception</label>
+      </node>
+      <node id="31">
+        <label>filesystem</label>
+      </node>
+      <node id="32">
+        <label>fstream</label>
+      </node>
+      <node id="33">
+        <label>functional</label>
+      </node>
+      <node id="34">
+        <label>iomanip</label>
+      </node>
+      <node id="35">
+        <label>iostream</label>
+      </node>
+      <node id="36">
+        <label>istream</label>
+      </node>
+      <node id="37">
+        <label>iterator</label>
+      </node>
+      <node id="8">
+        <label>limits</label>
+      </node>
+      <node id="38">
+        <label>list</label>
+      </node>
+      <node id="39">
+        <label>map</label>
+      </node>
+      <node id="40">
+        <label>memory</label>
+      </node>
+      <node id="41">
+        <label>numeric</label>
+      </node>
+      <node id="42">
+        <label>ostream</label>
+      </node>
+      <node id="43">
+        <label>random</label>
+      </node>
+      <node id="6">
+        <label>set</label>
+      </node>
+      <node id="44">
+        <label>sstream</label>
+      </node>
+      <node id="11">
+        <label>stdexcept</label>
+      </node>
+      <node id="7">
+        <label>string</label>
+      </node>
+      <node id="45">
+        <label>type_traits</label>
+      </node>
+      <node id="12">
+        <label>typeinfo</label>
+      </node>
+      <node id="48">
+        <label>unordered_map</label>
+      </node>
+      <node id="47">
+        <label>unordered_set</label>
+      </node>
+      <node id="46">
+        <label>utility</label>
+      </node>
+      <node id="4">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;LinearTriangle.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Exception.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;MJL_Edge.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal">LinearTriangle::LinearTriangle()</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>CSMP_FEM_TYPE,<sp/>isoparametric(y/n),<sp/>uses_local_coordinates(y/n),<sp/>order_of_shape_functions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/>:<sp/><ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref>(<sp/>LINEAR_TRIANGLE,<sp/>false,<sp/>false,<sp/>1U<sp/>)</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/>dim<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/>itp<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/>npf<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/>npe<sp/>=<sp/>3;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/>fpe<sp/>=<sp/>3;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/>spe<sp/>=<sp/>3;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/>epe<sp/>=<sp/>3;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/>nne<sp/>=<sp/>6;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/>cne<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/>gpe<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/>XY.Resize(npe,dim);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/>M.Resize(npe,npe);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/>UsesLocalCoordinates(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/>Isoparametric(<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/>SurfaceElement();</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/>ElementType(LINEAR_TRIANGLE);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35" refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" kindref="member">LinearTriangle::Volume</ref>()</highlight></codeline>
+<codeline lineno="36"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::fabs(<sp/>0.5<sp/>*<sp/>(<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)<sp/>+<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>+<sp/></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>-</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46" refid="classcsmp_1_1_linear_triangle_1a32a777cc1f54021c18f8c668052ed433" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a32a777cc1f54021c18f8c668052ed433" kindref="member">LinearTriangle::EdgeLengths</ref>(<sp/>std::vector&lt;double&gt;&amp;<sp/>len<sp/>)</highlight></codeline>
+<codeline lineno="47"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/>sum;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>len.resize(<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>segment<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>sum<sp/><sp/><sp/><sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0))<sp/>*<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0));</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>sum<sp/><sp/><sp/>+=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1))<sp/>*<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1));</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>len[0]<sp/>=<sp/>std::sqrt(sum);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>segment<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>sum<sp/><sp/><sp/><sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0))<sp/>*<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0));</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>sum<sp/><sp/><sp/>+=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1))<sp/>*<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1));</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>len[1]<sp/>=<sp/>std::sqrt(sum);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>segment<sp/>3</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>sum<sp/><sp/><sp/><sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0))<sp/>*<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0));</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>sum<sp/><sp/><sp/>+=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1))<sp/>*<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)-<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1));</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>len[2]<sp/>=<sp/>std::sqrt(sum);<sp/></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/>}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>EdgeLengths</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>LinearTriangle::TestFunctionCoefficients(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>M<sp/>)</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/>M.Resize(npe,npe);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Calculate<sp/>the<sp/>value<sp/>of<sp/>the<sp/>test<sp/>function<sp/>coefficients</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>in<sp/>global<sp/>coordinates</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>result<sp/>is<sp/>stored<sp/>in<sp/>the<sp/>3<sp/>x<sp/>3<sp/>matrix<sp/>as<sp/>follows</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>ai<sp/>aj<sp/>ak<sp/>|</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>bi<sp/>bj<sp/>bk<sp/>|<sp/><sp/>=<sp/>coeffs</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>ci<sp/>cj<sp/>ck<sp/>|</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>calculation<sp/>the<sp/>exponents<sp/>of<sp/>the<sp/>interpolation<sp/>functions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/>M(0,0)<sp/>=<sp/>XY(1,0)<sp/>*<sp/>XY(2,1)<sp/>-<sp/>XY(2,0)<sp/>*<sp/>XY(1,1);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/>M(0,1)<sp/>=<sp/>XY(2,0)<sp/>*<sp/>XY(0,1)<sp/>-<sp/>XY(0,0)<sp/>*<sp/>XY(2,1);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/>M(0,2)<sp/>=<sp/>XY(0,0)<sp/>*<sp/>XY(1,1)<sp/>-<sp/>XY(1,0)<sp/>*<sp/>XY(0,1);<sp/></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/>M(1,0)<sp/>=<sp/>XY(1,1)<sp/>-<sp/>XY(2,1);</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/>M(1,1)<sp/>=<sp/>XY(2,1)<sp/>-<sp/>XY(0,1);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/>M(1,2)<sp/>=<sp/>XY(0,1)<sp/>-<sp/>XY(1,1);<sp/></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/>M(2,0)<sp/>=<sp/>XY(2,0)<sp/>-<sp/>XY(1,0);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/>M(2,1)<sp/>=<sp/>XY(0,0)<sp/>-<sp/>XY(2,0);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/>M(2,2)<sp/>=<sp/>XY(1,0)<sp/>-<sp/>XY(0,0);<sp/></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101" refid="classcsmp_1_1_linear_triangle_1a417549c0ef71e52089017c961bd91f42" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_linear_triangle_1a417549c0ef71e52089017c961bd91f42" kindref="member">LinearTriangle::dN</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>B<sp/>)</highlight></codeline>
+<codeline lineno="102"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/>B.<ref refid="classcsmp_1_1_dense_matrix_1a906c0bd524510a58ce4fc17e1e32700d" kindref="member">Resize</ref>(<ref refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" kindref="member">dim</ref>,<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>call<sp/>to<sp/>volume<sp/>updates<sp/>coordinate<sp/>matrix</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ae2<sp/>=<sp/>2.<sp/>*<sp/><ref refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" kindref="member">Volume</ref>();<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/>B(0,0)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/>B(0,1)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/>B(0,2)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/>B(1,0)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/>B(1,1)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/>B(1,2)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119" refid="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" kindref="member">LinearTriangle::dN_AtBarycenter</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>B<sp/>)</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/>B.<ref refid="classcsmp_1_1_dense_matrix_1a906c0bd524510a58ce4fc17e1e32700d" kindref="member">Resize</ref>(<ref refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" kindref="member">dim</ref>,<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>call<sp/>to<sp/>volume<sp/>updates<sp/>coordinate<sp/>matrix</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ae2<sp/>=<sp/>2.<sp/>*<sp/><ref refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" kindref="member">Volume</ref>();<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/>B(0,0)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/>B(0,1)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/>B(0,2)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/>B(1,0)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/>B(1,1)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/>B(1,2)<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0))<sp/>/<sp/>ae2;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>return<sp/>the<sp/>element<sp/>area</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ae2<sp/>/<sp/>2.;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight></codeline>
+<codeline lineno="141" refid="classcsmp_1_1_linear_triangle_1a5ce801f35372d6f7f47a8c67c8ac4a8d" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a5ce801f35372d6f7f47a8c67c8ac4a8d" kindref="member">LinearTriangle::dN_At</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>B,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>)</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" kindref="member">dN_AtBarycenter</ref>(<sp/>B<sp/>);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149" refid="classcsmp_1_1_linear_triangle_1a4c3fcf8b458ea3468424d63d91d4deba" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_linear_triangle_1a4c3fcf8b458ea3468424d63d91d4deba" kindref="member">LinearTriangle::IntegralNN</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>CE<sp/>)</highlight></codeline>
+<codeline lineno="150"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/>CE.<ref refid="classcsmp_1_1_dense_matrix_1a906c0bd524510a58ce4fc17e1e32700d" kindref="member">Resize</ref>(<sp/><ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>,<sp/><ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref><sp/>);</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/>CE(0,0)<sp/>=<sp/><ref refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" kindref="member">Volume</ref>()<sp/>/<sp/><sp/>6.0;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/>CE(0,1)<sp/>=<sp/>CE(0,0)<sp/>/<sp/>2.0;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/>CE(0,2)<sp/>=<sp/>CE(0,1);</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/>CE(1,0)<sp/>=<sp/>CE(0,1);</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/>CE(1,1)<sp/>=<sp/>CE(0,0);</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/>CE(1,2)<sp/>=<sp/>CE(0,1);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/>CE(2,0)<sp/>=<sp/>CE(0,1);</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/>CE(2,1)<sp/>=<sp/>CE(0,1);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/>CE(2,2)<sp/>=<sp/>CE(0,0);<sp/></highlight></codeline>
+<codeline lineno="162"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="167" refid="classcsmp_1_1_linear_triangle_1a9b6c262e1c52692cbc5f7286689a7a9a" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_linear_triangle_1a9b6c262e1c52692cbc5f7286689a7a9a" kindref="member">LinearTriangle::NodesOfSegment</ref>(<sp/>uint32_t<sp/>segm_id,<sp/>std::vector&lt;uint32_t&gt;&amp;<sp/>snids<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="168"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/>snids.resize(2);</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>segm_id<sp/>==<sp/>0<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snids[0]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snids[1]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>segm_id<sp/>==<sp/>1<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snids[0]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snids[1]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>segm_id<sp/>==<sp/>2<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snids[0]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snids[1]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="190"><highlight class="comment">void<sp/>LinearTriangle::NodesOfFace(<sp/>uint32_t<sp/>face_id,<sp/>std::vector&lt;uint32_t&gt;&amp;<sp/>fnids<sp/>)<sp/>const</highlight></codeline>
+<codeline lineno="191"><highlight class="comment"><sp/>{</highlight></codeline>
+<codeline lineno="192"><highlight class="comment"><sp/><sp/><sp/><sp/>fnids.resize(2);</highlight></codeline>
+<codeline lineno="193"><highlight class="comment"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="194"><highlight class="comment"><sp/><sp/><sp/><sp/>if<sp/><sp/><sp/><sp/><sp/><sp/>(<sp/>face_id<sp/>==<sp/>0<sp/>)</highlight></codeline>
+<codeline lineno="195"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="196"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[0]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="197"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[1]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="198"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="199"><highlight class="comment"><sp/><sp/><sp/><sp/>else<sp/>if<sp/>(<sp/>face_id<sp/>==<sp/>1<sp/>)</highlight></codeline>
+<codeline lineno="200"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="201"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[0]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="202"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[1]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="203"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="204"><highlight class="comment"><sp/><sp/><sp/><sp/>else<sp/>if<sp/>(<sp/>face_id<sp/>==<sp/>2<sp/>)</highlight></codeline>
+<codeline lineno="205"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="206"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[0]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="207"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[1]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="208"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="209"><highlight class="comment"><sp/><sp/><sp/><sp/>else</highlight></codeline>
+<codeline lineno="210"><highlight class="comment"><sp/><sp/><sp/><sp/>std::cerr<sp/>&lt;&lt;&quot;\nLinearTriangle::NodesOfFace:<sp/>Invalid<sp/>Face<sp/>ID<sp/>requested:<sp/>&quot;&lt;&lt;<sp/>face_id<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline lineno="211"><highlight class="comment"><sp/>}</highlight></codeline>
+<codeline lineno="212"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"></highlight></codeline>
+<codeline lineno="214"><highlight class="normal"></highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight></codeline>
+<codeline lineno="216"><highlight class="normal"></highlight></codeline>
+<codeline lineno="217" refid="classcsmp_1_1_linear_triangle_1a5234fb11dc29caa9a2b12b4a9a7b8b23" refkind="member"><highlight class="normal">vector&lt;uint32_t&gt;<sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a5234fb11dc29caa9a2b12b4a9a7b8b23" kindref="member">LinearTriangle::NodesOfFace</ref>(<sp/>uint32_t<sp/>face_id<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="218"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(face_id)<sp/>{</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>0:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{1,2};</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>1:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{2,0};</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>2:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{0,1};</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/>cerr<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nLinearTriangle::NodesOfFace:<sp/>face<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>face_id<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>does<sp/>not<sp/>exist.&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{};</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"></highlight></codeline>
+<codeline lineno="230" refid="classcsmp_1_1_linear_triangle_1a1d43cd42879fdfa02779be4c3cccb729" refkind="member"><highlight class="normal">vector&lt;uint32_t&gt;<sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a1d43cd42879fdfa02779be4c3cccb729" kindref="member">LinearTriangle::CornerNodesOfFace</ref>(<sp/>uint32_t<sp/>face_id<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="231"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(face_id)<sp/>{</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>0:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{1,2};</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>1:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{2,0};</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>2:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{0,1};</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/><sp/><sp/>cerr<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nLinearTriangle::CornerNodesOfFace:<sp/>face<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>face_id<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>does<sp/>not<sp/>exist.&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{};</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"></highlight></codeline>
+<codeline lineno="241"><highlight class="normal"></highlight></codeline>
+<codeline lineno="242"><highlight class="normal"></highlight></codeline>
+<codeline lineno="244" refid="classcsmp_1_1_linear_triangle_1a57540dda59880c9d405cf90153cd819e" refkind="member"><highlight class="normal">std::vector&lt;uint32_t&gt;<sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a57540dda59880c9d405cf90153cd819e" kindref="member">LinearTriangle::NodesConnectedTo</ref>(<sp/>uint32_t<sp/>node_id<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="245"><highlight class="keyword"><sp/><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(<sp/>node_id<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>0:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{1,2};</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>1:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{2,0};</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>2:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{0,1};</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/>cerr<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nLinearTriangle::NodesConnectedTo:<sp/>node<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>node_id<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>does<sp/>not<sp/>exist.&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vector&lt;uint32_t&gt;{};</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"></highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"></highlight></codeline>
+<codeline lineno="258"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="259"><highlight class="comment">void<sp/>LinearTriangle::CounterClockwiseNodes(<sp/>std::vector&lt;uint32_t&gt;&amp;<sp/>ids<sp/>)<sp/>const</highlight></codeline>
+<codeline lineno="260"><highlight class="comment"><sp/>{</highlight></codeline>
+<codeline lineno="261"><highlight class="comment"><sp/><sp/><sp/><sp/>ids.resize(npe);</highlight></codeline>
+<codeline lineno="262"><highlight class="comment"><sp/><sp/><sp/><sp/>ids[0]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="263"><highlight class="comment"><sp/><sp/><sp/><sp/>ids[1]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="264"><highlight class="comment"><sp/><sp/><sp/><sp/>ids[2]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="265"><highlight class="comment"><sp/>}</highlight></codeline>
+<codeline lineno="266"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="267"><highlight class="normal"></highlight></codeline>
+<codeline lineno="269" refid="classcsmp_1_1_linear_triangle_1a7b1a45f0bb224148193a959b3ad9f0a7" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>LinearTriangle::CornerNodes(<sp/>std::vector&lt;uint32_t&gt;&amp;<sp/>ids<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="270"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/>ids.resize(<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>);</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/>ids[0]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/>ids[1]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/>ids[2]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"></highlight></codeline>
+<codeline lineno="277"><highlight class="normal"></highlight></codeline>
+<codeline lineno="278" refid="classcsmp_1_1_linear_triangle_1a4de3c63de75763821476e3d63bae7d4a" refkind="member"><highlight class="normal"><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref><sp/><ref refid="classcsmp_1_1_linear_triangle_1a4de3c63de75763821476e3d63bae7d4a" kindref="member">LinearTriangle::ElementTypeOfFace</ref>(<sp/>uint32_t<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="279"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>LINEAR_BAR;</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"></highlight></codeline>
+<codeline lineno="283"><highlight class="normal"></highlight></codeline>
+<codeline lineno="284"><highlight class="normal"></highlight></codeline>
+<codeline lineno="285"><highlight class="normal"></highlight></codeline>
+<codeline lineno="286" refid="classcsmp_1_1_linear_triangle_1aa602f72f185e39d5e42359c85f0830ba" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1aa602f72f185e39d5e42359c85f0830ba" kindref="member">LinearTriangle::AspectRatio</ref>()</highlight></codeline>
+<codeline lineno="287"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/>vector&lt;double&gt;<sp/><sp/>vec(<ref refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" kindref="member">spe</ref>);</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"></highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a32a777cc1f54021c18f8c668052ed433" kindref="member">EdgeLengths</ref>(<sp/>vec<sp/>);</highlight></codeline>
+<codeline lineno="291"><highlight class="normal"></highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>order<sp/>segment</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="293"><highlight class="normal"><sp/><sp/><sp/>set&lt;double&gt;<sp/>segms;</highlight></codeline>
+<codeline lineno="294"><highlight class="normal"></highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>i{0U};<sp/>i&lt;<ref refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" kindref="member">spe</ref>;<sp/>i++<sp/>)<sp/>segms.insert(<sp/>vec[i]<sp/>);</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"></highlight></codeline>
+<codeline lineno="297"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>segm1<sp/>=<sp/>(*segms.begin()),<sp/></highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>segm2<sp/>=<sp/>(*segms.rbegin());</highlight></codeline>
+<codeline lineno="299"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="300"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>segm2<sp/>/<sp/>segm1;</highlight></codeline>
+<codeline lineno="301"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="302"><highlight class="normal"></highlight></codeline>
+<codeline lineno="303"><highlight class="normal"></highlight></codeline>
+<codeline lineno="304"><highlight class="normal"></highlight></codeline>
+<codeline lineno="305"><highlight class="normal"></highlight></codeline>
+<codeline lineno="306" refid="classcsmp_1_1_linear_triangle_1adf570523d3e8910b5269393d414abc11" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1adf570523d3e8910b5269393d414abc11" kindref="member">LinearTriangle::InnerRadius</ref>()</highlight></codeline>
+<codeline lineno="307"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="308"><highlight class="normal"><sp/><sp/><sp/>vector&lt;double&gt;<sp/>segms(<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>);</highlight></codeline>
+<codeline lineno="309"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum(0.0),<sp/>vol;</highlight></codeline>
+<codeline lineno="310"><highlight class="normal"></highlight></codeline>
+<codeline lineno="311"><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a32a777cc1f54021c18f8c668052ed433" kindref="member">EdgeLengths</ref>(<sp/>segms<sp/>);</highlight></codeline>
+<codeline lineno="312"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>i{0U};<sp/>i&lt;segms.size();<sp/>i++<sp/>)<sp/>sum<sp/>+=<sp/>segms[i];</highlight></codeline>
+<codeline lineno="313"><highlight class="normal"><sp/><sp/><sp/>sum<sp/>/=<sp/>2.0;</highlight></codeline>
+<codeline lineno="314"><highlight class="normal"><sp/><sp/><sp/>vol<sp/><sp/>=<sp/><ref refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" kindref="member">Volume</ref>();</highlight></codeline>
+<codeline lineno="315"><highlight class="normal"><sp/><sp/><sp/>vol<sp/>/=<sp/>sum;</highlight></codeline>
+<codeline lineno="316"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vol;</highlight></codeline>
+<codeline lineno="317"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="318"><highlight class="normal"></highlight></codeline>
+<codeline lineno="319"><highlight class="normal"></highlight></codeline>
+<codeline lineno="320"><highlight class="normal"></highlight></codeline>
+<codeline lineno="321"><highlight class="normal"></highlight></codeline>
+<codeline lineno="322" refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">LinearTriangle::N</ref>(<sp/>vector&lt;double&gt;&amp;<sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">N</ref>,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vector&lt;double&gt;&amp;<sp/>xyz<sp/>)<sp/></highlight></codeline>
+<codeline lineno="323"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="324"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>no<sp/>sign<sp/>is<sp/>taken,<sp/>thus<sp/>method<sp/>works<sp/>with<sp/>cw<sp/>and<sp/>ccw<sp/>node<sp/>numbering</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="325"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ae2<sp/>=<sp/>1.0<sp/>/<sp/>(<sp/>(<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)<sp/>+<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>+<sp/></highlight></codeline>
+<codeline lineno="326"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>-</highlight></codeline>
+<codeline lineno="327"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)*<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="328"><highlight class="normal"></highlight></codeline>
+<codeline lineno="329"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>calculation<sp/>the<sp/>coefficients<sp/>of<sp/>the<sp/>element<sp/>interpolation<sp/>functions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="330"><highlight class="normal"><sp/><sp/><sp/>a[0]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)<sp/>*<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)<sp/>*<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1);</highlight></codeline>
+<codeline lineno="331"><highlight class="normal"><sp/><sp/><sp/>a[1]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)<sp/>*<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>*<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1);</highlight></codeline>
+<codeline lineno="332"><highlight class="normal"><sp/><sp/><sp/>a[2]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>*<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)<sp/>*<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1);<sp/></highlight></codeline>
+<codeline lineno="333"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="334"><highlight class="normal"><sp/><sp/><sp/>b[0]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1);</highlight></codeline>
+<codeline lineno="335"><highlight class="normal"><sp/><sp/><sp/>b[1]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1);</highlight></codeline>
+<codeline lineno="336"><highlight class="normal"><sp/><sp/><sp/>b[2]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1);<sp/></highlight></codeline>
+<codeline lineno="337"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="338"><highlight class="normal"><sp/><sp/><sp/>c[0]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0);</highlight></codeline>
+<codeline lineno="339"><highlight class="normal"><sp/><sp/><sp/>c[1]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0);</highlight></codeline>
+<codeline lineno="340"><highlight class="normal"><sp/><sp/><sp/>c[2]<sp/>=<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)<sp/>-<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0);<sp/></highlight></codeline>
+<codeline lineno="341"><highlight class="normal"></highlight></codeline>
+<codeline lineno="342"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>summing<sp/>the<sp/>interpolation<sp/>functions<sp/>to<sp/>get<sp/>their<sp/>value<sp/>at<sp/>(x,y)<sp/><sp/><sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="343"><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">N</ref>.resize(<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>);</highlight></codeline>
+<codeline lineno="344"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>i{0U};<sp/>i&lt;<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>;<sp/>i++<sp/>)</highlight></codeline>
+<codeline lineno="345"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">N</ref>[i]<sp/>=<sp/>ae2<sp/>*<sp/>(a[i]<sp/>+<sp/>b[i]<sp/>*<sp/>xyz[0]<sp/>+<sp/>c[i]<sp/>*<sp/>xyz[1]);</highlight></codeline>
+<codeline lineno="346"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="347"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>N</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="348"><highlight class="normal"></highlight></codeline>
+<codeline lineno="349"><highlight class="normal"></highlight></codeline>
+<codeline lineno="350"><highlight class="normal"></highlight></codeline>
+<codeline lineno="351"><highlight class="normal"></highlight></codeline>
+<codeline lineno="352" refid="classcsmp_1_1_linear_triangle_1a6c1d1cc28bfb1440182e2c8b8ec27791" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_linear_triangle_1a6c1d1cc28bfb1440182e2c8b8ec27791" kindref="member">LinearTriangle::N_AtBaryCenter</ref>(<sp/>std::vector&lt;double&gt;&amp;<sp/>IPOL<sp/>)</highlight></codeline>
+<codeline lineno="353"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="354"><highlight class="normal"><sp/><sp/><sp/><sp/>vector&lt;double&gt;<sp/><sp/>xyz(2);</highlight></codeline>
+<codeline lineno="355"><highlight class="normal"><sp/><sp/><sp/><sp/>xyz[0]<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0)<sp/>+<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0)<sp/>+<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0))<sp/>/<sp/>3.;</highlight></codeline>
+<codeline lineno="356"><highlight class="normal"><sp/><sp/><sp/><sp/>xyz[1]<sp/>=<sp/>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)<sp/>+<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)<sp/>+<sp/><ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1))<sp/>/<sp/>3.;</highlight></codeline>
+<codeline lineno="357"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="358"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" kindref="member">N</ref>(<sp/>IPOL,<sp/>xyz<sp/>);<sp/></highlight></codeline>
+<codeline lineno="359"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="360"><highlight class="normal"><sp/>}<sp/></highlight><highlight class="comment">//<sp/>N_AtBaryCenter</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="361"><highlight class="normal"></highlight></codeline>
+<codeline lineno="362"><highlight class="normal"></highlight></codeline>
+<codeline lineno="363"><highlight class="normal"></highlight></codeline>
+<codeline lineno="364"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="365"><highlight class="comment">void<sp/><sp/>LinearTriangle::ConsecutiveNodesAtBoundary(<sp/>const<sp/>vector&lt;uint32_t&gt;&amp;<sp/>bnodes,<sp/></highlight></codeline>
+<codeline lineno="366"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>vector&lt;uint32_t&gt;&amp;<sp/>fnids<sp/>)</highlight></codeline>
+<codeline lineno="367"><highlight class="comment"><sp/>{</highlight></codeline>
+<codeline lineno="368"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>bnodes.size()<sp/>&lt;<sp/>2<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="369"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cerr<sp/>&lt;&lt;&quot;\n\tnodes<sp/>at<sp/>boundary:<sp/>&quot;;</highlight></codeline>
+<codeline lineno="370"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>for<sp/>(<sp/>uint32_t<sp/>j{0U};<sp/>j&lt;bnodes.size();<sp/>j++<sp/>)<sp/>cerr<sp/>&lt;&lt;<sp/>bnodes[j]<sp/>&lt;&lt;&quot;<sp/>&quot;;</highlight></codeline>
+<codeline lineno="371"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cerr<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="372"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>throw<sp/>csmp::Exception(<sp/>ERROR,<sp/>&quot;LinearTriangle::ConsecutiveNodesAtBoundary&quot;,</highlight></codeline>
+<codeline lineno="373"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;Two<sp/>nodes<sp/>should<sp/>be<sp/>located<sp/>at<sp/>a<sp/>boundary<sp/>!<sp/>-&quot;,</highlight></codeline>
+<codeline lineno="374"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;correct<sp/>input<sp/>to<sp/>meet<sp/>this<sp/>criterion.&quot;<sp/>);</highlight></codeline>
+<codeline lineno="375"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="376"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="377"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>fnids.resize(2);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="378"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="379"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>(bnodes[0]<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>bnodes[1]<sp/>==<sp/>1)<sp/>||<sp/>(bnodes[0]<sp/>==<sp/>1<sp/>&amp;&amp;<sp/>bnodes[1]<sp/>==<sp/>0)<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="380"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[0]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="381"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[1]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="382"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return;</highlight></codeline>
+<codeline lineno="383"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="384"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="385"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>(bnodes[0]<sp/>==<sp/>1<sp/>&amp;&amp;<sp/>bnodes[1]<sp/>==<sp/>2)<sp/>||<sp/>(bnodes[0]<sp/>==<sp/>2<sp/>&amp;&amp;<sp/>bnodes[1]<sp/>==<sp/>1)<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="386"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[0]<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="387"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[1]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="388"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return;</highlight></codeline>
+<codeline lineno="389"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="390"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="391"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>(bnodes[0]<sp/>==<sp/>2<sp/>&amp;&amp;<sp/>bnodes[1]<sp/>==<sp/>0)<sp/>||<sp/>(bnodes[0]<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>bnodes[1]<sp/>==<sp/>2)<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="392"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[0]<sp/>=<sp/>2;</highlight></codeline>
+<codeline lineno="393"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fnids[1]<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="394"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return;</highlight></codeline>
+<codeline lineno="395"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="396"><highlight class="comment"></highlight></codeline>
+<codeline lineno="397"><highlight class="comment"><sp/>}<sp/>//<sp/>end<sp/>ConsecutiveNodesAtBoundary</highlight></codeline>
+<codeline lineno="398"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="399"><highlight class="normal"></highlight></codeline>
+<codeline lineno="400"><highlight class="normal"></highlight></codeline>
+<codeline lineno="401"><highlight class="normal"></highlight></codeline>
+<codeline lineno="405" refid="classcsmp_1_1_linear_triangle_1a8deb43a50229ce96f937fe6f5cc3f6f1" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_linear_triangle_1a8deb43a50229ce96f937fe6f5cc3f6f1" kindref="member">LinearTriangle::UnitNormalToFace</ref>(<sp/>uint32_t<sp/>face,<sp/>std::vector&lt;double&gt;&amp;<sp/>unrml<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="406"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="407"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>assert(<sp/>face<sp/>&lt;<sp/><ref refid="classcsmp_1_1_finite_element_1a9666661fa30a04d97f6c04a059a6bba6" kindref="member">Faces</ref>()<sp/>);</highlight></codeline>
+<codeline lineno="408"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>unrml.resize(2);</highlight></codeline>
+<codeline lineno="409"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>nodes<sp/>1<sp/>and<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="410"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>face<sp/>==<sp/>0<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="411"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref><sp/><sp/>normal(<sp/><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0),<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1)),<sp/><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0),<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1))<sp/>);</highlight></codeline>
+<codeline lineno="412"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>rotating<sp/>edge<sp/>clockwise<sp/>to<sp/>find<sp/>outward<sp/>pointing<sp/>normal<sp/>to<sp/>face</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="413"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>normal.<ref refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" kindref="member">Rot</ref>();</highlight></codeline>
+<codeline lineno="414"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>normal.NormalizeTo(<sp/>1.<sp/>);</highlight></codeline>
+<codeline lineno="415"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unrml[0]<sp/>=<sp/>normal.Destination()[0];</highlight></codeline>
+<codeline lineno="416"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unrml[1]<sp/>=<sp/>normal.Destination()[1];</highlight></codeline>
+<codeline lineno="417"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="418"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="419"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>nodes<sp/>2<sp/>and<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="420"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>face<sp/>==<sp/>1<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="421"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref><sp/><sp/>normal(<sp/><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,0),<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(2,1)),<sp/><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0),<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1))<sp/>);</highlight></codeline>
+<codeline lineno="422"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>normal.<ref refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" kindref="member">Rot</ref>();</highlight></codeline>
+<codeline lineno="423"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>normal.NormalizeTo(<sp/>1.<sp/>);</highlight></codeline>
+<codeline lineno="424"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unrml[0]<sp/>=<sp/>normal.Destination()[0];</highlight></codeline>
+<codeline lineno="425"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unrml[1]<sp/>=<sp/>normal.Destination()[1];</highlight></codeline>
+<codeline lineno="426"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="427"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="428"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>nodes<sp/>0<sp/>and<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="429"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>face<sp/>==<sp/>2<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="430"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref><sp/><sp/>normal(<sp/><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,0),<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(0,1)),<sp/><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref>(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,0),<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>(1,1))<sp/>);</highlight></codeline>
+<codeline lineno="431"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>normal.<ref refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" kindref="member">Rot</ref>();</highlight></codeline>
+<codeline lineno="432"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>normal.NormalizeTo(<sp/>1.<sp/>);</highlight></codeline>
+<codeline lineno="433"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unrml[0]<sp/>=<sp/>normal.Destination()[0];</highlight></codeline>
+<codeline lineno="434"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>unrml[1]<sp/>=<sp/>normal.Destination()[1];</highlight></codeline>
+<codeline lineno="435"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="436"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="437"><highlight class="normal"></highlight></codeline>
+<codeline lineno="438"><highlight class="normal"></highlight></codeline>
+<codeline lineno="439"><highlight class="normal"></highlight></codeline>
+<codeline lineno="440"><highlight class="normal"></highlight></codeline>
+<codeline lineno="441" refid="classcsmp_1_1_linear_triangle_1af01a417ecaa31effbbf43a27a32dbb2e" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_linear_triangle_1af01a417ecaa31effbbf43a27a32dbb2e" kindref="member">LinearTriangle::OutputNodeDataToVTK</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>file_name,<sp/></highlight></codeline>
+<codeline lineno="442"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>var_name,<sp/></highlight></codeline>
+<codeline lineno="443"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>DATA<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="444"><highlight class="keyword"><sp/><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="445"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/><sp/>outfile[<ref refid="group___c_s_m_p__global__enumerations_1ga8413f7c3b4f238c5a98a846198d49469" kindref="member">NAME_STRING</ref>],<sp/>elmt[30];</highlight></codeline>
+<codeline lineno="446"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>strcpy(<sp/>outfile,<sp/>file_name<sp/>);</highlight></codeline>
+<codeline lineno="447"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>snprintf(<sp/>elmt,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(elmt),<sp/></highlight><highlight class="stringliteral">&quot;%lu&quot;</highlight><highlight class="normal">,<sp/><ref refid="classcsmp_1_1_finite_element_1a9831bfb64a8fa07f20eb7024fc5a22f2" kindref="member">CurrentID</ref>()<sp/>);</highlight></codeline>
+<codeline lineno="448"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>strcat(<sp/>outfile,<sp/>elmt<sp/>);</highlight></codeline>
+<codeline lineno="449"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>strcat(<sp/>outfile,<sp/></highlight><highlight class="stringliteral">&quot;.vtk&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="450"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="451"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>0.<sp/>opening<sp/>data<sp/>output<sp/>file<sp/>in<sp/>ascii<sp/>format</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="452"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofstream<sp/>ofs;</highlight></codeline>
+<codeline lineno="453"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs.open(<sp/>outfile,<sp/>ios::out|ios::trunc<sp/>);</highlight></codeline>
+<codeline lineno="454"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>!ofs<sp/>)</highlight></codeline>
+<codeline lineno="455"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="456"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cerr<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nLinearTriangle::OutputNodeDataToVTK<sp/>&quot;</highlight><highlight class="normal">;<sp/></highlight></codeline>
+<codeline lineno="457"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cerr<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;Output<sp/>file<sp/>could<sp/>not<sp/>be<sp/>opened.&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="458"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="459"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/><sp/></highlight></codeline>
+<codeline lineno="460"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="461"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1.<sp/>writing<sp/>the<sp/>file<sp/>header</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="462"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="463"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;#<sp/>vtk<sp/>DataFile<sp/>Version<sp/>2.0&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="464"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;Finite-element<sp/>dataset<sp/>(CSMP):<sp/>variable:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>var_name<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="465"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;ASCII&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="466"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="467"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>2.<sp/>writing<sp/>node<sp/>coordinates</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="468"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="469"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref><sp/>COORD(<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref>);</highlight></codeline>
+<codeline lineno="470"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;DATASET<sp/>UNSTRUCTURED_GRID&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="471"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;POINTS<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref><sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>float&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="472"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>i{0U};<sp/>i&lt;<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>;<sp/>i++<sp/>)</highlight></codeline>
+<codeline lineno="473"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="474"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>x,<sp/>y</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="475"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>j{0U};<sp/>j&lt;<ref refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" kindref="member">dim</ref>;<sp/>j++<sp/>)<sp/>ofs<sp/>&lt;&lt;<sp/>COORD(i,j)<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="476"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>z</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="477"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>0.0<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="478"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="479"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="480"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;<sp/><sp/></highlight></codeline>
+<codeline lineno="481"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="482"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3.<sp/>writing<sp/>CELLS<sp/>(cell-size<sp/>and<sp/>member<sp/>nodes<sp/>(point))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="483"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>-----------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="484"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;CELLS<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>1<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/><ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>+1<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="485"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>number<sp/>of<sp/>points<sp/>per<sp/>cell,<sp/>point1,<sp/>...<sp/>point<sp/>n</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="486"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/><ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref><sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>0<sp/>1<sp/>2&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="487"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="488"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="489"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="490"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>4.<sp/>writing<sp/>CELL_TYPES</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="491"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="492"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;CELL_TYPES<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>1<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="493"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>5<sp/>&lt;&lt;<sp/>endl;<sp/></highlight><highlight class="comment">//<sp/>VTK_TRIANGLE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="494"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="495"><highlight class="normal"></highlight></codeline>
+<codeline lineno="496"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>5.<sp/>writing<sp/>POINT_DATA<sp/>point-type<sp/>data<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="497"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="498"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;POINT_DATA<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/><ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref><sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="499"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs.setf(<sp/>ios::scientific<sp/>);</highlight></codeline>
+<codeline lineno="500"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="501"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>DATA.Rows()<sp/>==<sp/>1<sp/>)</highlight></codeline>
+<codeline lineno="502"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="503"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;SCALARS<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>var_name<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>float&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="504"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;LOOKUP_TABLE<sp/>default&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>endl;<sp/></highlight><highlight class="comment">//<sp/>table<sp/>must<sp/>always<sp/>be<sp/>created</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="505"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>matrix<sp/>DATA<sp/>is<sp/>1x6</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="506"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>i{0U};<sp/>i&lt;<ref refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" kindref="member">npe</ref>;<sp/>i++<sp/>)<sp/>ofs<sp/>&lt;&lt;<sp/>DATA(0,i)<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="507"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="508"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="509"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="510"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="511"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>assert(<sp/>DATA.Rows()<sp/>==<sp/><ref refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" kindref="member">dim</ref><sp/>);</highlight></codeline>
+<codeline lineno="512"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;VECTORS<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>var_name<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>float&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="513"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>variables<sp/>have<sp/>always<sp/>3<sp/>components<sp/>since<sp/>view<sp/>screen<sp/>is<sp/>3D</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="514"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>matrix<sp/>DATA<sp/>is<sp/>vec-dim<sp/>x<sp/>6</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="515"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>i{0U};<sp/>i&lt;DATA.Cols();<sp/>i++<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="516"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>j{0U};<sp/>j&lt;DATA.Rows();<sp/>j++<sp/>)<sp/>ofs<sp/>&lt;&lt;<sp/>DATA(j,i)<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/><sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="517"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>the<sp/>missing<sp/>3rd<sp/>dimension</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="518"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>0.0<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/><sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="519"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="520"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="521"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="522"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="523"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>ofs.close();</highlight></codeline>
+<codeline lineno="524"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nLinearTriangle3D::OutputNodeDataToVTK:<sp/>file<sp/>&apos;&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>outfile;</highlight></codeline>
+<codeline lineno="525"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;&apos;<sp/>written<sp/>successfully.&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="526"><highlight class="normal"></highlight></codeline>
+<codeline lineno="527"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>OutputNodeDataToVTK</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="528"><highlight class="normal"></highlight></codeline>
+<codeline lineno="529"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>namespace<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="530"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/modules/integration/finite_elements/LinearTriangle.cpp"/>
+  </compounddef>
+</doxygen>

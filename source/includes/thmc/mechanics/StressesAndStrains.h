@@ -28,16 +28,16 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U,Element> {
                         bool geomechanics_conventions=true  );
     
     /// get displacement values to compute {d} vector
-    virtual void GetOperands( const Element<3U>& );
+    void GetOperands( const Element<3U>& ) override final;
 
     /// {e} = [B]{d}, {s} = [D]{e} at integration points
-    virtual void ComputeContribution( const Element<3U>& );
+    void ComputeContribution( const Element<3U>& ) override final;
 
     /// write {e} to each elements
-    virtual void WriteOperands( Element<3U>& );
+    void WriteOperands( Element<3U>& ) override final;
     
     void PrincipalStrainsAndStresses( bool yes_no );
-    virtual StressesAndStrains<3U>* clone() const { return new StressesAndStrains<3U> (*this); }
+    StressesAndStrains<3U>* clone() const override final { return new StressesAndStrains<3U> (*this); }
   private:
     const uint32_t  components_;  // stress strain components
     

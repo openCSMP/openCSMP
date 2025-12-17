@@ -1,0 +1,131 @@
+.TH "csmp::LinearElasticIsotropicDeformation2D_VVCase" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::LinearElasticIsotropicDeformation2D_VVCase
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLinearElasticIsotropicDeformation2D_VVCase\fP (const char *prefix)"
+.br
+.ti -1c
+.RI "void \fBSetupLinearTriangles\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetupQuadraticTriangles\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetupLinearQuadrilaterals\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetupQuadraticQuadrilaterals\fP ()"
+.br
+.ti -1c
+.RI "void \fBSolve\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::LinearElasticIsotropicDeformation2D_VVCase::run ()\fR [virtual]\fP"
+Author: M\&. Nejati -- Adapted by E\&.Pezzulli for Melbourne repository 
+.SH "Linear Elastic: Plane stress/Strain problem under uniform traction"
+.PP
+Domain: Omega: w x h Rectangle (Provided meshes is for a 10x10 square plane) Mesh: Square_10x10_LinearTrianglesCoarse (Quadrilaterials dont work bcause of incorrect Ansys mesh) Square_10x10_QuadraticTrianglesCoarse Var File: LinearElasticIsotropicDeformation2D_VVCase-variables\&.txt Reg File: LinearElasticIsotropicDeformation2D_VVCase-regions\&.txt Material: Linear ELastic Isotropic Material: E=Young's Modulus, nu= Poisson's Ratio; Loading: Uniaxial/Biaxial Tension/Compression on RIGHT and TOP Boundaries BC: Zero x and y displacements on LEFT and BOTTOM Edges, rexpectively
+
+.PP
+.PP
+
+.PP
+Assume a rectangular plane of width and height of w, and h, subjected to uniform stresses S1 and S2 in x and y directions, respectively\&. If Ux and Uy are the solutions of displacements in x and y directions, respectively: BC: The displacement boundary conditions are Ux=0 on LEFT and Uy=0 on BOTTOM; The Neumann conditions are: Sx=S1 on RIGHT and Sy=S2 on TOP\&. Solution of stress and displacement at point (x,y) over the domain Omega:
+
+.PP
+Plane Stress: Sx(x,y)=S1 Sy(x,y)=S2 Ux(x,y)=1/E * (S1-nuS2)x Uy(x,y)=1/E * (S2-nuS1)y
+
+.PP
+Plain Strain: Sx(x,y)=S1 Sy(x,y)=S2 Ux(x,y)=1/E * (S1-nuS2-nu^2(S1+S2))x Uy(x,y)=1/E * (S2-nuS1-nu^2(S1+S2))y
+
+.PP
+The following implemetation, together with the other elastic tests by MN, uses the capability to assign faces over the boundaries of the domain\&. In this case, all the 2D elements building the regions TOP, BOTTOM, LEFT and RIGHT are deleted, and equivalent faces are created instead\&. Using this functionality, one can apply boundary integrals only on the boundaries with known faces\&. An alternative method is to keep the elements, and apply the boundary interals as rhs terms\&. One can easily switch between these two methodologies below\&. However, the use of boundary faces has the following advantages: 1) The lower dimension elements are deleted, and therefore they can not have any contribution to the LHS of the system\&. In the case of the presence of boundary elements, one has to make sure that they do not contribute to the stiffness matrix\&. This can be done, for example, by making Young's modulus zero on these boundary elements\&. 2) When using RHS operators to add a boundary integral, an iteration happens over all the elements, including the domain higher dimension elements, to accumulate the boundary integrals\&. Although the contribution of domain elements can be forced to be zero (by making the operand zero for all domain elements), this iteration is very expensive compared to the one that just iterates over the boundary faces\&. 
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "void csmp::LinearElasticIsotropicDeformation2D_VVCase::Solve ()"
+
+.PP
+ 
+.SS "BEGIN TESTING OF MODEL CONSTRUCTION ------------------------------------------------"
+.PP
+ 
+.SS "BEGIN TESTING OF LINEAR ELASTICITY ------------------------------------------------"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

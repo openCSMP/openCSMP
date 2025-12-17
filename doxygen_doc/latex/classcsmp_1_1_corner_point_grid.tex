@@ -1,0 +1,114 @@
+\doxysection{csmp\+::Corner\+Point\+Grid Class Reference}
+\hypertarget{classcsmp_1_1_corner_point_grid}{}\label{classcsmp_1_1_corner_point_grid}\index{csmp::CornerPointGrid@{csmp::CornerPointGrid}}
+
+
+Collaboration diagram for csmp\+::Corner\+Point\+Grid\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=196pt]{classcsmp_1_1_corner_point_grid__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_a38c23e1bcbf434ac85f39cf70f7353da}{Create\+Model}} (const std\+::string \&model\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_v_set}{csmp\+::\+VSet}}$<$ 3U $>$ \&vset, \mbox{\hyperlink{classcsmp_1_1_model_topology}{csmp\+::\+Model\+Topology}} \&model\+\_\+topology, const std\+::vector$<$ double $>$ \&zcorn, std\+::set$<$ std\+::string $>$ \&regions, std\+::set$<$ std\+::string $>$ \&faults, std\+::set$<$ std\+::string $>$ \&wells, bool tetra\+\_\+mesh, bool exclude\+\_\+inactive\+\_\+cells)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a44ec7c953c860ee5a47c9113ae5b32f5}\label{classcsmp_1_1_corner_point_grid_a44ec7c953c860ee5a47c9113ae5b32f5} 
+{\footnotesize template$<$class Var\+Type$>$ }\\void {\bfseries Write\+Property\+To\+VSet} (\mbox{\hyperlink{classcsmp_1_1_v_set}{csmp\+::\+VSet}}$<$ 3U $>$ \&vset, const std\+::vector$<$ Var\+Type $>$ \&prop\+\_\+data, const std\+::string \&prop\+\_\+name, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{csmp\+::\+PLACEMENT}} \&prop\+\_\+place) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a47aca34bf9073f03b5acf91e548eb02a}\label{classcsmp_1_1_corner_point_grid_a47aca34bf9073f03b5acf91e548eb02a} 
+size\+\_\+t {\bfseries DimensionI} () const
+\begin{DoxyCompactList}\small\item\em return the number of blocks the grid has in the given direction \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a533a1805a415a251aa9be30817e85861}\label{classcsmp_1_1_corner_point_grid_a533a1805a415a251aa9be30817e85861} 
+size\+\_\+t {\bfseries DimensionJ} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_ad4dff1520840023057755c436706d37d}\label{classcsmp_1_1_corner_point_grid_ad4dff1520840023057755c436706d37d} 
+size\+\_\+t {\bfseries DimensionK} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a612ef3b4f7b5638ef830f5a0f98c01d6}\label{classcsmp_1_1_corner_point_grid_a612ef3b4f7b5638ef830f5a0f98c01d6} 
+void {\bfseries Assign\+Dimensions} (uint32\+\_\+t nx, uint32\+\_\+t ny, uint32\+\_\+t nz)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a312e88fa5e127f78eb85e8b938cd43c0}\label{classcsmp_1_1_corner_point_grid_a312e88fa5e127f78eb85e8b938cd43c0} 
+void {\bfseries Resize} (uint32\+\_\+t nx, uint32\+\_\+t ny)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_pillar}{csmp\+::\+Pillar}} \& \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_af736ac5c6b20968f9fa6cc2d266b4f28}{operator()}} (uint32\+\_\+t i, uint32\+\_\+t j)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_aceb386fb32892c1074fb817be2d2562c}\label{classcsmp_1_1_corner_point_grid_aceb386fb32892c1074fb817be2d2562c} 
+std\+::vector$<$ uint8\+\_\+t $>$ \& {\bfseries Get\+Cell\+Activity} ()
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a1c80364bebdb45c77fe502ec298fb7dd}\label{classcsmp_1_1_corner_point_grid_a1c80364bebdb45c77fe502ec298fb7dd} 
+size\+\_\+t {\bfseries Ordinary\+Nodes} () const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a9516ea6015584611e5e5727c59aa80b6}\label{classcsmp_1_1_corner_point_grid_a9516ea6015584611e5e5727c59aa80b6} 
+std\+::multimap$<$ \mbox{\hyperlink{structijk}{ijk}}, size\+\_\+t $>$ \& {\bfseries IJKMap} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_a369907a8420b40bb54bc303d130c801a}{Convert\+From\+Reservoir\+To\+CSMPcoordinate\+System}} (\mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&pt) const
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a65a08601af3b24472186eb66c2925d3c}\label{classcsmp_1_1_corner_point_grid_a65a08601af3b24472186eb66c2925d3c} 
+bool {\bfseries Construct\+Line\+Element} (uint32\+\_\+t \&i, uint32\+\_\+t \&j, uint32\+\_\+t \&k, size\+\_\+t \&new\+\_\+elemt\+\_\+idx)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a82ed0ada89a436752157b154f65462f2}\label{classcsmp_1_1_corner_point_grid_a82ed0ada89a436752157b154f65462f2} 
+bool {\bfseries Construct\+Line\+Element} (\mbox{\hyperlink{structcsmp_1_1_column_cell}{csmp\+::\+Column\+Cell}} \&cell, uint32\+\_\+t \&i, uint32\+\_\+t \&j, uint32\+\_\+t \&k)
+\item 
+\Hypertarget{classcsmp_1_1_corner_point_grid_a09f4caebb89b6d395d60200feb58b9f2}\label{classcsmp_1_1_corner_point_grid_a09f4caebb89b6d395d60200feb58b9f2} 
+\mbox{\hyperlink{classcsmp_1_1_cell_generator}{Cell\+Generator}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Cell\+Generator} ()
+\item 
+{\footnotesize template$<$class Var\+Type$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_ab15514b1ae88d9fc42040cfa3b2e5315}{Write\+Property\+To\+VSet}} (\mbox{\hyperlink{classcsmp_1_1_v_set}{csmp\+::\+VSet}}$<$ 3U $>$ \&vset, const \mbox{\hyperlink{classvector}{vector}}$<$ Var\+Type $>$ \&prop\+\_\+data, const string \&prop\+\_\+name, const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{csmp\+::\+PLACEMENT}} \&prop\+\_\+place) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+A.\+J. Bromage 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_corner_point_grid_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_corner_point_grid_a369907a8420b40bb54bc303d130c801a}\index{csmp::CornerPointGrid@{csmp::CornerPointGrid}!ConvertFromReservoirToCSMPcoordinateSystem@{ConvertFromReservoirToCSMPcoordinateSystem}}
+\index{ConvertFromReservoirToCSMPcoordinateSystem@{ConvertFromReservoirToCSMPcoordinateSystem}!csmp::CornerPointGrid@{csmp::CornerPointGrid}}
+\doxysubsubsection{\texorpdfstring{ConvertFromReservoirToCSMPcoordinateSystem()}{ConvertFromReservoirToCSMPcoordinateSystem()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_grid_a369907a8420b40bb54bc303d130c801a} 
+void csmp\+::\+Corner\+Point\+Grid\+::\+Convert\+From\+Reservoir\+To\+CSMPcoordinate\+System (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&}]{pt}{}\end{DoxyParamCaption}) const}
+
+x stays, y = -\/z and z=y. \Hypertarget{classcsmp_1_1_corner_point_grid_a38c23e1bcbf434ac85f39cf70f7353da}\index{csmp::CornerPointGrid@{csmp::CornerPointGrid}!CreateModel@{CreateModel}}
+\index{CreateModel@{CreateModel}!csmp::CornerPointGrid@{csmp::CornerPointGrid}}
+\doxysubsubsection{\texorpdfstring{CreateModel()}{CreateModel()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_grid_a38c23e1bcbf434ac85f39cf70f7353da} 
+void csmp\+::\+Corner\+Point\+Grid\+::\+Create\+Model (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{model\+\_\+name}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{csmp\+::\+VSet}}$<$ 3U $>$ \&}]{vset}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_model_topology}{csmp\+::\+Model\+Topology}} \&}]{model\+\_\+topology}{, }\item[{const std\+::vector$<$ double $>$ \&}]{zcorn}{, }\item[{std\+::set$<$ std\+::string $>$ \&}]{regions}{, }\item[{std\+::set$<$ std\+::string $>$ \&}]{faults}{, }\item[{std\+::set$<$ std\+::string $>$ \&}]{wells}{, }\item[{bool}]{tetra\+\_\+mesh}{, }\item[{bool}]{exclude\+\_\+inactive\+\_\+cells}{}\end{DoxyParamCaption})}
+
+MASTER METHOD for the creation of corner point grids from the original cell-\/centered grids read by the \doxylink{classcsmp_1_1_eclipse_interface}{Eclipse\+Interface}.
+
+The \doxylink{classcsmp_1_1_polygon_grid_manager}{Polygon\+Grid\+Manager} is used to construct the pillars.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000197}{Todo}}]this is confused! -\/ why should the corner point grid be responsible for building the CSMP model? -\/ code should be in the \doxylink{classcsmp_1_1_eclipse_model}{Eclipse\+Model}\end{DoxyRefDesc}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000198}{Todo}}]regions are not recognised properly. \end{DoxyRefDesc}
+\Hypertarget{classcsmp_1_1_corner_point_grid_af736ac5c6b20968f9fa6cc2d266b4f28}\index{csmp::CornerPointGrid@{csmp::CornerPointGrid}!operator()@{operator()}}
+\index{operator()@{operator()}!csmp::CornerPointGrid@{csmp::CornerPointGrid}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_grid_af736ac5c6b20968f9fa6cc2d266b4f28} 
+\mbox{\hyperlink{classcsmp_1_1_pillar}{Pillar}} \& csmp\+::\+Corner\+Point\+Grid\+::operator() (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{, }\item[{uint32\+\_\+t}]{j}{}\end{DoxyParamCaption})}
+
+accessing the contained pillars \Hypertarget{classcsmp_1_1_corner_point_grid_ab15514b1ae88d9fc42040cfa3b2e5315}\index{csmp::CornerPointGrid@{csmp::CornerPointGrid}!WritePropertyToVSet@{WritePropertyToVSet}}
+\index{WritePropertyToVSet@{WritePropertyToVSet}!csmp::CornerPointGrid@{csmp::CornerPointGrid}}
+\doxysubsubsection{\texorpdfstring{WritePropertyToVSet()}{WritePropertyToVSet()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_corner_point_grid_ab15514b1ae88d9fc42040cfa3b2e5315} 
+template$<$class Var\+Type$>$ \\
+void csmp\+::\+Corner\+Point\+Grid\+::\+Write\+Property\+To\+VSet (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_v_set}{csmp\+::\+VSet}}$<$ 3U $>$ \&}]{vset}{, }\item[{const \mbox{\hyperlink{classvector}{vector}}$<$ Var\+Type $>$ \&}]{prop\+\_\+data}{, }\item[{const string \&}]{prop\+\_\+name}{, }\item[{const \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{csmp\+::\+PLACEMENT}} \&}]{prop\+\_\+place}{}\end{DoxyParamCaption}) const}
+
+correcting data cell id\textquotesingle{}s due to existance of embedded cells
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/regular\+\_\+grids/Corner\+Point\+Grid.\+h\item 
+source/modules/regular\+\_\+grids/Corner\+Point\+Grid.\+cpp\end{DoxyCompactItemize}

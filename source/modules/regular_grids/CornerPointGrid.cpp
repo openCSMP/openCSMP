@@ -886,6 +886,7 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, uint32_t& i, 
               break;
               
             case FACE_TYPE::FULL_QUAD:
+              throw csmp::Exception( FATAL_ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "FULL_QUAD bottom face not handled" );
 
             default:
               throw csmp::Exception( FATAL_ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "Hexahedron with unknown bottom face" );
@@ -997,6 +998,8 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, uint32_t& i, 
           break;
         case FACE_TYPE::SPLIT_X:
           throw csmp::Exception( ERROR, "CornerPointGrid::ConstructEclipseCell0000", "switch case FACE_TYPE::SPLIT_X not handled yet");
+        case FACE_TYPE::FULL_QUAD:
+          break;
       }
     }
   }

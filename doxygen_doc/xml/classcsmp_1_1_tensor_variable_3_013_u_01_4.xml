@@ -1,0 +1,1594 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_tensor_variable_3_013_u_01_4" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TensorVariable&lt; 3U &gt;</compoundname>
+    <includes refid="_tensor_variable_8h" local="no">TensorVariable.h</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aa0f05a3e995e648096266151e1e0f893" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gacbf62c758c46dc45b3f024638bb89274" kindref="member">VARIABLE_TYPE</ref></type>
+        <definition>VARIABLE_TYPE csmp::TensorVariable&lt; 3U &gt;::VariableType</definition>
+        <argsstring></argsstring>
+        <name>VariableType</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::VariableType</qualifiedname>
+        <initializer>= TENSOR</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="91" column="34" bodyfile="source/includes/model/TensorVariable.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a995bbed7d4553abf228f1fabf05b52e6" prot="private" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref>, 3U &gt;</type>
+        <definition>std::array&lt;VARIABLE_FLAG, 3U&gt; csmp::TensorVariable&lt; 3U &gt;::flag</definition>
+        <argsstring></argsstring>
+        <name>flag</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::flag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="271" column="24" bodyfile="source/includes/model/TensorVariable.h" bodystart="271" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a57d3e0a8f4479f6eb00f36b442c033c4" prot="private" static="no" mutable="no">
+        <type>std::array&lt; std::array&lt; double, 3U &gt;, 3U &gt;</type>
+        <definition>std::array&lt;std::array&lt;double, 3U&gt;, 3U&gt; csmp::TensorVariable&lt; 3U &gt;::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="272" column="15" bodyfile="source/includes/model/TensorVariable.h" bodystart="272" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae775cfc5328664efdadd010007fe6434" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</definition>
+        <argsstring>()</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="93" column="3" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="9" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a42250db271bf5f76bd6d510addb71d6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</definition>
+        <argsstring>(VARIABLE_FLAG flag, double val)</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>flag</declname>
+          <defname>f</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+<para>creates isotropic diagonal tensor with diagonal elements equal to supplied value </para>
+        </briefdescription>
+        <detaileddescription>
+<para>initialises variable as diagonal isotropic tensor with flag and value SKM 17/6/2015 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="96" column="3" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="26" bodyend="30"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a42250db271bf5f76bd6d510addb71d6a" compoundref="_tensor_variable_8cpp" startline="26" endline="30">TensorVariable</references>
+        <referencedby refid="classcsmp_1_1_permeability_tensor___example_1adb8049909b705a05d837f5f900afb753" compoundref="_permeability_tensor___example_8cpp" startline="32" endline="89">csmp::PermeabilityTensor_Example::Run</referencedby>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a42250db271bf5f76bd6d510addb71d6a" compoundref="_tensor_variable_8cpp" startline="26" endline="30">TensorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1abe7e98766f3b5eba67509f2289605549" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</definition>
+        <argsstring>(VARIABLE_FLAG f, double v11, double v12, double v13, double v21, double v22, double v23, double v31, double v32, double v33)</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</qualifiedname>
+        <param>
+          <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v11</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v12</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v13</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v21</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v22</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v23</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v31</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v32</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>v33</declname>
+        </param>
+        <briefdescription>
+<para>full initialisation where all diagonal elements have the same flag </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="99" column="3" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="293" bodyend="300"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1abe7e98766f3b5eba67509f2289605549" compoundref="_tensor_variable_8cpp" startline="293" endline="300">TensorVariable</references>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1abe7e98766f3b5eba67509f2289605549" compoundref="_tensor_variable_8cpp" startline="293" endline="300">TensorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a4acb34f9effcdc9a54f36bb30fc866b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</definition>
+        <argsstring>(const VARIABLE_FLAG f11, const VARIABLE_FLAG f22, const VARIABLE_FLAG f33, const double v11, const double v12, const double v13, const double v21, const double v22, const double v23, const double v31, const double v32, const double v33)</argsstring>
+        <name>TensorVariable</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::TensorVariable</qualifiedname>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f11</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f22</declname>
+        </param>
+        <param>
+          <type>const <ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+          <declname>f33</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v11</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v12</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v13</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v21</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v22</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v23</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v31</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v32</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>v33</declname>
+        </param>
+        <briefdescription>
+<para>full initialisation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="105" column="3" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="304" bodyend="311"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a4acb34f9effcdc9a54f36bb30fc866b3" compoundref="_tensor_variable_8cpp" startline="304" endline="311">TensorVariable</references>
+        <referencedby refid="namespacecsmp_1abe8816824ef9048d167c060c054ca5db" compoundref="_tensor_variable_8cpp" startline="282" endline="288">csmp::makeTensor</referencedby>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a4acb34f9effcdc9a54f36bb30fc866b3" compoundref="_tensor_variable_8cpp" startline="304" endline="311">TensorVariable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a7fce44b335010a9dd46d4e7f78d82bc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; csmp::TensorVariable&lt; 3U &gt;::operator()</definition>
+        <argsstring>(uint32_t i, uint32_t j)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+<para>read/write access to the elements of the tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="111" column="17" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="39" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac85a606b9dc452352a553db8437356fe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const double &amp;</type>
+        <definition>const double &amp; csmp::TensorVariable&lt; 3U &gt;::operator()</definition>
+        <argsstring>(uint32_t i, uint32_t j) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+<para>read-only access to the elements of the tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="114" column="17" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="57" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aac74631f6ddc482ee40249765206bd0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::Component</definition>
+        <argsstring>(uint32_t, double)</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <defname>val</defname>
+        </param>
+        <briefdescription>
+<para>alternative mutator of tensor elements 0..8 accessing them sequentially row by row </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="117" column="13" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="74" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac85dd9bdf9152f48da1453ae8ddb79cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 3U &gt;::Component</definition>
+        <argsstring>(uint32_t i) const</argsstring>
+        <name>Component</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Component</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>alternative accessor of tensor elements 0..8 accessing them sequentially row by row </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="120" column="13" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="95" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1afe3e6ebe73e7a166479539dcc35a0d41" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::TensorVariable&lt; 3U &gt;::Size</definition>
+        <argsstring>() const</argsstring>
+        <name>Size</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Size</qualifiedname>
+        <briefdescription>
+<para>number of entries in tensor (dim x dim = 9 in this 3D case) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="123" column="13" bodyfile="source/includes/model/TensorVariable.h" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9d8dcc0d84512432e5d4e930c32443be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::Resize</definition>
+        <argsstring>(uint32_t, double newValue=std::numeric_limits&lt; double &gt;::quiet_NaN())</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Resize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>newValue</declname>
+          <defval>std::numeric_limits&lt; double &gt;::quiet_NaN()</defval>
+        </param>
+        <briefdescription>
+<para>assigns second argument to all elements of the tensor, first argument is not used; </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="todo_1_todo000033"><xreftitle>Todo</xreftitle><xrefdescription><para>remove </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="126" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a639c398e776a3ebef017f71395af9980" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::operator+</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator+</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="128" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="336" bodyend="342"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aac2bb69f7b265d969762e111bd3c2ad5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::operator-</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator-</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="129" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="346" bodyend="352"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9457c9a17818d36d14d40fd6c52cb92a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::operator*</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="130" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="356" bodyend="362"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ade27d2eb09b5daef014a6e689a039295" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::operator/</definition>
+        <argsstring>(double val) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="131" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="366" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6e00f060b03d8ae121e385f9acba8a72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator+=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="133" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="615" bodyend="628"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a145be5e1219d357775962e7a5981c08b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator-=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="134" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="632" bodyend="645"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a18201da08766bc5b892a67f75ca87c17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator*=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="135" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="649" bodyend="662"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a1c882d2ea527d34f9758d8d17c964d53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator/=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="136" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="666" bodyend="679"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aaf316eeb20987eaee2fce19239924370" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator+=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="138" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="443" bodyend="456"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1af35c758ea29dd916d3d4f41ae714682f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator-=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="139" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="460" bodyend="473"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1af7da63108c781e890f836e1a3bfa142d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator*=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="140" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="477" bodyend="490"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a82f45d09499d148d86bde70dedfcb449" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator/=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="141" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="494" bodyend="507"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a93ef28ae101bdd582ebdb146e8690d5d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 3U &gt;::operator+</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator+</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="142" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac938e29e9cf4ce686d1157edfd8be28c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 3U &gt;::operator-</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator-</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="143" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a2cf128de2576aa8d7fca910788a4cbde" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 3U &gt;::operator*</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="144" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a0ef2812ad966c4856f906196437ddf10" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::operator*</definition>
+        <argsstring>(const VectorVariable&lt; 3U &gt; &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+<para>(A x) matrix-vector multiplication -&gt; vector (v treated as column vector) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000056"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. SKM 29-9-2001 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="147" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="378" bodyend="385"/>
+        <referencedby refid="classcsmp_1_1_stress_rotate_1a92041531d717596096e8bbcdb46b001e" compoundref="_stress_rotate_8cpp" startline="165" endline="234">csmp::StressRotate::Rotate</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acad6b5527173c4732b8da623e6b23fe9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::operator*</definition>
+        <argsstring>(const Point&lt; 3U &gt; &amp;) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>v</defname>
+        </param>
+        <briefdescription>
+<para>(A x) matrix-vector multiplication -&gt; vector (v treated as column vector) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="150" column="10" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="387" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6938f40d387abe1c91dfacd786efcf57" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable csmp::TensorVariable&lt; 3U &gt;::operator/</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator/</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>value by value division of the elements of the tensor with another one </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="153" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a5f45643ab852bb05b0b1760e0b7705af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 3U &gt;::operator+=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator+=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>value by value addition of the elements of the tensors </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="156" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a0535de512e5a40795db5fa53dd5c65b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 3U &gt;::operator-=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator-=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>value by value subtraction from the lh-tensor by the rh tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="159" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae529fd8497394aa866fc8c80a82444a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 3U &gt;::operator/=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator/=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>value by value division of the elements of the lh-tensor by those of the righthand tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="162" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acac51e3245415bfce7edd66518baa561" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable &amp; csmp::TensorVariable&lt; 3U &gt;::operator*=</definition>
+        <argsstring>(const TensorVariable &amp;)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator*=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>matrix multiplication -&gt; matrix (A.rows, B.cols); creates temporary tensor, avoid this using &apos;operator*()&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="165" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a25bc10d3ff0d74fba0616c37ebcf5542" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator=</definition>
+        <argsstring>(double val)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+<para>sets all ij values to val or sc </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="168" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="687" bodyend="700"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a99db0494ca971901d0f141e1e02cdca2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator=</definition>
+        <argsstring>(const ScalarVariable &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &amp;</type>
+          <defname>sc</defname>
+        </param>
+        <briefdescription>
+<para>sets all ii values to sc (value and flags of diagonal elements) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="171" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="705" bodyend="720"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a20491bf6bef52e3a82d8acadd073484d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        <definition>TensorVariable&lt; 3U &gt; &amp; csmp::TensorVariable&lt; 3U &gt;::operator=</definition>
+        <argsstring>(const VectorVariable&lt; 3U &gt; &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+<para>assigns vector to diagonal elements of tensor, off-diagonal elements are set to zero </para>
+        </briefdescription>
+        <detaileddescription>
+<para>writes vector into the diagonal of the zero&apos;d tensor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="174" column="19" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="724" bodyend="741"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aac527aa69420da863a30152814965321" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::operator==</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>element-by-element comparison of ij values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="177" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="212" bodyend="215"/>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1af4c05e54e266f639f5f46814bf6c299b" compoundref="_tensor_variable_8cpp" startline="218" endline="221">operator!=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1af4c05e54e266f639f5f46814bf6c299b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::operator!=</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>element-by-element comparison of ij values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="180" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="218" bodyend="221"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aac527aa69420da863a30152814965321" compoundref="_tensor_variable_8cpp" startline="212" endline="215">operator==</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a29a34396b9fbdfe553ea9f4e0567651e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::operator&lt;</definition>
+        <argsstring>(const TensorVariable &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> &amp;</type>
+        </param>
+        <briefdescription>
+<para>comparison of the determinants of the tensors </para>
+        </briefdescription>
+        <detaileddescription>
+<para>to achieve reasonable ordering in associative STL containers </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="183" column="3" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="225" bodyend="228"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ad3b45ec9f9b0c9b6c7b664607525fe05" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::IsWithinRange</definition>
+        <argsstring>(double vmin, double vmax) const</argsstring>
+        <name>IsWithinRange</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::IsWithinRange</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>vmin</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>vmax</declname>
+        </param>
+        <briefdescription>
+<para>compares the individual elements of the tensor with the ranges specified in <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref> file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Assumes that tensor is diagonal, checking its Eigen values.</para>
+<para><xrefsect id="test_1_test000064"><xreftitle>Test</xreftitle><xrefdescription><para>re-tested: SKM 29-9-2001 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="186" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="910" bodyend="923"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9c7a202c2fc5be0fa81934c0af25a4ff" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::Has_NaN_Values</definition>
+        <argsstring>() const</argsstring>
+        <name>Has_NaN_Values</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Has_NaN_Values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks only the diagonal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="188" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="929" bodyend="934"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a73a3070483ecca9807c9451ac369289f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref></type>
+        <definition>VARIABLE_FLAG csmp::TensorVariable&lt; 3U &gt;::Flag</definition>
+        <argsstring>(uint32_t i=0) const</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Flag</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>returns the flag of the diagonal tensor element of choice </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="192" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="129" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a32a7bc89e54cf02bfd4d8950039a865d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 3U &gt;::MinElement</definition>
+        <argsstring>() const</argsstring>
+        <name>MinElement</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::MinElement</qualifiedname>
+        <briefdescription>
+<para>returns smallest element in tensor (this is zero if the tensor is diagonal) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000062"><xreftitle>Test</xreftitle><xrefdescription><para>re-tested: SKM 29-9-2001 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="195" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="868" bodyend="882"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6aa05318f3258073a8426868cfdf5e9b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 3U &gt;::MaxElement</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxElement</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::MaxElement</qualifiedname>
+        <briefdescription>
+<para>returns largest element in tensor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000063"><xreftitle>Test</xreftitle><xrefdescription><para>re-tested: SKM 29-9-2001 </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="198" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="887" bodyend="901"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a57738ffeca103afced2713d69b0ea43b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 3U &gt;::Determinant</definition>
+        <argsstring>() const</argsstring>
+        <name>Determinant</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Determinant</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000060"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="200" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="816" bodyend="823"/>
+        <referencedby refid="namespacecsmp_1a02f42d74e82aed43bef68e0bbf9e7fea" compoundref="_mesh_management_utilities_8cpp" startline="1207" endline="1227">csmp::hasNonManifoldVertices</referencedby>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae2dbed54f20a5f66071af484bfe37e03" compoundref="_tensor_variable_8cpp" startline="829" endline="860">Inverse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9b283490d09a365448fe70afd1774eb7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TensorVariable&lt; 3U &gt;::Trace</definition>
+        <argsstring>() const</argsstring>
+        <name>Trace</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Trace</qualifiedname>
+        <briefdescription>
+<para>returns the sum of the diagonal values of the tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="203" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="159" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a873b1d04b9158e96af55e29a349c8589" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::Adjoint</definition>
+        <argsstring>() const</argsstring>
+        <name>Adjoint</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Adjoint</qualifiedname>
+        <briefdescription>
+<para>returns the conjugate transpose of the tensor (commonly denoted M^(H)) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="206" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="398" bodyend="410"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae2dbed54f20a5f66071af484bfe37e03" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::Inverse</definition>
+        <argsstring>() const</argsstring>
+        <name>Inverse</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Inverse</qualifiedname>
+        <briefdescription>
+<para>returns a tensor the product of which with the original tensor gives the identity matrix </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000061"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="209" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="829" bodyend="860"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a57738ffeca103afced2713d69b0ea43b" compoundref="_tensor_variable_8cpp" startline="816" endline="823">Determinant</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a1d41ea6ae2ab266732e0f39c8b2388b8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref></type>
+        <definition>TensorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::Transposed</definition>
+        <argsstring>() const</argsstring>
+        <name>Transposed</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Transposed</qualifiedname>
+        <briefdescription>
+<para>returns the transposed of the tensor into a new tensor variable </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000059"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="212" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="804" bodyend="810"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a5098d2cf7e099fb4548cf0e057cea4e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::EigenValuesPositiveDefiniteSymmetricMatrix</definition>
+        <argsstring>(double &amp;eigenValue0, double &amp;eigenValue1, double &amp;eigenValue2) const</argsstring>
+        <name>EigenValuesPositiveDefiniteSymmetricMatrix</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::EigenValuesPositiveDefiniteSymmetricMatrix</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>eigenValue0</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>eigenValue1</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>eigenValue2</declname>
+        </param>
+        <briefdescription>
+<para>assuming that the tensor is symmetric and positive definite, method returns its sorted Eigen values (largest to smallest) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Code revision by Hossein Ageshlui (Nov. 2015), fixing several errors:</para>
+<para>Previous code included two functions for eigenvalue calculation, using basically the same code, one outputing eigenvalues as a vector and the other one as an object of the class <ref refid="classcsmp_1_1_vector_variable_3_013_u_01_4" kindref="compound">VectorVariable&lt;3U&gt;</ref>&amp;.</para>
+<para>To shorten the code and to not to cause any issues with previously written code, this new function has been added which calculates eigenvalues as scalar variables.</para>
+<para>The old functions now only call this new function and output the eigenvalues as a vector or as an object of a <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>. The new code also sorts the eigenvalues in descending order.</para>
+<para>Also all the pow (1./3.) calls are replaced with cbrt(). The pow (1./.3) does not produce a result when used with negative values and it is slow. The source for solving the cubic equation is: <ulink url="http://mathworld.wolfram.com/CubicFormula.html">http://mathworld.wolfram.com/CubicFormula.html</ulink> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="215" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="1430" bodyend="1507"/>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a2fad99384340564b12f3c4706b5b62d7" compoundref="_tensor_variable_8cpp" startline="143" endline="146">EigenValues</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a580fb92da90c379feb15b895b4e7f784" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::EigenNonSymmetric</definition>
+        <argsstring>(VectorVariable&lt; 3U &gt; &amp;eigenVals, TensorVariable&lt; 3U &gt; &amp;eigenVecs) const</argsstring>
+        <name>EigenNonSymmetric</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::EigenNonSymmetric</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <declname>eigenVals</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <declname>eigenVecs</declname>
+        </param>
+        <briefdescription>
+<para>alternative Eigen decomposition that should also work for non-symmetric matrices </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes eigenvalues and eigenvectors for 3d <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> (doesn&apos;t have to be symmetric)</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>eigenVectors, eigenValues</para>
+<para><simplesect kind="return"><para>Eigenvalues and vectors are returned into the supplied Vector and TensorVariables, respectively.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Uses: 1) Symmetric Householder reduction to tridiagonal form, derived from the Algol procedures tred2 by Bowdler, Martin, Reinsch, and Wilkinson, Handbook for Auto. Comp., Vol.ii-Linear Algebra, and the corresponding Fortran subroutine in EISPACK. 2) Symmetric tridiagonal QL algorithm, derived from the Algol procedures tql2, by Bowdler, Martin, Reinsch, and Wilkinson, Handbook for Auto. Comp., Vol.ii-Linear Algebra, and the corresponding Fortran subroutine in EISPACK.</para>
+<para><simplesect kind="author"><para>Lukas Mosser? </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="220" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="1163" bodyend="1410"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a2fad99384340564b12f3c4706b5b62d7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::EigenValues</definition>
+        <argsstring>(VectorVariable&lt; 3U &gt; &amp;vecEigenvalues) const</argsstring>
+        <name>EigenValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::EigenValues</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vecEigenvalues</declname>
+        </param>
+        <briefdescription>
+<para>assuming that the tensor is symmetric and positive definite, its Eigenvalues are returned into the supplied <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="223" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="143" bodyend="146"/>
+        <references refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a5098d2cf7e099fb4548cf0e057cea4e3" compoundref="_tensor_variable_8cpp" startline="1430" endline="1507">EigenValuesPositiveDefiniteSymmetricMatrix</references>
+        <referencedby refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a911a0e44c37ac1d93f145c097c00348d" compoundref="_tensor_variable_8cpp" startline="1058" endline="1130">Eigen</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acd02b1c08ea89cabdb465d5d2aa60d7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::EigenValues</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vecEigenvalues) const</argsstring>
+        <name>EigenValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::EigenValues</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vecEigenvalues</declname>
+        </param>
+        <briefdescription>
+<para>assuming that the tensor is symmetric and positive definite, its Eigenvalues are returned into the supplied STL vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="226" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="149" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a911a0e44c37ac1d93f145c097c00348d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::Eigen</definition>
+        <argsstring>(VectorVariable&lt; 3U &gt; &amp;vvEigenvalues, TensorVariable&lt; 3U &gt; &amp;tvEigenvectors, bool bNormalize) const</argsstring>
+        <name>Eigen</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Eigen</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <declname>vvEigenvalues</declname>
+          <defname>evals</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <declname>tvEigenvectors</declname>
+          <defname>evecs</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>bNormalize</declname>
+        </param>
+        <briefdescription>
+<para>assuming that the tensor is symmetric and positive definite, method returns Eigenvalues and vectors that can be normalised to 1 </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes eigenvalues and eigenvectors assuming that the tensor variable is symmetric. If not symmetric, off-diagonal elements are averaged. No check of symmetry is performed.</para>
+<para><simplesect kind="attention"><para>the Eigenvectors are returned row by row into the evecs tensor.</para>
+</simplesect>
+By default the length of the eigenvectors is equivalent to the eigenvalues but it can be normalized to one.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>Flag to normalize length of eigenvectors to 1.</para>
+<para><simplesect kind="return"><para>Eigenvalues and vectors are returned into the supplied Vector and TensorVariables, respectively. Method returns false if the rank of the matrix is zero.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Cubic root finding algorithm using Cardano&apos;s formula and the eigenvectors are calculated via LU-backsubstitution.</para>
+<para><xrefsect id="test_1_test000066"><xreftitle>Test</xreftitle><xrefdescription><para>SKM - observed, by comparison with Maple, that all the values are the same, but that the first element of the second Eigenvector always has the opposite sign (does this matter?)</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="229" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="1058" bodyend="1130"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a6c4de567ce41f96e0e61175ca75945b3" compoundref="_c_s_m_p__global__enumerations_8h" startline="59">csmp::ANY</references>
+        <references refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a2fad99384340564b12f3c4706b5b62d7" compoundref="_tensor_variable_8cpp" startline="143" endline="146">EigenValues</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acbaeba34834cc48573f35639950a31b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::DiagonalValues</definition>
+        <argsstring>(double f_00, double f_11, double f_22)</argsstring>
+        <name>DiagonalValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::DiagonalValues</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f_00</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>f_11</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>f_22</declname>
+        </param>
+        <briefdescription>
+<para>assigns diagonal values to tensor (off-diagonal elements are not touched) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="232" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="773" bodyend="778"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ab3d8ca13d57a6403fa1efaf7159a3511" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::DiagonalValues</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;)</argsstring>
+        <name>DiagonalValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::DiagonalValues</qualifiedname>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <defname>vecDiags</defname>
+        </param>
+        <briefdescription>
+<para>assigns diagonal values to tensor from STL vector </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="235" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="782" bodyend="787"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a684d9df87bd4ba1dbece6ca1b7cdddbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::DiagonalValues</definition>
+        <argsstring>(const VectorVariable&lt; 3U &gt; &amp;)</argsstring>
+        <name>DiagonalValues</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::DiagonalValues</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <defname>vecDiags</defname>
+        </param>
+        <briefdescription>
+<para>assigns diagonal values to tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="238" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="791" bodyend="799"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a0d1641be10366fb82ca9c96a04336ed6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::AssignToRow</definition>
+        <argsstring>(uint32_t i, VectorVariable&lt; 3U &gt; &amp;)</argsstring>
+        <name>AssignToRow</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::AssignToRow</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+<para>assigns vector variable to row i of the tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="241" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="166" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a7667ed7890a9129d8ae01ac176560831" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::AssignToColumn</definition>
+        <argsstring>(uint32_t j, VectorVariable&lt; 3U &gt; &amp;)</argsstring>
+        <name>AssignToColumn</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::AssignToColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>j</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+<para>assigns vector variable to column j of the tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="244" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="181" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a896b5e563e9f470a36ed16210ebb33f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::Row</definition>
+        <argsstring>(uint32_t iRow) const</argsstring>
+        <name>Row</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Row</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iRow</declname>
+        </param>
+        <briefdescription>
+<para>returns row iRow into the argument <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="247" column="18" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="198" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac76ad492f0326ce03693932fd4f43899" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt;</type>
+        <definition>VectorVariable&lt; 3U &gt; csmp::TensorVariable&lt; 3U &gt;::Column</definition>
+        <argsstring>(uint32_t iCol) const</argsstring>
+        <name>Column</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Column</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iCol</declname>
+        </param>
+        <briefdescription>
+<para>returns column iCol into the argument <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="250" column="18" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="205" bodyend="209"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6072821d8e4dda052f54a39b7c997642" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1ga98d2031b830da37499a1b512d9dca4b9" kindref="member">VARIABLE_FLAG</ref> &amp;</type>
+        <definition>VARIABLE_FLAG &amp; csmp::TensorVariable&lt; 3U &gt;::Flag</definition>
+        <argsstring>(uint32_t i=0)</argsstring>
+        <name>Flag</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Flag</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>accessor/mutator of the flags of the diagonal elements of the tensor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="253" column="20" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="116" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aa5d0acb3049f7099a61713cdcb63bb6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::Identity</definition>
+        <argsstring>()</argsstring>
+        <name>Identity</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Identity</qualifiedname>
+        <briefdescription>
+<para>converts tensor into identity matrix </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000058"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="256" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="756" bodyend="769"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a109d47446100a873a2116cd9617616a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::In</definition>
+        <argsstring>()</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::In</qualifiedname>
+        <briefdescription>
+<para>prompts user to initialise the tensor from the command line </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="259" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="977" bodyend="999"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6477d07d42ad2ad7e223cc554a0119a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TensorVariable&lt; 3U &gt;::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Out</qualifiedname>
+        <briefdescription>
+<para>prints the tensor to the command line </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="test_1_test000065"><xreftitle>Test</xreftitle><xrefdescription><para>tested: O.K. </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="262" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="1006" bodyend="1022"/>
+        <referencedby refid="classcsmp_1_1_permeability_tensor___example_1adb8049909b705a05d837f5f900afb753" compoundref="_permeability_tensor___example_8cpp" startline="32" endline="89">csmp::PermeabilityTensor_Example::Run</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aeef25e23a4361976ddbe7d2e80cfe6a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::In</definition>
+        <argsstring>(std::fstream &amp;fp)</argsstring>
+        <name>In</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::In</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+<para>reads the tensor from the supplied input file </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="265" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="252" bodyend="269"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aab50a4f8e2512c776a64380d60172cee" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TensorVariable&lt; 3U &gt;::Out</definition>
+        <argsstring>(std::fstream &amp;fp) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::TensorVariable&lt; 3U &gt;::Out</qualifiedname>
+        <param>
+          <type>std::fstream &amp;</type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+<para>writes the tensor to the supplied output file </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/TensorVariable.h" line="268" column="21" bodyfile="source/modules/model/TensorVariable.cpp" bodystart="230" bodyend="250"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>full 3D specialisation of the <ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> class template </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>2001</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Template specialization implementing optimized tensors in CSP. Depending on the spatial dimension of the model, tensor variables are either 2 x 2 or 3 x 3 matrices. Each value is associated with a flag which can be set to indicate to finite-element computations that the corresponding degree of freedom is enabled or restricted.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1functionality">
+<title>Functionality</title><para>Apart from the standard constructors with a default where all elements are initialized to NaN (not-a-number) and the flags are set to plain, assignment is defined to allow the storage of tensors in STL containers. Ordering using STL&apos;s less() is facilitated through an <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a29a34396b9fbdfe553ea9f4e0567651e" kindref="member">operator&lt;()</ref> that compares the determinants of matrices. All costly operations like this are unrolled.</para>
+<para><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref> implements typical accessors, mutators for tensor elements and operations on entire tensors. To get at element 1,2 of 3D tensor, ts, use ts(1,2), for instance.</para>
+<para>Value-by-value operations such as matrix addition, subtraction, division are implemented by the operators +, -, /. operator*() assumes different meanings dependent on the type of its arguments. Thus, tensors can be multiplied with scalars, vectors, and tensors to produce the standard results expected for matrix algebra. Other matrix algebraic operations include finding the <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a1d41ea6ae2ab266732e0f39c8b2388b8" kindref="member">Transposed()</ref>, <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a57738ffeca103afced2713d69b0ea43b" kindref="member">Determinant()</ref>, <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae2dbed54f20a5f66071af484bfe37e03" kindref="member">Inverse()</ref>, <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aa5d0acb3049f7099a61713cdcb63bb6c" kindref="member">Identity()</ref>, and <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a873b1d04b9158e96af55e29a349c8589" kindref="member">Adjoint()</ref> matrices.</para>
+<para>The *= operator will always produce a temporary matrix. Therefore, should be preferred if the result is to be assigned to a new variable.</para>
+<para>Assignent of a vector to a tensor is done by placing the vector in the tensors diagonal and zeroing its off-diagonal elements.</para>
+<para>Matrices can be input and output via the console, using the <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a109d47446100a873a2116cd9617616a0" kindref="member">In()</ref> and <ref refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6477d07d42ad2ad7e223cc554a0119a3" kindref="member">Out()</ref> member functions.</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Part of a consistent framework for physical variables for which there exist overloaded operators so that vector-matrix multiplications and other operations can be written in a straight forward way.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Using the template specialization mechanism of C++. Specializations exist only for the 2 and 3D cases. These are declared in this (3D) and the header file &apos;<ref refid="_tensor_variable2_8h_source" kindref="compound">TensorVariable2.h</ref>&apos; (2D), respectively.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>To diagonalize a tensor variable, one could write:</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">VectorVariable&lt;double,2&gt;</ref><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">vc</ref>(<ref refid="classcsmp_1_1_tensor_variable" kindref="compound">PLAIN</ref>,<ref refid="classcsmp_1_1_tensor_variable" kindref="compound">PLAIN</ref>,1,1);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;double,2&gt;</ref><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">ts</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">ts</ref>.Identity();</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">vc</ref><sp/>=<sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">ts</ref><sp/>*<sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">vc</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">vc</ref>.Out();</highlight></codeline>
+</programlisting></para>
+<para><xrefsect id="todo_1_todo000032"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-D) Const/Non const access operator convention not consistent with VectorVariable/ArrayVariable </para>
+</xrefdescription></xrefsect></para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::TensorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+      </node>
+      <node id="1">
+        <label>csmp::TensorVariable&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable_3_013_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::TensorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+      </node>
+      <node id="1">
+        <label>csmp::TensorVariable&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable_3_013_u_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/TensorVariable.h" line="89" column="1" bodyfile="source/includes/model/TensorVariable.h" bodystart="89" bodyend="273"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a873b1d04b9158e96af55e29a349c8589" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Adjoint</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a7667ed7890a9129d8ae01ac176560831" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>AssignToColumn</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a0d1641be10366fb82ca9c96a04336ed6" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>AssignToRow</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac76ad492f0326ce03693932fd4f43899" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Column</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aac74631f6ddc482ee40249765206bd0c" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac85dd9bdf9152f48da1453ae8ddb79cb" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Component</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a57d3e0a8f4479f6eb00f36b442c033c4" prot="private" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>data</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a57738ffeca103afced2713d69b0ea43b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Determinant</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acbaeba34834cc48573f35639950a31b2" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>DiagonalValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ab3d8ca13d57a6403fa1efaf7159a3511" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>DiagonalValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a684d9df87bd4ba1dbece6ca1b7cdddbf" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>DiagonalValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a911a0e44c37ac1d93f145c097c00348d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Eigen</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a580fb92da90c379feb15b895b4e7f784" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>EigenNonSymmetric</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a2fad99384340564b12f3c4706b5b62d7" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>EigenValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acd02b1c08ea89cabdb465d5d2aa60d7f" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>EigenValues</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a5098d2cf7e099fb4548cf0e057cea4e3" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>EigenValuesPositiveDefiniteSymmetricMatrix</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a73a3070483ecca9807c9451ac369289f" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6072821d8e4dda052f54a39b7c997642" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Flag</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a995bbed7d4553abf228f1fabf05b52e6" prot="private" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>flag</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9c7a202c2fc5be0fa81934c0af25a4ff" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Has_NaN_Values</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aa5d0acb3049f7099a61713cdcb63bb6c" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Identity</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a109d47446100a873a2116cd9617616a0" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aeef25e23a4361976ddbe7d2e80cfe6a8" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>In</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae2dbed54f20a5f66071af484bfe37e03" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Inverse</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ad3b45ec9f9b0c9b6c7b664607525fe05" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6aa05318f3258073a8426868cfdf5e9b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>MaxElement</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a32a7bc89e54cf02bfd4d8950039a865d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>MinElement</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1af4c05e54e266f639f5f46814bf6c299b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator!=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a7fce44b335010a9dd46d4e7f78d82bc7" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac85a606b9dc452352a553db8437356fe" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator()</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9457c9a17818d36d14d40fd6c52cb92a" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a2cf128de2576aa8d7fca910788a4cbde" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a0ef2812ad966c4856f906196437ddf10" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acad6b5527173c4732b8da623e6b23fe9" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator*</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a18201da08766bc5b892a67f75ca87c17" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1af7da63108c781e890f836e1a3bfa142d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1acac51e3245415bfce7edd66518baa561" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator*=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a639c398e776a3ebef017f71395af9980" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a93ef28ae101bdd582ebdb146e8690d5d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator+</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6e00f060b03d8ae121e385f9acba8a72" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aaf316eeb20987eaee2fce19239924370" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a5f45643ab852bb05b0b1760e0b7705af" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator+=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aac2bb69f7b265d969762e111bd3c2ad5" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ac938e29e9cf4ce686d1157edfd8be28c" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator-</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a145be5e1219d357775962e7a5981c08b" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1af35c758ea29dd916d3d4f41ae714682f" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a0535de512e5a40795db5fa53dd5c65b8" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator-=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ade27d2eb09b5daef014a6e689a039295" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6938f40d387abe1c91dfacd786efcf57" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator/</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a1c882d2ea527d34f9758d8d17c964d53" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a82f45d09499d148d86bde70dedfcb449" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae529fd8497394aa866fc8c80a82444a7" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator/=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a29a34396b9fbdfe553ea9f4e0567651e" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a25bc10d3ff0d74fba0616c37ebcf5542" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a99db0494ca971901d0f141e1e02cdca2" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a20491bf6bef52e3a82d8acadd073484d" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aac527aa69420da863a30152814965321" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a6477d07d42ad2ad7e223cc554a0119a3" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aab50a4f8e2512c776a64380d60172cee" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9d8dcc0d84512432e5d4e930c32443be" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a896b5e563e9f470a36ed16210ebb33f1" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Row</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1afe3e6ebe73e7a166479539dcc35a0d41" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Size</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1ae775cfc5328664efdadd010007fe6434" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a42250db271bf5f76bd6d510addb71d6a" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1abe7e98766f3b5eba67509f2289605549" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a4acb34f9effcdc9a54f36bb30fc866b3" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>TensorVariable</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a9b283490d09a365448fe70afd1774eb7" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Trace</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1a1d41ea6ae2ab266732e0f39c8b2388b8" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>Transposed</name></member>
+      <member refid="classcsmp_1_1_tensor_variable_3_013_u_01_4_1aa0f05a3e995e648096266151e1e0f893" prot="public" virt="non-virtual"><scope>csmp::TensorVariable&lt; 3U &gt;</scope><name>VariableType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,131 @@
+\doxysection{Small\+Set.\+h}
+\hypertarget{_small_set_8h_source}{}\label{_small_set_8h_source}\index{source/includes/utilities/SmallSet.h@{source/includes/utilities/SmallSet.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_SMALLSET\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_SMALLSET\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ A\ small\ set\ of\ trivial\ types,\ represented\ as\ a\ sorted\ vector.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keywordtype}{unsigned}\ N\ =\ 32>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_small_set}{SmallSet}}\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{static\_assert}(\mbox{\hyperlink{classcsmp_1_1_small_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_small_set}{is\_trivial}}<\mbox{\hyperlink{classcsmp_1_1_small_set}{T}}>::\mbox{\hyperlink{classcsmp_1_1_small_set}{value}},\ \textcolor{stringliteral}{"{}Type\ must\ be\ trivial"{}});}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{static\_assert}(N\ <=\ 32,\ \textcolor{stringliteral}{"{}The\ optimised\ size\ of\ this\ set\ is\ probably\ too\ large"{}});}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{typedef}\ T\ value\_type;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_small_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_small_set}{vector}}<\mbox{\hyperlink{classcsmp_1_1_small_set}{T}}>::\mbox{\hyperlink{classcsmp_1_1_small_set}{iterator}}\ \mbox{\hyperlink{classcsmp_1_1_small_set}{iterator}};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_small_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_small_set}{vector}}<\mbox{\hyperlink{classcsmp_1_1_small_set}{T}}>::\mbox{\hyperlink{classcsmp_1_1_small_set}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_small_set}{const\_iterator}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ SmallSet()}
+\DoxyCodeLine{00022\ \ \ \ \ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ storage\_.reserve(N);}
+\DoxyCodeLine{00024\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ std::pair<iterator,\textcolor{keywordtype}{bool}>\ insert(\ \textcolor{keyword}{const}\ value\_type\&\ value\ )}
+\DoxyCodeLine{00027\ \ \ \ \ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::lower\_bound(storage\_.begin(),\ storage\_.end(),\ value);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ storage\_.end()\ \&\&\ *it\ ==\ value)\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_pair(it,\textcolor{keyword}{false});}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ newit\ =\ storage\_.insert(it,\ value);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_pair(newit,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ std::pair<iterator,\textcolor{keywordtype}{bool}>\ insert(\ value\_type\&\&\ value\ )}
+\DoxyCodeLine{00040\ \ \ \ \ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::lower\_bound(storage\_.begin(),\ storage\_.end(),\ value);}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ storage\_.end()\ \&\&\ *it\ ==\ value)\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_pair(it,\textcolor{keyword}{false});}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ newit\ =\ storage\_.insert(it,\ value);}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_pair(newit,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{bool}\ empty()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00052\ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.empty();}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ size\_t\ size()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00057\ \ \ \ \ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.size();}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ iterator\ begin()}
+\DoxyCodeLine{00062\ \ \ \ \ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.begin();}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ const\_iterator\ begin()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00067\ \ \ \ \ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.begin();}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ iterator\ end()}
+\DoxyCodeLine{00072\ \ \ \ \ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.end();}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ const\_iterator\ end()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00077\ \ \ \ \ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.end();}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ iterator\ find(\textcolor{keyword}{const}\ value\_type\&\ value)}
+\DoxyCodeLine{00082\ \ \ \ \ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::lower\_bound(storage\_.begin(),\ storage\_.end(),\ value);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ ==\ storage\_.end()\ ||\ *it\ !=\ value)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.end();}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ const\_iterator\ find(\textcolor{keyword}{const}\ value\_type\&\ value)\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00093\ \ \ \ \ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::lower\_bound(storage\_.begin(),\ storage\_.end(),\ value);}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ ==\ storage\_.end()\ ||\ *it\ !=\ value)\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage\_.end();}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ erase(\textcolor{keyword}{const}\ value\_type\&\ value)}
+\DoxyCodeLine{00104\ \ \ \ \ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::lower\_bound(storage\_.begin(),\ storage\_.end(),\ value);}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ storage\_.end()\ \&\&\ *it\ ==\ value)\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ storage\_.erase(it);}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00109\ \ \ \ \ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ size\_t\ count(\textcolor{keyword}{const}\ value\_type\&\ value)\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00112\ \ \ \ \ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::lower\_bound(storage\_.begin(),\ storage\_.end(),\ value);}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (it\ ==\ storage\_.end()\ ||\ *it\ !=\ value)\ ?\ 0\ :\ 1;}
+\DoxyCodeLine{00115\ \ \ \ \ \}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00119\ \ \ \ \ std::vector<T>\ storage\_;}
+\DoxyCodeLine{00120\ \ \ \};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

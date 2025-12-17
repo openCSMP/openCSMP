@@ -1,0 +1,167 @@
+\doxysection{Binary\+File\+Handler.\+h}
+\hypertarget{_binary_file_handler_8h_source}{}\label{_binary_file_handler_8h_source}\index{source/includes/interfaces/BinaryFileHandler.h@{source/includes/interfaces/BinaryFileHandler.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_BINARY\_FILE\_HANDLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_BINARY\_FILE\_HANDLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{///\ writes\ objects\ and\ collections\ thereof\ to\ binary\ file}}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ S,\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler}{BinaryFileHandler}}\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{char}\ \ fname[\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga8413f7c3b4f238c5a98a846198d49469}{NAME\_STRING}}];}
+\DoxyCodeLine{00012\ \ \ \ \ std::FILE*\ fp;}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ BinaryFileHandler();}
+\DoxyCodeLine{00015\ \ \ \ \ \string~BinaryFileHandler();}
+\DoxyCodeLine{00016\ \ \ \ \ \ \textcolor{keywordtype}{void}\ SaveAs(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keyword}{const}\ std::vector<S>\&\ obj\_list\ );}
+\DoxyCodeLine{00017\ \ \ \ \ \ \textcolor{keywordtype}{void}\ SaveAs(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keyword}{const}\ std::map<S,T>\&\ obj\_list\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler_a27b493137f0aba5f03bec02e4ed347d9}{Read}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ std::vector<S>\&\ obj\_list\ );}
+\DoxyCodeLine{00019\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler_a27b493137f0aba5f03bec02e4ed347d9}{Read}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ std::map<S,T>\&\ obj\_list\ );}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ S,\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00025\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler}{BinaryFileHandler}}<S,T>::BinaryFileHandler()}
+\DoxyCodeLine{00026\ \ \{}
+\DoxyCodeLine{00027\ \ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ S,\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00031\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler}{BinaryFileHandler}}<S,T>::\string~BinaryFileHandler()}
+\DoxyCodeLine{00032\ \ \{}
+\DoxyCodeLine{00033\ \ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ S,\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler}{BinaryFileHandler}}<S,T>::SaveAs(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keyword}{const}\ std::vector<S>\&\ obj\_list\ )}
+\DoxyCodeLine{00038\ \ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ record\_size;}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{typename}\ std::vector<S>::const\_iterator\ iter;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ record\_size\ =\ \textcolor{keyword}{sizeof}(S);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ "{}wb"{}\ overwrite\ mode\ instead\ of\ "{}ab"{}\ for\ appending\ to\ file}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (fp\ =\ std::fopen\ (\ s,\textcolor{stringliteral}{"{}wb"{}}))\ ==\ NULL\ )}
+\DoxyCodeLine{00046\ \ \ \ \ \ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nBinaryFileHandler::SaveAs:\ Object\ file\ '"{}}\ <<\ s;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}'\ not\ accessible\ !"{}};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{/*\ Writing\ the\ contents\ of\ the\ class\ to\ binary\ datafile\ */}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ iter=obj\_list.begin();\ iter!=obj\_list.end();\ iter++\ )}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (fwrite(\ \&(*iter),\ record\_size,\ 1,\ fp\ ))\ !=\ 1\ )}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nBinaryFileHandler::SaveAs:\ Unable\ to\ write\ data\ to\ datafile"{}};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ fclose(\ fp\ );}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \}\ \textcolor{comment}{//\ end\ SaveAs(vector)}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ S,\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler}{BinaryFileHandler}}<S,T>::SaveAs(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keyword}{const}\ std::map<S,T>\&\ obj\_list\ )}
+\DoxyCodeLine{00066\ \ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ record\_size;}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{typename}\ std::map<S,T>::const\_iterator\ iter;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ record\_size\ =\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ "{}wb"{}\ overwrite\ mode\ instead\ of\ "{}ab"{}\ for\ appending\ to\ file}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (fp\ =\ std::fopen\ (\ s,\textcolor{stringliteral}{"{}wb"{}}))\ ==\ NULL\ )}
+\DoxyCodeLine{00074\ \ \ \ \ \ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nBinaryFileHandler::SaveAs:\ Object\ file\ '"{}}\ <<\ s;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}'\ not\ accessible\ !"{}};}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/*\ Writing\ the\ contents\ of\ the\ class\ to\ binary\ datafile\ */}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ iter=obj\_list.begin();\ iter!=obj\_list.end();\ iter++\ )}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (fwrite(\ \&((*iter).second),\ record\_size,\ 1,\ fp\ ))\ !=\ 1\ )}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nBinaryFileHandler::SaveAs:\ Unable\ to\ write\ data\ to\ datafile"{}};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \ \ \ \ fclose(\ fp\ );}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \}\ \textcolor{comment}{//\ end\ SaveAs(map)}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{comment}{///\ Objects\ of\ type\ S\ are\ added\ in\ the\ vector<double>\ 'obj\_list'}}
+\DoxyCodeLine{00094\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ S,\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00095\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler}{BinaryFileHandler}}<S,T>::\mbox{\hyperlink{classcsmp_1_1_binary_file_handler_a27b493137f0aba5f03bec02e4ed347d9}{Read}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ std::vector<S>\&\ obj\_list\ )}
+\DoxyCodeLine{00096\ \ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ record\_size;}
+\DoxyCodeLine{00098\ \ \ \ \ S\ \ \ \ \ \ \ \ \ \ \ \ \ object;}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ record\_size\ =\ \textcolor{keyword}{sizeof}(S);}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (fp\ =\ std::fopen\ (\ s,\textcolor{stringliteral}{"{}rb"{}}))\ ==\ NULL\ )}
+\DoxyCodeLine{00103\ \ \ \ \ \ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nBinaryFileHandler::Read:\ Object\ file\ '"{}}\ <<\ s;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}'\ not\ accessible\ !"{}};}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00107\ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ obj\_list.erase(\ obj\_list.begin(),\ obj\_list.end()\ );}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{/*\ Writing\ the\ contents\ of\ the\ class\ to\ binary\ datafile\ */}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordflow}{while}\ (!feof(fp))}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ fread(\ \&object,\ record\_size,\ 1,\ fp\ )\ ==\ 1\ )}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ obj\_list.push\_back(\ object\ );}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ fclose(\ fp\ );}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordflow}{return}(\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \}\ \textcolor{comment}{//\ end\ Read(vector)}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{comment}{///\ Objects\ of\ type\ T\ are\ read\ and\ added\ in\ the\ map\ 'obj\_list'\ with\ keys\ S}}
+\DoxyCodeLine{00127\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ S,\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00128\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_binary_file_handler}{BinaryFileHandler}}<S,T>::\mbox{\hyperlink{classcsmp_1_1_binary_file_handler_a27b493137f0aba5f03bec02e4ed347d9}{Read}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ std::map<S,T>\&\ obj\_list\ )}
+\DoxyCodeLine{00129\ \ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ record\_size;}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{typename}\ std::map<S,T>::iterator\ \ iter;}
+\DoxyCodeLine{00132\ \ \ \ \ T\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ object;}
+\DoxyCodeLine{00133\ \ \ \ \ S\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ key;}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ record\_size\ =\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (fp\ =\ std::fopen\ (\ s,\textcolor{stringliteral}{"{}rb"{}}))\ ==\ NULL\ )}
+\DoxyCodeLine{00138\ \ \ \ \ \ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}\(\backslash\)nBinaryFileHandler::Read:\ Object\ file\ '"{}}\ <<\ s;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ std::cout\ <<\textcolor{stringliteral}{"{}'\ not\ accessible\ !"{}};}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00142\ \ \ \ \ \ \}}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{/*\ Writing\ the\ contents\ of\ the\ class\ to\ binary\ datafile\ */}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{while}\ (!feof(fp))}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ fread(\ \&object,\ record\_size,\ 1,\ fp\ )\ ==\ 1\ )}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ key\ \ \ \ \ \ \ \ \ \ \ =\ object.name;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ obj\_list[key]\ =\ object;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ fclose(\ fp\ );}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordflow}{return}(\ \textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \}\ \textcolor{comment}{//\ end\ Read(map)}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

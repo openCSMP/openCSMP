@@ -2099,9 +2099,9 @@ template bool ModelTopology::EstablishTopology( VSet<3U>&,const multimap<string,
 
 template<uint32_t dim>
 bool ModelTopology::EstablishTopology( VSet<dim>& vset,
-                                   bool require_unique_names_for_vol_surf_lines,
-                                   bool correct_orientation_of_surface_elements,
-                                   bool reassign_boundary_flags )
+                                       bool require_unique_names_for_vol_surf_lines,
+                                       bool correct_orientation_of_surface_elements,
+                                       bool reassign_boundary_flags )
 {
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     bool checks_passed(true);
@@ -2277,6 +2277,7 @@ bool  ModelTopology::BoxShapedModel() const
      bs.insert("FRONT_LEFT");
   }
 
+
  void BoundariesOfRectangleShapedModel( set<string>& bs )
   {
      if ( !bs.empty() ) bs.erase( bs.begin(), bs.end() );
@@ -2304,7 +2305,7 @@ bool  ModelTopology::BoxShapedModel() const
            {
               if ( csmp_error.Verbose() )
                 {
-                   cout <<"\n\nModelTopology::AssignBoxShapedModelFlags: The model is 'box shaped'. ";
+                   cout <<"\nModelTopology::AssignBoxShapedModelFlags: The model is 'box shaped'. ";
                    cout <<"Re-assigning boundary flags to box-shaped model..."<< endl;
                 }
                // flagging the boundary nodes according to CSMP specs
@@ -2317,7 +2318,7 @@ bool  ModelTopology::BoxShapedModel() const
            if ( RectangleShapedModel() )
              {
                  if ( csmp_error.Verbose() ) {
-                      cout <<"\n\nModelTopology::AssignBoxShapedModelFlags: The model is 'rectangle shaped'. ";
+                      cout <<"\nModelTopology::AssignBoxShapedModelFlags: The model is 'rectangle shaped'. ";
                       cout <<"Building neighbor connectivity and assigning boundary flags in rectangle-shaped model..."<< endl;
                    }
                  // for all surface elements in the mesh which have bar element neighbors,
@@ -2577,10 +2578,15 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VS
 
  
  
- 
+/**
+    Identifies the BOX_BOUNDARY  of nodes based on names of the regions that they belong to.
+        
+    @atttention  this method does NOT rely of neighbor connectivity between elements.
+    Instead, edges are found by intersecting the side boundaries and corners are found by intersecting these edges.
+*/
 bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
   {
-     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+     ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
      set<string> boundary_regions;
 
@@ -2643,7 +2649,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        for ( auto bit=CellsOfDomainBegin(it.c_str());
              bit!=CellsOfDomainEnd(it.c_str()); bit++ )
          for ( auto nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
-           irregular.push_back( (*nit) );      //E.P BUG Fix - Changed to nit , since before it was passing bit which is an Element ID!! (You want to pass the node ID's)
+           irregular.push_back( (*nit) );     
 
      // making these containers unique
      sort( bottom.begin(), bottom.end() );
@@ -2672,77 +2678,89 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
      // intersecting the sides to identify the edges
      // -------------------------------------------------------------------------------
      // FRONT_LEFT
-     insert_iterator<deque<size_t> >  fl_it(front_left,front_left.begin());
-     set_intersection( front.begin(), front.end(), left.begin(), left.end(), fl_it );
+     set_intersection( front.begin(), front.end(), left.begin(), left.end(), back_inserter(front_left) );
+     if ( front_left.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "FRONT_LEFT (EDGE12) could not be identified");
 
      // FRONT_RIGHT
-     insert_iterator<deque<size_t> >  fr_it(front_right,front_right.begin());
-     set_intersection( front.begin(), front.end(), right.begin(), right.end(), fr_it );
+     set_intersection( front.begin(), front.end(), right.begin(), right.end(), back_inserter(front_right) );
+     if ( front_right.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "FRONT_RIGHT (EDGE10) could not be identified");
 
      // FRONT_BOTTOM
-     insert_iterator<deque<size_t> >  fb_it(front_bottom,front_bottom.begin());
-     set_intersection( front.begin(), front.end(), bottom.begin(), bottom.end(), fb_it );
+     set_intersection( front.begin(), front.end(), bottom.begin(), bottom.end(), back_inserter(front_bottom) );
+     if ( front_bottom.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "FRONT_BOTTOM (EDGE9) could not be identified");
 
      // FRONT_TOP
-     insert_iterator<deque<size_t> >  ft_it(front_top,front_top.begin());
-     set_intersection( front.begin(), front.end(), top.begin(), top.end(), ft_it );
+     set_intersection( front.begin(), front.end(), top.begin(), top.end(), back_inserter(front_top) );
+     if ( front_top.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "FRONT_TOP (EDGE11) could not be identified");
 
      // BOTTOM_LEFT
-     insert_iterator<deque<size_t> >  bl_it(bottom_left,bottom_left.begin());
-     set_intersection( bottom.begin(), bottom.end(), left.begin(), left.end(), bl_it );
+     set_intersection( bottom.begin(), bottom.end(), left.begin(), left.end(), back_inserter(bottom_left) );
+     if ( bottom_left.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "BOTTOM_LEFT (EDGE5) could not be identified");
 
      // BOTTOM_RIGHT
-     insert_iterator<deque<size_t> >  br_it(bottom_right,bottom_right.begin());
-     set_intersection( bottom.begin(), bottom.end(), right.begin(), right.end(), br_it );
+     set_intersection( bottom.begin(), bottom.end(), right.begin(), right.end(), back_inserter(bottom_right) );
+     if ( bottom_right.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "BOTTOM_RIGHT (EDGE6) could not be identified");
 
      // BACK_BOTTOM
-     insert_iterator<deque<size_t> >  bb_it(back_bottom,back_bottom.begin());
-     set_intersection( back.begin(), back.end(), bottom.begin(), bottom.end(), bb_it );
+     set_intersection( back.begin(), back.end(), bottom.begin(), bottom.end(), back_inserter(back_bottom) );
+     if ( back_bottom.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "BACK_BOTTOM (EDGE1) could not be identified");
 
      // BACK_LEFT
-     insert_iterator<deque<size_t> >  bal_it(back_left,back_left.begin());
-     set_intersection( back.begin(), back.end(), left.begin(), left.end(), bal_it );
+     set_intersection( back.begin(), back.end(), left.begin(), left.end(), back_inserter(back_left) );
+     if ( back_left.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "BACK_LEFT (EDGE4) could not be identified");
 
      // TOP_LEFT
-     insert_iterator<deque<size_t> >  tl_it(top_left,top_left.begin());
-     set_intersection( top.begin(), top.end(), left.begin(), left.end(), tl_it );
+     set_intersection( top.begin(), top.end(), left.begin(), left.end(), back_inserter(top_left) );
+     if ( top_left.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "TOP_LEFT (EDGE8) could not be identified");
 
      // BACK_TOP
-     insert_iterator<deque<size_t> >  bt_it(back_top,back_top.begin());
-     set_intersection( back.begin(), back.end(), top.begin(), top.end(), bt_it );
+     set_intersection( back.begin(), back.end(), top.begin(), top.end(), back_inserter(back_top) );
+     if ( back_top.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "BACK_TOP (EDGE3) could not be identified");
 
      // TOP_RIGHT
-     insert_iterator<deque<size_t> >  tr_it(top_right,top_right.begin());
-     set_intersection( top.begin(), top.end(), right.begin(), right.end(), tr_it );
+     set_intersection( top.begin(), top.end(), right.begin(), right.end(), back_inserter(top_right) );
+     if ( top_right.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "TOP_RIGHT (EDGE7) could not be identified");
 
      // BACK_RIGHT
-     insert_iterator<deque<size_t> >  bar_it(back_right,back_right.begin());
-     set_intersection( back.begin(), back.end(), right.begin(), right.end(), bar_it );
+     set_intersection( back.begin(), back.end(), right.begin(), right.end(), back_inserter(back_right) );
+     if ( back_right.empty() )
+       csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "BACK_RIGHT (EDGE2) could not be identified");
 
      // 2. Flagging the nodes on the sides according to the boundaries
      // zapping all previous box boundary flags
      for ( auto bit=vset.BFlagsBegin(); bit!= vset.BFlagsEnd(); ++bit ) (*bit) = NOT;
      // assigning "IRREGULAR","BOTTOM","LEFT","RIGHT","TOP","FRONT","BACK"
-     for ( auto& it : irregular ) vset.BFlag( it, IRREGULAR_OUTSIDE );
-     for ( auto& it : bottom ) vset.BFlag( it, BOTTOM_OUTSIDE );
-     for ( auto& it : left ) vset.BFlag( it, LEFT_OUTSIDE );
-     for ( auto& it : right ) vset.BFlag( it, RIGHT_OUTSIDE );
-     for ( auto& it : top ) vset.BFlag( it, TOP_OUTSIDE );
-     for ( auto& it : front ) vset.BFlag( it, FRONT_OUTSIDE );
-     for ( auto& it : back ) vset.BFlag( it, BACK_OUTSIDE );
+     for ( auto& it : irregular ) vset.BFlag( it, IRREGULAR ); // IRREGULAR_OUTSIDE
+     for ( auto& it : bottom ) vset.BFlag( it, BOTTOM );       // BOTTOM_OUTSIDE
+     for ( auto& it : left ) vset.BFlag( it, LEFT );           // LEFT_OUTSIDE
+     for ( auto& it : right ) vset.BFlag( it, RIGHT );         // RIGHT_OUTSIDE
+     for ( auto& it : top ) vset.BFlag( it, TOP );             // TOP_OUTSIDE
+     for ( auto& it : front ) vset.BFlag( it, FRONT );         // FRONT_OUTSIDE
+     for ( auto& it : back ) vset.BFlag( it, BACK );           // BACK_OUTSIDE
      // edges
-     for ( auto& it : back_bottom ) vset.BFlag( it, BACK_BOTTOM );
-     for ( auto& it : back_right ) vset.BFlag( it, BACK_RIGHT );
-     for ( auto& it : back_top ) vset.BFlag( it, BACK_TOP );
-     for ( auto& it : back_left ) vset.BFlag( it, BACK_LEFT );
-     for ( auto& it : bottom_left ) vset.BFlag( it, BOTTOM_LEFT );
-     for ( auto& it : bottom_right ) vset.BFlag( it, BOTTOM_RIGHT );
-     for ( auto& it : top_right ) vset.BFlag( it, TOP_RIGHT );
-     for ( auto& it : top_left ) vset.BFlag( it, TOP_LEFT );
-     for ( auto& it : front_bottom ) vset.BFlag( it, FRONT_BOTTOM );
-     for ( auto& it : front_right ) vset.BFlag( it, FRONT_RIGHT );
-     for ( auto& it : front_top ) vset.BFlag( it, FRONT_TOP );
-     for ( auto& it : front_left ) vset.BFlag( it, FRONT_LEFT );
+     for ( auto& it : back_bottom ) vset.BFlag( it, EDGE1 );  // BACK_BOTTOM
+     for ( auto& it : back_right ) vset.BFlag( it, EDGE2 );   // BACK_RIGHT
+     for ( auto& it : back_top ) vset.BFlag( it, EDGE3 );     // BACK_TOP
+     for ( auto& it : back_left ) vset.BFlag( it, EDGE4 );    // BACK_LEFT
+     for ( auto& it : bottom_left ) vset.BFlag( it, EDGE5 );  // BOTTOM_LEFT
+     for ( auto& it : bottom_right ) vset.BFlag( it, EDGE6 ); // BOTTOM_RIGHT
+     for ( auto& it : top_right ) vset.BFlag( it, EDGE7 );    // TOP_RIGHT
+     for ( auto& it : top_left ) vset.BFlag( it, EDGE8 );     // TOP_LEFT
+     for ( auto& it : front_bottom ) vset.BFlag( it, EDGE9 ); // FRONT_BOTTOM
+     for ( auto& it : front_right ) vset.BFlag( it, EDGE10 ); // FRONT_RIGHT
+     for ( auto& it : front_top ) vset.BFlag( it, EDGE11 );   // FRONT_TOP
+     for ( auto& it : front_left ) vset.BFlag( it, EDGE12 );  // FRONT_LEFT
 
      // Flagging the corner nodes
 
@@ -2750,93 +2768,77 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
      // CNR1
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( back_left.begin(), back_left.end(),
-                         back_bottom.begin(), back_bottom.end(), cit );
+                         back_bottom.begin(), back_bottom.end(), back_inserter(corner) );
 
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
-                                                             "CNR1 could not be identified");
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR1 could not be identified");
        else vset.BFlag( (*corner.begin()), CNR_MIN );
      }
      
      // CNR2
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( back_bottom.begin(), back_bottom.end(),
-                         back_right.begin(), back_right.end(), cit );
+                         back_right.begin(), back_right.end(), back_inserter(corner) );
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
-                                                             "CNR2 could not be identified");
-       else vset.BFlag( (*corner.begin()), CNR_MIN_MAXX );
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR2 could not be identified");
+       else vset.BFlag( (*corner.begin()), CNR2 );
      }
      // CNR3
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( back_right.begin(), back_right.end(),
-                         back_top.begin(), back_top.end(), cit );
+                         back_top.begin(), back_top.end(), back_inserter(corner) );
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
-                                                             "CNR3 could not be identified");
-       else vset.BFlag( (*corner.begin()), CNR_MAX_MAXX );
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR3 could not be identified");
+       else vset.BFlag( (*corner.begin()), CNR3 );
      }
      // CNR4
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( back_left.begin(), back_left.end(),
-                         back_top.begin(), back_top.end(), cit );
+                         back_top.begin(), back_top.end(), back_inserter(corner) );
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
-                                                             "CNR4 could not be identified");
-       else vset.BFlag( (*corner.begin()), CNR_MAX_MINXZ );
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR4 could not be identified");
+       else vset.BFlag( (*corner.begin()), CNR4 );
      }
      // The Z axis (forward) facing plane of the model
      // CNR5
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( front_left.begin(), front_left.end(),
-                         front_bottom.begin(), front_bottom.end(), cit );
+                         front_bottom.begin(), front_bottom.end(), back_inserter(corner) );
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
-                                                             "CNR5 could not be identified");
-       else vset.BFlag( (*corner.begin()), CNR_MIN_MAXZ );
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR5 could not be identified");
+       else vset.BFlag( (*corner.begin()), CNR5 );
      }
      // CNR6
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( front_right.begin(), front_right.end(),
-                         front_bottom.begin(), front_bottom.end(), cit );
+                         front_bottom.begin(), front_bottom.end(), back_inserter(corner) );
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
-                                                             "CNR6 could not be identified");
-       else vset.BFlag( (*corner.begin()), CNR_MIN_MAXXZ );
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR6 could not be identified");
+      else vset.BFlag( (*corner.begin()), CNR6 );
      }
      // CNR7
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( front_right.begin(), front_right.end(),
-                         front_top.begin(), front_top.end(), cit );
+                         front_top.begin(), front_top.end(), back_inserter(corner) );
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
-                                                             "CNR7 could not be identified");
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR7 could not be identified");
        else vset.BFlag( (*corner.begin()), CNR_MAX );
      }
      // CNR8
      {
        deque<uint32_t> corner;
-       insert_iterator<deque<uint32_t> >  cit(corner,corner.begin());
        set_intersection( front_left.begin(), front_left.end(),
-                         front_top.begin(), front_top.end(), cit );
+                         front_top.begin(), front_top.end(), back_inserter(corner) );
        if ( corner.empty() )
-         throw csmp::Exception( ERROR, "ModelTopology::FlagNodesUsingBoundaryDomains",
-                                                             "CNR8 could not be identified");
-       else vset.BFlag( (*corner.begin()), CNR_MAX_MAXZ );
+         csmp_error.Note( WARNING, "ModelTopology<3>::FlagNodesUsingBoundaryDomains", "CNR8 could not be identified");
+       else vset.BFlag( (*corner.begin()), CNR8 );
      }
 
      if ( csmp_error.Verbose() ) {

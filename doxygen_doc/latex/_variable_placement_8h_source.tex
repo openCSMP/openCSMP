@@ -1,0 +1,33 @@
+\doxysection{Variable\+Placement.\+h}
+\hypertarget{_variable_placement_8h_source}{}\label{_variable_placement_8h_source}\index{source/includes/model/VariablePlacement.h@{source/includes/model/VariablePlacement.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_VARIABLE\_PLACEMENT\_H\_INCLUDED}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_VARIABLE\_PLACEMENT\_H\_INCLUDED}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_variable_type_traits_8h}{"{}VariableTypeTraits.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ pl>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_placement}{FiniteElementPlacement}};}
+\DoxyCodeLine{00011\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ pl>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_finite_element_placement_collection}{FiniteElementPlacementCollection}};}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ pl>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_placement}{FiniteVolumePlacement}};}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim,\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ pl>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_finite_volume_placement_collection}{FiniteVolumePlacementCollection}};}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_neighbour_node_collection}{NeighbourNodeCollection}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00017\ \ \ \textcolor{keywordtype}{void}\ calculateN(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ p,\ std::vector<\textcolor{keywordtype}{double}>\&\ coeff\ );}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \textcolor{comment}{//\ TODO:\ works\ only\ for\ elements\ where\ the\ Jacobian\ matrix\ is\ constant}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ \ template<uint32\_t\ dim>}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ \ void\ calculateDN(const\ Element<dim>\&\ e,\ const\ Point<dim>\&\ p,\ std::vector<double>\&\ coeff\ );}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00024\ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ directedAreaOfFacet(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,\ uint32\_t\ iFacet);}
+\DoxyCodeLine{00025\ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

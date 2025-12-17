@@ -1,0 +1,5 @@
+<map id="csmp::LinearTriangle::InnerRadius" name="csmp::LinearTriangle::InnerRadius">
+<area shape="rect" id="Node000001" title="returns the radius of the largest sphere that could be inscribed in the element" alt="" coords="5,5,148,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_triangle.html#ab4468ebd9e3ff009a19b27543bfeff0f" title="computes and returns the volume of the element which is an area for a surface&#45; and a length for a lin..." alt="" coords="196,5,338,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,23,180,23,180,28,148,28"/>
+</map>

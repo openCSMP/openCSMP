@@ -1,0 +1,104 @@
+\doxysection{csmp\+::Integrator\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_integrator}{}\label{classcsmp_1_1_integrator}\index{csmp::Integrator$<$ dim, USER $>$@{csmp::Integrator$<$ dim, USER $>$}}
+
+
+{\ttfamily \#include $<$Integrator.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Integrator\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_integrator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Integrator\texorpdfstring{$<$}{<} dim, USER \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{classcsmp_1_1_integrator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_integrator_abc39fad70f47beb4e4382acf06cd4afd}\label{classcsmp_1_1_integrator_abc39fad70f47beb4e4382acf06cd4afd} 
+{\bfseries Integrator} (size\+\_\+t m\+\_\+x\+\_\+n, double lower\+\_\+limit, double upper\+\_\+limit)
+\begin{DoxyCompactList}\small\item\em m=n since solution matrix is square, limits should include permitted tolerances \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_integrator_a2a14bd76ac1e8f602ab413427ba41c54}{Integrate\+Over}} (double time\+\_\+increment)
+\begin{DoxyCompactList}\small\item\em uses \doxylink{classcsmp_1_1_integral_equation}{Integral\+Equation} and \doxylink{classcsmp_1_1_accumulator}{Accumulator} to build system and \doxylink{classcsmp_1_1_solver}{Solver} to solve it \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_integrator_af64619cd73000e47ae39e8e4b0b67f8f}\label{classcsmp_1_1_integrator_af64619cd73000e47ae39e8e4b0b67f8f} 
+void {\bfseries Reconfigure\+Solver\+For\+Repeated\+Use} ()
+\begin{DoxyCompactList}\small\item\em transform solver settings from initial use to reuse of settings and previous solution \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_integrator_a713a272272d4e5180bb5da3dbd89cc2a}\label{classcsmp_1_1_integrator_a713a272272d4e5180bb5da3dbd89cc2a} 
+void {\bfseries Assign\+Initial\+Conditions} ()
+\item 
+\Hypertarget{classcsmp_1_1_integrator_aa5662d1abddf106322cdc120907d851e}\label{classcsmp_1_1_integrator_aa5662d1abddf106322cdc120907d851e} 
+void {\bfseries Assign\+Essential\+Conditions} ()
+\item 
+\Hypertarget{classcsmp_1_1_integrator_ae98cb47a951de3bab5796c94f3707b12}\label{classcsmp_1_1_integrator_ae98cb47a951de3bab5796c94f3707b12} 
+void {\bfseries Solve\+Linear\+Algebraic\+System} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_integrator_a4fc5423f07ad3f484394a04abb34d033}{Verify\+And\+Assign\+Results}} (bool show\+\_\+range, bool do\+\_\+range\+\_\+check)
+\begin{DoxyCompactList}\small\item\em transfer results updating concentration, zeroing out \textquotesingle{}new concentration\textquotesingle{} values, and performing range checks; returns error \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$\newline
+class csmp\+::\+Integrator$<$ dim, USER $>$}
+\doxylink{classcsmp_1_1_integrator}{Integrator} -\/ to solve the linear algebraic system arising from the upwind implicit form of the transport equations.
+
+Operations
+\begin{DoxyItemize}
+\item Integrate\+Over( equation, domain, time )
+\item Assign\+Initial\+Conditions( domain )
+\item Assign\+Essential\+Conditions( domain )
+\item Insert\+In\+Matrix()
+\item Insert\+In\+Vector()
+\item Solve( solver );
+\item Post\+Process( domain );
+\item Output\+Results( domain ); Attributes
+\item \doxylink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix} A\+\_\+;
+\item Vector rhs\+\_\+;
+\item Vector x\+\_\+; 
+\end{DoxyItemize}
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_integrator_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_integrator_a2a14bd76ac1e8f602ab413427ba41c54}\index{csmp::Integrator$<$ dim, USER $>$@{csmp::Integrator$<$ dim, USER $>$}!IntegrateOver@{IntegrateOver}}
+\index{IntegrateOver@{IntegrateOver}!csmp::Integrator$<$ dim, USER $>$@{csmp::Integrator$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrateOver()}{IntegrateOver()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integrator_a2a14bd76ac1e8f602ab413427ba41c54} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_integrator}{csmp\+::\+Integrator}}$<$ dim, USER $>$\+::\+Integrate\+Over (\begin{DoxyParamCaption}\item[{double}]{time\+\_\+increment}{}\end{DoxyParamCaption})}
+
+
+
+uses \doxylink{classcsmp_1_1_integral_equation}{Integral\+Equation} and \doxylink{classcsmp_1_1_accumulator}{Accumulator} to build system and \doxylink{classcsmp_1_1_solver}{Solver} to solve it 
+
+assuming that the \doxylink{classcsmp_1_1_integral_equation}{Integral\+Equation} and \doxylink{classcsmp_1_1_accumulator}{Accumulator} have already been applied to build system and \doxylink{classcsmp_1_1_solver}{Solver} to solve it \Hypertarget{classcsmp_1_1_integrator_a4fc5423f07ad3f484394a04abb34d033}\index{csmp::Integrator$<$ dim, USER $>$@{csmp::Integrator$<$ dim, USER $>$}!VerifyAndAssignResults@{VerifyAndAssignResults}}
+\index{VerifyAndAssignResults@{VerifyAndAssignResults}!csmp::Integrator$<$ dim, USER $>$@{csmp::Integrator$<$ dim, USER $>$}}
+\doxysubsubsection{\texorpdfstring{VerifyAndAssignResults()}{VerifyAndAssignResults()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_integrator_a4fc5423f07ad3f484394a04abb34d033} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class USER$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_integrator}{csmp\+::\+Integrator}}$<$ dim, USER $>$\+::\+Verify\+And\+Assign\+Results (\begin{DoxyParamCaption}\item[{bool}]{show\+\_\+range}{, }\item[{bool}]{do\+\_\+range\+\_\+check}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+transfer results updating concentration, zeroing out \textquotesingle{}new concentration\textquotesingle{} values, and performing range checks; returns error 
+
+Checks the range of \textquotesingle{}new saturation oil\textquotesingle{} against that specified in the property database. Where the new values comply, they are used to replace the previous ones stored as \textquotesingle{}saturation oil\textquotesingle{}. If not, the deviations are reported and the nearest maximum or minimum permitted values of saturation are stored. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/Integrator.\+h\item 
+source/modules/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/source/Integrator.\+cpp\end{DoxyCompactItemize}

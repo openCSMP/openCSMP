@@ -1,0 +1,30 @@
+\doxysection{Groundwater\+Darcy\+Velocity.\+h}
+\hypertarget{source_2includes_2thmc_2single__phase__flow_2_groundwater_darcy_velocity_8h_source}{}\label{source_2includes_2thmc_2single__phase__flow_2_groundwater_darcy_velocity_8h_source}\index{source/includes/thmc/single\_phase\_flow/GroundwaterDarcyVelocity.h@{source/includes/thmc/single\_phase\_flow/GroundwaterDarcyVelocity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{GROUND\_WATER\_DARCY\_VELOCITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{GROUND\_WATER\_DARCY\_VELOCITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_groundwater_darcy_velocity}{GroundwaterDarcyVelocity}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ DH;\ \ \ \textcolor{comment}{///<\ hydraulic\ head\ gradient}}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ K;\ \ \ \ \textcolor{comment}{///<\ hydraulic\ conductivity}}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ V;\ \ \ \ \textcolor{comment}{///<\ Darcy\ velocity}}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ head\_grad;}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ hcond;}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ GroundwaterDarcyVelocity(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \string~GroundwaterDarcyVelocity()\ \{\}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_groundwater_darcy_velocity_a6c62ee12d6a080983bd51bbff71d40f5}{Calculate}}();}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,60 @@
+.TH "csmp::PoreVolumeLHS< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PoreVolumeLHS< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PoreVolumeLHS\&.h>\fP
+.PP
+Inherits \fBcsmp::MatrixOperator< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPoreVolumeLHS\fP (const \fBcsmp::INDEX\fP< SCALAR, SECTOR_INTEGRATION_POINT > &spv_key, const \fBcsmp::INDEX\fP< SCALAR, NODE > &fpv_key)"
+.br
+.ti -1c
+.RI "virtual void \fBAccumulateFiniteVolume\fP (const \fBNode\fP< dim > &nptr, \fBSparseMatrix\fP &A) const"
+.br
+.ti -1c
+.RI "virtual void \fBAccumulateStencil\fP (const \fBElement\fP< dim > &eptr, \fBSparseMatrix\fP &A) const"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::MatrixOperator< dim >\fP
+.in +1c
+.ti -1c
+.RI "void \fBMultiplyWithTimeIncrement\fP (double dt)"
+.br
+.RI "includes the time increment in the multiplication factor for this operator "
+.ti -1c
+.RI "void \fBFactor\fP (double value)"
+.br
+.RI "set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-1), multiplication or division (fac=1/value) "
+.ti -1c
+.RI "double \fBFactor\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::PoreVolumeLHS< dim >"The pore volume is accumulated into the diagonal of the sparse (solution) matrix 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::PoreVolumeLHS\fP< dim >::AccumulateFiniteVolume (const \fBNode\fP< dim > & nptr, \fBSparseMatrix\fP & A) const\fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::MatrixOperator< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::PoreVolumeLHS\fP< dim >::AccumulateStencil (const \fBElement\fP< dim > & eptr, \fBSparseMatrix\fP & A) const\fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::MatrixOperator< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

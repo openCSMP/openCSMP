@@ -13,13 +13,13 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_PT_op_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_PT_op_dV( const PropertyDatabase<dim>&, const char* oper, const char* test );
-    virtual ~NumIntegral_PT_op_dV() {}
+    ~NumIntegral_PT_op_dV() {}
     
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
  
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual NumIntegral_PT_op_dV<dim,CELL>* clone() const { return new NumIntegral_PT_op_dV<dim,CELL> (*this); }
+    NumIntegral_PT_op_dV<dim,CELL>* clone() const override final { return new NumIntegral_PT_op_dV<dim,CELL> (*this); }
   private:
     std::vector<double>  BFORCE;
 };

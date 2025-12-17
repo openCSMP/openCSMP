@@ -1,0 +1,122 @@
+\doxysection{Explicit\+Transport.\+h}
+\hypertarget{_explicit_transport_8h_source}{}\label{_explicit_transport_8h_source}\index{source/includes/integration/finite\_volumes/generic\_transport\_scheme/ExplicitTransport.h@{source/includes/integration/finite\_volumes/generic\_transport\_scheme/ExplicitTransport.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_EXPLICIT\_TRANSPORT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_EXPLICIT\_TRANSPORT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_variable_set___tracer_transfer_8h}{"{}VariableSet\_TracerTransfer.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_flux_evaluator_8h}{"{}FluxEvaluator.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_time_step_evaluator_8h}{"{}TimeStepEvaluator.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_region}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ TODO:\ gradient\ calculation:\ compare\ different\ implementations\ (ExtrapolateElementPropertyToNode...)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ TODO:\ make\ the\ transported\ variable\ a\ template\ as\ well:\ Scalar,\ Array,\ FlaggedArray...}}
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ Single-\/phase\ flow\ tracer,\ heat\ or\ other\ transport,\ taking\ into\ account\ the\ thickness\ attribute}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ of\ lower-\/dimensional\ elements\ in\ the\ flux\ calculations.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ @attention\ terminology\ is\ super\ important:}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ -\/\ flux\ refers\ to\ the\ total\ quantity\ that\ passes\ through\ the\ surface,\ i.e.\ \ (v\ .\ n\_i)\ *\ A\_i,}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ \ where\ subscript\ i\ refers\ to\ the\ finite\ volume\ facet}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ -\/\ volume\ flux\ \ -\/\ refers\ to\ volumetric\ flow}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ -\/\ flux\ -\/\ refers\ to\ products\ of\ the\ advected\ quantity\ and\ the\ volumetric\ flow}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ flux\ balance\ -\/\ sum\ over\ all\ finite-\/volume\ facet\ fluxes}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ @author\ SKM}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ @date\ 25/6/2015}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ @copyright\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ TODO:\ account\ for\ the\ effects\ of\ potential\ element\ based\ 'fluid\ volume\ source'\ terms.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ TODO:\ return\ rates\ of\ solute\ influx/outflux\ into/from\ the\ model}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ double\ InFlux()\ const;}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ double\ OutFlux()\ const;}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ TODO:\ add\ choice\ of\ transport\ scheme:\ 1st\ versus\ 2nd\ order\ in\ space}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ TODO:\ Generalise\ scheme\ so\ that\ it\ can\ handle\ Face\ and\ InterFace\ objects}}
+\DoxyCodeLine{00038\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00039\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00040\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport}{ExplicitTransport}}\ :\ \textcolor{keyword}{public}\ variables::\mbox{\hyperlink{structcsmp_1_1variables_1_1_variable_set___tracer_transfer}{VariableSet\_TracerTransfer}},}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport}{FluxEvaluator}}<\mbox{\hyperlink{classcsmp_1_1_explicit_transport}{dim}},\mbox{\hyperlink{classcsmp_1_1_explicit_transport}{ExplicitTransport}}>,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport}{TimeStepEvaluator}}<\mbox{\hyperlink{classcsmp_1_1_explicit_transport}{dim}},\mbox{\hyperlink{classcsmp_1_1_explicit_transport}{ExplicitTransport}}>\ \{}
+\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport___test}{ExplicitTransport\_Test}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ shorthand\ to\ get\ to\ variable\ names}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1variables_1_1_variable_set___tracer_transfer}{VariableSet\_TracerTransfer}}\&\ \ \mbox{\hyperlink{classcsmp_1_1_explicit_transport_ab650a9af484336f41ea9026d08c199e0}{Notation}};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ constructor\ for\ target\ region;\ by\ default\ all\ driving\ forces\ are\ considered;\ @attention\ if\ there\ is\ a\ velocity\ field,\ it\ is\ used\ to\ initialise\ facet\ fluxes}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_explicit_transport_ab73e1bd128174fc85445e14f5d5accb3}{ExplicitTransport}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ std::string\&\ target\_region\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{///\ initialises\ transport\ class\ for\ current\ pressure/velocity/transport\ variable\ field}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport_aa08c34e0ead5f3f5999129f092ba22ef}{UpdateFluxesAndFluxBalances}}();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ computes\ the\ time\ constraint}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport_a2d206bfbbedfcc1061ad83991ecfbfd8}{TimeIncrement}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ executes\ incremental\ time-\/stepping\ (a\ suitable\ time\ increment\ is\ computed\ by\ scheme)}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport_a3ba05be8f7eed8f1dc4c52fabaeaa6d6}{AdvectVariable}}(\ \textcolor{keywordtype}{double}\ time\_interval\ );}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport_a60b5e301ae9a44f822eb118ffa443e5c}{IncomingVolumetricFlow}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_explicit_transport_aa747da759e6e9187279aa53d99217376}{OutgoingVolumetricFlow}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{///\ identifies\ "{}halo\ elements"{},\ i.e.\ which\ contribute\ to\ domain\ FVs,\ but\ are\ outside\ of\ domain,\ returns\ number}}
+\DoxyCodeLine{00066\ \ \ \ \ size\_t\ CollectHaloStencils();}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{///\ true\ if\ the\ computational\ domain\ has\ parts\ that\ are\ removed\ from\ the\ model\ boundary}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{bool}\ HasHaloStencils()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ !halo\_elmts\_.empty();\ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ 1.a\ computations\ of\ \ volumetric\ flows\ and\ (chemical)\ fluxes\ across\ facets\ using\ FacetFlux\ (facet\ flux)\ policy}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ VolumetricFlowAndTransportVariableFluxBalances();}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ 1.b\ recomputed\ transport-\/variable\ flux\ balance,\ stored\ in\ 'accumulation';\ assumes\ that\ transport\ velocity\ did\ not\ change}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ TransportVariableFluxBalances();}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ 2.\ calculates\ optimal\ time\ increment,\ flux\ balance,\ and\ in-\/\ and\ out\ flows\ for\ each\ FV}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{double}\ TimeIncrement\_CFL\_Outflow(\ \textcolor{keywordtype}{double}\ max\_time\_increment\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ 4.\ composes\ 'new\ concentration':\ C\string^t+1\ =\ C\string^t\ -\/\ dt/(phi\ Vi)\ *\ sum\_j\string^faces\ Aj\ n\ .\ [vi]}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ Assemble1stOrderSolution(\ \textcolor{keywordtype}{double}\ delta\_t,\ \textcolor{keywordtype}{bool}\ enforce\_divergence\_free\_vt\_field\ );}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ 5.\ transfer\ results\ updating\ concentration,\ zeroing\ out\ 'new\ concentration'\ values,\ and\ performing\ range\ checks;\ returns\ error}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ VerifyAndAssignResults(\ \textcolor{keywordtype}{bool}\ show\_range,\ \textcolor{keywordtype}{bool}\ do\_range\_check\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//\ DEPRACATE\ ?}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{///\ if\ we\ know\ beforehand\ that\ velocity\ field\ will\ be\ divergence\ free,\ this\ method\ compensates\ for\ small\ abberations\ from\ this}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ AdjustResultsAssumingDivergenceFreeVelocityField(\ \textcolor{keywordtype}{double}\ time\_interval\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ subdomain\_;\ \ \ \textcolor{comment}{///<\ region\ to\ which\ transport\ algorithm\ is\ applied}}
+\DoxyCodeLine{00093\ \ \ \ \ std::vector<Element<dim>*>\ \ halo\_elmts\_;\ \ \textcolor{comment}{///<\ elements\ outside\ of\ subdomain,\ contributing\ stencils\ to\ subdomain\ FVs}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ \ upper\_limit\_,\ lower\_limit\_;\ \ \ \ \ \textcolor{comment}{///<\ range\ in\ which\ the\ result\ is\ allowed\ to\ vary}}
+\DoxyCodeLine{00095\ \};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00099\ \textcolor{comment}{@class\ ExplicitTransport\ ExplicitTransport\ "{}reservoir\_simulator/TransportEquationSolver.h"{}}}
+\DoxyCodeLine{00100\ \textcolor{comment}{}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\(\backslash\)brief\ \ \ \ \ For\ implicit\ transport\ calculations}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\(\backslash\)details\ \ \ Part\ of\ the\ Colleoli\ transport\ scheme.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\(\backslash\)author\ \ \ \ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\(\backslash\)version\ \ \ 1a}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\(\backslash\)date\ \ \ \ \ \ 21/2/2013}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\(\backslash\)pre\ \ \ \ \ \ \ high-\/level\ class\ depending\ on\ CSMP++\ API}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\(\backslash\)bug}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\(\backslash\)warning}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\(\backslash\)copyright\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_EXPLICIT\_TRANSPORT\_H\ */}}
+
+\end{DoxyCode}

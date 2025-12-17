@@ -1,0 +1,136 @@
+.TH "csmp::LinearElasticFractureAperture2D_VVCase" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::LinearElasticFractureAperture2D_VVCase
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLinearElasticFractureAperture2D_VVCase\fP (const char *prefix)"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_min_avg_error\fP (double epsilon)"
+.br
+.ti -1c
+.RI "template<typename T> void \fBWriteSolutionToFile\fP (std::vector< std::vector< T > > data, std::string name)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::LinearElasticFractureAperture2D_VVCase::run ()\fR [virtual]\fP"
+
+.PP
+ 
+.SS "Setting up Fracture Configuration"
+================================================================== 
+.SH "Elasticity Equations"
+.PP
+.PP
+.nf
+ K u = f
+.fi
+.PP
+
+.PP
+K = int BT D B dV
+
+.PP
+.PP
+ 
+.SH "Elasticity Equations"
+.PP
+================================================================== 
+.SH "Displacement Solution & Verification"
+.PP
+ANALYTICAL SOLUTION Aperture Profile of crack
+.PP
+Implements \fBcsmp::Test\fP\&.
+.SS "void csmp::LinearElasticFractureAperture2D_VVCase::set_min_avg_error (double epsilon)"
+Author: E\&. Pezzulli & M\&. Nejati 
+.SH "Linear Elasticity: Plane strain problem with central crack under uniform tension; testing the aperture profile of the crack compared to Sneddon Analytical solution"
+.PP
+Domain: Omega: w x h Rectangle (Provided meshes is for a 10x10 square plane) Mesh: InternalBoundary_test InternalCrack_tri_lin_02 InternalCrack_tri_lin_01 InternalCrack_tri_lin_005 InternalBoundary_Test_quadratic Var File: LinearElasticFractureAperture2D-variables\&.txt Reg File: LinearElasticFractureAperture2D Material: Linear ELastic Isotropic Material: E=Young's Modulus, nu= Poisson's Ratio; Loading: Uniaxial Tension on TOP \fBBoundary\fP BC: Zero y displacements on Bottom boundary, and fixing x,y displacements in CRN1 (bottom left)\&. 
+.SH "ConfigFiles:see meshes, var file and regions file above"
+.PP
+Assume a rectangular plane of width and height of w, and h, with a horizontal crack at its center\&. The body is subjected to a uniform tensile stress S1 in both the y direction\&. Let Uy(x) be the solution for the displacement of the fracture in the vertical direction y\&. BC: The Neumann conditions SHOULD be Sy = S1 on the TOP boundary\&.
+
+.PP
+Plane Strain: Uy(x)=4*S1/E * (a^2-x^2)^(1/2)
+
+.PP
+The following implementation is testing the creation of the \fBFracture\fP Class, its initialisation and creation of \fBInterFace\fP Objects, constructed from opposite face pairs of the master and slave Boundaries of a 2D fracture\&. The calculation and calibration of a Unit Normal\&.
+
+.PP
+The following implemetation, together with the other elastic tests by MN, uses the capability to assign faces over the boundaries of the domain\&. In this case, all the 2D elements building the regions TOP, BOTTOM, LEFT and RIGHT are deleted, and equivalent faces are created instead\&. Using this functionality, one can apply boundary integrals only on the boundaries with known faces\&. An alternative method is to keep the elements, and apply the boundary interals as rhs terms\&. However, the use of boundary faces has the following advantages: 1) The lower dimension elements are deleted, and therefore they can not have any contribution to the LHS of the system\&. In the case of the presence of boundary elements, one has to make sure that they do not contribute to the stiffness matrix\&. This can be done, for example, by making Young's modulus zero on these boundary elements\&. 2) When using RHS operators to add a boundary integral, an iteration happens over all the elements, including the domain higher dimension elements, to accumulate the boundary integrals\&. Although the contribution of domain elements can be forced to be zero (by making the operand zero for all domain elements), this iteration is very expensive compared to the one that just iterates over the boundary faces\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

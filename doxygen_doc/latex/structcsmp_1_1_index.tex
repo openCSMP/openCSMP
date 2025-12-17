@@ -1,0 +1,487 @@
+\doxysection{csmp\+::Index Struct Reference}
+\hypertarget{structcsmp_1_1_index}{}\label{structcsmp_1_1_index}\index{csmp::Index@{csmp::Index}}
+
+
+Accessor for discretized physical variables.  
+
+
+
+
+{\ttfamily \#include $<$Index.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Index\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Index\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{structcsmp_1_1_index__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structcsmp_1_1_index_ae522e9f5a16830c30a2d4f6f26ee1729}\label{structcsmp_1_1_index_ae522e9f5a16830c30a2d4f6f26ee1729} 
+using {\bfseries int\+\_\+type} = \mbox{\hyperlink{structcsmp_1_1_local_variables_af8bec2aa21bd639c2f0953597f0f8376}{Local\+Variables\+::int\+\_\+type}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index_a4a84f8220a8133265973a50d2062ff33}{Index}} ()
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index_a11848fab83380053785e7621f8c72284}{Index}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, int\+\_\+type idx)
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index_a33169d111f1c24dfe8e7900892c6de13}{Index}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}, int\+\_\+type idx, int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_index_a4f9284a718753ac2e21ecc3d056ce77f}{data\+Depth}}, int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_index_a1cf780af8543d274e0772dfed579c40c}{flag\+Depth}}, int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_index_a1836321a275c6f4166edaeb2a1c5d6b3}{data\+Offset}}, int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_index_a746510ee71fae746e09a78e6c959ebfe}{flag\+Offset}}, const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&, const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&=\mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}}(), int\+\_\+type offset\+Factor\+Object=0, int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_index_a74a6be7459ba4a62d9bf33c311918178}{offset\+Factor\+Sector}}=0, int\+\_\+type ip\+Factor\+Object=0, int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_index_ae0cf4ec7f901cab701ee2ef95d97ef44}{ip\+Factor\+Sector}}=0, int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_index_af4a2fd13fd2c0d60fd17afebd28140be}{ip\+Factor\+Facet}}=0)
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index_af455658d6684dec26653f1390da18ee3}{Index}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\item 
+\Hypertarget{structcsmp_1_1_index_a3d38adc8395a9ace450318dbe3ca2ecc}\label{structcsmp_1_1_index_a3d38adc8395a9ace450318dbe3ca2ecc} 
+{\bfseries Index} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&\&)
+\begin{DoxyCompactList}\small\item\em move constructor that takes care of index tracker \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_acbdfb5b45232eb3eab9bf18fc7e609ec}\label{structcsmp_1_1_index_acbdfb5b45232eb3eab9bf18fc7e609ec} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Index} ()
+\begin{DoxyCompactList}\small\item\em DTor\+: Detaches intself from \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& \mbox{\hyperlink{structcsmp_1_1_index_a67ca8bf26803f6322d5e4635a2da72d2}{operator=}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\begin{DoxyCompactList}\small\item\em Assignment operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& \mbox{\hyperlink{structcsmp_1_1_index_a96e678d743121334a176ad4525a94fcd}{operator=}} (\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&\&)
+\begin{DoxyCompactList}\small\item\em move assignment operator \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structcsmp_1_1_index_a5363199597fe72433b8dc0a821a060cc}{operator==}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\item 
+bool \mbox{\hyperlink{structcsmp_1_1_index_a0a7fd1abbf733977e07561c090fe50c3}{operator!=}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\item 
+bool \mbox{\hyperlink{structcsmp_1_1_index_a4def23535bbe8c648d15fc9c29e45adb}{operator$<$}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\item 
+bool \mbox{\hyperlink{structcsmp_1_1_index_a83240c2ca5b3464bd8bfbe8c61194555}{Is\+Defined}} () const
+\item 
+\Hypertarget{structcsmp_1_1_index_abb874a9f4479e5436f285b7c65b26524}\label{structcsmp_1_1_index_abb874a9f4479e5436f285b7c65b26524} 
+void {\bfseries Attach} (\mbox{\hyperlink{classcsmp_1_1_index_tracker}{Index\+Tracker}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structcsmp_1_1_index_ab6f458fe143755ff9467770eedf1b88d}{index\+Tracker}})
+\begin{DoxyCompactList}\small\item\em Registers an \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker} (does not detach from current!) \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a4f25345b8d8bb3230dc0f84a0775dcee}\label{structcsmp_1_1_index_a4f25345b8d8bb3230dc0f84a0775dcee} 
+void {\bfseries Detach} ()
+\begin{DoxyCompactList}\small\item\em Detaches itself from \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker} (i.\+e. called upon destruction) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structcsmp_1_1_index_a858fba57c23ba7b4de157c85cc0208a3}{Update\+Data}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&idx)
+\begin{DoxyCompactList}\small\item\em Updates to the data described by idx without updating index\+Tracker. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structcsmp_1_1_index_a459d7e434854a790a303dcc20cc47949}{Out}} () const
+\item 
+bool \mbox{\hyperlink{structcsmp_1_1_index_a2571e67408a6b2b271eac6a575a6f516}{Out}} (std\+::fstream \&fp) const
+\item 
+bool \mbox{\hyperlink{structcsmp_1_1_index_a114a3c47f32b8334b27fa0f47651bb04}{In}} (std\+::fstream \&fp)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structcsmp_1_1_index_ab609636351fa030cfca44888a44a48c7}\label{structcsmp_1_1_index_ab609636351fa030cfca44888a44a48c7} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries type}
+\item 
+\Hypertarget{structcsmp_1_1_index_a3e3555907cb4921e6333361f84147c72}\label{structcsmp_1_1_index_a3e3555907cb4921e6333361f84147c72} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries place}
+\item 
+\Hypertarget{structcsmp_1_1_index_a16dd82c3058e3f91a76485a2bb574efb}\label{structcsmp_1_1_index_a16dd82c3058e3f91a76485a2bb574efb} 
+int\+\_\+type {\bfseries index} = UNSPECIFIED
+\begin{DoxyCompactList}\small\item\em For Scalars, Vectors, Tensors, Arrays, Flagged\+Arrays\+: the how many\textquotesingle{}th variable of its kind at specified placement. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a4f9284a718753ac2e21ecc3d056ce77f}\label{structcsmp_1_1_index_a4f9284a718753ac2e21ecc3d056ce77f} 
+int\+\_\+type {\bfseries data\+Depth}
+\begin{DoxyCompactList}\small\item\em Scalar\+:1 , Vector\+: dim, Tensor\+: dim\texorpdfstring{$\ast$}{*}dim, Array\+:Size, Flagged\+Array\+:Size. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a1cf780af8543d274e0772dfed579c40c}\label{structcsmp_1_1_index_a1cf780af8543d274e0772dfed579c40c} 
+int\+\_\+type {\bfseries flag\+Depth}
+\begin{DoxyCompactList}\small\item\em Scalar\+:1 , Vector\+: dim, Tensor\+: dim, Array\+:1, Flagged\+Array\+:Size. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a1836321a275c6f4166edaeb2a1c5d6b3}\label{structcsmp_1_1_index_a1836321a275c6f4166edaeb2a1c5d6b3} 
+int\+\_\+type {\bfseries data\+Offset}
+\begin{DoxyCompactList}\small\item\em \doxylink{structcsmp_1_1_index}{Index} in data container where data start. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a746510ee71fae746e09a78e6c959ebfe}\label{structcsmp_1_1_index_a746510ee71fae746e09a78e6c959ebfe} 
+int\+\_\+type {\bfseries flag\+Offset}
+\begin{DoxyCompactList}\small\item\em \doxylink{structcsmp_1_1_index}{Index} in flag container where data start. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a68383516bd146ad402080afdc7b82538}\label{structcsmp_1_1_index_a68383516bd146ad402080afdc7b82538} 
+int\+\_\+type {\bfseries offset\+Factor\+Cell}
+\begin{DoxyCompactList}\small\item\em Factors used in integration point variable index arithmetic. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a74a6be7459ba4a62d9bf33c311918178}\label{structcsmp_1_1_index_a74a6be7459ba4a62d9bf33c311918178} 
+int\+\_\+type {\bfseries offset\+Factor\+Sector}
+\begin{DoxyCompactList}\small\item\em Factors used in integration point variable index arithmetic. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_ae483089917fc056949d5b0d2e114f409}\label{structcsmp_1_1_index_ae483089917fc056949d5b0d2e114f409} 
+int\+\_\+type {\bfseries ip\+Factor\+Cell}
+\begin{DoxyCompactList}\small\item\em Factors used in integration point variable index arithmetic. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_ae0cf4ec7f901cab701ee2ef95d97ef44}\label{structcsmp_1_1_index_ae0cf4ec7f901cab701ee2ef95d97ef44} 
+int\+\_\+type {\bfseries ip\+Factor\+Sector}
+\begin{DoxyCompactList}\small\item\em Factors used in integration point variable index arithmetic. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_af4a2fd13fd2c0d60fd17afebd28140be}\label{structcsmp_1_1_index_af4a2fd13fd2c0d60fd17afebd28140be} 
+int\+\_\+type {\bfseries ip\+Factor\+Facet}
+\begin{DoxyCompactList}\small\item\em Factors used in integration point variable index arithmetic. \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a9b682bbfccf7984b5e0b52855ac84b0a}\label{structcsmp_1_1_index_a9b682bbfccf7984b5e0b52855ac84b0a} 
+\mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} {\bfseries local\+Variables}
+\begin{DoxyCompactList}\small\item\em Description of state of physical variables at given placement (variables count etc..) \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_a84f0944b32554ce9c4d1c2488bcb921b}\label{structcsmp_1_1_index_a84f0944b32554ce9c4d1c2488bcb921b} 
+\mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} {\bfseries integration\+Point\+Variables}
+\begin{DoxyCompactList}\small\item\em Description of state of physical variables at given placement (variables count etc..) \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_index_ab6f458fe143755ff9467770eedf1b88d}\label{structcsmp_1_1_index_ab6f458fe143755ff9467770eedf1b88d} 
+\mbox{\hyperlink{classcsmp_1_1_index_tracker}{Index\+Tracker}} \texorpdfstring{$\ast$}{*} {\bfseries index\+Tracker}
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker} used for runtime updates of offsets (addition/removal of variables) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Accessor for discretized physical variables. 
+
+Link between \doxylink{classcsmp_1_1_property_database}{Property\+Database} and \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}.
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei 
+
+P. Lang 
+
+S. Geiger 
+
+Stephen G. Roberts
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Class encapsulates the three values that are required to retrieve a CSP variable from a model based on an unstructured mesh\+: The Type() distinguishes scalars, vectors and tensors from one-\/another since these have different storage requirements.
+
+The Place() specifies whether a variable is discretized on the nodes, elements, faces or on constraint points. This has implications as to how the variable is interpolated over the model domain.
+
+The \doxylink{structcsmp_1_1_index_a4a84f8220a8133265973a50d2062ff33}{Index()} is used internally by CSMP for housekeeping. It corresponds to the number that the variable has in an alphabetically ordered map of variables of the same type and placement, in the same model.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+Create a universal accessor for discretized physical variables in a model.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+Typically, a \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} or \doxylink{structcsmp_1_1_index}{Index} object is initialized only once before it is used as an accessor to variables in a model. The initialization is done by the \doxylink{classcsmp_1_1_property_database}{Property\+Database} if so requested.
+
+\doxylink{structcsmp_1_1_index}{Index} is applicable whereever the parallel structure \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} is applicable. The reason, why a class is present in addition to the structure is that this allows to assign default values when indices are constructed.\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+\doxylink{structcsmp_1_1_index}{Index} is known to the \doxylink{classcsmp_1_1_property_database}{Property\+Database} and all variable accessor and mutator functions. It is used by \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} and \doxylink{classcsmp_1_1_operand}{Operand} objects, as well as Interrelations, Visitors and Algorithms to housekeep currently used variables.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Both as struct \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} and this class.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+To get an \doxylink{structcsmp_1_1_index}{Index} for a variable of interest in order to perform a computation, do the following\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structcsmp_1_1_index_a4a84f8220a8133265973a50d2062ff33}{Index}}\ variable\_key\ =\ prop\_database.StorageKey(\textcolor{stringliteral}{"{}variable"{}});}
+
+\end{DoxyCode}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000010}{Todo}}]SKM\+: (3-\/F) complete scheme for compile-\/time variables\end{DoxyRefDesc}
+
+
+\label{doc-constructors}
+\Hypertarget{structcsmp_1_1_index_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structcsmp_1_1_index_a4a84f8220a8133265973a50d2062ff33}\index{csmp::Index@{csmp::Index}!Index@{Index}}
+\index{Index@{Index}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{Index()}{Index()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a4a84f8220a8133265973a50d2062ff33} 
+csmp\+::\+Index\+::\+Index (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Default constructor
+
+Assigns an \doxylink{structcsmp_1_1_index}{Index} of scalar type on the model. The index number itself will be set to the maximum and hence interpreted as not defined. Inline implementation. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{structcsmp_1_1_index_a4a84f8220a8133265973a50d2062ff33_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index_a4a84f8220a8133265973a50d2062ff33_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{structcsmp_1_1_index_a11848fab83380053785e7621f8c72284}\index{csmp::Index@{csmp::Index}!Index@{Index}}
+\index{Index@{Index}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{Index()}{Index()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a11848fab83380053785e7621f8c72284} 
+csmp\+::\+Index\+::\+Index (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}}]{ty}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}}]{pl}{, }\item[{int\+\_\+type}]{idx}{}\end{DoxyParamCaption})}
+
+Custom constructor
+
+Neither sets local nor integration point variables and has no option for offsets/depth ( i.\+e. = 0 )
+
+Assigns an \doxylink{structcsmp_1_1_index}{Index} with defined type and placement. Inline implementation. 
+\begin{DoxyParams}{Parameters}
+{\em ty} & the variable type \\
+\hline
+{\em pl} & the placement \\
+\hline
+{\em idx} & the index \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{structcsmp_1_1_index_a11848fab83380053785e7621f8c72284_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{structcsmp_1_1_index_a11848fab83380053785e7621f8c72284_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{structcsmp_1_1_index_a33169d111f1c24dfe8e7900892c6de13}\index{csmp::Index@{csmp::Index}!Index@{Index}}
+\index{Index@{Index}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{Index()}{Index()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a33169d111f1c24dfe8e7900892c6de13} 
+csmp\+::\+Index\+::\+Index (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}}}]{ty}{, }\item[{\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}}]{pl}{, }\item[{int\+\_\+type}]{idx}{, }\item[{int\+\_\+type}]{datadepth}{, }\item[{int\+\_\+type}]{flagdepth}{, }\item[{int\+\_\+type}]{dataoffset}{, }\item[{int\+\_\+type}]{flagoffset}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_local_variables}{Local\+Variables}} \&}]{lvs}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}} \&}]{ivs}{ = {\ttfamily \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables}}()}, }\item[{int\+\_\+type}]{offsetfactorsimplex}{ = {\ttfamily 0}, }\item[{int\+\_\+type}]{offsetfactorsector}{ = {\ttfamily 0}, }\item[{int\+\_\+type}]{ipfactorsimplex}{ = {\ttfamily 0}, }\item[{int\+\_\+type}]{ipfactorsector}{ = {\ttfamily 0}, }\item[{int\+\_\+type}]{ipfactorfacet}{ = {\ttfamily 0}}\end{DoxyParamCaption})}
+
+Custom constructor
+
+This should be goto ctor, even though members may be initialized individually through struct Assigns an \doxylink{structcsmp_1_1_index}{Index} with defined type and placement. Inline implementation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ty} & the variable type \\
+\hline
+{\em pl} & the placement \\
+\hline
+{\em idx} & the index \\
+\hline
+{\em datadepth} & component count, size of variable (scalar 1, vector 2, tensor 3, array \#components) \\
+\hline
+{\em dataoffset} & Offset in of data in variable storage container (implicit dependence on \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}) \\
+\hline
+{\em flagoffset} & Offset in of flag data in variable storage container (implicit dependence on \doxylink{classcsmp_1_1_local_variable_storage}{Local\+Variable\+Storage}) \\
+\hline
+{\em lvs} & \doxylink{structcsmp_1_1_local_variables}{Local\+Variables} of placement pl \\
+\hline
+{\em ivs} & \doxylink{structcsmp_1_1_integration_point_variables}{Integration\+Point\+Variables} of elements \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{structcsmp_1_1_index_a33169d111f1c24dfe8e7900892c6de13_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{structcsmp_1_1_index_a33169d111f1c24dfe8e7900892c6de13_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{structcsmp_1_1_index_af455658d6684dec26653f1390da18ee3}\index{csmp::Index@{csmp::Index}!Index@{Index}}
+\index{Index@{Index}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{Index()}{Index()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_af455658d6684dec26653f1390da18ee3} 
+csmp\+::\+Index\+::\+Index (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{}\end{DoxyParamCaption})}
+
+Copy constructor
+
+Creates an index based on the provided parameter 
+\begin{DoxyParams}{Parameters}
+{\em idx} & an existing \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAttention}{Attention}
+asserting specific offsets cannot be done here where the Indices are constructed because they are calculated and assigned later after they keys have been registered with the database. 
+\end{DoxyAttention}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index_af455658d6684dec26653f1390da18ee3_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{structcsmp_1_1_index_af455658d6684dec26653f1390da18ee3_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{structcsmp_1_1_index_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcsmp_1_1_index_a114a3c47f32b8334b27fa0f47651bb04}\index{csmp::Index@{csmp::Index}!In@{In}}
+\index{In@{In}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{In()}{In()}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a114a3c47f32b8334b27fa0f47651bb04} 
+bool csmp\+::\+Index\+::\+In (\begin{DoxyParamCaption}\item[{std\+::fstream \&}]{fp}{}\end{DoxyParamCaption})}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000149}{Todo}}](1-\/C) Meaningless return statement \end{DoxyRefDesc}
+\Hypertarget{structcsmp_1_1_index_a83240c2ca5b3464bd8bfbe8c61194555}\index{csmp::Index@{csmp::Index}!IsDefined@{IsDefined}}
+\index{IsDefined@{IsDefined}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{IsDefined()}{IsDefined()}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a83240c2ca5b3464bd8bfbe8c61194555} 
+bool csmp\+::\+Index\+::\+Is\+Defined (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Boolean Function that checks if object has been defined
+
+\begin{DoxyReturn}{Returns}
+true if an index has been assigned 
+\end{DoxyReturn}
+\Hypertarget{structcsmp_1_1_index_a0a7fd1abbf733977e07561c090fe50c3}\index{csmp::Index@{csmp::Index}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a0a7fd1abbf733977e07561c090fe50c3} 
+bool csmp\+::\+Index\+::operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{i}{}\end{DoxyParamCaption}) const}
+
+Boolean equals not operator
+
+\begin{DoxyReturn}{Returns}
+boolean result of the comparison 
+
+true if not equal 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index_a0a7fd1abbf733977e07561c090fe50c3_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{structcsmp_1_1_index_a4def23535bbe8c648d15fc9c29e45adb}\index{csmp::Index@{csmp::Index}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a4def23535bbe8c648d15fc9c29e45adb} 
+bool csmp\+::\+Index\+::operator$<$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{i}{}\end{DoxyParamCaption}) const}
+
+comparator less
+
+Provides required functionality for use in an STL container.
+
+\begin{DoxyAttention}{Attention}
+Do not use this as an example for how to code since it deduces information at runtime which should already be known at compile time. 
+\end{DoxyAttention}
+
+\begin{DoxyParams}{Parameters}
+{\em i} & a \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if smaller than argument 
+\end{DoxyReturn}
+\Hypertarget{structcsmp_1_1_index_a67ca8bf26803f6322d5e4635a2da72d2}\index{csmp::Index@{csmp::Index}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a67ca8bf26803f6322d5e4635a2da72d2} 
+\mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& csmp\+::\+Index\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{}\end{DoxyParamCaption})}
+
+
+
+Assignment operator. 
+
+attach itself to \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker} and vice versa.Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index_a67ca8bf26803f6322d5e4635a2da72d2_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index_a67ca8bf26803f6322d5e4635a2da72d2_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{structcsmp_1_1_index_a96e678d743121334a176ad4525a94fcd}\index{csmp::Index@{csmp::Index}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a96e678d743121334a176ad4525a94fcd} 
+\mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& csmp\+::\+Index\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&\&}]{idx}{}\end{DoxyParamCaption})}
+
+
+
+move assignment operator 
+
+attach itself to \doxylink{classcsmp_1_1_index_tracker}{Index\+Tracker} and vice versa.Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index_a96e678d743121334a176ad4525a94fcd_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{structcsmp_1_1_index_a5363199597fe72433b8dc0a821a060cc}\index{csmp::Index@{csmp::Index}!operator==@{operator==}}
+\index{operator==@{operator==}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a5363199597fe72433b8dc0a821a060cc} 
+bool csmp\+::\+Index\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{i}{}\end{DoxyParamCaption}) const}
+
+Boolean equals operator
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & an \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean result of the comparison 
+
+true if equal 
+\end{DoxyReturn}
+\Hypertarget{structcsmp_1_1_index_a459d7e434854a790a303dcc20cc47949}\index{csmp::Index@{csmp::Index}!Out@{Out}}
+\index{Out@{Out}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a459d7e434854a790a303dcc20cc47949} 
+void csmp\+::\+Index\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+CSMP output feature
+
+\doxylink{structcsmp_1_1_index_a459d7e434854a790a303dcc20cc47949}{Out()} returns all the internal data that \doxylink{structcsmp_1_1_index}{Index} needs to access variables. These include the type and placement of a variable in the finite element mesh and the associated data storage index for the CSMP \textquotesingle{}Memory\+Manager\textquotesingle{}. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structcsmp_1_1_index_a459d7e434854a790a303dcc20cc47949_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{structcsmp_1_1_index_a2571e67408a6b2b271eac6a575a6f516}\index{csmp::Index@{csmp::Index}!Out@{Out}}
+\index{Out@{Out}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a2571e67408a6b2b271eac6a575a6f516} 
+bool csmp\+::\+Index\+::\+Out (\begin{DoxyParamCaption}\item[{std\+::fstream \&}]{fp}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000148}{Todo}}](1-\/C) Meaningless return statement \end{DoxyRefDesc}
+\Hypertarget{structcsmp_1_1_index_a858fba57c23ba7b4de157c85cc0208a3}\index{csmp::Index@{csmp::Index}!UpdateData@{UpdateData}}
+\index{UpdateData@{UpdateData}!csmp::Index@{csmp::Index}}
+\doxysubsubsection{\texorpdfstring{UpdateData()}{UpdateData()}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_index_a858fba57c23ba7b4de157c85cc0208a3} 
+void csmp\+::\+Index\+::\+Update\+Data (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{}\end{DoxyParamCaption})}
+
+
+
+Updates to the data described by idx without updating index\+Tracker. 
+
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+9/26/2012
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em idx} & The index to be updated from \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Index.\+h\item 
+source/modules/model/Index.\+cpp\end{DoxyCompactItemize}

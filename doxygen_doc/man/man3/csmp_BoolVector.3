@@ -1,0 +1,118 @@
+.TH "csmp::BoolVector" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::BoolVector
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBoolVector\fP ()"
+.br
+.ti -1c
+.RI "\fBBoolVector\fP (size_t uSize)"
+.br
+.ti -1c
+.RI "\fBBoolVector\fP (const \fBBoolVector\fP &bv)"
+.br
+.ti -1c
+.RI "\fBBoolVector\fP & \fBoperator=\fP (const \fBBoolVector\fP &)"
+.br
+.ti -1c
+.RI "\fB~BoolVector\fP ()"
+.br
+.ti -1c
+.RI "void \fBResize\fP (size_t uSize)"
+.br
+.ti -1c
+.RI "size_t \fBSize\fP () const"
+.br
+.ti -1c
+.RI "void \fBSetBit\fP (size_t uOffset, bool bValue)"
+.br
+.RI "sets the value of the bit with the specified offset\&. (uOffset: 0-> uSize_-1) "
+.ti -1c
+.RI "bool \fBGetBit\fP (size_t uOffset) const"
+.br
+.RI "sets the value of the bit with the specified offset\&. (uOffset: 0-> uSize_-1) "
+.ti -1c
+.RI "void \fBSetAll\fP (bool value)"
+.br
+.RI "sets all bits to a value "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::BoolVector::BoolVector ()"
+Default constructor\&. 
+.SS "csmp::BoolVector::BoolVector (size_t uSize)\fR [explicit]\fP"
+Size constructor\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIuSize\fP initial size of the bit vector\&. 
+.RE
+.PP
+
+.SS "csmp::BoolVector::BoolVector (const \fBBoolVector\fP & bv)"
+Copy constructor\&. 
+.SS "csmp::BoolVector::~BoolVector ()"
+destructor\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "bool csmp::BoolVector::GetBit (size_t uOffset) const"
+
+.PP
+sets the value of the bit with the specified offset\&. (uOffset: 0-> uSize_-1) Gets the value of the bit with the specified offset\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIuOffset\fP offset of the bit in the bit vector\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+logical value of the bit\&. 
+.RE
+.PP
+
+.SS "\fBBoolVector\fP & csmp::BoolVector::operator= (const \fBBoolVector\fP & bv)"
+Assign operator 
+.SS "void csmp::BoolVector::Resize (size_t uSize)"
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIuSize\fP initial size of the bit vector\&. 
+.RE
+.PP
+
+.SS "void csmp::BoolVector::SetAll (bool value)"
+
+.PP
+sets all bits to a value Sets all bits to a value\&. 
+.SS "void csmp::BoolVector::SetBit (size_t uOffset, bool bValue)"
+
+.PP
+sets the value of the bit with the specified offset\&. (uOffset: 0-> uSize_-1) Sets the value of the bit with the specified offset\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIuOffset\fP offset of the bit in the bit vector\&. 
+.br
+\fIbValue\fP logical value to set the bit\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

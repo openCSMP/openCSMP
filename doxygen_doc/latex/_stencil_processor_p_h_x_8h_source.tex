@@ -1,0 +1,101 @@
+\doxysection{Stencil\+Processor\+PHX.\+h}
+\hypertarget{_stencil_processor_p_h_x_8h_source}{}\label{_stencil_processor_p_h_x_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/StencilProcessorPHX.h@{source/includes/integration/cvfe\_hydrothermal/StencilProcessorPHX.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{STENCIL\_PROCESSOR\_PHX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{STENCIL\_PROCESSOR\_PHX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \ \ \ \ February\ 2015,\ Philipp\ Weis:}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_f_v___parameter_8h}{"{}FV\_Parameter.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ \ @class\ StencilProcessorPHX\ StencilProcessorPHX.h}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ \ Stencil\ processor\ for\ finitive\ volume\ calculations\ within\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ Specialized\ stencil\ processor\ for\ PHX\ scheme.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ \ To\ be\ used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00032\ \textcolor{comment}{}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ Performs\ finite\ volume\ fluxes\ across\ facets.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ The\ functions\ are\ tailored\ for\ use\ in\ ExplicitFiniteVolumeTransportPHX}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00048\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x}{StencilProcessorPHX}}\ \{}
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a25201ee08639dbfa335391a0f410ce1c}{StencilProcessorPHX}}();}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{DetermineFluxOutWithGravity}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ upwind,\ \textcolor{comment}{//matrix\ indicating\ pre-\/defined\ upwind\ nodes}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{vector}}<\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{vector}}<\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{facet\_flux}},\ \ \textcolor{comment}{//vector\ storing\ flux\ across\ each\ facet}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{flux\_out}},\ \textcolor{comment}{//\ vector\ storing\ the\ flux\ out\ of\ the\ control\ volumes}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{Index}}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{rhs\_key}},\ \textcolor{comment}{//\ key\ for\ the\ right-\/hand\ side\ variable\ of\ fintite\ volume\ calculations}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{Index}}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{rho\_key}},\ \textcolor{comment}{//\ density\ of\ the\ transported\ phase}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{Index}}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a584a44e7c01b5cbd93626587b6792bcd}{k\_key}});\ \ \textcolor{comment}{//\ element\ permeability}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{DetermineFluxOutWithoutGravity}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ upwind,\ \textcolor{comment}{//matrix\ indicating\ pre-\/defined\ upwind\ nodes}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{vector}}<\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{vector}}<\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{facet\_flux}},\ \textcolor{comment}{//vector\ storing\ flux\ across\ each\ facet}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{flux\_out}},\ \textcolor{comment}{//\ vector\ storing\ the\ flux\ out\ of\ the\ control\ volumes}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{Index}}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_af41e695e4a59639065e11a37e6f232ef}{rhs\_key}});\ \ \textcolor{comment}{//\ density\ of\ the\ transported\ phase}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{DetermineFluxIn}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{vector}}<\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{vector}}<\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{facet\_flux}},\ \textcolor{comment}{//vector\ storing\ flux\ across\ each\ facet}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{flux\_in}},\ \textcolor{comment}{//\ vector\ storing\ the\ flux\ into\ of\ the\ control\ volumes}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_abde9e7ac7d7563fa83f8294c5f31091b}{mass\_balance}}\ );\ \textcolor{comment}{//\ vector\ for\ mass\ balance\ corrections}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{DetermineFluxOut}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_f_v___parameter}{FV\_Parameter}}\&\ param,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{vector}}<\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{vector}}<\textcolor{keywordtype}{double}>\ >\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{facet\_flux}},\ \textcolor{comment}{//vector\ storing\ flux\ across\ each\ facet}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{std}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{flux\_out}},\ \textcolor{comment}{//\ vector\ storing\ the\ flux\ out\ of\ the\ control\ volumes}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{Index}}\ \mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_aefd83f7d78dfe442c19a2bb87790378f}{rhs\_key}});\ \textcolor{comment}{//\ density\ of\ the\ transported\ phase}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_stencil_processor_p_h_x_a3a087f5f4624b227be6030aefcfbb408}{StencilProcessorPHX}}();}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ gravity\_;}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ eidx\_;}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{mutable}\ uint32\_t\ \ inside\_node\_,\ outside\_node\_;}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ rhs\_property\_,\ density\_,\ perm\_;}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ grav\_,\ g\_component\_,\ vel\_;}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \}\ \textcolor{comment}{//\ namespace\ csmp}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

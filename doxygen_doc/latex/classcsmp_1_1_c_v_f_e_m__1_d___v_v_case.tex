@@ -1,0 +1,126 @@
+\doxysection{csmp\+::CVFEM\+\_\+1\+D\+\_\+\+VVCase Class Reference}
+\hypertarget{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case}{}\label{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case}\index{csmp::CVFEM\_1D\_VVCase@{csmp::CVFEM\_1D\_VVCase}}
+
+
+{\ttfamily \#include $<$CVFEM\+\_\+1\+D\+\_\+\+VVCase.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::CVFEM\+\_\+1\+D\+\_\+\+VVCase\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::CVFEM\+\_\+1\+D\+\_\+\+VVCase\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_a75287725a37e6823686e144aa7078939}{CVFEM\+\_\+1\+D\+\_\+\+VVCase}} (const char \texorpdfstring{$\ast$}{*}prefix)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_afe070ca8718d2210324cd9b7a0a23efc}{run}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\hypertarget{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_autotoc_md11}{}\doxysubsection{\texorpdfstring{CVFEM\+\_\+1\+D\+\_\+\+VVCase \+: 1D Test Case}{CVFEM\+\_\+1\+D\+\_\+\+VVCase \+: 1D Test Case}}\label{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_autotoc_md11}
+Mesh\+: Not needed \doxylink{classcsmp_1_1_model}{Model}\+: 1D \doxylink{classcsmp_1_1_test}{Test}\+: PHX\+\_\+\+Scheme BC\+: TBC \hypertarget{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_autotoc_md12}{}\doxysubsection{\texorpdfstring{Criterion\+:}{Criterion\+:}}\label{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_autotoc_md12}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_a75287725a37e6823686e144aa7078939}\index{csmp::CVFEM\_1D\_VVCase@{csmp::CVFEM\_1D\_VVCase}!CVFEM\_1D\_VVCase@{CVFEM\_1D\_VVCase}}
+\index{CVFEM\_1D\_VVCase@{CVFEM\_1D\_VVCase}!csmp::CVFEM\_1D\_VVCase@{csmp::CVFEM\_1D\_VVCase}}
+\doxysubsubsection{\texorpdfstring{CVFEM\_1D\_VVCase()}{CVFEM\_1D\_VVCase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_a75287725a37e6823686e144aa7078939} 
+csmp\+::\+CVFEM\+\_\+1\+D\+\_\+\+VVCase\+::\+CVFEM\+\_\+1\+D\+\_\+\+VVCase (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{prefix}{}\end{DoxyParamCaption})}
+
+Create a 1D model
+
+assign the gravity flag from the config file
+
+read time increment from config file
+
+create new CVFEM PHX Scheme object
+
+vtu interface fro output
+
+output main variables
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_afe070ca8718d2210324cd9b7a0a23efc}\index{csmp::CVFEM\_1D\_VVCase@{csmp::CVFEM\_1D\_VVCase}!run@{run}}
+\index{run@{run}!csmp::CVFEM\_1D\_VVCase@{csmp::CVFEM\_1D\_VVCase}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_c_v_f_e_m__1_d___v_v_case_afe070ca8718d2210324cd9b7a0a23efc} 
+void csmp\+::\+CVFEM\+\_\+1\+D\+\_\+\+VVCase\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Calculate linear pressure gradient, initialize fluid properties from PTX, initial output to vtu
+
+setup time variables
+
+main time loop
+
+output to vtk
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/integration/CVFEM\+\_\+1\+D\+\_\+\+VVCase.\+h\item 
+tests/integration/CVFEM\+\_\+1\+D\+\_\+\+VVCase.\+cpp\end{DoxyCompactItemize}

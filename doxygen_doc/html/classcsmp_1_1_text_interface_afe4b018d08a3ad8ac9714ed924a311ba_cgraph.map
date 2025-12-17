@@ -1,0 +1,5 @@
+<map id="csmp::TextInterface::OutputDataAsTextColumns" name="csmp::TextInterface::OutputDataAsTextColumns">
+<area shape="rect" id="Node000001" title="single variable text column output for a user specified region" alt="" coords="5,5,195,46"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="243,5,387,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,23,227,23,227,28,195,28"/>
+</map>

@@ -1,0 +1,80 @@
+.TH "source/includes/utilities/CSMP_highLevelUtilities.h" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+source/includes/utilities/CSMP_highLevelUtilities.h \- Leftover global functions for which no suitable place has yet been found in the code\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fR#include 'CSMP_definitions\&.h'\fP
+.br
+
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBcsmp\fP"
+.br
+.RI "Complex System Modeling Platform\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::vector< std::string > \fBcsmp::splitString\fP (std::string str, char delimiter)"
+.br
+.RI "utility that tokenises string into substrings using the supplied delimiter(s)\&. "
+.ti -1c
+.RI "void \fBcsmp::replaceWhiteSpaceBy\fP (std::string &, char ascii_char)"
+.br
+.RI "to fill whitespace in strings with character of choice, for instance '_' "
+.ti -1c
+.RI "template<typename T> std::string \fBcsmp::number_to_string\fP (const T &value)"
+.br
+.RI "converts types to strings without loss of precision (std::to_string limits to 6 significant digits) "
+.ti -1c
+.RI "template<typename T> std::string \fBcsmp::numberToString\fP (const T &value, bool verbose=false)"
+.br
+.RI "scientific-format string with appropriate digits (without loss of precision (std::to_string limits to 6 significant digits) "
+.ti -1c
+.RI "bool \fBcsmp::areFartherApartThan\fP (const double *pn, const double *pw, double \fBdistance\fP)"
+.br
+.RI "evaluates the distance between 2 points "
+.ti -1c
+.RI "size_t \fBcsmp::renumberElementNodes\fP (std::vector< \fBElement\fP< 1U > * >::iterator first, std::vector< \fBElement\fP< 1U > * >::iterator last)"
+.br
+.ti -1c
+.RI "size_t \fBcsmp::renumberElementNodes\fP (std::vector< \fBElement\fP< 2U > * >::iterator first, std::vector< \fBElement\fP< 2U > * >::iterator last)"
+.br
+.ti -1c
+.RI "size_t \fBcsmp::renumberElementNodes\fP (std::vector< \fBElement\fP< 3U > * >::iterator first, std::vector< \fBElement\fP< 3U > * >::iterator last)"
+.br
+.ti -1c
+.RI "template<typename T> size_t \fBcsmp::removeVectorElements\fP (std::vector< T > &toRemoveFrom, std::vector< T > &toRemove)"
+.br
+.RI "Vector element subtraction\&. "
+.ti -1c
+.RI "template<typename intType> size_t \fBcsmp::createUniqueCombinations\fP (std::vector< intType > &sequence, intType samples, std::deque< std::vector< intType > > &combinations)"
+.br
+.RI "find all possible combinations of the numbers provided in 'sequence', where 'samples' specified how many numbers shall be combined; combinations are returned into deque\&. "
+.ti -1c
+.RI "bool \fBcsmp::isInputFileEmpty\fP (std::ifstream &)"
+.br
+.RI "Returns true if file on ifstream is empty\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Leftover global functions for which no suitable place has yet been found in the code\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,90 @@
+\doxysection{Threephase\+HLV.\+h}
+\hypertarget{_threephase_h_l_v_8h_source}{}\label{_threephase_h_l_v_8h_source}\index{source/includes/eos/ThreephaseHLV.h@{source/includes/eos/ThreephaseHLV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{THREEPHASEHLV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{THREEPHASEHLV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_triple_point_na_cl_8h}{"{}TriplePointNaCl.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ \ \ October\ 13,\ 2014,\ Thomas\ Driesner:\ porting\ to\ CSMP++,\ adjusting\ pressure\ to\ [Pa]\ units,\ doxygen\ documentation,\ style\ adjustments,\ basic\ manual\ testing\ against\ CSP\ version\ (OK)}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_threephase_h_l_v}{ThreephaseHLV}}}
+\DoxyCodeLine{00014\ \ \ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{///\ Pressure-\/temperature\ coordinates\ of\ threephase\ Halite+Liquid+Vapor\ coexistence}}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_threephase_h_l_v_a423662bc313dbfac0fcf4e5edd3ea0de}{ThreephaseHLV}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature);\ \textcolor{comment}{//\ [C]}}
+\DoxyCodeLine{00020\ \ \ \ \ \string~ThreephaseHLV();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ Temperature()\ \textcolor{keyword}{const};\ \ \ \ \textcolor{comment}{//\ [C]}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ Pressure();\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa]}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ DPressureDT();\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa\ C-\/1]}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ Tmax();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ temperature\ for\ the\ pressure\ maximum\ near\ 590\ C}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ Pmax();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ pressure\ at\ that\ maximum}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ ThreephaseHLV();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ disable\ default\ construction}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ temperature\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ const\ ref\ to\ temperature\ [C]\ in\ flow\ code}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f0\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f1;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f1\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f2;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f2\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f3;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f3\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f4;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f4\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f5;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f5\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f6;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f6\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f7;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f7\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f8;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f8\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f9;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f9\ \ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ f10;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ f10\ for\ eq.\ 10\ in\ Driesner\&Heinrich\ (2007)}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ tcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ [C]\ for\ internal\ use}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ myt\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ tcurrent\_/nacl\_triple.Temperature()\ both\ in\ [C]}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ pressure\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ [bar],\ internal\ use}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ dpressuredt\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ [bar]\ derivative\ w.r.t.\ temperature,\ internal\ use}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CheckStatus();}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ Pressure(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ myt);}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ DPressureDT(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ myt,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t);}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_triple_point_na_cl}{TriplePointNaCl}}\ \ \ \ \ nacl\_triple;}
+\DoxyCodeLine{00056\ \ \ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ @class\ ThreephaeHLV\ ThreephaeHLV.h\ "{}eos/h2o\_nacl/ThreephaeHLV.h"{}}}
+\DoxyCodeLine{00060\ \textcolor{comment}{}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ @author:\ Thomas\ Driesner,\ ETH\ Zuerich,\ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00062\ \textcolor{comment}{}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ "{}ThreephaseHLV"{}\ computes\ the\ temperature-\/pressure-\/composition\ [Celsius,\ bar]\ coordinates\ of\ the\ vapor-\/liquid-\/halite\ threephase-\/coexistence\ surface\ of\ the\ system\ H2O-\/NaCl,\ according\ to\ the\ paper}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ and\ Heinrich\ C.A.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ I:\ Correlation\ formulae\ for\ phase\ relations\ in\ temperature-\/pressure-\/composition\ space\ from\ 0\ to\ 1000oC,\ 0\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4880-\/4901.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ Other\ porperties\ such\ as\ density\ etc.\ are\ NOT\ provided.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ "{}ThreephaseHLV"{}\ is\ legacy\ code\ coming\ from\ Thomas\ Driesner's\ developments\ for\ the\ H2O-\/NaCl\ system.\ It\ is\ REQUIRED\ to\ build\ accurate\ lookup\ tables\ for\ the\ H2O-\/NaCl\ system.\ }}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ Construct\ an\ instance\ of\ "{}ThreephaseHLV"{}\ with\ the\ temperature\ (in\ C)\ as\ constructor\ variable.\ "{}ThreephaseHLV"{}\ has\ an\ internal\ mechanism\ to\ make\ sure\ that\ it\ always\ uses\ the\ current\ value\ of\ that\ temperature.\ Public\ member\ names\ should\ be\ self-\/explanatory,\ I\ hope.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ @section\ requirements\ Requirements:}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ "{}ThreephaseHLV"{}\ needs\ "{}TriplePointNaCl"{}}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing:}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ Manually\ tested\ against\ CSMP\ version}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \}\textcolor{comment}{//csmp}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

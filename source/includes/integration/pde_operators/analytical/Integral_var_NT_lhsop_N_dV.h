@@ -23,11 +23,11 @@ class Integral_var_NT_lhsop_N_dV : public MathOperatorLHS<dim,CELL> {
                                const char* var,
                                const double prefactor = 1. );
     
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual Integral_var_NT_lhsop_N_dV<dim,CELL>* clone() const { return new Integral_var_NT_lhsop_N_dV<dim,CELL> (*this); }
+    Integral_var_NT_lhsop_N_dV<dim,CELL>* clone() const override final { return new Integral_var_NT_lhsop_N_dV<dim,CELL> (*this); }
     
   private:
     void ComputeIntegral( const CELL<dim>& );

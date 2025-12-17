@@ -1,0 +1,178 @@
+.TH "csmp::MeshDiagnostics< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::MeshDiagnostics< dim > \- Common checks performed on a newly constructed mesh to detect issues\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <MeshDiagnostics\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBElementVolumeRange\fP (const \fBModel\fP< dim > &, double &vmin, double &vmax) const"
+.br
+.ti -1c
+.RI "bool \fBScrutinizeMesh\fP (\fBModel\fP< 3U > &) const"
+.br
+.RI "summary: diagnostics including checks/reports negative element orientations, flat elements, zero volumes etc\&. "
+.ti -1c
+.RI "bool \fBComputeQualityMetricsAndOutputToVTU\fP (\fBModel\fP< dim > &, const std::string &region)"
+.br
+.RI "creates a range of quality variables, computes them and outputs them from the target region to VTU; creates diagnostic regions for this purpose "
+.ti -1c
+.RI "bool \fBDetectPotentiallyMisnumberedElements\fP (const \fBModel\fP< dim > &) const"
+.br
+.RI "tests for negative element volumes "
+.ti -1c
+.RI "bool \fBDetectConflictingDirichletConditions\fP (const \fBModel\fP< dim > &, const char *variable_of_interest, \fBVARIABLE_FLAG\fP status=\fBDIRICH\fP) const"
+.br
+.RI "detects whether different Dirichlet conditions have been assigned to a single finite element "
+.ti -1c
+.RI "bool \fBDetectOverConstrainedElements\fP (const \fBModel\fP< dim > &model, const char *variable_of_interest, \fBVARIABLE_FLAG\fP status=\fBDIRICH\fP) const"
+.br
+.RI "elements where all nodes have a status constraint so that they do not participate in the computation "
+.ti -1c
+.RI "bool \fBDetectNonMonotonicity\fP (const \fBModel\fP< dim > &, const char *variable_of_interest) const"
+.br
+.RI "checks whether the any value of a computed node variable (P,T,C) lies outside of the range of the values in its neighborhood "
+.ti -1c
+.RI "bool \fBDetectOrphanNodes\fP (const \fBModel\fP< dim > &) const"
+.br
+.RI "nodes that are not connected to any cells "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::MeshDiagnostics< dim >"Common checks performed on a newly constructed mesh to detect issues\&. 
+
+\fBMeshDiagnostics\fP determines node-numbering and other issues such as duplicate elements in a mesh\&.
+
+.PP
+Reports element volume ranges\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> bool \fBcsmp::MeshDiagnostics\fP< dim >::ComputeQualityMetricsAndOutputToVTU (\fBModel\fP< dim > & model, const std::string & region)"
+
+.PP
+creates a range of quality variables, computes them and outputs them from the target region to VTU; creates diagnostic regions for this purpose Creates a range of quality variables, computes them and outputs them from the target region to VTU; creates diagnostic regions for this purpose\&.
+
+.PP
+Diagnostics obtained: cells: 
+.PP
+.nf
+ 1\&.  "cell volume" - cells that are smaller than 1e-5 of average cell size are reported in region "small cells"
+   (a special treatment is applied to lower dimensional elements)
+ 2\&.  "Jacobian determinant" - a negative value indicates a problem with the node-numbering of the cell or twistedness
+ 3\&.  "aspect ratio" - longest over shortest segment length
+ 4\&. "minimum inter-segment angle" - indicating splinter elements
+ 5\&. "width over height ratio" - suitable for the detection of non-manifold vertices (where all nodes lie in the same plane)
+
+.fi
+.PP
+
+.PP
+Diagnostics obtained: nodes: 
+.PP
+.nf
+ 1\&. "node connections" - number of nodes the node is connected to\&. A highly variable number indicates a poor quality mesh
+ 2\&. "shortest distance to node" - any of the other nodes surrounding the node
+
+.fi
+.PP
+
+.PP
+Cells that do not suffer from any of the checked criteria are stored in a new region that fullfil the criterion "fit for computation" = 1\&. Creates a range of quality variables, computes them and outputs them from the target region to VTU; creates diagnostic regions for this purpose\&.
+
+.PP
+Diagnostics obtained: cells: 
+.PP
+.nf
+ 1\&.  "cell volume" - cells that are smaller than 1e-5 of average cell size are reported in region "small cells"
+   (a special treatment is applied to lower dimensional elements)
+
+ 2\&.  "Jacobian determinant" - a negative value indicates a problem with the node-numbering of the cell or twistedness
+
+ 3\&.  "aspect ratio" - longest over shortest segment length
+
+ 4\&. "minimum inter-segment angle" - indicating splinter elements
+
+ 5\&. "width over height ratio" - suitable for the detection of non-manifold vertices (where all nodes lie in the same plane)
+
+.fi
+.PP
+
+.PP
+Diagnostics obtained: nodes: 
+.PP
+.nf
+ 1\&. "node connections" - number of nodes the node is connected to\&. A highly variable number indicates a poor quality mesh
+
+ 2\&. "shortest distance to node" - any of the other nodes surrounding the node
+
+.fi
+.PP
+
+.PP
+Cells that do not suffer from any of the checked criteria are stored in a new region that fullfil the criterion "fit for computation" = 1\&. 
+.SS "template<uint32_t dim> bool \fBcsmp::MeshDiagnostics\fP< dim >::DetectConflictingDirichletConditions (const \fBModel\fP< dim > & model, const char * variable_of_interest, \fBVARIABLE_FLAG\fP status = \fR\fBDIRICH\fP\fP) const"
+
+.PP
+detects whether different Dirichlet conditions have been assigned to a single finite element detects whether different Dirichlet conditions have been assigned to a single finite element\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+method has been implemented only for scalar and vector variables\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> bool \fBcsmp::MeshDiagnostics\fP< dim >::DetectNonMonotonicity (const \fBModel\fP< dim > & model, const char * variable_of_interest) const"
+
+.PP
+checks whether the any value of a computed node variable (P,T,C) lies outside of the range of the values in its neighborhood checks whether the any value of a computed node variable (P,T,C) lies outside of the range of the values in its neighborhood 
+.SS "template<uint32_t dim> bool \fBcsmp::MeshDiagnostics\fP< dim >::DetectPotentiallyMisnumberedElements (const \fBModel\fP< dim > & model) const"
+
+.PP
+tests for negative element volumes tests for negative element volume / area / length 
+.SS "template<uint32_t dim> bool \fBcsmp::MeshDiagnostics\fP< dim >::ScrutinizeMesh (\fBModel\fP< 3U > & sg) const"
+
+.PP
+summary: diagnostics including checks/reports negative element orientations, flat elements, zero volumes etc\&. Method tries to test the current finite-element mesh for internal consistency\&. Thus it checks whether there are no gaps in the mesh object numbering (e\&.g\&., node numbers which are larger than the actual number of nodes etc\&.), no zero segment lengths of elements, no NAN coordinates etc\&. The method will not report duplicate \fBNode\fP or IntegrationPoint coordinates\&.
+.SH "Implementation"
+.PP
+Thus far, scrutinizeMesh() assumes a fixed maximum dimension of 40'000km\&.
+.SH "Application Examples"
+.PP
+scrutinizeMesh() is recommended if meshes from external tools are used in CSMP computations\&. Its performance is fast, and while it does not guarantee for the detection of all possible errors many very obvious errors are reported\&.
+.SH "Messages"
+.PP
+At the end of the test the method will write a few mesh diagnostics to stdout:
+
+.PP
+"horizontal min, max coordinate"vertical min, max coordinate "length of longest segment"length of shortest segment "maximum segment length ratio"minimum segment length ratio
+
+.PP
+SKM fix 18/10/2014: additions to catch exceptions associated with negative Jacobians\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

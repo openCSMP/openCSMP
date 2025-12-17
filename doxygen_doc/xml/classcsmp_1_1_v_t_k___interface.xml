@@ -1,0 +1,1033 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_v_t_k___interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::VTK_Interface</compoundname>
+    <includes refid="_v_t_k___interface_8h" local="no">VTK_Interface.h</includes>
+    <innerclass refid="structcsmp_1_1_v_t_k___interface_1_1_point_descriptor" prot="private">csmp::VTK_Interface::PointDescriptor</innerclass>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a423d54765575b3d9d90fe1271e315975" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::VTK_Interface&lt; dim &gt;::toFolder_</definition>
+        <argsstring></argsstring>
+        <name>toFolder_</name>
+        <qualifiedname>csmp::VTK_Interface::toFolder_</qualifiedname>
+        <briefdescription>
+<para>output to folder </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="130" column="9" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a6528cb36e2c6335acbbb8f44c0dc4f9f" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::VTK_Interface&lt; dim &gt;::toSubFolder_</definition>
+        <argsstring></argsstring>
+        <name>toSubFolder_</name>
+        <qualifiedname>csmp::VTK_Interface::toSubFolder_</qualifiedname>
+        <briefdescription>
+<para>output to subfolder </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="131" column="9" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a6b8e48f6bfc5b50ed566ec19eb886915" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::VTK_Interface&lt; dim &gt;::problemTitle_</definition>
+        <argsstring></argsstring>
+        <name>problemTitle_</name>
+        <qualifiedname>csmp::VTK_Interface::problemTitle_</qualifiedname>
+        <briefdescription>
+<para>title that goes into xml header </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="132" column="16" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a6fcd43a9be7b43e670df85ea1b6b5520" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::VTK_Interface&lt; dim &gt;::subFolderName_</definition>
+        <argsstring></argsstring>
+        <name>subFolderName_</name>
+        <qualifiedname>csmp::VTK_Interface::subFolderName_</qualifiedname>
+        <briefdescription>
+<para>name of subfolder </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="133" column="16" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a040941a2bcd7ad01c9f5d2c23d108b87" prot="private" static="no" mutable="no">
+        <type>std::deque&lt; <ref refid="namespacecsmp_1aabe538a469c723c9324782594badb034" kindref="member">VTK_TYPE</ref> &gt;</type>
+        <definition>std::deque&lt;VTK_TYPE&gt; csmp::VTK_Interface&lt; dim &gt;::geometric_primitives_VTK_</definition>
+        <argsstring></argsstring>
+        <name>geometric_primitives_VTK_</name>
+        <qualifiedname>csmp::VTK_Interface::geometric_primitives_VTK_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="134" column="35" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a055ab8b9881e0168ab841144b122e82d" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt;</type>
+        <definition>std::map&lt;size_t,std::vector&lt;size_t&gt; &gt; csmp::VTK_Interface&lt; dim &gt;::plist_</definition>
+        <argsstring></argsstring>
+        <name>plist_</name>
+        <qualifiedname>csmp::VTK_Interface::plist_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="135" column="16" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a95251582f6e3738a47f8b8e579a3f980" prot="private" static="no" mutable="no">
+        <type>std::deque&lt; std::vector&lt; size_t &gt; &gt;</type>
+        <definition>std::deque&lt;std::vector&lt;size_t&gt; &gt; csmp::VTK_Interface&lt; dim &gt;::transformed_plist_</definition>
+        <argsstring></argsstring>
+        <name>transformed_plist_</name>
+        <qualifiedname>csmp::VTK_Interface::transformed_plist_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="136" column="23" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1a46c18f0a62d42f4f50095e9562f20981" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, PointDescriptor &gt;</type>
+        <definition>std::map&lt;size_t,PointDescriptor&gt; csmp::VTK_Interface&lt; dim &gt;::node_mapping_</definition>
+        <argsstring></argsstring>
+        <name>node_mapping_</name>
+        <qualifiedname>csmp::VTK_Interface::node_mapping_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="137" column="21" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1aa53ca99fc72f2779b7e905f0164bc16c" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt;</type>
+        <definition>std::map&lt;size_t,std::vector&lt;double&gt; &gt; csmp::VTK_Interface&lt; dim &gt;::pxyz_data_</definition>
+        <argsstring></argsstring>
+        <name>pxyz_data_</name>
+        <qualifiedname>csmp::VTK_Interface::pxyz_data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="138" column="16" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1aa0d5eb80fde92e7eac885683f22f2a84" prot="private" static="no" mutable="no">
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <definition>PLACEMENT csmp::VTK_Interface&lt; dim &gt;::last_visualized_</definition>
+        <argsstring></argsstring>
+        <name>last_visualized_</name>
+        <qualifiedname>csmp::VTK_Interface::last_visualized_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="139" column="45" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_t_k___interface_1acf25c40e6dfbab74f8f9e0022ee8449c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::VTK_Interface&lt; dim &gt;::node_output_of_element_data_</definition>
+        <argsstring></argsstring>
+        <name>node_output_of_element_data_</name>
+        <qualifiedname>csmp::VTK_Interface::node_output_of_element_data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="140" column="45" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1aef1b2e2b7180d75390ef46641281d022" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VTK_Interface&lt; dim &gt;::VTK_Interface</definition>
+        <argsstring>(const std::string &amp;problemTitle=&quot;CSMP_Simulation&quot;, bool use_problem_title_as_output_folder_name=false)</argsstring>
+        <name>VTK_Interface</name>
+        <qualifiedname>csmp::VTK_Interface::VTK_Interface</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>problemTitle</declname>
+          <defval>&quot;CSMP_Simulation&quot;</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>use_problem_title_as_output_folder_name</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="79" column="5" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="20" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1ad31687258d6f895ef7a395948b0b7736" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VTK_Interface&lt; dim &gt;::VTK_Interface</definition>
+        <argsstring>(const std::string &amp;problemTitle, const std::string &amp;subFolderTitle, bool use_problem_title_as_output_folder_name=false)</argsstring>
+        <name>VTK_Interface</name>
+        <qualifiedname>csmp::VTK_Interface::VTK_Interface</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>problemTitle</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>subFolderTitle</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>use_problem_title_as_output_folder_name</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="80" column="5" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="32" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1af09c5039ac784ad51321b2f59c32fe60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VTK_Interface&lt; dim &gt;::~VTK_Interface</definition>
+        <argsstring>()</argsstring>
+        <name>~VTK_Interface</name>
+        <qualifiedname>csmp::VTK_Interface::~VTK_Interface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="82" column="5" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="46" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1aba067f671b99076d7727efcd576c1e0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::OutputNodeDataToVTK</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::string &amp;file_name, T timestep)</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::VTK_Interface::OutputNodeDataToVTK</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>timestep</declname>
+        </param>
+        <briefdescription>
+<para>for all node property data associated with <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="86" column="10" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="94" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1ac6462240e868658c70cfd9cc506e57c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::OutputNodeDataToVTK</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::string &amp;domain_name, const std::string &amp;file_name, T timestep)</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::VTK_Interface::OutputNodeDataToVTK</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>domain_name</declname>
+          <defname>region</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_name</declname>
+          <defname>initial_file_name</defname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>timestep</declname>
+        </param>
+        <briefdescription>
+<para>for all node property data associated with a specific region </para>
+        </briefdescription>
+        <detaileddescription>
+<para>output of variables placed on the nodes to VTK </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="92" column="10" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="125" bodyend="309"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ga8413f7c3b4f238c5a98a846198d49469">csmp::NAME_STRING</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::OutputDataToVTK</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::string &amp;file_name, const std::string &amp;var_name, T timestep, bool update_topology=true)</argsstring>
+        <name>OutputDataToVTK</name>
+        <qualifiedname>csmp::VTK_Interface::OutputDataToVTK</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>timestep</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>update_topology</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>for entire models represented by <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> objects </para>
+        </briefdescription>
+        <detaileddescription>
+<para>OutputDataToVTK writes the values of the specified distributed <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> variable to a VTK textfile of unstructured data. <linebreak/>
+</para>
+<para>Note that in order to display element variables in VTK, flat shading must be set. Otherwise the variable values are again smeared out across neighboring nodes. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first method argument is a reference to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object from which the data shall be retrieved. The second and third string arguments specify the name of the output file and the physical variable which shall be output. The fourth argument specifies the simulation timestep which the dataset represents. This timestep is appended to the output file name. The fifth method argument specifies whether <ref refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" kindref="member">OutputDataToVTK()</ref> should update the internally stored mesh topology or whether it can use again one which it created at an earlier output step. The default value here tells the method to update the topology. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>From a &apos;plist&apos;, a unique list of nodes is created which are renumbered from 0...n-1. <linebreak/>
+</para>
+<para>The original &apos;plist&apos; is reassembled by braking more complex elements down into topological primitives which can be displayed in VTK. The new plist then also contains the new node IDs which the <ref refid="classcsmp_1_1_v_t_k___interface" kindref="compound">VTK_Interface</ref> uses internally. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="99" column="10" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="368" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a588cc63d1cc01332919ee1dc39c23a35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::OutputDataToVTK</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::string &amp;domain_name, const std::string &amp;file_name, const std::string &amp;var_name, T timestep, bool update_topology=true)</argsstring>
+        <name>OutputDataToVTK</name>
+        <qualifiedname>csmp::VTK_Interface::OutputDataToVTK</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>domain_name</declname>
+          <defname>group_name</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_name</declname>
+          <defname>initial_file_name</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>timestep</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>update_topology</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>for a specific subregion of a model </para>
+        </briefdescription>
+        <detaileddescription>
+<para>To output subregions of a model represented by <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> objects to a VTK file in text format. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first method argument is a reference to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object representing the model from which data shall be output to VTK. The following string arguments give the names of (1) the region object inside the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> to which the interface is applied, (2) the name of outputfile, and (3) the name of the output variable. The fifth method argument further supplies the current timestep of the computation and the sixth argument tells the <ref refid="classcsmp_1_1_v_t_k___interface" kindref="compound">VTK_Interface</ref> whether the topology has to be updated or whether it can be re-used. The default value leads to updates. <linebreak/>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><orderedlist>
+<listitem><para>Makes a first map that contains a uniquely numbered list of the node coordinates abd the old node IDs</para>
+</listitem><listitem><para>Create a second map that contains new node IDs that correspond to the alreadzy existing node coordinates</para>
+</listitem><listitem><para>Build a third map for the Plist that contains the new node IDs of the new subtriangles</para>
+</listitem></orderedlist>
+</para>
+<para>(4 subtriangles for the quadratic triangle , 6 subtriangles for the barycentric quadratic triangle) in a counter clockwise order</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To visualize CSMP models using the Visualization Toolkit. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="107" column="10" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="436" bodyend="666"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a892589ae34a6677af7de64232369cd24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>template void csmp::VTK_Interface&lt; dim &gt;::OutputRegionByRegionToVTK</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::string &amp;file_name, const std::string &amp;var_name, T timestep, bool update_topology=true)</argsstring>
+        <name>OutputRegionByRegionToVTK</name>
+        <qualifiedname>csmp::VTK_Interface::OutputRegionByRegionToVTK</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_name</declname>
+          <defname>initial_file_name</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>timestep</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>update_topology</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>all subregion of model, with file_name preface and var-name attached </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs all subregion of model, with file_name preface and var-name attached </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="116" column="10" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="2063" bodyend="2092"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1aa06b9b07f76577b8e70649bdd8964325" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VTK_Interface&lt; dim &gt;::NodeOutputOfElementData</definition>
+        <argsstring>() const</argsstring>
+        <name>NodeOutputOfElementData</name>
+        <qualifiedname>csmp::VTK_Interface::NodeOutputOfElementData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="122" column="10" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a0cbaee6296f6309d17d0c76c5e180a88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::NodeOutputOfElementData</definition>
+        <argsstring>(bool yes_or_no)</argsstring>
+        <name>NodeOutputOfElementData</name>
+        <qualifiedname>csmp::VTK_Interface::NodeOutputOfElementData</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>yes_or_no</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="123" column="10" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="58" bodyend="61"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a8683c5c507a1e8bfe3c27cf74f8553e1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::VTK_Interface&lt; dim &gt;::OutputFileAndSubFolderName</definition>
+        <argsstring>(const std::string &amp;)</argsstring>
+        <name>OutputFileAndSubFolderName</name>
+        <qualifiedname>csmp::VTK_Interface::OutputFileAndSubFolderName</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <defname>fileName</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="142" column="16" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="64" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1acc5db023d192a498ec568515df904eb6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::NodeBasedTopology</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const std::vector&lt; size_t &gt; &amp;elmt_ids, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::map&lt; size_t, PointDescriptor &gt; &amp;node_nums)</argsstring>
+        <name>NodeBasedTopology</name>
+        <qualifiedname>csmp::VTK_Interface::NodeBasedTopology</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>elmt_ids</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>node_nums</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The global element ID&apos;s are retained as keys of the &apos;plist&apos; such that they can be used at a later stage to query the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="144" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="768" bodyend="809"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1ae30f1172941af6f99d2f62b8ed58a860" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::ElmtIntegrationPointBasedTopology</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const std::vector&lt; size_t &gt; &amp;elmt_ids, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;clist, std::map&lt; size_t, PointDescriptor &gt; &amp;cpoint_nums)</argsstring>
+        <name>ElmtIntegrationPointBasedTopology</name>
+        <qualifiedname>csmp::VTK_Interface::ElmtIntegrationPointBasedTopology</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>elmt_ids</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>clist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>cpoint_nums</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>ELEMENT_INTEGRATION_POINTs are visualized as point data. Such points are introduced as nodes with locations that correspond to those of the integration points of the corresponding finite elements. Thus, each element has its own unique set of constraint points.</para>
+<para>The constraint point properties are assigned later to each of these. <linebreak/>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The constraint points are treated like nodes which are not shared among the the elements. <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Output of variables that are stored at IntegrationPoints. These might be strain, stress or similar computational variables.</para>
+<para><xrefsect id="todo_1_todo000131"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM: sector integration point placements have to be added</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="149" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="898" bodyend="946"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1ac6c4a07a55386c8ae2c34605c2b91694" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::FacetIntegrationPointBasedTopology</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const std::vector&lt; size_t &gt; &amp;elmt_ids, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;clist, std::map&lt; size_t, PointDescriptor &gt; &amp;cpoint_nums)</argsstring>
+        <name>FacetIntegrationPointBasedTopology</name>
+        <qualifiedname>csmp::VTK_Interface::FacetIntegrationPointBasedTopology</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>elmt_ids</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>clist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>cpoint_nums</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>FACET_INTEGRATION_POINTs are visualized as point data. Such points are introduced as nodes with locations that correspond to those of the integration points of the corresponding finite elements. Thus, each element has its own unique set of constraint points.</para>
+<para>The constraint point properties are assigned later to each of these.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The constraint points are treated like nodes which are not shared among the the elements.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Output of variables that are stored at IntegrationPoints. These might be strain, stress or similar computational variables. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="154" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="970" bodyend="1017"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a439426d14894f41f6b0fdcb16fb3d282" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::ElementBasedTopology</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const std::vector&lt; size_t &gt; &amp;elmt_ids, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::map&lt; size_t, size_t &gt; &amp;node_nums)</argsstring>
+        <name>ElementBasedTopology</name>
+        <qualifiedname>csmp::VTK_Interface::ElementBasedTopology</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>elmt_ids</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, size_t &gt; &amp;</type>
+          <declname>node_nums</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Since VTK cannot associate properties with cells, it must be tricked into treating each cell separately. This is done (unfortunately) by introducing redundant nodes such that each triangle / tetrahedron has its own, unique set of nodes. The element properties are then assigned to all the nodes of each element. To maximize efficiency in VTK flat shading should be used to display this kind of element data. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="159" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="832" bodyend="867"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a1eb0b49406d6392642e2ade12baf4ea6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::PointBasedTopology</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const std::vector&lt; size_t &gt; &amp;elmt_ids, std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::map&lt; size_t, PointDescriptor &gt; &amp;node_nums)</argsstring>
+        <name>PointBasedTopology</name>
+        <qualifiedname>csmp::VTK_Interface::PointBasedTopology</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; size_t &gt; &amp;</type>
+          <declname>elmt_ids</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>node_nums</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Rebuilds &apos;plist&apos; and &apos;node_nums&apos; creating a one-to-one mapping between elements and data points. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="164" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1029" bodyend="1053"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a657f8630c0c3725eb91da0634136ffed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::TransformPlist</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::deque&lt; std::vector&lt; size_t &gt; &gt; &amp;tplist)</argsstring>
+        <name>TransformPlist</name>
+        <qualifiedname>csmp::VTK_Interface::TransformPlist</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::deque&lt; std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>tplist</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Depending on the element type, and the spatial dimensions of the model, the <ref refid="classcsmp_1_1_v_t_k___interface" kindref="compound">VTK_Interface</ref> breaks the elements into simple triangles, quadrilaterals, tetrahedra, or hexahedra or pyramids for the the purpose of the visualization.</para>
+<para><simplesect kind="attention"><para>see &quot;The Visualization Toolkit&quot;, &gt;=4th ed., <ref refid="structcsmp_1_1_cell" kindref="compound">Cell</ref> types, p.129 <linebreak/>
+</para>
+</simplesect>
+<xrefsect id="test_1_test000031"><xreftitle>Test</xreftitle><xrefdescription><para>SKM 26/8/14, updated for nonlinear VTK&gt;4.2 element types</para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="169" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1688" bodyend="1948"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a67622c0f1ae1a763e8e8939f469e21f4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::RetrieveData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, const std::map&lt; size_t, PointDescriptor &gt; &amp;obj_nums, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;sgdata)</argsstring>
+        <name>RetrieveData</name>
+        <qualifiedname>csmp::VTK_Interface::RetrieveData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>obj_nums</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>sgdata</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="173" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1397" bodyend="1466"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a1c0ea57bf479e998a75b583f75d6cd8b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::NodeCoordinates</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const std::map&lt; size_t, PointDescriptor &gt; &amp;node_nums, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>NodeCoordinates</name>
+        <qualifiedname>csmp::VTK_Interface::NodeCoordinates</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>node_nums</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="178" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1062" bodyend="1091"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a92361dfc8446626e9261a5594fce81f5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::IntegrationPointData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>IntegrationPointData</name>
+        <qualifiedname>csmp::VTK_Interface::IntegrationPointData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="182" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1200" bodyend="1226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a72820a0c471bb224d885a6b2783019a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::ElmtIntegrationPointData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>ElmtIntegrationPointData</name>
+        <qualifiedname>csmp::VTK_Interface::ElmtIntegrationPointData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="186" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1236" bodyend="1306"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a1b0461d13bf76d117fca862ff6357d19" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::FacetIntegrationPointData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>FacetIntegrationPointData</name>
+        <qualifiedname>csmp::VTK_Interface::FacetIntegrationPointData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="190" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1315" bodyend="1386"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1aeaa7a77e5d9ec855dae0cdbec3aaa203" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::NodeData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, const std::map&lt; size_t, PointDescriptor &gt; &amp;node_nums, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>NodeData</name>
+        <qualifiedname>csmp::VTK_Interface::NodeData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>node_nums</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Method retrieves node coordinates and nodal property values from the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>, for the property specified by the <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref>. <linebreak/>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a constant reference to the <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object, the second specifies the property which will be output into the fourth method argument. The third argument gives the mapping between <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> node numbers and the node numbers used by the <ref refid="classcsmp_1_1_v_t_k___interface" kindref="compound">VTK_Interface</ref>. Thus the supplied map contains pairs of the old and the corresponding new node numbers. <linebreak/>
+</para>
+<para>A map which contains vectors holding the node coordinates (first three entries and the property values. Depending whether the property is of scalar, vector, or tensor type, the data segment of the <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> contains 1, 3, ord 9 entries respectively. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="194" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1118" bodyend="1189"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a8b45c3685630fb2958ecb720ca1b4970" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::ElementData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, const std::map&lt; size_t, size_t &gt; &amp;node_nums, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>ElementData</name>
+        <qualifiedname>csmp::VTK_Interface::ElementData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, size_t &gt; &amp;</type>
+          <declname>node_nums</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="199" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1476" bodyend="1568"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1a97587f436ac5427e17160d848efdb66e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::ElementPointData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, const std::map&lt; size_t, PointDescriptor &gt; &amp;node_nums, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>ElementPointData</name>
+        <qualifiedname>csmp::VTK_Interface::ElementPointData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, PointDescriptor &gt; &amp;</type>
+          <declname>node_nums</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Finds the element barycenters, storing these points in &apos;pxyz_data&apos; as the locations associated with the &apos;node_nums&apos; where the property values will be stored. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="204" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1580" bodyend="1670"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_t_k___interface_1ae045a3ed26b25e15ae6106e971f93c28" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VTK_Interface&lt; dim &gt;::CellData</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, const csmp::Index &amp;, const std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;plist, std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;pxyz_data)</argsstring>
+        <name>CellData</name>
+        <qualifiedname>csmp::VTK_Interface::CellData</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const std::map&lt; size_t, std::vector&lt; size_t &gt; &gt; &amp;</type>
+          <declname>plist</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>pxyz_data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>the pxyz_data record is resized to the number of cells, no coordinates are stored only the cell centered variable values are recorded</para>
+<para>SKM fixed 1/9/2014 to include new VTK quadratic element types </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="209" column="9" bodyfile="source/modules/interfaces/VTK/VTK_Interface.cpp" bodystart="1967" bodyend="2053"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Outputs csmp data to VTK Ascii text format</para>
+<para>Known problems:</para>
+<para><xrefsect id="todo_1_todo000034"><xreftitle>Todo</xreftitle><xrefdescription><para>(3) Outputs an inconsistent number of elements and number of points for a quadratic element in case of vector output (A) </para>
+<para>(3) Fails to output constraint point properties correctly (A) </para>
+<para>(3) Display quadratic FEM with the corresponding VTK primitives (A) </para>
+<para>(3) Display 2D regions using VTK polygons (A) </para>
+<para>(3) Save data as VTK binaries (A) </para>
+<para>(3) Create and store connectivity only once and then just add new data blocks to files (A) </para>
+</xrefdescription></xrefsect></para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::VTK_Interface&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_v_t_k___interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/VTK/VTK_Interface.h" line="75" column="1" bodyfile="source/includes/interfaces/VTK/VTK_Interface.h" bodystart="75" bodyend="213"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_v_t_k___interface_1ae045a3ed26b25e15ae6106e971f93c28" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>CellData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a439426d14894f41f6b0fdcb16fb3d282" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>ElementBasedTopology</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a8b45c3685630fb2958ecb720ca1b4970" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>ElementData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a97587f436ac5427e17160d848efdb66e" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>ElementPointData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1ae30f1172941af6f99d2f62b8ed58a860" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>ElmtIntegrationPointBasedTopology</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a72820a0c471bb224d885a6b2783019a6" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>ElmtIntegrationPointData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1ac6c4a07a55386c8ae2c34605c2b91694" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>FacetIntegrationPointBasedTopology</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a1b0461d13bf76d117fca862ff6357d19" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>FacetIntegrationPointData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a040941a2bcd7ad01c9f5d2c23d108b87" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>geometric_primitives_VTK_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a92361dfc8446626e9261a5594fce81f5" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>IntegrationPointData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1aa0d5eb80fde92e7eac885683f22f2a84" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>last_visualized_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a46c18f0a62d42f4f50095e9562f20981" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>node_mapping_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1acf25c40e6dfbab74f8f9e0022ee8449c" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>node_output_of_element_data_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1acc5db023d192a498ec568515df904eb6" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>NodeBasedTopology</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a1c0ea57bf479e998a75b583f75d6cd8b" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>NodeCoordinates</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1aeaa7a77e5d9ec855dae0cdbec3aaa203" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>NodeData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1aa06b9b07f76577b8e70649bdd8964325" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>NodeOutputOfElementData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a0cbaee6296f6309d17d0c76c5e180a88" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>NodeOutputOfElementData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a4a0463e2ef123a7bdd112ed6e9b50c7c" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>OutputDataToVTK</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a588cc63d1cc01332919ee1dc39c23a35" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>OutputDataToVTK</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a8683c5c507a1e8bfe3c27cf74f8553e1" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>OutputFileAndSubFolderName</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1aba067f671b99076d7727efcd576c1e0a" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1ac6462240e868658c70cfd9cc506e57c3" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a892589ae34a6677af7de64232369cd24" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>OutputRegionByRegionToVTK</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a055ab8b9881e0168ab841144b122e82d" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>plist_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a1eb0b49406d6392642e2ade12baf4ea6" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>PointBasedTopology</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a6b8e48f6bfc5b50ed566ec19eb886915" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>problemTitle_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1aa53ca99fc72f2779b7e905f0164bc16c" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>pxyz_data_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a67622c0f1ae1a763e8e8939f469e21f4" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>RetrieveData</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a6fcd43a9be7b43e670df85ea1b6b5520" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>subFolderName_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a423d54765575b3d9d90fe1271e315975" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>toFolder_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a6528cb36e2c6335acbbb8f44c0dc4f9f" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>toSubFolder_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a95251582f6e3738a47f8b8e579a3f980" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>transformed_plist_</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1a657f8630c0c3725eb91da0634136ffed" prot="private" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>TransformPlist</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1aef1b2e2b7180d75390ef46641281d022" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>VTK_Interface</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1ad31687258d6f895ef7a395948b0b7736" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>VTK_Interface</name></member>
+      <member refid="classcsmp_1_1_v_t_k___interface_1af09c5039ac784ad51321b2f59c32fe60" prot="public" virt="non-virtual"><scope>csmp::VTK_Interface</scope><name>~VTK_Interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

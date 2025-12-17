@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="struct_loki_1_1_compile_time_error_3_01true_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>Loki::CompileTimeError&lt; true &gt;</compoundname>
+    <templateparamlist>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Loki::CompileTimeError&lt; int &gt;</label>
+        <link refid="struct_loki_1_1_compile_time_error"/>
+      </node>
+      <node id="1">
+        <label>Loki::CompileTimeError&lt; true &gt;</label>
+        <link refid="struct_loki_1_1_compile_time_error_3_01true_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; true &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Loki::CompileTimeError&lt; int &gt;</label>
+        <link refid="struct_loki_1_1_compile_time_error"/>
+      </node>
+      <node id="1">
+        <label>Loki::CompileTimeError&lt; true &gt;</label>
+        <link refid="struct_loki_1_1_compile_time_error_3_01true_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; true &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/Loki_static_check.h" line="33" column="14" bodyfile="source/includes/utilities/Loki_static_check.h" bodystart="33" bodyend="33"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

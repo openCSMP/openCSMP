@@ -28,19 +28,19 @@ class NumIntegral_dudn_rhsop_u_dS : public MathOperatorRHS<dim,InterFace> {
        Computes difference between the variable values at the topologically collocated nodes, including that in the intervening
        lower-dimensional region, using it to compute   the transfer coefficient (=coupling coefficient) at the time level t + delta t.
     */
-    virtual void GetOperands( const InterFace<dim>& ) override;
+    void GetOperands( const InterFace<dim>& ) override final;
     
-    virtual void ComputeContribution( const InterFace<dim>& ) override;
+    void ComputeContribution( const InterFace<dim>& ) override final;
     
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void AssignToGlobal( const InterFace<dim>&,
+    void AssignToGlobal( const InterFace<dim>&,
                                  std::vector<double>& rhs,
-                                 const std::vector<size_t>& DOF_indexes ) override;
+                                 const std::vector<size_t>& DOF_indexes ) override final;
     
     /// adjusting the time increment in case it changes during the transient calculation
     void UpdateTimeIncrement( double dt ) { delta_t_ = dt; }
     
-    virtual NumIntegral_dudn_rhsop_u_dS<dim>* clone() const override;
+    NumIntegral_dudn_rhsop_u_dS<dim>* clone() const override final;
       
     void ResetMinMaxTransferTerms() {
          transfer_min_ =  1e30;

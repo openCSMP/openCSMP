@@ -1,0 +1,79 @@
+\doxysection{Stochastic\+Permeability\+Field\+Interface.\+h}
+\hypertarget{_stochastic_permeability_field_interface_8h_source}{}\label{_stochastic_permeability_field_interface_8h_source}\index{source/includes/interfaces/StochasticPermeabilityFieldInterface.h@{source/includes/interfaces/StochasticPermeabilityFieldInterface.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{STOCHASTIC\_PERMEABILITY\_FIELD\_INTERFACE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{STOCHASTIC\_PERMEABILITY\_FIELD\_INTERFACE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_property_handle_8h}{"{}PropertyHandle.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_property_handle}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_stochastic_permeability_field_interface}{StochasticPermeabilityFieldInterface}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ StochasticPermeabilityFieldInterface(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ );}
+\DoxyCodeLine{00017\ \ \ \ \ \string~StochasticPermeabilityFieldInterface();}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_stochastic_permeability_field_interface_aef200217723991702ed44b5887326330}{Read2DStochasticPermeabilityFieldOnRegularGrid}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname\ );}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_stochastic_permeability_field_interface_ad6941bbf713af021e318681e208d13fe}{Read2DStochasticPermeabilityField}}(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ Tokenize(\ \textcolor{keyword}{const}\ std::string\&\ str,\ std::vector<std::string>\&\ tkns\ );}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_handle}{PropertyHandle}}<dim>\ nodal\_perm,\ log\_perm;}
+\DoxyCodeLine{00024\ \ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/**\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{class\ StochasticPermeabilityFieldInterface\ \ StochasticPermeabilityFieldInterface\ "{}interfaces\(\backslash\)StochasticPermeabilityFieldInterface.h"{}}}
+\DoxyCodeLine{00030\ \textcolor{comment}{@author\ S.\ Geiger}}
+\DoxyCodeLine{00031\ \textcolor{comment}{@date\ 2003}}
+\DoxyCodeLine{00032\ \textcolor{comment}{}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{To\ map\ HYDROGEN\ (Bellin\ \&\ Rubin,\ 1996)\ generated\ 2D\ stochastic\ permeability\ }}
+\DoxyCodeLine{00037\ \textcolor{comment}{fields\ to\ CSMP\ for\ structured\ and\ unstructured\ finite\ element\ meshes.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{}}
+\DoxyCodeLine{00040\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{Employs\ the\ FiniteDifferenceGrid\ and\ FEMToGridVisitor\ to\ map\ the\ permeability}}
+\DoxyCodeLine{00043\ \textcolor{comment}{values\ to\ the\ finite\ element\ mesh.\ PropertyHandles\ are\ used\ to\ create\ new\ variables}}
+\DoxyCodeLine{00044\ \textcolor{comment}{'nodal\ permeability,\ 'log\ nodal\ permeability',\ and\ a\ temporary\ 'backup\ permeability'.\ \ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{'log\ nodal\ permeability'\ can\ be\ used\ from\ the\ main()\ file\ to\ visualize\ the}}
+\DoxyCodeLine{00046\ \textcolor{comment}{stochastic\ permeability\ field.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{@section\ collaboration\ Collaboration}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{Object\ interacts\ with\ the\ Model.\ }}
+\DoxyCodeLine{00052\ \textcolor{comment}{}}
+\DoxyCodeLine{00053\ \textcolor{comment}{}}
+\DoxyCodeLine{00054\ \textcolor{comment}{@section\ examples\ Application\ Examples}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00056\ \textcolor{comment}{The\ object\ should\ be\ used\ from\ the\ main()\ file\ before\ the\ comptuation\ of\ the}}
+\DoxyCodeLine{00057\ \textcolor{comment}{fluid\ pressure\ but\ potentially\ after\ creating\ new\ Regions,\ as\ the\ initial\ permeability}}
+\DoxyCodeLine{00058\ \textcolor{comment}{field\ is\ completely\ overwritten\ and\ cannot\ be\ used\ to\ identify\ Regions\ any\ longer.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ //\ Build\ the\ 2D\ Model}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ Model<\ 2>\ \ my\_sg(\ my\_mesh\_container\ );}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ //\ Setup\ the\ interface\ to\ read\ a\ HYDROGEN\ generated\ stochastic\ permeability\ field}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ StochasticPermeabilityFieldInterface<2U>\ new\_stochastic\_k\_field(\ my\_sg\ );}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ //\ Read\ in\ k-\/field\ from\ file\ 'k\_field.perm'\ and\ compute\ the\ element\ permeability\ values\ on\ a\ regular\ grid}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ new\_stochastic\_k\_field.Read2DStochasticPermeabilityFieldOnRegularGrid(\ my\_sg,\ "{}k\_field"{}\ );}}
+\DoxyCodeLine{00069\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

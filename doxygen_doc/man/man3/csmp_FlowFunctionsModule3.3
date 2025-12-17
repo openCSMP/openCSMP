@@ -1,0 +1,275 @@
+.TH "csmp::FlowFunctionsModule3< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FlowFunctionsModule3< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits variables::VariableSet_CO2GeoSequestration, \fBcsmp::ExperimentalSaturationFunctions< dim, FlowFunctionsModule3 >\fP, \fBcsmp::TwoPhaseFlowFunctions< dim, FlowFunctionsModule3 >\fP, and \fBcsmp::Fluid< dim, FlowFunctionsModule3 >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFlowFunctionsModule3\fP (\fBPropertyDatabase\fP< dim > &, double acc_gravity, const char *model_name='ACGSS_simulator')"
+.br
+.RI "initialises saturation functions from file and set range of rocktype values accordingly in property database "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::ExperimentalSaturationFunctions< dim, FlowFunctionsModule3 >\fP
+.in +1c
+.ti -1c
+.RI "\fBExperimentalSaturationFunctions\fP (const char *filename)"
+.br
+.RI "reads capillary preessure and saturation functions from "rocktype" file "
+.ti -1c
+.RI "double \fBEffectiveSaturation\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations\&. "
+.ti -1c
+.RI "double \fBEffectiveSaturation_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.RI "TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations\&. "
+.ti -1c
+.RI "double \fBpc_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdpcds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBkrw_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBkrn_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdpcdsw_at_Numerical\fP (\fBElement\fP< dim > *const p, double sw, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_at_Numerical\fP (\fBElement\fP< dim > *const p, double sw, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_at_Numerical\fP (\fBElement\fP< dim > *const p, double sw, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBpc\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdpcds\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBkrw\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBkrn\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdpcdsw_Numerical\fP (\fBElement\fP< dim > *const p, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_Numerical\fP (\fBElement\fP< dim > *const p, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_Numerical\fP (\fBElement\fP< dim > *const p, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "size_t \fBRockTypes\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "void \fBinitialiseResidualSaturations\fP (\fBModel\fP< dim > &model)"
+.br
+.RI "initialise swr and snr from input table data "
+.ti -1c
+.RI "double \fBseff_to_sw\fP (\fBElement\fP< dim > *const e, double \fBseff\fP) const"
+.br
+.RI "return wetting-phase saturation based on effective saturation "
+.ti -1c
+.RI "double \fBsw_from_pc_at\fP (\fBElement\fP< dim > *const e, double \fBpc\fP, double sw) const"
+.br
+.RI "inverse capillary pressure function "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::TwoPhaseFlowFunctions< dim, FlowFunctionsModule3 >\fP
+.in +1c
+.ti -1c
+.RI "double \fBSw\fP (\fBElement\fP< dim > *const e) const"
+.br
+.RI "current water saturation initialised inside of the model "
+.ti -1c
+.RI "double \fBMobility\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "lambda parameter: 0 for water, 1 for the non-wetting phase "
+.ti -1c
+.RI "double \fBMobility_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.RI "lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw) "
+.ti -1c
+.RI "double \fBMobilityDerivative\fP (\fBElement\fP< dim > *const, uint32_t phase, bool evaluate_numerically=false) const"
+.br
+.RI "d lambda_i / dsw "
+.ti -1c
+.RI "double \fBMobilityDerivative_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.ti -1c
+.RI "double \fBTotalMobility\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "lambda_t: sum of phase mobilities "
+.ti -1c
+.RI "double \fBTotalMobility_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.RI "lambda_t: sum of phase mobilities (using prescribed sw) "
+.ti -1c
+.RI "double \fBMobilityProduct\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G "
+.ti -1c
+.RI "double \fBMobilityProductDerivative\fP (\fBElement\fP< dim > *const, bool evaluate_numerically=false) const"
+.br
+.RI "d lambda overbar / dsw also known as dGds "
+.ti -1c
+.RI "double \fBMobilityProductDerivative_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBf\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "fractional flow; 0=water, 1=non-wetting phase "
+.ti -1c
+.RI "double \fBf_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.RI "fractional flow; 0=water, 1=non-wetting phase (using prescribed sw) "
+.ti -1c
+.RI "double \fBPermeability\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "Permeability\&. "
+.ti -1c
+.RI "double \fBdfds\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn "
+.ti -1c
+.RI "double \fBdfds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBMaxFractionalFlowDerivative\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "maximum value of previous derivative "
+.ti -1c
+.RI "double \fBAdvectionMultiplier\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "multiplier for advection viscosity coefficient in the case of non-linear advection "
+.ti -1c
+.RI "double \fBShockSpeed\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "outputs the shock wave celerity "
+.ti -1c
+.RI "double \fBShockHeight\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "outputs the water saturation at the non-wetting phase shock front "
+.ti -1c
+.RI "void \fBShockSpeedAndHeight\fP (\fBElement\fP< dim > *const, double &speed, double &height) const"
+.br
+.RI "calculated shock height and speed "
+.ti -1c
+.RI "void \fBGravityMultiplier\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.RI "multipliers for gravity-driven flow (advection multiplier and source term) "
+.ti -1c
+.RI "void \fBGravityMultiplier_G\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.ti -1c
+.RI "void \fBGravityMultiplier_dGds\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.ti -1c
+.RI "double \fBDiffusionMultiplier\fP (\fBElement\fP< dim > *const, size_t phase) const"
+.br
+.RI "multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase) "
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "driven by capillary pressure gradient "
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier_Phase\fP (\fBElement\fP< dim > *const, size_t phase) const"
+.br
+.ti -1c
+.RI "double \fBShockFrontVelocity\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "calculating the Shock velocity "
+.ti -1c
+.RI "double \fBdfds_Numerical\fP (\fBElement\fP< dim > *const, uint32_t phase, double delta_s=0\&.001) const"
+.br
+.ti -1c
+.RI "double \fBdfds_at_Numerical\fP (\fBElement\fP< dim > *const, double sw, double delta_s=0\&.001) const"
+.br
+.ti -1c
+.RI "double \fBdGds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.000001) const"
+.br
+.ti -1c
+.RI "double \fBdlwds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.001) const"
+.br
+.RI "derivative of wetting phase mobility "
+.ti -1c
+.RI "double \fBdlnds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.001) const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Fluid< dim, FlowFunctionsModule3 >\fP
+.in +1c
+.ti -1c
+.RI "\fBFluid\fP ()"
+.br
+.RI "default constructor that tests the phase-state key "
+.ti -1c
+.RI "double \fBViscosity\fP (\fBNode\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "the node property fluid viscosity (Pa\&.s) returned has been interpolated to the user-specified target placement (argument parameter) "
+.ti -1c
+.RI "double \fBDensity\fP (\fBNode\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "the returned node property fluid density (of phase) (kg/m3) interpolated to the user-specified target placement (argument parameter) "
+.ti -1c
+.RI "double \fBMixtureDensity\fP (\fBNode\fP< dim > *const) const"
+.br
+.RI "returns saturation-weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement "
+.ti -1c
+.RI "double \fBViscosityRatio\fP (\fBNode\fP< dim > *const) const"
+.br
+.RI "returns the ratio of the phase viscosities at the target placement "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "double \fBacceleration_of_gravity_\fP"
+.br
+.RI "this must be read and input from the model (key_g) "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Fluid< dim, FlowFunctionsModule3 >\fP
+.in +1c
+.ti -1c
+.RI "\fBFlowFunctionsModule3\fP< dim > * \fBUser\fP ()"
+.br
+.RI "shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of "
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

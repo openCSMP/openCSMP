@@ -176,7 +176,7 @@ bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim
 template<class V, class D, uint32_t dim>
 bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
 {
-  size_t vcount( -1 );
+  size_t vcount = std::numeric_limits<size_t>::max();
   fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
   for ( size_t i( 0 ); i < vcount; ++i )
   {
@@ -242,7 +242,7 @@ bool selectedVariablesIn( std::fstream& fp, D& domain,
                           const PropertyDatabase<dim>& pref,
                           VARIABLE_TYPE, const std::set<std::string>& selection )
 {
-  size_t vcount( -1 );
+  size_t vcount = std::numeric_limits<size_t>::max();
   fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
   for ( size_t i( 0 ); i < vcount; ++i )
     {
@@ -340,8 +340,7 @@ bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 
 	// writing all elements
   if ( elements >= 1 )
-//    fp.write( reinterpret_cast<const char*>(&stl_ctner[0]), bytes * elements );
-    fp.write( reinterpret_cast<const char*>(stl_ctner.data()), bytes * elements );
+    fp.write( reinterpret_cast<const char*>(stl_ctner.data()), static_cast<long>(bytes * elements) );
 
 	return true;
 }
@@ -422,7 +421,7 @@ bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
     stl_ctner.resize( elements );
    	const size_t bytes = sizeof(T);
 
-    if ( !fp.read(reinterpret_cast<char*>(stl_ctner.data()), elements * bytes ) ) {
+    if ( !fp.read(reinterpret_cast<char*>(stl_ctner.data()), static_cast<long>(elements * bytes) ) ) {
         std::cerr << "\nbool binaryFileRead(vector): ERROR: reading from file."<< std::endl;
         return false;
       }

@@ -1,0 +1,242 @@
+.TH "csmp::ExperimentalSaturationFunctions< dim, USER >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ExperimentalSaturationFunctions< dim, USER >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ExperimentalSaturationFunctions\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExperimentalSaturationFunctions\fP (const char *filename)"
+.br
+.RI "reads capillary preessure and saturation functions from "rocktype" file "
+.ti -1c
+.RI "double \fBEffectiveSaturation\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations\&. "
+.ti -1c
+.RI "double \fBEffectiveSaturation_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.RI "TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations\&. "
+.ti -1c
+.RI "double \fBpc_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdpcds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBkrw_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBkrn_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBdpcdsw_at_Numerical\fP (\fBElement\fP< dim > *const p, double sw, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_at_Numerical\fP (\fBElement\fP< dim > *const p, double sw, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_at_Numerical\fP (\fBElement\fP< dim > *const p, double sw, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBpc\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdpcds\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBkrw\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBkrn\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds\fP (\fBElement\fP< dim > *const) const"
+.br
+.ti -1c
+.RI "double \fBdpcdsw_Numerical\fP (\fBElement\fP< dim > *const p, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_Numerical\fP (\fBElement\fP< dim > *const p, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_Numerical\fP (\fBElement\fP< dim > *const p, double \fBh\fP) const"
+.br
+.ti -1c
+.RI "size_t \fBRockTypes\fP () const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "void \fBinitialiseResidualSaturations\fP (\fBModel\fP< dim > &model)"
+.br
+.RI "initialise swr and snr from input table data "
+.ti -1c
+.RI "double \fBseff_to_sw\fP (\fBElement\fP< dim > *const e, double \fBseff\fP) const"
+.br
+.RI "return wetting-phase saturation based on effective saturation "
+.ti -1c
+.RI "double \fBsw_from_pc_at\fP (\fBElement\fP< dim > *const e, double \fBpc\fP, double sw) const"
+.br
+.RI "inverse capillary pressure function "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class USER>
+.br
+class csmp::ExperimentalSaturationFunctions< dim, USER >"Saturation functions parameterised with experimental data, including relperm- and pc-s relations read from user-specified data (ASCII-text) files are interpolated with cubic splines\&.
+
+.PP
+Each curve is indentified by a unique integer code that represents the rocktype of interest\&.
+
+.PP
+Input file format:
+
+.PP
+.PP
+.nf
+ To use experimental data for rock types you need to define
+ RELPERM_MODEL in Numerical\&.txt file as EXPERIMENTAL
+ Input file for rock types should be put in the execution folder
+ and the file name that contains relative permeability data and
+ capillary values should be 'rock type\&.txt'
+ File structure is as follow:
+2 \->number of tables
+1 \->rocktype
+21 \->number of entries for table 0 (first table) excluding the first row
+\-1\&.99513 \-0\&.00488    0\&.000125    3\&.709875    \-10557\&.3    \-519\&.567 \->derivatives at start and end for kro, krw and pc
+0    1   0   5000 \-> data (sw  kro krw pc)
+0\&.05 0\&.90024375  0\&.00000625  4472\&.135955
+0\&.1  0\&.8019  0\&.0001  3162\&.27766
+0\&.15 0\&.70624375  0\&.00050625  2581\&.988897
+0\&.2  0\&.6144  0\&.0016  2236\&.067977
+0\&.25 0\&.52734375  0\&.00390625  2000
+0\&.3  0\&.4459  0\&.0081  1825\&.741858
+0\&.35 0\&.37074375  0\&.01500625  1690\&.308509
+0\&.4  0\&.3024  0\&.0256  1581\&.13883
+0\&.45 0\&.24124375  0\&.04100625  1490\&.711985
+0\&.5  0\&.1875  0\&.0625  1414\&.213562
+0\&.55 0\&.14124375  0\&.09150625  1348\&.399725
+0\&.6  0\&.1024  0\&.1296  1290\&.994449
+0\&.65 0\&.07074375  0\&.17850625  1240\&.347346
+0\&.7  0\&.0459  0\&.2401  1195\&.228609
+0\&.75 0\&.02734375  0\&.31640625  1154\&.700538
+0\&.8  0\&.0144  0\&.4096  1118\&.033989
+0\&.85 0\&.00624375  0\&.52200625  1084\&.652289
+0\&.9  0\&.0019  0\&.6561  1054\&.092553
+0\&.95 0\&.00024375  0\&.81450625  1025\&.978352
+1    0   1   1000
+2 \->rocktype
+6 \->number of entries for table 1 (second table) excluding the first row
+\-1   \-1  1   1   0   0 \->derivatives
+0    1   0   0 \->data
+0\&.2  0\&.8 0\&.2 0
+0\&.4  0\&.6 0\&.4 0
+0\&.6  0\&.4 0\&.6 0
+0\&.8  0\&.2 0\&.8 0
+1    0   1   0
+.fi
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+DO NOT SET ANY SATURATION ENDPOINTS (swr or snr) when using experimentally determined saturation functions as these will naturally emerge from the curves\&.
+
+.PP
+consequently, effective saturation also is already accounted for in terms of the spline values negative values are avoided by returning 0 or 1 at saturations below and above the end-point saturations\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+14/1/2007 @update 9/2/2019 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class USER> \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::ExperimentalSaturationFunctions (const char * filename)\fR [explicit]\fP"
+
+.PP
+reads capillary preessure and saturation functions from "rocktype" file The default constructor of Exoperimental Saturation Functions With Hysteresis class 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::dkrnds (\fBElement\fP< dim > * const e) const"
+
+.PP
+\fBNote\fP
+.RS 4
+by contrast with the wetting phase relative permeability, the non-wetting phase kri is expected to have a negative slope w\&.r\&.t\&. water saturation\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::dkrnds_at (\fBElement\fP< dim > * const e, double sw) const"
+1st derivative of non-wetting phase relative permeability as a function of saturation\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::dkrwds (\fBElement\fP< dim > * const e) const"
+calculating the 1st derivative of water relative permeability at the element barycentre\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::dkrwds_Numerical (\fBElement\fP< dim > *const e, double h) const"
+Computes derivative of the wetting phase relative permeability using central finite difference method\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::dpcds (\fBElement\fP< dim > * const e) const"
+
+.PP
+\fBAttention\fP
+.RS 4
+this treatment assumes that the capillary pressure derivative with regard to the wetting phase saturation is always negative\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::EffectiveSaturation (\fBElement\fP< dim > * const e) const"
+
+.PP
+TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations\&. (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
+
+.PP
+TODO: this needs to be computed from the curves in the input file 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::EffectiveSaturation_at (\fBElement\fP< dim > * const e, double sw) const"
+
+.PP
+TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations\&. (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::pc (\fBElement\fP< dim > * const e) const"
+
+.PP
+\fBNote\fP
+.RS 4
+Note that capillary pressure also exists outside of the effective saturation range 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> size_t \fBcsmp::ExperimentalSaturationFunctions\fP< dim, USER >::RockTypes () const"
+
+.PP
+\fBReturns\fP
+.RS 4
+number of RRTs (reservoir rock types) for which saturation function values are stored
+.RE
+.PP
+returns for how many rocktypes information is stored in the underlying data arrays\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

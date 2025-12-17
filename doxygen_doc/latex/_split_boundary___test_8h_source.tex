@@ -1,0 +1,111 @@
+\doxysection{Split\+Boundary\+\_\+\+Test.\+h}
+\hypertarget{_split_boundary___test_8h_source}{}\label{_split_boundary___test_8h_source}\index{tests/unit/SplitBoundary\_Test.h@{tests/unit/SplitBoundary\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SPLIT\_BOUNDARY\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SPLIT\_BOUNDARY\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_split_boundary_8h}{"{}SplitBoundary.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_split_boundary_interface___test_8h}{"{}SplitBoundaryInterface\_Test.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ \ SplitBoundary\_Test\ of\ the\ functionality\ of\ individual\ SpitBoundary\ objects}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ as\ opposed\ to\ their\ creation\ (see\ SplitBoundaryInterface\_Test)\ or\ that\ of\ the\ InterFace}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ objects\ that\ the\ SplitBoundary\ objects\ consist\ of\ (see\ InterFace\_Test).}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ @attention\ this\ also\ performs\ test\ on\ SplitBoundary\ objects\ created\ in\ ANSYS}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ @section\ Tests\ Performed\ Here\ (2D\ and\ 3D)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ -\/\ do\ all\ interfaces\ have\ higher\ dimensional\ neighbors}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ -\/\ do\ correspoding\ nodes\ coincide}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ -\/\ is\ there\ only\ a\ single\ node\ along\ the\ perimeter\ of\ a\ split\ boundary}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ -\/\ are\ all\ of\ the\ above\ operations\ still\ valid\ for\ a\ SplitBoundary\ read\ from\ binary\ file?}}
+\DoxyCodeLine{00023\ \textcolor{comment}{}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ @author\ SKM}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ @date\ 26/1/2020}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test}{SplitBoundary\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00028\ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ SplitBoundary\_Test()\ \{\}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \textcolor{comment}{//\ TESTING\ of\ public\ methods\ -\/\ Top\ ones\ are\ implemented}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{comment}{//\ SplitBoundary\ creation\ gets\ tested\ by\ SplitBoundaryInterface\_Test}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \textcolor{comment}{///\ initialises\ 2022\ SKUA\ model\ with\ properties\ from\ binary\ version\ of\ VSet}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_a084bfe05d9278f998d56fa93635e066b}{Test\_InitialiseSKUA\_Model}}();}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{comment}{///\ tests\ that\ all\ properties\ are\ properly\ added\ to\ nodes\ on\ split\ boundary}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_a75a2900302017c212e9766b580a0628f}{Test\_InputNodePropertyValue}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_file);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \textcolor{comment}{///\ integrates\ the\ property\ over\ the\ boundary\ line\ or\ surface}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_aaa8ed3ab65f8f14cd5c7ae284f435fa7}{Test\_Area\_and\_SurfaceIntegral}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_file);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \textcolor{comment}{//\ TODO\ -\/\ ALl\ tests\ below\ are\ still\ to\ be\ done}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \textcolor{comment}{///\ returns\ location\ of\ split\ boundary\ relative\ to\ adjacent\ region}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_acec25b3a2a27dc36012010bfdee7e142}{Test\_FacingDirection}}();}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \textcolor{comment}{///\ outputs\ length\ of\ perimeter\ curve\ of\ a\ 3D\ split\ boundary;\ no\ meaning\ in\ 1\ or\ 2D\ models}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_ae3030d573200c8740dfca45c64172418}{Test\_PerimeterCalculation}}();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{///\ integrates\ the\ property\ over\ the\ boundary\ line\ or\ surface}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_a0fefcaff43c069926e7e3b7303c7870b}{Test\_SurfaceIntegral}}();}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \textcolor{comment}{///\ do\ all\ interfaces\ have\ higher\ dimensional\ neighbors}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_aac692dd36672a84ed45978de8d2e15de}{Test\_HigherDimensionalNeighbors}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ Test\_Manifolds();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \textcolor{comment}{///\ is\ there\ only\ a\ single\ node\ along\ the\ perimeter\ of\ a\ split\ boundary}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_a234dc6b4662c167e7d407541c0ddf6f0}{Test\_SingleParameterNode}}();}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \textcolor{comment}{///\ are\ all\ of\ the\ above\ operations\ still\ valid\ for\ a\ SplitBoundary\ read\ from\ binary\ file?}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_ae6818fda15e9d89c2304984d1488736a}{Test\_IntegrityOfSplitBoundaryFromBinaryFile}}();}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \textcolor{comment}{//\ TEST\ SETUP}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ LoadModel(\ \textcolor{keyword}{const}\ std::string\&\ model\_name\ );}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ LoadModel(\ \textcolor{keyword}{const}\ std::string\&\ model\_name,\ std::vector<std::string>\&\ regions\ );}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ LoadContiguousModel(\ \textcolor{keyword}{const}\ std::string\&\ model\_name,\ std::vector<std::string>\&\ fractures\ );}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \textcolor{comment}{///\ reading\ fault\ modeling\ input\ data}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_ad89159fa5cf23e8a370889e4b7b44c79}{InputFromFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::string>\&\ fractures\_basic\_set\ );}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_ad89159fa5cf23e8a370889e4b7b44c79}{InputFromFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ fractures\ );}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \textcolor{comment}{///\ writing\ fault\ modeling\ input\ data\ into\ text\ file}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_a27d2b9bd7109be49ac0f3440e7e99d11}{OutputToFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ fractures\ );}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_split_boundary___test_a27d2b9bd7109be49ac0f3440e7e99d11}{OutputToFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::set<std::string>\&\ fractures\ );}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ EstablishContiguousRegionsList(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::set<std::string>\&\ interface\_basic\_set,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::string>\&\ interface\_sets\ );}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00101\ \ \ \};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,75 @@
+\doxysection{Num\+Integral\+\_\+dudn\+\_\+rhsop\+\_\+u\+\_\+d\+S.\+h}
+\hypertarget{_num_integral__dudn__rhsop__u__d_s_8h_source}{}\label{_num_integral__dudn__rhsop__u__d_s_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_dudn\_rhsop\_u\_dS.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_dudn\_rhsop\_u\_dS.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_DUDN\_RHSOP\_U\_DV\_DS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_DUDN\_RHSOP\_U\_DV\_DS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_inter_face_8h}{"{}InterFace.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ \ \ \ Use\ to\ apply\ a\ Robin\ type\ (flux)\ boundary\ condition\ coupling\ the\ sides\ of\ the\ Interface\ with\ a\ lower-\/dimensional}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ \ \ \ region\ in\ the\ middle\ between\ them.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ \ \ \ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ \ \ \ @note\ use\ for\ transient\ computations\ involving\ fractures}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ \ \ \ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ \ \ \ @author\ SKM}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ \ \ @date\ 18/8/22}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{NumIntegral\_dudn\_rhsop\_u\_dS}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{InterFace}}>\ \{}
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ interface\ variable\ has\ to\ be\ flagged\ Robin\ and\ elmt\ variable\ will\ be\ read\ as\ a\ matching\ variable\ placed\ on\ the\ element}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4cb68a8ee6f784df9798edbf15ed42c0}{NumIntegral\_dudn\_rhsop\_u\_dS}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ interface\_oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ elmt\_oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ \ Computes\ difference\ between\ the\ variable\ values\ at\ the\ topologically\ collocated\ nodes,\ including\ that\ in\ the\ intervening}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ \ \ lower-\/dimensional\ region,\ using\ it\ to\ compute\ \ \ the\ transfer\ coefficient\ (=coupling\ coefficient)\ at\ the\ time\ level\ t\ +\ delta\ t.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a983f88d08973ee359a31624766207785}{GetOperands}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_inter_face}{InterFace}}<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_af22f6fa88965dbb06a632caa1865d27d}{ComputeContribution}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_inter_face}{InterFace}}<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{///\ used\ by\ PDE\_IntegratorUoM\ for\ assembly\ of\ a\ pre-\/eliminated\ solution\ matrix\ and\ RH\ vector\ (scalar\ versions,\ Luat\ Khoa\ Tran)}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a5b4c7ed0cedc8e864b2f4fe8e0f59511}{AssignToGlobal}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_inter_face}{InterFace}}<dim>\&,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ rhs,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<size\_t>\&\ DOF\_indexes\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ adjusting\ the\ time\ increment\ in\ case\ it\ changes\ during\ the\ transient\ calculation}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s_a4f3f7db7f6fced4e9ed2237a859a2c99}{UpdateTimeIncrement}}(\ \textcolor{keywordtype}{double}\ dt\ )\ \{\ delta\_t\_\ =\ dt;\ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_num_integral__dudn__rhsop__u__d_s}{NumIntegral\_dudn\_rhsop\_u\_dS}}<dim>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ ResetMinMaxTransferTerms()\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ transfer\_min\_\ =\ \ 1e30;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ transfer\_max\_\ =\ -\/1e30;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \textcolor{comment}{//\ for\ the\ computation\ of\ fluxes\ from\ the\ 1D\ analytic\ solution}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ Diffusion1D(\ \textcolor{keywordtype}{double}\ val\_farfield,\ \textcolor{keywordtype}{double}\ diffusivity,\ \textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ t\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ Grad\_Var\_AtX0(\ \textcolor{keywordtype}{double}\ val\_farfield,\ \textcolor{keywordtype}{double}\ diffusivity,\ \textcolor{keywordtype}{double}\ t\ );}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ Flux1DAtX0(\ \textcolor{keywordtype}{double}\ val\_farfield,\ \textcolor{keywordtype}{double}\ diffusivity,\ \textcolor{keywordtype}{double}\ t,\ \textcolor{keywordtype}{double}\ conductivity\ );}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,ELEMENT>\ \ diffusivity\_key\_;\ \ \textcolor{comment}{///<\ extra\ key\ for\ diffusion\ in\ higher-\/dim\ elements\ adjacent\ to\ interface}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{INDEX}}<SCALAR,ELEMENT>\ \ conductivity\_key\_;\ \textcolor{comment}{///<\ extra\ key\ for\ conduction\ in\ higher-\/dim\ elements\ adjacent\ to\ interface}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ transfer\_coefficients\_;\ \ \textcolor{comment}{///<\ as\ computed\ from\ delta\ t\ and\ delta\ test-\/function\ operand\ value\ at\ the\ nodes}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ delta\_t\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ current\ time\ increment\ (between\ t0\ and\ t\ +\ delta\ t)}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ transfer\_min\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ \ 1e30;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ transfer\_max\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ -\/1e30;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \ order1\_FD\_approximation\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00064\ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ NUM\_INTEGRAL\_DUDN\_OP\_U\_DV\_H\ */}}
+
+\end{DoxyCode}

@@ -1,0 +1,64 @@
+.TH "csmp::BrittleFailure" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::BrittleFailure
+.SH SYNOPSIS
+.br
+.PP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static FAILURE \fBEvaluate\fP (const \fBMechanicalProperties\fP &, const \fBcsmp::StressInvariants\fP &)"
+.br
+.RI "evaluates failure criteria -1 to 4 without explicit consideration of pore pressure "
+.ti -1c
+.RI "static FAILURE \fBEvaluate\fP (const \fBMechanicalProperties\fP &, const \fBcsmp::StressInvariants\fP &, double pf)"
+.br
+.RI "evaluates failure criteria -1 to 4 with consideration of pore pressure "
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "FAILURE csmp::BrittleFailure::Evaluate (const \fBMechanicalProperties\fP & props, const \fBcsmp::StressInvariants\fP & invars)\fR [static]\fP"
+
+.PP
+evaluates failure criteria -1 to 4 without explicit consideration of pore pressure Evaluates failure criteria -1 to 4 without the explicit consideration of pore pressure (note that this works for fluid-saturated porous media as well, if the computed stresses are already effective stresses\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+Since this approach is based on civil engineering concepts, tensile stresses are treated as positive and compressive ones as negative\&. 
+.RE
+.PP
+
+.SS "FAILURE csmp::BrittleFailure::Evaluate (const \fBMechanicalProperties\fP & props, const \fBcsmp::StressInvariants\fP & invars, double pf)\fR [static]\fP"
+
+.PP
+evaluates failure criteria -1 to 4 with consideration of pore pressure Evaluates failure criteria -1 to 4 considering pore pressure explicitly, establishing the effective stress:
+
+.PP
+sigma_ij' = sigma_ij - pf * alpha * delta_ij
+
+.PP
+where delta_ij is Kronecker delta\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+Since this approach is based on civil engineering concepts, tensile stresses are treated as positive and compressive ones as negative\&.
+
+.PP
+The ordering of the principal stresses in engineering is such that sigma1 is the most negative = least tensile stress\&.
+.RE
+.PP
+\fBTest\fP
+.RS 4
+looks OK, but not rigorously tested yet\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

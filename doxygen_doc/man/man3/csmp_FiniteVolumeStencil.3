@@ -1,0 +1,492 @@
+.TH "csmp::FiniteVolumeStencil< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FiniteVolumeStencil< dim > \- Finite-element specific finite volume stencil (partition into facets and sectors) of the finite element for which the stencil was initialized\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FiniteVolumeStencil\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFiniteVolumeStencil\fP (const char *csp_finite_element_type)"
+.br
+.ti -1c
+.RI "\fBFiniteVolumeStencil\fP (const \fBFiniteVolumeStencil\fP &)"
+.br
+.ti -1c
+.RI "\fBFiniteVolumeStencil\fP & \fBoperator=\fP (const \fBFiniteVolumeStencil\fP &)"
+.br
+.ti -1c
+.RI "uint32_t \fBFacetsPerSector\fP (uint32_t iSector) const"
+.br
+.RI "number of facets that delimited the FV sector on the insider of the parent finite element "
+.ti -1c
+.RI "uint32_t \fBFacetSurroundingSector\fP (uint32_t iSector, uint32_t n) const"
+.br
+.RI "n-th facet that delimits the FV sector in the inside of the finite element "
+.ti -1c
+.RI "FV_FACET_TYPE \fBFacetType\fP (uint32_t iFacet) const"
+.br
+.RI "reports the type of a facet "
+.ti -1c
+.RI "double \fBFacetIntegrationPoint\fP (uint32_t iFacet, uint32_t ip, uint32_t r_or_s_or_t) const"
+.br
+.RI "choice of rst-integration point coordinate of the facet integration point "
+.ti -1c
+.RI "void \fBFacetIntegrationPoint\fP (uint32_t iFacet, uint32_t ip, std::vector< double > &rst) const"
+.br
+.RI "rst coordinate of facet integration point in parametric space "
+.ti -1c
+.RI "const \fBPoint\fP< dim > \fBFacetIntegrationPoint\fP (uint32_t iFacet, uint32_t ip) const"
+.br
+.RI "returns rst coordinate of facet integration point in parametric space "
+.ti -1c
+.RI "double \fBFacetIntegrationWeight\fP (uint32_t iFacet, uint32_t ip) const"
+.br
+.RI "integration weight of given integration point correlated with facet area and number of facet integration points "
+.ti -1c
+.RI "double \fBFacetProjectionWeight\fP (uint32_t iFacet, uint32_t ip) const"
+.br
+.RI "scale factor to match sector integration weights between adjacent finite elements that have a different volume in rst space "
+.ti -1c
+.RI "void \fBFacetEdgeNodes\fP (uint32_t iFacet, uint32_t &inside_node, uint32_t &outside_node) const"
+.br
+.RI "nodes that sit on the opposite sides of the facet; outside is direction into which facet normal points "
+.ti -1c
+.RI "uint32_t \fBInsideNode\fP (uint32_t iFacet) const"
+.br
+.RI "opposite side of the outward pointing normal of the facet "
+.ti -1c
+.RI "uint32_t \fBOutsideNode\fP (uint32_t iFacet) const"
+.br
+.RI "same side as the outward pointing normal of the facet "
+.ti -1c
+.RI "const \fBPoint\fP< dim > \fBFacetEdgeMidPoint\fP (uint32_t iFacet) const"
+.br
+.RI "point on the finite-element edge that is touched by the facet "
+.ti -1c
+.RI "const \fBPoint\fP< dim > \fBBarycenter\fP () const"
+.br
+.RI "of finite element in parametric space "
+.ti -1c
+.RI "double \fBSectorIntegrationPoint\fP (uint32_t iSector, uint32_t ip, uint32_t r_or_s_or_t) const"
+.br
+.ti -1c
+.RI "void \fBSectorIntegrationPoint\fP (uint32_t iSector, uint32_t ip, std::vector< double > &rst) const"
+.br
+.ti -1c
+.RI "const \fBPoint\fP< dim > \fBSectorIntegrationPoint\fP (uint32_t iSector, uint32_t ip) const"
+.br
+.ti -1c
+.RI "double \fBSectorIntegrationWeight\fP (uint32_t iSector, uint32_t ip) const"
+.br
+.ti -1c
+.RI "const \fBPoint\fP< dim > \fBFacetPoint\fP (uint32_t iFacet, uint32_t iPoint) const"
+.br
+.ti -1c
+.RI "uint32_t \fBFacetPoints\fP (uint32_t iFacet) const"
+.br
+.ti -1c
+.RI "const \fBPoint\fP< dim > \fBSectorPoint\fP (uint32_t iSector, uint32_t iPoint) const"
+.br
+.RI "corner points of the (hexahedral) sector in parametric space "
+.ti -1c
+.RI "std::pair< \fBPoint\fP< dim >, \fBPoint\fP< dim > > \fBSectorEdgePoints\fP (uint32_t iSector, uint32_t iEdge) const"
+.br
+.RI "pairs of sector edge points definining the intersection lines of the sector with the finite element faces "
+.ti -1c
+.RI "const std::pair< uint32_t, uint32_t > \fBSectorEdge\fP (uint32_t iSector, uint32_t iEdge) const"
+.br
+.RI "pairs of the ids (0\&.\&.n-1) of the sector edge point definining the intersection lines of the sector with the finite element faces "
+.ti -1c
+.RI "uint32_t \fBSectorPoints\fP (uint32_t iSector) const"
+.br
+.RI "number of corner points of the finite volume sector "
+.ti -1c
+.RI "uint32_t \fBSectorEdges\fP (uint32_t iSector) const"
+.br
+.RI "number of edges of the finite volume sector "
+.ti -1c
+.RI "uint32_t \fBFacets\fP () const"
+.br
+.RI "number of finite-volume facets in the parent finite element "
+.ti -1c
+.RI "uint32_t \fBSectors\fP () const"
+.br
+.RI "number of finite-volume sectors in the parent finite element "
+.ti -1c
+.RI "uint32_t \fBIntegrationPointsPerFacet\fP (uint32_t iFacet=0U) const"
+.br
+.RI "number of quadrature points of the finite volume facet i "
+.ti -1c
+.RI "uint32_t \fBIntegrationPointsPerSector\fP (uint32_t iSector=0U) const"
+.br
+.RI "number of quadrature points of the finite volume sector i "
+.ti -1c
+.RI "const \fBPoint\fP< dim > \fBUnitParametricNormalTo\fP (uint32_t iFacet) const"
+.br
+.RI "returns unit normal to facet in parametric space "
+.ti -1c
+.RI "double \fBUnitParametricNormalComponent\fP (uint32_t iFacet, uint32_t x_or_y_or_z) const"
+.br
+.RI "returns x,y or z component of unit normal in parametric space "
+.ti -1c
+.RI "std::pair< double, double > \fBFacetNormalTransformationNodeWeights\fP (uint32_t iFacet, uint32_t iNode) const"
+.br
+.ti -1c
+.RI "const std::string \fBParentElement\fP () const"
+.br
+.RI "returns the parent element of the finite volume stencil "
+.ti -1c
+.RI "\fBCELL_SHAPE\fP \fBGeometry\fP () const"
+.br
+.RI "reports whether the parent element of the stencil is a line, surface or volume "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "returns the data (private members) stored in this finite volume stencil "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBFiniteVolumeStencilManager< dim >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::FiniteVolumeStencil< dim >"Finite-element specific finite volume stencil (partition into facets and sectors) of the finite element for which the stencil was initialized\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+
+.PP
+A\&.Paluszny 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2003
+.RE
+.PP
+.SH "Motivation"
+.PP
+Class provides a whole set of functionality, related to construction of the node-centered FV virtual cells for realisation of the CVPEM in CSP\&.
+
+.PP
+Tesarius: sector - sector part of the finite element (FE), attributed to the FE node\&. Number of sectors corresponds to the number of nodes\&. Sector is a topological hexahedron and is defined in physical and parametric spaces of the FE\&. Physical and parametric spaces of the FE are related by the mapping, characterized by Jacobian transformation\&.
+
+.PP
+facet - four-side face inside the FE, dividing it to volumetric sectors\&.
+
+.PP
+Other set of methods here is providing accessors for the stencil dynamic data: integration points in the parametric space of the finite element, integration weights, normals and correction multiplies for unification of the parametric paces of different elements\&.
+.SH "Applicability"
+.PP
+Class is applicable to any FE model, containing isoparametric linear elements\&. It can work on the mono- and poly-element type meshes, containing tetrahedrons, hexahedrons, prisms and pyramids\&.
+.SH "Participants"
+.PP
+Gets it data from IntegrationPointsAndWeights\&.
+.SH "Implementation"
+.PP
+Class provides facet / sector integration methods for finite volumes associated with specific finite elements\&. For tabulation of the points and weights if uses class \fBFV_IntegrationPointsAndWeights\fP ()\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::FiniteVolumeStencil\fP< dim >::FiniteVolumeStencil (const \fBFiniteVolumeStencil\fP< dim > & fvs)"
+Parametrised constructor for the \fBFiniteVolumeStencil\fP classpoints\&.
+
+.PP
+const FiniteVolumeStencil<dim>& fvs - reference to the \fBFiniteVolumeStencil\fP object\&. 
+.br
+.SH "Application Examples"
+.PP
+Standard as for any parametrised constructor\&. Method parametr should be previously initialised as well\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::FiniteVolumeStencil\fP< dim >::FacetEdgeNodes (uint32_t iFacet, uint32_t & estart, uint32_t & eend) const\fR [inline]\fP"
+
+.PP
+nodes that sit on the opposite sides of the facet; outside is direction into which facet normal points Defines FE edge, associated with that facet of interest\&. For a given facet method returns local indices of the FE start node and the end node\&. The end node is the one on the side of the facet into which the outward pointing normal points\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiFacet\fP index of the internal dividing facet in the FE\&. 
+.br
+\fIestart\fP local index of the FE edge start node 
+.br
+\fIeend\fP local index of the FE edge end node
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private pair of nodes, associated with the facet\&. 
+.SS "template<uint32_t dim> const \fBPoint\fP< dim > \fBcsmp::FiniteVolumeStencil\fP< dim >::FacetIntegrationPoint (uint32_t iFacet, uint32_t ip) const\fR [inline]\fP"
+
+.PP
+returns rst coordinate of facet integration point in parametric space Returns to argument rst the reference to STL vector of the parametric coordinates of the given facet integration point\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiFacet\fP index (No) of the internal facet isnside the FE 
+.br
+\fIip\fP index (No) of the integration point on the facet
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+reference to STL vector of the parametric coordinates of the given facet integration point
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the tabulated points, associated with the facet\&.
+.SH "Application Examples"
+.PP
+For current implementation index ip is constrained to 0 only, i\&.e\&. the FVPEM method is working with 1 facet integration point only\&. 
+.SS "template<uint32_t dim> double \fBcsmp::FiniteVolumeStencil\fP< dim >::FacetIntegrationWeight (uint32_t iFacet, uint32_t ip) const\fR [inline]\fP"
+
+.PP
+integration weight of given integration point correlated with facet area and number of facet integration points Returns for the given facet integration point integration weight, associated with given facet "facet"\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiFacet\fP index (No) of the internal facet isnside the FE 
+.br
+\fIip\fP index (No) of the integration point on the facet
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the value of the facet integration weight\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the tabulated points, associated with the facet\&.
+.SH "Application Examples"
+.PP
+For current implementation index ip is constrained to 0 only, i\&.e\&. the FVPEM method is working with 1 facet integration point only\&. 
+.SS "template<uint32_t dim> std::pair< double, double > \fBcsmp::FiniteVolumeStencil\fP< dim >::FacetNormalTransformationNodeWeights (uint32_t iFacet, uint32_t iNode) const\fR [inline]\fP"
+Returns the component of the transformation from nodes to normals in physical space\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiFacet\fP is the number 0\&.\&.n-1 of the internal facet inside of the FE 
+.br
+\fIiNode\fP is the number 0\&.\&.n-1 of the FE node
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+a pair of weights, one for each tangent vector
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the class, retreiving tabulated vector\&. 
+.SS "template<uint32_t dim> double \fBcsmp::FiniteVolumeStencil\fP< dim >::FacetProjectionWeight (uint32_t iFacet, uint32_t ip) const\fR [inline]\fP"
+
+.PP
+scale factor to match sector integration weights between adjacent finite elements that have a different volume in rst space Returns for the given sector integration point projection weight, associated with given facet "facet"\&. Projection weight is an extra multiplier, which is bringing to the same scale the size of the unit parametric spaces of different element types\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiFacet\fP index (No) of the internal facet isnside the FE 
+.br
+\fIip\fP index (No) of the integration point on the facet
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the value of the facet projection weight\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the tabulated points, associated with the facet\&.
+.SH "Application Examples"
+.PP
+For current implementation index ip is constrained to 0 only, i\&.e\&. the FVPEM method is working with 1 facet integration point only\&. 
+.SS "template<uint32_t dim> uint32_t \fBcsmp::FiniteVolumeStencil\fP< dim >::Facets () const\fR [inline]\fP"
+
+.PP
+number of finite-volume facets in the parent finite element Returns the number of internal facets - division walls inside the FE\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+Returns the number of the internal facets\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the class, retreiving the value\&. 
+.SS "template<uint32_t dim> uint32_t \fBcsmp::FiniteVolumeStencil\fP< dim >::FacetsPerSector (uint32_t iSector) const\fR [inline]\fP"
+
+.PP
+number of facets that delimited the FV sector on the insider of the parent finite element Returns number of facets, opposite to the given node - this corresponds to the number of facets, adding flux to the given node\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+the number of the facets in front of the node of given element type\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the class, retrieving the value\&. 
+.SS "template<uint32_t dim> \fBCELL_SHAPE\fP \fBcsmp::FiniteVolumeStencil\fP< dim >::Geometry () const\fR [inline]\fP"
+
+.PP
+reports whether the parent element of the stencil is a line, surface or volume Irrespective of the dimension of the model, this method reports whether the stencil corresponds to a line, surface or volumetric finite element\&. 
+.SS "template<uint32_t dim> uint32_t \fBcsmp::FiniteVolumeStencil\fP< dim >::IntegrationPointsPerFacet (uint32_t iFacet = \fR0U\fP) const\fR [inline]\fP"
+
+.PP
+number of quadrature points of the finite volume facet i Returns number of integration points per facet\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+the number of integration points per facet\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the class, retreiving the value\&. For current implementation this value is 1\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+assumes that the number of integration points per facet is the same for all facets 
+.RE
+.PP
+
+.SS "template<uint32_t dim> uint32_t \fBcsmp::FiniteVolumeStencil\fP< dim >::IntegrationPointsPerSector (uint32_t iSector = \fR0U\fP) const\fR [inline]\fP"
+
+.PP
+number of quadrature points of the finite volume sector i Returns number of integration points per sectortric sector of given FE type\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+the number of integration points per volumetric sector\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the class, retreiving the value\&. For current implementation this value is 1\&. 
+.SS "template<uint32_t dim> \fBFiniteVolumeStencil\fP< dim > & \fBcsmp::FiniteVolumeStencil\fP< dim >::operator= (const \fBFiniteVolumeStencil\fP< dim > & fvs)"
+Operator "=" for \fBFiniteVolumeStencil\fP object\&.
+
+.PP
+const FiniteVolumeStencil<dim>& fvs - reference to the \fBFiniteVolumeStencil\fP object\&. 
+.br
+.SH "Application Examples"
+.PP
+Standard as for any "equals" operator\&. 
+.SS "template<uint32_t dim> const \fBPoint\fP< dim > \fBcsmp::FiniteVolumeStencil\fP< dim >::SectorIntegrationPoint (uint32_t iSector, uint32_t ip) const\fR [inline]\fP"
+Returns to argument rst the reference to STL vector of the parametric coordinates of the given sector integration point, associated with given sector "volume"\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiSector\fP number of the internal sector isnside the FE 
+.br
+\fIip\fP index (No) of the integration point on the facet
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+reference to STL vector of the parametric coordinates of the given facet integration point
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the tabulated points, associated with the sector\&.
+.SH "Application Examples"
+.PP
+For current implementation index ip is constrained to 0 only, i\&.e\&. the FVPEM method is working with 1 facet integration point only\&. 
+.SS "template<uint32_t dim> double \fBcsmp::FiniteVolumeStencil\fP< dim >::SectorIntegrationWeight (uint32_t iSector, uint32_t ip) const\fR [inline]\fP"
+Returns for the given sector integration point integration weight, associated with given sector "volume"\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiSector\fP corresponding to the finite element node with the same number 
+.br
+\fIip\fP represents the n-th integration point on the facet
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the value of the sector integration weight=volume in parametric space\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the tabulated points, associated with the sector\&.
+.SH "Application Examples"
+.PP
+For current implementation index ip is constrained to 0 only, i\&.e\&. the FVPEM method is working with 1 facet integration point only\&. 
+.SS "template<uint32_t dim> uint32_t \fBcsmp::FiniteVolumeStencil\fP< dim >::Sectors () const\fR [inline]\fP"
+
+.PP
+number of finite-volume sectors in the parent finite element Returns number of internal FV sectors, given FE is divided to\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+the number of sectors\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the class, retreiving the value\&. 
+.SS "template<uint32_t dim> const \fBPoint\fP< dim > \fBcsmp::FiniteVolumeStencil\fP< dim >::UnitParametricNormalTo (uint32_t iFacet) const\fR [inline]\fP"
+
+.PP
+returns unit normal to facet in parametric space Returns the normal vector in parametric space of the FE\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIiFacet\fP is the number 0\&.\&.n-1 of the internal facet inside of the FE
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+to argument "nrml" reference to STL vector of the normal vector coordinates in parametric space of the FE\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Accesses the private data of the class, retreiving tabulated vector\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+here parametric space has same dimensions as physical space, but third dimension may be zero 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

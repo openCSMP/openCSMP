@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_59850670e39fc019d83bc12605cd56cb" kind="dir">
+    <compoundname>source/includes/interfaces/Matlab</compoundname>
+    <innerfile refid="_matlab_interface_8h">MatlabInterface.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/interfaces/Matlab/"/>
+  </compounddef>
+</doxygen>

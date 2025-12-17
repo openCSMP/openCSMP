@@ -1,0 +1,100 @@
+.TH "csmp::TwoPhaseTransportPHX< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TwoPhaseTransportPHX< dim > \- class to handle two-phase flow caclulations of FV part within the CVFEM scheme (Weis et al\&., Geofluids, 2014)\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <TwoPhaseTransportPHX\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTwoPhaseTransportPHX\fP (\fBModel\fP< dim > &model, \fBUpwindControlVisitor\fP< dim > &upwind_visitor, \fBExplicitFiniteVolumeTransportPHX\fP< dim > &fv_vapor, \fBExplicitFiniteVolumeTransportPHX\fP< dim > &fv_liquid)"
+.br
+.ti -1c
+.RI "virtual \fB~TwoPhaseTransportPHX\fP ()"
+.br
+.ti -1c
+.RI "double \fBAdvectMassConserved\fP (const double &time_increment)"
+.br
+.ti -1c
+.RI "void \fBSetLargestTimeStep\fP (const double &max_time_step)"
+.br
+.ti -1c
+.RI "void \fBWithGravityComponentLiquidAndVapor\fP ()"
+.br
+.ti -1c
+.RI "void \fBUpdateProjection\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddAdvectionVariable\fP (const char *new_lhs_liquid, const char *new_rhs_liquid, const char *new_lhs_vapor, const char *new_rhs_vapor)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::TwoPhaseTransportPHX< dim >"class to handle two-phase flow caclulations of FV part within the CVFEM scheme (Weis et al\&., Geofluids, 2014)\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Philipp Weis, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+philipp.weis@erdw.ethz.ch
+
+.PP
+@changes changes Latest Changes 
+.br
+.SH "Motivation"
+.PP
+Class for two-phase flow calculations within CVFEM scheme\&.
+.SH "Usage"
+.PP
+To be used within the CVFEM scheme (Weis et al\&., Geofluids, 2014)\&.
+
+.PP
+.PP
+.nf
+Controls two\-phase flow calculations by coordating flow of vapor and liquid phase
+.fi
+.PP
+.SH "Dependencies"
+.PP
+Needs \fBExplicitFiniteVolumeTransportPHX\fP and \fBUpwindControlVisitor\fP
+.SH "Known issues"
+.PP
+.SH "Testing"
+.PP
+testing was done in the period before publication in 2014\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::TwoPhaseTransportPHX\fP< dim >::TwoPhaseTransportPHX (\fBModel\fP< dim > & model, \fBUpwindControlVisitor\fP< dim > & upwind_visitor, \fBExplicitFiniteVolumeTransportPHX\fP< dim > & fv_vapor, \fBExplicitFiniteVolumeTransportPHX\fP< dim > & fv_liquid)"
+custom constructor 
+.SS "template<uint32_t dim> \fBcsmp::TwoPhaseTransportPHX\fP< dim >::~\fBTwoPhaseTransportPHX\fP ()\fR [virtual]\fP"
+default destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseTransportPHX\fP< dim >::AddAdvectionVariable (const char * new_lhs_liquid, const char * new_rhs_liquid, const char * new_lhs_vapor, const char * new_rhs_vapor)"
+adding further variables for FV calculations 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseTransportPHX\fP< dim >::AdvectMassConserved (const double & time_increment)"
+main function to coordinate two-phase flow 
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseTransportPHX\fP< dim >::SetLargestTimeStep (const double & max_time_step)"
+modify maximum size of time step 
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseTransportPHX\fP< dim >::UpdateProjection ()"
+update projection of velocity onto facet normal 
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseTransportPHX\fP< dim >::WithGravityComponentLiquidAndVapor ()"
+active gravity component 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

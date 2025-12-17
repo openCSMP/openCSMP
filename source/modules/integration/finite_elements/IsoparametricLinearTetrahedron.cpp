@@ -1139,10 +1139,10 @@ void  IsoparametricLinearTetrahedron::UnitNormalToFace( uint32_t face, std::vect
           return;
        }
 
-     if ( face == 1 ) { // OK - counter-clockwise nodes (ouside looking in): 0-3-2
-          Point<3> nrml = normalOfTriangle( Point<3>(XY(3,0),XY(3,1),XY(3,2)),
-                                            Point<3>(XY(2,0),XY(2,1),XY(2,2)),
-                                            Point<3>(XY(0,0),XY(0,1),XY(0,2)) );
+     if ( face == 1 ) { // OK 
+          Point<3> nrml = normalOfTriangle( Point<3>(XY(0,0),XY(0,1),XY(0,2)),
+                                            Point<3>(XY(3,0),XY(3,1),XY(3,2)),
+                                            Point<3>(XY(2,0),XY(2,1),XY(2,2)) );
           unrml[0] = nrml[0];
           unrml[1] = nrml[1];
           unrml[2] = nrml[2];
@@ -1185,7 +1185,7 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%zu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
 

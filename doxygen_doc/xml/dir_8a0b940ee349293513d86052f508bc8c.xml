@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_8a0b940ee349293513d86052f508bc8c" kind="dir">
+    <compoundname>source/modules/integration/finite_volumes/generic_transport_scheme/source</compoundname>
+    <innerfile refid="_accumulator_8cpp">Accumulator.cpp</innerfile>
+    <innerfile refid="_diffusion_l_h_s_8cpp">DiffusionLHS.cpp</innerfile>
+    <innerfile refid="_explicit_transport_8cpp">ExplicitTransport.cpp</innerfile>
+    <innerfile refid="_fluid_compressibility_source_l_h_s_8cpp">FluidCompressibilitySourceLHS.cpp</innerfile>
+    <innerfile refid="_flux_evaluator_8cpp">FluxEvaluator.cpp</innerfile>
+    <innerfile refid="_implicit_transport_8cpp">ImplicitTransport.cpp</innerfile>
+    <innerfile refid="_integral_equation_8cpp">IntegralEquation.cpp</innerfile>
+    <innerfile refid="_integrator_8cpp">Integrator.cpp</innerfile>
+    <innerfile refid="_linear_algebraic_system_8cpp">LinearAlgebraicSystem.cpp</innerfile>
+    <innerfile refid="_operation_8cpp">Operation.cpp</innerfile>
+    <innerfile refid="_pore_volume_l_h_s_8cpp">PoreVolumeLHS.cpp</innerfile>
+    <innerfile refid="_pore_volume_r_h_s_8cpp">PoreVolumeRHS.cpp</innerfile>
+    <innerfile refid="_post_processor_8cpp">PostProcessor.cpp</innerfile>
+    <innerfile refid="_source_term_r_h_s_8cpp">SourceTermRHS.cpp</innerfile>
+    <innerfile refid="_time_step_evaluator_8cpp">TimeStepEvaluator.cpp</innerfile>
+    <innerfile refid="_upwind_flux_l_h_s_8cpp">UpwindFluxLHS.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/finite_volumes/generic_transport_scheme/source/"/>
+  </compounddef>
+</doxygen>

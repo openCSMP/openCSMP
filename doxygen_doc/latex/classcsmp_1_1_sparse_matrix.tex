@@ -1,0 +1,274 @@
+\doxysection{csmp\+::Sparse\+Matrix Class Reference}
+\hypertarget{classcsmp_1_1_sparse_matrix}{}\label{classcsmp_1_1_sparse_matrix}\index{csmp::SparseMatrix@{csmp::SparseMatrix}}
+
+
+For the accumulation of element matrices in finite element calculations.  
+
+
+
+
+{\ttfamily \#include $<$Sparse\+Matrix.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Sparse\+Matrix\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=176pt]{classcsmp_1_1_sparse_matrix__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a5c6457b0e8e2a963f999c2a5cd5b87a1}\label{classcsmp_1_1_sparse_matrix_a5c6457b0e8e2a963f999c2a5cd5b87a1} 
+typedef std\+::vector$<$ std\+::map$<$ size\+\_\+t, double $>$ $>$\+::const\+\_\+iterator {\bfseries rows\+Const\+Iterator}
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a0d5006fd6699c5601720d0bce9a7ad7f}\label{classcsmp_1_1_sparse_matrix_a0d5006fd6699c5601720d0bce9a7ad7f} 
+typedef std\+::map$<$ size\+\_\+t, double $>$\+::const\+\_\+iterator {\bfseries cols\+Const\+Iterator}
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a2e059384e007e181e6661ba20f07946c}\label{classcsmp_1_1_sparse_matrix_a2e059384e007e181e6661ba20f07946c} 
+typedef std\+::vector$<$ std\+::map$<$ size\+\_\+t, double $>$ $>$\+::iterator {\bfseries rows\+Iterator}
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a616f8317e533e506a5972aac2726abfb}\label{classcsmp_1_1_sparse_matrix_a616f8317e533e506a5972aac2726abfb} 
+typedef std\+::map$<$ size\+\_\+t, double $>$\+::iterator {\bfseries cols\+Iterator}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a10a0e6af2de3b84099a81c95142e82d3}\label{classcsmp_1_1_sparse_matrix_a10a0e6af2de3b84099a81c95142e82d3} 
+{\bfseries Sparse\+Matrix} (size\+\_\+t m\+\_\+x\+\_\+n)
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a602a4a8769f756677545bae5b3ee2c93}\label{classcsmp_1_1_sparse_matrix_a602a4a8769f756677545bae5b3ee2c93} 
+{\bfseries Sparse\+Matrix} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a4027552e8c240b1af0bc829ae9f36665}\label{classcsmp_1_1_sparse_matrix_a4027552e8c240b1af0bc829ae9f36665} 
+{\bfseries Sparse\+Matrix} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&\&)
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a1337033ac964d8100f9c5274de46f03b}\label{classcsmp_1_1_sparse_matrix_a1337033ac964d8100f9c5274de46f03b} 
+\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_ad41df1e097225640e2f60ddb7b603695}\label{classcsmp_1_1_sparse_matrix_ad41df1e097225640e2f60ddb7b603695} 
+\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&\&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \& \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_aaac91f911000b006477b825c75bc6eda}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a0c9950bf5e7c7d3fdd38ba87c8d940f5}{operator()}} (size\+\_\+t, size\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em operator accumulates sparse matrices. Initially created for Open\+MP features. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a2a2d24236bc667ae2196137dcfe96edb}\label{classcsmp_1_1_sparse_matrix_a2a2d24236bc667ae2196137dcfe96edb} 
+double {\bfseries At} (size\+\_\+t, size\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em range-\/checked accessor for matrix elements \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a76492c150a731df19960249de024b031}\label{classcsmp_1_1_sparse_matrix_a76492c150a731df19960249de024b031} 
+void {\bfseries Resize} (size\+\_\+t n\+\_\+x\+\_\+m, bool preserve\+\_\+allocated\+\_\+memory=true)
+\begin{DoxyCompactList}\small\item\em resets the rows=columns of the square matrix, retaining potential extra capacity of the vector used \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_aef4ae623451108fe5fb28185b7527c01}\label{classcsmp_1_1_sparse_matrix_aef4ae623451108fe5fb28185b7527c01} 
+size\+\_\+t {\bfseries Entries} () const
+\begin{DoxyCompactList}\small\item\em reports the non-\/zero elements currently stored in the sparse matrix \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_aee70b7ef693deebad47c3b5a9a88a613}\label{classcsmp_1_1_sparse_matrix_aee70b7ef693deebad47c3b5a9a88a613} 
+size\+\_\+t {\bfseries Rows} () const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_aeb1a0fdf10891f6fc28079982f902bda}\label{classcsmp_1_1_sparse_matrix_aeb1a0fdf10891f6fc28079982f902bda} 
+size\+\_\+t {\bfseries Cols} () const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_ad4fc22e6203144dd5942882b3c4dc167}\label{classcsmp_1_1_sparse_matrix_ad4fc22e6203144dd5942882b3c4dc167} 
+rows\+Const\+Iterator {\bfseries Begin} () const
+\begin{DoxyCompactList}\small\item\em iterator over the matrix rows \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a33328949ca344a7b9c317d6bcd2b36e4}\label{classcsmp_1_1_sparse_matrix_a33328949ca344a7b9c317d6bcd2b36e4} 
+rows\+Const\+Iterator {\bfseries End} () const
+\begin{DoxyCompactList}\small\item\em iterator over the rows of the matrix \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_add7a549cf6ecc709ed8245792f4c33b3}\label{classcsmp_1_1_sparse_matrix_add7a549cf6ecc709ed8245792f4c33b3} 
+cols\+Const\+Iterator {\bfseries Row\+Begin} (size\+\_\+t i) const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a6695050aa6c81e71079c801554bc86bb}\label{classcsmp_1_1_sparse_matrix_a6695050aa6c81e71079c801554bc86bb} 
+cols\+Const\+Iterator {\bfseries Row\+End} (size\+\_\+t i) const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a7e6ecfca93088f3df3d8a4056406ed7c}\label{classcsmp_1_1_sparse_matrix_a7e6ecfca93088f3df3d8a4056406ed7c} 
+void {\bfseries Remove\+Halo} (int32\+\_\+t nrhalo)
+\begin{DoxyCompactList}\small\item\em zeroing out rows in the context of parallel computations \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a7163c8281f1305400d086314673b0c73}\label{classcsmp_1_1_sparse_matrix_a7163c8281f1305400d086314673b0c73} 
+bool {\bfseries Has\+Entry} (size\+\_\+t i, size\+\_\+t j) const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a2ad90e342bb5575e6e9dc32466e823a2}\label{classcsmp_1_1_sparse_matrix_a2ad90e342bb5575e6e9dc32466e823a2} 
+void {\bfseries Remove\+Entry} (size\+\_\+t, size\+\_\+t)
+\begin{DoxyCompactList}\small\item\em remove a single element from the matrix \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a2301e91687a211598c29b0b0a7c0204b}\label{classcsmp_1_1_sparse_matrix_a2301e91687a211598c29b0b0a7c0204b} 
+void {\bfseries Erase} ()
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a3cc6df801845cf90401c3e0aeffb9178}\label{classcsmp_1_1_sparse_matrix_a3cc6df801845cf90401c3e0aeffb9178} 
+void {\bfseries Zero} ()
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a47ce0ca2db45f25c5cdb103ae25a0941}\label{classcsmp_1_1_sparse_matrix_a47ce0ca2db45f25c5cdb103ae25a0941} 
+void {\bfseries Zero\+Row} (size\+\_\+t row)
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_afed837e4ccf3132692c950dca50a81ae}\label{classcsmp_1_1_sparse_matrix_afed837e4ccf3132692c950dca50a81ae} 
+void {\bfseries Zero\+Column} (size\+\_\+t col)
+\begin{DoxyCompactList}\small\item\em beware! -\/ this is not an efficient operation \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_ad3c97e1e94ba49b44917bbfa00222d9c}\label{classcsmp_1_1_sparse_matrix_ad3c97e1e94ba49b44917bbfa00222d9c} 
+void {\bfseries Add} (size\+\_\+t, size\+\_\+t, double val)
+\begin{DoxyCompactList}\small\item\em more efficient additions to matrix than attainable with operator() \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a3130d9f7e751ff17e37df33d49ad07d5}{Assign}} (size\+\_\+t, size\+\_\+t, double val)
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a16e7487b8b3070de3d0d4b378447cc94}\label{classcsmp_1_1_sparse_matrix_a16e7487b8b3070de3d0d4b378447cc94} 
+void {\bfseries Multiply\+Entry\+With} (size\+\_\+t i, size\+\_\+t j, double val)
+\begin{DoxyCompactList}\small\item\em multiply an element of the matrix with val; if result is zero, the element is eliminated \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_ac31cc1d2645bcc59242281142282535d}\label{classcsmp_1_1_sparse_matrix_ac31cc1d2645bcc59242281142282535d} 
+void {\bfseries Multiply\+With} (const std\+::vector$<$ double $>$ \&vec, std\+::vector$<$ double $>$ \&res)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a128750bd06e2126dc6f765df36fd5db7}{Column\+Indices}} (size\+\_\+t row, std\+::vector$<$ size\+\_\+t $>$ \&indices) const
+\begin{DoxyCompactList}\small\item\em returns j\textquotesingle{}s of non-\/zero column entries in row \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_af56b248669bef709eea77d325e7048ec}\label{classcsmp_1_1_sparse_matrix_af56b248669bef709eea77d325e7048ec} 
+size\+\_\+t {\bfseries Recount\+Entries} () const
+\begin{DoxyCompactList}\small\item\em if suspected that a recent operation modified number of entries \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a2c21a0e6ea89f264a8e598896875a4f6}\label{classcsmp_1_1_sparse_matrix_a2c21a0e6ea89f264a8e598896875a4f6} 
+double {\bfseries Infinity\+Norm} () const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a83b096d4527ed139d603104fb4369d62}\label{classcsmp_1_1_sparse_matrix_a83b096d4527ed139d603104fb4369d62} 
+bool {\bfseries Symmetric} () const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a158cbe8d16774c072cfb3a43ad1c94cc}\label{classcsmp_1_1_sparse_matrix_a158cbe8d16774c072cfb3a43ad1c94cc} 
+bool {\bfseries Zeroes\+In\+Diagonal} () const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_afda25993a88c4aff54ba30aea03df4cc}\label{classcsmp_1_1_sparse_matrix_afda25993a88c4aff54ba30aea03df4cc} 
+bool {\bfseries Diagonally\+Positive} () const
+\begin{DoxyCompactList}\small\item\em if there are negative elements in the diagonal of the matrix \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_ad4c1b5bc9de350f15e744f62c60534a8}\label{classcsmp_1_1_sparse_matrix_ad4c1b5bc9de350f15e744f62c60534a8} 
+void {\bfseries Sparsity\+Pattern} (const char \texorpdfstring{$\ast$}{*}txtfile) const
+\begin{DoxyCompactList}\small\item\em writes text matrix of zero\textquotesingle{}s and one\textquotesingle{}s to visualise sparsity pattern \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a4492808d84a7a9565fd49782759fab66}\label{classcsmp_1_1_sparse_matrix_a4492808d84a7a9565fd49782759fab66} 
+{\footnotesize template$<$class csp\+Mat1, class csp\+Mat2$>$ }\\void {\bfseries Assign} (const csp\+Mat1 \&idx, const csp\+Mat2 \&data)
+\begin{DoxyCompactList}\small\item\em inserts (\doxylink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}) \textquotesingle{}data\textquotesingle{} in sparse matrix at location identified by position matrix \textquotesingle{}idx\textquotesingle{} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a29f1664cc0efb343bc246b7e339e6d7f}\label{classcsmp_1_1_sparse_matrix_a29f1664cc0efb343bc246b7e339e6d7f} 
+void {\bfseries Out\+Compressed\+Row\+Format} (int32\+\_\+t \texorpdfstring{$\ast$}{*}ia, int32\+\_\+t \texorpdfstring{$\ast$}{*}ja, double \texorpdfstring{$\ast$}{*}a, bool reallocate=true) const
+\begin{DoxyCompactList}\small\item\em output in the form of C-\/style arrays indexed 0...n-\/1 \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_aab48307ad33d77fb2e9c48823c0315d0}\label{classcsmp_1_1_sparse_matrix_aab48307ad33d77fb2e9c48823c0315d0} 
+void {\bfseries Out\+Compressed\+Row\+Format} (long \texorpdfstring{$\ast$}{*}ia, long \texorpdfstring{$\ast$}{*}ja, double \texorpdfstring{$\ast$}{*}a, bool reallocate=true) const
+\begin{DoxyCompactList}\small\item\em This is the version which is used for the old AMG solver. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_aafbb3f90912050d145182b1019a1eb0c}{Out\+Compressed\+Row\+Format1\+\_\+n}} (int32\+\_\+t \texorpdfstring{$\ast$}{*}ia, int32\+\_\+t \texorpdfstring{$\ast$}{*}ja, double \texorpdfstring{$\ast$}{*}a, bool reallocate=true) const
+\begin{DoxyCompactList}\small\item\em output to Fortran arrays indexed 1...n \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a5aeee7e3b5e1c5b77df8cdfa9498e261}\label{classcsmp_1_1_sparse_matrix_a5aeee7e3b5e1c5b77df8cdfa9498e261} 
+void {\bfseries Out\+Compressed\+Row\+Format\+Parallel} (std\+::vector$<$ int32\+\_\+t $>$ \&, std\+::vector$<$ int32\+\_\+t $>$ \&, std\+::vector$<$ double $>$, int32\+\_\+t, bool) const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a9398d5da381297ffd60e4959acb59b28}\label{classcsmp_1_1_sparse_matrix_a9398d5da381297ffd60e4959acb59b28} 
+void {\bfseries In} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name\+\_\+without\+\_\+extension)
+\begin{DoxyCompactList}\small\item\em read (square) matrix from text file with zeros \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_afb371082ecc3edbdf38176a40d8044a2}{Out}} (long precis=5L) const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_af7f5cbab37a1e9e34d857ad75a06fe0c}\label{classcsmp_1_1_sparse_matrix_af7f5cbab37a1e9e34d857ad75a06fe0c} 
+void {\bfseries Out} (const char \texorpdfstring{$\ast$}{*}file) const
+\item 
+\Hypertarget{classcsmp_1_1_sparse_matrix_a4161da90c890895b33a36f96971b4d71}\label{classcsmp_1_1_sparse_matrix_a4161da90c890895b33a36f96971b4d71} 
+void {\bfseries Out\+For\+Matlab} (const char \texorpdfstring{$\ast$}{*}file) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+For the accumulation of element matrices in finite element calculations. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2001 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_sparse_matrix_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_sparse_matrix_a3130d9f7e751ff17e37df33d49ad07d5}\index{csmp::SparseMatrix@{csmp::SparseMatrix}!Assign@{Assign}}
+\index{Assign@{Assign}!csmp::SparseMatrix@{csmp::SparseMatrix}}
+\doxysubsubsection{\texorpdfstring{Assign()}{Assign()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sparse_matrix_a3130d9f7e751ff17e37df33d49ad07d5} 
+void csmp\+::\+Sparse\+Matrix\+::\+Assign (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{i}{, }\item[{size\+\_\+t}]{j}{, }\item[{double}]{val}{}\end{DoxyParamCaption})}
+
+Assigns value to the i,j\textquotesingle{}th element in the matrix, overwriting any value that might have resided there before. \Hypertarget{classcsmp_1_1_sparse_matrix_a128750bd06e2126dc6f765df36fd5db7}\index{csmp::SparseMatrix@{csmp::SparseMatrix}!ColumnIndices@{ColumnIndices}}
+\index{ColumnIndices@{ColumnIndices}!csmp::SparseMatrix@{csmp::SparseMatrix}}
+\doxysubsubsection{\texorpdfstring{ColumnIndices()}{ColumnIndices()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sparse_matrix_a128750bd06e2126dc6f765df36fd5db7} 
+void csmp\+::\+Sparse\+Matrix\+::\+Column\+Indices (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{row}{, }\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{indices}{}\end{DoxyParamCaption}) const}
+
+
+
+returns j\textquotesingle{}s of non-\/zero column entries in row 
+
+Returns the indices j of non-\/zero column elements in the row of interest.
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & of interest \\
+\hline
+{\em indices} & is the vector into which the columns where the non-\/zero elements reside are returned \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_sparse_matrix_a0c9950bf5e7c7d3fdd38ba87c8d940f5}\index{csmp::SparseMatrix@{csmp::SparseMatrix}!operator()@{operator()}}
+\index{operator()@{operator()}!csmp::SparseMatrix@{csmp::SparseMatrix}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sparse_matrix_a0c9950bf5e7c7d3fdd38ba87c8d940f5} 
+double csmp\+::\+Sparse\+Matrix\+::operator() (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{i}{, }\item[{size\+\_\+t}]{j}{}\end{DoxyParamCaption}) const}
+
+
+
+operator accumulates sparse matrices. Initially created for Open\+MP features. 
+
+standard accessor of matrix elements (asserts i,j in debug mode) \Hypertarget{classcsmp_1_1_sparse_matrix_aaac91f911000b006477b825c75bc6eda}\index{csmp::SparseMatrix@{csmp::SparseMatrix}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::SparseMatrix@{csmp::SparseMatrix}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sparse_matrix_aaac91f911000b006477b825c75bc6eda} 
+\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \& csmp\+::\+Sparse\+Matrix\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{mat}{}\end{DoxyParamCaption})}
+
+Operator accumulates sparse matrices. Initially created for Open\+MP features. All need to have the same number of row entries. \doxylink{structcsmp_1_1_column}{Column} entries may be differenct \begin{DoxyAuthor}{Author}
+Julian E. Mindel 
+\end{DoxyAuthor}
+\Hypertarget{classcsmp_1_1_sparse_matrix_afb371082ecc3edbdf38176a40d8044a2}\index{csmp::SparseMatrix@{csmp::SparseMatrix}!Out@{Out}}
+\index{Out@{Out}!csmp::SparseMatrix@{csmp::SparseMatrix}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sparse_matrix_afb371082ecc3edbdf38176a40d8044a2} 
+void csmp\+::\+Sparse\+Matrix\+::\+Out (\begin{DoxyParamCaption}\item[{long}]{digits}{ = {\ttfamily 5L}}\end{DoxyParamCaption}) const}
+
+Prints matrix dimensions, \# of non-\/zero elements and (non-\/zero) entries row by row. Each entry is prefaced by its column index. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_sparse_matrix_afb371082ecc3edbdf38176a40d8044a2_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_sparse_matrix_aafbb3f90912050d145182b1019a1eb0c}\index{csmp::SparseMatrix@{csmp::SparseMatrix}!OutCompressedRowFormat1\_n@{OutCompressedRowFormat1\_n}}
+\index{OutCompressedRowFormat1\_n@{OutCompressedRowFormat1\_n}!csmp::SparseMatrix@{csmp::SparseMatrix}}
+\doxysubsubsection{\texorpdfstring{OutCompressedRowFormat1\_n()}{OutCompressedRowFormat1\_n()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sparse_matrix_aafbb3f90912050d145182b1019a1eb0c} 
+void csmp\+::\+Sparse\+Matrix\+::\+Out\+Compressed\+Row\+Format1\+\_\+n (\begin{DoxyParamCaption}\item[{int32\+\_\+t \texorpdfstring{$\ast$}{*}}]{ia}{, }\item[{int32\+\_\+t \texorpdfstring{$\ast$}{*}}]{ja}{, }\item[{double \texorpdfstring{$\ast$}{*}}]{a}{, }\item[{bool}]{reallocate}{ = {\ttfamily true}}\end{DoxyParamCaption}) const}
+
+
+
+output to Fortran arrays indexed 1...n 
+
+IN ORDER TO IDENTIFY EACH ELEMENT IN A, THE USER HAS TO PROVIDE TWO integer ARRAYS IA AND JA. IF NNU DENOTES THE TOTAL NUMBER OF UNKNOWNS, THE NON-\/\+ZERO ENTRIES OF ANY ROW I OF L (1\texorpdfstring{$<$}{<}=I\texorpdfstring{$<$}{<}=NNU) ARE STORED IN A(\+J) WHERE THE RANGE OF J IS GIVEN BY \begin{DoxyVerb}         IA(I) <= J <= IA(I+1)-1.
+\end{DoxyVerb}
+
+
+THUS, IA(\+I) POINTS TO THE POSITION OF THE DIAGONAL ENTRY OF ROW I WITHIN THE VECTOR A. IN PARTICULAR, \begin{DoxyVerb}         IA(1) = 1 ,  IA(NNU+1) = 1 + NNA
+\end{DoxyVerb}
+
+
+WHERE NNA DENOTES THE TOTAL NUMBER OF MATRIX ENTRIES STORED. THE POINTER VECTOR JA HAS TO BE DEFINED SUCH THAT ANY ENTRY A(\+J) CORRESPONDS TO THE UNKNOWN U(\+JA(\+J)), I.\+E., JA(\+J) identifies THE COLUMN \doxylink{structcsmp_1_1_i_n_d_e_x}{INDEX} OF A(\+J). IN PARTICULAR, A(\+IA(\+I)) IS THE DIAGONAL ENTRY OF ROW I AND CORRESPONDS TO THE UNKNOWN U(\+I)\+: JA(\+IA(\+I))=I.
+
+IN THIS TERMINOLOGY, THE I-\/\+TH EQUATION READS AS FOLLOWS (FOR ANY I WITH 1.\+LE.\+I.\+LE.\+NNU)\+: \begin{DoxyVerb}      F(I) =        SUM      A(J) * U(JA(J))
+
+               J1 <= J <= J2
+\end{DoxyVerb}
+
+
+WHERE F(\+I) DENOTES THE I-\/\+TH COMPONENT OF THE RIGHT HAND SIDE AND \begin{DoxyVerb}          J1 = IA(I) ,  J2 = IA(I+1)-1. 
+\end{DoxyVerb}
+
+
+NOTES\+: THE ENTRY IA(NNU+1) HAS TO POINT TO THE FIRST FREE ENTRY IN VECTORS A AND JA, RESPECTIVELY. OTHERWISE, AMG CANNOT KNOW THE LENGTH OF THE LAST MATRIX ROW.
+
+THE INPUT VECTORS A, IA AND JA ARE CHANGED BY AMG1\+R5 SO, AFTER RETURN FROM AMG1\+R5, THE PACKAGE MUST NOT BE CALLED A SECOND TIME WITHOUT HAVING NEWLY DEFINED THE INPUT VECTORS AND USING ISWTCH=4. OTHERWISE, THE SETUP PHASE WILL FAIL. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/Sparse\+Matrix.\+h\item 
+source/modules/math/Sparse\+Matrix.\+cpp\end{DoxyCompactItemize}

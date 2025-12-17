@@ -1,0 +1,100 @@
+\doxysection{csmp\+::Local\+Variable\+Storage\texorpdfstring{$<$}{<} dim, STOREE \texorpdfstring{$>$}{>}\+::Data Struct Reference}
+\hypertarget{structcsmp_1_1_local_variable_storage_1_1_data}{}\label{structcsmp_1_1_local_variable_storage_1_1_data}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data@{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data}}
+
+
+Collaboration diagram for csmp\+::Local\+Variable\+Storage\texorpdfstring{$<$}{<} dim, STOREE \texorpdfstring{$>$}{>}\+::Data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{structcsmp_1_1_local_variable_storage_1_1_data__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a63e2e82085f0698e18aba01f3bc25e2c}\label{structcsmp_1_1_local_variable_storage_1_1_data_a63e2e82085f0698e18aba01f3bc25e2c} 
+typedef std\+::vector$<$ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} $>$ {\bfseries Flag\+Container}
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a9a40bd82e7d5dcdfb87566db36e8533b}\label{structcsmp_1_1_local_variable_storage_1_1_data_a9a40bd82e7d5dcdfb87566db36e8533b} 
+typedef std\+::vector$<$ double $>$ {\bfseries Data\+Container}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a56a8bcd183b4933a91aade3aea5b68dd}\label{structcsmp_1_1_local_variable_storage_1_1_data_a56a8bcd183b4933a91aade3aea5b68dd} 
+{\bfseries Data} (const \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \&d)
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_af69332c0d6cd479eb8d501ebcd866e7d}\label{structcsmp_1_1_local_variable_storage_1_1_data_af69332c0d6cd479eb8d501ebcd866e7d} 
+{\bfseries Data} (const \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \&\&d)
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a577775305fcd42e03c44e96a10a54d01}\label{structcsmp_1_1_local_variable_storage_1_1_data_a577775305fcd42e03c44e96a10a54d01} 
+\mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \& {\bfseries operator=} (const \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \&d)
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a4680c7a44985fb60212798e7dfc0df25}\label{structcsmp_1_1_local_variable_storage_1_1_data_a4680c7a44985fb60212798e7dfc0df25} 
+\mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \& {\bfseries operator=} (\mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data}{Data}} \&\&d)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_af72b4faa4199230520ea0f2afd577d37}\label{structcsmp_1_1_local_variable_storage_1_1_data_af72b4faa4199230520ea0f2afd577d37} 
+Flag\+Container {\bfseries flags}
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a2cd2db6c8614385188bd636f17b9adfb}\label{structcsmp_1_1_local_variable_storage_1_1_data_a2cd2db6c8614385188bd636f17b9adfb} 
+Data\+Container {\bfseries data}
+\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a756c0f38d8c73a5c30f8c6a6601f75a0}\label{structcsmp_1_1_local_variable_storage_1_1_data_a756c0f38d8c73a5c30f8c6a6601f75a0} 
+int\+\_\+type {\bfseries scalars}
+\begin{DoxyCompactList}\small\item\em scalar variables stored at the site this policy is associated with \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_ab1b5a52535c4bb0182542d23d95a7822}\label{structcsmp_1_1_local_variable_storage_1_1_data_ab1b5a52535c4bb0182542d23d95a7822} 
+int\+\_\+type {\bfseries vectors}
+\begin{DoxyCompactList}\small\item\em vector variables at this site \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_ae5b14f7323aaec21634d5ac2c5fe407f}\label{structcsmp_1_1_local_variable_storage_1_1_data_ae5b14f7323aaec21634d5ac2c5fe407f} 
+int\+\_\+type {\bfseries tensors}
+\begin{DoxyCompactList}\small\item\em tensor variables at this site \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a5abd6c1242b0048ae49b32844a966eba}\label{structcsmp_1_1_local_variable_storage_1_1_data_a5abd6c1242b0048ae49b32844a966eba} 
+int\+\_\+type {\bfseries arrays}
+\begin{DoxyCompactList}\small\item\em array variables at this site \end{DoxyCompactList}\item 
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_ab4fdf3dc4cfd6731c2a2f4d1dca3b376}\label{structcsmp_1_1_local_variable_storage_1_1_data_ab4fdf3dc4cfd6731c2a2f4d1dca3b376} 
+int\+\_\+type {\bfseries flagged\+Arrays}
+\begin{DoxyCompactList}\small\item\em flagged array variables at this site \end{DoxyCompactList}\item 
+int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data_a5e835489a7b099138cd5cadecf76f5ef}{array\+Length}}
+\begin{DoxyCompactList}\small\item\em length of array variables associated with this site \end{DoxyCompactList}\item 
+int\+\_\+type \mbox{\hyperlink{structcsmp_1_1_local_variable_storage_1_1_data_a3442a0a37844f158eb9672400345da85}{flagged\+Array\+Length}}
+\begin{DoxyCompactList}\small\item\em length of flagged array variables \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-variable-members}
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a5e835489a7b099138cd5cadecf76f5ef}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data@{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data}!arrayLength@{arrayLength}}
+\index{arrayLength@{arrayLength}!csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data@{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data}}
+\doxysubsubsection{\texorpdfstring{arrayLength}{arrayLength}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_local_variable_storage_1_1_data_a5e835489a7b099138cd5cadecf76f5ef} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+int\+\_\+type \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Data\+::array\+Length}
+
+
+
+length of array variables associated with this site 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000018}{Todo}}]only one size? \end{DoxyRefDesc}
+\Hypertarget{structcsmp_1_1_local_variable_storage_1_1_data_a3442a0a37844f158eb9672400345da85}\index{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data@{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data}!flaggedArrayLength@{flaggedArrayLength}}
+\index{flaggedArrayLength@{flaggedArrayLength}!csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data@{csmp::LocalVariableStorage$<$ dim, STOREE $>$::Data}}
+\doxysubsubsection{\texorpdfstring{flaggedArrayLength}{flaggedArrayLength}}
+{\footnotesize\ttfamily \label{structcsmp_1_1_local_variable_storage_1_1_data_a3442a0a37844f158eb9672400345da85} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class STOREE$>$ \\
+int\+\_\+type \mbox{\hyperlink{classcsmp_1_1_local_variable_storage}{csmp\+::\+Local\+Variable\+Storage}}$<$ dim, STOREE $>$\+::\+Data\+::flagged\+Array\+Length}
+
+
+
+length of flagged array variables 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000019}{Todo}}]only one size? \end{DoxyRefDesc}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Local\+Variable\+Storage.\+h\end{DoxyCompactItemize}

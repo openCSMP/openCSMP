@@ -1010,7 +1010,7 @@ void SplitBoundaryInterface_Test<dim>::Detect_and_create_splitboundaries( const 
   cout << "\nNodes: " << model_out.Mesh().Nodes() << "\n";
   cout << "\nElements: " << model_out.Mesh().Elements() << "\n";
   cout << "\nFaces: " << model_out.Mesh().Faces() << "\n";
-  cout << "\nInterfaces: " << model_out.Mesh().InterFaces() << "\n";
+  cout << "\nInterfaces: " << model_out.Mesh().Interfaces() << "\n";
 
   // 4. visualising
   string test_name( "DETECTED_SPLITBOUNDARY_TEST_FROM_" );
@@ -1047,7 +1047,7 @@ void SplitBoundaryInterface_Test<dim>::Detect_and_create_splitboundaries_from_co
   cout << "\nNodes: " << model_out.Mesh().Nodes() << "\n";
   cout << "\nElements: " << model_out.Mesh().Elements() << "\n";
   cout << "\nFaces: " << model_out.Mesh().Faces() << "\n";
-  cout << "\nInterfaces: " << model_out.Mesh().InterFaces() << "\n";
+  cout << "\nInterfaces: " << model_out.Mesh().Interfaces() << "\n";
 
 } // endf Detect_and_create_splitboundaries_from_constructor
 

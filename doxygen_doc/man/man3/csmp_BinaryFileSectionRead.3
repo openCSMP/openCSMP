@@ -1,0 +1,39 @@
+.TH "csmp::BinaryFileSectionRead" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::BinaryFileSectionRead
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <binaryReadWrite\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBinaryFileSectionRead\fP (std::fstream &fp, const char *header)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Helper class for reading fixed-size strings from binary files
+
+.PP
+defines strings that are used to read the possible datablocks that are abbreviated as VSETCORD VSETPELT VSETPLST VSETPFVT VSETBFLG VSETHEDR VSETCONN VSETFOTR VSETMTRL - new for pmtrl record
+
+.PP
+\fBBoundaryInterface\fP BNDFHEDR - file header BOUNDARY - object description ONE_BDRY BOUNDVAR - variable datablock BNDFFOTR - file footer
+
+.PP
+\fBSplitBoundaryInterface\fP SBDFHEDR SPLITBDRY ONE_BDRY SBDRYVAR SBDFFOTR
+
+.PP
+\fBRegionInterface\fP REGGHEDR UNIQREGN ONE_REGN NONUREGN MODELVARS REGFFOTR
+
+.PP
+NodeManifolds NDMFHEDR MANIFLDS 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

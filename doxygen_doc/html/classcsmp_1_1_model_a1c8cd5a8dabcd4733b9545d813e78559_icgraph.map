@@ -1,0 +1,7 @@
+<map id="csmp::Model::InputVariablesFrom" name="csmp::Model::InputVariablesFrom">
+<area shape="rect" id="Node000001" title="inputs all discretised variables stored in the supplied VSet into the model" alt="" coords="206,31,422,56"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_model.html#a755401f7f803d98572dd9cff1b2b1b1f" title="builds model with regions, boundaries, and splitboundaries as identified by &quot;BOX_BOUNDARY&quot;,..." alt="" coords="5,5,158,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,33,158,29,158,24,190,27"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_model.html#a659628e032169aace551f8493bb8d64e" title="builds with model without specifically named subdomains other than &quot;Model&quot;. If model is box&#45;shaped co..." alt="" coords="5,55,158,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,59,158,62,158,57,190,54"/>
+</map>

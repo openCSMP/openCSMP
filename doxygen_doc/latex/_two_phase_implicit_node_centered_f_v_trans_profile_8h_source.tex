@@ -1,0 +1,84 @@
+\doxysection{Two\+Phase\+Implicit\+Node\+Centered\+FVTrans\+Profile.\+h}
+\hypertarget{_two_phase_implicit_node_centered_f_v_trans_profile_8h_source}{}\label{_two_phase_implicit_node_centered_f_v_trans_profile_8h_source}\index{source/modules/integration/solver/SAMG\_profiles/TwoPhaseImplicitNodeCenteredFVTransProfile.h@{source/modules/integration/solver/SAMG\_profiles/TwoPhaseImplicitNodeCenteredFVTransProfile.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWOPHASEIMPLICITNODECENTEREDFVTRANSPROFILE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWOPHASEIMPLICITNODECENTEREDFVTRANSPROFILE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_s_a_m_g___profile_8h}{"{}SAMG\_Profile.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_implicit_node_centered_f_v_transport_8h}{"{}TwoPhaseImplicitNodeCenteredFVTransport.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile}{TwoPhaseImplicitNodeCenteredFVTransProfile}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___profile}{SAMG\_Profile}}}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{comment}{///\ First-\/order\ two-\/phase\ flow\ constructor}}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile_ad5813e5cfb42d63cae4e9bc397d60bfa}{TwoPhaseImplicitNodeCenteredFVTransProfile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ group\_name,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_capillary\_spreading,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_gravitational\_forces,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ porosity\ \ =\ \textcolor{stringliteral}{"{}porosity"{}},}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusivity\ =\ \textcolor{stringliteral}{"{}capillary\ diffusivity"{}},}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_n\ =\ \textcolor{stringliteral}{"{}viscosity\ carbonic\ phase"{}},}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_w\ =\ \textcolor{stringliteral}{"{}viscosity\ aqueous\ phase"{}},}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_n\ =\ \textcolor{stringliteral}{"{}density\ carbonic\ phase"{}},}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_w\ =\ \textcolor{stringliteral}{"{}density\ aqueous\ phase"{}},}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ phase1\_to\_update\ =\ \textcolor{stringliteral}{"{}saturation\ aqueous\ phase"{}},}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ phase2\_to\_advect\ =\ \textcolor{stringliteral}{"{}saturation\ carbonic\ phase"{}},}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ transp\_velocity\ =\ \textcolor{stringliteral}{"{}velocity"{}},}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodal\_source=\ \textcolor{stringliteral}{"{}nodal\ fluid\ volume\ source"{}},}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ reference\_variable\_to\_no\_flow\_bc=\textcolor{stringliteral}{"{}fluid\ pressure"{}},}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ nonlinear\_scheme\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ Second-\/order\ two-\/phase\ flow\ constructor}}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile_ac9a117bfd41fa4e8c2243a8070602a01}{TwoPhaseImplicitNodeCenteredFVTransProfile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ group\_name,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ second\_order\_in\_space,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_capillary\_spreading,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ with\_gravitational\_forces,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ porosity\ \ =\ \textcolor{stringliteral}{"{}porosity"{}},}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ diffusivity\ =\ \textcolor{stringliteral}{"{}capillary\ diffusivity"{}},}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_n\ =\ \textcolor{stringliteral}{"{}viscosity\ carbonic\ phase"{}},}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ viscosity\_w\ =\ \textcolor{stringliteral}{"{}viscosity\ aqueous\ phase"{}},}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_n\ =\ \textcolor{stringliteral}{"{}density\ carbonic\ phase"{}},}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ density\_w\ =\ \textcolor{stringliteral}{"{}density\ aqueous\ phase"{}},}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ phase1\_to\_update\ =\ \textcolor{stringliteral}{"{}saturation\ aqueous\ phase"{}},}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ phase2\_to\_advect\ =\ \textcolor{stringliteral}{"{}saturation\ carbonic\ phase"{}},}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ transp\_velocity\ =\ \textcolor{stringliteral}{"{}velocity"{}},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ nodal\_source=\ \textcolor{stringliteral}{"{}nodal\ fluid\ volume\ source"{}},}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ reference\_variable\_to\_no\_flow\_bc=\textcolor{stringliteral}{"{}fluid\ pressure"{}},}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ nonlinear\_scheme\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{///\ Solve\ for\ transport\ equation}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile_acf61ebdb3cf9b3b829a9453f2b0065ee}{Solve}}(\ \textcolor{keywordtype}{double}\ modelTime\ );}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{///\ Overloaded\ for\ transport}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_implicit_node_centered_f_v_trans_profile_abfcbdb2fd7261c86fa4f699f62d02512}{Solve}}(\ \textcolor{keywordtype}{double}\ modelTime,\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\&\ saturationFunctions,\ \textcolor{keywordtype}{double}\ timeInterval\ );}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ TwoPhaseImplicitNodeCenteredFVTransport<dim,StencilProcessor>\&\ Solver()\ \{\ \textcolor{keywordflow}{return}\ advector\_;\ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00062\ \ \ \ \ TwoPhaseImplicitNodeCenteredFVTransProfile();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ Configure\ SAMG\ solver\ settings}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ AdjustSolverSettings();}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model\_;}
+\DoxyCodeLine{00069\ \ \ \ \ TwoPhaseImplicitNodeCenteredFVTransport<dim,StencilProcessor>\ advector\_;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{bool}\ firstCall\_;}
+\DoxyCodeLine{00072\ \ \ \ \ std::string\ \ \ dumpFileName\_;}
+\DoxyCodeLine{00073\ \};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ TWOPHASEIMPLICITNODECENTEREDFVTRANSPROFILE\_H}}
+
+\end{DoxyCode}

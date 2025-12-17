@@ -1,0 +1,6 @@
+<map id="csmp::Model::Model" name="csmp::Model::Model">
+<area shape="rect" id="Node000001" title="to construct model as a base class to a derived model built from an external dataset using a variable..." alt="" coords="5,29,145,55"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="40,31,33,21,37,11,52,5,75,3,101,5,114,12,111,17,99,10,75,8,53,10,41,15,39,20,44,27"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_model.html#a3beebcda9fd039ea50be5e7b41948bfe" title="Instantiates MODEL LocalVariables." alt="" coords="193,22,376,62"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,40,177,40,177,45,145,45"/>
+</map>

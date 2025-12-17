@@ -1,0 +1,40 @@
+\doxysection{csmp\+::Loop\+Unroller Class Reference}
+\hypertarget{classcsmp_1_1_loop_unroller}{}\label{classcsmp_1_1_loop_unroller}\index{csmp::LoopUnroller@{csmp::LoopUnroller}}
+
+
+Collaboration diagram for csmp\+::Loop\+Unroller\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=173pt]{classcsmp_1_1_loop_unroller__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_loop_unroller_adbf4c3dc2700c00a8ff7b2095941ec99}\label{classcsmp_1_1_loop_unroller_adbf4c3dc2700c00a8ff7b2095941ec99} 
+void {\bfseries Unroll} (const char \texorpdfstring{$\ast$}{*}file, int i, const char \texorpdfstring{$\ast$}{*}var1, const char \texorpdfstring{$\ast$}{*}var2, const char \texorpdfstring{$\ast$}{*}expression)
+\begin{DoxyCompactList}\small\item\em simple i loop, e.\+g. data\mbox{[}i\mbox{]} += obj.\+data\mbox{[}j\mbox{]} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_loop_unroller_aa5f37ed7e104d45b2f264115a1899f13}\label{classcsmp_1_1_loop_unroller_aa5f37ed7e104d45b2f264115a1899f13} 
+void {\bfseries Unroll} (const char \texorpdfstring{$\ast$}{*}file, int i, int j, const char \texorpdfstring{$\ast$}{*}var1, const char \texorpdfstring{$\ast$}{*}var2, const char \texorpdfstring{$\ast$}{*}expression)
+\begin{DoxyCompactList}\small\item\em simple i,j loop, e.\+g. data\mbox{[}i\mbox{]}\mbox{[}j\mbox{]} += obj.\+data\mbox{[}j\mbox{]}\mbox{[}j\mbox{]} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_loop_unroller_a1f9c694e677f4a2c68636eea4d2277af}{Unroll}} (const char \texorpdfstring{$\ast$}{*}file, const char \texorpdfstring{$\ast$}{*}rows, const char \texorpdfstring{$\ast$}{*}cols, int i, int j, const char \texorpdfstring{$\ast$}{*}var1, const char \texorpdfstring{$\ast$}{*}expression1, const char \texorpdfstring{$\ast$}{*}var2)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_loop_unroller_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_loop_unroller_a1f9c694e677f4a2c68636eea4d2277af}\index{csmp::LoopUnroller@{csmp::LoopUnroller}!Unroll@{Unroll}}
+\index{Unroll@{Unroll}!csmp::LoopUnroller@{csmp::LoopUnroller}}
+\doxysubsubsection{\texorpdfstring{Unroll()}{Unroll()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_loop_unroller_a1f9c694e677f4a2c68636eea4d2277af} 
+void csmp\+::\+Loop\+Unroller\+::\+Unroll (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{rows}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{cols}{, }\item[{int}]{isz}{, }\item[{int}]{jsz}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{var1}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{var2}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{expression}{}\end{DoxyParamCaption})}
+
+version with inbuilt checks for the current size of the matrix assumes that loop variables are called i,j simple i,j loop, e.\+g. data\mbox{[}i\mbox{]}\mbox{[}j\mbox{]} += obj.\+data\mbox{[}j\mbox{]}\mbox{[}j\mbox{]} 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/utilities/Loop\+Unroller.\+h\item 
+source/modules/utilities/Loop\+Unroller.\+cpp\end{DoxyCompactItemize}

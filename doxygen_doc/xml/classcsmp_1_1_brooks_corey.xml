@@ -1,0 +1,924 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_brooks_corey" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BrooksCorey</compoundname>
+    <basecompoundref refid="classcsmp_1_1_two_phase_model" prot="public" virt="non-virtual">csmp::TwoPhaseModel&lt; dim &gt;</basecompoundref>
+    <includes refid="_brooks_corey_8h" local="no">BrooksCorey.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_1af7750c2c4cf6d71c97cee4488061b8aa" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCorey&lt; dim &gt;::pd_key_</definition>
+        <argsstring></argsstring>
+        <name>pd_key_</name>
+        <qualifiedname>csmp::BrooksCorey::pd_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="102" column="18" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_1a26e2eeead50387a75d651e77f5089ef6" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCorey&lt; dim &gt;::pc_max_key_</definition>
+        <argsstring></argsstring>
+        <name>pc_max_key_</name>
+        <qualifiedname>csmp::BrooksCorey::pc_max_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="102" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_1ab50e007f346c34dffa83c90b9e09a0a7" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrooksCorey&lt; dim &gt;::lamda_key_</definition>
+        <argsstring></argsstring>
+        <name>lamda_key_</name>
+        <qualifiedname>csmp::BrooksCorey::lamda_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="102" column="38" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_1aea03ded04417acf4f9d98f6443af6e11" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::lambda_</definition>
+        <argsstring></argsstring>
+        <name>lambda_</name>
+        <qualifiedname>csmp::BrooksCorey::lambda_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="103" column="18" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_1a44630d8716557c7a504789c2bb45d745" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::entry_pressure_</definition>
+        <argsstring></argsstring>
+        <name>entry_pressure_</name>
+        <qualifiedname>csmp::BrooksCorey::entry_pressure_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="103" column="26" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_1a302350aa9d67d62d9a4f61c992f84162" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::pc_max_</definition>
+        <argsstring></argsstring>
+        <name>pc_max_</name>
+        <qualifiedname>csmp::BrooksCorey::pc_max_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="103" column="41" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brooks_corey_1a69ef357b81dd02468a5d430a9967e6bd" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::BrooksCorey&lt; dim &gt;::default_capillary_pressure_max_</definition>
+        <argsstring></argsstring>
+        <name>default_capillary_pressure_max_</name>
+        <qualifiedname>csmp::BrooksCorey::default_capillary_pressure_max_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="104" column="18" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1ad7ec6a204296bcb48eee88246609d5cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, const char *lamda, const char *pc_entry, const bool sw_ro_mu_placement=true)</argsstring>
+        <name>BrooksCorey</name>
+        <qualifiedname>csmp::BrooksCorey::BrooksCorey</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>lamda</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pc_entry</declname>
+        </param>
+        <param>
+          <type>const bool</type>
+          <declname>sw_ro_mu_placement</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="16" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="46" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a885bd26294b1a5180bb9eff610138531" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, const char *permeability, double viscosity_nw, double viscosity_w, double density_nw, double density_w, const char *lamda, const char *pc_entry, const bool sw_ro_mu_placement=true)</argsstring>
+        <name>BrooksCorey</name>
+        <qualifiedname>csmp::BrooksCorey::BrooksCorey</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>permeability</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>viscosity_nw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>viscosity_w</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>density_nw</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>density_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>lamda</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pc_entry</declname>
+        </param>
+        <param>
+          <type>const bool</type>
+          <declname>sw_ro_mu_placement</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>One also has to initialize the material parameter key in the base class in this case the material parameter is used as the lambda parameter of the Brooks-Corey model </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="20" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="23" bodyend="42"/>
+        <references refid="classcsmp_1_1_brooks_corey_1a885bd26294b1a5180bb9eff610138531" compoundref="_brooks_corey_8cpp" startline="23" endline="42">csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</references>
+        <referencedby refid="classcsmp_1_1_brooks_corey_1a885bd26294b1a5180bb9eff610138531" compoundref="_brooks_corey_8cpp" startline="23" endline="42">csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a8aebbb43de8df4246896eabf7e9cd46c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, const char *permeability, const char *viscosity_nw, const char *viscosity_w, const char *density_nw, const char *density_w, const char *lamda, const char *pc_entry, const char *sat_w, const char *res_sat_nw, const char *res_sat_w, const bool sw_ro_mu_placement=true)</argsstring>
+        <name>BrooksCorey</name>
+        <qualifiedname>csmp::BrooksCorey::BrooksCorey</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>permeability</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>viscosity_nw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>viscosity_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>density_nw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>density_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>lamda</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pc_entry</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>sat_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>res_sat_nw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>res_sat_w</declname>
+        </param>
+        <param>
+          <type>const bool</type>
+          <declname>sw_ro_mu_placement</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>constructor for constant capillary pressure equal to entry pressure in case if lambda = 0 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="29" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="66" bodyend="89"/>
+        <references refid="classcsmp_1_1_brooks_corey_1a8aebbb43de8df4246896eabf7e9cd46c" compoundref="_brooks_corey_8cpp" startline="66" endline="89">csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</references>
+        <referencedby refid="classcsmp_1_1_brooks_corey_1a8aebbb43de8df4246896eabf7e9cd46c" compoundref="_brooks_corey_8cpp" startline="66" endline="89">csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1af47af4e27766bf2f7529e452d1f43c07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;database, const char *permeability, const char *viscosity_nw, const char *viscosity_w, const char *density_nw, const char *density_w, const char *lamda, const char *pc_entry, const char *maximum_pc, const char *sat_w, const char *res_sat_nw, const char *res_sat_w, const bool sw_ro_mu_placement=true)</argsstring>
+        <name>BrooksCorey</name>
+        <qualifiedname>csmp::BrooksCorey::BrooksCorey</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>database</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>permeability</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>viscosity_nw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>viscosity_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>density_nw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>density_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>lamda</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>pc_entry</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>maximum_pc</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>sat_w</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>res_sat_nw</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>res_sat_w</declname>
+        </param>
+        <param>
+          <type>const bool</type>
+          <declname>sw_ro_mu_placement</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>constructor for linear capillary pressure in case if lambda = 0 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="40" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="92" bodyend="116"/>
+        <references refid="classcsmp_1_1_brooks_corey_1af47af4e27766bf2f7529e452d1f43c07" compoundref="_brooks_corey_8cpp" startline="92" endline="116">csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</references>
+        <referencedby refid="classcsmp_1_1_brooks_corey_1af47af4e27766bf2f7529e452d1f43c07" compoundref="_brooks_corey_8cpp" startline="92" endline="116">csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a33e0001def174e3ffaa70be967e17a09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrooksCorey&lt; dim &gt;::BrooksCorey</definition>
+        <argsstring>()</argsstring>
+        <name>BrooksCorey</name>
+        <qualifiedname>csmp::BrooksCorey::BrooksCorey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="52" column="5" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="11" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a7e054eb3db24daebd886c44e6627ed2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::BrooksCorey&lt; dim &gt;::~BrooksCorey</definition>
+        <argsstring>()</argsstring>
+        <name>~BrooksCorey</name>
+        <qualifiedname>csmp::BrooksCorey::~BrooksCorey</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="54" column="13" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="119" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1ab632f54034ce47136356bce772f57054" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::BrooksCorey&lt; dim &gt;::Initialize</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;e)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::BrooksCorey::Initialize</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1affc076dda4e95cfbdc9c3e12dfbd68a5">Initialize</reimplements>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+<para>Reading parameters for the linear &amp; BC relperm models. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="56" column="18" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="128" bodyend="161"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a40e50451890b1dc8b3c02fcf36791f3e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::krn_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>krn_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::krn_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ab6127c81bce3b1af871ec4cc83b165f7">krn_Phase</reimplements>
+        <briefdescription>
+<para>as in Helmig 97, eqn.2.57, p. 75 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="59" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="180" bodyend="188"/>
+        <referencedby refid="classcsmp_1_1_brooks_corey_1a78020f5366cb40aa725f50ae40bb58a6" compoundref="_brooks_corey_8cpp" startline="402" endline="430">csmp::BrooksCorey&lt; dim &gt;::dfds</referencedby>
+        <referencedby refid="classcsmp_1_1_brooks_corey_1aeca78297e0a8eb947ad89a072f2d0967" compoundref="_brooks_corey_8cpp" startline="434" endline="463">csmp::BrooksCorey&lt; dim &gt;::dGds</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a0b82831fcaee9769d27a332cf1f672b3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::krw_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>krw_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::krw_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ab2460fc60f9beaf1c6ffc9f7a4d1200b">krw_Phase</reimplements>
+        <briefdescription>
+<para>relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="60" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="167" bodyend="175"/>
+        <referencedby refid="classcsmp_1_1_brooks_corey_1a78020f5366cb40aa725f50ae40bb58a6" compoundref="_brooks_corey_8cpp" startline="402" endline="430">csmp::BrooksCorey&lt; dim &gt;::dfds</referencedby>
+        <referencedby refid="classcsmp_1_1_brooks_corey_1aeca78297e0a8eb947ad89a072f2d0967" compoundref="_brooks_corey_8cpp" startline="434" endline="463">csmp::BrooksCorey&lt; dim &gt;::dGds</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a009297404a97b1a2ec1bf2c683126f4a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::dkrnds_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>dkrnds_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::dkrnds_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a443ab083ab0a009e2976d420099610a9">dkrnds_Phase</reimplements>
+        <briefdescription>
+<para>derivatives of relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="63" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="203" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1ad62e53a71931fd242f190fd8321db655" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::dkrwds_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>dkrwds_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::dkrwds_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1aee63123cf9276045d351d0f832a41ef0">dkrwds_Phase</reimplements>
+        <briefdescription>
+<para>derivatives of relative permeabilities </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="64" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="191" bodyend="199"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a60d9c0bb282cde45b580244be2fc8cee" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::pc_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>pc_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::pc_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1aa22fa0a162c0e3d38012fc24d6ed59f4">pc_Phase</reimplements>
+        <briefdescription>
+<para>pc covers the full saturation range, pc is capped based on maximum dpcds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="67" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="220" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1ae7b84dc38ba2f913913be944ac0ef30a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::dpcds_Phase</definition>
+        <argsstring>() const</argsstring>
+        <name>dpcds_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::dpcds_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1aac4bba423c4d31322d744ea5d77d8830">dpcds_Phase</reimplements>
+        <briefdescription>
+<para>dpcdS covers the full saturation range, dpcds is capped based on maximum dpcds </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="70" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="267" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a7b5237f7a922503261e452531ced6b77" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::Sw_Phase</definition>
+        <argsstring>(double pc_Phase) const</argsstring>
+        <name>Sw_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::Sw_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1aeb29d7ad37775ec0753fe935ac5e2cc6">Sw_Phase</reimplements>
+        <param>
+          <type>double</type>
+          <declname>pc_Phase</declname>
+        </param>
+        <briefdescription>
+<para>inverse capillary pressure function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="73" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="307" bodyend="357"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1ac9fd4dc5adf31a2a6c49c5b5eb72a449" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::dsdpc_Phase</definition>
+        <argsstring>(double pc_Phase) const</argsstring>
+        <name>dsdpc_Phase</name>
+        <qualifiedname>csmp::BrooksCorey::dsdpc_Phase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a9cfa41794233d9fb6854e0b4a00f8ddf">dsdpc_Phase</reimplements>
+        <param>
+          <type>double</type>
+          <declname>pc_Phase</declname>
+        </param>
+        <briefdescription>
+<para>derivatives of inverse capillary pressure function </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="76" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="360" bodyend="390"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a78020f5366cb40aa725f50ae40bb58a6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::dfds</definition>
+        <argsstring>() const</argsstring>
+        <name>dfds</name>
+        <qualifiedname>csmp::BrooksCorey::dfds</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a295c4bd526a0f939f2d810a99a5843b9">dfds</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculates the derivative of water fractional flow respect to water saturation for Brooks-Corey and Linear relative permeability models. The derivative is conducted by analytical differentiation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="79" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="402" bodyend="430"/>
+        <references refid="classcsmp_1_1_brooks_corey_1a40e50451890b1dc8b3c02fcf36791f3e" compoundref="_brooks_corey_8cpp" startline="180" endline="188">csmp::BrooksCorey&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_brooks_corey_1a0b82831fcaee9769d27a332cf1f672b3" compoundref="_brooks_corey_8cpp" startline="167" endline="175">csmp::BrooksCorey&lt; dim &gt;::krw_Phase</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1aeca78297e0a8eb947ad89a072f2d0967" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::dGds</definition>
+        <argsstring>() const</argsstring>
+        <name>dGds</name>
+        <qualifiedname>csmp::BrooksCorey::dGds</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ae46b8290e476e6d16ebcf239481e915d">dGds</reimplements>
+        <briefdescription>
+<para>derivatives of gravitational flow (advection multipliers) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>derivatives of gravitational flow </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="82" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="434" bodyend="463"/>
+        <references refid="classcsmp_1_1_brooks_corey_1a40e50451890b1dc8b3c02fcf36791f3e" compoundref="_brooks_corey_8cpp" startline="180" endline="188">csmp::BrooksCorey&lt; dim &gt;::krn_Phase</references>
+        <references refid="classcsmp_1_1_brooks_corey_1a0b82831fcaee9769d27a332cf1f672b3" compoundref="_brooks_corey_8cpp" startline="167" endline="175">csmp::BrooksCorey&lt; dim &gt;::krw_Phase</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1ad30020f8bd5115bf5a91b2df0c7a3b37" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::MaxFractionalFlowDerivative</definition>
+        <argsstring>() const</argsstring>
+        <name>MaxFractionalFlowDerivative</name>
+        <qualifiedname>csmp::BrooksCorey::MaxFractionalFlowDerivative</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a46e4e125f5c5eb3c78f081027179d40f">MaxFractionalFlowDerivative</reimplements>
+        <briefdescription>
+<para>for the wetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="85" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="468" bodyend="479"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a82151596aaf5ecea507fbc3bb7fa443b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::ShockSpeed</definition>
+        <argsstring>() const</argsstring>
+        <name>ShockSpeed</name>
+        <qualifiedname>csmp::BrooksCorey::ShockSpeed</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ac160a98a72d2a12fcda59cc513f17fb6">ShockSpeed</reimplements>
+        <briefdescription>
+<para>linearized fractional flow derivative </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="88" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="482" bodyend="492"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a69ee95c4936176a8ebf286734c987316" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::ShockHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>ShockHeight</name>
+        <qualifiedname>csmp::BrooksCorey::ShockHeight</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1ab5bd3691e1e08d769292892d02603666">ShockHeight</reimplements>
+        <briefdescription>
+<para>look this one up in the book by Randy LeVeque </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="89" column="20" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="497" bodyend="503"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1af910b8eb5013340eb1886596842d1bfa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::BrooksCorey&lt; dim &gt;::Out</definition>
+        <argsstring>(uint32_t phase) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::BrooksCorey::Out</qualifiedname>
+        <reimplements refid="classcsmp_1_1_two_phase_model_1a9c8b70b4cb55a2028b78aa0ec631f400">Out</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>phase</declname>
+        </param>
+        <briefdescription>
+<para>default is the wetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="91" column="18" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="508" bodyend="517"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1ac8d5c6ad1f3c07f1b2708043d211fd23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BrooksCorey&lt; dim &gt;::Lambda</definition>
+        <argsstring>(double lambda)</argsstring>
+        <name>Lambda</name>
+        <qualifiedname>csmp::BrooksCorey::Lambda</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>lambda</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="95" column="15" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="536" bodyend="539"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1accfbe35c7fa971c8aed803a58d0f1760" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::Lambda</definition>
+        <argsstring>() const</argsstring>
+        <name>Lambda</name>
+        <qualifiedname>csmp::BrooksCorey::Lambda</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="96" column="13" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="542" bodyend="545"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1a50b9e283df27012ccf605901bc8678b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BrooksCorey&lt; dim &gt;::Pd</definition>
+        <argsstring>(double pd)</argsstring>
+        <name>Pd</name>
+        <qualifiedname>csmp::BrooksCorey::Pd</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pd</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="97" column="15" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="529" bodyend="532"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brooks_corey_1af5d815f43806304d2026ba25c5d558df" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::BrooksCorey&lt; dim &gt;::Pd</definition>
+        <argsstring>() const</argsstring>
+        <name>Pd</name>
+        <qualifiedname>csmp::BrooksCorey::Pd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="98" column="13" bodyfile="source/modules/thmc/two_phase_flow/BrooksCorey.cpp" bodystart="522" bodyend="525"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="note"><para>for lambda=0, this implementation of Brooks-Corey model switches to linear </para>
+</simplesect>
+<simplesect kind="note"><para>for linear case capillary pressure is a constant value equal to entry pressure </para>
+</simplesect>
+<simplesect kind="note"><para>base class pm1 and pm2 are used for pd and lambda, respectively </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::BrooksCorey&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::TwoPhaseModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_model"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BrooksCorey&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brooks_corey"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="5">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="8">
+        <label>csmp::TensorVariable&lt; uint32_t &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+      </node>
+      <node id="7">
+        <label>csmp::TensorVariable&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_tensor_variable"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::TwoPhaseModel&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_model"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#ift_key_</edgelabel>
+          <edgelabel>#lt_key_</edgelabel>
+          <edgelabel>#mun_key_</edgelabel>
+          <edgelabel>#muw_key_</edgelabel>
+          <edgelabel>#perm_key_</edgelabel>
+          <edgelabel>#rhn_key_</edgelabel>
+          <edgelabel>#rhw_key_</edgelabel>
+          <edgelabel>#sat_key_</edgelabel>
+          <edgelabel>#snr_key_</edgelabel>
+          <edgelabel>#swr_key_</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>#K_</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/two_phase_flow/BrooksCorey.h" line="13" column="1" bodyfile="source/includes/thmc/two_phase_flow/BrooksCorey.h" bodystart="13" bodyend="106"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_two_phase_model_1a23d8c17a39e686e256a0f0089da87b01" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>acc_gravity_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a29b1cf1676c8fac2faeea06d341e1e03" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>AdvectionMultiplier</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ad7ec6a204296bcb48eee88246609d5cb" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>BrooksCorey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a885bd26294b1a5180bb9eff610138531" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>BrooksCorey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a8aebbb43de8df4246896eabf7e9cd46c" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>BrooksCorey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1af47af4e27766bf2f7529e452d1f43c07" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>BrooksCorey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a33e0001def174e3ffaa70be967e17a09" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>BrooksCorey</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a503aab2ef0cdb43b39ae52ed277dfceb" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>CapillaryDiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a69ef357b81dd02468a5d430a9967e6bd" prot="private" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>default_capillary_pressure_max_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9263314c3cb1d6e50ce8cfd09d411276" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>DensityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6168dc03fed46b8b916b48cd2be4a1d9" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>DensityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3390594869038bb3cf05256072d50751" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>DensityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abbe4fa907d41d4e83760586ac7547cc8" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>DensityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a78020f5366cb40aa725f50ae40bb58a6" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dfds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab6a0d830d3381b641bde2d0d41ecaf18" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>dfds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aebb908311eff09132a9741b18115c310" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dfds_numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1aeca78297e0a8eb947ad89a072f2d0967" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5cfd5cb5d31b538a7540906b9cb7b8b" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dGds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3f28a44e20135a0eda808a185b0b3872" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>DiffusionCharacteristic</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af6fc4c52013d567bc9b2c2acb680becd" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>DiffusionMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4eec6e36881c230776f38731414f0e4a" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>dkrnds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a235c92738451968f796f05b15c0f79c5" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dkrnds_numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a009297404a97b1a2ec1bf2c683126f4a" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dkrnds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abe0652b8778382c04cd18b8ab600ea96" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>dkrwds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa19c0eb9e5f5c8564c174ff566a44964" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dkrwds_numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ad62e53a71931fd242f190fd8321db655" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dkrwds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab4eeb89ea5ef7f4712e9992bb3537fa2" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dlnds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abf2edca98411263db66c25c551ce3be7" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dlnds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1adaaeae8402ca9003b29c624f0ba26929" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dlwds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7734fabaf23e67cac34ca1ccac9dfea5" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dlwds_numerical</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a210de106c8538e972bcf0f02cb78e278" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>dpcds_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae929ec1d4c7e905865f8b3b529a16ae4" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dpcds_numerical</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ae7b84dc38ba2f913913be944ac0ef30a" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dpcds_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae8eb4d48e0ec82cc6fb2c18b8c5d161d" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>dsdpc_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ac9fd4dc5adf31a2a6c49c5b5eb72a449" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>dsdpc_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ac796aeb19755c2905f7f5969c66f7f8c" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>EffectiveSaturation</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a44630d8716557c7a504789c2bb45d745" prot="private" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>entry_pressure_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af5f9ba8fd94fe48d40cca93a042c6618" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>f_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abfdc07305e42e076e1bab48e147c578b" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>fn_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8f37ad603a4bf7f5d37d453a313da478" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>fw_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a116a6eb34e3be5a267f519b865b89468" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>G</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a26c99b49057701e4f26a2d12bbc8c6b0" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>G_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a697acaf5dd0aad5ed586a9756d8d6875" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>GravityMultiplier_dGds</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6245a32bb53cd9abcf67a5bcded9bf4f" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>GravityMultiplier_G</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a90c517eb7a5faf1507204f721aba8535" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>GravityTerm</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afbd66b65f7f76a8cb18e9fe26eca5045" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ift_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afed59c0d76526b7267fbcb7ddfbd103c" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ift_key_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ab632f54034ce47136356bce772f57054" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aea34aa1fb3b86a30fd8876ffd6b832df" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>InitializeAndStore</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9b8050e80a78c2dbf7e58edbd1a6fda3" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>InitializeForBaryCenter</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7e5ffdf7d5d7e6247f505514c13e59ba" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>InitializeForFacetIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a035564f82664ed735dd10b90252affc1" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>InitializeForIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4946a65cddfb1d2b244bd9202ef6a7c6" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>InitializeForNode</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a76820115685a04287c37f3bf793faaeb" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>InitializeForSectorIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa1396da1d4ffce2a75d3e2344dc12bbe" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>interpolate_fluid_properties_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a68ba34a53479c12885884d299f8ada02" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>InterpolateNodeProperties</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aeef9e999593b3d8d7384c928738683bb" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>K_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a69c352b7101de29a6c298d2a9ac03a2a" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>k_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a47cf273a46a177a0b9748646b83ac8bc" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>krn_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a40e50451890b1dc8b3c02fcf36791f3e" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>krn_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afa4bad3a3c573bd5f049132c26a95cee" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>krw_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a0b82831fcaee9769d27a332cf1f672b3" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>krw_Phase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ac8d5c6ad1f3c07f1b2708043d211fd23" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Lambda</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1accfbe35c7fa971c8aed803a58d0f1760" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Lambda</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1aea03ded04417acf4f9d98f6443af6e11" prot="private" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>lambda_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ab50e007f346c34dffa83c90b9e09a0a7" prot="private" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>lamda_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ab23a76bf8e7190d36540dbb87855e909" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>lt_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae429661671b756b0dcbed408dc66a901" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>MAX_CAPILLARY_PRESSURE_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a80e0231aee428c8a10389fda1261f33c" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>MAX_CAPILLARY_PRESSURE_SLOPE_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a04eff9d0d3c09d011aba6bbd46a2eda0" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>MaxCapillaryPressure</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1ad30020f8bd5115bf5a91b2df0c7a3b37" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>MaxFractionalFlowDerivative</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5c106acc437e4c62c14fd916fbaf50c" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>mobility_n_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8d1dc7daff33c410ba77b49517707b61" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>mobility_w_at</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ace751e7ae6bf5a2bd4605e5d29550329" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>MobilityPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a813f4d49ed99e37c8fc80048e0293e93" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>mun_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a85359fbcc412cd4f3d8b4995244bfba3" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>mun_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a1d87598a734e6671f4b153453f37e2da" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>muw_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a755f5f5de97f71bd11d0c5525a2b825f" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>muw_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a492aa415c596093780d144d468d778cc" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>NonWettingPhaseSaturationKey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1af910b8eb5013340eb1886596842d1bfa" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a7a5fb8efac951f2c7d61b43bb0aa4014" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>pc_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a302350aa9d67d62d9a4f61c992f84162" prot="private" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>pc_max_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a26e2eeead50387a75d651e77f5089ef6" prot="private" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>pc_max_key_</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a60d9c0bb282cde45b580244be2fc8cee" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>pc_Phase</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a50b9e283df27012ccf605901bc8678b9" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Pd</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1af5d815f43806304d2026ba25c5d558df" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Pd</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1af7750c2c4cf6d71c97cee4488061b8aa" prot="private" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>pd_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4bff3ce11382c26112f7c2cc72974c84" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>perm_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a24979dee40c424aa9e78e508a9fdd54a" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1aa93ca9953ff3cf15f4aae0bd7f1ef87a" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Permeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abaeba466b652999181d16909421e2abd" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>rhn_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1acf5e0ea1fde6aa4bfbbfda6bbb39af04" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>rhn_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae893513c9b4199420b06ab2d68465bf3" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>rhw_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae7e5792b6ecc96bbe735dd480ef9304d" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>rhw_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a92e6c51b800c1e4e6eb57362c7894ebb" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>sat_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a1346eac40e3a09c6ae7264737aaa61f6" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>sat_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3dc094ad03c4deb676cd3c2e9f477a1d" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Saturation</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1af231e8d21dd47901266bc941f6b20d53" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>SaturationWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a717178b5b8ebd4e6cd90e806e3c75984" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>seff_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae6f67062e5a9702b13340943f6c1142e" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>SeffToSw</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae25169a198e4423eee83158365897c85" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>SeffToSw</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a69ee95c4936176a8ebf286734c987316" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>ShockHeight</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a82151596aaf5ecea507fbc3bb7fa443b" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>ShockSpeed</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a3cad2de63b5e4b36c8e2cf4099ea94c8" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ShockSpeedHeight</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a2ed211e8b4e44dc03669b415059c495d" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Snr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad635256c30362aafc998b4205bef00bd" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Snr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a03564672375e3db427e40e77a04b28f8" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>snr_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a636e1276285fbf97b1c3c2ae942c3c36" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>snr_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9210bd68068b2d27cb01eef6a5c8a464" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Sw_at</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a7b5237f7a922503261e452531ced6b77" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>Sw_Phase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a413087063e40e71e90b5f573538ee953" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>sw_ro_mu_placement_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a753786842d256a10e2f648781cba80c3" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Swr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a65060e8f00a9635132b314872c1c2356" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>Swr</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a06e3a9b3d23be9aa3239c74e1c25268c" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>swr_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a0ccfc050d9e86571b9bf685770f782fb" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>swr_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a111dc3eba3c33c0ccd2cc49c6fff5439" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>tensor_permeability_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afd18457e1a803d0878ea2eb522abcc0c" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TensorPermeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a9f750feb26a8c5bd67e688c92d2c2aa5" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TensorPermeability</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a8485eb64c4709f938017a47333fe7fa3" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>tolerance_</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afe87adcce8dc3c20438072541a973075" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TotalMobility</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a55cb58cd1f8a191f38718932d9b487b7" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TotalMobilityKey</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1afba394a0043e79d0929b2c341272b955" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TotalMobilityMultiplier</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1abfdb2ac9fb5d193308c6a217b16cd032" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a5b0782527b060ea802294942b88adcd8" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae59dbf53ef3861828f80c7c88b38079f" prot="protected" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>TwoPhaseModel</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a5725adbe29291d9c0d9555b37b299e14" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ViscosityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a4bfb130244e5558dde06f392ef600515" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ViscosityNonWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ad5825da6dae18e0298d4e4f136971f06" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ViscosityRatio</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a68f4aa6b07e0fcf17aeb5865a71699c4" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ViscosityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1ae9a23928fdca86e49806e231f4480251" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>ViscosityWettingPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a6e0856b1080a40e27e759ab6778ce94b" prot="public" virt="non-virtual"><scope>csmp::BrooksCorey</scope><name>WettingPhaseSaturationKey</name></member>
+      <member refid="classcsmp_1_1_brooks_corey_1a7e054eb3db24daebd886c44e6627ed2a" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>~BrooksCorey</name></member>
+      <member refid="classcsmp_1_1_two_phase_model_1a716a045623682dc5614580d4d18af10e" prot="public" virt="virtual"><scope>csmp::BrooksCorey</scope><name>~TwoPhaseModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

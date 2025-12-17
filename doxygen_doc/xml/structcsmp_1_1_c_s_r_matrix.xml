@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_c_s_r_matrix" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::CSRMatrix</compoundname>
+    <includes refid="_c_s_r_matrix_8h" local="no">CSRMatrix.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_c_s_r_matrix_1a470625a2d56dbc5556e6295aae0d1214" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; int32_t &gt;</type>
+        <definition>std::vector&lt;int32_t&gt; csmp::CSRMatrix::ia</definition>
+        <argsstring></argsstring>
+        <name>ia</name>
+        <qualifiedname>csmp::CSRMatrix::ia</qualifiedname>
+        <briefdescription>
+<para>refer to SAMG&apos;s documentation </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="34" column="18" bodyfile="source/includes/math/CSRMatrix.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_s_r_matrix_1ae221d4526aa1d96e4bfd9b23eee30403" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; int32_t &gt;</type>
+        <definition>std::vector&lt;int32_t&gt; csmp::CSRMatrix::ja</definition>
+        <argsstring></argsstring>
+        <name>ja</name>
+        <qualifiedname>csmp::CSRMatrix::ja</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="35" column="27" bodyfile="source/includes/math/CSRMatrix.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_s_r_matrix_1ac02687c9ce98b76db128ce18986166d0" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::CSRMatrix::a</definition>
+        <argsstring></argsstring>
+        <name>a</name>
+        <qualifiedname>csmp::CSRMatrix::a</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="36" column="19" bodyfile="source/includes/math/CSRMatrix.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1afc93c85cf4e5d9b40023f7b6fac4d12c" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CSRMatrix::CSRMatrix</definition>
+        <argsstring>(const csmp::SparseMatrix &amp;)</argsstring>
+        <name>CSRMatrix</name>
+        <qualifiedname>csmp::CSRMatrix::CSRMatrix</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">csmp::SparseMatrix</ref> &amp;</type>
+          <defname>spmat</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="17" column="14" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="13" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1a4bbe2f125c59377fb68ba6fc22c379d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CSRMatrix::CSRMatrix</definition>
+        <argsstring>()</argsstring>
+        <name>CSRMatrix</name>
+        <qualifiedname>csmp::CSRMatrix::CSRMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="18" column="5" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="9" bodyend="11"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1a586c753afcd0221767313107e09e87ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CSRMatrix::~CSRMatrix</definition>
+        <argsstring>()</argsstring>
+        <name>~CSRMatrix</name>
+        <qualifiedname>csmp::CSRMatrix::~CSRMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="19" column="5" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="19" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1ab4436b5a87d5578eb0b9b0197147c392" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CSRMatrix::CSRMatrix</definition>
+        <argsstring>(const CSRMatrix &amp;)</argsstring>
+        <name>CSRMatrix</name>
+        <qualifiedname>csmp::CSRMatrix::CSRMatrix</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_c_s_r_matrix" kindref="compound">CSRMatrix</ref> &amp;</type>
+          <defname>crm</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="20" column="5" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="23" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1ae2151c72b878c56fb5918f4d1008c10b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcsmp_1_1_c_s_r_matrix" kindref="compound">CSRMatrix</ref> &amp;</type>
+        <definition>CSRMatrix &amp; csmp::CSRMatrix::operator=</definition>
+        <argsstring>(const CSRMatrix &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::CSRMatrix::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_c_s_r_matrix" kindref="compound">CSRMatrix</ref> &amp;</type>
+          <defname>crm</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="21" column="15" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="28" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1aa96ac5dc4eb9c4c7d4523507684c15a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::CSRMatrix::operator()</definition>
+        <argsstring>(uint32_t, uint32_t) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>csmp::CSRMatrix::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="23" column="13" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="39" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1af4aa6456104667a2c1010e861119a5d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CSRMatrix::Initialize</definition>
+        <argsstring>(const csmp::SparseMatrix &amp;)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::CSRMatrix::Initialize</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">csmp::SparseMatrix</ref> &amp;</type>
+          <defname>A</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="25" column="10" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="49" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1a90222ddf612b75743b8369128a9a48b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CSRMatrix::InitializePointBased</definition>
+        <argsstring>(const SparseMatrix &amp;, size_t nsys)</argsstring>
+        <name>InitializePointBased</name>
+        <qualifiedname>csmp::CSRMatrix::InitializePointBased</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> &amp;</type>
+          <defname>A</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nsys</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Initialises the public <ref refid="structcsmp_1_1_c_s_r_matrix" kindref="compound">CSRMatrix</ref> vectors ia, ja, a for given <ref refid="classcsmp_1_1_sparse_matrix" kindref="compound">SparseMatrix</ref> in case the Point-based approach is selected. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="26" column="10" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="151" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1a96ffc4d69aaa777580c6d73833ae762b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CSRMatrix::Rows</definition>
+        <argsstring>() const</argsstring>
+        <name>Rows</name>
+        <qualifiedname>csmp::CSRMatrix::Rows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="28" column="12" bodyfile="source/includes/math/CSRMatrix.h" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1a8b95fa810f1fe22075ce314e37e07ba0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::CSRMatrix::TotalExistingEntries</definition>
+        <argsstring>() const</argsstring>
+        <name>TotalExistingEntries</name>
+        <qualifiedname>csmp::CSRMatrix::TotalExistingEntries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="29" column="12" bodyfile="source/includes/math/CSRMatrix.h" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="structcsmp_1_1_c_s_r_matrix_1a2e5289963653800d5164cdf15763c29d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CSRMatrix::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::CSRMatrix::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Outputs matrix to screen. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/CSRMatrix.h" line="31" column="10" bodyfile="source/modules/math/CSRMatrix.cpp" bodystart="208" bodyend="224"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>CSR matrix class created to emulate <ref refid="classcsmp_1_1_compressed_row_matrix" kindref="compound">CompressedRowMatrix</ref> class when using OpenMP</para>
+<para><simplesect kind="author"><para>Julian Mindel </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CSRMatrix</label>
+        <link refid="structcsmp_1_1_c_s_r_matrix"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/math/CSRMatrix.h" line="16" column="1" bodyfile="source/includes/math/CSRMatrix.h" bodystart="16" bodyend="37"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1ac02687c9ce98b76db128ce18986166d0" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>a</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1afc93c85cf4e5d9b40023f7b6fac4d12c" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>CSRMatrix</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1a4bbe2f125c59377fb68ba6fc22c379d7" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>CSRMatrix</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1ab4436b5a87d5578eb0b9b0197147c392" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>CSRMatrix</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1a470625a2d56dbc5556e6295aae0d1214" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>ia</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1af4aa6456104667a2c1010e861119a5d1" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>Initialize</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1a90222ddf612b75743b8369128a9a48b9" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>InitializePointBased</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1ae221d4526aa1d96e4bfd9b23eee30403" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>ja</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1aa96ac5dc4eb9c4c7d4523507684c15a7" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>operator()</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1ae2151c72b878c56fb5918f4d1008c10b" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>operator=</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1a2e5289963653800d5164cdf15763c29d" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>Out</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1a96ffc4d69aaa777580c6d73833ae762b" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>Rows</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1a8b95fa810f1fe22075ce314e37e07ba0" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>TotalExistingEntries</name></member>
+      <member refid="structcsmp_1_1_c_s_r_matrix_1a586c753afcd0221767313107e09e87ff" prot="public" virt="non-virtual"><scope>csmp::CSRMatrix</scope><name>~CSRMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

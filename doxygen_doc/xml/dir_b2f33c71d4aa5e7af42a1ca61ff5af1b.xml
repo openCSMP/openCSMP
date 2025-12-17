@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_b2f33c71d4aa5e7af42a1ca61ff5af1b" kind="dir">
+    <compoundname>source</compoundname>
+    <innerdir refid="dir_c9f89f587e7e777be723ee48a3df5844">source/includes</innerdir>
+    <innerdir refid="dir_cd7a448e5c16e17955dd008163ffcdf4">source/modules</innerdir>
+    <innerfile refid="csv_8h">csv.h</innerfile>
+    <innerfile refid="variable__set__processor_8cpp">variable_set_processor.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/"/>
+  </compounddef>
+</doxygen>

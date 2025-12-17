@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="group___c_s_m_pglobal_operators" kind="group">
+    <compoundname>CSMPglobalOperators</compoundname>
+    <title>Global CSMP Operators</title>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="group___c_s_m_pglobal_operators_1gae1fe2ad541d773a29dff540d90244d66" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ostream &amp;</type>
+        <definition>ostream &amp; csmp::operator&lt;&lt;</definition>
+        <argsstring>(ostream &amp;stream, const csmp::Index &amp;o)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>csmp::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>ostream &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Custom global ostream operator</para>
+<para><simplesect kind="attention"><para>Does not output <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> / <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref></para>
+</simplesect>
+Writes human-readable variable characteristics to given output stream (use Out() to get all)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output stream </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> object to output </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Formatted output </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/model/Index.cpp" line="555" column="1" bodyfile="source/modules/model/Index.cpp" bodystart="555" bodyend="579"/>
+        <references refid="structcsmp_1_1_index_1a4f9284a718753ac2e21ecc3d056ce77f" compoundref="_index_8h" startline="126">csmp::Index::dataDepth</references>
+        <references refid="structcsmp_1_1_index_1a1836321a275c6f4166edaeb2a1c5d6b3" compoundref="_index_8h" startline="128">csmp::Index::dataOffset</references>
+        <references refid="structcsmp_1_1_index_1a1cf780af8543d274e0772dfed579c40c" compoundref="_index_8h" startline="127">csmp::Index::flagDepth</references>
+        <references refid="structcsmp_1_1_index_1a746510ee71fae746e09a78e6c959ebfe" compoundref="_index_8h" startline="129">csmp::Index::flagOffset</references>
+        <references refid="structcsmp_1_1_index_1a16dd82c3058e3f91a76485a2bb574efb" compoundref="_index_8h" startline="125">csmp::Index::index</references>
+        <references refid="structcsmp_1_1_index_1ae483089917fc056949d5b0d2e114f409" compoundref="_index_8h" startline="132">csmp::Index::ipFactorCell</references>
+        <references refid="structcsmp_1_1_index_1af4a2fd13fd2c0d60fd17afebd28140be" compoundref="_index_8h" startline="134">csmp::Index::ipFactorFacet</references>
+        <references refid="structcsmp_1_1_index_1ae0cf4ec7f901cab701ee2ef95d97ef44" compoundref="_index_8h" startline="133">csmp::Index::ipFactorSector</references>
+        <references refid="structcsmp_1_1_index_1a68383516bd146ad402080afdc7b82538" compoundref="_index_8h" startline="130">csmp::Index::offsetFactorCell</references>
+        <references refid="structcsmp_1_1_index_1a74a6be7459ba4a62d9bf33c311918178" compoundref="_index_8h" startline="131">csmp::Index::offsetFactorSector</references>
+        <references refid="group___c_s_m_p__global__enumerations_1ga95e1c94571005a47b4ddaed36f729da6" compoundref="_c_s_m_p__global__enumerations_8cpp" startline="170" endline="172">csmp::parsePlacement</references>
+        <references refid="group___c_s_m_p__global__enumerations_1ga6fca9512b5b221f840ec0c167b05be9c" compoundref="_c_s_m_p__global__enumerations_8cpp" startline="61" endline="72">csmp::parseType</references>
+      </memberdef>
+      <memberdef kind="function" id="group___c_s_m_pglobal_operators_1gae01569532eec2fe03ebaeac0197e4150" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>istream &amp;</type>
+        <definition>istream &amp; csmp::operator&gt;&gt;</definition>
+        <argsstring>(istream &amp;stream, csmp::Index &amp;o)</argsstring>
+        <name>operator&gt;&gt;</name>
+        <qualifiedname>csmp::operator&gt;&gt;</qualifiedname>
+        <param>
+          <type>istream &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Custom global istream operator</para>
+<para><simplesect kind="attention"><para>Does not instantiate <ref refid="structcsmp_1_1_integration_point_variables" kindref="compound">IntegrationPointVariables</ref> / <ref refid="structcsmp_1_1_local_variables" kindref="compound">LocalVariables</ref></para>
+</simplesect>
+Provides formatted input to a given stream <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The input stream </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> object to intput </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Formatted intput </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/model/Index.cpp" line="593" column="9" bodyfile="source/modules/model/Index.cpp" bodystart="593" bodyend="624"/>
+        <references refid="structcsmp_1_1_index_1a4f9284a718753ac2e21ecc3d056ce77f" compoundref="_index_8h" startline="126">csmp::Index::dataDepth</references>
+        <references refid="structcsmp_1_1_index_1a1836321a275c6f4166edaeb2a1c5d6b3" compoundref="_index_8h" startline="128">csmp::Index::dataOffset</references>
+        <references refid="structcsmp_1_1_index_1a1cf780af8543d274e0772dfed579c40c" compoundref="_index_8h" startline="127">csmp::Index::flagDepth</references>
+        <references refid="structcsmp_1_1_index_1a746510ee71fae746e09a78e6c959ebfe" compoundref="_index_8h" startline="129">csmp::Index::flagOffset</references>
+        <references refid="structcsmp_1_1_index_1a16dd82c3058e3f91a76485a2bb574efb" compoundref="_index_8h" startline="125">csmp::Index::index</references>
+        <references refid="structcsmp_1_1_index_1ae483089917fc056949d5b0d2e114f409" compoundref="_index_8h" startline="132">csmp::Index::ipFactorCell</references>
+        <references refid="structcsmp_1_1_index_1ae0cf4ec7f901cab701ee2ef95d97ef44" compoundref="_index_8h" startline="133">csmp::Index::ipFactorSector</references>
+        <references refid="structcsmp_1_1_index_1a68383516bd146ad402080afdc7b82538" compoundref="_index_8h" startline="130">csmp::Index::offsetFactorCell</references>
+        <references refid="structcsmp_1_1_index_1a74a6be7459ba4a62d9bf33c311918178" compoundref="_index_8h" startline="131">csmp::Index::offsetFactorSector</references>
+        <references refid="group___c_s_m_p__global__enumerations_1ga95e1c94571005a47b4ddaed36f729da6" compoundref="_c_s_m_p__global__enumerations_8cpp" startline="170" endline="172">csmp::parsePlacement</references>
+        <references refid="group___c_s_m_p__global__enumerations_1ga6fca9512b5b221f840ec0c167b05be9c" compoundref="_c_s_m_p__global__enumerations_8cpp" startline="61" endline="72">csmp::parseType</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Operators available globally in the csmp Namespace</para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

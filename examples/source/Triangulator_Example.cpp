@@ -37,6 +37,7 @@
 #endif
 
 using namespace std;
+using namespace std::filesystem;
 
 namespace csmp {
 
@@ -44,7 +45,7 @@ void Triangulator_Example::Specifications()
 {
   SetTitle( "Triangulator based meshing of image files" );
   SetDifficulty( 1 );
-  SetCategory( "Software Interfaces" );
+  SetCategory( "Meshing Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "Uses Triangular to make 2D triangular FE mesh from color-coded image in text file");
   AddDescription( "Perform steady-state fluid pressure computation on mesh" );
@@ -83,6 +84,9 @@ void Triangulator_Example::Run()
   string model_name;
   cin >> model_name;
 
+  // setting path to bitmaps_and_other/ where the color-coded file is contained
+  current_path("bitmaps_and_other");
+  
   // 0.1 Reading a pixelated permeability image ASCII file into the
   //    new Matrix 'pixelcolors'
   size_t m, n;
@@ -114,12 +118,23 @@ void Triangulator_Example::Run()
   vset.CoordinateRange( 'y', zero, extent2 );
   cout <<"\nAssigned Y range: "<< zero <<" to "<< extent2 << " meter." << endl;
 
-  // 1. A Region named "model" is built
+  // 1. A Region named "Model" is built
   //    from a mesh based on a color coded image
   // -------------------------------------------
-   Model<2U>  model( vset, "example1.txt" );
-   vset.Erase();
-   stripDomainEdgesFor( model, "permeability" );
+  // moving to directory that contains variables file
+  current_path("../variables_and_configuration_files");
+
+  Model<2U>  model( vset, "example1.txt" );
+  
+  // now up to create a working directory
+  current_path("../../");
+  create_directory("example_outputs");
+  current_path("example_outputs");
+  create_directory("Triangulator_Example");
+  current_path("Triangulator_Example");
+
+  vset.Erase();
+  stripDomainEdgesFor( model, "permeability" );
 
   // 2. Assignment of material properties & initial conditions
   // ---------------------------------------------------------

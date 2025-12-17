@@ -1,0 +1,46 @@
+\doxysection{Integral\+\_\+d\+NT\+\_\+op\+\_\+d\+N\+\_\+d\+V.\+h}
+\hypertarget{_integral__d_n_t__op__d_n__d_v_8h_source}{}\label{_integral__d_n_t__op__d_n__d_v_8h_source}\index{source/includes/integration/pde\_operators/analytical/Integral\_dNT\_op\_dN\_dV.h@{source/includes/integration/pde\_operators/analytical/Integral\_dNT\_op\_dN\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{Integral\_dNT\_op\_dN\_dV\_h}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{Integral\_dNT\_op\_dN\_dV\_h}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_l_h_s_8h}{"{}MathOperatorLHS.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{///\ Known\ as:\ element\ conductance\ matrix\ or\ K\ div\string^2\ P}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__op__d_n__d_v}{Integral\_dNT\_op\_dN\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__op__d_n__d_v}{MathOperatorLHS}}<\mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__op__d_n__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__op__d_n__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__op__d_n__d_v_a25dd0f38251f7da5461dd102018789d4}{Integral\_dNT\_op\_dN\_dV}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integral__d_n_t__op__d_n__d_v_a30d6d1c679d6faad886a038043a259d0}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ Integral\_dNT\_op\_dN\_dV<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ Integral\_dNT\_op\_dN\_dV<dim,CELL>\ (*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ DN,\ DNT;}
+\DoxyCodeLine{00023\ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{@class\ Integral\_dNT\_op\_dN\_dV\ Integral\_dNT\_op\_dN\_dV\ "{}pde\_operators/Integral\_dNT\_op\_dN\_dV.h"{}}}
+\DoxyCodeLine{00029\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00030\ \textcolor{comment}{@author\ S.\ Roberts}}
+\DoxyCodeLine{00031\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00034\ \textcolor{comment}{}}
+\DoxyCodeLine{00035\ \textcolor{comment}{PDE\ operator\ representing\ the\ divergence\ squared\ of\ the\ dependent\ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{variable.*/}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

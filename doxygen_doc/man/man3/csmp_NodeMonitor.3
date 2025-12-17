@@ -1,0 +1,59 @@
+.TH "csmp::NodeMonitor< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NodeMonitor< dim > \- Monitors node / finite volume properties over the course of a run in a cluster of nodes of interest\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <NodeMonitor\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNodeMonitor\fP (const \fBModel\fP< dim > &, const std::map< std::string, size_t > &monitored_nodes, const std::list< std::string > &properties_to_monitor)"
+.br
+.RI "defines nodes and scalar variables stored there that shall be monitored "
+.ti -1c
+.RI "void \fBScalarPropertyValues\fP (const \fBModel\fP< dim > &, double current_time)"
+.br
+.RI "prompts monitoring of the target property values at the current time "
+.ti -1c
+.RI "void \fBReset\fP ()"
+.br
+.RI "zap all recorded values and property names "
+.ti -1c
+.RI "void \fBEraseData\fP ()"
+.br
+.RI "zap all recorded values "
+.ti -1c
+.RI "void \fBOut\fP (const char *text_file) const"
+.br
+.RI "writes results to text file "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::NodeMonitor< dim >"Monitors node / finite volume properties over the course of a run in a cluster of nodes of interest\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Stephan Matthai 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2001 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,40 @@
+\doxysection{DES2\+Phase\+Slightly\+Compressible\+Flow\+\_\+\+Example.\+h}
+\hypertarget{_d_e_s2_phase_slightly_compressible_flow___example_8h_source}{}\label{_d_e_s2_phase_slightly_compressible_flow___example_8h_source}\index{examples/source/DES2PhaseSlightlyCompressibleFlow\_Example.h@{examples/source/DES2PhaseSlightlyCompressibleFlow\_Example.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DES\_2PHASE\_SLIGHTLY\_COMPRESSBILE\_FLOW\_EXAMPLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DES\_2PHASE\_SLIGHTLY\_COMPRESSBILE\_FLOW\_EXAMPLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_example_8h}{"{}Example.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_model_8h}{"{}TwoPhaseModel.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_flow_functions_module_8h}{"{}FlowFunctionsModule.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_slightly_compressible_flow___example}{DES2PhaseSlightlyCompressibleFlow\_Example}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_example}{Example}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_d_e_s2_phase_slightly_compressible_flow___example_aa82c61aec99966380a5e6198979ef05d}{Run}}();}
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Specifications();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{void}\ RunSimulation(\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ FLOW\_FUNCTIONS>}
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{void}\ Compute2PhaseFlowProperties(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ mdl,\ FLOW\_FUNCTIONS<dim>\&\ flowfunctions,\ \textcolor{keywordtype}{bool}\ with\_gravity,\ \textcolor{keywordtype}{bool}\ with\_tensor\_k\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00028\ \ \ \textcolor{keywordtype}{void}\ ComputeSteadyStatePressure(\mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ mdl,\ \textcolor{keywordtype}{bool}\ with\_gravity,\ \textcolor{keywordtype}{bool}\ with\_tensor\_k);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ DES\_2PHASE\_SLIGHTLY\_COMPRESSBILE\_FLOW\_EXAMPLE\_H}}
+
+\end{DoxyCode}

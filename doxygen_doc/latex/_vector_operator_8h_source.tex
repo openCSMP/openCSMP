@@ -1,0 +1,59 @@
+\doxysection{Vector\+Operator.\+h}
+\hypertarget{_vector_operator_8h_source}{}\label{_vector_operator_8h_source}\index{source/includes/integration/finite\_volumes/generic\_transport\_scheme/VectorOperator.h@{source/includes/integration/finite\_volumes/generic\_transport\_scheme/VectorOperator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_VECTOR\_OPERATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_VECTOR\_OPERATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_face}{Face}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_inter_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_inter_face}{InterFace}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\(\backslash\)brief\ \ \ \ \ Vector\ operator}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\(\backslash\)details\ \ \ Part\ of\ the\ Colleoli\ transport\ scheme.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\(\backslash\)author\ \ \ \ Stephan\ Matthai}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\(\backslash\)version\ \ \ 0a}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\(\backslash\)date\ \ \ \ \ \ 6/12/2017}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\(\backslash\)pre\ \ \ \ \ \ \ base\ class\ for\ matrix\ operators}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\(\backslash\)copyright\ The\ University\ of\ Melbourne}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00024\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_vector_operator}{VectorOperator}}\ \{}
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ VectorOperator()\ :\ factor\_(1.)\ \{\}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~VectorOperator()\ \{\}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ AccumulateFiniteVolume(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&,\ std::vector<\textcolor{keywordtype}{double}>\&\ rhs\ )\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ AccumulateStencil(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&,\ std::vector<\textcolor{keywordtype}{double}>\&\ rhs\ )\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ \ \ \ virtual\ void\ AccumulateStencil(\ Face<dim>\&,\ std::vector<double>\&\ rhs\ )\ const\ =\ 0;}}
+\DoxyCodeLine{00033\ \textcolor{comment}{//\ \ \ \ virtual\ void\ AccumulateStencil(\ InterFace<dim>\&,\ std::vector<double>\&\ rhs\ )\ const\ =\ 0;}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{///\ includes\ the\ time\ increment\ in\ the\ multiplication\ factor\ for\ this\ operator}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_vector_operator_a19d157262fbef6ad30f61041f87b9149}{MultiplyWithTimeIncrement}}(\ \textcolor{keywordtype}{double}\ dt\ )\ \{\ factor\_\ *=\ dt;\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ set\ factor\ to\ achieve\ multiplication\ with\ time\ increment\ (fac=dt),\ subtraction\ (fac=-\/1),\ multiplication\ or\ division\ (fac=1/value)}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_operator_a00ae75725c21698b6c0a5681664158bb}{Factor}}(\ \textcolor{keywordtype}{double}\ value\ )\ \{\ factor\_\ =\ value;\ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{double}\ Factor()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ factor\_;\ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{//\ virtual\ void\ Out()\ const\ =\ 0;\ TODO:\ use\ verbose\ function\ to\ print\ term\ to\ be\ accumulated}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{double}\ factor\_\ =\ 1.;\ \textcolor{comment}{///<\ \ 1=add,\ -\/1=subtract,\ factor=val\ =\ multiply,\ factor=1/val\ divide,\ \ factor=time\_increment\ if\ so\ needed}}
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_VECTOR\_OPERATOR\_H\ */}}
+
+\end{DoxyCode}

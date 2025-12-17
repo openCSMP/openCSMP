@@ -1,0 +1,2624 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_dense_matrix_8h" kind="file" language="C++">
+    <compoundname>DenseMatrix.h</compoundname>
+    <includes local="no">stdexcept</includes>
+    <includes local="no">typeinfo</includes>
+    <includes local="no">array</includes>
+    <includes refid="_point_8h" local="yes">Point.h</includes>
+    <includes refid="_scalar_variable_8h" local="yes">ScalarVariable.h</includes>
+    <includes refid="_vector_variable_8h" local="yes">VectorVariable.h</includes>
+    <includes refid="_tensor_variable_8h" local="yes">TensorVariable.h</includes>
+    <includes refid="_array_variable_8h" local="yes">ArrayVariable.h</includes>
+    <includes refid="_flagged_array_variable_8h" local="yes">FlaggedArrayVariable.h</includes>
+    <includedby refid="_dense_matrix___example_8cpp" local="yes">examples/source/DenseMatrix_Example.cpp</includedby>
+    <includedby refid="_c_v_f_e_m___visitor_8h" local="yes">source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h</includedby>
+    <includedby refid="_stencil_processor_p_h_x_8h" local="yes">source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h</includedby>
+    <includedby refid="_finite_element_8h" local="yes">source/includes/integration/finite_elements/FiniteElement.h</includedby>
+    <includedby refid="_finite_volume_policy_8h" local="yes">source/includes/integration/finite_volumes/FiniteVolumePolicy.h</includedby>
+    <includedby refid="_diffusion_l_h_s_8h" local="yes">source/includes/integration/finite_volumes/generic_transport_scheme/DiffusionLHS.h</includedby>
+    <includedby refid="_flux_evaluator_8h" local="yes">source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h</includedby>
+    <includedby refid="_explicit_stencil_processor_8h" local="yes">source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitStencilProcessor.h</includedby>
+    <includedby refid="_node_centered_finite_volume_algorithm_8h" local="yes">source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h</includedby>
+    <includedby refid="_stencil_processor_8h" local="yes">source/includes/integration/finite_volumes/legacy_transport_scheme/StencilProcessor.h</includedby>
+    <includedby refid="_num_integral__d_n_t__mixed__op__d_n___n_t__v__d_n__d_v_8h" local="yes">source/includes/integration/pde_operators/numerical/NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV.h</includedby>
+    <includedby refid="_text_interface_8h" local="yes">source/includes/interfaces/TextInterface.h</includedby>
+    <includedby refid="_c_s_m_p__math_utilities_8h" local="yes">source/includes/math/CSMP_mathUtilities.h</includedby>
+    <includedby refid="dense_matrix_methods_8h" local="yes">source/includes/math/denseMatrixMethods.h</includedby>
+    <includedby refid="_math_operator_l_h_s_8h" local="yes">source/includes/model/MathOperatorLHS.h</includedby>
+    <includedby refid="_math_operator_r_h_s_8h" local="yes">source/includes/model/MathOperatorRHS.h</includedby>
+    <includedby refid="_fracture_compute_velocity_visitor_8h" local="yes">source/includes/thmc/fractures/FractureComputeVelocityVisitor.h</includedby>
+    <includedby refid="_stresses_and_strains_8h" local="yes">source/includes/thmc/mechanics/StressesAndStrains.h</includedby>
+    <includedby refid="_stresses_and_strains2_8h" local="yes">source/includes/thmc/mechanics/StressesAndStrains2.h</includedby>
+    <includedby refid="_stresses_and_strains_i_p3_d_8h" local="yes">source/includes/thmc/mechanics/StressesAndStrainsIP3D.h</includedby>
+    <includedby refid="mechanics_8h" local="yes">source/includes/thmc/mechanics/mechanics.h</includedby>
+    <includedby refid="_velocity_and_volume_flux_8h" local="yes">source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h</includedby>
+    <includedby refid="_two_phase_velocity_and_volume_flux_8h" local="yes">source/includes/thmc/two_phase_flow/TwoPhaseVelocityAndVolumeFlux.h</includedby>
+    <includedby refid="_node_centered_finite_volume_algorithm_8cpp" local="yes">source/modules/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.cpp</includedby>
+    <includedby refid="_dense_matrix_8cpp" local="yes">source/modules/math/DenseMatrix.cpp</includedby>
+    <includedby refid="_sparse_matrix_8cpp" local="yes">source/modules/math/SparseMatrix.cpp</includedby>
+    <includedby refid="point_property_mapping_8cpp" local="yes">source/modules/property_manipulation/pointPropertyMapping.cpp</includedby>
+    <includedby refid="_a_n_s_y_s___model2_d___test_8cpp" local="yes">tests/unit/ANSYS_Model2D_Test.cpp</includedby>
+    <includedby refid="_dense_matrix___test_8h" local="yes">tests/unit/DenseMatrix_Test.h</includedby>
+    <includedby refid="_inter_face___test_8h" local="yes">tests/unit/InterFace_Test.h</includedby>
+    <includedby refid="_isoparametric_linear_hexahedron___test_8cpp" local="yes">tests/unit/IsoparametricLinearHexahedron_Test.cpp</includedby>
+    <includedby refid="_isoparametric_quadratic_tetrahedron___test_8cpp" local="yes">tests/unit/IsoparametricQuadraticTetrahedron_Test.cpp</includedby>
+    <includedby refid="_point_property_to_cell_mapper2_d___test_8cpp" local="yes">tests/unit/PointPropertyToCellMapper2D_Test.cpp</includedby>
+    <includedby refid="_sparse_matrix___test_8cpp" local="yes">tests/unit/SparseMatrix_Test.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>source/includes/math/DenseMatrix.h</label>
+        <link refid="_dense_matrix_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>ArrayVariable.h</label>
+        <link refid="_array_variable_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>FlaggedArrayVariable.h</label>
+        <link refid="_flagged_array_variable_8h_source"/>
+        <childnode refid="56" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="5">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>TensorVariable.h</label>
+        <link refid="_tensor_variable_8h_source"/>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>TensorVariable1.h</label>
+        <link refid="_tensor_variable1_8h_source"/>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>TensorVariable2.h</label>
+        <link refid="_tensor_variable2_8h_source"/>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>algorithm</label>
+      </node>
+      <node id="4">
+        <label>array</label>
+      </node>
+      <node id="17">
+        <label>cassert</label>
+      </node>
+      <node id="12">
+        <label>cctype</label>
+      </node>
+      <node id="15">
+        <label>cfloat</label>
+      </node>
+      <node id="19">
+        <label>chrono</label>
+      </node>
+      <node id="16">
+        <label>climits</label>
+      </node>
+      <node id="7">
+        <label>cmath</label>
+      </node>
+      <node id="11">
+        <label>cstdarg</label>
+      </node>
+      <node id="10">
+        <label>cstddef</label>
+      </node>
+      <node id="46">
+        <label>cstdint</label>
+      </node>
+      <node id="8">
+        <label>cstdio</label>
+      </node>
+      <node id="9">
+        <label>cstdlib</label>
+      </node>
+      <node id="13">
+        <label>cstring</label>
+      </node>
+      <node id="14">
+        <label>ctime</label>
+      </node>
+      <node id="20">
+        <label>deque</label>
+      </node>
+      <node id="21">
+        <label>exception</label>
+      </node>
+      <node id="22">
+        <label>filesystem</label>
+      </node>
+      <node id="23">
+        <label>fstream</label>
+      </node>
+      <node id="24">
+        <label>functional</label>
+      </node>
+      <node id="25">
+        <label>iomanip</label>
+      </node>
+      <node id="26">
+        <label>iostream</label>
+      </node>
+      <node id="27">
+        <label>istream</label>
+      </node>
+      <node id="28">
+        <label>iterator</label>
+      </node>
+      <node id="29">
+        <label>limits</label>
+      </node>
+      <node id="30">
+        <label>list</label>
+      </node>
+      <node id="31">
+        <label>map</label>
+      </node>
+      <node id="32">
+        <label>memory</label>
+      </node>
+      <node id="33">
+        <label>numeric</label>
+      </node>
+      <node id="34">
+        <label>ostream</label>
+      </node>
+      <node id="35">
+        <label>random</label>
+      </node>
+      <node id="36">
+        <label>set</label>
+      </node>
+      <node id="37">
+        <label>sstream</label>
+      </node>
+      <node id="2">
+        <label>stdexcept</label>
+      </node>
+      <node id="38">
+        <label>string</label>
+      </node>
+      <node id="39">
+        <label>type_traits</label>
+      </node>
+      <node id="3">
+        <label>typeinfo</label>
+      </node>
+      <node id="43">
+        <label>unordered_map</label>
+      </node>
+      <node id="42">
+        <label>unordered_set</label>
+      </node>
+      <node id="40">
+        <label>utility</label>
+      </node>
+      <node id="41">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="40">
+        <label>examples/source/DES2PhaseFlowWithSplitBoundary_Example.h</label>
+        <link refid="_d_e_s2_phase_flow_with_split_boundary___example_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>examples/source/DES2PhaseSlightlyCompressibleFlow_Example.h</label>
+        <link refid="_d_e_s2_phase_slightly_compressible_flow___example_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>examples/source/Examples.h</label>
+        <link refid="_examples_8h_source"/>
+      </node>
+      <node id="43">
+        <label>examples/source/Interfaces_Example.h</label>
+        <link refid="_interfaces___example_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>examples/source/StreamFunction_Example.h</label>
+        <link refid="_stream_function___example_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>examples/source/ThermalConvectionETHZ_Example.h</label>
+        <link refid="_thermal_convection_e_t_h_z___example_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>examples/source/Tutorial3_Example.h</label>
+        <link refid="_tutorial3___example_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>examples/source/deprecated/Tutorial4_Example_original.h</label>
+        <link refid="_tutorial4___example__original_8h_source"/>
+      </node>
+      <node id="47">
+        <label>source/includes/analysis/NodeCenteredFiniteVolumeMonitor.h</label>
+        <link refid="_node_centered_finite_volume_monitor_8h_source"/>
+      </node>
+      <node id="48">
+        <label>source/includes/analysis/RegionMonitor.h</label>
+        <link refid="_region_monitor_8h_source"/>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="189">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h</label>
+        <link refid="_c_v_f_e_m___math_operator_l_h_s_8h_source"/>
+        <childnode refid="190" relation="include">
+        </childnode>
+        <childnode refid="191" relation="include">
+        </childnode>
+      </node>
+      <node id="228">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorRHS.h</label>
+        <link refid="_c_v_f_e_m___math_operator_r_h_s_8h_source"/>
+        <childnode refid="229" relation="include">
+        </childnode>
+        <childnode refid="230" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="190">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_NumIntegral_dNT_op_dN_dV.h</label>
+        <link refid="_c_v_f_e_m___num_integral__d_n_t__op__d_n__d_v_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PHX_Scheme.h</label>
+        <link refid="_c_v_f_e_m___p_h_x___scheme_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="229">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PointSource_rhsop.h</label>
+        <link refid="_c_v_f_e_m___point_source__rhsop_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PressureGradientVisitor.h</label>
+        <link refid="_c_v_f_e_m___pressure_gradient_visitor_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="191">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.h</label>
+        <link refid="_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="230">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h</label>
+        <link refid="_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h</label>
+        <link refid="_c_v_f_e_m___visitor_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>source/includes/integration/cvfe_hydrothermal/ExplicitFiniteVolumeTransportPHX.h</label>
+        <link refid="_explicit_finite_volume_transport_p_h_x_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="192">
+        <label>source/includes/integration/cvfe_hydrothermal/NumIntegral_NT_lhs_nodal_op_N_dV.h</label>
+        <link refid="_num_integral___n_t__lhs__nodal__op___n__d_v_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="231">
+        <label>source/includes/integration/cvfe_hydrothermal/NumIntegral_NT_rhs_nodal_op_N_dV.h</label>
+        <link refid="_num_integral___n_t__rhs__nodal__op___n__d_v_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h</label>
+        <link refid="_stencil_processor_p_h_x_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>source/includes/integration/cvfe_hydrothermal/UpwindControlVisitor.h</label>
+        <link refid="_upwind_control_visitor_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>source/includes/integration/finite_elements/CSMP_ElementSpecifications.h</label>
+        <link refid="_c_s_m_p___element_specifications_8h_source"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>source/includes/integration/finite_elements/FiniteElement.h</label>
+        <link refid="_finite_element_8h"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="126" relation="include">
+        </childnode>
+        <childnode refid="128" relation="include">
+        </childnode>
+        <childnode refid="129" relation="include">
+        </childnode>
+        <childnode refid="130" relation="include">
+        </childnode>
+        <childnode refid="132" relation="include">
+        </childnode>
+        <childnode refid="133" relation="include">
+        </childnode>
+        <childnode refid="134" relation="include">
+        </childnode>
+        <childnode refid="135" relation="include">
+        </childnode>
+        <childnode refid="136" relation="include">
+        </childnode>
+        <childnode refid="137" relation="include">
+        </childnode>
+        <childnode refid="138" relation="include">
+        </childnode>
+        <childnode refid="139" relation="include">
+        </childnode>
+        <childnode refid="140" relation="include">
+        </childnode>
+        <childnode refid="141" relation="include">
+        </childnode>
+        <childnode refid="142" relation="include">
+        </childnode>
+        <childnode refid="143" relation="include">
+        </childnode>
+        <childnode refid="144" relation="include">
+        </childnode>
+        <childnode refid="145" relation="include">
+        </childnode>
+        <childnode refid="146" relation="include">
+        </childnode>
+        <childnode refid="147" relation="include">
+        </childnode>
+        <childnode refid="148" relation="include">
+        </childnode>
+        <childnode refid="150" relation="include">
+        </childnode>
+        <childnode refid="153" relation="include">
+        </childnode>
+        <childnode refid="154" relation="include">
+        </childnode>
+        <childnode refid="155" relation="include">
+        </childnode>
+        <childnode refid="157" relation="include">
+        </childnode>
+        <childnode refid="158" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="117" relation="include">
+        </childnode>
+        <childnode refid="159" relation="include">
+        </childnode>
+        <childnode refid="119" relation="include">
+        </childnode>
+        <childnode refid="162" relation="include">
+        </childnode>
+        <childnode refid="163" relation="include">
+        </childnode>
+        <childnode refid="164" relation="include">
+        </childnode>
+        <childnode refid="165" relation="include">
+        </childnode>
+        <childnode refid="166" relation="include">
+        </childnode>
+        <childnode refid="167" relation="include">
+        </childnode>
+        <childnode refid="152" relation="include">
+        </childnode>
+        <childnode refid="115" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>source/includes/integration/finite_elements/FiniteElementPolicy.h</label>
+        <link refid="_finite_element_policy_8h_source"/>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="117" relation="include">
+        </childnode>
+        <childnode refid="119" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+      </node>
+      <node id="126">
+        <label>source/includes/integration/finite_elements/IsoparametricLinearHexahedron.h</label>
+        <link refid="_isoparametric_linear_hexahedron_8h_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="128">
+        <label>source/includes/integration/finite_elements/IsoparametricLinearLineElement.h</label>
+        <link refid="_isoparametric_linear_line_element_8h_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="129">
+        <label>source/includes/integration/finite_elements/IsoparametricLinearPrism.h</label>
+        <link refid="_isoparametric_linear_prism_8h_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="130">
+        <label>source/includes/integration/finite_elements/IsoparametricLinearPyramid.h</label>
+        <link refid="_isoparametric_linear_pyramid_8h_source"/>
+        <childnode refid="131" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="132">
+        <label>source/includes/integration/finite_elements/IsoparametricLinearQuadrilateral.h</label>
+        <link refid="_isoparametric_linear_quadrilateral_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="133">
+        <label>source/includes/integration/finite_elements/IsoparametricLinearTetrahedron.h</label>
+        <link refid="_isoparametric_linear_tetrahedron_8h_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="134">
+        <label>source/includes/integration/finite_elements/IsoparametricLinearTriangle.h</label>
+        <link refid="_isoparametric_linear_triangle_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="135">
+        <label>source/includes/integration/finite_elements/IsoparametricQuadraticHexahedron.h</label>
+        <link refid="_isoparametric_quadratic_hexahedron_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="136">
+        <label>source/includes/integration/finite_elements/IsoparametricQuadraticLineElement.h</label>
+        <link refid="_isoparametric_quadratic_line_element_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="137">
+        <label>source/includes/integration/finite_elements/IsoparametricQuadraticPrism.h</label>
+        <link refid="_isoparametric_quadratic_prism_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="131">
+        <label>source/includes/integration/finite_elements/IsoparametricQuadraticPyramid.h</label>
+        <link refid="_isoparametric_quadratic_pyramid_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="138">
+        <label>source/includes/integration/finite_elements/IsoparametricQuadraticQuadrilateral.h</label>
+        <link refid="_isoparametric_quadratic_quadrilateral_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="139">
+        <label>source/includes/integration/finite_elements/IsoparametricQuadraticTetrahedron.h</label>
+        <link refid="_isoparametric_quadratic_tetrahedron_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="140">
+        <label>source/includes/integration/finite_elements/IsoparametricQuadraticTriangle.h</label>
+        <link refid="_isoparametric_quadratic_triangle_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="141">
+        <label>source/includes/integration/finite_elements/LinearCuboid.h</label>
+        <link refid="_linear_cuboid_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+        <childnode refid="116" relation="include">
+        </childnode>
+      </node>
+      <node id="142">
+        <label>source/includes/integration/finite_elements/LinearLineElement.h</label>
+        <link refid="_linear_line_element_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="143">
+        <label>source/includes/integration/finite_elements/LinearRectangle.h</label>
+        <link refid="_linear_rectangle_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="144">
+        <label>source/includes/integration/finite_elements/LinearTetrahedron.h</label>
+        <link refid="_linear_tetrahedron_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="145">
+        <label>source/includes/integration/finite_elements/LinearTriangle.h</label>
+        <link refid="_linear_triangle_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="146">
+        <label>source/includes/integration/finite_elements/LinearTriangle3D.h</label>
+        <link refid="_linear_triangle3_d_8h_source"/>
+        <childnode refid="127" relation="include">
+        </childnode>
+      </node>
+      <node id="147">
+        <label>source/includes/integration/finite_volumes/FV_IntegrationPointsAndWeights.h</label>
+        <link refid="_f_v___integration_points_and_weights_8h_source"/>
+      </node>
+      <node id="149">
+        <label>source/includes/integration/finite_volumes/FiniteVolumePolicy.h</label>
+        <link refid="_finite_volume_policy_8h_source"/>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="117" relation="include">
+        </childnode>
+        <childnode refid="119" relation="include">
+        </childnode>
+        <childnode refid="114" relation="include">
+        </childnode>
+      </node>
+      <node id="148">
+        <label>source/includes/integration/finite_volumes/FiniteVolumeStencil.h</label>
+        <link refid="_finite_volume_stencil_8h_source"/>
+        <childnode refid="149" relation="include">
+        </childnode>
+        <childnode refid="150" relation="include">
+        </childnode>
+        <childnode refid="151" relation="include">
+        </childnode>
+        <childnode refid="152" relation="include">
+        </childnode>
+      </node>
+      <node id="150">
+        <label>source/includes/integration/finite_volumes/FiniteVolumeStencilManager.h</label>
+        <link refid="_finite_volume_stencil_manager_8h_source"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>source/includes/integration/finite_volumes/GenericNodePropertyGradient.h</label>
+        <link refid="_generic_node_property_gradient_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>source/includes/integration/finite_volumes/GenericNodePropertyGradientLimiter.h</label>
+        <link refid="_generic_node_property_gradient_limiter_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="179">
+        <label>source/includes/integration/finite_volumes/finiteVolumeAuxiliaryFunctions.h</label>
+        <link refid="finite_volume_auxiliary_functions_8h"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="168">
+        <label>source/includes/integration/finite_volumes/generic_transport_scheme/DiffusionLHS.h</label>
+        <link refid="_diffusion_l_h_s_8h_source"/>
+      </node>
+      <node id="170">
+        <label>source/includes/integration/finite_volumes/generic_transport_scheme/ExplicitTransport.h</label>
+        <link refid="_explicit_transport_8h_source"/>
+      </node>
+      <node id="169">
+        <label>source/includes/integration/finite_volumes/generic_transport_scheme/FluxEvaluator.h</label>
+        <link refid="_flux_evaluator_8h_source"/>
+        <childnode refid="170" relation="include">
+        </childnode>
+        <childnode refid="171" relation="include">
+        </childnode>
+      </node>
+      <node id="171">
+        <label>source/includes/integration/finite_volumes/generic_transport_scheme/ImplicitTransport.h</label>
+        <link refid="_implicit_transport_8h_source"/>
+      </node>
+      <node id="31">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitMassBasedTransport.h</label>
+        <link refid="_explicit_mass_based_transport_8h_source"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitNodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_explicit_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="172">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitStencilProcessor.h</label>
+        <link refid="_explicit_stencil_processor_8h_source"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="173" relation="include">
+        </childnode>
+      </node>
+      <node id="173">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.h</label>
+        <link refid="_mass_based_stencil_processor_8h_source"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="174">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h</label>
+        <link refid="_node_centered_finite_volume_algorithm_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="175">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/StencilProcessor.h</label>
+        <link refid="_stencil_processor_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_explicit_node_centered_f_v_transport_8h_source"/>
+      </node>
+      <node id="55">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseImplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_transport_8h_source"/>
+        <childnode refid="56" relation="include">
+        </childnode>
+      </node>
+      <node id="194">
+        <label>source/includes/integration/pde_integrators/IterativeIntegrator.h</label>
+        <link refid="_iterative_integrator_8h_source"/>
+        <childnode refid="195" relation="include">
+        </childnode>
+        <childnode refid="196" relation="include">
+        </childnode>
+      </node>
+      <node id="195">
+        <label>source/includes/integration/pde_integrators/NewtonIntegrator.h</label>
+        <link refid="_newton_integrator_8h_source"/>
+      </node>
+      <node id="193">
+        <label>source/includes/integration/pde_integrators/PDE_Integrator.h</label>
+        <link refid="_p_d_e___integrator_8h_source"/>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="194" relation="include">
+        </childnode>
+        <childnode refid="197" relation="include">
+        </childnode>
+        <childnode refid="198" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="199" relation="include">
+        </childnode>
+      </node>
+      <node id="87">
+        <label>source/includes/integration/pde_integrators/PDE_Integrator_CRM.h</label>
+        <link refid="_p_d_e___integrator___c_r_m_8h_source"/>
+      </node>
+      <node id="196">
+        <label>source/includes/integration/pde_integrators/PicardIntegrator.h</label>
+        <link refid="_picard_integrator_8h_source"/>
+      </node>
+      <node id="197">
+        <label>source/includes/integration/pde_integrators/SteadyStateDiffusor.h</label>
+        <link refid="_steady_state_diffusor_8h_source"/>
+        <childnode refid="88" relation="include">
+        </childnode>
+      </node>
+      <node id="198">
+        <label>source/includes/integration/pde_integrators/TransientDiffusor.h</label>
+        <link refid="_transient_diffusor_8h_source"/>
+      </node>
+      <node id="232">
+        <label>source/includes/integration/pde_operators/NT_op.h</label>
+        <link refid="_n_t__op_8h_source"/>
+      </node>
+      <node id="233">
+        <label>source/includes/integration/pde_operators/PT_op.h</label>
+        <link refid="_p_t__op_8h_source"/>
+      </node>
+      <node id="200">
+        <label>source/includes/integration/pde_operators/PointSource_lhsop.h</label>
+        <link refid="_point_source__lhsop_8h_source"/>
+      </node>
+      <node id="234">
+        <label>source/includes/integration/pde_operators/PointSource_rhsop.h</label>
+        <link refid="_point_source__rhsop_8h_source"/>
+        <childnode refid="198" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="235">
+        <label>source/includes/integration/pde_operators/analytical/Integral_NT_M_dV_Triangle.h</label>
+        <link refid="_integral___n_t___m__d_v___triangle_8h_source"/>
+      </node>
+      <node id="201">
+        <label>source/includes/integration/pde_operators/analytical/Integral_NT_N_dV.h</label>
+        <link refid="_integral___n_t___n__d_v_8h_source"/>
+      </node>
+      <node id="202">
+        <label>source/includes/integration/pde_operators/analytical/Integral_NT_lhsop_N_dV.h</label>
+        <link refid="_integral___n_t__lhsop___n__d_v_8h_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="236">
+        <label>source/includes/integration/pde_operators/analytical/Integral_NT_op_N_dV.h</label>
+        <link refid="_integral___n_t__op___n__d_v_8h_source"/>
+      </node>
+      <node id="237">
+        <label>source/includes/integration/pde_operators/analytical/Integral_NT_op_dNi_dV.h</label>
+        <link refid="_integral___n_t__op__d_ni__d_v_8h_source"/>
+      </node>
+      <node id="238">
+        <label>source/includes/integration/pde_operators/analytical/Integral_NT_op_dS.h</label>
+        <link refid="_integral___n_t__op__d_s_8h_source"/>
+      </node>
+      <node id="239">
+        <label>source/includes/integration/pde_operators/analytical/Integral_NT_rhsop_N_dV.h</label>
+        <link refid="_integral___n_t__rhsop___n__d_v_8h_source"/>
+      </node>
+      <node id="240">
+        <label>source/includes/integration/pde_operators/analytical/Integral_dNT_dN_dV.h</label>
+        <link refid="_integral__d_n_t__d_n__d_v_8h_source"/>
+      </node>
+      <node id="203">
+        <label>source/includes/integration/pde_operators/analytical/Integral_dNT_op_dN_NT_v_dN_dV.h</label>
+        <link refid="_integral__d_n_t__op__d_n___n_t__v__d_n__d_v_8h_source"/>
+      </node>
+      <node id="204">
+        <label>source/includes/integration/pde_operators/analytical/Integral_dNT_op_dN_dV.h</label>
+        <link refid="_integral__d_n_t__op__d_n__d_v_8h_source"/>
+      </node>
+      <node id="205">
+        <label>source/includes/integration/pde_operators/analytical/Integral_dNT_op_dN_dV_Analytical.h</label>
+        <link refid="_integral__d_n_t__op__d_n__d_v___analytical_8h_source"/>
+      </node>
+      <node id="241">
+        <label>source/includes/integration/pde_operators/analytical/Integral_dNT_rhsop_dN_dV.h</label>
+        <link refid="_integral__d_n_t__rhsop__d_n__d_v_8h_source"/>
+      </node>
+      <node id="242">
+        <label>source/includes/integration/pde_operators/analytical/Integral_op_NT_dN_orthogonal_dV.h</label>
+        <link refid="_integral__op___n_t__d_n__orthogonal__d_v_8h_source"/>
+      </node>
+      <node id="243">
+        <label>source/includes/integration/pde_operators/analytical/Integral_rhsop_dNT_dN_dV.h</label>
+        <link refid="_integral__rhsop__d_n_t__d_n__d_v_8h_source"/>
+      </node>
+      <node id="206">
+        <label>source/includes/integration/pde_operators/analytical/Integral_var_NT_lhsop_N_dV.h</label>
+        <link refid="_integral__var___n_t__lhsop___n__d_v_8h_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="244">
+        <label>source/includes/integration/pde_operators/analytical/Integral_var_NT_rhsop_N_dV.h</label>
+        <link refid="_integral__var___n_t__rhsop___n__d_v_8h_source"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="207">
+        <label>source/includes/integration/pde_operators/analytical/Jacobian_Integral_dNT_op_dN_dV.h</label>
+        <link refid="_jacobian___integral__d_n_t__op__d_n__d_v_8h_source"/>
+      </node>
+      <node id="208">
+        <label>source/includes/integration/pde_operators/analytical/Jacobian_Upwind_Integral_dNT_op_dN_dV.h</label>
+        <link refid="_jacobian___upwind___integral__d_n_t__op__d_n__d_v_8h_source"/>
+      </node>
+      <node id="209">
+        <label>source/includes/integration/pde_operators/analytical/LHS_Integral_dNT_dN_dV.h</label>
+        <link refid="_l_h_s___integral__d_n_t__d_n__d_v_8h_source"/>
+      </node>
+      <node id="210">
+        <label>source/includes/integration/pde_operators/analytical/Upwind_Integral_dNT_op_dN_dV.h</label>
+        <link refid="_upwind___integral__d_n_t__op__d_n__d_v_8h_source"/>
+      </node>
+      <node id="245">
+        <label>source/includes/integration/pde_operators/analytical/Upwind_Integral_dNT_rhsop_dN_dV.h</label>
+        <link refid="_upwind___integral__d_n_t__rhsop__d_n__d_v_8h_source"/>
+      </node>
+      <node id="246">
+        <label>source/includes/integration/pde_operators/analytical/Upwind_Integral_dNT_rhsop_g_dV.h</label>
+        <link refid="_upwind___integral__d_n_t__rhsop__g__d_v_8h_source"/>
+      </node>
+      <node id="211">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_BT_D_B_dV.h</label>
+        <link refid="_num_integral___b_t___d___b__d_v_8h_source"/>
+      </node>
+      <node id="247">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_BT_D_op_dV.h</label>
+        <link refid="_num_integral___b_t___d__op__d_v_8h_source"/>
+      </node>
+      <node id="248">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_BT_op_dV.h</label>
+        <link refid="_num_integral___b_t__op__d_v_8h_source"/>
+      </node>
+      <node id="212">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_DNT_op_DN_NT_v_DN_dV.h</label>
+        <link refid="_num_integral___d_n_t__op___d_n___n_t__v___d_n__d_v_8h_source"/>
+      </node>
+      <node id="249">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_DNT_rhsop_DN_dV.h</label>
+        <link refid="_num_integral___d_n_t__rhsop___d_n__d_v_8h_source"/>
+      </node>
+      <node id="250">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_DNT_v_dV.h</label>
+        <link refid="_num_integral___d_n_t__v__d_v_8h_source"/>
+      </node>
+      <node id="251">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_DNi_rhsop_dV.h</label>
+        <link refid="_num_integral___d_ni__rhsop__d_v_8h_source"/>
+      </node>
+      <node id="213">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_dNi_dV.h</label>
+        <link refid="_num_integral___n_t__d_ni__d_v_8h_source"/>
+      </node>
+      <node id="214">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_dNi_dV_sc.h</label>
+        <link refid="_num_integral___n_t__d_ni__d_v__sc_8h_source"/>
+      </node>
+      <node id="215">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_lhsop_N_dV.h</label>
+        <link refid="_num_integral___n_t__lhsop___n__d_v_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="198" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="252">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_mixed_op_dNi_dV.h</label>
+        <link refid="_num_integral___n_t__mixed__op__d_ni__d_v_8h_source"/>
+      </node>
+      <node id="253">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_op1_op2_dNi_dV.h</label>
+        <link refid="_num_integral___n_t__op1__op2__d_ni__d_v_8h_source"/>
+      </node>
+      <node id="254">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_op_N_dS.h</label>
+        <link refid="_num_integral___n_t__op___n__d_s_8h_source"/>
+      </node>
+      <node id="255">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_op_N_dV.h</label>
+        <link refid="_num_integral___n_t__op___n__d_v_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="198" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="256">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_NT_op_dNi_dV.h</label>
+        <link refid="_num_integral___n_t__op__d_ni__d_v_8h_source"/>
+      </node>
+      <node id="216">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_PT_lhsop_P_dV.h</label>
+        <link refid="_num_integral___p_t__lhsop___p__d_v_8h_source"/>
+      </node>
+      <node id="257">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_PT_op_P_dV.h</label>
+        <link refid="_num_integral___p_t__op___p__d_v_8h_source"/>
+      </node>
+      <node id="258">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_PT_op_dS.h</label>
+        <link refid="_num_integral___p_t__op__d_s_8h_source"/>
+      </node>
+      <node id="259">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_PT_op_dV.h</label>
+        <link refid="_num_integral___p_t__op__d_v_8h_source"/>
+      </node>
+      <node id="260">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_SetRHS_to_One.h</label>
+        <link refid="_num_integral___set_r_h_s__to___one_8h_source"/>
+      </node>
+      <node id="261">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_SetRHS_to_Zero.h</label>
+        <link refid="_num_integral___set_r_h_s__to___zero_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="217">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_dN_dV.h</label>
+        <link refid="_num_integral__d_n_t__d_n__d_v_8h_source"/>
+      </node>
+      <node id="176">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV.h</label>
+        <link refid="_num_integral__d_n_t__mixed__op__d_n___n_t__v__d_n__d_v_8h_source"/>
+      </node>
+      <node id="218">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_mixed_op_dN_dV.h</label>
+        <link refid="_num_integral__d_n_t__mixed__op__d_n__d_v_8h_source"/>
+      </node>
+      <node id="219">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_op_dN_NT_op_dop_dN_dV.h</label>
+        <link refid="_num_integral__d_n_t__op__d_n___n_t__op__dop__d_n__d_v_8h_source"/>
+      </node>
+      <node id="220">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_op_dN_dV.h</label>
+        <link refid="_num_integral__d_n_t__op__d_n__d_v_8h_source"/>
+        <childnode refid="197" relation="include">
+        </childnode>
+        <childnode refid="198" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="120">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_op_dN_dV_InterFace.h</label>
+        <link refid="_num_integral__d_n_t__op__d_n__d_v___inter_face_8h_source"/>
+      </node>
+      <node id="221">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_op_dN_dV_NT_v_dN_dV.h</label>
+        <link refid="_num_integral__d_n_t__op__d_n__d_v___n_t__v__d_n__d_v_8h_source"/>
+      </node>
+      <node id="262">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dNT_op_dV.h</label>
+        <link refid="_num_integral__d_n_t__op__d_v_8h_source"/>
+        <childnode refid="198" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="121">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.h</label>
+        <link refid="_num_integral__dudn__op__u__d_s___inter_face__w__dim_m1___region_8h_source"/>
+      </node>
+      <node id="122">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_dudn_rhsop_u_dS.h</label>
+        <link refid="_num_integral__dudn__rhsop__u__d_s_8h_source"/>
+      </node>
+      <node id="263">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_op_NT_N_dV.h</label>
+        <link refid="_num_integral__op___n_t___n__d_v_8h_source"/>
+      </node>
+      <node id="264">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_op_NT_dN_orthogonal_dV.h</label>
+        <link refid="_num_integral__op___n_t__d_n__orthogonal__d_v_8h_source"/>
+      </node>
+      <node id="265">
+        <label>source/includes/integration/pde_operators/numerical/NumIntegral_op_PT_P_dV.h</label>
+        <link refid="_num_integral__op___p_t___p__d_v_8h_source"/>
+      </node>
+      <node id="153">
+        <label>source/includes/interfaces/ANSYS/ANSYS_ElementSpecifications.h</label>
+        <link refid="_a_n_s_y_s___element_specifications_8h_source"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Interface.h</label>
+        <link refid="_a_n_s_y_s___interface_8h_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Model2D.h</label>
+        <link refid="_a_n_s_y_s___model2_d_8h_source"/>
+      </node>
+      <node id="58">
+        <label>source/includes/interfaces/ANSYS/ANSYS_Model3D.h</label>
+        <link refid="_a_n_s_y_s___model3_d_8h_source"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="154">
+        <label>source/includes/interfaces/CGNS/CGNS_ElementSpecifications.h</label>
+        <link refid="_c_g_n_s___element_specifications_8h_source"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>source/includes/interfaces/CGNS/CGNS_Interface.h</label>
+        <link refid="_c_g_n_s___interface_8h_source"/>
+      </node>
+      <node id="59">
+        <label>source/includes/interfaces/CGNS/CGNS_Model.h</label>
+        <link refid="_c_g_n_s___model_8h_source"/>
+      </node>
+      <node id="19">
+        <label>source/includes/interfaces/Eclipse/CellGenerator.h</label>
+        <link refid="_cell_generator_8h_source"/>
+      </node>
+      <node id="16">
+        <label>source/includes/interfaces/Eclipse/EclipseInterface.h</label>
+        <link refid="_eclipse_interface_8h"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>source/includes/interfaces/Eclipse/EclipseModel.h</label>
+        <link refid="_eclipse_model_8h_source"/>
+      </node>
+      <node id="20">
+        <label>source/includes/interfaces/Eclipse/GridIJK.h</label>
+        <link refid="_grid_i_j_k_8h_source"/>
+      </node>
+      <node id="14">
+        <label>source/includes/interfaces/Eclipse/MeshingTools.h</label>
+        <link refid="_meshing_tools_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="156">
+        <label>source/includes/interfaces/Eclipse/PolygonCell.h</label>
+        <link refid="_polygon_cell_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="155">
+        <label>source/includes/interfaces/Eclipse/PolygonGrid.h</label>
+        <link refid="_polygon_grid_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="156" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="181">
+        <label>source/includes/interfaces/JPEG/JPEG_Interface.h</label>
+        <link refid="_j_p_e_g___interface_8h_source"/>
+      </node>
+      <node id="182">
+        <label>source/includes/interfaces/JPEG/JPEG_RegionInterface.h</label>
+        <link refid="_j_p_e_g___region_interface_8h_source"/>
+      </node>
+      <node id="60">
+        <label>source/includes/interfaces/Matlab/MatlabInterface.h</label>
+        <link refid="_matlab_interface_8h_source"/>
+      </node>
+      <node id="91">
+        <label>source/includes/interfaces/StochasticPermeabilityFieldInterface.h</label>
+        <link refid="_stochastic_permeability_field_interface_8h_source"/>
+      </node>
+      <node id="177">
+        <label>source/includes/interfaces/TextInterface.h</label>
+        <link refid="_text_interface_8h_source"/>
+      </node>
+      <node id="157">
+        <label>source/includes/interfaces/VTK/VTK_Interface.h</label>
+        <link refid="_v_t_k___interface_8h_source"/>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="158">
+        <label>source/includes/interfaces/VTK/VTK_Type.h</label>
+        <link refid="_v_t_k___type_8h_source"/>
+        <childnode refid="157" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>source/includes/interfaces/VTK/VTU_Interface.h</label>
+        <link refid="_v_t_u___interface_8h_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>source/includes/interfaces/gOcad_SKUA/SKUA_FiniteElementMeshInterface.h</label>
+        <link refid="_s_k_u_a___finite_element_mesh_interface_8h_source"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>source/includes/interfaces/gOcad_SKUA/SKUA_Model.h</label>
+        <link refid="_s_k_u_a___model_8h_source"/>
+      </node>
+      <node id="151">
+        <label>source/includes/math/AP_algebraUtilities.h</label>
+        <link refid="_a_p__algebra_utilities_8h_source"/>
+      </node>
+      <node id="178">
+        <label>source/includes/math/CSMP_mathUtilities.h</label>
+        <link refid="_c_s_m_p__math_utilities_8h"/>
+        <childnode refid="179" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="185" relation="include">
+        </childnode>
+        <childnode refid="186" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/math/DenseMatrix.h</label>
+        <link refid="_dense_matrix_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="149" relation="include">
+        </childnode>
+        <childnode refid="168" relation="include">
+        </childnode>
+        <childnode refid="169" relation="include">
+        </childnode>
+        <childnode refid="172" relation="include">
+        </childnode>
+        <childnode refid="174" relation="include">
+        </childnode>
+        <childnode refid="175" relation="include">
+        </childnode>
+        <childnode refid="176" relation="include">
+        </childnode>
+        <childnode refid="177" relation="include">
+        </childnode>
+        <childnode refid="178" relation="include">
+        </childnode>
+        <childnode refid="187" relation="include">
+        </childnode>
+        <childnode refid="188" relation="include">
+        </childnode>
+        <childnode refid="227" relation="include">
+        </childnode>
+        <childnode refid="99" relation="include">
+        </childnode>
+        <childnode refid="222" relation="include">
+        </childnode>
+        <childnode refid="223" relation="include">
+        </childnode>
+        <childnode refid="224" relation="include">
+        </childnode>
+        <childnode refid="266" relation="include">
+        </childnode>
+        <childnode refid="225" relation="include">
+        </childnode>
+        <childnode refid="268" relation="include">
+        </childnode>
+        <childnode refid="269" relation="include">
+        </childnode>
+        <childnode refid="125" relation="include">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>source/includes/math/RandomFieldGenerator.h</label>
+        <link refid="_random_field_generator_8h_source"/>
+      </node>
+      <node id="187">
+        <label>source/includes/math/denseMatrixMethods.h</label>
+        <link refid="dense_matrix_methods_8h_source"/>
+      </node>
+      <node id="118">
+        <label>source/includes/model/Boundary.h</label>
+        <link refid="_boundary_8h_source"/>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>source/includes/model/Edge.h</label>
+        <link refid="_edge_8h_source"/>
+      </node>
+      <node id="29">
+        <label>source/includes/model/Element.h</label>
+        <link refid="_element_8h_source"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+        <childnode refid="96" relation="include">
+        </childnode>
+        <childnode refid="111" relation="include">
+        </childnode>
+        <childnode refid="112" relation="include">
+        </childnode>
+        <childnode refid="113" relation="include">
+        </childnode>
+        <childnode refid="114" relation="include">
+        </childnode>
+        <childnode refid="115" relation="include">
+        </childnode>
+        <childnode refid="116" relation="include">
+        </childnode>
+      </node>
+      <node id="117">
+        <label>source/includes/model/Face.h</label>
+        <link refid="_face_8h_source"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="118" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>source/includes/model/FieldVariable.h</label>
+        <link refid="model_2_field_variable_8h_source"/>
+      </node>
+      <node id="159">
+        <label>source/includes/model/FiniteElementManager.h</label>
+        <link refid="_finite_element_manager_8h_source"/>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="160" relation="include">
+        </childnode>
+        <childnode refid="161" relation="include">
+        </childnode>
+      </node>
+      <node id="127">
+        <label>source/includes/model/FiniteElementManager_stack_version.h</label>
+        <link refid="_finite_element_manager__stack__version_8h_source"/>
+      </node>
+      <node id="119">
+        <label>source/includes/model/InterFace.h</label>
+        <link refid="_inter_face_8h_source"/>
+        <childnode refid="120" relation="include">
+        </childnode>
+        <childnode refid="121" relation="include">
+        </childnode>
+        <childnode refid="122" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="123" relation="include">
+        </childnode>
+        <childnode refid="125" relation="include">
+        </childnode>
+      </node>
+      <node id="188">
+        <label>source/includes/model/MathOperatorLHS.h</label>
+        <link refid="_math_operator_l_h_s_8h_source"/>
+        <childnode refid="189" relation="include">
+        </childnode>
+        <childnode refid="192" relation="include">
+        </childnode>
+        <childnode refid="193" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="200" relation="include">
+        </childnode>
+        <childnode refid="201" relation="include">
+        </childnode>
+        <childnode refid="202" relation="include">
+        </childnode>
+        <childnode refid="203" relation="include">
+        </childnode>
+        <childnode refid="204" relation="include">
+        </childnode>
+        <childnode refid="205" relation="include">
+        </childnode>
+        <childnode refid="206" relation="include">
+        </childnode>
+        <childnode refid="207" relation="include">
+        </childnode>
+        <childnode refid="208" relation="include">
+        </childnode>
+        <childnode refid="209" relation="include">
+        </childnode>
+        <childnode refid="210" relation="include">
+        </childnode>
+        <childnode refid="211" relation="include">
+        </childnode>
+        <childnode refid="212" relation="include">
+        </childnode>
+        <childnode refid="213" relation="include">
+        </childnode>
+        <childnode refid="214" relation="include">
+        </childnode>
+        <childnode refid="215" relation="include">
+        </childnode>
+        <childnode refid="216" relation="include">
+        </childnode>
+        <childnode refid="217" relation="include">
+        </childnode>
+        <childnode refid="176" relation="include">
+        </childnode>
+        <childnode refid="218" relation="include">
+        </childnode>
+        <childnode refid="219" relation="include">
+        </childnode>
+        <childnode refid="220" relation="include">
+        </childnode>
+        <childnode refid="120" relation="include">
+        </childnode>
+        <childnode refid="221" relation="include">
+        </childnode>
+        <childnode refid="121" relation="include">
+        </childnode>
+        <childnode refid="222" relation="include">
+        </childnode>
+        <childnode refid="223" relation="include">
+        </childnode>
+        <childnode refid="224" relation="include">
+        </childnode>
+        <childnode refid="225" relation="include">
+        </childnode>
+        <childnode refid="226" relation="include">
+        </childnode>
+      </node>
+      <node id="227">
+        <label>source/includes/model/MathOperatorRHS.h</label>
+        <link refid="_math_operator_r_h_s_8h_source"/>
+        <childnode refid="228" relation="include">
+        </childnode>
+        <childnode refid="231" relation="include">
+        </childnode>
+        <childnode refid="193" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="232" relation="include">
+        </childnode>
+        <childnode refid="233" relation="include">
+        </childnode>
+        <childnode refid="234" relation="include">
+        </childnode>
+        <childnode refid="235" relation="include">
+        </childnode>
+        <childnode refid="236" relation="include">
+        </childnode>
+        <childnode refid="237" relation="include">
+        </childnode>
+        <childnode refid="238" relation="include">
+        </childnode>
+        <childnode refid="239" relation="include">
+        </childnode>
+        <childnode refid="240" relation="include">
+        </childnode>
+        <childnode refid="241" relation="include">
+        </childnode>
+        <childnode refid="242" relation="include">
+        </childnode>
+        <childnode refid="243" relation="include">
+        </childnode>
+        <childnode refid="244" relation="include">
+        </childnode>
+        <childnode refid="245" relation="include">
+        </childnode>
+        <childnode refid="246" relation="include">
+        </childnode>
+        <childnode refid="247" relation="include">
+        </childnode>
+        <childnode refid="248" relation="include">
+        </childnode>
+        <childnode refid="249" relation="include">
+        </childnode>
+        <childnode refid="250" relation="include">
+        </childnode>
+        <childnode refid="251" relation="include">
+        </childnode>
+        <childnode refid="252" relation="include">
+        </childnode>
+        <childnode refid="253" relation="include">
+        </childnode>
+        <childnode refid="254" relation="include">
+        </childnode>
+        <childnode refid="255" relation="include">
+        </childnode>
+        <childnode refid="256" relation="include">
+        </childnode>
+        <childnode refid="257" relation="include">
+        </childnode>
+        <childnode refid="258" relation="include">
+        </childnode>
+        <childnode refid="259" relation="include">
+        </childnode>
+        <childnode refid="260" relation="include">
+        </childnode>
+        <childnode refid="261" relation="include">
+        </childnode>
+        <childnode refid="262" relation="include">
+        </childnode>
+        <childnode refid="122" relation="include">
+        </childnode>
+        <childnode refid="263" relation="include">
+        </childnode>
+        <childnode refid="264" relation="include">
+        </childnode>
+        <childnode refid="265" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>source/includes/model/MeshManager.h</label>
+        <link refid="_mesh_manager_8h_source"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="162">
+        <label>source/includes/model/MeshPatch.h</label>
+        <link refid="_mesh_patch_8h_source"/>
+      </node>
+      <node id="39">
+        <label>source/includes/model/Model.h</label>
+        <link refid="_model_8h_source"/>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>source/includes/model/Model1D.h</label>
+        <link refid="_model1_d_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>source/includes/model/ModelTopology.h</label>
+        <link refid="_model_topology_8h_source"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>source/includes/model/PropertyAtPointVisitor.h</label>
+        <link refid="_property_at_point_visitor_8h_source"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+      </node>
+      <node id="85">
+        <label>source/includes/model/Region.h</label>
+        <link refid="_region_8h_source"/>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+      </node>
+      <node id="123">
+        <label>source/includes/model/SplitBoundary.h</label>
+        <link refid="_split_boundary_8h_source"/>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="124" relation="include">
+        </childnode>
+      </node>
+      <node id="90">
+        <label>source/includes/property_manipulation/PropertyHandle.h</label>
+        <link refid="_property_handle_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>source/includes/regular_grids/CornerPointCell.h</label>
+        <link refid="_corner_point_cell_8h_source"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>source/includes/regular_grids/CornerPointGrid.h</label>
+        <link refid="_corner_point_grid_8h_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="183">
+        <label>source/includes/regular_grids/ElementGrid.h</label>
+        <link refid="_element_grid_8h_source"/>
+        <childnode refid="163" relation="include">
+        </childnode>
+        <childnode refid="164" relation="include">
+        </childnode>
+        <childnode refid="184" relation="include">
+        </childnode>
+      </node>
+      <node id="163">
+        <label>source/includes/regular_grids/FemFromGridVisitor.h</label>
+        <link refid="_fem_from_grid_visitor_8h_source"/>
+      </node>
+      <node id="164">
+        <label>source/includes/regular_grids/FemToGridVisitor.h</label>
+        <link refid="_fem_to_grid_visitor_8h_source"/>
+      </node>
+      <node id="180">
+        <label>source/includes/regular_grids/FiniteDifferenceGrid.h</label>
+        <link refid="_finite_difference_grid_8h_source"/>
+        <childnode refid="181" relation="include">
+        </childnode>
+        <childnode refid="182" relation="include">
+        </childnode>
+        <childnode refid="183" relation="include">
+        </childnode>
+        <childnode refid="184" relation="include">
+        </childnode>
+      </node>
+      <node id="184">
+        <label>source/includes/regular_grids/TransportVisitor2D.h</label>
+        <link refid="_transport_visitor2_d_8h_source"/>
+      </node>
+      <node id="33">
+        <label>source/includes/run_control/SimulatorControl.h</label>
+        <link refid="_simulator_control_8h_source"/>
+      </node>
+      <node id="74">
+        <label>source/includes/run_control/SimulatorMonitor.h</label>
+        <link refid="_simulator_monitor_8h_source"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>source/includes/run_control/SimulatorSetup.h</label>
+        <link refid="_simulator_setup_8h_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="97">
+        <label>source/includes/thmc/fractures/FourarLenormand.h</label>
+        <link refid="_fourar_lenormand_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="93">
+        <label>source/includes/thmc/fractures/Fracture.h</label>
+        <link refid="_fracture_8h_source"/>
+      </node>
+      <node id="98">
+        <label>source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h</label>
+        <link refid="_fracture_compute_capillary_gradient_visitor_8h_source"/>
+      </node>
+      <node id="99">
+        <label>source/includes/thmc/fractures/FractureComputeVelocityVisitor.h</label>
+        <link refid="_fracture_compute_velocity_visitor_8h_source"/>
+      </node>
+      <node id="100">
+        <label>source/includes/thmc/fractures/FractureMatrixUpscaled.h</label>
+        <link refid="_fracture_matrix_upscaled_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>source/includes/thmc/fractures/HydroFractureVisitor.h</label>
+        <link refid="_hydro_fracture_visitor_8h_source"/>
+      </node>
+      <node id="222">
+        <label>source/includes/thmc/mechanics/StressesAndStrains.h</label>
+        <link refid="_stresses_and_strains_8h_source"/>
+      </node>
+      <node id="223">
+        <label>source/includes/thmc/mechanics/StressesAndStrains2.h</label>
+        <link refid="_stresses_and_strains2_8h_source"/>
+        <childnode refid="222" relation="include">
+        </childnode>
+      </node>
+      <node id="224">
+        <label>source/includes/thmc/mechanics/StressesAndStrainsIP3D.h</label>
+        <link refid="_stresses_and_strains_i_p3_d_8h_source"/>
+      </node>
+      <node id="266">
+        <label>source/includes/thmc/mechanics/mechanics.h</label>
+        <link refid="mechanics_8h_source"/>
+        <childnode refid="267" relation="include">
+        </childnode>
+      </node>
+      <node id="160">
+        <label>source/includes/thmc/single_phase_flow/ComputeSinglePhaseGravityTermVisitor.h</label>
+        <link refid="_compute_single_phase_gravity_term_visitor_8h_source"/>
+      </node>
+      <node id="76">
+        <label>source/includes/thmc/single_phase_flow/DispersivityVisitor.h</label>
+        <link refid="_dispersivity_visitor_8h_source"/>
+      </node>
+      <node id="92">
+        <label>source/includes/thmc/single_phase_flow/StreamingPotential.h</label>
+        <link refid="_streaming_potential_8h_source"/>
+      </node>
+      <node id="225">
+        <label>source/includes/thmc/single_phase_flow/VelocityAndVolumeFlux.h</label>
+        <link refid="_velocity_and_volume_flux_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="101">
+        <label>source/includes/thmc/two_phase_flow/BrooksCorey.h</label>
+        <link refid="_brooks_corey_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="102">
+        <label>source/includes/thmc/two_phase_flow/BrooksCoreyCO2.h</label>
+        <link refid="_brooks_corey_c_o2_8h_source"/>
+      </node>
+      <node id="103">
+        <label>source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresis.h</label>
+        <link refid="_brooks_corey_with_hysteresis_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="104">
+        <label>source/includes/thmc/two_phase_flow/BrooksCoreyWithHysteresisCO2.h</label>
+        <link refid="_brooks_corey_with_hysteresis_c_o2_8h_source"/>
+      </node>
+      <node id="105">
+        <label>source/includes/thmc/two_phase_flow/Corey.h</label>
+        <link refid="_corey_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="106">
+        <label>source/includes/thmc/two_phase_flow/ExperimentalRT.h</label>
+        <link refid="_experimental_r_t_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="94">
+        <label>source/includes/thmc/two_phase_flow/ExperimentalSaturationFunctions.h</label>
+        <link refid="_experimental_saturation_functions_8h_source"/>
+        <childnode refid="95" relation="include">
+        </childnode>
+      </node>
+      <node id="95">
+        <label>source/includes/thmc/two_phase_flow/FlowFunctionsModule.h</label>
+        <link refid="_flow_functions_module_8h_source"/>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+      </node>
+      <node id="107">
+        <label>source/includes/thmc/two_phase_flow/HeterogeneityAndRateAwareModel.h</label>
+        <link refid="_heterogeneity_and_rate_aware_model_8h_source"/>
+      </node>
+      <node id="108">
+        <label>source/includes/thmc/two_phase_flow/LinearTwoPhaseModel.h</label>
+        <link refid="_linear_two_phase_model_8h_source"/>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="109">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseFileBased.h</label>
+        <link refid="_two_phase_file_based_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="96">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseModel.h</label>
+        <link refid="_two_phase_model_8h_source"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="97" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+        <childnode refid="99" relation="include">
+        </childnode>
+        <childnode refid="100" relation="include">
+        </childnode>
+        <childnode refid="101" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+        <childnode refid="103" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="105" relation="include">
+        </childnode>
+        <childnode refid="106" relation="include">
+        </childnode>
+        <childnode refid="107" relation="include">
+        </childnode>
+        <childnode refid="108" relation="include">
+        </childnode>
+        <childnode refid="109" relation="include">
+        </childnode>
+        <childnode refid="110" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseUndersaturatedFluidPropertyVisitor.h</label>
+        <link refid="_two_phase_undersaturated_fluid_property_visitor_8h_source"/>
+      </node>
+      <node id="268">
+        <label>source/includes/thmc/two_phase_flow/TwoPhaseVelocityAndVolumeFlux.h</label>
+        <link refid="_two_phase_velocity_and_volume_flux_8h_source"/>
+      </node>
+      <node id="110">
+        <label>source/includes/thmc/two_phase_flow/VanGenuchten.h</label>
+        <link refid="_van_genuchten_8h_source"/>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="165">
+        <label>source/includes/utilities/FaceData.h</label>
+        <link refid="_face_data_8h_source"/>
+      </node>
+      <node id="72">
+        <label>source/includes/utilities/ModelComparator.h</label>
+        <link refid="_model_comparator_8h_source"/>
+      </node>
+      <node id="78">
+        <label>source/includes/utilities/PL_Utilities.h</label>
+        <link refid="_p_l___utilities_8h"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>source/includes/utilities/vsetMakers.h</label>
+        <link refid="vset_makers_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="226">
+        <label>source/modules/integration/pde_operators/fv_integration/CVFE_NumIntegral_dNT_op_dN_dV.h</label>
+        <link refid="_c_v_f_e___num_integral__d_n_t__op__d_n__d_v_8h_source"/>
+      </node>
+      <node id="88">
+        <label>source/modules/integration/solver/SAMG_profiles/SteadyStateDiffusionProfile.h</label>
+        <link refid="_steady_state_diffusion_profile_8h_source"/>
+      </node>
+      <node id="56">
+        <label>source/modules/integration/solver/SAMG_profiles/TwoPhaseImplicitNodeCenteredFVTransProfile.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_trans_profile_8h_source"/>
+      </node>
+      <node id="185">
+        <label>source/modules/math/CSMP_mathUtilities.cpp</label>
+        <link refid="_c_s_m_p__math_utilities_8cpp"/>
+      </node>
+      <node id="267">
+        <label>source/modules/thmc/mechanics/mechanics.cpp</label>
+        <link refid="mechanics_8cpp"/>
+      </node>
+      <node id="4">
+        <label>tests/integration/CVFEM_1D_VVCase.h</label>
+        <link refid="_c_v_f_e_m__1_d___v_v_case_8h_source"/>
+      </node>
+      <node id="34">
+        <label>tests/integration/Geothermal_2D_VVCase.h</label>
+        <link refid="_geothermal__2_d___v_v_case_8h_source"/>
+      </node>
+      <node id="35">
+        <label>tests/integration/Geothermal_3D_VVCase.h</label>
+        <link refid="_geothermal__3_d___v_v_case_8h_source"/>
+      </node>
+      <node id="79">
+        <label>tests/unit/BoundaryInterface_Test.h</label>
+        <link refid="_boundary_interface___test_8h_source"/>
+      </node>
+      <node id="37">
+        <label>tests/unit/Boundary_Test.h</label>
+        <link refid="_boundary___test_8h_source"/>
+      </node>
+      <node id="111">
+        <label>tests/unit/Colony_Test.h</label>
+        <link refid="_colony___test_8h_source"/>
+      </node>
+      <node id="269">
+        <label>tests/unit/DenseMatrix_Test.h</label>
+        <link refid="_dense_matrix___test_8h_source"/>
+      </node>
+      <node id="112">
+        <label>tests/unit/ElementPolicyIntegrity_Test.h</label>
+        <link refid="_element_policy_integrity___test_8h_source"/>
+      </node>
+      <node id="113">
+        <label>tests/unit/Element_Test.h</label>
+        <link refid="_element___test_8h_source"/>
+      </node>
+      <node id="161">
+        <label>tests/unit/FiniteElementManager_Test.h</label>
+        <link refid="_finite_element_manager___test_8h_source"/>
+      </node>
+      <node id="166">
+        <label>tests/unit/FiniteElement_Test.h</label>
+        <link refid="_finite_element___test_8h_source"/>
+      </node>
+      <node id="167">
+        <label>tests/unit/FiniteElement_TestData.h</label>
+        <link refid="_finite_element___test_data_8h_source"/>
+        <childnode refid="166" relation="include">
+        </childnode>
+      </node>
+      <node id="114">
+        <label>tests/unit/FiniteVolumePolicy_Test.h</label>
+        <link refid="_finite_volume_policy___test_8h_source"/>
+      </node>
+      <node id="152">
+        <label>tests/unit/FiniteVolumeStencil_Test.h</label>
+        <link refid="_finite_volume_stencil___test_8h_source"/>
+      </node>
+      <node id="11">
+        <label>tests/unit/Integral_var_NT_lhsop_N_dV_Test.h</label>
+        <link refid="_integral__var___n_t__lhsop___n__d_v___test_8h_source"/>
+      </node>
+      <node id="12">
+        <label>tests/unit/Integral_var_NT_rhsop_N_dV_Test.h</label>
+        <link refid="_integral__var___n_t__rhsop___n__d_v___test_8h_source"/>
+      </node>
+      <node id="125">
+        <label>tests/unit/InterFace_Test.h</label>
+        <link refid="_inter_face___test_8h_source"/>
+      </node>
+      <node id="115">
+        <label>tests/unit/IsoparametricQuadraticTetrahedron_Test.h</label>
+        <link refid="_isoparametric_quadratic_tetrahedron___test_8h_source"/>
+      </node>
+      <node id="116">
+        <label>tests/unit/LinearCuboid_Test.h</label>
+        <link refid="_linear_cuboid___test_8h_source"/>
+      </node>
+      <node id="65">
+        <label>tests/unit/MathOperatorLHS_Test.h</label>
+        <link refid="_math_operator_l_h_s___test_8h_source"/>
+      </node>
+      <node id="66">
+        <label>tests/unit/MathOperatorRHS_Test.h</label>
+        <link refid="_math_operator_r_h_s___test_8h_source"/>
+      </node>
+      <node id="80">
+        <label>tests/unit/MeshManager_Test.h</label>
+        <link refid="_mesh_manager___test_8h_source"/>
+      </node>
+      <node id="186">
+        <label>tests/unit/ModelSubDomain_Test.h</label>
+        <link refid="_model_sub_domain___test_8h_source"/>
+      </node>
+      <node id="26">
+        <label>tests/unit/ModelTopology_Test.h</label>
+        <link refid="_model_topology___test_8h_source"/>
+      </node>
+      <node id="81">
+        <label>tests/unit/NodeManifoldManager_Test.h</label>
+        <link refid="_node_manifold_manager___test_8h_source"/>
+      </node>
+      <node id="199">
+        <label>tests/unit/PDE_Integrator_Test.h</label>
+        <link refid="_p_d_e___integrator___test_8h_source"/>
+      </node>
+      <node id="89">
+        <label>tests/unit/Parallel_TestCase.h</label>
+        <link refid="_parallel___test_case_8h_source"/>
+      </node>
+      <node id="73">
+        <label>tests/unit/PropertyAtPointVisitor_Test.h</label>
+        <link refid="_property_at_point_visitor___test_8h_source"/>
+      </node>
+      <node id="82">
+        <label>tests/unit/PropertyHandle_Test.h</label>
+        <link refid="_property_handle___test_8h_source"/>
+      </node>
+      <node id="49">
+        <label>tests/unit/RegionMonitor_Test.h</label>
+        <link refid="_region_monitor___test_8h_source"/>
+      </node>
+      <node id="83">
+        <label>tests/unit/Region_Test.h</label>
+        <link refid="_region___test_8h_source"/>
+      </node>
+      <node id="84">
+        <label>tests/unit/RelativePermeabilityModel_Test.h</label>
+        <link refid="_relative_permeability_model___test_8h_source"/>
+      </node>
+      <node id="22">
+        <label>tests/unit/SKUA_FiniteElementMeshInterface_Test.h</label>
+        <link refid="_s_k_u_a___finite_element_mesh_interface___test_8h_source"/>
+      </node>
+      <node id="124">
+        <label>tests/unit/SplitBoundary_Test.h</label>
+        <link refid="_split_boundary___test_8h_source"/>
+      </node>
+      <node id="67">
+        <label>tests/unit/StatisticalAnalyzer_Test.h</label>
+        <link refid="_statistical_analyzer___test_8h_source"/>
+      </node>
+      <node id="68">
+        <label>tests/unit/TwoPhaseModelCapillaryPressure_TestSuite.h</label>
+        <link refid="_two_phase_model_capillary_pressure___test_suite_8h_source"/>
+      </node>
+      <node id="69">
+        <label>tests/unit/TwoPhaseModelWithCapillaryPressure_TestSuite.h</label>
+        <link refid="_two_phase_model_with_capillary_pressure___test_suite_8h_source"/>
+      </node>
+      <node id="70">
+        <label>tests/unit/TwoPhaseModel_TestSuite.h</label>
+        <link refid="_two_phase_model___test_suite_8h_source"/>
+      </node>
+      <node id="25">
+        <label>tests/unit/VSet_Test1.h</label>
+        <link refid="_v_set___test1_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_dense_matrix" prot="public">csmp::DenseMatrix</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="_dense_matrix_8h_1a7e3c68b98a62b7b63934ed9475a6b360" prot="public" static="no">
+        <name>DENSE_MATRIX_USED_TOGETHER_WITH_CSMP</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/math/DenseMatrix.h" line="4" column="9" bodyfile="source/includes/math/DenseMatrix.h" bodystart="4" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>CSMP_DENSE_MATRIX_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DENSE_MATRIX_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DENSE_MATRIX_USED_TOGETHER_WITH_CSMP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdexcept&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;typeinfo&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;array&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>DENSE_MATRIX_USED_TOGETHER_WITH_CSMP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Point.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;ScalarVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;VectorVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;TensorVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;ArrayVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;FlaggedArrayVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="group___c_s_m_pglobal_enums_1gaf487cd149273f4c0bdbd1e1027158b86" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="group___c_s_m_pglobal_enums_1gaf487cd149273f4c0bdbd1e1027158b86" kindref="member">CSMP_DMAT_SIZE</ref><sp/>{<sp/>DM3=3U,<sp/>DM4=4U,<sp/>DM6=6U,<sp/>DM12=12U,<sp/>DM_MIN=36U,<sp/>DM_MAX=81U<sp/>};</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>mn_max&gt;</highlight></codeline>
+<codeline lineno="45" refid="classcsmp_1_1_dense_matrix" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref><sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>();</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::initializer_list&lt;std::initializer_list&lt;double&gt;&gt;&amp;<sp/>);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>(<sp/>uint32_t<sp/>m,<sp/>uint32_t<sp/>n<sp/>);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>(<sp/>uint32_t<sp/>m,<sp/>uint32_t<sp/>n,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>rule<sp/>of<sp/>zero</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>Rows()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>Cols()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1a906c0bd524510a58ce4fc17e1e32700d" kindref="member">Resize</ref>(<sp/>uint32_t<sp/>m,<sp/>uint32_t<sp/>n<sp/>);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1a71a4bedea139e8007b48fccf2a25dd09" kindref="member">operator()</ref>(<sp/>uint32_t<sp/>m,<sp/>uint32_t<sp/>n<sp/>);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1a71a4bedea139e8007b48fccf2a25dd09" kindref="member">operator()</ref>(<sp/>uint32_t<sp/>m,<sp/>uint32_t<sp/>n<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1aa962eeba60f172035147cb07c96abc77" kindref="member">operator=</ref>(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>operator+=(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>operator-=(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref><sp/><sp/>operator+(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref><sp/><sp/>operator-(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">*<sp/>);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1a25440c1547adadbd859534e19f50f5b0" kindref="member">operator*</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a66c1d7d3c699b585b55dd813d1a4128d" kindref="member">Identity</ref>();</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a7fb32ff231baf2c4d532dadba32f705f" kindref="member">AssignToDiagonalAndZeroOffDiagonal</ref>(<sp/>uint32_t<sp/>diag_elmts,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a76e2251b50c15226a6de59ccb1721b68" kindref="member">RowCondenseTo</ref>(<sp/>std::vector&lt;double&gt;&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Zero();</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ZeroRow(<sp/>uint32_t<sp/>row<sp/>);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ZeroCol(<sp/>uint32_t<sp/>col<sp/>);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Fill(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FillRow(<sp/>uint32_t<sp/>row,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FillCol(<sp/>uint32_t<sp/>col,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val<sp/>);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a7219415834a3178c4edce3b27855676a" kindref="member">Transposed</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ae877c621f4c8f8a0780ddbb1ba439677" kindref="member">TransposedProduct</ref>(<sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1af05dfcc50e7ddb364c2dc59369f568ed" kindref="member">MultiplyWithTransposedOf</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;,<sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a16f7c5a2f25dbc64aa7c95949fa49be1" kindref="member">MultiplyTransposedOfWith</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;,<sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/>RowSum(<sp/>uint32_t<sp/>row<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/>ColSum(<sp/>uint32_t<sp/>col<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1a631ce9f5ae2f9234b012532b6002eb7e" kindref="member">NormL1</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1a5d4114487e7d2b6c0fc3824d800e2379" kindref="member">NormL_Infinity</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>In();</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Out(<sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>digits=5L<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>DENSE_MATRIX_USED_TOGETHER_WITH_CSMP</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108" refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="118" refid="classcsmp_1_1_dense_matrix_1ae84a4a8eec7c2035d47dfc161dd0cdf7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ae84a4a8eec7c2035d47dfc161dd0cdf7" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/>uint32_t<sp/>diag_elmts,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="135" refid="classcsmp_1_1_dense_matrix_1a477ea71ea5d457c47509ed9c577f235d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1a477ea71ea5d457c47509ed9c577f235d" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="143" refid="classcsmp_1_1_dense_matrix_1afaceebbbad76e0ee32ec2d233731c1ea" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1afaceebbbad76e0ee32ec2d233731c1ea" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>uint32_t<sp/>i,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>AssignCol(<sp/>uint32_t<sp/>j,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1a2b6cbb8ddaf27f387a4d45305aab09ee" kindref="member">AssignToDiagonal</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="149" refid="classcsmp_1_1_dense_matrix_1a04b54c2bb914e49ac05abe6013fc84fd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1a04b54c2bb914e49ac05abe6013fc84fd" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ExportTo(<sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;1U&gt;</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ExportTo(<sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;2U&gt;</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ExportTo(<sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;3U&gt;</ref>&amp;<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1aa962eeba60f172035147cb07c96abc77" kindref="member">operator=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1aa962eeba60f172035147cb07c96abc77" kindref="member">operator=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1aa962eeba60f172035147cb07c96abc77" kindref="member">operator=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="158" refid="classcsmp_1_1_dense_matrix_1af02abc045dd3d84265ed6d674af41eac" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1af02abc045dd3d84265ed6d674af41eac" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;1U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;2U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/><ref refid="classcsmp_1_1_dense_matrix_1ab88217ee227a01e70954830a100f5699" kindref="member">operator*=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;3U&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>square<sp/>matrix<sp/>of<sp/>dimension<sp/>mn_max<sp/>times<sp/>mn_max</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/>std::array&lt;std::array&lt;double,mn_max&gt;,<sp/>mn_max&gt;<sp/>data;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/>uint32_t<sp/><sp/>rows,<sp/>cols;</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/>CheckRange(<sp/>uint32_t<sp/>m,<sp/>uint32_t<sp/>n,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>originator<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/>CheckSizes(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix_1aacee4e65464fcb82005acc35e57e7b78" kindref="member">DenseMatrix</ref>&amp;<sp/>mat,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>originator<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="170"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight><highlight class="comment">//<sp/>associated<sp/>operators</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"></highlight></codeline>
+<codeline lineno="175"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>mn_max&gt;</highlight></codeline>
+<codeline lineno="176" refid="namespacecsmp_1abce478da080d5c69835f9b53ac54cd19" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1abce478da080d5c69835f9b53ac54cd19" kindref="member">operator==</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>);</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>mn_max&gt;</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref><sp/><sp/><ref refid="namespacecsmp_1a0699f387d21ee79b6dd02ccb1067fa36" kindref="member">operator+</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>a,<sp/></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>b<sp/>);</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"></highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>mn_max&gt;</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref><sp/><sp/><ref refid="namespacecsmp_1a608e2d7815c4db87fc42d7cb1b3f76ad" kindref="member">operator-</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>a,<sp/></highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>b<sp/>);</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>mn_max&gt;</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref><sp/><sp/><ref refid="namespacecsmp_1a83cd60f16044ec4c01401467e6748a77" kindref="member">operator*</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>a,<sp/></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>b<sp/>);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>mn_max&gt;</highlight></codeline>
+<codeline lineno="192"><highlight class="normal">std::vector&lt;double&gt;<sp/><sp/><ref refid="namespacecsmp_1a83cd60f16044ec4c01401467e6748a77" kindref="member">operator*</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>mat,</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>);</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"></highlight></codeline>
+<codeline lineno="196"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>mn_max&gt;</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref><sp/><sp/><ref refid="namespacecsmp_1a83cd60f16044ec4c01401467e6748a77" kindref="member">operator*</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>v,</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;mn_max&gt;</ref>&amp;<sp/>M<sp/>);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/math/DenseMatrix.h"/>
+  </compounddef>
+</doxygen>

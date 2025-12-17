@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_expiration" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::Expiration</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_expiration_1a36f9ab5200f3f0efeaceeae5ef18048a" prot="public" static="no" mutable="no">
+        <type>LICENSE_PERIOD</type>
+        <definition>LICENSE_PERIOD csmp::Expiration::duration</definition>
+        <argsstring></argsstring>
+        <name>duration</name>
+        <qualifiedname>csmp::Expiration::duration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/license.h" line="24" column="20" bodyfile="source/modules/run_control/license.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_expiration_1a2cbfe9f80a45faf9f893cd6bb0dfce93" prot="public" static="no" mutable="no">
+        <type>std::tm</type>
+        <definition>std::tm csmp::Expiration::start_time</definition>
+        <argsstring></argsstring>
+        <name>start_time</name>
+        <qualifiedname>csmp::Expiration::start_time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/license.h" line="25" column="20" bodyfile="source/modules/run_control/license.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_expiration_1a00067d6e676fd15e7600faad5cf17d9a" prot="public" static="no" mutable="no">
+        <type>std::time_t</type>
+        <definition>std::time_t csmp::Expiration::secs_remaining</definition>
+        <argsstring></argsstring>
+        <name>secs_remaining</name>
+        <qualifiedname>csmp::Expiration::secs_remaining</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/license.h" line="26" column="20" bodyfile="source/modules/run_control/license.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_expiration_1a8af6dfd1d0a85828448bb7bb59423a29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Expiration::Expiration</definition>
+        <argsstring>(LICENSE_PERIOD p, int startYear, int startMonth, int startDay)</argsstring>
+        <name>Expiration</name>
+        <qualifiedname>csmp::Expiration::Expiration</qualifiedname>
+        <param>
+          <type>LICENSE_PERIOD</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>startYear</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>startMonth</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>startDay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/run_control/license.h" line="23" column="4" bodyfile="source/modules/run_control/license.h" bodystart="51" bodyend="76"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Expiration</label>
+        <link refid="structcsmp_1_1_expiration"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/modules/run_control/license.h" line="22" column="1" bodyfile="source/modules/run_control/license.h" bodystart="22" bodyend="27"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_expiration_1a36f9ab5200f3f0efeaceeae5ef18048a" prot="public" virt="non-virtual"><scope>csmp::Expiration</scope><name>duration</name></member>
+      <member refid="structcsmp_1_1_expiration_1a8af6dfd1d0a85828448bb7bb59423a29" prot="public" virt="non-virtual"><scope>csmp::Expiration</scope><name>Expiration</name></member>
+      <member refid="structcsmp_1_1_expiration_1a00067d6e676fd15e7600faad5cf17d9a" prot="public" virt="non-virtual"><scope>csmp::Expiration</scope><name>secs_remaining</name></member>
+      <member refid="structcsmp_1_1_expiration_1a2cbfe9f80a45faf9f893cd6bb0dfce93" prot="public" virt="non-virtual"><scope>csmp::Expiration</scope><name>start_time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,100 @@
+.TH "csmp::LocalVariableStorage< dim, STOREE >::Data" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::LocalVariableStorage< dim, STOREE >::Data
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::vector< \fBVARIABLE_FLAG\fP > \fBFlagContainer\fP"
+.br
+.ti -1c
+.RI "typedef std::vector< double > \fBDataContainer\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBData\fP (const \fBData\fP &d)"
+.br
+.ti -1c
+.RI "\fBData\fP (const \fBData\fP &&d)"
+.br
+.ti -1c
+.RI "\fBData\fP & \fBoperator=\fP (const \fBData\fP &d)"
+.br
+.ti -1c
+.RI "\fBData\fP & \fBoperator=\fP (\fBData\fP &&d)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "FlagContainer \fBflags\fP"
+.br
+.ti -1c
+.RI "DataContainer \fBdata\fP"
+.br
+.ti -1c
+.RI "int_type \fBscalars\fP"
+.br
+.RI "scalar variables stored at the site this policy is associated with "
+.ti -1c
+.RI "int_type \fBvectors\fP"
+.br
+.RI "vector variables at this site "
+.ti -1c
+.RI "int_type \fBtensors\fP"
+.br
+.RI "tensor variables at this site "
+.ti -1c
+.RI "int_type \fBarrays\fP"
+.br
+.RI "array variables at this site "
+.ti -1c
+.RI "int_type \fBflaggedArrays\fP"
+.br
+.RI "flagged array variables at this site "
+.ti -1c
+.RI "int_type \fBarrayLength\fP"
+.br
+.RI "length of array variables associated with this site "
+.ti -1c
+.RI "int_type \fBflaggedArrayLength\fP"
+.br
+.RI "length of flagged array variables "
+.in -1c
+.SH "Member Data Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class STOREE> int_type \fBcsmp::LocalVariableStorage\fP< dim, STOREE >::Data::arrayLength"
+
+.PP
+length of array variables associated with this site 
+.PP
+\fBTodo\fP
+.RS 4
+only one size? 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class STOREE> int_type \fBcsmp::LocalVariableStorage\fP< dim, STOREE >::Data::flaggedArrayLength"
+
+.PP
+length of flagged array variables 
+.PP
+\fBTodo\fP
+.RS 4
+only one size? 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

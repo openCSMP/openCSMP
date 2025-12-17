@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structvariable" kind="struct" language="C++" prot="public">
+    <compoundname>variable</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structvariable_1a62a8d8067ee9e125798f8097b23b16fa" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>variable::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="26" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1a199bb445845b5046ac1390fafc924627" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::notation</definition>
+        <argsstring></argsstring>
+        <name>notation</name>
+        <qualifiedname>variable::notation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="27" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1aa88a49c026e3f4c138c2f751b090d4f3" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::units</definition>
+        <argsstring></argsstring>
+        <name>units</name>
+        <qualifiedname>variable::units</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="28" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1aa642b1ce92ba8c0c1da7633a92d5aa9a" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>variable::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="29" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1a60bec581ae365dacf354b3758dae0cd5" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double variable::minval</definition>
+        <argsstring></argsstring>
+        <name>minval</name>
+        <qualifiedname>variable::minval</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="30" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1a77dd5f9d2d7b405389670f08ea85cd23" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double variable::maxval</definition>
+        <argsstring></argsstring>
+        <name>maxval</name>
+        <qualifiedname>variable::maxval</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="31" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1aeed06952bea4b154fc0fb5023f9a5349" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::placement</definition>
+        <argsstring></argsstring>
+        <name>placement</name>
+        <qualifiedname>variable::placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="32" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1a2ddca517a841e02ba06083f59f88c6ef" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::usage</definition>
+        <argsstring></argsstring>
+        <name>usage</name>
+        <qualifiedname>variable::usage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="33" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1a2bd3f8e3c230a05e0446850767023049" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::explanation</definition>
+        <argsstring></argsstring>
+        <name>explanation</name>
+        <qualifiedname>variable::explanation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="34" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1a8991da6112529d30a20c7fd80f773ef1" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::reference</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>variable::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="35" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structvariable_1a2c304704a1426e532a0150fc18a0bc5f" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string variable::notes</definition>
+        <argsstring></argsstring>
+        <name>notes</name>
+        <qualifiedname>variable::notes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/variable_set_processor.cpp" line="36" column="10" bodyfile="source/variable_set_processor.cpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>variable</label>
+        <link refid="structvariable"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/variable_set_processor.cpp" line="25" column="1" bodyfile="source/variable_set_processor.cpp" bodystart="25" bodyend="37"/>
+    <listofallmembers>
+      <member refid="structvariable_1a2bd3f8e3c230a05e0446850767023049" prot="public" virt="non-virtual"><scope>variable</scope><name>explanation</name></member>
+      <member refid="structvariable_1a77dd5f9d2d7b405389670f08ea85cd23" prot="public" virt="non-virtual"><scope>variable</scope><name>maxval</name></member>
+      <member refid="structvariable_1a60bec581ae365dacf354b3758dae0cd5" prot="public" virt="non-virtual"><scope>variable</scope><name>minval</name></member>
+      <member refid="structvariable_1a62a8d8067ee9e125798f8097b23b16fa" prot="public" virt="non-virtual"><scope>variable</scope><name>name</name></member>
+      <member refid="structvariable_1a199bb445845b5046ac1390fafc924627" prot="public" virt="non-virtual"><scope>variable</scope><name>notation</name></member>
+      <member refid="structvariable_1a2c304704a1426e532a0150fc18a0bc5f" prot="public" virt="non-virtual"><scope>variable</scope><name>notes</name></member>
+      <member refid="structvariable_1aeed06952bea4b154fc0fb5023f9a5349" prot="public" virt="non-virtual"><scope>variable</scope><name>placement</name></member>
+      <member refid="structvariable_1a8991da6112529d30a20c7fd80f773ef1" prot="public" virt="non-virtual"><scope>variable</scope><name>reference</name></member>
+      <member refid="structvariable_1aa642b1ce92ba8c0c1da7633a92d5aa9a" prot="public" virt="non-virtual"><scope>variable</scope><name>type</name></member>
+      <member refid="structvariable_1aa88a49c026e3f4c138c2f751b090d4f3" prot="public" virt="non-virtual"><scope>variable</scope><name>units</name></member>
+      <member refid="structvariable_1a2ddca517a841e02ba06083f59f88c6ef" prot="public" virt="non-virtual"><scope>variable</scope><name>usage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

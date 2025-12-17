@@ -1,0 +1,346 @@
+\doxysection{csmp\+::Vector\+Variable\texorpdfstring{$<$}{<} 3U \texorpdfstring{$>$}{>} Class Reference}
+\hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4}{}\label{classcsmp_1_1_vector_variable_3_013_u_01_4}\index{csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}}
+
+
+3D full specialization of vector-\/type variable template (2D vectors are declared in files \#1, \#2)  
+
+
+
+
+{\ttfamily \#include $<$Vector\+Variable.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Vector\+Variable\texorpdfstring{$<$}{<} 3U \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{classcsmp_1_1_vector_variable_3_013_u_01_4__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Vector\+Variable\texorpdfstring{$<$}{<} 3U \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{classcsmp_1_1_vector_variable_3_013_u_01_4__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a27a22bb80077fba9d82bbf03f5afdd13}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a27a22bb80077fba9d82bbf03f5afdd13} 
+{\bfseries Vector\+Variable} ()
+\begin{DoxyCompactList}\small\item\em default constructor initialising values to NaN \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a8d4a67b7abec61c75d67f4341399f24f}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a8d4a67b7abec61c75d67f4341399f24f} 
+{\bfseries Vector\+Variable} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}}, double)
+\begin{DoxyCompactList}\small\item\em sets all elements to fl, val \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a9f25b6eea3e09c5afd9dabac74240040}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a9f25b6eea3e09c5afd9dabac74240040} 
+{\bfseries Vector\+Variable} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} f1, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} f2, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} f3, double val1, double val2, double val3)
+\begin{DoxyCompactList}\small\item\em constructor for 3D version \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_afccea844f22d111d4ae4eab4b0f02954}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_afccea844f22d111d4ae4eab4b0f02954} 
+{\bfseries Vector\+Variable} (const std\+::vector$<$ double $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialize with an STL vector \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ad69a2d0737d5a458f5bb8524ae759c6a}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ad69a2d0737d5a458f5bb8524ae759c6a} 
+{\bfseries Vector\+Variable} (const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialize with a \doxylink{classcsmp_1_1_point}{Point} \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a494f3aaa44bd17d139462d08578fc60f}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a494f3aaa44bd17d139462d08578fc60f} 
+double \& {\bfseries operator()} (uint32\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a2c69afdc62a4130d883be739e0400a71}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a2c69afdc62a4130d883be739e0400a71} 
+const double \& {\bfseries operator()} (uint32\+\_\+t) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_acb5da595113719ac8209b9c75a1d4ef9}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_acb5da595113719ac8209b9c75a1d4ef9} 
+double {\bfseries operator\mbox{[}$\,$\mbox{]}} (uint32\+\_\+t) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a76f3f8b89ac4b56be78da63b78f56e0e}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a76f3f8b89ac4b56be78da63b78f56e0e} 
+void {\bfseries Component} (uint32\+\_\+t, double)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a8997a37a04a5600eb4465f8c79f00c31}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a8997a37a04a5600eb4465f8c79f00c31} 
+double {\bfseries Component} (uint32\+\_\+t) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a7fd5c285ec95c0e3a70ce883f55241ab}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a7fd5c285ec95c0e3a70ce883f55241ab} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a14d2f00de91c09a4cdc7c0f135ad2ee3}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a14d2f00de91c09a4cdc7c0f135ad2ee3} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a32dada37748909187829c909da8c3097}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a32dada37748909187829c909da8c3097} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a315df57f218f5ccb68ded6416ab01f49}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a315df57f218f5ccb68ded6416ab01f49} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator+} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a3e76286919729c00d937ddd6e41f99f3}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a3e76286919729c00d937ddd6e41f99f3} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator-\/} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a6aef6274884ce580cc8790d13fca4d12}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a6aef6274884ce580cc8790d13fca4d12} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_adcdb19656a7efb643815c30218d3f487}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_adcdb19656a7efb643815c30218d3f487} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator/} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a80058be885dee1a59d232d72a74b9dac}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a80058be885dee1a59d232d72a74b9dac} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator\texorpdfstring{$^\wedge$}{\string^}} (double) const
+\begin{DoxyCompactList}\small\item\em squares all elements of the vector \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a6b5a61d2256c7decab31eab573ad4438}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a6b5a61d2256c7decab31eab573ad4438} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator+} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ac55556d8a94dc06928ea5994267f33e6}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ac55556d8a94dc06928ea5994267f33e6} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator-\/} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ae9d8ee5116b9c43d2ad9ae0903c91a73}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ae9d8ee5116b9c43d2ad9ae0903c91a73} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_aa009f1b97fd489db29668ef9b330452c}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_aa009f1b97fd489db29668ef9b330452c} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries operator/} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a48c6e5de4e75f37212e92dc1b4fd093e}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a48c6e5de4e75f37212e92dc1b4fd093e} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator+=} (double)
+\begin{DoxyCompactList}\small\item\em vec1 += vec2 enables shorthand for vec1 = vec1 + vec2 \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a5dcd1562507b67e9106dd1bbc2c9d0eb}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a5dcd1562507b67e9106dd1bbc2c9d0eb} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator-\/=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a3c985f8c6124fdf15fe28b066aac553d}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a3c985f8c6124fdf15fe28b066aac553d} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a04b52e9d8e0914b677b287c961bc3ec0}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a04b52e9d8e0914b677b287c961bc3ec0} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator/=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a60d99d85e1bcedc11d6a35e1ebf6426b}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a60d99d85e1bcedc11d6a35e1ebf6426b} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator+=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_aaf63144eed28645bb77ee58d0bcd9966}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_aaf63144eed28645bb77ee58d0bcd9966} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ae0eb32927955bdfa242ce30b945a37ec}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ae0eb32927955bdfa242ce30b945a37ec} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a1099d44615f1527f8478ee66ce9900d1}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a1099d44615f1527f8478ee66ce9900d1} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a8f606b0fd48628c8cdf24a8ee2259ea6}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a8f606b0fd48628c8cdf24a8ee2259ea6} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator+=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a99d7808e671f9e9350f7b1c8610d5b87}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a99d7808e671f9e9350f7b1c8610d5b87} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a8b77fe47a1c93cd5a647ffc09ed01b05}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a8b77fe47a1c93cd5a647ffc09ed01b05} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_acfd2de3b79e2e2807473c7b01b2c70b5}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_acfd2de3b79e2e2807473c7b01b2c70b5} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a191c4e8ea7f3ad0d96cccf377eeaf482}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a191c4e8ea7f3ad0d96cccf377eeaf482} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em comparison of flags and values \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ac291cf0835a57b653d3e05a4a6bfe64a}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ac291cf0835a57b653d3e05a4a6bfe64a} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_vector_variable_3_013_u_01_4_a450ba24209bffeee149e2e842c2b1aab}{operator$<$}} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em comparison by length (to allow ordering in containers) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ab66095fee680a3edde3a12aa03e210fb}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ab66095fee680a3edde3a12aa03e210fb} 
+double {\bfseries operator\&} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em dot product = scalar product \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \mbox{\hyperlink{classcsmp_1_1_vector_variable_3_013_u_01_4_a7c66e8a6bd9b17c3c37d4981dfd54607}{operator\%}} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\begin{DoxyCompactList}\small\item\em cross product (vector perpendicular to input vectors \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a7dfae6eb1c258c64840396955b018fe5}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a7dfae6eb1c258c64840396955b018fe5} 
+double {\bfseries Length} () const
+\begin{DoxyCompactList}\small\item\em returns spatial i-\/th dimension \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_abb5efe2f3ee46697ea91d0b1f0cc3a43}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_abb5efe2f3ee46697ea91d0b1f0cc3a43} 
+double {\bfseries Angle\+To} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&v) const
+\begin{DoxyCompactList}\small\item\em return angle in degrees \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_vector_variable_3_013_u_01_4_abb402ef20ae54317293a542bfa94b5b0}{P}} () const
+\begin{DoxyCompactList}\small\item\em returns \doxylink{classcsmp_1_1_point}{csmp\+::\+Point} initialised with vector values; \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a3cae5b91e5027f594cd1aebe847a132a}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a3cae5b91e5027f594cd1aebe847a132a} 
+bool {\bfseries Is\+Within\+Range} (double vmin, double vmax) const
+\begin{DoxyCompactList}\small\item\em checks vector length against the value range supplied as arguments \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ad10763b301634d1fb155c2d284b4cb57}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ad10763b301634d1fb155c2d284b4cb57} 
+bool {\bfseries Has\+\_\+\+Na\+N\+\_\+\+Values} () const
+\begin{DoxyCompactList}\small\item\em tests whether variable contains NaN value(s) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a423399d3492f4c3d4837b9dbbb6b1c4e}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a423399d3492f4c3d4837b9dbbb6b1c4e} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Flag} (uint32\+\_\+t i=0) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a8dd6fa449372c74ae631ba91d266bb2f}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a8dd6fa449372c74ae631ba91d266bb2f} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} \& {\bfseries Flag} (uint32\+\_\+t i=0)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a91039770e57426e419f655bd197efd46}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a91039770e57426e419f655bd197efd46} 
+uint32\+\_\+t {\bfseries Size} () const
+\begin{DoxyCompactList}\small\item\em for the Property\+Storage \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_acf946412a6afd97bea418e6c3dce3133}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_acf946412a6afd97bea418e6c3dce3133} 
+double {\bfseries Dot\+Product} (const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_aa2a8f973979f4c148c465cf708fd71df}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_aa2a8f973979f4c148c465cf708fd71df} 
+double {\bfseries Dot\+Product} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_af8ad3a8dabd7f25317a9627a17d50bb8}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_af8ad3a8dabd7f25317a9627a17d50bb8} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries Cross\+Product} (const \mbox{\hyperlink{classcsmp_1_1_point}{csmp\+::\+Point}}$<$ 3U $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ab9a1e27695b862e4d0822cc86efbdcb3}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ab9a1e27695b862e4d0822cc86efbdcb3} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries Cross\+Product} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a4901f7c4a4704cfd27f0dde681574fe3}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a4901f7c4a4704cfd27f0dde681574fe3} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries Project\+Onto} (const std\+::vector$<$ double $>$ \&) const
+\begin{DoxyCompactList}\small\item\em projects this vector variable onto the supplied vector v and returns the projection vector \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ad61e8d33e2412b0a2de0397c164eb7ff}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ad61e8d33e2412b0a2de0397c164eb7ff} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries Project\+Onto} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a0d6e62130f7a5bb473cfc2778736a289}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a0d6e62130f7a5bb473cfc2778736a289} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}} {\bfseries Flip} ()
+\begin{DoxyCompactList}\small\item\em Multiplies by negative unity vector. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_vector_variable_3_013_u_01_4_a076b8b8b701db89172c267c47fc83392}{Invert}} ()
+\begin{DoxyCompactList}\small\item\em reverts the sequence of entries \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_vector_variable_3_013_u_01_4_a1d69d50797a81ddc146071aec74f2ceb}{Euclidean\+Normalize}} ()
+\begin{DoxyCompactList}\small\item\em normalizes the vector variable by its length given the unit normal \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a982f47e1231e60a3e31c1e0fe5edcfc6}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a982f47e1231e60a3e31c1e0fe5edcfc6} 
+void {\bfseries In} ()
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_aa4ffa7baa2f4b585535b0dc456baff9a}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_aa4ffa7baa2f4b585535b0dc456baff9a} 
+void {\bfseries Out} () const
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_aa487bb47ef4fbbc0814dd645ea21c2d9}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_aa487bb47ef4fbbc0814dd645ea21c2d9} 
+bool {\bfseries In} (std\+::fstream \&)
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a3ad63ba9bc01c1b6af7b11d7a3477791}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_a3ad63ba9bc01c1b6af7b11d7a3477791} 
+bool {\bfseries Out} (std\+::fstream \&) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_ad86913b94f62b9bb81b6ac4cad3706c4}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_ad86913b94f62b9bb81b6ac4cad3706c4} 
+static constexpr \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Variable\+Type} = VECTOR
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_aeb3e922d3ad4dbb215302734d34b7c76}\label{classcsmp_1_1_vector_variable_3_013_u_01_4_aeb3e922d3ad4dbb215302734d34b7c76} 
+class {\bfseries Tensor\+Variable$<$ 3\+U $>$}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+3D full specialization of vector-\/type variable template (2D vectors are declared in files \#1, \#2) 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+Stephen G. Roberts 
+
+S. Geiger 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2001
+\end{DoxyDate}
+3D full specialization of vector-\/type variable template (2D vectors are in files \#1, \#2).
+
+Implements basic vector variable type that consists of dim=spatial dimensions entries (options are 2 x 1 and 3 x 1 for 2D and 3D models, respectively) plus as many variable flags as vector elements. The flags are of type enum \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}. ~\newline
+ \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} is defined as a C++ template for the 2D and 3D cases (In 1D you should use \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable} to represent vector type properties). ~\newline
+
+
+NOTE\+: The definitions of the 2D constructors are in the file \doxylink{_vector_variable2_8h_source}{Vector\+Variable2.\+h}. ~\newline
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+A plain STL vector cannot be used to implement this datatype since there is a need to flag each vector entry so that it can receive a special treatment in a finite element computation, i.\+e. as a fixed (Dirichlet) boundary value or the like. Also there is a need to make vector operations as efficient as possible. This has been done by unrolling all loops.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+Any kind of computations that involve Scalar-\/, Vector-\/, or \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable} objects in CSMP. For standard element-\/by-\/element calculations, operators are provided. This includes special operators like \textquotesingle{}\texorpdfstring{$^\wedge$}{\string^}\textquotesingle{} which will calculate the power of each vector element for the user-\/specified value. Slightly odd is the use of the operators \& and \% for the scalar and the cross products of vectors, respectively (there are no better options, try maybe templatized enums, suggestions are welcome).
+
+All vector operations are already unrolled to give best performance. Temporaries are eliminated as far as is possible and all \texorpdfstring{$\ast$}{*}=, /=, +=, -\/=, dot and cross product, and \doxylink{classcsmp_1_1_vector_variable_3_013_u_01_4_a7dfae6eb1c258c64840396955b018fe5}{Length()} operators / member functions have no overhead due to assigments of flags. Hence there is nothing to be gained from additional handcoding of such operations.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+Operations of the following types are possible\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable<3U>}}\ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{v1}}(\mbox{\hyperlink{classcsmp_1_1_vector_variable}{PLAIN}},\mbox{\hyperlink{classcsmp_1_1_vector_variable}{PLAIN}},\mbox{\hyperlink{classcsmp_1_1_vector_variable}{PLAIN}},1.,1.,1.);}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{cout}}\ <<\textcolor{stringliteral}{"{}\(\backslash\)main:\ Length\ of\ "{}}<<\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{v1}}\ <<\textcolor{stringliteral}{"{}\ is\ "{}}<<\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{v1}}.Length()\ <<\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{endl}};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable<3U>}}\ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{v2}};}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{v2}}\ =\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{sqrt}}(3.);}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable<3U>}}\ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{v3}}\ =\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{v2}}\ \&\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{v1}};\ \textcolor{comment}{//\ dot\ product}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_vector_variable}{v3}}.Out();}
+
+\end{DoxyCode}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a1d69d50797a81ddc146071aec74f2ceb}\index{csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}!EuclideanNormalize@{EuclideanNormalize}}
+\index{EuclideanNormalize@{EuclideanNormalize}!csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}}
+\doxysubsubsection{\texorpdfstring{EuclideanNormalize()}{EuclideanNormalize()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_vector_variable_3_013_u_01_4_a1d69d50797a81ddc146071aec74f2ceb} 
+void \mbox{\hyperlink{classcsmp_1_1_vector_variable}{csmp\+::\+Vector\+Variable}}$<$ 3U $>$\+::\+Euclidean\+Normalize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+normalizes the vector variable by its length given the unit normal 
+
+normalize L2
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000031}{Todo}}]replace with more generic function \end{DoxyRefDesc}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_vector_variable_3_013_u_01_4_a1d69d50797a81ddc146071aec74f2ceb_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a076b8b8b701db89172c267c47fc83392}\index{csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}!Invert@{Invert}}
+\index{Invert@{Invert}!csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}}
+\doxysubsubsection{\texorpdfstring{Invert()}{Invert()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_vector_variable_3_013_u_01_4_a076b8b8b701db89172c267c47fc83392} 
+void \mbox{\hyperlink{classcsmp_1_1_vector_variable}{csmp\+::\+Vector\+Variable}}$<$ 3U $>$\+::\+Invert (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+reverts the sequence of entries 
+
+Multiplies by negative unity vector. \Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a7c66e8a6bd9b17c3c37d4981dfd54607}\index{csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}!operator\%@{operator\%}}
+\index{operator\%@{operator\%}!csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}}
+\doxysubsubsection{\texorpdfstring{operator\%()}{operator\%()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_vector_variable_3_013_u_01_4_a7c66e8a6bd9b17c3c37d4981dfd54607} 
+\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{csmp\+::\+Vector\+Variable}}$<$ 3U $>$\+::operator\% (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 3U $>$ \&}]{}{}\end{DoxyParamCaption}) const}
+
+
+
+cross product (vector perpendicular to input vectors 
+
+cross product \textquotesingle{} \% \textquotesingle{} of two vectors \Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_a450ba24209bffeee149e2e842c2b1aab}\index{csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}}
+\doxysubsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_vector_variable_3_013_u_01_4_a450ba24209bffeee149e2e842c2b1aab} 
+bool \mbox{\hyperlink{classcsmp_1_1_vector_variable}{csmp\+::\+Vector\+Variable}}$<$ 3U $>$\+::operator$<$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 3U $>$ \&}]{}{}\end{DoxyParamCaption}) const}
+
+
+
+comparison by length (to allow ordering in containers) 
+
+compare the length of two vectors \Hypertarget{classcsmp_1_1_vector_variable_3_013_u_01_4_abb402ef20ae54317293a542bfa94b5b0}\index{csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}!P@{P}}
+\index{P@{P}!csmp::VectorVariable$<$ 3U $>$@{csmp::VectorVariable$<$ 3U $>$}}
+\doxysubsubsection{\texorpdfstring{P()}{P()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_vector_variable_3_013_u_01_4_abb402ef20ae54317293a542bfa94b5b0} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{csmp\+::\+Vector\+Variable}}$<$ 3U $>$\+::P (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+returns \doxylink{classcsmp_1_1_point}{csmp\+::\+Point} initialised with vector values; 
+
+\begin{DoxyNote}{Note}
+name avoids GNU clash 
+\end{DoxyNote}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_vector_variable_3_013_u_01_4_abb402ef20ae54317293a542bfa94b5b0_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Vector\+Variable.\+h\item 
+source/modules/model/Vector\+Variable.\+cpp\end{DoxyCompactItemize}

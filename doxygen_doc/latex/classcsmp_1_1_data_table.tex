@@ -1,0 +1,93 @@
+\doxysection{csmp\+::Data\+Table Class Reference}
+\hypertarget{classcsmp_1_1_data_table}{}\label{classcsmp_1_1_data_table}\index{csmp::DataTable@{csmp::DataTable}}
+
+
+Collaboration diagram for csmp\+::Data\+Table\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=177pt]{classcsmp_1_1_data_table__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d}\label{classcsmp_1_1_data_table_ab30ea0548e34e38e2a85b5a9286f982d} 
+{\bfseries Data\+Table} (std\+::string name, const std\+::vector$<$ std\+::string $>$ \&col\+\_\+headers, const std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \&rows\+\_\+of\+\_\+columns)
+\begin{DoxyCompactList}\small\item\em creates a table from values and column headers supplied \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_data_table_a192cd6aaf33965c23bedabeaff0ccb3d}\label{classcsmp_1_1_data_table_a192cd6aaf33965c23bedabeaff0ccb3d} 
+{\bfseries Data\+Table} (std\+::string name, const std\+::vector$<$ std\+::string $>$ \&col\+\_\+headers, const std\+::vector$<$ std\+::string $>$ \&row\+\_\+lables, const std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \&rows\+\_\+of\+\_\+columns)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_data_table_a6d84c348c3f9a59eb0db59d6ffe7cebf}{Append\+Column}} (std\+::string col\+\_\+header)
+\begin{DoxyCompactList}\small\item\em if table does not already contain a data column with the indicated header it is appended on the right \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_data_table_a135aaba6804a25c0490decd03699f930}\label{classcsmp_1_1_data_table_a135aaba6804a25c0490decd03699f930} 
+size\+\_\+t {\bfseries Rows} () const
+\item 
+\Hypertarget{classcsmp_1_1_data_table_ae8c510991f75fb38206a16ba4b804d34}\label{classcsmp_1_1_data_table_ae8c510991f75fb38206a16ba4b804d34} 
+size\+\_\+t {\bfseries Columns} () const
+\item 
+\Hypertarget{classcsmp_1_1_data_table_a57a2b5fa0aa4a8a15d711a15a03d2606}\label{classcsmp_1_1_data_table_a57a2b5fa0aa4a8a15d711a15a03d2606} 
+bool {\bfseries Contains\+Column} (std\+::string column\+\_\+header) const
+\begin{DoxyCompactList}\small\item\em checks whether there is a column header that matches the supplied variable \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_data_table_a4940b62df5a0d190c7d2c050a8bd584f}\label{classcsmp_1_1_data_table_a4940b62df5a0d190c7d2c050a8bd584f} 
+size\+\_\+t {\bfseries Column\+Index} (std\+::string \mbox{\hyperlink{structvariable}{variable}}) const
+\begin{DoxyCompactList}\small\item\em finds in which column the values of the target variable are stored; returns UINT\+\_\+\+MAX if the variable is not contained \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_data_table_ac4e5912de9d97d9efe58e67b9d8a1c64}{operator()}} (size\+\_\+t row, size\+\_\+t col) const
+\begin{DoxyCompactList}\small\item\em read access of elements in the table by row and column indices \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_data_table_adec68ba84bcaf52b762474c24fdcfb35}\label{classcsmp_1_1_data_table_adec68ba84bcaf52b762474c24fdcfb35} 
+double \& {\bfseries operator()} (size\+\_\+t row, size\+\_\+t col)
+\begin{DoxyCompactList}\small\item\em write access \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_data_table_a7214d3276024ecffb46ef98ee0456e35}\label{classcsmp_1_1_data_table_a7214d3276024ecffb46ef98ee0456e35} 
+\mbox{\hyperlink{classcsmp_1_1_data_table}{Data\+Table}} {\bfseries Extract\+Sub\+Table} (const std\+::set$<$ std\+::string $>$ \&rows, const std\+::set$<$ std\+::string $>$ \&columns) const
+\begin{DoxyCompactList}\small\item\em whre empty sets are supplied as arguments, all column or rows will be extracted \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_data_table}{Data\+Table}} \mbox{\hyperlink{classcsmp_1_1_data_table_a6753e9935fe3862525e1c64bc39f2284}{Extract\+Sub\+Table}} (const std\+::vector$<$ int $>$ \&rows, const std\+::vector$<$ int $>$ \&columns) const
+\item 
+\Hypertarget{classcsmp_1_1_data_table_ae548e81b57e73a9b815860d2875b5f76}\label{classcsmp_1_1_data_table_ae548e81b57e73a9b815860d2875b5f76} 
+void {\bfseries Write\+\_\+\+CSV\+\_\+\+File} (std\+::string filename) const
+\begin{DoxyCompactList}\small\item\em writes the data from the currently stored table into a comma delimited text file \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_data_table_ae9a8c578dc1ec7b13f9cd91e88784a59}\label{classcsmp_1_1_data_table_ae9a8c578dc1ec7b13f9cd91e88784a59} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_data_table_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_data_table_a6d84c348c3f9a59eb0db59d6ffe7cebf}\index{csmp::DataTable@{csmp::DataTable}!AppendColumn@{AppendColumn}}
+\index{AppendColumn@{AppendColumn}!csmp::DataTable@{csmp::DataTable}}
+\doxysubsubsection{\texorpdfstring{AppendColumn()}{AppendColumn()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_table_a6d84c348c3f9a59eb0db59d6ffe7cebf} 
+bool csmp\+::\+Data\+Table\+::\+Append\+Column (\begin{DoxyParamCaption}\item[{std\+::string}]{col\+\_\+header}{}\end{DoxyParamCaption})}
+
+
+
+if table does not already contain a data column with the indicated header it is appended on the right 
+
+If table does not already contain a data column with the indicated header it is appended on the right.
+
+\begin{DoxyReturn}{Returns}
+true if a column was appended, false if the table was unmodified because it already contained a column with the desired header. 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_data_table_a6753e9935fe3862525e1c64bc39f2284}\index{csmp::DataTable@{csmp::DataTable}!ExtractSubTable@{ExtractSubTable}}
+\index{ExtractSubTable@{ExtractSubTable}!csmp::DataTable@{csmp::DataTable}}
+\doxysubsubsection{\texorpdfstring{ExtractSubTable()}{ExtractSubTable()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_table_a6753e9935fe3862525e1c64bc39f2284} 
+\mbox{\hyperlink{classcsmp_1_1_data_table}{Data\+Table}} csmp\+::\+Data\+Table\+::\+Extract\+Sub\+Table (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{rows}{, }\item[{const std\+::vector$<$ int $>$ \&}]{columns}{}\end{DoxyParamCaption}) const}
+
+Extract rows and columns by number \Hypertarget{classcsmp_1_1_data_table_ac4e5912de9d97d9efe58e67b9d8a1c64}\index{csmp::DataTable@{csmp::DataTable}!operator()@{operator()}}
+\index{operator()@{operator()}!csmp::DataTable@{csmp::DataTable}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_table_ac4e5912de9d97d9efe58e67b9d8a1c64} 
+double csmp\+::\+Data\+Table\+::operator() (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{row}{, }\item[{size\+\_\+t}]{col}{}\end{DoxyParamCaption}) const}
+
+
+
+read access of elements in the table by row and column indices 
+
+access of elements in the table by row and column indices 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/Data\+Table.\+h\item 
+source/modules/interfaces/Data\+Table.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,3 @@
+<map id="csmp::Triangulator" name="csmp::Triangulator">
+<area shape="rect" id="Node000001" title="Creates a triangular element mesh from the pixels of the regular grid. Boundaries that are defined by..." alt="" coords="5,5,189,92"/>
+</map>

@@ -1,0 +1,37 @@
+<map id="source/includes/integration" name="source/includes/integration">
+<area shape="rect" id="node1" href="dir_854e1a20a5c6356ccbf09e31b24de07d.html" title="math" alt="" coords="330,210,380,236"/>
+<area shape="rect" id="node2" href="dir_aa4994f42e9a39150eac57619fde54c5.html" title="model" alt="" coords="540,210,596,236"/>
+<area shape="rect" id="node4" href="dir_b80f5fb035b5c3d25411329adcf3c13b.html" title="cvfe_hydrothermal" alt="" coords="144,63,272,89"/>
+<area shape="poly" id="edge1" href="dir_000022_000095.html" alt="" coords="222,87,334,197,330,201,218,91"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000022_000095.html" title="3" alt="" coords="332,184,339,199"/>
+<area shape="poly" id="edge2" href="dir_000022_000103.html" alt="" coords="273,86,423,113,516,134,525,143,529,152,537,172,553,197,549,199,532,174,524,154,521,146,513,139,422,118,272,91"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000022_000103.html" title="1" alt="" coords="552,183,559,198"/>
+<area shape="rect" id="node5" href="dir_077d0da913803c005456e784880730bf.html" title="finite_elements" alt="" coords="393,137,503,162"/>
+<area shape="poly" id="edge3" href="dir_000039_000095.html" alt="" coords="434,165,384,203,381,199,431,161"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000039_000095.html" title="1" alt="" coords="386,198,393,213"/>
+<area shape="poly" id="edge4" href="dir_000039_000103.html" alt="" coords="470,161,536,200,533,204,467,165"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000039_000103.html" title="4" alt="" coords="533,186,540,201"/>
+<area shape="rect" id="node6" href="dir_01344b407346140afbd897e85242f3f4.html" title="finite_volumes" alt="" coords="423,63,529,89"/>
+<area shape="poly" id="edge6" href="dir_000042_000095.html" alt="" coords="447,92,414,111,383,138,368,167,361,196,355,195,364,165,379,135,411,106,445,87"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000042_000095.html" title="7" alt="" coords="363,186,370,201"/>
+<area shape="poly" id="edge7" href="dir_000042_000103.html" alt="" coords="506,87,537,106,552,120,564,135,573,165,574,195,569,195,568,166,559,138,548,123,534,111,504,91"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000042_000103.html" title="11" alt="" coords="573,185,587,200"/>
+<area shape="poly" id="edge5" href="dir_000042_000039.html" alt="" coords="474,90,461,123,456,121,469,88"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000042_000039.html" title="3" alt="" coords="464,115,471,130"/>
+<area shape="rect" id="node10" href="dir_d6fdc804d3589ef308a8ec09a7e4414f.html" title="non&#45;GIT&#45;files" alt="" coords="776,137,872,162"/>
+<area shape="poly" id="edge8" href="dir_000042_000107.html" alt="" coords="530,85,761,133,760,138,529,91"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000042_000107.html" title="2" alt="" coords="756,119,763,134"/>
+<area shape="rect" id="node7" href="dir_33b8d6c6502f506ca7b4a86eecbab16d.html" title="pde_integrators" alt="" coords="553,63,663,89"/>
+<area shape="poly" id="edge9" href="dir_000113_000103.html" alt="" coords="609,90,591,174,582,197,577,195,585,172,604,89"/>
+<area shape="rect" id="edge9-headlabel" href="dir_000113_000103.html" title="1" alt="" coords="585,189,592,204"/>
+<area shape="rect" id="node8" href="dir_73fa904606b8ebf412e04f7d32b8188e.html" title="pde_operators" alt="" coords="296,63,400,89"/>
+<area shape="poly" id="edge10" href="dir_000116_000095.html" alt="" coords="351,89,356,195,351,195,346,89"/>
+<area shape="rect" id="edge10-headlabel" href="dir_000116_000095.html" title="1" alt="" coords="358,184,365,199"/>
+<area shape="poly" id="edge11" href="dir_000116_000103.html" alt="" coords="401,86,479,107,513,121,537,135,556,164,566,195,561,196,551,166,533,139,511,125,477,112,399,91"/>
+<area shape="rect" id="edge11-headlabel" href="dir_000116_000103.html" title="30" alt="" coords="565,183,579,198"/>
+<area shape="rect" id="node9" href="dir_bda0054bbf5551074ce0d5c2f9de0dc7.html" title="solver" alt="" coords="688,63,744,89"/>
+<area shape="poly" id="edge12" href="dir_000131_000103.html" alt="" coords="706,91,593,201,589,197,702,87"/>
+<area shape="rect" id="edge12-headlabel" href="dir_000131_000103.html" title="4" alt="" coords="596,196,603,211"/>
+<area shape="rect" id="clust2" href="dir_6304fa7a098e7c1b7f4f62f36929b396.html" alt="" coords="27,52,755,173"/>
+<area shape="rect" id="clust1" href="dir_c9f89f587e7e777be723ee48a3df5844.html" title="includes" alt="" coords="16,16,765,247"/>
+</map>

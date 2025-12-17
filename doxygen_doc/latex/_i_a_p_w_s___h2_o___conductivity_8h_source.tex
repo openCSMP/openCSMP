@@ -1,0 +1,30 @@
+\doxysection{IAPWS\+\_\+\+H2\+O\+\_\+\+Conductivity.\+h}
+\hypertarget{_i_a_p_w_s___h2_o___conductivity_8h_source}{}\label{_i_a_p_w_s___h2_o___conductivity_8h_source}\index{source/includes/eos/IAPWS\_H2O\_Conductivity.h@{source/includes/eos/IAPWS\_H2O\_Conductivity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{IAPWS\_H2O\_CONDUCTIVITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{IAPWS\_H2O\_CONDUCTIVITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___conductivity}{IAPWS\_H2O\_Conductivity}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ k;}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ K;}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ v;}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ perm,\ viscos;}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{public}:\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00017\ \ \ \ \ IAPWS\_H2O\_Conductivity(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p\ );}
+\DoxyCodeLine{00018\ \ \ \ \ \string~IAPWS\_H2O\_Conductivity()\ \{\};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_i_a_p_w_s___h2_o___conductivity_a8b2171894975dab39f4b8a3e2ca4ef9a}{Calculate}}();}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_point_property_to_cell_mapper2_d" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PointPropertyToCellMapper2D</compoundname>
+    <includes refid="_point_property_to_cell_mapper2_d_8h" local="no">PointPropertyToCellMapper2D.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1a8536ee63ff9aab55ce99420125c1514c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_data_table" kindref="compound">DataTable</ref></type>
+        <definition>DataTable csmp::PointPropertyToCellMapper2D::property_data_</definition>
+        <argsstring></argsstring>
+        <name>property_data_</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::property_data_</qualifiedname>
+        <briefdescription>
+<para>row x col table with point coordinates and property values </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="58" column="31" bodyfile="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1a284b5581e6399e043ae17f3f0a6185b7" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 2 &gt; * &gt;</type>
+        <definition>std::vector&lt;Element&lt;2&gt;*&gt; csmp::PointPropertyToCellMapper2D::cells_with_points_</definition>
+        <argsstring></argsstring>
+        <name>cells_with_points_</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::cells_with_points_</qualifiedname>
+        <briefdescription>
+<para>pointers to the cells that are non-null if they contain points and are part of target region </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="59" column="18" bodyfile="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1a46ab7190aff48e42eb1344354b3bb137" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PointPropertyToCellMapper2D::PointPropertyToCellMapper2D</definition>
+        <argsstring>(std::string point_property_csv_file)</argsstring>
+        <name>PointPropertyToCellMapper2D</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::PointPropertyToCellMapper2D</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>point_property_csv_file</declname>
+        </param>
+        <briefdescription>
+<para>reads property data from CSV text file </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="33" column="14" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="239" bodyend="253"/>
+        <references refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a46ab7190aff48e42eb1344354b3bb137" compoundref="_point_property_to_cell_mapper2_d_8cpp" startline="239" endline="253">PointPropertyToCellMapper2D</references>
+        <referencedby refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a46ab7190aff48e42eb1344354b3bb137" compoundref="_point_property_to_cell_mapper2_d_8cpp" startline="239" endline="253">PointPropertyToCellMapper2D</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1a4deac4c0e592b13f8c891ea7f21e5057" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PointPropertyToCellMapper2D::MapPointsToCells</definition>
+        <argsstring>(Model&lt; 2 &gt; &amp;, std::string target_region, std::vector&lt; Element&lt; 2 &gt; * &gt; &amp;)</argsstring>
+        <name>MapPointsToCells</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::MapPointsToCells</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2 &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>target_region</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 2 &gt; * &gt; &amp;</type>
+        </param>
+        <briefdescription>
+<para>initialises vector determining point containment for cells of the target region; points not found become null cells; returns whether all region cells have points </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Initialises cell-pointer vector determining point containment for cells of the target region; points not found become null cells;</para>
+<para><simplesect kind="return"><para>returns true when all cells of the target region contain points. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="36" column="10" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="264" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1a706985b94772b5ff8daaa7eca9037555" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PointPropertyToCellMapper2D::MapPointDataToElements</definition>
+        <argsstring>(Model&lt; 2 &gt; &amp;, std::string target_region, std::string target_variable)</argsstring>
+        <name>MapPointDataToElements</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::MapPointDataToElements</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2 &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>target_region</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>target_variable</declname>
+        </param>
+        <briefdescription>
+<para>Assigns property data to the elements of the target region, and interpolates them across it if some points do not have corresponding cells. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Attempts to assign the property data as element properties of the target region, in the process &apos;cells_with_points_&apos; gets initialised </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="39" column="10" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="314" bodyend="395"/>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae" compoundref="_c_s_m_p__global__enumerations_8h" startline="64">csmp::DIRICH</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9a007bb4d1aeea52db143267c7d3ce9c9c" compoundref="_c_s_m_p__global__enumerations_8h" startline="62">csmp::FIELD_DATA</references>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a7f84951d5c1114806a911e9318f8122c" compoundref="_point_property_to_cell_mapper2_d_8cpp" startline="448" endline="469">Out</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1ad39c7acd25d93107ce284455082b837a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PointPropertyToCellMapper2D::MapNodeToPointData</definition>
+        <argsstring>(Model&lt; 2 &gt; &amp;, std::string target_variable)</argsstring>
+        <name>MapNodeToPointData</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::MapNodeToPointData</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 2 &gt; &amp;</type>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>target_variable</declname>
+        </param>
+        <briefdescription>
+<para>Interpolates the values of the target variable, to the points stored in the <ref refid="classcsmp_1_1_data_table" kindref="compound">DataTable</ref>, storing them in there provided that the target variable is defined in the table. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Interpolates the values of the target node variable, to the points specified in the CSV file, writing another CSV file with these values </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="43" column="10" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="404" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1a72628095511938f8f4c62db9ae0e50df" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PointPropertyToCellMapper2D::OutputPointDataToCSV_File</definition>
+        <argsstring>(std::string file_name, std::string target_variable) const</argsstring>
+        <name>OutputPointDataToCSV_File</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::OutputPointDataToCSV_File</qualifiedname>
+        <param>
+          <type>std::string</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>target_variable</declname>
+        </param>
+        <briefdescription>
+<para>writes point dataset to a CSV file </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="46" column="10" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="437" bodyend="442"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1ac2284e835f51c708c4558232804f19f9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::PointPropertyToCellMapper2D::TotalPoints</definition>
+        <argsstring>() const</argsstring>
+        <name>TotalPoints</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::TotalPoints</qualifiedname>
+        <briefdescription>
+<para>all points stored in the Mapper irrespective of their association with regions </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="49" column="12" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="292" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1aa85edd984e39c22657843d306ceb093c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::PointPropertyToCellMapper2D::CellsWithPoints</definition>
+        <argsstring>() const</argsstring>
+        <name>CellsWithPoints</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::CellsWithPoints</qualifiedname>
+        <briefdescription>
+<para>current count of cells which contain one or more of the points stored by the Mapper </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="52" column="12" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="299" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_point_property_to_cell_mapper2_d_1a7f84951d5c1114806a911e9318f8122c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PointPropertyToCellMapper2D::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::PointPropertyToCellMapper2D::Out</qualifiedname>
+        <briefdescription>
+<para>prints datatable indicating for which points mesh cells were identfied </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="55" column="10" bodyfile="source/modules/property_manipulation/PointPropertyToCellMapper2D.cpp" bodystart="448" bodyend="469"/>
+        <referencedby refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a706985b94772b5ff8daaa7eca9037555" compoundref="_point_property_to_cell_mapper2_d_8cpp" startline="314" endline="395">MapPointDataToElements</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Using the point data in the supplied spreadsheet, <ref refid="classcsmp_1_1_point_property_to_cell_mapper2_d" kindref="compound">PointPropertyToCellMapper2D</ref> creates a vector of cell pointers that are non-null if they contain points are are part of the target region. This set is then used for the mapping of values to the mesh or back to the point set.</para>
+<para><simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>5/1/2022 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PointPropertyToCellMapper2D</label>
+        <link refid="classcsmp_1_1_point_property_to_cell_mapper2_d"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" line="30" column="1" bodyfile="source/includes/property_manipulation/PointPropertyToCellMapper2D.h" bodystart="30" bodyend="60"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a284b5581e6399e043ae17f3f0a6185b7" prot="private" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>cells_with_points_</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1aa85edd984e39c22657843d306ceb093c" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>CellsWithPoints</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1ad39c7acd25d93107ce284455082b837a" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>MapNodeToPointData</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a706985b94772b5ff8daaa7eca9037555" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>MapPointDataToElements</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a4deac4c0e592b13f8c891ea7f21e5057" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>MapPointsToCells</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a7f84951d5c1114806a911e9318f8122c" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a72628095511938f8f4c62db9ae0e50df" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>OutputPointDataToCSV_File</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a46ab7190aff48e42eb1344354b3bb137" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>PointPropertyToCellMapper2D</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1a8536ee63ff9aab55ce99420125c1514c" prot="private" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>property_data_</name></member>
+      <member refid="classcsmp_1_1_point_property_to_cell_mapper2_d_1ac2284e835f51c708c4558232804f19f9" prot="public" virt="non-virtual"><scope>csmp::PointPropertyToCellMapper2D</scope><name>TotalPoints</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

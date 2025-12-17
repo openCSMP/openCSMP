@@ -1,0 +1,1420 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl" kind="class" language="C++" prot="public">
+    <compoundname>csmp::PhaseStateFinder_H2O_CO2_NaCl</compoundname>
+    <includes refid="_phase_state_finder___h2_o___c_o2___na_cl_8h" local="no">PhaseStateFinder_H2O_CO2_NaCl.h</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="enum" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298e" prot="private" static="no" strong="no">
+        <type></type>
+        <name>corner</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::corner</qualifiedname>
+        <enumvalue id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298ea9199df1a9ab3973375a4679f7f2d4986" prot="private">
+          <name>a</name>
+          <initializer>=0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298ead639112987f696f88747b90e966a1af4" prot="private">
+          <name>b</name>
+          <initializer>=1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298eaa7d2925aeebd4fa34295f261c39848d2" prot="private">
+          <name>c</name>
+          <initializer>=2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="26" column="5" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="26" bodyend="26"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ac65e1100c031bfb39c1d89ccacf25efe" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::PhaseStateFinder_H2O_CO2_NaCl::t</definition>
+        <argsstring></argsstring>
+        <name>t</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::t</qualifiedname>
+        <briefdescription>
+<para>temperature [Celsius] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="70" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a5d26422606dcd13926000695df66f727" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::PhaseStateFinder_H2O_CO2_NaCl::p</definition>
+        <argsstring></argsstring>
+        <name>p</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::p</qualifiedname>
+        <briefdescription>
+<para>pressure [Pascal] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="71" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9764d5a09e8c9f21e424084e4bc380e9" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::PhaseStateFinder_H2O_CO2_NaCl::total_mass</definition>
+        <argsstring></argsstring>
+        <name>total_mass</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::total_mass</qualifiedname>
+        <briefdescription>
+<para>total mass of H2O+CO2+NaCl in fluid phase and NaCl crystalline salt in the control volume [kg] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="72" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ada9463975079405edc656fad972342b9" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_massfraction_h2o</definition>
+        <argsstring></argsstring>
+        <name>bulk_massfraction_h2o</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_massfraction_h2o</qualifiedname>
+        <briefdescription>
+<para>fraction of total_mass that is H2O [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="73" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a430d0ed63367d7daab1ffbec89a9bafe" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_massfraction_co2</definition>
+        <argsstring></argsstring>
+        <name>bulk_massfraction_co2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_massfraction_co2</qualifiedname>
+        <briefdescription>
+<para>fraction of total_mass that is CO2 [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="74" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6a0b2bc4750a3567a40a66dd9a806d79" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_massfraction_nacl</definition>
+        <argsstring></argsstring>
+        <name>bulk_massfraction_nacl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_massfraction_nacl</qualifiedname>
+        <briefdescription>
+<para>fraction of total mass that is NaCl (dissolved and solid) [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="75" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0ee532a664bebc4020050bcbeb262e7d" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::PhaseStateFinder_H2O_CO2_NaCl::nacl_y</definition>
+        <argsstring></argsstring>
+        <name>nacl_y</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::nacl_y</qualifiedname>
+        <initializer>= sin(60./180.*PI)</initializer>
+        <briefdescription>
+<para>cartesian y-coordinate of the NaCl corner of the triangular phase diagram </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="84" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a19081b2f120bb6abfb74aaeda943aa34" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::weight_phase_a</definition>
+        <argsstring></argsstring>
+        <name>weight_phase_a</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::weight_phase_a</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="90" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0959e6cbeac0260f8245d662224a409f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::weight_phase_b</definition>
+        <argsstring></argsstring>
+        <name>weight_phase_b</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::weight_phase_b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="90" column="26" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a8779ee8c4e346df2ad670e6f1f4b1009" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::weight_phase_c</definition>
+        <argsstring></argsstring>
+        <name>weight_phase_c</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::weight_phase_c</qualifiedname>
+        <briefdescription>
+<para>weights (mole-based) of phases on corner points in triangular regions </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="90" column="40" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9480c0a6febff63412cc9dac2441c9cb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_xh2o</definition>
+        <argsstring></argsstring>
+        <name>bulk_xh2o</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_xh2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="91" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a91ceaf12469e2c767ed04e5b1e62a347" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_xco2</definition>
+        <argsstring></argsstring>
+        <name>bulk_xco2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_xco2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="91" column="21" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0560eb214caac16218826a1ab8d85ee7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_xnacl</definition>
+        <argsstring></argsstring>
+        <name>bulk_xnacl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::bulk_xnacl</qualifiedname>
+        <briefdescription>
+<para>mole fractions of bulk composition </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="91" column="30" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a2097ebc83b2027a10e68a082494015c6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::x_bulkcomp</definition>
+        <argsstring></argsstring>
+        <name>x_bulkcomp</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::x_bulkcomp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="92" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0ffa51a64f1456eed4b52fd366c92a3d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::y_bulkcomp</definition>
+        <argsstring></argsstring>
+        <name>y_bulkcomp</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::y_bulkcomp</qualifiedname>
+        <briefdescription>
+<para>cartesian coordinates of bulk composition </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="92" column="22" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6a915b771bff9dbbd4c85ac87455063a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::x[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>x</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="93" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a744bda6ce32e7d18f7bcf9dfbeed57e1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::y[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>y</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::y</qualifiedname>
+        <briefdescription>
+<para>corner points of triangular regions within phase diagram </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="93" column="13" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7ddc0762729541f376ebc92ed56bfdd3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::xsat</definition>
+        <argsstring></argsstring>
+        <name>xsat</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::xsat</qualifiedname>
+        <briefdescription>
+<para>mole fraction of NaCl in salt-saturated but CO2-free water </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="94" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1b3b012296ee9e10017fd9c5e2afc93b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::msat</definition>
+        <argsstring></argsstring>
+        <name>msat</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::msat</qualifiedname>
+        <briefdescription>
+<para>molality of NaCl in salt-saturated aqueous phase (this does not depend on CO2) [mole NaCl / kg H2O] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="95" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a110288d8a3e8f80358e5811d5501ad1e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::massCarbonicPhase_</definition>
+        <argsstring></argsstring>
+        <name>massCarbonicPhase_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::massCarbonicPhase_</qualifiedname>
+        <briefdescription>
+<para>[kg] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="97" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af89beac6feb072a9607821bb830d7d83" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_carb_</definition>
+        <argsstring></argsstring>
+        <name>rho_carb_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_carb_</qualifiedname>
+        <briefdescription>
+<para>Density of carbonic phase [kg m-3]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="98" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a533d4c285b35703372e5037bc76e3a17" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_carb_</definition>
+        <argsstring></argsstring>
+        <name>mu_carb_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_carb_</qualifiedname>
+        <briefdescription>
+<para>dynamic viscosity of carbonic phase [Pa s] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="99" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1aa6fc2c1a0e2d25f1949524f886d8c1d3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_carb_</definition>
+        <argsstring></argsstring>
+        <name>beta_carb_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_carb_</qualifiedname>
+        <briefdescription>
+<para>isothermal compressibility of carbonic phase [Pa-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="100" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a23f61fd0dc4b0ffc6c377a894f9996f2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_h2o_</definition>
+        <argsstring></argsstring>
+        <name>Y_h2o_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_h2o_</qualifiedname>
+        <briefdescription>
+<para>mass fraction of H2O in carbonic phase [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="101" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a5d76a62c005f54319de322cd15a39723" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_co2_</definition>
+        <argsstring></argsstring>
+        <name>Y_co2_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_co2_</qualifiedname>
+        <briefdescription>
+<para>mass fraction of CO2 in carbonic phase [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="102" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a948fff9ac4c213b25f1c91da42d21d6d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::massAqueousPhase_</definition>
+        <argsstring></argsstring>
+        <name>massAqueousPhase_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::massAqueousPhase_</qualifiedname>
+        <briefdescription>
+<para>[kg] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="104" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7af56dac742d9f81820a757753428492" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_aq_</definition>
+        <argsstring></argsstring>
+        <name>rho_aq_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_aq_</qualifiedname>
+        <briefdescription>
+<para>Density of aqueous phase [kg m-3]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="105" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6868200a10ffc232041fc747d4587206" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_aq_</definition>
+        <argsstring></argsstring>
+        <name>mu_aq_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_aq_</qualifiedname>
+        <briefdescription>
+<para>dynamic viscosity of aqueous phase [Pa s] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="106" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1afd4f3f517bed032d3464987af713dd42" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_aq_</definition>
+        <argsstring></argsstring>
+        <name>beta_aq_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_aq_</qualifiedname>
+        <briefdescription>
+<para>isothermal compressibility of aqueous phase [Pa-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="107" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a45bdf593c85b13baa0c38edff3b2c6ca" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::X_h2o_</definition>
+        <argsstring></argsstring>
+        <name>X_h2o_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::X_h2o_</qualifiedname>
+        <briefdescription>
+<para>mass fraction of H2O in aqueous phase [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="108" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ac4db64e54db1814d0d193dd5fa760450" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::X_co2_</definition>
+        <argsstring></argsstring>
+        <name>X_co2_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::X_co2_</qualifiedname>
+        <briefdescription>
+<para>mass fraction of CO2 in aqueous phase [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="109" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a193c998b7e8da8af0326571827b9640f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::X_nacl_</definition>
+        <argsstring></argsstring>
+        <name>X_nacl_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::X_nacl_</qualifiedname>
+        <briefdescription>
+<para>mass fraction of NaCl in aqueous phase [-] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="110" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a404638d3bf9252b2e9f318694aecaf2d" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::D_Co2_</definition>
+        <argsstring></argsstring>
+        <name>D_Co2_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::D_Co2_</qualifiedname>
+        <briefdescription>
+<para>Diffusivity of CO2 in the aqueous phase (just copy/pasted from SKM&apos;s code, no further info) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="111" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a2a85ed16651db575b2a4e64ec14a03d7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::massHalite_</definition>
+        <argsstring></argsstring>
+        <name>massHalite_</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::massHalite_</qualifiedname>
+        <briefdescription>
+<para>[kg] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="113" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1adf7d660457dfb5662cc9c37c0f37585a" prot="private" static="no" mutable="no">
+        <type><ref refid="namespacecsmp_1a61836a78073a95dc9667046e679869d0" kindref="member">SYSTEM_STATE</ref></type>
+        <definition>SYSTEM_STATE csmp::PhaseStateFinder_H2O_CO2_NaCl::mystate</definition>
+        <argsstring></argsstring>
+        <name>mystate</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::mystate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="115" column="20" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1b9499ef3e0b3739041f9970eb82d094" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_halite_liquidus" kindref="compound">HaliteLiquidus</ref></type>
+        <definition>HaliteLiquidus csmp::PhaseStateFinder_H2O_CO2_NaCl::liquidus</definition>
+        <argsstring></argsstring>
+        <name>liquidus</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::liquidus</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="116" column="20" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a8043bbf57f65b6e0b9f6a0d9f7124e3c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04" kindref="compound">EOS_CO2H2ONaCl_Spycher04</ref></type>
+        <definition>EOS_CO2H2ONaCl_Spycher04 csmp::PhaseStateFinder_H2O_CO2_NaCl::eos</definition>
+        <argsstring></argsstring>
+        <name>eos</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::eos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="117" column="30" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a68b76ae311e69db27cf0cc2162e4ffd5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_xh2o[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>corner_xh2o</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_xh2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="120" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1ae32e3946be998ea4254ac0d3f835b3" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_xco2[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>corner_xco2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_xco2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="121" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1abcc36865a331a5ee6d00b9cb857c6c8a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_xnacl[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>corner_xnacl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_xnacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="122" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6b3a547985ea0b6ed92d91778f320fe8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_massfraction_h2o[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>corner_massfraction_h2o</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_massfraction_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="124" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9ea3b090f4ecf9f00fbc23eea090d7f7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_massfraction_co2[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>corner_massfraction_co2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_massfraction_co2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="125" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a57baa65f48c5465294fb8813a413c089" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_massfraction_nacl[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>corner_massfraction_nacl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::corner_massfraction_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="126" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="126" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9705523d7d5b6bf86455a15b12799116" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::PI</definition>
+        <argsstring></argsstring>
+        <name>PI</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::PI</qualifiedname>
+        <initializer>= 3.14159265358979323846</initializer>
+        <briefdescription>
+<para>the number PI </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="78" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af9b63ad3dba507dfea004540f4c2feac" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::h2o_x</definition>
+        <argsstring></argsstring>
+        <name>h2o_x</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::h2o_x</qualifiedname>
+        <initializer>= 0.</initializer>
+        <briefdescription>
+<para>cartesian x-coordinate of the H2O corner of the triangular phase diagram </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="79" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7548ea46ed5d61dd87c71f13b5014064" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::h2o_y</definition>
+        <argsstring></argsstring>
+        <name>h2o_y</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::h2o_y</qualifiedname>
+        <initializer>= 0.</initializer>
+        <briefdescription>
+<para>cartesian y-coordinate of the H2O corner of the triangular phase diagram </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="80" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a49382d0f747fd7dbede527d4a3dc453b" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::co2_x</definition>
+        <argsstring></argsstring>
+        <name>co2_x</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::co2_x</qualifiedname>
+        <initializer>= 1.</initializer>
+        <briefdescription>
+<para>cartesian x-coordinate of the CO2 corner of the triangular phase diagram </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="81" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a56659e1bdf7887c124baa81a0c8a2eda" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::co2_y</definition>
+        <argsstring></argsstring>
+        <name>co2_y</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::co2_y</qualifiedname>
+        <initializer>= 0.</initializer>
+        <briefdescription>
+<para>cartesian y-coordinate of the CO2 corner of the triangular phase diagram </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="82" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af096775eac2f89342bd34344f82de930" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::nacl_x</definition>
+        <argsstring></argsstring>
+        <name>nacl_x</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::nacl_x</qualifiedname>
+        <initializer>= 0.5</initializer>
+        <briefdescription>
+<para>cartesian x-coordinate of the NaCl corner of the triangular phase diagram </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="83" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6f89124c697c3cba2f02dad0b557ebb0" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::molar_mass_h2o</definition>
+        <argsstring></argsstring>
+        <name>molar_mass_h2o</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::molar_mass_h2o</qualifiedname>
+        <initializer>= 18.015e-3</initializer>
+        <briefdescription>
+<para>[kg mol-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="85" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a78908c520d9d739c0adce54dbce08c73" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::molar_mass_co2</definition>
+        <argsstring></argsstring>
+        <name>molar_mass_co2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::molar_mass_co2</qualifiedname>
+        <initializer>= 44.010e-3</initializer>
+        <briefdescription>
+<para>[kg mol-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="86" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9228d360c7434730ffc2bd5c4646a575" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::molar_mass_nacl</definition>
+        <argsstring></argsstring>
+        <name>molar_mass_nacl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::molar_mass_nacl</qualifiedname>
+        <initializer>= 58.443e-3</initializer>
+        <briefdescription>
+<para>[kg mol-1] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="87" column="29" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a55d49c885f9afc5a273d089c4ee75571" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PhaseStateFinder_H2O_CO2_NaCl::PhaseStateFinder_H2O_CO2_NaCl</definition>
+        <argsstring>(const double &amp;t, const double &amp;p, const double &amp;total_mass, const double &amp;massfraction_h2o, const double &amp;massfraction_co2, const double &amp;massfraction_nacl)</argsstring>
+        <name>PhaseStateFinder_H2O_CO2_NaCl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::PhaseStateFinder_H2O_CO2_NaCl</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>total_mass</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>massfraction_h2o</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>massfraction_co2</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>massfraction_nacl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="31" column="5" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="14" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1aba104a6a050dc474be3e2c9574da05b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="namespacecsmp_1a61836a78073a95dc9667046e679869d0" kindref="member">SYSTEM_STATE</ref></type>
+        <definition>SYSTEM_STATE csmp::PhaseStateFinder_H2O_CO2_NaCl::Equilibrate</definition>
+        <argsstring>()</argsstring>
+        <name>Equilibrate</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::Equilibrate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="36" column="18" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="32" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6d448084ff4e2f701123c841a6d01c6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::massCarbonicPhase</definition>
+        <argsstring>() const</argsstring>
+        <name>massCarbonicPhase</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::massCarbonicPhase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="39" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a989f60afbf8b7e81c61419a346f7247e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_carb</definition>
+        <argsstring>() const</argsstring>
+        <name>rho_carb</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_carb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="40" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad5450e26bbce3cd530657ebdbb0c69a7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_carb</definition>
+        <argsstring>() const</argsstring>
+        <name>mu_carb</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_carb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="41" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad3aeb9a1747b036f86cf1fb99bb0ac07" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_carb</definition>
+        <argsstring>() const</argsstring>
+        <name>beta_carb</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_carb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="42" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a522a7710d21882cff8329f0959f608c2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_h2o</definition>
+        <argsstring>() const</argsstring>
+        <name>Y_h2o</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="43" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="142" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a8ecde5a019632112606ec38ae884a1aa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_co2</definition>
+        <argsstring>() const</argsstring>
+        <name>Y_co2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::Y_co2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="44" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="143" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9621301ed9021d851fb3113c10842e0e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::massAqueousPhase</definition>
+        <argsstring>() const</argsstring>
+        <name>massAqueousPhase</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::massAqueousPhase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="46" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="145" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0df431c9cca3001fad8b51d6d10d0557" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_aq</definition>
+        <argsstring>() const</argsstring>
+        <name>rho_aq</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::rho_aq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="47" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="146" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a83992065fadd247caa22a6f8a0ea1e22" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_aq</definition>
+        <argsstring>() const</argsstring>
+        <name>mu_aq</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::mu_aq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="48" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="147" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1acc67549b5660738c8c7e21e062ea670d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_aq</definition>
+        <argsstring>() const</argsstring>
+        <name>beta_aq</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::beta_aq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="49" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="148" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad864f90265fbb962b19f37fb85870ed7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::X_h2o</definition>
+        <argsstring>() const</argsstring>
+        <name>X_h2o</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::X_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="50" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="149" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1773236ba8c074a2ea8885de45f696a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::X_co2</definition>
+        <argsstring>() const</argsstring>
+        <name>X_co2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::X_co2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="51" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="150" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1abdae5eed52aca6596e51e148b0e868bc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::X_nacl</definition>
+        <argsstring>() const</argsstring>
+        <name>X_nacl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::X_nacl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="52" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="151" bodyend="151"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a947b27d8264aea1a911cd8fcb03817d2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::D_Co2</definition>
+        <argsstring>() const</argsstring>
+        <name>D_Co2</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::D_Co2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="53" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="152" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1acd4ca005c657a8d8b2c86aa599ae35fd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::PhaseStateFinder_H2O_CO2_NaCl::massHalite</definition>
+        <argsstring>() const</argsstring>
+        <name>massHalite</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::massHalite</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="55" column="12" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="156" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9bad12524d2d1cb2e33fcfaa76813ff4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::DisplayFractions</definition>
+        <argsstring>(SYSTEM_STATE)</argsstring>
+        <name>DisplayFractions</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::DisplayFractions</qualifiedname>
+        <param>
+          <type><ref refid="namespacecsmp_1a61836a78073a95dc9667046e679869d0" kindref="member">SYSTEM_STATE</ref></type>
+          <defname>state</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="58" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="525" bodyend="535"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af2486c3697ef2e45aa419caf14476e15" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::InputComposition</definition>
+        <argsstring>()</argsstring>
+        <name>InputComposition</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::InputComposition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="59" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="408" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad182bf846475fb7bb7f7a1c3f7a6c1ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::InputXcompYcomp</definition>
+        <argsstring>()</argsstring>
+        <name>InputXcompYcomp</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::InputXcompYcomp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="60" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="419" bodyend="423"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a5db8b82e9286ad77f99cf12a8e9a7673" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="namespacecsmp_1a61836a78073a95dc9667046e679869d0" kindref="member">SYSTEM_STATE</ref></type>
+        <definition>SYSTEM_STATE csmp::PhaseStateFinder_H2O_CO2_NaCl::State</definition>
+        <argsstring>() const</argsstring>
+        <name>State</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::State</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="62" column="18" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="154" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1aa4245dc31800a0a452437e098f60c2a1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::Out</definition>
+        <argsstring>(bool print_private_state_as_well=false) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::Out</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>print_private_state_as_well</declname>
+          <defname>print_private_state</defname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>output the current state in as much as it is of interest to user </para>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1aa4245dc31800a0a452437e098f60c2a1" kindref="member">Out()</ref></para>
+<para>const double&amp; t; const double&amp; p; const double&amp; total_mass; const double&amp; bulk_massfraction_h2o; const double&amp; bulk_massfraction_co2; const double&amp; bulk_massfraction_nacl;</para>
+<para>const double PI; const double h2o_x; const double h2o_y; const double co2_x; const double co2_y; const double nacl_x; const double nacl_y; const double molar_mass_h2o; const double molar_mass_co2; const double molar_mass_nacl; const double moles_in_kg_h2o;</para>
+<para>double weight_phase_a,weight_phase_b,weight_phase_c; // weights (mole-based) of phases on corner points in triangular regions double bulk_xh2o,bulk_xco2,bulk_xnacl; // mole fractions of bulk composition double bulk_mnacl; // molality of NaCl for the bulk composition double x_bulkcomp,y_bulkcomp; // cartesian coordinates of bulk composition double x[3],y[3]; // corner points of triangular regions within phase diagram double m; double xsat, msat, mnacl;</para>
+<para>SKM FIX - there were 2 versions of total mass. This one is disambiguated by underscore for class member double total_mass; <verbatim>double massCarbonicPhase_;
+double rho_carb_;
+double mu_carb_;
+double beta_carb_;
+double Y_h2o_;
+double Y_co2_;
+
+double massAqueousPhase_;
+double rho_aq_;
+double mu_aq_;
+double beta_aq_;
+double X_h2o_;
+double X_co2_;
+double X_nacl_;
+double D_Co2_;
+
+double massHalite_;
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="65" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="617" bodyend="642"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6816344db3516c874bc14aa436141866" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::PhaseStateFinder_H2O_CO2_NaCl::PhaseStateFinder_H2O_CO2_NaCl</definition>
+        <argsstring>()</argsstring>
+        <name>PhaseStateFinder_H2O_CO2_NaCl</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::PhaseStateFinder_H2O_CO2_NaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="68" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a3c843181b8dc34197e6c21741c510057" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::MoleToMassfractionAtTriangularCorners</definition>
+        <argsstring>()</argsstring>
+        <name>MoleToMassfractionAtTriangularCorners</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::MoleToMassfractionAtTriangularCorners</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="130" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="381" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a3b64e3b8efe5a18dc9d0104255fbf855" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::ConvertMolefractionTriangularCornersToCartesian</definition>
+        <argsstring>(corner)</argsstring>
+        <name>ConvertMolefractionTriangularCornersToCartesian</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::ConvertMolefractionTriangularCornersToCartesian</qualifiedname>
+        <param>
+          <type>corner</type>
+          <defname>mycorner</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="131" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="396" bodyend="399"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6fbcc4c6463d6c3c761b77cee78c20ef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::ConvertMolefractionToCartesian</definition>
+        <argsstring>(double &amp;x, double &amp;y, double xh2o, double xco2, double xnacl)</argsstring>
+        <name>ConvertMolefractionToCartesian</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::ConvertMolefractionToCartesian</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xh2o</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xco2</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>xnacl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="132" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="402" bodyend="406"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad12d3deae8ee73ff3c7b1ec74b28123e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::PhaseStateFinder_H2O_CO2_NaCl::EvaluateFractionsInTriangularRegion</definition>
+        <argsstring>()</argsstring>
+        <name>EvaluateFractionsInTriangularRegion</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::EvaluateFractionsInTriangularRegion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="133" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="427" bodyend="446"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ae3cfeae2c368fb0c36242cf00cf9ef0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::EvaluateSaltyAqCarb</definition>
+        <argsstring>()</argsstring>
+        <name>EvaluateSaltyAqCarb</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::EvaluateSaltyAqCarb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="134" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="296" bodyend="379"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ac30769561b4d4a3dd9aadce66828b02d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::PhaseStateFinder_H2O_CO2_NaCl::SetCornerPointsTriangularRegions</definition>
+        <argsstring>(SYSTEM_STATE)</argsstring>
+        <name>SetCornerPointsTriangularRegions</name>
+        <qualifiedname>csmp::PhaseStateFinder_H2O_CO2_NaCl::SetCornerPointsTriangularRegions</qualifiedname>
+        <param>
+          <type><ref refid="namespacecsmp_1a61836a78073a95dc9667046e679869d0" kindref="member">SYSTEM_STATE</ref></type>
+          <defname>state</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="135" column="10" bodyfile="source/modules/eos/h2o_nacl_co2/PhaseStateFinder_H2O_CO2_NaCl.cpp" bodystart="450" bodyend="521"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="attention"><para>the mass fractions of non existing phases are set to zero. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::PhaseStateFinder_H2O_CO2_NaCl</label>
+        <link refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" line="23" column="1" bodyfile="source/includes/eos/PhaseStateFinder_H2O_CO2_NaCl.h" bodystart="24" bodyend="136"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298ea9199df1a9ab3973375a4679f7f2d4986" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>a</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298ead639112987f696f88747b90e966a1af4" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>b</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1acc67549b5660738c8c7e21e062ea670d" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>beta_aq</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1afd4f3f517bed032d3464987af713dd42" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>beta_aq_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad3aeb9a1747b036f86cf1fb99bb0ac07" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>beta_carb</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1aa6fc2c1a0e2d25f1949524f886d8c1d3" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>beta_carb_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a430d0ed63367d7daab1ffbec89a9bafe" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>bulk_massfraction_co2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ada9463975079405edc656fad972342b9" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>bulk_massfraction_h2o</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6a0b2bc4750a3567a40a66dd9a806d79" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>bulk_massfraction_nacl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a91ceaf12469e2c767ed04e5b1e62a347" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>bulk_xco2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9480c0a6febff63412cc9dac2441c9cb" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>bulk_xh2o</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0560eb214caac16218826a1ab8d85ee7" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>bulk_xnacl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298eaa7d2925aeebd4fa34295f261c39848d2" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>c</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a49382d0f747fd7dbede527d4a3dc453b" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>co2_x</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a56659e1bdf7887c124baa81a0c8a2eda" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>co2_y</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6fbcc4c6463d6c3c761b77cee78c20ef" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>ConvertMolefractionToCartesian</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a3b64e3b8efe5a18dc9d0104255fbf855" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>ConvertMolefractionTriangularCornersToCartesian</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7a97ccd369c4ea9598328bc7e2d7298e" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>corner</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9ea3b090f4ecf9f00fbc23eea090d7f7" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>corner_massfraction_co2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6b3a547985ea0b6ed92d91778f320fe8" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>corner_massfraction_h2o</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a57baa65f48c5465294fb8813a413c089" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>corner_massfraction_nacl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1ae32e3946be998ea4254ac0d3f835b3" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>corner_xco2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a68b76ae311e69db27cf0cc2162e4ffd5" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>corner_xh2o</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1abcc36865a331a5ee6d00b9cb857c6c8a" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>corner_xnacl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a947b27d8264aea1a911cd8fcb03817d2" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>D_Co2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a404638d3bf9252b2e9f318694aecaf2d" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>D_Co2_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9bad12524d2d1cb2e33fcfaa76813ff4" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>DisplayFractions</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a8043bbf57f65b6e0b9f6a0d9f7124e3c" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>eos</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1aba104a6a050dc474be3e2c9574da05b6" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>Equilibrate</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad12d3deae8ee73ff3c7b1ec74b28123e" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>EvaluateFractionsInTriangularRegion</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ae3cfeae2c368fb0c36242cf00cf9ef0e" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>EvaluateSaltyAqCarb</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af9b63ad3dba507dfea004540f4c2feac" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>h2o_x</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7548ea46ed5d61dd87c71f13b5014064" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>h2o_y</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af2486c3697ef2e45aa419caf14476e15" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>InputComposition</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad182bf846475fb7bb7f7a1c3f7a6c1ab" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>InputXcompYcomp</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1b9499ef3e0b3739041f9970eb82d094" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>liquidus</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9621301ed9021d851fb3113c10842e0e" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>massAqueousPhase</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a948fff9ac4c213b25f1c91da42d21d6d" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>massAqueousPhase_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6d448084ff4e2f701123c841a6d01c6a" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>massCarbonicPhase</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a110288d8a3e8f80358e5811d5501ad1e" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>massCarbonicPhase_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1acd4ca005c657a8d8b2c86aa599ae35fd" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>massHalite</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a2a85ed16651db575b2a4e64ec14a03d7" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>massHalite_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a78908c520d9d739c0adce54dbce08c73" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>molar_mass_co2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6f89124c697c3cba2f02dad0b557ebb0" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>molar_mass_h2o</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9228d360c7434730ffc2bd5c4646a575" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>molar_mass_nacl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a3c843181b8dc34197e6c21741c510057" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>MoleToMassfractionAtTriangularCorners</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1b3b012296ee9e10017fd9c5e2afc93b" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>msat</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a83992065fadd247caa22a6f8a0ea1e22" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>mu_aq</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6868200a10ffc232041fc747d4587206" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>mu_aq_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad5450e26bbce3cd530657ebdbb0c69a7" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>mu_carb</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a533d4c285b35703372e5037bc76e3a17" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>mu_carb_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1adf7d660457dfb5662cc9c37c0f37585a" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>mystate</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af096775eac2f89342bd34344f82de930" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>nacl_x</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0ee532a664bebc4020050bcbeb262e7d" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>nacl_y</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1aa4245dc31800a0a452437e098f60c2a1" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a5d26422606dcd13926000695df66f727" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>p</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a55d49c885f9afc5a273d089c4ee75571" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>PhaseStateFinder_H2O_CO2_NaCl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6816344db3516c874bc14aa436141866" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>PhaseStateFinder_H2O_CO2_NaCl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9705523d7d5b6bf86455a15b12799116" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>PI</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0df431c9cca3001fad8b51d6d10d0557" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>rho_aq</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7af56dac742d9f81820a757753428492" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>rho_aq_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a989f60afbf8b7e81c61419a346f7247e" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>rho_carb</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1af89beac6feb072a9607821bb830d7d83" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>rho_carb_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ac30769561b4d4a3dd9aadce66828b02d" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>SetCornerPointsTriangularRegions</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a5db8b82e9286ad77f99cf12a8e9a7673" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>State</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ac65e1100c031bfb39c1d89ccacf25efe" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>t</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a9764d5a09e8c9f21e424084e4bc380e9" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>total_mass</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a19081b2f120bb6abfb74aaeda943aa34" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>weight_phase_a</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0959e6cbeac0260f8245d662224a409f" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>weight_phase_b</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a8779ee8c4e346df2ad670e6f1f4b1009" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>weight_phase_c</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a6a915b771bff9dbbd4c85ac87455063a" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>x</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a2097ebc83b2027a10e68a082494015c6" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>x_bulkcomp</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a1773236ba8c074a2ea8885de45f696a1" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>X_co2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ac4db64e54db1814d0d193dd5fa760450" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>X_co2_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1ad864f90265fbb962b19f37fb85870ed7" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>X_h2o</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a45bdf593c85b13baa0c38edff3b2c6ca" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>X_h2o_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1abdae5eed52aca6596e51e148b0e868bc" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>X_nacl</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a193c998b7e8da8af0326571827b9640f" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>X_nacl_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a7ddc0762729541f376ebc92ed56bfdd3" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>xsat</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a744bda6ce32e7d18f7bcf9dfbeed57e1" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>y</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a0ffa51a64f1456eed4b52fd366c92a3d" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>y_bulkcomp</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a8ecde5a019632112606ec38ae884a1aa" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>Y_co2</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a5d76a62c005f54319de322cd15a39723" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>Y_co2_</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a522a7710d21882cff8329f0959f608c2" prot="public" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>Y_h2o</name></member>
+      <member refid="classcsmp_1_1_phase_state_finder___h2_o___c_o2___na_cl_1a23f61fd0dc4b0ffc6c377a894f9996f2" prot="private" virt="non-virtual"><scope>csmp::PhaseStateFinder_H2O_CO2_NaCl</scope><name>Y_h2o_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

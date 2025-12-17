@@ -1,0 +1,741 @@
+.TH "csmp::BoundaryInterface< dim, BOUNDARY_COMPLEX >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::BoundaryInterface< dim, BOUNDARY_COMPLEX > \- Policy of \fBModel\fP class for the management of internal and external boundaries which are of a lower spatial dimensional than the model and consist of \fBFace\fP objects\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <BoundaryInterface\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::Boundary\fP< dim > >::iterator \fBboundaryIterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, \fBcsmp::Boundary\fP< dim > >::const_iterator \fBboundaryConstIterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBoundaryInterface\fP (const \fBBoundaryInterface\fP &)=delete"
+.br
+.ti -1c
+.RI "\fBcsmp::Boundary\fP< dim > & \fBBoundary\fP (const std::string &bName)"
+.br
+.ti -1c
+.RI "const \fBcsmp::Boundary\fP< dim > & \fBBoundary\fP (const std::string &bName) const"
+.br
+.ti -1c
+.RI "bool \fBContainsBoundary\fP (const std::string &bName) const"
+.br
+.ti -1c
+.RI "boundaryIterator \fBBoundariesBegin\fP ()"
+.br
+.ti -1c
+.RI "boundaryIterator \fBBoundariesEnd\fP ()"
+.br
+.ti -1c
+.RI "boundaryConstIterator \fBBoundariesBegin\fP () const"
+.br
+.ti -1c
+.RI "boundaryConstIterator \fBBoundariesEnd\fP () const"
+.br
+.ti -1c
+.RI "boundaryIterator \fBBoundary\fP (const \fBcsmp::Boundary\fP< dim > &)"
+.br
+.ti -1c
+.RI "size_t \fBBoundaries\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBCreateBoundaryName\fP (const std::string &inside_region, const std::string &outside_region)"
+.br
+.RI "creates a name for a new boundary that shall be created between two touching unique (non-overlapping) regions "
+.ti -1c
+.RI "std::string \fBFindBoundaryByName\fP (const std::set< std::string > &intersected_regions) const"
+.br
+.RI "searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string ('\\0') if not found "
+.ti -1c
+.RI "size_t \fBFindBoundaryByNames\fP (const std::set< std::string > &intersected_regions, std::set< std::string > &region_patches_found) const"
+.br
+.RI "searches for the boundaries whose name contains the supplied strings (region names etc\&.) "
+.ti -1c
+.RI "bool \fBIsBoundaryName\fP (const std::string &regionName) const"
+.br
+.RI "checks whether name contains the strings BOUNDARY or any of the predefined boundary names "
+.ti -1c
+.RI "bool \fBBoxShaped\fP () const"
+.br
+.RI "checks whether the model contains the \fBBOX_BOUNDARY\fP=equivalent boundaries TOP, BOTTOM etc\&. "
+.ti -1c
+.RI "size_t \fBFormBoundariesFrom\fP (const \fBModelTopology\fP &)"
+.br
+.RI "uses the \fBFace\fP ids stored in the model topology object to form boundaries using \fBFace\fP objects which already exist; returns number of boundaries formed "
+.ti -1c
+.RI "std::pair< std::set< std::string >, bool > \fBCreateInternalBoundaryFrom\fP (const char *dimension_minus1_region)"
+.br
+.RI "converts lower-dimensional \fBRegion\fP into uniquely named \fBBoundary\fP patches, assigning more specific names to these; the input \fBRegion\fP and its elements are removed "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBCreateExternalBoundaryFrom\fP (const char *dimension_minus1_region, bool check_topo_attributes_of_nodes)"
+.br
+.RI "converts lower-dimensional \fBRegion\fP on the outside of the model into a \fBBoundary\fP; returns whether this conversion was successful as well as the boundary name "
+.ti -1c
+.RI "bool \fBCreateBoundaryAround\fP (const char *region)"
+.br
+.RI "creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside "
+.ti -1c
+.RI "std::pair< std::string, bool > \fBCreateBoundaryBetween\fP (const char *region1, const char *region2)"
+.br
+.RI "insert lower-dimensional \fBRegion\fP between two equidimensional unique regions, and then converts it into \fBBoundary\fP; returns boundary name "
+.ti -1c
+.RI "bool \fBEstablishEdgeBoundariesOfBoxShapedModel\fP ()"
+.br
+.RI "creates EDGE# \fBBoundary\fP line objects for box-shaped model by intersecting side boundaries objects "
+.ti -1c
+.RI "bool \fBEstablishBoxBoundaries\fP ()"
+.br
+.RI "creates \fBcsmp::Boundary\fP objects replacing lower-dimensional \fBBOX_BOUNDARY\fP named regions with boundaries with the same names "
+.ti -1c
+.RI "std::set< std::string > \fBEstablishBoundariesFromRegions\fP ()"
+.br
+.RI "inserts box boundary or irregular \fBcsmp::Boundary\fP objects for all eligible regions in the model; returns the names of the created boudaries "
+.ti -1c
+.RI "bool \fBEstablishBoxBoundariesFromOrientation\fP ()"
+.br
+.RI "tries to create \fBBox\fP \fBBoundary\fP objects surrounding '\fBModel\fP' into TOP, BOTTOM, IRREGULAR if possible; updates \fBBOX_BOUNDARY\fP flags "
+.ti -1c
+.RI "void \fBEstablishBoxBoundariesFromNodeFlags\fP (bool recreate_box_boundary_flags_before)"
+.br
+.RI "creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing "
+.ti -1c
+.RI "void \fBRemoveBoundary\fP (const char *boundary, bool erase_faces)"
+.br
+.RI "Removes boundary with deletion of its faces in the \fBMeshManager\fP\&. "
+.ti -1c
+.RI "void \fBRemoveBoundary\fP (\fBcsmp::Boundary\fP< dim > &, bool erase_faces)"
+.br
+.RI "Remove boundary, also deleting associated face objects if so requested\&. "
+.ti -1c
+.RI "size_t \fBBoundariesOut\fP () const"
+.br
+.RI "prints boundary names and other stats to screen; returns number of boundaries "
+.ti -1c
+.RI "bool \fBOutputBoundariesToBinary\fP (const char *file_name) const"
+.br
+.RI "method used in the storage of a model to binary file "
+.ti -1c
+.RI "void \fBInputBoundariesFromBinary\fP (const char *file_name, const std::set< std::string > &subset_variables)"
+.br
+.RI "reads boundaries stored in CSMP native binary file written by OutputBoundariesToBinary; if set non-empty will only read subset of variables "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBCreateBoundaryNameFrom\fP (const \fBFaceConstructionData\fP< dim > &, const std::vector< std::string > &region_names) const"
+.br
+.RI "combines strings (including 'BOUNDARY') into a unique name of the boundary "
+.ti -1c
+.RI "bool \fBAddBoundary\fP (const char *name, typename std::vector< \fBFace\fP< dim > * >::iterator facesBegin, typename std::vector< \fBFace\fP< dim > * >::iterator facesEnd, \fBBOX_BOUNDARY\fP)"
+.br
+.RI "creates boundary from already interconnected faces that also know their parent elements "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::Boundary\fP< dim > > \fBboundaryMap_\fP"
+.br
+.RI "storage of the boundaries "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBBoundary_Test\fP"
+.br
+.ti -1c
+.RI "class \fBBoundaryInterface_Test\fP"
+.br
+.RI "to gain access to protected member functions for testing "
+.ti -1c
+.RI "class \fBBox_Test\fP"
+.br
+.ti -1c
+.RI "class \fBBoundaryInterFace_Test\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX>
+.br
+class csmp::BoundaryInterface< dim, BOUNDARY_COMPLEX >"Policy of \fBModel\fP class for the management of internal and external boundaries which are of a lower spatial dimensional than the model and consist of \fBFace\fP objects\&. 
+
+The \fBBoundaryInterface\fP manages the boundaries of the model, including their construction and removal\&.
+.SH "Implementation"
+.PP
+By contrast with the \fBRegionInterface\fP whose interfaces for \fBRegion\fP creation rely on the existance of a master region that contains all elements of the model, no such region exists for the boundaries, but boundaries are typically constructed from lower-dimensional regions tagged via the name string 'BOUNDARY' as future boundaries in the geomodelling process\&.
+
+.PP
+\fBNote\fP
+.RS 4
+the \fBBoundaryInterface\fP is not responsible for the management of \fBFace\fP objects\&. These are handled by the \fBMeshManager\fP\&. The only thing that the \fBBoundaryInterface\fP does is to allow the creation / modification of Boundaries and to give access to them\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthai 
+
+.PP
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2010, 2017 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::AddBoundary (const char * boundary_name, typename std::vector< \fBFace\fP< dim > * >::iterator facesBegin, typename std::vector< \fBFace\fP< dim > * >::iterator facesEnd, \fBBOX_BOUNDARY\fP bflag)\fR [protected]\fP"
+
+.PP
+creates boundary from already interconnected faces that also know their parent elements Creates boundary from Faces that already know their parent elements and are interconnected to one another!
+
+.PP
+The connectivity between the Faces is (re)established\&.
+
+.PP
+\fBNote\fP
+.RS 4
+the supplied \fBFace\fP pointer vector is moved into boundary and will therefore not be accessible anymore after this method has been called\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1/4/2016 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::BoxShaped () const"
+
+.PP
+checks whether the model contains the \fBBOX_BOUNDARY\fP=equivalent boundaries TOP, BOTTOM etc\&. Checks whether a model is box-shaped while we can't ask RectangularShapedModel anymore since boundary regions were replaced by boundaries\&. 
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::CreateBoundaryAround (const char * region_name)"
+
+.PP
+creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside Creates \fBBoundary\fP around the supplied region ignoring pre-exisiting Boundaries of SplitBoundaries identified by nodes flagged as INTERNAL or the presence of NodeManifolds\&. Also ignores external model boundaries\&.
+
+.PP
+The resulting \fBBoundary\fP is flagged as INTERNAL\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+By default, there is no partitioning of the boundary into patches based in the juxtaposition of different layers and the region\&. Instead, the boundary is named BOUNDARY_"region"_HULL\&.
+
+.PP
+the detection of existing boundaries relies on their nodes being flagged as !NOT, if these are not present the method might duplicate existing boundaries\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+should HULL be partitioned for consistency with boundary naming conventions? - this would require the identification of the names of the adjacent regions\&. It could be made optional / dependent on the presence of an initialised region identifier\&.
+.RE
+.PP
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+27/10/21 refactored 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> pair< string, bool > \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::CreateBoundaryBetween (const char * group1, const char * group2)"
+
+.PP
+insert lower-dimensional \fBRegion\fP between two equidimensional unique regions, and then converts it into \fBBoundary\fP; returns boundary name Method forms a \fBBoundary\fP between the two supplied regions\&. This will involve the creation and connection of Faces\&.
+
+.PP
+This method will only work for unique Regions which are not overlapping\&.
+
+.PP
+This method makes no sense for the region '\fBModel\fP' as it encompasses all unique regions\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+returns pair singnalling the success of the operation and giving the name of the boundary\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+: BoundariesInterface cannot be created in 1D models or between regions which contain one-dimensional elements\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+the BOX boundary flag will always be internal for this type of boundary because it lies between higher dimensional regions\&.
+.RE
+.PP
+NAMING THE NEW BOUNDARY
+
+.PP
+(1\&. name of the master region from which the boundary was created if any)
+
+.PP
+.IP "2." 4
+"BOUNDARY"
+.IP "3." 4
+the patch identifier number attached to boundary (making the boundary patch unique, avoiding duplications)
+.IP "4." 4
+the name of the inner region, i\&.e\&. the region that the lower-dimensional element normals point away from
+.IP "5." 4
+the name of the outer region, i\&.e\&. that into which the normals point
+.PP
+
+.PP
+\fBNote\fP
+.RS 4
+Where the boundary just intersects a layer (same material on either side), the layer name appears only once\&. The second instance is replaced by INTERSECTION\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Attempts to create a lower-dimensional region between higher dimensional ones\&. This is done in the following steps:
+
+.PP
+.IP "0." 4
+Checks:
+.PP
+.IP "\(bu" 2
+do the input regions exist
+.IP "\(bu" 2
+are they higher dimensional
+.IP "\(bu" 2
+is there not already a region that has the name that the new region will get?
+.PP
+.IP "1." 4
+Using the Perimeter faces of the candiate regions, matching faces are found and the inside and outside elements are determined as well as recording their face numbers\&.
+.IP "2." 4
+The \fBMeshManager\fP is instructed to create the required \fBFace\fP objects AND connect them with one another\&. (no objects need to be deleted because it is assumed that there is no line element region at this boundary) 
+.PP
+\fBTodo\fP
+.RS 4
+check
+.RE
+.PP
+
+.IP "3." 4
+The \fBBoundary\fP is constructed from the \fBFace\fP objects\&.
+.PP
+
+.PP
+\fBNote\fP
+.RS 4
+the \fBRegion\fP will be oriented such that the elements of the first region will be on the inside (normals pointing outward from this region)\&.
+
+.PP
+this region is not necessarily contiguous
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+refactored 2/4/2022 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> string \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::CreateBoundaryName (const std::string & inside_region, const std::string & outside_region)"
+
+.PP
+creates a name for a new boundary that shall be created between two touching unique (non-overlapping) regions Creates a name for a new boundary that shall be created between two touching unique (non-overlapping) regions
+
+.PP
+Name will be 'BOUNDARY' + inner + "_" + outer contacting regions\&. If the name already exists, a number will be appended to boundary to make it unique\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+17/4/22 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> string \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::CreateBoundaryNameFrom (const \fBFaceConstructionData\fP< dim > & , const std::vector< std::string > & region_names) const\fR [protected]\fP"
+
+.PP
+combines strings (including 'BOUNDARY') into a unique name of the boundary LOCAL METHOD (not known beyond this compilation unit)
+
+.PP
+creates underscore-separated unique names for the region patches based on the juxtapositions relationships across the lower-dimensional regions, the names are composed of:
+
+.PP
+.IP "1." 4
+the name of the master region
+.IP "2." 4
+"BOUNDARY"
+.IP "3." 4
+the patch identifier number attached to boundary
+.IP "4." 4
+the name of the inner region, i\&.e\&. the region that the lower-dimensional element normals point away from
+.IP "5." 4
+the name of the outer region, i\&.e\&. that into which the normals point
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+where the boundary just intersects a single layer (same material on either side), the layer name appears only once\&. The second instance is replaced by INTERSECTION\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> pair< string, bool > \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::CreateExternalBoundaryFrom (const char * dimension_minus1_region, bool check_topo_attributes_of_nodes)"
+
+.PP
+converts lower-dimensional \fBRegion\fP on the outside of the model into a \fBBoundary\fP; returns whether this conversion was successful as well as the boundary name converts lower-dimensional \fBRegion\fP on the outside of the model into a \fBBoundary\fP; returns whether this conversion was successful as well as the boundary name 
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> pair< set< string >, bool > \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::CreateInternalBoundaryFrom (const char * dim_1_region)"
+
+.PP
+converts lower-dimensional \fBRegion\fP into uniquely named \fBBoundary\fP patches, assigning more specific names to these; the input \fBRegion\fP and its elements are removed Converts lower-dimensional region into Boundarie(s) of faces, decomposed into patches\&. The \fBMeshManager\fP updates the connectivity\&. The original region is removed (including removal from "Model") to non-unique regions\&.
+
+.PP
+Uses node-to-parent relationship to find the higher dimensional elements that will share a face with the \fBFace\fP: usng \fBhigherDimensionalNeighbors()\fP
+
+.PP
+\fBReturns\fP
+.RS 4
+pair of the set oof boundary patches that were created from the region and boolean that tells whether the operation was completely successful\&.
+.RE
+.PP
+Algorithmic steps:
+
+.PP
+.IP "1." 4
+Verify input lower-dimensional region object from which the boundary shall be created: must be lower dimensional and must lie inside of model
+.IP "2." 4
+Determine the number of boundary segments (sub-boundaries) that the new boundary will consist of\&. The output of this step will be a map of \fBFaceConstructionData\fP in which the names of the new boundary segments are the keys\&.
+.IP "3." 4
+In the \fBMeshManager\fP object,
+
+.PP
+3\&.1 create all required face objects
+
+.PP
+3\&.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because any \fBModelSubDomain\fP creation relies on this connectivity during identification of interior and perimeter\&.
+.IP "4." 4
+Create the \fBBoundary\fP segments, one-by-one from the map<bname, FaceConstructionData>; this involves connecting the faces to their higher dimensional neighbours\&.
+.IP "5." 4
+For the nodes located on the new boundaries, update / recreate the parent element vectors so that these no longer include neither the elements from which the \fBBoundary\fP was created nor the new faces\&.
+.IP "6." 4
+Remove the parent region of the new boundary(ies) from the region “Model\&.” The region is also put into the non-unique region map\&.
+.IP "7." 4
+Assign \fBBOX_BOUNDARY\fP flags to new nodes if any\&.
+.IP "8." 4
+By default, but optional removes parent region (including its elements)\&. 
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> set< string > \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::EstablishBoundariesFromRegions ()"
+
+.PP
+inserts box boundary or irregular \fBcsmp::Boundary\fP objects for all eligible regions in the model; returns the names of the created boudaries Creates boundary around "Model" region determining whether lower-dimensional regions shall become a boundary segments on the basis of whether their name contains the string "BOUNDARY" or is one of the reserved boundary names\&.
+
+.PP
+When a boundary (of \fBFace\fP objects) is created, the underpinning lower-dimensional (parent) region is removed from the region "Model"\&. It is also moved from the unique to the non-unique region map if it was stored there originally\&.
+
+.PP
+\fBRemarks\fP
+.RS 4
+builds boundaries only considering unique, lower-dimensional regions (line-element boundaries will not be created)\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+if all the created \fBFace\fP objects can be assigned to boundaries (as identified by the string BOUNDARY) the method returns true\&. If not, the remaining \fBFace\fP objects will be retained as a \fBBoundary\fP object named "Model_BOUNDARY and the method returns false\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+by contrast to \fBEstablishBoxBoundaries()\fP, EstablishBoundaries() does not require to be applied to box-shaped models, but is more general\&.
+.RE
+.PP
+\fBTest\fP
+.RS 4
+updated by SKM 2016 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::EstablishBoxBoundaries ()"
+
+.PP
+creates \fBcsmp::Boundary\fP objects replacing lower-dimensional \fBBOX_BOUNDARY\fP named regions with boundaries with the same names Forms boundaries considering names of \fBBox\&.h\fP-defined strings only, e\&.g\&., BACK, BOTTOM, RIGHT, TOP, FRONT, IRREGULAR and INTERNAL\&. Regions with these names are converted to boundaries removing them and their Elements that are replaced by \fBFace\fP objects\&. The new boundaries are given the standard names and are flagged correspondingly\&.
+
+.PP
+\fBRemarks\fP
+.RS 4
+input regions must be lower-dimensional (surfaces in 3D and lines in 1D) 
+
+.PP
+input regions must be unique (space exclusive) 
+
+.PP
+connectivity of \fBFace\fP objects must match / preserve that of previous \fBElement\fP objects 
+
+.PP
+when elements become faces they need to be tagged so that one can detect which region they were created from (idx?)
+.RE
+.PP
+\fBNote\fP
+.RS 4
+if the TOP region is missing, but a IRREGULAR region is there in stead, this is converted into the corresponding boundary\&. In this case, the model is still regarded as BOX_SHAPED\&.
+
+.PP
+\fBBoundary\fP creation itself does not deal with the generation of \fBBOX_BOUNDARY\fP flags for the model edges and corners\&. This is accomplished subsequently (in this method) by calling \fBrecreateBoxBoundaryFlags()\fP\&.
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+this method does not take care of the updating of the non-unique regions that are affected by the conversion of Regions into boundaries\&. This is done afterwards by methods of the \fBModel\fP class\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+refactored by SKM 2016 
+
+.PP
+refactored by SKM 2018 
+
+.PP
+SKM 2021 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> void \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::EstablishBoxBoundariesFromNodeFlags (bool recreate_box_boundary_flags_before)"
+
+.PP
+creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing Creates BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing\&.
+
+.PP
+The result are \fBBoundary\fP objects with standard names such as TOP, BOTTOM, INTERNAL, IRREGULAR, EDGE1, CNR2 etc\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+method assumes that boundary flags were assigned correctly to the nodes, else a method which does this is called\&.
+.RE
+.PP
+Procedure
+.IP "\(bu" 2
+using the node flags of the perimeter elements faces, boundary by boundary \fBVData\fP are created that are subsequently employed to create the \fBFace\fP objects of the new boundaries\&. Then these are created\&. 
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::EstablishBoxBoundariesFromOrientation ()"
+
+.PP
+tries to create \fBBox\fP \fBBoundary\fP objects surrounding '\fBModel\fP' into TOP, BOTTOM, IRREGULAR if possible; updates \fBBOX_BOUNDARY\fP flags Method caps elements that share one of their faces with the model boundary with \fBFace\fP objects\&. In a second step it assigns these to the \fBBox\fP boundaries: TOP, BOTTOM,LEFT, RIGHT, etc\&. INTERNAL, IRREGULAR, or \fBEdge\fP boundaries are not created\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+method assumes that the perimeter of region "Model" correctly identifies the outside faces of the elements of the model\&. 
+
+.PP
+this method was designed primarily for three-dimensional models\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+21/8/2018 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::EstablishEdgeBoundariesOfBoxShapedModel ()"
+
+.PP
+creates EDGE# \fBBoundary\fP line objects for box-shaped model by intersecting side boundaries objects Creates \fBEdge\fP boundary objects (of dim-2 \fBFace\fP objects) for box-shaped model from side boundaries
+
+.PP
+.IP "1." 4
+verifies that that the side boundaries of the box-shaped model are there
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+EXCEPTION: the edge curves are represented by \fBFace\fP objects, however these are dim-2 entities\&. Following CSMP's rules, these edges will be connected to their face neighbors AND their higher-dimensional parent elements with which they share edges\&.
+.RE
+.PP
+\fBTest\fP
+.RS 4
+OK - for BoxHalfs3D
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> string \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::FindBoundaryByName (const std::set< std::string > & intersected_regions) const"
+
+.PP
+searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string ('\\0') if not found Returns name of the first \fBBoundary\fP (patch) that contains the supplied region name strings or any other other strings in an arbitrary order\&.
+
+.PP
+if the boundary does not exist, method returns \\O string\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+March 2016 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> size_t \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::FindBoundaryByNames (const std::set< std::string > & intersected_regions, std::set< std::string > & region_patches_found) const"
+
+.PP
+searches for the boundaries whose name contains the supplied strings (region names etc\&.) Searches the model for boundaries the name of which contains the search strings provided via the first set\&. The results are returnd into the second set\&.
+
+.PP
+\fBNote\fP
+.RS 4
+Use this method, for example, to retrieve multiple boundary patches that were generated from a single lower-dimensional regon, like a fault surface\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+March 2016 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> size_t \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::FormBoundariesFrom (const \fBModelTopology\fP & topo)"
+
+.PP
+uses the \fBFace\fP ids stored in the model topology object to form boundaries using \fBFace\fP objects which already exist; returns number of boundaries formed Assuming that the necessary \fBFace\fP objects already exist, this method creates Boundaries interpreting the \fBCell\fP 'idx' stored in the model topology object as \fBFace\fP 'idx' ranging between n_elements\&.\&.interfaces-1 
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> void \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::InputBoundariesFromBinary (const char * file_name, const std::set< std::string > & subset_variables)"
+
+.PP
+reads boundaries stored in CSMP native binary file written by OutputBoundariesToBinary; if set non-empty will only read subset of variables reads and initialises boundaries from file written by \fBOutputBoundariesToBinary()\fP 
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::IsBoundaryName (const std::string & regionName) const"
+
+.PP
+checks whether name contains the strings BOUNDARY or any of the predefined boundary names Checks whether the name contains any substring that is indicative of a model boundary, this includes LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK, IRREGULAR and any name that is preceded by the string BOUNDARY\&.
+
+.PP
+\fBNote\fP
+.RS 4
+\fBBOX_BOUNDARY\fP edge and corner names are not checked for 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> bool \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::OutputBoundariesToBinary (const char * file_name) const"
+
+.PP
+method used in the storage of a model to binary file Writes all the boundaries to binary file, remembering all details of their implementation\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+method expects that a unique global nnumbering of \fBFace\fP and \fBNode\fP objects was established prior to its application\&.
+
+.PP
+ONLY METHOD that provides complete information about each boundary: interior vs\&. perimeter nodes and element; boudary faces etc\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 3/4/2016 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> void \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::RemoveBoundary (const char * boundary_name, bool erase_faces)"
+
+.PP
+Removes boundary with deletion of its faces in the \fBMeshManager\fP\&. Removes the boundary from the map, prompting the \fBMeshManager\fP to delete the corresponding \fBFace\fP objects if so required\&. Interior nodes that had a boundary specific \fBBOX_BOUNDARY\fP flag are set back to NOT\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIboundary_name\fP either one of the box boundaries or a name that contains the string BOUNDARY (case insentivite) 
+.br
+\fIerase_faces\fP deletes the \fBFace\fP objects that were defining the boundary
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+this does not remove the \fBFace\fP objects associated with the boundary; call \fBMeshManager\fP to do this\&. 
+.PP
+.nf
+@author SKM (refactored - since design was flawed)
+@date 15/8/2020
+
+.fi
+.PP
+ 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class BOUNDARY_COMPLEX> void \fBcsmp::BoundaryInterface\fP< dim, BOUNDARY_COMPLEX >::RemoveBoundary (\fBcsmp::Boundary\fP< dim > & boundary, bool erase_faces)"
+
+.PP
+Remove boundary, also deleting associated face objects if so requested\&. Removes the boundary from the map, prompting the \fBMeshManager\fP to delete the corresponding \fBFace\fP objects if so required\&. Interior nodes that had a boundary specific \fBBOX_BOUNDARY\fP flag are set back to NOT\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIboundary\fP reference to valid boundary in the model
+.RE
+.PP
+\fBAttention\fP
+.RS 4
+this does not remove the \fBFace\fP objects associated with the boundary; call \fBMeshManager\fP to do this\&. 
+.PP
+.nf
+@author SKM (refactored - since design was flawed)
+@date 15/8/2020
+
+.fi
+.PP
+ 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

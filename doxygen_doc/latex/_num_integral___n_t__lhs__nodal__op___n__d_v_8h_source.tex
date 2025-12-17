@@ -1,0 +1,73 @@
+\doxysection{Num\+Integral\+\_\+\+NT\+\_\+lhs\+\_\+nodal\+\_\+op\+\_\+\+N\+\_\+d\+V.\+h}
+\hypertarget{_num_integral___n_t__lhs__nodal__op___n__d_v_8h_source}{}\label{_num_integral___n_t__lhs__nodal__op___n__d_v_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV.h@{source/includes/integration/cvfe\_hydrothermal/NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NUMINTEGRAL\_NT\_LHS\_NODAL\_OP\_N\_DV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NUMINTEGRAL\_NT\_LHS\_NODAL\_OP\_N\_DV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \ \ \ \ November\ 2014,\ Philipp\ Weis:}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ \ -\/\ initial\ port\ to\ CSMP++.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_l_h_s_8h}{"{}MathOperatorLHS.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{///\ Capacitance\ matrix\ (LHS)\ with\ the\ operand\ values\ applied\ strictly\ to\ the\ node}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00016\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__lhs__nodal__op___n__d_v}{NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__lhs__nodal__op___n__d_v}{MathOperatorLHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__lhs__nodal__op___n__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__lhs__nodal__op___n__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__lhs__nodal__op___n__d_v_acea076599be9eb2361074ad1747b8c9a}{NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ basic,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__lhs__nodal__op___n__d_v_a536687f30f36ca28b2e155782e2cf98f}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__lhs__nodal__op___n__d_v_a62fecb8e00c0495c8310d7f15fe50235}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{virtual}\ NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV<dim,CELL>(*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00031\ \ \ \ \ std::vector<ScalarVariable>\ VAR;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{double}\ volume;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ @class\ NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV\ NumIntegral\_NT\_lhs\_nodal\_op\_N\_dV.h}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ @author\ Philipp\ Weis,\ ETH\ Zuerich}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ philipp.weis@erdw.ethz.ch}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ \ Calculations\ with\ large\ point\ source\ terms\ and\ values\ in\ the\ capacitance\ matrix\ that\ can\ vary\ over\ several\ orders\ of\ magnitude\ require\ that\ the\ material\ operand\ has\ to\ be\ evaluated\ at\ the\ node.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ \ Used\ within\ the\ CVFEM\ scheme\ (Weis\ et\ al.,\ Geofluids,\ 2014).}}
+\DoxyCodeLine{00050\ \textcolor{comment}{}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ The\ material\ operand\ is\ read\ in\ as\ a\ nodal\ vector\ and\ applied\ to\ the\ entries\ of\ that\ respective\ node.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ No\ averaging\ at\ the\ constraint\ points\ is\ performed.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2014.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00065\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

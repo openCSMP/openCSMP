@@ -24,26 +24,26 @@ class ANSYS_Model3D : public Model<3U> {
     ANSYS_Model3D( const char* icem_file_set,
                    const char* regions_file_prefix,
                    const char* variable_file,
-                   bool binary_file = true );   /* true = reduce regions according to regions file, false = does not redure regions */
+                   bool binary_file = true );   ///< true = reduce regions according to regions file, false = does not reduce regions
 
     /// (non-)isoparametric input from ANSYS *.asc, *.dat and *-variable.txt files
     ANSYS_Model3D( bool isoparametric,
                    const char* icem_file_set,
                    const char* variable_file,
-                   bool binary_file = true  );   /* true = reduce regions according to regions file, false = does not redure regions */
+                   bool binary_file = true  );   ///< true = reduce regions according to regions file, false = does not reduce regions
 
     /// input from ANSYS *.asc, *.dat and *-variable.txt files
     ANSYS_Model3D( const char* icem_file_set,
                    const char* variable_file,
-                   bool binary_file = true );    /* true = reduce regions according to regions file, false = does not redure regions */
+                   bool binary_file = true );    ///< true = reduce regions according to regions file, false = does not reduce regions
 
     /// input from ANSYS *.asc, *.dat files
     /// creates empty property database
     ANSYS_Model3D( const char* icem_file_set,
-                   bool binary_file = true );    /* true = reduce regions according to regions file, false = does not redure regions */
+                   bool binary_file = true );    ///< true = reduce regions according to regions file, false = does not reduce regions
 
-    // To rebuild model from CSMP native binary file do not use an ANSYS model
-    virtual ~ANSYS_Model3D();
+    /// To rebuild model from CSMP native binary file do not use an ANSYS model
+    virtual ~ANSYS_Model3D() = default;
 
     /// renumbers the nodes (0..n) as in the original ANSYS model; returns true if changes were made
     bool RestoreOriginalNodeNumbering( bool verbose );

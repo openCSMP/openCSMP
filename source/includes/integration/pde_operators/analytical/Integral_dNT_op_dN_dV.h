@@ -14,9 +14,9 @@ class Integral_dNT_op_dN_dV : public MathOperatorLHS<dim,CELL> {
     Integral_dNT_op_dN_dV( const PropertyDatabase<dim>&,
                            const char* oper, const char* basic, const char* test );
     
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual Integral_dNT_op_dN_dV<dim,CELL>* clone() const { return new Integral_dNT_op_dN_dV<dim,CELL> (*this); }
+    Integral_dNT_op_dN_dV<dim,CELL>* clone() const override final { return new Integral_dNT_op_dN_dV<dim,CELL> (*this); }
     
   private:
     DenseMatrix<DM_MIN>  DN, DNT; 

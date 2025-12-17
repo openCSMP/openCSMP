@@ -1,0 +1,141 @@
+\doxysection{Twophase\+Vapor\+Lookup.\+h}
+\hypertarget{_twophase_vapor_lookup_8h_source}{}\label{_twophase_vapor_lookup_8h_source}\index{source/includes/eos/TwophaseVaporLookup.h@{source/includes/eos/TwophaseVaporLookup.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \ \ \textcolor{preprocessor}{TWOPHASEVAPORLOOKUP\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \ \ \textcolor{preprocessor}{TWOPHASEVAPORLOOKUP\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_h2_o_lookup_8h}{"{}H2OLookup.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_critical_curve_lookup_8h}{"{}CriticalCurveLookup.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_critical_point_h2_o_8h}{"{}CriticalPointH2O.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_l_h___vapor_lookup_8h}{"{}VLH\_VaporLookup.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_states_8h}{"{}States.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_error_handler_8h}{"{}ErrorHandler.h"{}}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_twophase_vapor_lookup}{TwophaseVaporLookup}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ TwophaseVaporLookup(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalpressure);}
+\DoxyCodeLine{00019\ \ \ \ \ \string~TwophaseVaporLookup();}
+\DoxyCodeLine{00020\ \ \ \ \ TwophaseVaporLookup(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_twophase_vapor_lookup}{TwophaseVaporLookup}}\&);}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_twophase_vapor_lookup}{TwophaseVaporLookup}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_twophase_vapor_lookup}{TwophaseVaporLookup}}\&);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Temperature();}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Pressure();}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MassFractionNaCl();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Density();}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Enthalpy();}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HeatCapacity();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Compressibility();}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Viscosity();}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DCompositionDT();}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DSaltMassFractionDT();}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ReportMassFractionNaCl();}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ReportEnthalpy();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DEnthalpyDT();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ temperature;}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ \ pressure;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tcurrent;}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pcurrent;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xcurrent;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tdummy;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pdummy;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_res;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_res;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tnorm;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pnorm;}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pvlh;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ph2o;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_iA;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_iB;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_iC;}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_iD;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_iA;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_iB;}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_iC;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_iD;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_iA;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_iB;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_iC;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_iD;}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_bottom;}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_top;}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_before;}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_behind;}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_interpolated;}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_crit;}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_crit\_behind;}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_vlh;}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_vlh\_behind;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_vlh\_before;}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_boil;}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\_boil\_behind;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pboil\_iA;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pboil\_iB;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tboil;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tcrit;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tvlh;}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x\_low;}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x\_high;}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pcrit\_iB;}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pcrit\_iA;}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it;}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ip;}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_dim;}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_dim;}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iA;}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iB;}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iC;}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iD;}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\_dummy;}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it\_p\_max;}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ip\_p\_max;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ States\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state;}
+\DoxyCodeLine{00100\ \ \ \ \ States\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\_iA;}
+\DoxyCodeLine{00101\ \ \ \ \ States\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\_iB;}
+\DoxyCodeLine{00102\ \ \ \ \ States\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\_iC;}
+\DoxyCodeLine{00103\ \ \ \ \ States\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\_iD;}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ storage\_vector;\ \textcolor{comment}{//\ stores\ data\ in\ sequence\ t-\/p-\/x-\/rho-\/h\ at\ each\ Lookup\ point}}
+\DoxyCodeLine{00106\ \ \ \ \ std::vector<States>\ \ \ \ \ state\_vector;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ stores\ fluid\ state\ at\ each\ Lookup\ point}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Interpolate(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index);}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NormalInterpolation(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NearCritpointInterpolation(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NearCritcurveInterpolation(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NearBoilingCurveInterpolation(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NearVLHInterpolationLowT(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NearVLHInterpolationHighT(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index\ );}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ InterpolateBetweenBoilingCurveAndVLH(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index);}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NearVLHMaxInterpolation(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index);}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SetTemperatureAndPressure();}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetIndex\_iA(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ property\_index);}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetTemperatureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t);}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetPressureIndex(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p);}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_critical_point_h2_o}{CriticalPointH2O}}\ \ \ \ \ \ \ \ cp\_h2o;}
+\DoxyCodeLine{00124\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_critical_curve_lookup}{CriticalCurveLookup}}\ \ \ \ \ critcurve;}
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_l_h___vapor_lookup}{VLH\_VaporLookup}}\ \ \ \ \ \ \ \ \ vlh\_vapor;}
+\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_h2_o_lookup}{H2OLookup}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ water;}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ vlh\_tmax;}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ vlh\_pmax;}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_error_handler}{ErrorHandler}}\&\ \ \ \ \ \ \ \ \ \ \ csmp\_error;}
+\DoxyCodeLine{00132\ \ \ \};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \}\textcolor{comment}{//\ namespace\ csmp}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

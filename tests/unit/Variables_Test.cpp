@@ -32,6 +32,9 @@ void Variables_Test::run()
     // Run Test for 3D Model constructed by ANSYS mesh reader
 	  const string variables_filename = (string)(this->getName() + ".txt");
     ANSYS_Model3D m0(prefix_, variables_filename.c_str(), true );
+    // needs SplitBoundary so that InterFace objects exist
+    bool retain_elmts_as_intervening_elements{false};
+    m0.CreateSplitBoundaryFrom( "FRACTURE", retain_elmts_as_intervening_elements );
     m0.OutputToBinaryFile("Variables_Test_BinaryModel");
     runModel(m0);
 
@@ -583,7 +586,7 @@ void Variables_Test::runModel( Model<3>& model )
 
           // ========================================================================
           // PLACEMENT: Element Integration Point
-          for( auto i(0); i < (*it)->IntegrationPoints(); ++i )
+          for( uint32_t i{0}; i < (*it)->IntegrationPoints(); ++i )
             {
               // TYPE: Scalar
               (*it)->Read( i, eipKey1, scalarV );
@@ -656,7 +659,7 @@ void Variables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Face Integration Points
-        for( auto i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( uint32_t i(0); i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           (*it)->Read( i, fipKey1, scalarV );
@@ -778,7 +781,7 @@ void Variables_Test::runModel( Model<3>& model )
 
           // ========================================================================
           // PLACEMENT: Element Integration Point
-          for( auto i(0); i < (*it)->IntegrationPoints(); ++i )
+          for( uint32_t i(0); i < (*it)->IntegrationPoints(); ++i )
             {
               // TYPE: Scalar
               (*it)->Read( i, eipKey1, scalarV );
@@ -818,8 +821,8 @@ void Variables_Test::runModel( Model<3>& model )
           // PLACEMENT: Sector Integration Point
           const size_t sectors( (*it)->Sectors() );
           assert( sectors != 0 );
-          for( auto j(0); j < sectors; ++j )
-            for( auto i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+          for( uint32_t j(0); j < sectors; ++j )
+            for( uint32_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
               {
                 // TYPE: Scalar
                 (*it)->Read( j, i, seipKey1, scalarV );
@@ -856,8 +859,8 @@ void Variables_Test::runModel( Model<3>& model )
             // PLACEMENT: Facet Integration Point
             const size_t facets( (*it)->Facets() );
             assert( facets != 0 );
-            for( auto j(0); j < facets; ++j )
-              for( auto i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+            for( uint32_t j(0); j < facets; ++j )
+              for( uint32_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
                 {
                   // TYPE: Scalar
                   (*it)->Read( j, i, faipKey1, scalarV );
@@ -947,7 +950,7 @@ void Variables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Element Integration Point
-        for( auto i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( uint32_t i(0); i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           (*it)->Read( i, eipKey2, scalarV );
@@ -975,8 +978,8 @@ void Variables_Test::runModel( Model<3>& model )
         // PLACEMENT: Sector Integration Point
         const auto sectors( (*it)->Sectors() );
         assert( sectors != 0 );
-        for( auto j(0); j < sectors; ++j )
-          for( auto i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+        for( uint32_t j(0); j < sectors; ++j )
+          for( uint32_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
             {
             // TYPE: Scalar
             (*it)->Read( j, i, seipKey2, scalarV );
@@ -1003,8 +1006,8 @@ void Variables_Test::runModel( Model<3>& model )
           // PLACEMENT: Facet Integration Points
           const auto facets( (*it)->Facets() );
           assert( facets != 0 );
-          for( auto j(0); j < facets; ++j )
-            for( auto i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+          for( uint32_t j(0); j < facets; ++j )
+            for( uint32_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
               {
               // TYPE: Scalar
               (*it)->Read( j, i, faipKey2, scalarV );
@@ -1139,7 +1142,7 @@ void Variables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Element Integration Point
-        for( auto i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( uint32_t i(0); i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           (*it)->Read( i, eipKey2, scalarV );
@@ -1177,8 +1180,8 @@ void Variables_Test::runModel( Model<3>& model )
         // PLACEMENT: Sector Integration Points
         const auto sectors( (*it)->Sectors() );
         assert( sectors != 0 );
-        for( auto j(0); j < sectors; ++j )
-          for( auto i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+        for( uint32_t j(0); j < sectors; ++j )
+          for( uint32_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
             {
             // TYPE: Scalar
             (*it)->Read( j, i, seipKey2, scalarV );
@@ -1215,8 +1218,8 @@ void Variables_Test::runModel( Model<3>& model )
           // PLACEMENT: Facet Integration Point
           const auto facets( (*it)->Facets() );
           assert( facets != 0 );
-          for( auto j(0); j < facets; ++j )
-            for( auto i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+          for( uint32_t j(0); j < facets; ++j )
+            for( uint32_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
               {
               // TYPE: Scalar
               (*it)->Read( j, i, faipKey2, scalarV );
@@ -1261,7 +1264,7 @@ void Variables_Test::runModel( Model<3>& model )
         // TYPE: Scalar
         _test( (*it)->Status(eKey2)     == twoS.Flag() );
         _test( (*it)->Status(neweKey3)  == threeS.Flag() );
-        for( auto d(0); d<3; ++d )
+        for( uint32_t d(0); d<3; ++d )
           {
           // TYPE: Vector
           _test( (*it)->Status(evKey2,d)    == fiveV.Flag(d) );
@@ -1274,19 +1277,19 @@ void Variables_Test::runModel( Model<3>& model )
         _test( (*it)->Status(eaKey2) == elementArray2.Flag() );
         _test( (*it)->Status(neweaKey3) == elementArray3.Flag() );
         // TYPE: Flagged Array
-        for( auto d(0); d<elementFlaggedArray2.Size(); ++d )
+        for( uint32_t d(0); d<elementFlaggedArray2.Size(); ++d )
             _test( (*it)->Status(efaKey2,d) == elementFlaggedArray2.Flag(d) );
-        for( auto d(0); d<elementFlaggedArray3.Size(); ++d )
+        for( uint32_t d(0); d<elementFlaggedArray3.Size(); ++d )
             _test( (*it)->Status(newefaKey3,d) == elementFlaggedArray3.Flag(d) );
 
         // ========================================================================
         // PLACEMENT: Element Integration Point
-        for( auto i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( uint32_t i(0); i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           _test( (*it)->Status(i,eipKey2)       == twoS.Flag() );
           _test( (*it)->Status(i,neweipKey3)    == threeS.Flag() );
-          for( auto d(0); d<3; ++d )
+          for( uint32_t d(0); d<3; ++d )
             {
             // TYPE: Vector
             _test( (*it)->Status(i,eipvKey2,d)      == fiveV.Flag(d) );
@@ -1300,9 +1303,9 @@ void Variables_Test::runModel( Model<3>& model )
           _test( (*it)->Status(i,eipaKey3)      == eipArray3.Flag() );
           _test( (*it)->Status(i,neweipaKey3)   == elementArray3.Flag() );
           // TYPE: Flagged Array
-          for( auto d(0); d<eipFlaggedArray3.Size(); ++d )
+          for( uint32_t d(0); d<eipFlaggedArray3.Size(); ++d )
               _test( (*it)->Status(i,eipfaKey3,d) == eipFlaggedArray3.Flag(d) );
-          for( auto d(0); d<elementFlaggedArray3.Size(); ++d )
+          for( uint32_t d(0); d<elementFlaggedArray3.Size(); ++d )
               _test( (*it)->Status(i,neweipfaKey3,d) == elementFlaggedArray3.Flag(d) );
           }
 
@@ -1311,13 +1314,13 @@ void Variables_Test::runModel( Model<3>& model )
         // PLACEMENT: Sector Integration Point
         const auto sectors( (*it)->Sectors() );
         assert( sectors != 0 );
-        for( auto j(0); j < sectors; ++j )
-          for( auto i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+        for( uint32_t j(0); j < sectors; ++j )
+          for( uint32_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
             {
             // TYPE: Scalar
             _test( (*it)->Status(j,i,seipKey2)      == twoS.Flag() );
             _test( (*it)->Status(j,i,newseipKey3)   == threeS.Flag() );
-            for( auto d(0); d<3; ++d )
+            for( uint32_t d(0); d<3; ++d )
               {
               // TYPE: Vector
               _test( (*it)->Status(j,i,seipvKey2,d)     == fiveV.Flag(d) );
@@ -1331,11 +1334,11 @@ void Variables_Test::runModel( Model<3>& model )
             _test( (*it)->Status(j,i,seipaKey3)     == fvipArray3.Flag() );
             _test( (*it)->Status(j,i,newseipaKey3)  == elementArray3.Flag() );
             // TYPE: Flagged Array
-            for( auto d(0); d<fvipFlaggedArray2.Size(); ++d )
+            for( uint32_t d(0); d<fvipFlaggedArray2.Size(); ++d )
                 _test( (*it)->Status(j,i,seipfaKey2,d) == fvipFlaggedArray2.Flag(d) );
-            for( auto d(0); d<fvipFlaggedArray3.Size(); ++d )
+            for( uint32_t d(0); d<fvipFlaggedArray3.Size(); ++d )
                 _test( (*it)->Status(j,i,seipfaKey3,d) == fvipFlaggedArray3.Flag(d) );
-            for( auto d(0); d<elementFlaggedArray3.Size(); ++d )
+            for( uint32_t d(0); d<elementFlaggedArray3.Size(); ++d )
                 _test( (*it)->Status(j,i,newseipfaKey3,d) == elementFlaggedArray3.Flag(d) );
             }
 
@@ -1343,13 +1346,13 @@ void Variables_Test::runModel( Model<3>& model )
           // PLACEMENT: Facet Integration Point
           const auto facets( (*it)->Facets() );
           assert( facets != 0 );
-          for( auto j(0); j < facets; ++j )
-            for( auto i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+          for( uint32_t j(0); j < facets; ++j )
+            for( uint32_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
               {
               // TYPE: Scalar
               _test( (*it)->Status(j,i,faipKey2)    == twoS.Flag() );
               _test( (*it)->Status(j,i,newfaipKey3) == threeS.Flag() );
-              for( auto d(0); d<3; ++d )
+              for( uint32_t d(0); d<3; ++d )
                 {
                 // TYPE: Vector
                 _test( (*it)->Status(j,i,faipvKey2,d)       == fiveV.Flag(d) );
@@ -1363,11 +1366,11 @@ void Variables_Test::runModel( Model<3>& model )
               _test( (*it)->Status(j,i,faipaKey3) == fvipArray3.Flag() );
               _test( (*it)->Status(j,i,newfaipaKey3)  == elementArray3.Flag() );
               // TYPE: Flagged Array
-              for( auto d(0); d<fvipFlaggedArray2.Size(); ++d )
+              for( uint32_t d(0); d<fvipFlaggedArray2.Size(); ++d )
                   _test( (*it)->Status(j,i,faipfaKey2,d) == fvipFlaggedArray2.Flag(d) );
-              for( auto d(0); d<fvipFlaggedArray3.Size(); ++d )
+              for( uint32_t d(0); d<fvipFlaggedArray3.Size(); ++d )
                   _test( (*it)->Status(j,i,faipfaKey3,d) == fvipFlaggedArray3.Flag(d) );
-              for( auto d(0); d<elementFlaggedArray3.Size(); ++d )
+              for( uint32_t d(0); d<elementFlaggedArray3.Size(); ++d )
                   _test( (*it)->Status(j,i,newfaipfaKey3,d) == elementFlaggedArray3.Flag(d) );
 
               }

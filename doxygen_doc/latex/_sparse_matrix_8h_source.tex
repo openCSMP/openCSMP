@@ -1,0 +1,124 @@
+\doxysection{Sparse\+Matrix.\+h}
+\hypertarget{_sparse_matrix_8h_source}{}\label{_sparse_matrix_8h_source}\index{source/includes/math/SparseMatrix.h@{source/includes/math/SparseMatrix.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_SPARSE\_MATRIX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_SPARSE\_MATRIX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{limits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{stdexcept}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@brief\ For\ the\ accumulation\ of\ element\ matrices\ in\ finite\ element}}
+\DoxyCodeLine{00017\ \textcolor{comment}{calculations.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{@author\ S.K.\ Matthai}}
+\DoxyCodeLine{00020\ \textcolor{comment}{@date\ 2001}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\ \{}
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ SparseMatrix();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{explicit}\ SparseMatrix(\ size\_t\ m\_x\_n\ );}
+\DoxyCodeLine{00027\ \ \ \ \ SparseMatrix(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ );}
+\DoxyCodeLine{00028\ \ \ \ \ SparseMatrix(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\&\ );}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ );}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ operator=(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\&\ );}
+\DoxyCodeLine{00031\ \ \ \ \ \string~SparseMatrix()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{std}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{vector}}<\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{std}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{map}}<\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{size\_t}},\textcolor{keywordtype}{double}>\ >::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{const\_iterator}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{rowsConstIterator}};}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{typedef}\ std::map<size\_t,\textcolor{keywordtype}{double}>::const\_iterator\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{colsConstIterator}};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{std}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{vector}}<\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{std}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{map}}<\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{size\_t}},\textcolor{keywordtype}{double}>\ >::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{iterator}}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{rowsIterator}};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{typedef}\ std::map<size\_t,\textcolor{keywordtype}{double}>::iterator\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{colsIterator}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_aaac91f911000b006477b825c75bc6eda}{operator}}+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ );\ \textcolor{comment}{///\ operator\ accumulates\ sparse\ matrices.\ \ Initially\ created\ for\ OpenMP\ features.}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ standard\ accessor\ of\ matrix\ elements\ (asserts\ i,j\ in\ debug\ mode)}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a0c9950bf5e7c7d3fdd38ba87c8d940f5}{operator}}()(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a0c9950bf5e7c7d3fdd38ba87c8d940f5}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a0c9950bf5e7c7d3fdd38ba87c8d940f5}{size\_t}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ range-\/checked\ accessor\ for\ matrix\ elements}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a2a2d24236bc667ae2196137dcfe96edb}{At}}(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a2a2d24236bc667ae2196137dcfe96edb}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a2a2d24236bc667ae2196137dcfe96edb}{size\_t}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ resets\ the\ rows=columns\ of\ the\ square\ matrix,\ retaining\ potential\ extra\ capacity\ of\ the\ vector\ used}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a76492c150a731df19960249de024b031}{Resize}}(\ size\_t\ n\_x\_m,\ \textcolor{keywordtype}{bool}\ preserve\_allocated\_memory=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ reports\ the\ non-\/zero\ elements\ currently\ stored\ in\ the\ sparse\ matrix}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_aef4ae623451108fe5fb28185b7527c01}{size\_t}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_aef4ae623451108fe5fb28185b7527c01}{Entries}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ Rows()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ Cols()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_ad4fc22e6203144dd5942882b3c4dc167}{rowsConstIterator}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_ad4fc22e6203144dd5942882b3c4dc167}{Begin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a33328949ca344a7b9c317d6bcd2b36e4}{rowsConstIterator}}\ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a33328949ca344a7b9c317d6bcd2b36e4}{End}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ \ \ \ \ colsConstIterator\ \ \ RowBegin(\ size\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ \ \ \ \ colsConstIterator\ \ \ RowEnd(\ size\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ zeroing\ out\ rows\ in\ the\ context\ of\ parallel\ computations}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a7e6ecfca93088f3df3d8a4056406ed7c}{RemoveHalo}}(\ int32\_t\ nrhalo\ );}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ HasEntry(\ size\_t\ i,\ size\_t\ j\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_[i].find(j)\ ==\ data\_[i].end();\ \}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a2ad90e342bb5575e6e9dc32466e823a2}{RemoveEntry}}(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a2ad90e342bb5575e6e9dc32466e823a2}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a2ad90e342bb5575e6e9dc32466e823a2}{size\_t}}\ );}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ Erase();}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ Zero();}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ ZeroRow(\ size\_t\ row\ );}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{///\ beware!\ -\/\ this\ is\ not\ an\ efficient\ operation}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_afed837e4ccf3132692c950dca50a81ae}{ZeroColumn}}(\ size\_t\ col\ );}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_ad3c97e1e94ba49b44917bbfa00222d9c}{Add}}(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_ad3c97e1e94ba49b44917bbfa00222d9c}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_ad3c97e1e94ba49b44917bbfa00222d9c}{size\_t}},\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a3130d9f7e751ff17e37df33d49ad07d5}{Assign}}(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a3130d9f7e751ff17e37df33d49ad07d5}{size\_t}},\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a3130d9f7e751ff17e37df33d49ad07d5}{size\_t}},\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a16e7487b8b3070de3d0d4b378447cc94}{MultiplyEntryWith}}(\ size\_t\ i,\ size\_t\ j,\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ MultiplyWith(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ vec,\ std::vector<\textcolor{keywordtype}{double}>\&\ res);}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{///\ returns\ j's\ of\ non-\/zero\ column\ entries\ in\ row}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a128750bd06e2126dc6f765df36fd5db7}{ColumnIndices}}(\ size\_t\ row,\ std::vector<size\_t>\&\ indices\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{///\ if\ suspected\ that\ a\ recent\ operation\ modified\ number\ of\ entries}}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_af56b248669bef709eea77d325e7048ec}{size\_t}}\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_af56b248669bef709eea77d325e7048ec}{RecountEntries}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ InfinityNorm()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ Symmetric()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ ZeroesInDiagonal()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_afda25993a88c4aff54ba30aea03df4cc}{DiagonallyPositive}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{///\ writes\ text\ matrix\ of\ zero's\ and\ one's\ to\ visualise\ sparsity\ pattern}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_ad4c1b5bc9de350f15e744f62c60534a8}{SparsityPattern}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ txtfile\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ cspMat1,\textcolor{keyword}{class}\ cspMat2>}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a4492808d84a7a9565fd49782759fab66}{Assign}}(\ \textcolor{keyword}{const}\ cspMat1\&\ idx,\ \textcolor{keyword}{const}\ cspMat2\&\ data\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{///\ output\ in\ the\ form\ of\ C-\/style\ arrays\ indexed\ 0...n-\/1}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a29f1664cc0efb343bc246b7e339e6d7f}{OutCompressedRowFormat}}(\ int32\_t*\ \ ia,\ int32\_t*\ \ ja,\ \textcolor{keywordtype}{double}*\ a,\ \textcolor{keywordtype}{bool}\ reallocate=\textcolor{keyword}{true}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_aab48307ad33d77fb2e9c48823c0315d0}{OutCompressedRowFormat}}(\ \textcolor{keywordtype}{long}*\ \ ia,\ \textcolor{keywordtype}{long}*\ \ ja,\ \textcolor{keywordtype}{double}*\ a,\ \textcolor{keywordtype}{bool}\ reallocate=\textcolor{keyword}{true}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{///\ output\ to\ Fortran\ arrays\ indexed\ 1...n}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_aafbb3f90912050d145182b1019a1eb0c}{OutCompressedRowFormat1\_n}}(\ int32\_t*\ ia,\ int32\_t*\ ja,\ \textcolor{keywordtype}{double}*\ a,\ \textcolor{keywordtype}{bool}\ reallocate=\textcolor{keyword}{true}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ OutCompressedRowFormatParallel(\ std::vector<int32\_t>\&,\ std::vector<int32\_t>\&,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>,\ int32\_t,\ \textcolor{keywordtype}{bool}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ read\ (square)\ matrix\ from\ text\ file\ with\ zeros}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_a9398d5da381297ffd60e4959acb59b28}{In}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name\_without\_extension\ );}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix_afb371082ecc3edbdf38176a40d8044a2}{Out}}(\ \textcolor{keywordtype}{long}\ precis=5L\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ Out(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ OutForMatlab(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ file)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{//\ NB:\ can't\ be\ an\ unordered\ map\ because\ the\ order\ of\ the\ non-\/zero\ elements\ in\ each\ row\ is\ important}}
+\DoxyCodeLine{00111\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{std}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{vector}}<\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{std}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{map}}<\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{size\_t}},\textcolor{keywordtype}{double}>\ >\ \ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{data\_}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ row\ vector\ with\ maps\ that\ store\ the\ non-\/zero\ elements\ of\ the\ matrix}}
+\DoxyCodeLine{00112\ \ \ \ \ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ entries\_\ =\ 0U;\ \textcolor{comment}{///<\ total\ number\ of\ elements\ in\ the\ matrix}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

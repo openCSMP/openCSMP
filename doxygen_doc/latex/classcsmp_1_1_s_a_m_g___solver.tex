@@ -1,0 +1,314 @@
+\doxysection{csmp\+::SAMG\+\_\+\+Solver Class Reference}
+\hypertarget{classcsmp_1_1_s_a_m_g___solver}{}\label{classcsmp_1_1_s_a_m_g___solver}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+
+
+Subclass of \doxylink{classcsmp_1_1_solver}{Solver} for linear algebra computations conducted with SAMG, the algebraic multigrid solver for systems of equation from SCAPOS, Fraunhofer, Germany.  
+
+
+
+
+{\ttfamily \#include $<$SAMG\+\_\+\+Solver.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::SAMG\+\_\+\+Solver\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_s_a_m_g___solver__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::SAMG\+\_\+\+Solver\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_s_a_m_g___solver__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a830305c72009a8d132347fd16c950156}\label{classcsmp_1_1_s_a_m_g___solver_a830305c72009a8d132347fd16c950156} 
+{\bfseries SAMG\+\_\+\+Solver} (\mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings}} \texorpdfstring{$\ast$}{*}settings)
+\begin{DoxyCompactList}\small\item\em this method will not memory manage the \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} object \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a03cfc018c6ccc813e983f1e2032a62a9}\label{classcsmp_1_1_s_a_m_g___solver_a03cfc018c6ccc813e983f1e2032a62a9} 
+{\bfseries SAMG\+\_\+\+Solver} (const \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\+\_\+\+Solver}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a09c63f63d3d90e1f23232f35548c3146}\label{classcsmp_1_1_s_a_m_g___solver_a09c63f63d3d90e1f23232f35548c3146} 
+\mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\+\_\+\+Solver}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\+\_\+\+Solver}} \&)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a387f3ebfa2fb98fb9b24c4f9ef4b37e0}{Input\+Solver\+Settings}} (\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \&settings)
+\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_aa171eefe6041c5d3b2a65c93df285c83}{Get\+Solver\+Settings}} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_ae6733ea1213d720f643ceaf896ce8efc}{Write\+\_\+\+SAMG\+\_\+\+Text\+Input\+File}} (const char \texorpdfstring{$\ast$}{*}filename) const
+\item 
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_ae2b672cd390d0c172a3020b77a2fdd6f}\label{classcsmp_1_1_s_a_m_g___solver_ae2b672cd390d0c172a3020b77a2fdd6f} 
+void {\bfseries Write\+\_\+\+SAMG\+\_\+\+Text\+Output} (bool write)
+\item 
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a4be385c443457cae7b2cf71a11481946}\label{classcsmp_1_1_s_a_m_g___solver_a4be385c443457cae7b2cf71a11481946} 
+double {\bfseries Last\+Solver\+Residual} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a8eda482409227c6eca4935468e568580}{Check\+Sparsity\+Criterion}} (int32\+\_\+t \&levelx) const
+\begin{DoxyCompactList}\small\item\em Check matrix sparsity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a6721dbfffe7ae94fdd7ea94128d7c873}{Check\+Cycle\+Criterion}} (int32\+\_\+t \&iswtch) const
+\begin{DoxyCompactList}\small\item\em SAMG iteration cycles benchmark criterion. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a6afcab214b4163ab83230c0810b1d497}\label{classcsmp_1_1_s_a_m_g___solver_a6afcab214b4163ab83230c0810b1d497} 
+void {\bfseries Update\+Cycle\+Criterion} (int32\+\_\+t iswtch)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a4a43b799061f7080fcbd9065edfcda62}{Check\+Convergence}} (double eps) const
+\item 
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_aef6f948bb6ecae506bd602c021ec391b}\label{classcsmp_1_1_s_a_m_g___solver_aef6f948bb6ecae506bd602c021ec391b} 
+void {\bfseries Output\+Vectors} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_solver_a331d12fc9b8cb28b1d9614fdd1059a48}{Solver}} ()
+\item 
+{\bfseries Solver} (\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*}settings)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a7707a8bf03e9dde6396aecc144730c68}{Verbose}} (bool verb)
+\item 
+bool {\bfseries Verbose} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a00f2d834fa620f56e50a8cf37808c466}{Solve}} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&G, std\+::vector$<$ double $>$ \&rh, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns=1U)
+\item 
+void {\bfseries Solve} (\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&G, std\+::vector$<$ double $>$ \&rh, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns=1U)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_afb9380e536b4d7080c89cf143421c6f2}{Out}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&mat, const char \texorpdfstring{$\ast$}{*}fname="{}Sparse\+Matrix"{}) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_solver_a38054ec4ca8ea1fca61e4e32abf82c0e}{Out}} (const std\+::vector$<$ double $>$ \&vec, const char \texorpdfstring{$\ast$}{*}fname="{}CSP\+\_\+\+Vec"{}) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_solver_a352359e5ec450c03b8cf8b4fa2d06c2a}{Calculate\+Residual}} (const \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&A, const std\+::vector$<$ double $>$ \&b, const std\+::vector$<$ double $>$ \&x) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a6a4dbbe3dd011d95514026e4bcd52e33}{Solve\+Matrix\+Equation}} (\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&A, std\+::vector$<$ double $>$ \&b, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_af849b38b8bf9f8500590777e5fd1e7d7}{Solve\+Matrix\+Equation}} (\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&A, std\+::vector$<$ double $>$ \&b, std\+::vector$<$ double $>$ \&x, size\+\_\+t no\+\_\+unknowns)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*} {\bfseries solver\+\_\+settings\+\_\+} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Subclass of \doxylink{classcsmp_1_1_solver}{Solver} for linear algebra computations conducted with SAMG, the algebraic multigrid solver for systems of equation from SCAPOS, Fraunhofer, Germany. 
+
+Solves the linear algebraic system A x = b using the algebraic multigrid solver DLL from SCAI, Fraunhofer Gesellschaft (St. Augustin, Bonn), which can be obtained from SCAPOS.
+
+Up to 2 istances of the DLL can be communicated with. Use another instance of the solver if you have multiple PDEs that are solved sequentially and you want to remember SAMG settings from step to step.\hypertarget{classcsmp_1_1_s_a_m_g___solver_segFault}{}\doxysubsection{\texorpdfstring{Segmentation Fault on some linux based os}{Segmentation Fault on some linux based os}}\label{classcsmp_1_1_s_a_m_g___solver_segFault}
+We have noticed invalid memory access when using dynamically allocated \doxylink{classcsmp_1_1_s_a_m_g___solver}{SAMG\+\_\+\+Solver} objects and their calls to SAMG. To avoid that, use static(stack) instantiation. Right now we have no idea why, but we\textquotesingle{}re working on that... 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ i.e.:}}
+\DoxyCodeLine{SAMG\_Settings\ settings;}
+\DoxyCodeLine{settings.Set\_napproach(2);}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a830305c72009a8d132347fd16c950156}{SAMG\_Solver}}\ samgSolver(\&settings);}
+\DoxyCodeLine{PDE\_Integrator<DIM,Region>\ pressure\_diffusion(\&samgSolver);}
+
+\end{DoxyCode}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000116}{Todo}}](1) Check line 254\+: is resetting res\+\_\+in allowed if we use relative convergence 
+
+(3) Convergence check 670\+: 679 check eps or fabs(eps)? 
+
+(1) Look into runtime debug error when solving systems with vector as variable 
+
+(3) Try mpl\+::is\+\_\+volatile type trait to check whether they should manage the pointers they are supplied with in the constructor (B)\end{DoxyRefDesc}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a4a43b799061f7080fcbd9065edfcda62}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!CheckConvergence@{CheckConvergence}}
+\index{CheckConvergence@{CheckConvergence}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{CheckConvergence()}{CheckConvergence()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_a4a43b799061f7080fcbd9065edfcda62} 
+bool csmp\+::\+SAMG\+\_\+\+Solver\+::\+Check\+Convergence (\begin{DoxyParamCaption}\item[{double}]{eps}{}\end{DoxyParamCaption}) const}
+
+Verbose checks for absolute or relative convergence as supplied by user.
+
+Returns true if the solution residual is smaller than the user supplied eps (this usually indicates convergence) Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=345pt]{classcsmp_1_1_s_a_m_g___solver_a4a43b799061f7080fcbd9065edfcda62_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a6721dbfffe7ae94fdd7ea94128d7c873}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!CheckCycleCriterion@{CheckCycleCriterion}}
+\index{CheckCycleCriterion@{CheckCycleCriterion}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{CheckCycleCriterion()}{CheckCycleCriterion()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_a6721dbfffe7ae94fdd7ea94128d7c873} 
+void csmp\+::\+SAMG\+\_\+\+Solver\+::\+Check\+Cycle\+Criterion (\begin{DoxyParamCaption}\item[{int32\+\_\+t \&}]{iswtch}{}\end{DoxyParamCaption}) const}
+
+
+
+SAMG iteration cycles benchmark criterion. 
+
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+Below functions are called only if NO\+\_\+\+PRIMARY\+\_\+\+SOLVER\+\_\+\+CONTROL is defined by the user.
+
+When SAMG solver settings allow reuse of coarsening setups for subsequent time steps it must be ensured that it is still applicable to the problem. The below function has access to the SAMG output parameter ncyc\+\_\+done\+\_\+ and stores the lowest number of performed iteration cycles required to reach convergence (ncyc\+\_\+best\+\_\+). If the criterion can not be fulfilled a new SAMG solver setting is enforce by adjusting the SAMG paramters iswtch before it is passed on to the solver call. Subsequent solver calls will query the unaffected iswit setting of the \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} instance and hence resume reusing the new solver setup.
+
+Within CSMP++ this optimization feature can be only applied when solving for diffusion in an IMPES numeric scheme or IMP-\/\+IMS in combination with SAMG Multiple Instances. \Hypertarget{classcsmp_1_1_s_a_m_g___solver_a8eda482409227c6eca4935468e568580}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!CheckSparsityCriterion@{CheckSparsityCriterion}}
+\index{CheckSparsityCriterion@{CheckSparsityCriterion}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{CheckSparsityCriterion()}{CheckSparsityCriterion()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_a8eda482409227c6eca4935468e568580} 
+void csmp\+::\+SAMG\+\_\+\+Solver\+::\+Check\+Sparsity\+Criterion (\begin{DoxyParamCaption}\item[{int32\+\_\+t \&}]{levelx}{}\end{DoxyParamCaption}) const}
+
+
+
+Check matrix sparsity. 
+
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+Gauss-\/\+Seidel preconditioned Bi\+CGstab without coarsening (levelx = 1) is permitted only for nealy diagonal matrices. SAMG hidden parameter levelx defines number of coarsening levels. If SAMG levelx is set to 1, and the sparsity criterion is not fulfilled ( ratio of non-\/diagonal matrix entries to unknowns \texorpdfstring{$>$}{>} 2), levelx is reset to its default parameter 25.
+
+Within CSMP++ this optimization feature can be only applied when solving for advective transport \Hypertarget{classcsmp_1_1_s_a_m_g___solver_aa171eefe6041c5d3b2a65c93df285c83}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!GetSolverSettings@{GetSolverSettings}}
+\index{GetSolverSettings@{GetSolverSettings}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{GetSolverSettings()}{GetSolverSettings()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_aa171eefe6041c5d3b2a65c93df285c83} 
+\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \texorpdfstring{$\ast$}{*} csmp\+::\+SAMG\+\_\+\+Solver\+::\+Get\+Solver\+Settings (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}.
+
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a387f3ebfa2fb98fb9b24c4f9ef4b37e0}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!InputSolverSettings@{InputSolverSettings}}
+\index{InputSolverSettings@{InputSolverSettings}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{InputSolverSettings()}{InputSolverSettings()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_a387f3ebfa2fb98fb9b24c4f9ef4b37e0} 
+void csmp\+::\+SAMG\+\_\+\+Solver\+::\+Input\+Solver\+Settings (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_solver_settings}{Solver\+Settings}} \&}]{settings}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Set new solver settings.
+
+
+\begin{DoxyParams}{Parameters}
+{\em settings} & Pointer to a \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} object.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The new setting is stored as a pointer variable.
+
+\begin{DoxyWarning}{Warning}
+The \doxylink{classcsmp_1_1_s_a_m_g___solver}{SAMG\+\_\+\+Solver} object DOES NOT delete ANY pointer to \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} objects given to it. The user is therefore solely responsible for guaranteeing the destruction of \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} objects created with new 
+\end{DoxyWarning}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}.
+
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_af849b38b8bf9f8500590777e5fd1e7d7}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!SolveMatrixEquation@{SolveMatrixEquation}}
+\index{SolveMatrixEquation@{SolveMatrixEquation}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{SolveMatrixEquation()}{SolveMatrixEquation()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_af849b38b8bf9f8500590777e5fd1e7d7} 
+void csmp\+::\+SAMG\+\_\+\+Solver\+::\+Solve\+Matrix\+Equation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{Compressed\+Row\+Matrix}} \&}]{A}{, }\item[{std\+::vector$<$ double $>$ \&}]{b}{, }\item[{std\+::vector$<$ double $>$ \&}]{x}{, }\item[{size\+\_\+t}]{no\+\_\+unknowns}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+\begin{DoxyEnumerate}
+\item Calculate number of non-\/zero elements in A
+\end{DoxyEnumerate}
+
+Initialize settings Output parameter
+
+Paramater from \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} object
+
+SAMG matrix output to file
+
+Define SAMG hidden parameters
+
+Define number of SAMG levels
+
+Check applicability of renounced coarsening
+
+SAMG output to file
+
+IMPES without SAMG Multiple Instances
+
+IMPES without SAMG Multiple Instances
+
+SAMG convergence check
+
+Implements \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_s_a_m_g___solver_af849b38b8bf9f8500590777e5fd1e7d7_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_a6a4dbbe3dd011d95514026e4bcd52e33}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!SolveMatrixEquation@{SolveMatrixEquation}}
+\index{SolveMatrixEquation@{SolveMatrixEquation}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{SolveMatrixEquation()}{SolveMatrixEquation()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_a6a4dbbe3dd011d95514026e4bcd52e33} 
+void csmp\+::\+SAMG\+\_\+\+Solver\+::\+Solve\+Matrix\+Equation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix}} \&}]{A}{, }\item[{std\+::vector$<$ double $>$ \&}]{b}{, }\item[{std\+::vector$<$ double $>$ \&}]{x}{, }\item[{size\+\_\+t}]{no\+\_\+unknowns}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+CSMP\textquotesingle{}s sparse matrix is converted into a temporary Compressed\+Row\+Storage which is handed over to SAMG that solves it. The solution is returned into the vector x.
+
+Only 2 DLL instances (0-\/\texorpdfstring{$>$}{>}not numbered and (1) are supported. 
+\begin{DoxyEnumerate}
+\item Calculate number of non-\/zero elements in A
+\end{DoxyEnumerate}
+
+Initialize settings Output parameter
+
+Paramater from \doxylink{classcsmp_1_1_s_a_m_g___settings}{SAMG\+\_\+\+Settings} object
+
+SAMG matrix output to file
+
+Define SAMG hidden parameters
+
+Define number of SAMG levels
+
+Check applicability of renounced coarsening
+
+SAMG output to file
+
+IMPES without SAMG Multiple Instances
+
+IMPES without SAMG Multiple Instances
+
+SAMG convergence check
+
+Implements \mbox{\hyperlink{classcsmp_1_1_solver}{csmp\+::\+Solver}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_s_a_m_g___solver_a6a4dbbe3dd011d95514026e4bcd52e33_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_s_a_m_g___solver_ae6733ea1213d720f643ceaf896ce8efc}\index{csmp::SAMG\_Solver@{csmp::SAMG\_Solver}!Write\_SAMG\_TextInputFile@{Write\_SAMG\_TextInputFile}}
+\index{Write\_SAMG\_TextInputFile@{Write\_SAMG\_TextInputFile}!csmp::SAMG\_Solver@{csmp::SAMG\_Solver}}
+\doxysubsubsection{\texorpdfstring{Write\_SAMG\_TextInputFile()}{Write\_SAMG\_TextInputFile()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_a_m_g___solver_ae6733ea1213d720f643ceaf896ce8efc} 
+bool csmp\+::\+SAMG\+\_\+\+Solver\+::\+Write\+\_\+\+SAMG\+\_\+\+Text\+Input\+File (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{}\end{DoxyParamCaption}) const}
+
+Outputs the input \doxylink{classcsmp_1_1_sparse_matrix}{Sparse\+Matrix} into the desired format for the AMG solver\textquotesingle{}s file-\/based interface. This entails the generation of a format file ({\itshape .frm) and the files "{}$<$/em$>$.\+amg"{}, "{}\texorpdfstring{$\ast$}{*}.\+rhs"{}, "{}\texorpdfstring{$\ast$}{*}.\+lhs"{}, "{}\texorpdfstring{$\ast$}{*}.\+a"{}, as well as the optional files "{}\texorpdfstring{$\ast$}{*}.\+iu"{} and "{}\texorpdfstring{$\ast$}{*}.\+ip"{}, see SAMG users guide for their meaning. }Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_s_a_m_g___solver_ae6733ea1213d720f643ceaf896ce8efc_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/solver/SAMG\+\_\+\+Solver.\+h\item 
+source/modules/integration/solver/SAMG\+\_\+\+Solver.\+cpp\end{DoxyCompactItemize}

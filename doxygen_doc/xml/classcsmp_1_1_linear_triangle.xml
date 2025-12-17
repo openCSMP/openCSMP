@@ -1,0 +1,674 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_linear_triangle" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LinearTriangle</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element" prot="public" virt="non-virtual">csmp::FiniteElement</basecompoundref>
+    <includes refid="_linear_triangle_8h" local="no">LinearTriangle.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_linear_triangle_1a97683ba1a99b5830e68e4276352a40d2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::a[3U]</definition>
+        <argsstring>[3U]</argsstring>
+        <name>a</name>
+        <qualifiedname>csmp::LinearTriangle::a</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="48" column="12" bodyfile="source/includes/integration/finite_elements/LinearTriangle.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_triangle_1a7c81f333d0ebd0a0355137b580cdd7f2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::b[3U]</definition>
+        <argsstring>[3U]</argsstring>
+        <name>b</name>
+        <qualifiedname>csmp::LinearTriangle::b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="48" column="14" bodyfile="source/includes/integration/finite_elements/LinearTriangle.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_triangle_1ab726cfd80725aa93a29925fd42ae2ced" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::c[3U]</definition>
+        <argsstring>[3U]</argsstring>
+        <name>c</name>
+        <qualifiedname>csmp::LinearTriangle::c</qualifiedname>
+        <briefdescription>
+<para>test function coefficients </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="48" column="16" bodyfile="source/includes/integration/finite_elements/LinearTriangle.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a29a48db2f31552c2dcc9d857c322ead6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LinearTriangle::LinearTriangle</definition>
+        <argsstring>()</argsstring>
+        <name>LinearTriangle</name>
+        <qualifiedname>csmp::LinearTriangle::LinearTriangle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="11" column="5" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="9" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::Volume</definition>
+        <argsstring>()</argsstring>
+        <name>Volume</name>
+        <qualifiedname>csmp::LinearTriangle::Volume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a16025c5d7f2ac217d2dbedad5d561a06">Volume</reimplements>
+        <briefdescription>
+<para>computes and returns the volume of the element which is an area for a surface- and a length for a line element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="13" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="35" bodyend="40"/>
+        <referencedby refid="classcsmp_1_1_linear_triangle_1a417549c0ef71e52089017c961bd91f42" compoundref="_linear_triangle_8cpp" startline="101" endline="112">dN</referencedby>
+        <referencedby refid="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" compoundref="_linear_triangle_8cpp" startline="119" endline="133">dN_AtBarycenter</referencedby>
+        <referencedby refid="classcsmp_1_1_linear_triangle_1adf570523d3e8910b5269393d414abc11" compoundref="_linear_triangle_8cpp" startline="306" endline="317">InnerRadius</referencedby>
+        <referencedby refid="classcsmp_1_1_linear_triangle_1a4c3fcf8b458ea3468424d63d91d4deba" compoundref="_linear_triangle_8cpp" startline="149" endline="162">IntegralNN</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1aa602f72f185e39d5e42359c85f0830ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::AspectRatio</definition>
+        <argsstring>()</argsstring>
+        <name>AspectRatio</name>
+        <qualifiedname>csmp::LinearTriangle::AspectRatio</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6c6148f7a38b639b721013dbd8f8d3f5">AspectRatio</reimplements>
+        <briefdescription>
+<para>returns the ratio between the maximum and minimum spatial extent of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="14" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="286" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1adf570523d3e8910b5269393d414abc11" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::InnerRadius</definition>
+        <argsstring>()</argsstring>
+        <name>InnerRadius</name>
+        <qualifiedname>csmp::LinearTriangle::InnerRadius</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3ad8c30e7136d47df5ca95907647c538">InnerRadius</reimplements>
+        <briefdescription>
+<para>returns the radius of the largest sphere that could be inscribed in the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="15" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="306" bodyend="317"/>
+        <references refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" compoundref="_linear_triangle_8cpp" startline="35" endline="40">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a32a777cc1f54021c18f8c668052ed433" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::EdgeLengths</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vec)</argsstring>
+        <name>EdgeLengths</name>
+        <qualifiedname>csmp::LinearTriangle::EdgeLengths</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ac2348fa774457d4adde9354189277d9e">EdgeLengths</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <briefdescription>
+<para>reports the lengths of all edges (connections between nodes) in the currrent element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="16" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="46" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a9b6c262e1c52692cbc5f7286689a7a9a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::NodesOfSegment</definition>
+        <argsstring>(uint32_t segm_id, std::vector&lt; uint32_t &gt; &amp;snids) const</argsstring>
+        <name>NodesOfSegment</name>
+        <qualifiedname>csmp::LinearTriangle::NodesOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a443213e98dc0cc9692bd3eef5a168295">NodesOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segm_id</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>snids</declname>
+        </param>
+        <briefdescription>
+<para>segments are numbered like faces </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="17" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="167" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a5234fb11dc29caa9a2b12b4a9a7b8b23" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::LinearTriangle::NodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>NodesOfFace</name>
+        <qualifiedname>csmp::LinearTriangle::NodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a32fc14575277846326041fe914209f9a">NodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>For this element, the faces are numbered such that face 0 lies opposite of node 0, face 1 node 1 etc. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="19" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="217" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a1d43cd42879fdfa02779be4c3cccb729" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::LinearTriangle::CornerNodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>CornerNodesOfFace</name>
+        <qualifiedname>csmp::LinearTriangle::CornerNodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a9614d03193a707898a0b26336a61d9d9">CornerNodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the corner nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="20" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="230" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a57540dda59880c9d405cf90153cd819e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>std::vector&lt; uint32_t &gt; csmp::LinearTriangle::NodesConnectedTo</definition>
+        <argsstring>(uint32_t node_id) const</argsstring>
+        <name>NodesConnectedTo</name>
+        <qualifiedname>csmp::LinearTriangle::NodesConnectedTo</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ab7196476d9fb740d91384c6c4521b0f5">NodesConnectedTo</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>node_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the nodes at the other end of the sgment that the argument node is on </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="21" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="244" bodyend="253"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1aaa8a6dbf21bad68da13e7572dceb02c5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::LinearTriangle::CornerNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::LinearTriangle::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1abf2597e5cf0563435169689ee94d57a1">CornerNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="22" column="28" bodyfile="source/includes/integration/finite_elements/LinearTriangle.h" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a7b1a45f0bb224148193a959b3ad9f0a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::CornerNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::LinearTriangle::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae3f0ae4a9ad3424ccc4553ff270b155e">CornerNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+<para>The linear triangle is numbered counter-clockwise by default. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>clearly all nodes are corner nodes </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="23" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="269" bodyend="275"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a4de3c63de75763821476e3d63bae7d4a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>CSMP_FEM_TYPE csmp::LinearTriangle::ElementTypeOfFace</definition>
+        <argsstring>(uint32_t face) const</argsstring>
+        <name>ElementTypeOfFace</name>
+        <qualifiedname>csmp::LinearTriangle::ElementTypeOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a066cbd92cd983a3c2e73859286280587">ElementTypeOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000069"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="24" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="278" bodyend="281"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1adc2ce515c9efe0fb5ac3096fa1099132" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="group___c_s_m_pglobal_enums_1ga182d1fe97a0151d464d8170c0fafa872" kindref="member">CSMP_FEM_TYPE</ref></type>
+        <definition>virtual CSMP_FEM_TYPE csmp::LinearTriangle::ElementTypeOfSegment</definition>
+        <argsstring>(uint32_t) const</argsstring>
+        <name>ElementTypeOfSegment</name>
+        <qualifiedname>csmp::LinearTriangle::ElementTypeOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a136f53aa9d4cd295a984ca46c0864ff7">ElementTypeOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segment</declname>
+        </param>
+        <briefdescription>
+<para>reports the element type that would match that of its corresponding segment </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para><xrefsect id="todo_1_todo000070"><xreftitle>Todo</xreftitle><xrefdescription><para>(2-P) Remove typid by name fct </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="25" column="28" bodyfile="source/includes/integration/finite_elements/LinearTriangle.h" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a8deb43a50229ce96f937fe6f5cc3f6f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::UnitNormalToFace</definition>
+        <argsstring>(uint32_t face, std::vector&lt; double &gt; &amp;unrml) const</argsstring>
+        <name>UnitNormalToFace</name>
+        <qualifiedname>csmp::LinearTriangle::UnitNormalToFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a39eb6d5a1827783a679870277b4c68b8">UnitNormalToFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>unrml</declname>
+        </param>
+        <briefdescription>
+<para>outward-pointing normals </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="author"><para>SKM 18/2/2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="28" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="405" bodyend="436"/>
+        <references refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" compoundref="_m_j_l___edge_8cpp" startline="42" endline="51">mjl::Edge::Rot</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::N</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::LinearTriangle::N</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aac8b400d7e198282e0b8196df3338858">N</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+<para>element interpolation functions at point in global coordinates </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="31" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="322" bodyend="347"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a6c1d1cc28bfb1440182e2c8b8ec27791" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::N_AtBaryCenter</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtBaryCenter</name>
+        <qualifiedname>csmp::LinearTriangle::N_AtBaryCenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6df28d2a7b4bcaff49cb726d6ef0890b">N_AtBaryCenter</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+<para>reports the values of the interpolation functions at the center of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="32" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="352" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a417549c0ef71e52089017c961bd91f42" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::LinearTriangle::dN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3bf543b54ba24535aced15598495730f">dN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>B</defname>
+        </param>
+        <briefdescription>
+<para>first derivatives of element interpolation functions </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="35" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="101" bodyend="112"/>
+        <references refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" compoundref="_linear_triangle_8cpp" startline="35" endline="40">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a5ce801f35372d6f7f47a8c67c8ac4a8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::dN_At</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>dN_At</name>
+        <qualifiedname>csmp::LinearTriangle::dN_At</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1adb4103981ca8a56bbea237ef71c0cdc1">dN_At</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>B</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The interpolation function derivates are constant inside of this linear element. Thus, the location of the point itself does not have to be considered. The method returns the element area. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="36" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="141" bodyend="144"/>
+        <references refid="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" compoundref="_linear_triangle_8cpp" startline="119" endline="133">dN_AtBarycenter</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearTriangle::dN_AtBarycenter</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;)</argsstring>
+        <name>dN_AtBarycenter</name>
+        <qualifiedname>csmp::LinearTriangle::dN_AtBarycenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a703b7ce9d818248bbd9864dffee30b7c">dN_AtBarycenter</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>B</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The interpolation function derivates are constant inside of this linear element. The method returns the element area. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="37" column="26" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="119" bodyend="133"/>
+        <references refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" compoundref="_linear_triangle_8cpp" startline="35" endline="40">Volume</references>
+        <referencedby refid="classcsmp_1_1_linear_triangle_1a5ce801f35372d6f7f47a8c67c8ac4a8d" compoundref="_linear_triangle_8cpp" startline="141" endline="144">dN_At</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a4c3fcf8b458ea3468424d63d91d4deba" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::IntegralNN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;)</argsstring>
+        <name>IntegralNN</name>
+        <qualifiedname>csmp::LinearTriangle::IntegralNN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a84a69958fd3567565d4dc83037664d97">IntegralNN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>CE</defname>
+        </param>
+        <briefdescription>
+<para>integrals over interpolation functions products returned into <ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="40" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="149" bodyend="162"/>
+        <references refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" compoundref="_linear_triangle_8cpp" startline="35" endline="40">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1af01a417ecaa31effbbf43a27a32dbb2e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::OutputNodeDataToVTK</definition>
+        <argsstring>(const char *file_name, const char *var_name, DenseMatrix&lt; DM_MIN &gt; &amp;DATA) const</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::LinearTriangle::OutputNodeDataToVTK</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a67341585f83bc9d941c67e7a84801248">OutputNodeDataToVTK</reimplements>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DATA</declname>
+        </param>
+        <briefdescription>
+<para>prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="42" column="28" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="441" bodyend="527"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ga8413f7c3b4f238c5a98a846198d49469">csmp::NAME_STRING</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_linear_triangle_1a2b26508d1d1a4c4571fba229731d0c47" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::LinearTriangle::TestFunctionCoefficients</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>TestFunctionCoefficients</name>
+        <qualifiedname>csmp::LinearTriangle::TestFunctionCoefficients</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="46" column="10" bodyfile="source/modules/integration/finite_elements/LinearTriangle.cpp" bodystart="72" bodyend="97"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Straight-sided, analytically integrated triangular element for 2D calculations. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+      </node>
+      <node id="1">
+        <label>csmp::LinearTriangle</label>
+        <link refid="classcsmp_1_1_linear_triangle"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="3">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#M</edgelabel>
+          <edgelabel>+JAC</edgelabel>
+          <edgelabel>+JINV</edgelabel>
+          <edgelabel>+XY</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::LinearTriangle</label>
+        <link refid="classcsmp_1_1_linear_triangle"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/LinearTriangle.h" line="9" column="1" bodyfile="source/includes/integration/finite_elements/LinearTriangle.h" bodystart="9" bodyend="49"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_linear_triangle_1a97683ba1a99b5830e68e4276352a40d2" prot="private" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>a</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1aa602f72f185e39d5e42359c85f0830ba" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a7c81f333d0ebd0a0355137b580cdd7f2" prot="private" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>b</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1ab726cfd80725aa93a29925fd42ae2ced" prot="private" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>c</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab4ad41c705b9691a4d01ee979b6214cc" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>cne</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1aaa8a6dbf21bad68da13e7572dceb02c5" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a7b1a45f0bb224148193a959b3ad9f0a7" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a1d43cd42879fdfa02779be4c3cccb729" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9831bfb64a8fa07f20eb7024fc5a22f2" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab44758c4df00ff2cac338fbf7580b8d0" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a93be3242020acc01e32f26ee56c5d487" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Dim</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>dim</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a417549c0ef71e52089017c961bd91f42" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a5ce801f35372d6f7f47a8c67c8ac4a8d" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dN_At</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1ada3239ff54f9a99ad4436a21534587bf" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dN_AtBarycenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a885bb35784705f295c5f8ad9aa47f227" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a89d6f320e17b4cfe1f9ddbeade1c9255" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>DNR</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84befa0a4da0b4b8469ec5e7be89860e" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af159e5f99a0281ae603ca6ddde9bf6bf" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5b77ad8925c75b096867822e83bed7cd" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1a9d9ee7a3326164b35a523273dc54c9" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>DNS</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6d2fb4557b0681959501365138c9d3c3" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1c5cfe76807ea0d685c8e22d74c5582e" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a203a9d019620abee39fdbe7847ee8df0" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>DNT</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6c22543bd89563413954beb8697fa914" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>dNt</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a32a777cc1f54021c18f8c668052ed433" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>EdgeLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac2a37f7440f83acbcda169280fcb84b0" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac0a98e18654722a181c17a7e01b67e56" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a4de3c63de75763821476e3d63bae7d4a" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>ElementTypeOfFace</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1adc2ce515c9efe0fb5ac3096fa1099132" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>ElementTypeOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5684660784d3f15adffb485e8f47d9f3" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>epe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae7ea6940dcaa8403c7c35e70db4ba21c" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9666661fa30a04d97f6c04a059a6bba6" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a746f7ba1b4acf8dd74f39e3962f0707f" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa7a383bc5d1c0ee8f71ecb6c604db2ec" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa61e202519a3523f70da1f1854170c64" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a36972113f6f8351c891431038f8514bd" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>fpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a0729a0486b6febb96160f3e184c3f33f" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>gpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a564e0da11c00c28430fb146d5597c6ce" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>IDX</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4aaeb22c3a8da44a33361057ef2097f" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>InitialID</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1adf570523d3e8910b5269393d414abc11" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa5c7e3d4b60cdaa863b70edad755b09a" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d79c3309e261dd0939e5b733aac83d9" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>IntegraldNdN</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a4c3fcf8b458ea3468424d63d91d4deba" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aef00dcb02705580693988e47924a055d" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a35ee85b7635207926c97d4bf0bec7d1d" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8439ec45c22a2741b8782de67de98862" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2d45ffc4fd8598af124125bfe93a2597" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae2d5d559efe7f2b27dc5ec5e271c9b68" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4390186773409c6a5e30feb449e55f17" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d0543e1e432fdf65177495d72e4d51c" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac57108260f93ab6ef491448def2e9c50" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aca610ffda39cad1d959db0ec403c3019" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>IsSimplex</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a09d0c59e19d2cd5a6e46b7dc60fd5f07" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7ffd856e7bb1b9c1009d572775925c8d" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac8f4f6ea8649710e01ea018c61d93a30" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>itp</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5de71dcc5e56c2e814d31d798969f437" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>JAC</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae62e0c447141f0e2b7f7a4eb8412278b" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a81d93860f25ffe781837581f45caac4c" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af63fe74d4b20b02d72574d8380f5e41a" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a246043f81c66c9f65e08c6a5190ea381" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>JacobianAt</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac6a31722bbf25abad86ccea3b653953e" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>JacobianAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae758e82d3b214e9f9c5bda10cd20b515" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>JacobianDeterminant</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>JacobianInverse</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5c3fd117b986587599dcb441feeb000a" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>JINV</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a29a48db2f31552c2dcc9d857c322ead6" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>LinearTriangle</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac3204e22e57b8658797037802003c490" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>LineElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a64381c8d0e2f4840551c2da986fb9a25" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>M</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8149423046e10426a7eb520164ad3a38" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aec5a871df4af8c883e496f6283872780" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1af904a8a800f512af551614923334d5bd" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a6c1d1cc28bfb1440182e2c8b8ec27791" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac1168c0c1cc280d1a1ecba676877d13b" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad75cb0ef9bea852c900e58b74662b0d4" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2509e6d8ab556b6a65a9036a62485df4" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>nne</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad1e29de6aed41fb434a485b875d7d8d4" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a57540dda59880c9d405cf90153cd819e" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>NodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a5234fb11dc29caa9a2b12b4a9a7b8b23" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>NodesOfFace</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a9b6c262e1c52692cbc5f7286689a7a9a" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>NodesOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3cb7bc938ad00c9f4dbfbfa94c13e781" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>NodesPerFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>npe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9d9ced72fa35fd6a9fc755a219590820" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>npf</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af583becda82f4fef39bbe2d4c3b41cea" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Nr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb2baab01a52b040d73c10623a0605b2" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Nrs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa13754bef9eb502c77561f216d0258e7" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>NRST</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a34bd4d39b1a026b1de15f028e9692bd8" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1aa0c4f0fabe88be0c254f121d5a483b" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a698633a6c268ac88c82929093cd65cc1" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a94820d970b7a970757c91dac9934b424" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>OrderOfShapeFunctions</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae963674dc3ef25ce0e7bd8d2937c75ee" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1af01a417ecaa31effbbf43a27a32dbb2e" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a34a5c030987c7e9842af332f5ed0d61b" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>ReferenceCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7f488b707067cb6d1ee0b25a97c883a2" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>spe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a930e53402dc4847a3084e38853d3bfd6" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>SurfaceElement</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a2b26508d1d1a4c4571fba229731d0c47" prot="private" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>TestFunctionCoefficients</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1dedbd91a6e8765f57dfdaf999494b76" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae600307171225f53a2615aaffd5afb18" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>UnitNormalAtFaceBarycenter</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1a8deb43a50229ce96f937fe6f5cc3f6f1" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4d20a792255fd2b0984b255ec3e6817" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8211ac6a7c8734f142eaa51f459d25af" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_linear_triangle_1ab4468ebd9e3ff009a19b27543bfeff0f" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad92268835407ea5fc1df04583a754637" prot="protected" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>VolumeElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac224265aa216deebfcf44b54d2689d1d" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>XY</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae4bd0bcbccb811f852c26668f6959f14" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a56c5bc7db73c50f4448380eeee48fa3f" prot="public" virt="non-virtual"><scope>csmp::LinearTriangle</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4e65701c3dcf1f2c98688d3204bccb6d" prot="public" virt="virtual"><scope>csmp::LinearTriangle</scope><name>~FiniteElement</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

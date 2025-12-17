@@ -1,9 +1,10 @@
 #include "EigenSolver.h"
 #include "SparseMatrix.h"
 #include "CompressedRowMatrix.h"
-#include "eigen/Eigen/Sparse"
+#include <Eigen/Sparse>
 #include "ErrorHandler.h"
 #include "Exception.h"
+
 
 /**
  * @brief implementation of csmp-eigen interface solver class

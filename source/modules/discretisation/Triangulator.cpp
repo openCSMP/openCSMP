@@ -19,9 +19,6 @@ Triangulator::Triangulator()
     m_mtrx = n_mtrx = 0;
  } 
 
-Triangulator::~Triangulator()
- {
- }
 
 
 /**
@@ -356,9 +353,9 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
    
    // flagging the 4 corner elements, overwriting the side flags
    vset.BFlag( m_mtrx * (n_mtrx+1), CNR_MIN );   // CNR1
-   vset.BFlag( n_vertices-1U,   CNR_MIN_MAXX );  // CNR2
-   vset.BFlag( 2 * n_mtrx + 1U, CNR_MAX_MAXX );  // CNR3
-   vset.BFlag( 0U,              CNR_MAX_MINXZ ); // CNR4 
+   vset.BFlag( n_vertices-1U,   CNR2 );  // CNR2
+   vset.BFlag( 2 * n_mtrx + 1U, CNR3 );  // CNR3
+   vset.BFlag( 0U,              CNR4 ); // CNR4 
    
    // setting up the vset
    vset.AddPlist( plist.begin(), plist.end() );

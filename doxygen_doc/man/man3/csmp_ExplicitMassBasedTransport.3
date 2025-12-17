@@ -1,0 +1,499 @@
+.TH "csmp::ExplicitMassBasedTransport< dim, STP >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ExplicitMassBasedTransport< dim, STP >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExplicitMassBasedTransport\fP (const char *group, \fBModel\fP< dim > &sg, const char *porosity, const char *advected_prop_lhs, const char *advected_prop_rhs, const char *transp_velocity, const char *nodal_source, bool second_order_accuracy, bool second_order_in_time=false, const char *thickness=NULL)"
+.br
+.ti -1c
+.RI "double \fBAnisotropicCourantIncrement\fP () override"
+.br
+.RI "evaluation of Courant-Friedrich-Levy condition, i\&.e\&., grid Courant number "
+.ti -1c
+.RI "virtual void \fBAdvectVariable\fP (double time_interval)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariableSingleStep\fP (double time_increment, bool apply_flux_balance_correction, bool update_pore_volumes) override final"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable1stOrder\fP (double time_interval, bool output_result_range)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP
+.in +1c
+.ti -1c
+.RI "\fBExplicitNodeCenteredFiniteVolumeTransport\fP (const char *region, \fBModel\fP< dim > &, const char *porosity, const char *advected_prop, const char *transp_velocity, const char *nodal_source, bool second_order_accuracy)"
+.br
+.RI "single phase solute advection-only constructor for a subregion identified as a group "
+.ti -1c
+.RI "\fBExplicitNodeCenteredFiniteVolumeTransport\fP (const char *region, \fBModel\fP< dim > &, const char *porosity, const char *diffusivity, const char *advected_prop, const char *transp_velocity, const char *nodal_source, bool second_order_accuracy)"
+.br
+.RI "single phase solute advection-dispersion constructor for a subregion identified as a group "
+.ti -1c
+.RI "\fBExplicitNodeCenteredFiniteVolumeTransport\fP (const char *region, \fBModel\fP< dim > &, const char *porosity, const char *advected_prop_lhs, const char *advected_prop_rhs, const char *transp_velocity, const char *nodal_source, bool second_order_accurate, bool second_order_in_time, const char *elmt_thickness_attribute=NULL)"
+.br
+.RI "single-phase passive advection (group-restricted) "
+.ti -1c
+.RI "virtual \fB~ExplicitNodeCenteredFiniteVolumeTransport\fP ()"
+.br
+.ti -1c
+.RI "virtual double \fBAdvectVariable\fP (double time_interval, double cfl_multiplication_factor, bool apply_flux_balance_correction, bool update_pore_volumes)"
+.br
+.RI "single-phase transport ( "
+.ti -1c
+.RI "double \fBOutputResults\fP (const \fBPropertyDatabase\fP< dim > &, const \fBcsmp::Index\fP &adv_key, bool show_range, uint32_t var_comp_nr=0u) const"
+.br
+.RI "results are stored back wherever flags are not DIRICH "
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBNodeCenteredFiniteVolumeTransport\fP (const char *group_name, \fBModel\fP< dim > &, const char *porosity, const char *advected_prop, const char *transp_velocity, const char *nodal_source, bool second_order_in_space, bool second_order_in_time, const char *elmt_thickness_attribute=NULL, const char *velocity_multiplier=NULL)"
+.br
+.RI "single-phase solute advection-ONLY constructor, 1st-order method "
+.ti -1c
+.RI "\fBNodeCenteredFiniteVolumeTransport\fP (const char *group_name, \fBModel\fP< dim > &, const char *porosity, const char *diffusivity, const char *advected_prop, const char *transp_velocity, const char *nodal_source, bool second_order_in_space, bool second_order_in_time, const char *elmt_thickness_attribute=NULL, const char *velocity_multiplier=NULL)"
+.br
+.RI "single-phase solute advection-diffusion constructor, 1st-order method "
+.ti -1c
+.RI "virtual double \fBTransportPhase\fP (\fBTwoPhaseModel\fP< dim > &, double time_interval)"
+.br
+.RI "advection of one of two phases in two-phase flow handled by subclasses "
+.ti -1c
+.RI "virtual double \fBAnisotropicCourantIncrement\fP (\fBTwoPhaseModel\fP< dim > &, double max_time_increment=3153600000\&.)"
+.br
+.RI "advection, capillary diffusion and gravitational flow "
+.ti -1c
+.RI "void \fBCFL_Multiplier\fP (double desired_value)"
+.br
+.RI "to set scaling (default=1) "
+.ti -1c
+.RI "double \fBCFL_Multiplier\fP () const"
+.br
+.ti -1c
+.RI "void \fBWithLsmGradientLimiter\fP (\fBModel\fP< dim > &)"
+.br
+.RI "to apply the gradient limiter "
+.ti -1c
+.RI "void \fBMaxNonlinear2ndOrderIterations\fP (size_t max_nonlinear_iterations)"
+.br
+.ti -1c
+.RI "void \fBTargetNonlinear2ndOrderResidual\fP (double target_residual)"
+.br
+.ti -1c
+.RI "double \fBModelInflow\fP () const"
+.br
+.ti -1c
+.RI "double \fBModelOutflow\fP () const"
+.br
+.ti -1c
+.RI "double \fBBoundaryFluxes\fP (double &inflow, double &out_flow, bool box_shaped_model=true, bool use_advected_variable=false, const char *advected_variable='no advected variable', const char *variable_to_determine_no_flow='fluid pressure', \fBVARIABLE_FLAG\fP exclude_flag=\fBANY\fP) const"
+.br
+.RI "returns inflow, outflow, and mismatch between these; calculation can FVs where variable is flagged with exclude_flag "
+.ti -1c
+.RI "void \fBFluxBalance\fP (double &fmin, double &fmax) const"
+.br
+.RI "for each finite volume it sums up incoming and outgoing fluxes reporting the extrema "
+.ti -1c
+.RI "void \fBDivergence\fP (const char *div_property, const char *result_prop) const"
+.br
+.RI "as previous method, but assigns surface integrals to the result property "
+.ti -1c
+.RI "void \fBMultiplyScalarNodePropertyByFiniteVolume\fP (const char *property)"
+.br
+.RI "integrates nodal scalar properties finite volume by finite volume "
+.ti -1c
+.RI "double \fBVolumeIntegrateScalarFiniteVolumeVariable\fP (const char *property, bool consider_porosity) const"
+.br
+.RI "integrates scalar node and element variables "
+.ti -1c
+.RI "double \fBVolumeIntegrateScalarFiniteElementVariable\fP (const char *property, bool take_porosity_into_account=false, const char *region=NULL) const"
+.br
+.ti -1c
+.RI "double \fBVolumeIntegrateScalarFiniteVolumeVariable\fP (const char *group, const \fBModel\fP< dim > &, const char *property, bool consider_porosity) const"
+.br
+.RI "integrates target property over a region of interest, result can be scaled by porosity "
+.ti -1c
+.RI "void \fBVolumeIntegrate\fP (const char *integrand_property, const char *result_prop) const"
+.br
+.RI "integrals for finite-element computations "
+.ti -1c
+.RI "void \fBVolumeIntegrate\fP (const char *integrand_property, const char *integrand_multiplier, const char *result_prop) const"
+.br
+.ti -1c
+.RI "void \fBMultiplyScalarBoundaryValuesByFiniteVolumeCrossSectionalArea\fP (\fBModel\fP< dim > &, \fBBOX_BOUNDARY\fP, const char *property)"
+.br
+.RI "conversion of values already assigned to the nodes (only possible if nodes comprise model boundary) "
+.ti -1c
+.RI "void \fBTransformScalarBoundaryValuesIntoNeumannConditions\fP (\fBBOX_BOUNDARY\fP boundary, const char *node_property, const char *propertionality_constant, bool distribute_total_amount)"
+.br
+.RI "computation and assignment of Neumann boundary gradients to target boundary "
+.ti -1c
+.RI "void \fBAssignScalarBoundaryValues\fP (\fBBOX_BOUNDARY\fP, const char *property, \fBVARIABLE_FLAG\fP bcond, double val, bool distribute_total_amount)"
+.br
+.RI "assignment of a single specific value that is projected on outward point normal "
+.ti -1c
+.RI "double \fBFiniteVolume\fP (const char *volume_property) const"
+.br
+.RI "returns the actual volume of the finite volume i "
+.ti -1c
+.RI "double \fBPoreVolume\fP (size_t iFv_cell) const"
+.br
+.ti -1c
+.RI "virtual void \fBAdjustSolverSettings\fP ()"
+.br
+.RI "Adjust flexible samg solver settings\&. "
+.ti -1c
+.RI "virtual CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS & \fBGetSolverSettings\fP ()"
+.br
+.RI "Access to advector's solver settings\&. "
+.ti -1c
+.RI "virtual CSMP_DEFAULT_LINEAR_SOLVER * \fBGetSolver\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBAccumulateFluxUpwindProducts\fP () override"
+.br
+.ti -1c
+.RI "void \fBAccumulateFluxUpwindProductsOMP\fP (std::vector< double > &RESULT)"
+.br
+.ti -1c
+.RI "void \fBAssignFluxBoundaryConditions\fP (uint32_t var_comp_nr=0) override"
+.br
+.RI "as in base class but for a result vector "
+.ti -1c
+.RI "void \fBComposeSolution\fP (double time_interval, uint32_t var_comp_nr=0) override"
+.br
+.RI "passive advection: gives transported variable at end of time_interval "
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP
+.in +1c
+.ti -1c
+.RI "void \fBAdvectVariable1stOrder\fP (double time_interval, bool output_result_range)"
+.br
+.RI "explicit conservative "
+.in -1c
+
+Protected Member Functions inherited from \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBNodeCenteredFiniteVolumeTransport\fP (const \fBNodeCenteredFiniteVolumeTransport\fP< dim > &)"
+.br
+.ti -1c
+.RI "void \fBInitializeFiniteVolumeData\fP (bool multiply_pore_volumes_with_thickness_attribute=false)"
+.br
+.ti -1c
+.RI "void \fBInitializeFiniteVolumeDataParametricToPhysical\fP (bool store_normals)"
+.br
+.ti -1c
+.RI "void \fBInitializeSectorPoreVolumeData\fP (bool multiply_pore_volumes_with_thickness_attribute)"
+.br
+.ti -1c
+.RI "bool \fBInitializeArraysForFirstOrderMethod\fP ()"
+.br
+.ti -1c
+.RI "bool \fBInitializeArraysForSecondOrderMethod\fP (bool second_order_in_space, bool second_order_in_time)"
+.br
+.ti -1c
+.RI "virtual void \fBCheckTransportVariables\fP () const"
+.br
+.ti -1c
+.RI "virtual size_t \fBMeasureAllocatedMemory\fP () const"
+.br
+.ti -1c
+.RI "bool \fBSecondOrderInTime\fP () const"
+.br
+.ti -1c
+.RI "bool \fBSecondOrderInSpace\fP () const"
+.br
+.ti -1c
+.RI "void \fBInitialAdvectedPropertyValues\fP (const \fBcsmp::Index\fP &adv_key)"
+.br
+.ti -1c
+.RI "void \fBInitialAdvectedPropertyValues\fP (const \fBcsmp::Index\fP &adv_key, double &smin, double &smax)"
+.br
+.ti -1c
+.RI "void \fBMinMaxAdvectedProperty\fP ()"
+.br
+.ti -1c
+.RI "void \fBBackupFacetFluxes\fP ()"
+.br
+.ti -1c
+.RI "void \fBUpdateProjectedVelocitiesAndFluxBalances\fP ()"
+.br
+.ti -1c
+.RI "bool \fBFluxThroughBoundaryFiniteVolume\fP (const \fBNode\fP< dim > *fv_ptr, double &inflow, double &flux_balance) const"
+.br
+.ti -1c
+.RI "void \fBAssignFluxBoundaryConditions\fP (\fBNodeCenteredFiniteVolumeAlgorithm\fP< dim > &advection_algorithm, bool use_t0_saturation) const"
+.br
+.ti -1c
+.RI "void \fBRecordFluxBalances\fP (const char *balance_var, double &total_surplus, double &total_deficit) const"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable1stOrder\fP (\fBNodeCenteredFiniteVolumeAlgorithm\fP< dim > &, double time_interval, bool with_flux_balance_correction)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable2ndOrder\fP (\fBNodeCenteredFiniteVolumeAlgorithm\fP< dim > &, double time_increment, bool with_flux_balance_correction)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable2ndOrderInSpaceAndTime\fP (\fBNodeCenteredFiniteVolumeAlgorithm\fP< dim > &, double time_increment, bool with_flux_balance_correction)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBad_rhs_key_\fP"
+.br
+.RI "transported variable "
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP
+.in +1c
+.ti -1c
+.RI "STP< dim > \fBstencil_\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBRESULT\fP"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >\fP
+.in +1c
+.ti -1c
+.RI "const \fBPropertyDatabase\fP< dim > & \fBpref_\fP"
+.br
+.ti -1c
+.RI "\fBRegion\fP< dim > & \fBgref_\fP"
+.br
+.ti -1c
+.RI "\fBModel\fP< dim > & \fBmref_\fP"
+.br
+.ti -1c
+.RI "bool \fBverbose_\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBFV_Parameter\fP > \fBSTENCIL_DATA\fP"
+.br
+.RI "finite-volume data for fast calculations "
+.ti -1c
+.RI "std::vector< double > \fBFVPOREVOL\fP"
+.br
+.RI "pore volumes of finite-volume cells for theta calculation etc\&. "
+.ti -1c
+.RI "std::vector< double > \fBSAT0\fP"
+.br
+.RI "advected variable at t0 "
+.ti -1c
+.RI "std::vector< double > \fBFLUX_BALANCE\fP"
+.br
+.RI "for each FV, but excluding truncated FV at global model boundaries "
+.ti -1c
+.RI "std::vector< std::pair< double, double > > \fBSMINMAX\fP"
+.br
+.RI "min, max values of advected property at neighbor FV's of current FV "
+.ti -1c
+.RI "std::vector< std::vector< double > > \fBFACETFLUXES0\fP"
+.br
+.RI "at time, t (at last time step) "
+.ti -1c
+.RI "std::vector< std::vector< double > > \fBLTDSATS0\fP"
+.br
+.RI "ltd values of advected property "
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBphi_key_\fP"
+.br
+.RI "porosity "
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBdiff_key_\fP"
+.br
+.RI "diffusivity of advected variable (only in 2nd-order method) "
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBadv1_key_\fP"
+.br
+.RI "transported variable "
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBvel_key_\fP"
+.br
+.RI "transport velocity "
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBsrc_key_\fP"
+.br
+.RI "nodal fluid volume source "
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBthi_key_\fP"
+.br
+.RI "thickness multiplier for lower dimensional elements "
+.ti -1c
+.RI "const \fBcsmp::Index\fP \fBvelo_mult_key_\fP"
+.br
+.RI "velocity multiplier key "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBmass_center_key_\fP"
+.br
+.RI "center of mass for each CV "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBgrad_advprop_key_\fP"
+.br
+.RI "gradient of the advacted property "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBgrad_advprop_limiter_key_\fP"
+.br
+.RI "limiter for the gradient of the advected property "
+.ti -1c
+.RI "std::string \fBadvected_variable_\fP"
+.br
+.ti -1c
+.RI "double \fBcfl_multiplier_\fP"
+.br
+.ti -1c
+.RI "size_t \fBvar_ncomponents_\fP"
+.br
+.ti -1c
+.RI "\fBStencilProcessor\fP< dim > \fBstencil_\fP"
+.br
+.RI "default size is 1 if only a scalar is being advected\&. (Julian) "
+.ti -1c
+.RI "bool \fBfirstCall_\fP"
+.br
+.ti -1c
+.RI "bool \fBwith_lsmgrad_limiter_\fP"
+.br
+.ti -1c
+.RI "double \fBtarget_nonlinear_limiting_case_residual_\fP"
+.br
+.RI "targed residual in order to get correct 2nd order approximations "
+.ti -1c
+.RI "size_t \fBmax_nonlinear_limiting_case_iterations_\fP"
+.br
+.RI "maximum number of nonlinear iterations in 2nd order scheme "
+.ti -1c
+.RI "\fBNodeCenteredFiniteVolumeAlgorithm\fP< dim > * \fBbaseAdvector_\fP = nullptr"
+.br
+.ti -1c
+.RI "\fBGenericNodePropertyGradientLimiter\fP< dim > * \fBgrad_advprop_limiter_\fP = nullptr"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class STP> \fBcsmp::ExplicitMassBasedTransport\fP< dim, STP >::ExplicitMassBasedTransport (const char * group, \fBModel\fP< dim > & sg, const char * porosity, const char * advected_prop_lhs, const char * advected_prop_rhs, const char * transp_velocity, const char * nodal_source, bool second_order_in_space, bool second_order_in_time = \fRfalse\fP, const char * thickness = \fRNULL\fP)"
+single-phase passive advection (group-restricted) with different lhs and rhs important if lower dimensional elements are included in transport calculation
+.IP "2." 4
+multiply FacetArea by thickness in InitializeFVData of \fBNodeCenteredFiniteVolumeTransport\fP
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class STP> void \fBcsmp::ExplicitMassBasedTransport\fP< dim, STP >::AccumulateFluxUpwindProducts ()\fR [override]\fP, \fR [protected]\fP, \fR [virtual]\fP"
+Accumulates facet fluxes (volume * saturation) coming into the control volumes into the result vector\&. 
+.PP
+Reimplemented from \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class STP> void \fBcsmp::ExplicitMassBasedTransport\fP< dim, STP >::AdvectVariable1stOrder (double time_interval, bool output_result_range)"
+IMPORTANT NOTE: If you every change/improve this loop, make sure you input the equivalent changes in the openmp section below\&. Otherwise your changes/improvements will only be evident in serial simulations\&.
+.SS "template<uint32_t dim, template< uint32_t > class STP> void \fBcsmp::ExplicitMassBasedTransport\fP< dim, STP >::AdvectVariableSingleStep (double time_increment, bool apply_flux_balance_correction, bool update_pore_volumes)\fR [final]\fP, \fR [override]\fP, \fR [virtual]\fP"
+single-phase passive advection, does NOT return courant increment, single timestep calculation no checks are made for courant condition\&. Assumes external checks\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+: Julian E\&. Mindel (23-09-2013)
+.RE
+.PP
+This method calculates a single timestep of transport, assumming nothing about the time interval it is "fed"\&. It will advect using that time interval, assuming the user has externally determined that this is the correct time interval length\&. In contrast with AdvectVariable(, this method does not break the time interval into sub-parts and guarantee stability\&. This also means that the courant increment is not checked for in this method (and should be, externally, of course)\&.
+
+.PP
+Note, that in this case, AdvectVariable as created before the date in this documentation entry did not contain subcycling of time intervals\&. This statement is valid only for \fBExplicitMassBasedTransport\fP\&. 
+.PP
+Reimplemented from \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class STP> double \fBcsmp::ExplicitMassBasedTransport\fP< dim, STP >::AnisotropicCourantIncrement ()\fR [override]\fP, \fR [virtual]\fP"
+
+.PP
+evaluation of Courant-Friedrich-Levy condition, i\&.e\&., grid Courant number single phase, takes into account element shape in 3D
+
+.PP
+Method computes the minimum CFL criterion for the current model on the basis of the highest velocity in the cells contributing to the current finite volume cell\&.
+.SH "Input Arguments"
+.PP
+The method needs a reference to the current model in order to determine the flow velocity distribution\&.
+
+.PP
+If diffusion is important, a separate velocity computation is necessary\&. In this case, an estimate usind N-gradients is used for the diffusion velocity\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The method returns the minimum global timestep for the current mesh and velocity distribution for which the the transport distance in each element is smaller or equal to its diameter\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+This is a slightly expensive version because it loops over the finite volumes rather than the finite elements, then checking each finite element connected to FV for its velocity etc\&. CFL condition based on the distance from one side of the element to the other along a line through the element's barycenter and parallel to the current flow velocity vector\&.
+.SH "Input Arguments"
+.PP
+The method needs a reference to the current model in order to determine the flow velocity distribution\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+Thickness should not be multiplied if velocity was assumed to be de-scaled\&. for legacy purposes, the transport class assumes that the supplied velocity has already been scaled to adjust for facet areas coming from the thickness attribute\&. This is perhaps a little unintuitive, since any new user needs to know beforehand that this has to happen\&. The user should always provide the "real" velocity (not scaled) and the transport class should deal with thickness through internal scaling of its facet areas\&. -- Julian M\&. 23-09-2013
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The method returns the smallest global timestep for which the transport distance in each element is less than or equal to its intersection\&. 
+.RE
+.PP
+Thickness should not be multiplied if velocity was assumed to be de-scaled\&. for legacy purposes, the transport class assumes that the supplied velocity has already been scaled to adjust for facet areas coming from the thickness attribute\&. This is perhaps a little unintuitive, since any new user needs to know beforehand that this has to happen\&. The user should always provide the "real" velocity (not scaled) and the transport class should deal with thickness through internal scaling of its facet areas\&. -- Julian M\&. 23-09-2013
+.PP
+Reimplemented from \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class STP> void \fBcsmp::ExplicitMassBasedTransport\fP< dim, STP >::AssignFluxBoundaryConditions (uint32_t var_comp_nr = \fR0\fP)\fR [override]\fP, \fR [protected]\fP, \fR [virtual]\fP"
+
+.PP
+as in base class but for a result vector Luat's fix 4/6/2020 unneccessary for compressible flow(??) (there needs to be a better comment here! julian, july 2014)
+.PP
+Reimplemented from \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP\&.
+.SS "template<uint32_t dim, template< uint32_t > class STP> void \fBcsmp::ExplicitMassBasedTransport\fP< dim, STP >::ComposeSolution (double time_interval, uint32_t var_comp_nr = \fR0\fP)\fR [override]\fP, \fR [protected]\fP, \fR [virtual]\fP"
+
+.PP
+passive advection: gives transported variable at end of time_interval Computes the values of the transported variable at the new time-level (passive advection case)\&. \fBFluid\fP sources or sinks as well as in or out- fluxes at \fBModel\fP or region boundaries as well as poroelastic sources are also taken care off by consideration of FLUX_BALANCE vector\&. 
+.br
+.SH "Input Arguments"
+.PP
+The method needs access to the current transport model and two vectors which store the pore volume of each finite volume cell and the flux balance of that cell, respectively\&. The method further requires a \fBcsmp::Index\fP accessor to the transport variable in order to read current nodal values\&. Also, the current time-increment for the advection step needs to be specified in order to compose the solution\&. This time increment must satisfy the CFL condition, because this is an explicit transport scheme\&. 
+.br
+.SH "Implementation"
+.PP
+.SH "Application Examples"
+.PP
+For the passive advection of tracers\&. 
+.PP
+Reimplemented from \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

@@ -1,0 +1,516 @@
+\doxysection{Na\+Cl\+H2\+OProperties\+Visitor\+PHX.\+h}
+\hypertarget{_na_cl_h2_o_properties_visitor_p_h_x_8h_source}{}\label{_na_cl_h2_o_properties_visitor_p_h_x_8h_source}\index{source/includes/integration/cvfe\_hydrothermal/NaClH2OPropertiesVisitorPHX.h@{source/includes/integration/cvfe\_hydrothermal/NaClH2OPropertiesVisitorPHX.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NACL\_H2O\_PROPERTIES\_VISITOR\_PHX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NACL\_H2O\_PROPERTIES\_VISITOR\_PHX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_visitor_8h}{"{}Visitor.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_h2_o_na_cl_fluid_properties_8h}{"{}H2ONaClFluidProperties.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_h2_o_na_cl_thermal_equilibrator_8h}{"{}H2ONaClThermalEquilibrator.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_rock_8h}{"{}Rock.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_index_8h}{"{}Index.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \textcolor{comment}{/*!}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ <H1>NaClH2OPropertiesVisitorPHX</H1>\ <!-\/-\/\ =================================\ -\/-\/>}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ <H3>MOTIVATION</H3>}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ In\ simulations\ of\ multiphase\ fluid\ flow\ involving\ heat\ and\ mass\ transport,}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ fluid\ properties\ are\ typically\ stored\ at\ nodes,\ and\ heat\ and\ mass\ transport}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ via\ diffusion\ and\ advection\ is\ done\ in\ a\ decoupled\ manner.\ This\ ultimately}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ means\ that\ after\ the\ diffusion\ and\ advection\ steps,\ the\ fluid\ phase\ state}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ may\ have\ changed\ and,\ even\ worse,\ very\ likely\ means\ that\ fluid\ and\ rock}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ are\ not\ in\ thermal\ equilibrium.\ NaClH2OPropertiesVisitorPHX\ will}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ perform\ a\ thermal\ equilibration\ between\ fluid\ and\ rock\ (using\ class}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ H2ONaClThermalEquilibrator)\ at\ a\ given\ pressure,\ total}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ enthalpy\ and\ salinity\ and\ update\ fluid\ properties\ for\ the\ equilibrated}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ state.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ <p>}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ <H3>DESIGN\ INTENT</H3>}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ NaClH2OPropertiesVisitorPHX\ is\ an\ FEM\_Visitor\ within\ the\ CSMP\ framework,}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ see\ also\ documentation\ there.\ It\ applies\ to\ nodes\ only.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ <p>}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ <H3>APPLICABILITY</H3>}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ NaClH2OPropertiesVisitorPHX\ can\ be\ applied\ in\ simulations\ with\ pure\ H2O}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ fluids\ in\ combination\ with\ heat\ and\ mass\ transport.\ Simpler\ simulations}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ should\ use\ other\ tools\ in\ the\ CSMP++\ package.\ A\ fundamental\ assumption\ is}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ that\ of\ thermal\ equilibrium\ between\ fluid\ and\ rock\ is\ requested,\ otherwise}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ using\ NaClH2OPropertiesVisitorPHX\ makes\ no\ sense\ at\ all.}}
+\DoxyCodeLine{00051\ \textcolor{comment}{}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ NaClH2OPropertiesVisitorPHX\ also\ assumes\ that\ fluid\ properties\ are\ stored}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ on\ the\ nodes\ (i.e.,\ it\ relates\ to\ a\ node-\/centered\ finite\ volume\ schemes\ for}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ solving\ the\ advection\ equations)\ and\ that\ rock\ properties\ discretized\ on\ the}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ element\ are\ uniquely\ defined\ such\ that\ their\ interpolated\ nodal\ values\ can}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ meaningfully\ be\ used\ (***\ is\ that\ fully\ correct?\ ***).}}
+\DoxyCodeLine{00057\ \textcolor{comment}{}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ <p>}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ <H3>STRUCTURE</H3>}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ <p>}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ <H3>PARTICIPANTS</H3>}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ <!-\/-\/\ ==================================================================\ -\/-\/>}}
+\DoxyCodeLine{00066\ \textcolor{comment}{}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ NaClH2OPropertiesVisitorPHX\ uses\ H2ONaClThermalEquilibrator,}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ which\ itself\ calls\ a\ number\ of\ classes\ related\ to\ fluid\ properties,\ in}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ particular\ FluidLookup\ and\ the\ specialized\ classes\ for\ phases\ in\ the\ H2O}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ system\ (see\ documentation\ for\ FluidLookup\ etc.).}}
+\DoxyCodeLine{00071\ \textcolor{comment}{}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ During}}
+\DoxyCodeLine{00073\ \textcolor{comment}{}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ @copyright\ (c)\ 2004-\/2009\ by\ Drs.\ Thomas\ Driesner,\ Sebastian\ Geiger,\ Dim\ Coumou}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00076\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x}{NaClH2OPropertiesVisitorPHX}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>}
+\DoxyCodeLine{00078\ \ \ \ \ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ NaClH2OPropertiesVisitorPHX(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ );}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \string~NaClH2OPropertiesVisitorPHX();}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ );}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Visit(\ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<dim>*\ );}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetTimeIncrement(\ \textcolor{keywordtype}{double}\ time\_increment\ );}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ InitialPropertiesFromPTX(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ );}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ TopBoundaryHandling(\ \textcolor{keywordtype}{bool}\ TB\ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ TemperatureDependentHeatCapacityRock(\ \textcolor{keywordtype}{double}\ cpr\_min\_ext,\ \textcolor{keywordtype}{double}\ t\_min\_ext,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ cpr\_max\_ext,\ \textcolor{keywordtype}{double}\ t\_max\_ext\ );}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ WithOpenBoundaries(\ \textcolor{keywordtype}{double}\ reference\_specific\_enthalpy,\ \textcolor{keywordtype}{double}\ reference\_salinity\ );}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ WithOpenBoundaries(\ \textcolor{keywordtype}{double}\ reference\_salinity\ );}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetAdjustCompressibilityAfterPhaseChangeBoolTo(\ \textcolor{keywordtype}{bool}\ adjust\ );\ \textcolor{comment}{//\ default\ true,\ set\ to\ false\ if\ you\ want\ to\ switch\ off}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ SetMaximumCompressibilityCyclesAfterPhaseChange(\ \textcolor{keywordtype}{double}\ \ max\ );\ \ \ \ \textcolor{comment}{//\ number\ of\ timesteps\ after\ phase\ change\ where\ this\ should\ be\ applied}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \textcolor{comment}{//\ potentially\ problematic\ if\ yet\ another\ phase\ change\ within\ this\ number\ of\ timesteps!}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ top\_boundary;}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bogus\_variables;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ first;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pure\_halite;}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fixed\_temperature;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\_dependent\_cpr;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ open\_boundaries;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\_top\_pressure;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ verbose\_eq;}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ adjust\_compressibility\_after\_phasechange;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ max\_after\_phasechange\_counter;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \textcolor{comment}{//\ Variables\ for\ the\ "{}FluidRockEquilibrator"{}\ object}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rock\_;}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cp\_rock\_;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ phi\_;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_fluid\_;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tp\_;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_current\_;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\_current\_;}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MS\_current\_;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\_previous\_;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_fixed;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rho\_rock\_;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_diffusion\_;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dT\_diff\_;}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dh\_rock\_diff\_;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dh\_fluid\_diff\_;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dhCl\_;}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dhCv\_;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dxCl\_;}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dxCv\_;}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dx\_diff\_;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x\_;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dmt\_src;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dh\_src;}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ds\_src;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dt\_;}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dml\_;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dmv\_;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_fluid\_;}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wt\_;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_;}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_bar\_;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ previous\_state;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mlv\_;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ volume\_factor;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ volume\_factor\_LHS;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ volume\_factor\_RHS;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pore\_volume;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rock\_volume;}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ kelvin;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ res\_sl;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ res\_sv;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ krl;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ krv;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ref\_spec\_h;\ \textcolor{comment}{//\ reference\ specific\ enthalpy\ (only\ for\ constant\ p\ at\ top)}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ref\_sal;\ \textcolor{comment}{//\ reference\ salinity\ at\ open\ top}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ time\_factor\_p;}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \textcolor{comment}{//\ next\ two\ unused\ for\ the\ moment}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ time\_factor\_h;}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ time\_factor\_s;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ expected\_dp;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hrock\_prev;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hrock\_curr;}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ old\_state;}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_state;}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \textcolor{comment}{//\ primary\ variables}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ t;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ tp;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ p;}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \textcolor{comment}{//\ Saturation\ variables}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ sl;}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ sv;}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ slp;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ svp;}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ sh;}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \textcolor{comment}{//\ densities}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mt;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mtp;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ ml;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mv;}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mlp;}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mvp;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rl;}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rv;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rlp;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rvp;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mf;}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mh;}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rh;}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \textcolor{comment}{//\ viscosities}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mul;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ muv;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mulp;}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ muvp;}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \textcolor{comment}{//\ enthalpy\ variables}}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hCl;}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hCv;}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hClp;}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hCvp;}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ Htp;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hf;}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hl;}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hv;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ cpf;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hVl;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hVv;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hh;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hVh;}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hCh;}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \textcolor{comment}{//\ compressibility\ variables}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ beta;}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ beta\_p;}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ beta\_ref;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ nQ;}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ CT;}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \textcolor{comment}{//\ rock\ variables}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ cpr;}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ phi;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rr;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ cpv;}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ beta\_rock;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ ncp;}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \textcolor{comment}{//\ fluid\ source\ variables}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ src\_h;}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ src\_rate;}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ src\_wt;}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rl\_transport;}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rv\_transport;}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ vol\_fac;}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rho\_bulk;}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \textcolor{comment}{//\ salinity\ variables}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ wt;}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xf;}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xl;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xVl;}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xCl;}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xClp;}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xv;}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xVv;}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xCv;}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xCvp;}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xh;}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xVh;}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xCh;}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xCf;}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xCfp;}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ ms;}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ msp;}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xlp;}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xvp;}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hlp;}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hvp;}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ hhp;}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \textcolor{comment}{//\ to\ store\ fluid\ state}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ state;}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ state\_p;}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ visited;}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \textcolor{comment}{//\ to\ monitor\ phase\ changes\ that\ may\ lead\ to\ p\ <\ atm;\ TD\ May\ 2011}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ dangerous\_phase\_change;}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ after\_phasechange\_counter;}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \textcolor{comment}{//\ new\ JPW}}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mml;}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mmv;}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mmld;}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ mmvd;}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ eml;}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ emv;}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ emld;}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ emvd;}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xml;}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ xmv;}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ pv;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rvl;}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ rvv;}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ bfm;}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ bfe;}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ bfs;}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ time\_factor;}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ reference\_enthalpy\_top;}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \textcolor{comment}{//\ Index\ to\ variables}}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \textcolor{comment}{//\ primary\ variables}}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p\_key;\ \ \ \ \ \textcolor{comment}{//\ fluid\ pressure}}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\_key;\ \ \ \ \ \textcolor{comment}{//\ temperature}}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tp\_key;\ \ \ \ \textcolor{comment}{//\ temperature}}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \textcolor{comment}{//\ Saturation\ variables}}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sl\_key;\ \ \ \ \textcolor{comment}{//\ saturation\ liquid}}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sv\_key;\ \ \ \ \textcolor{comment}{//\ saturation\ vapor}}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sh\_key;\ \ \ \ \textcolor{comment}{//\ saturation\ halite}}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \textcolor{comment}{//\ fluid\ state}}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\_key;}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \textcolor{comment}{//***\ new\ TD\ May\ 2011}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\_p\_key;}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \textcolor{comment}{//\ Phase\ change\ tracking}}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ apc\_key;}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dpc\_key;}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \textcolor{comment}{//***\ end\ new}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \textcolor{comment}{//\ visitation}}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ visit\_key;\ \textcolor{comment}{//added\ JPW\ 27.10.2010}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \textcolor{comment}{//\ densities}}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mt\_key;\ \ \ \ \textcolor{comment}{//\ density\ (mixture)}}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mtp\_key;\ \ \ \textcolor{comment}{//\ previous\ density\ (mixture)}}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rl\_key;\ \ \ \ \textcolor{comment}{//\ density\ liquid}}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rv\_key;\ \ \ \ \textcolor{comment}{//\ density\ vapor}}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rh\_key;\ \ \ \ \textcolor{comment}{//\ density\ halite}}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mf\_key;\ \ \ \ \textcolor{comment}{//\ fluid\ mass}}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ml\_key;\ \ \ \ \textcolor{comment}{//\ fluid\ mass\ liquid}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mv\_key;\ \ \ \ \textcolor{comment}{//\ fluid\ mass\ vapor}}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mlp\_key;\ \ \ \textcolor{comment}{//\ previous\ fluid\ mass\ liquid}}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mvp\_key;\ \ \ \textcolor{comment}{//\ previous\ fluid\ mass\ vapor}}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mh\_key;\ \ \ \ \textcolor{comment}{//\ solid\ mass\ halite}}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \textcolor{comment}{//extras}}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rl\_transport\_key;\ \ \ \ \textcolor{comment}{//\ density\ liquid\ transport}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rv\_transport\_key;\ \ \ \ \textcolor{comment}{//\ density\ vapor\ transport}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vol\_fac\_key;}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rho\_bulk\_key;}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nQ\_key;\ \ \ \ \textcolor{comment}{//\ nodal\ fluid\ volume\ source}}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \textcolor{comment}{//\ viscosities}}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mul\_key;\ \ \ \textcolor{comment}{//\ viscosity\ halite}}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ muv\_key;\ \ \ \textcolor{comment}{//\ viscosity\ vapor}}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \textcolor{comment}{//\ enthalpy\ variales}}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hf\_key;\ \ \ \ \textcolor{comment}{//\ enthalpy\ (mixture)}}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hl\_key;\ \ \ \ \textcolor{comment}{//\ enthalpy\ liquid}}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hv\_key;\ \ \ \ \textcolor{comment}{//\ enthalpy\ vapor}}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hh\_key;\ \ \ \ \textcolor{comment}{//\ enthalpy\ halite}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hCl\_key;\ \ \ \textcolor{comment}{//\ enthalpy\ content\ liquid\ (S\ *\ rho\ *\ h)}}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hClp\_key;\ \ \textcolor{comment}{//\ previous\ enthalpy\ content\ liquid\ (S\ *\ rho\ *\ h)}}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hCv\_key;\ \ \ \textcolor{comment}{//\ enthalpy\ content\ vapor\ (S\ *\ rho\ *\ h)}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hCvp\_key;\ \ \textcolor{comment}{//\ previous\ enthalpy\ content\ vapor\ (S\ *\ rho\ *\ h)}}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hCh\_key;\ \ \ \textcolor{comment}{//\ enthalpy\ content\ halite\ (S\ *\ rho\ *\ h)}}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hVl\_key;\ \ \ \textcolor{comment}{//\ volumetric\ fluid\ enthalpy\ liquid\ (rho\ *\ h)}}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hVv\_key;\ \ \ \textcolor{comment}{//\ volumetric\ fluid\ enthalpy\ vapor\ (rho\ *\ h)}}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hVh\_key;\ \ \ \textcolor{comment}{//\ volumetric\ fluid\ enthalpy\ halite\ (rho\ *\ h)}}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cpf\_key;\ \ \ \textcolor{comment}{//\ heat\ capacity\ of\ bulk\ fluid}}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wt\_key;\ \ \ \ \textcolor{comment}{//\ salinity}}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xf\_key;\ \ \ \ \textcolor{comment}{//\ mass\ fraction\ salt\ fluid\ =\ salinity}}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xl\_key;\ \ \ \ \textcolor{comment}{//\ mass\ fraction\ salt\ liquid}}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xv\_key;\ \ \ \ \textcolor{comment}{//\ mass\ fraction\ salt\ vapor}}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xh\_key;\ \ \ \ \textcolor{comment}{//\ mass\ fraction\ salt\ halite}}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xVl\_key;\ \ \ \textcolor{comment}{//\ volumetric\ salinityliquid\ (rho\ *\ x)}}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xVv\_key;\ \ \ \textcolor{comment}{//\ volumetric\ salinity\ vapor\ (rho\ *\ x)}}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xVh\_key;\ \ \ \textcolor{comment}{//\ volumetric\ salinity\ halite\ (rho\ *\ x)}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xCl\_key;\ \ \ \textcolor{comment}{//\ salt\ content\ liquid\ (S\ *\ rho\ *\ x)}}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xCv\_key;\ \ \ \textcolor{comment}{//\ salt\ content\ vapor\ (S\ *\ rho\ *\ x)}}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xCh\_key;\ \ \ \textcolor{comment}{//\ salt\ content\ halite\ (S\ *\ rho\ *\ x)}}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xClp\_key;\ \ \textcolor{comment}{//\ previous\ salt\ content\ liquid\ (S\ *\ rho\ *\ x)}}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xCvp\_key;\ \ \textcolor{comment}{//\ previous\ salt\ content\ vapor\ (S\ *\ rho\ *\ x)}}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xCf\_key;\ \ \ \textcolor{comment}{//\ salt\ content\ fluid\ (rhof\ *\ xf)}}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \textcolor{comment}{//xCfp\_key;\ \ //\ previous\ salt\ content\ fluid\ (rhof\ *\ xf)}}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ msp\_key;\ \ \ \textcolor{comment}{//\ previous\ mass\ salt}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ht\_key;\ \ \ \ //\ total\ energy\ in\ fluid\ +\ rock\ in\ J}}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Htp\_key;\ \ \ \textcolor{comment}{//\ previous\ total\ energy\ fluid\ +\ rock\ in\ J}}
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \textcolor{comment}{//\ expansivities}}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ beta\_key;\ \ \textcolor{comment}{//\ fluid\ compressibility}}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \textcolor{comment}{//***\ new\ TD\ May\ 2011}}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ beta\_p\_key;\ \ \textcolor{comment}{//\ previous\ fluid\ compressibility}}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ beta\_ref\_key;\ \textcolor{comment}{//\ reference\ compressibility\ when\ crossing\ phase\ boundaries}}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \textcolor{comment}{//***\ end\ new}}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CT\_key;\ \ \textcolor{comment}{//\ nodal\ total\ compressibility}}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \textcolor{comment}{//\ rock\ variables}}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ phi\_key;\ \ \ \textcolor{comment}{//\ nodal\ porosity}}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cpv\_key;\ \ \ \textcolor{comment}{//\ control\ pore\ volume}}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cpr\_key;\ \ \ \textcolor{comment}{//\ heat\ capacity\ rock}}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ncp\_key;\ \ \ \textcolor{comment}{//\ nodal\ heat\ capacity\ (added\ JPW)}}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rr\_key;\ \ \ \ \textcolor{comment}{//\ density\ rock}}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ betar\_key;\ \ \ \ \textcolor{comment}{//\ nodal\ compressibility\ rock}}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \textcolor{comment}{//\ velocities}}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \textcolor{comment}{//\ fluid\ source\ \ \ \ \ }}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ src\_h\_key;}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ src\_rate\_key;}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ src\_wt\_key;}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \textcolor{comment}{//\ new\ JPW}}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mml\_key;\ \textcolor{comment}{//\ liquid\ mass\ mobility}}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mmv\_key;\ \textcolor{comment}{//\ vapor\ mass\ mobility}}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mmld\_key;\ \textcolor{comment}{//\ liquid\ mass\ mobility\ density}}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mmvd\_key;\ \textcolor{comment}{//\ vapor\ mass\ mobility\ density}}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eml\_key;\ \textcolor{comment}{//\ liquid\ enthalpy\ mobility}}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ emv\_key;\ \textcolor{comment}{//\ vapor\ enthalpy\ mobility}}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ emld\_key;\ \textcolor{comment}{//\ liquid\ enthalpy\ mobility\ density}}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ emvd\_key;\ \textcolor{comment}{//\ vapor\ enthalpy\ mobility\ density}}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xml\_key;\ \textcolor{comment}{//\ liquid\ salt\ mobility}}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xmv\_key;\ \textcolor{comment}{//\ vapor\ salt\ mobility}}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rvl\_key;\ \textcolor{comment}{//\ relperm\ viscosity\ liquid}}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rvv\_key;\ \textcolor{comment}{//\ relperm\ viscosity\ vapor}}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \textcolor{comment}{//\ JPW\ Nov\ 2010}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bfm\_key;\ \textcolor{comment}{//\ boundary\ flow\ mass}}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bfe\_key;\ \textcolor{comment}{//\ boundary\ flow\ enthalpy}}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bfs\_key;\ \textcolor{comment}{//\ boundary\ flow\ salinity}}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ time\_factor\_key;}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ref\_h\_top\_key;}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \textcolor{comment}{//\ Sowat\ objects}}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_rock}{Rock}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rock;}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_h2_o_na_cl_thermal_equilibrator}{H2ONaClThermalEquilibrator}}\ \ \ equilibrator;}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ Liquid;}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ Vapor;}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ Bulk;}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ Salt;}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \textcolor{comment}{//\ Private\ Memberfunctions}}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EffectiveLiquidSaturationHalitePresent(\ \textcolor{keywordtype}{double}\ sat\_liquid,\ \textcolor{keywordtype}{double}\ sat\_vapor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RelativePermeabilityLiquid(\ \textcolor{keywordtype}{double}\ sat\_liquid,\ \textcolor{keywordtype}{double}\ sat\_vapor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ReadAllVariables(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ n\ );}
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CheckForOutOfRange(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ n\ );}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CheckBoundaryFlags(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ n\ );}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CalculateAbsoluteVariables(\ );}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UpdateSowatVariables();}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Equilibrate(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ n\ );}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ScreenOutputSowatVariables();}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UpdateCSMPVariables(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ n\ );}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TwoPhasePureWaterCompressibility(\textcolor{keywordtype}{double}\ cpl,\ \textcolor{keywordtype}{double}\ cpv);}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Output\_PTXState();}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StorePropertiesAndFlags(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ n\ );}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StoreInitialPropertiesAndFlags(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ n\ );}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BoundaryHandling(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ n\ );}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BoundaryFlow(\ );}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BoundaryIteration(\ );}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CheckVolumeMismatchCompensation();}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CheckPhaseChange();}
+\DoxyCodeLine{00453\ }
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TimeStepAdjustment();}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VolumeFactorComputations(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ n\ );}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PrepareVariablesForStorage();}
+\DoxyCodeLine{00457\ \ \ \ \ \};}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \ \ \textcolor{comment}{//\ NaClH2OPropertiesVisitorPHX\ Methods\ ====================}}
+\DoxyCodeLine{00462\ }
+\DoxyCodeLine{00463\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00464\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x}{NaClH2OPropertiesVisitorPHX}}<dim>::EffectiveLiquidSaturationHalitePresent(\ \textcolor{keywordtype}{double}\ sat\_liquid,\ \textcolor{keywordtype}{double}\ sat\_vapor\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00465\ \ \ \ \ \{}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ seff;}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ my\_res\_sl(res\_sl*(sat\_liquid+sat\_vapor)),}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ my\_res\_sv(res\_sv*(sat\_liquid+sat\_vapor));}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \textcolor{comment}{//\ Changed\ JPW\ 26.5.2011}}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ seff\ =\ (sat\_liquid\ -\/\ res\_sl)\ /\ (sat\_liquid\ +\ sat\_vapor\ -\/\ res\_sl\ -\/\ res\_sv);}}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ seff\ =\ (sat\_liquid\ -\/\ my\_res\_sl)\ /\ (sat\_liquid\ +\ sat\_vapor\ -\/\ my\_res\_sl\ -\/\ my\_res\_sv);}}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ seff\ =\ (sat\_liquid\ -\/\ my\_res\_sl)\ /\ (sat\_liquid\ +\ sat\_vapor\ -\/\ my\_res\_sl\ -\/\ my\_res\_sv);}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ \ (\ seff\ >\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{double}>(1.0)\ )\ \textcolor{keywordflow}{return}\ 1.0;}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ seff\ <\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{double}>(0.0)\ )\ \textcolor{keywordflow}{return}\ 0.0;}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seff;}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \ \ \ \ \}\ \textcolor{comment}{//\ end\ EffectiveSaturation}}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x}{NaClH2OPropertiesVisitorPHX}}<dim>::RelativePermeabilityLiquid(\ \textcolor{keywordtype}{double}\ sat\_liquid,\ \textcolor{keywordtype}{double}\ sat\_vapor\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00482\ \ \ \ \ \{}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ seff,\ sat\_total(sat\_liquid+sat\_vapor);}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ my\_res\_sl(res\_sl*sat\_total),}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ my\_res\_sv(res\_sv*sat\_total);}
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \textcolor{comment}{//\ Changed\ JPW\ 26.5.2011}}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ seff\ =\ sat\_total*(sat\_liquid\ -\/\ my\_res\_sl)\ /\ (sat\_liquid\ +\ sat\_vapor\ -\/\ my\_res\_sl\ -\/\ my\_res\_sv);}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ \ (\ seff\ >\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{double}>(sat\_total)\ )\ \textcolor{keywordflow}{return}\ sat\_total;}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ seff\ <\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{double}>(0.0)\ )\ \textcolor{keywordflow}{return}\ 0.0;}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seff;}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \ \ \ \ \}\ \textcolor{comment}{//\ end\ RelativePermeabilityLiquid}}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \ \ \textcolor{comment}{//***\ new\ TD\ May\ 2011}}
+\DoxyCodeLine{00496\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00497\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x}{NaClH2OPropertiesVisitorPHX}}<dim>::SetMaximumCompressibilityCyclesAfterPhaseChange(\ \textcolor{keywordtype}{double}\ max\ )}
+\DoxyCodeLine{00498\ \ \ \ \ \{}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ max\_after\_phasechange\_counter\ =\ max;}
+\DoxyCodeLine{00500\ \ \ \ \ \}}
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00502\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00503\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_na_cl_h2_o_properties_visitor_p_h_x}{NaClH2OPropertiesVisitorPHX}}<dim>::SetAdjustCompressibilityAfterPhaseChangeBoolTo(\ \textcolor{keywordtype}{bool}\ adjust\ )}
+\DoxyCodeLine{00504\ \ \ \ \ \{}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ adjust\_compressibility\_after\_phasechange\ =\ adjust;}
+\DoxyCodeLine{00506\ \ \ \ \ \}}
+\DoxyCodeLine{00507\ \ \ \textcolor{comment}{//***\ end\ new}}
+\DoxyCodeLine{00508\ \}}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

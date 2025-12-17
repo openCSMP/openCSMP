@@ -373,7 +373,16 @@ bool Colony_Test::TestColonyWith_Element()
     }
   
   // copy construction of some more colonies
-  plf::colony< Element<2> >  elmt_colony2( elmt_colony ), elmt_colony3( elmt_colony );
+  const plf::colony<Element<2>>& source_colony = elmt_colony;
+  // ATTENTION! commented code would trigger colony's move contructor instead of expected copy construction -> special behaviour of colony
+  // this would even happen for element by element insertion
+  // plf::colony< Element<2> >  elmt_colony2( elmt_colony );
+  plf::colony<Element<2>> elmt_colony2;
+  elmt_colony2.insert( source_colony.begin(), source_colony.end() );
+  
+  // forcing colony to copy all elements from 2 to 3
+  plf::colony<Element<2>> elmt_colony3;
+  elmt_colony3.insert( source_colony.begin(), source_colony.end() );
   
   // erasure of single element (2) from colony 2
   elmt_colony2.erase( next(elmt_colony2.begin(),2) );

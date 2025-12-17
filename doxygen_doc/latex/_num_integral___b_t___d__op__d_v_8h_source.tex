@@ -1,0 +1,57 @@
+\doxysection{Num\+Integral\+\_\+\+BT\+\_\+\+D\+\_\+op\+\_\+d\+V.\+h}
+\hypertarget{_num_integral___b_t___d__op__d_v_8h_source}{}\label{_num_integral___b_t___d__op__d_v_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_BT\_D\_op\_dV.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_BT\_D\_op\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NumIntegral\_BT\_D\_op\_dV\_h}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NumIntegral\_BT\_D\_op\_dV\_h}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{}}
+\DoxyCodeLine{00013\ \textcolor{comment}{Vector\ solution\ variable:\ volume\ strain}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@author\ S.\ Roberts}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@date\ 1999\ */}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v}{NumIntegral\_BT\_D\_op\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ NumIntegral\_BT\_D\_op\_dV(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \ \ \ \ \textcolor{comment}{//\ volume\ strain}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ youngs,\ \ \ \textcolor{comment}{//\ Young's\ modulus}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ poissons,\ \textcolor{comment}{//\ Poisson's\ ratio}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test,\ \textcolor{keywordtype}{bool}\ plane\_strain=\textcolor{keyword}{true}\ );\ \textcolor{comment}{//\ displacement}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v_a977be5172ccdbce122765a32e2f9fbf5}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___b_t___d__op__d_v_a84b1d603d45d6990cfad765e8b27382b}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ PlaneStress();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ NumIntegral\_BT\_D\_op\_dV<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ NumIntegral\_BT\_D\_op\_dV<dim,CELL>\ (*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nu\_key\_;\ \ \ \ \textcolor{comment}{///<\ Poisson's\ ratio}}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Y\_key\_;\ \ \ \ \ \textcolor{comment}{///<\ Young's\ modulus}}
+\DoxyCodeLine{00038\ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\ E\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ Young's\ modulus}}
+\DoxyCodeLine{00039\ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\ nu\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///<\ variable\ in\ which\ Poisson's\ ratio\ will\ be\ stored}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ plane\_strain\_;}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ D,\ B,\ BT,\ TEMP,\ STR;\ \ \textcolor{comment}{//\ material\ property\ matrix,\ stiffness\ matrix}}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sc\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vc\_;}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ts\_;}
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

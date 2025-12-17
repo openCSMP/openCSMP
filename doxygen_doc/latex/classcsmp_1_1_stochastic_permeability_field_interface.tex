@@ -1,0 +1,68 @@
+\doxysection{csmp\+::Stochastic\+Permeability\+Field\+Interface\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_stochastic_permeability_field_interface}{}\label{classcsmp_1_1_stochastic_permeability_field_interface}\index{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$@{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$}}
+
+
+Collaboration diagram for csmp\+::Stochastic\+Permeability\+Field\+Interface\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{classcsmp_1_1_stochastic_permeability_field_interface__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_stochastic_permeability_field_interface_a16a7bc43a5380ccd031fcb13b99b0a55}\label{classcsmp_1_1_stochastic_permeability_field_interface_a16a7bc43a5380ccd031fcb13b99b0a55} 
+{\bfseries Stochastic\+Permeability\+Field\+Interface} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_stochastic_permeability_field_interface_aef200217723991702ed44b5887326330}{Read2\+DStochastic\+Permeability\+Field\+On\+Regular\+Grid}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}fname)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_stochastic_permeability_field_interface_ad6941bbf713af021e318681e208d13fe}{Read2\+DStochastic\+Permeability\+Field}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}fname)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_stochastic_permeability_field_interface_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_stochastic_permeability_field_interface_ad6941bbf713af021e318681e208d13fe}\index{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$@{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$}!Read2DStochasticPermeabilityField@{Read2DStochasticPermeabilityField}}
+\index{Read2DStochasticPermeabilityField@{Read2DStochasticPermeabilityField}!csmp::StochasticPermeabilityFieldInterface$<$ dim $>$@{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Read2DStochasticPermeabilityField()}{Read2DStochasticPermeabilityField()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stochastic_permeability_field_interface_ad6941bbf713af021e318681e208d13fe} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_stochastic_permeability_field_interface}{csmp\+::\+Stochastic\+Permeability\+Field\+Interface}}$<$ dim $>$\+::\+Read2\+DStochastic\+Permeability\+Field (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{fname}{}\end{DoxyParamCaption})}
+
+Same as above bu maps the stochastic permeability field to an irregular finite element mesh. A \doxylink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid} that holds the stochastic permeability values is created and the \doxylink{classcsmp_1_1_fem_from_grid_visitor}{Fem\+From\+Grid\+Visitor} is employed to transfer the grid data to the finite element mesh. If the stochastic permeability field extend and the dimensions of the \doxylink{classcsmp_1_1_model}{Model} do not coincide, the field is rescaled, in which case some of the accuracy of the stochastic field is lost. Further, if finite elements are smaller than the grid resolution of the \doxylink{classcsmp_1_1_finite_difference_grid}{Finite\+Difference\+Grid} such that no new permeability values can be assigned to these elements, the values of their connected neighbor elements are averaged to compute the new element permeability. In this case, accuracy of the stochastic permeability field is lost too. If more than 1/3 of the finite elements have no new permeability assigned, the method terminates and the original permeability field is retained. ~\newline
+
+
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000030}{Test}}]tested\+: O.\+K. \end{DoxyRefDesc}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_stochastic_permeability_field_interface_ad6941bbf713af021e318681e208d13fe_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_stochastic_permeability_field_interface_aef200217723991702ed44b5887326330}\index{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$@{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$}!Read2DStochasticPermeabilityFieldOnRegularGrid@{Read2DStochasticPermeabilityFieldOnRegularGrid}}
+\index{Read2DStochasticPermeabilityFieldOnRegularGrid@{Read2DStochasticPermeabilityFieldOnRegularGrid}!csmp::StochasticPermeabilityFieldInterface$<$ dim $>$@{csmp::StochasticPermeabilityFieldInterface$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Read2DStochasticPermeabilityFieldOnRegularGrid()}{Read2DStochasticPermeabilityFieldOnRegularGrid()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_stochastic_permeability_field_interface_aef200217723991702ed44b5887326330} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_stochastic_permeability_field_interface}{csmp\+::\+Stochastic\+Permeability\+Field\+Interface}}$<$ dim $>$\+::\+Read2\+DStochastic\+Permeability\+Field\+On\+Regular\+Grid (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{fname}{}\end{DoxyParamCaption})}
+
+Reads in a HYDROGEN (Bellin and Rubin, 1996; Fortran source code in folder /csp/varia/hydrogen) generated stochastic permeability field for a regular 2D finite element grid where the node-\/spacing in x and y direction is constant and the elements have the same volume. HYDRO\+\_\+\+GEN input file must have the ending \textquotesingle{}\texorpdfstring{$\ast$}{*}.perm\textquotesingle{} and be in x-\/y-\/z column format. Permeability values are assigned to the nodes of the FE mesh and the nodal permeability values are interpolated to the element center. If node coordinates and stochastic permeability coordinates do not coincide, the method terminates without mapping the stochastic permeability field to the \doxylink{classcsmp_1_1_model}{Model}. A variable \textquotesingle{}nodal logarithmic permeability\textquotesingle{} is created such that the log values of the permeability at the nodes can be visualized from the main() file. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the \doxylink{classcsmp_1_1_model}{Model} and the name of the HYDROGEN file that stores the permeability field.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Call the function from your main() file to assing the stochastic permeability values to the \doxylink{classcsmp_1_1_model}{Model}. ~\newline
+
+
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000029}{Test}}]tested\+: O.\+K. \end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/Stochastic\+Permeability\+Field\+Interface.\+h\item 
+source/modules/interfaces/Stochastic\+Permeability\+Field\+Interface.\+cpp\end{DoxyCompactItemize}

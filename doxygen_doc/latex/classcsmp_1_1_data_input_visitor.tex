@@ -1,0 +1,184 @@
+\doxysection{csmp\+::Data\+Input\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_data_input_visitor}{}\label{classcsmp_1_1_data_input_visitor}\index{csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}}
+
+
+{\ttfamily \#include $<$Data\+Input\+Visitor.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Data\+Input\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{classcsmp_1_1_data_input_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Data\+Input\+Visitor\texorpdfstring{$<$}{<} Var, dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{classcsmp_1_1_data_input_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_data_input_visitor_ac0639e101baa849456680fa0dc399962}\label{classcsmp_1_1_data_input_visitor_ac0639e101baa849456680fa0dc399962} 
+{\bfseries Data\+Input\+Visitor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&sg, const char \texorpdfstring{$\ast$}{*}input\+\_\+prop, const std\+::vector$<$ double $>$ \&input\+\_\+data)
+\begin{DoxyCompactList}\small\item\em visitor for input of variables placed on the node, element and elsewhere \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor_a4906d861a87bfb4c39df20b125f10d5e}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor_a6162b94ebe5181c010f61798c7543c47}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor_a7da6dd51acbcae9a3269173badeedf60}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor_a4b28735f85bdb5514a1cb16730a6585b}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor_a520c27b9869505dc9809dfb9e9ea49e2}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor_aa38e7ab086e4112093d2a9e648f520e9}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classcsmp_1_1_data_input_visitor_a807868e993002e8e7be539a29515e07c}\label{classcsmp_1_1_data_input_visitor_a807868e993002e8e7be539a29515e07c} 
+void {\bfseries Reset} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Var, uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Data\+Input\+Visitor$<$ Var, dim $>$}
+Use this visitor to input raw data into model which is assumed to be ordered in input vector by variable components (for example vector v1x, v1y, v1z, v2x...) visitor will renumber elements or nodes.
+
+\begin{DoxyAuthor}{Author}
+S. K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2006 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_data_input_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_data_input_visitor_a7da6dd51acbcae9a3269173badeedf60}\index{csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_input_visitor_a7da6dd51acbcae9a3269173badeedf60} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor}{csmp\+::\+Data\+Input\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{eptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+TODO\+: \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000142}{Todo}}]SKM\+: other placements like FV integration points are not considered here yet \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_data_input_visitor_a4b28735f85bdb5514a1cb16730a6585b}\index{csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_input_visitor_a4b28735f85bdb5514a1cb16730a6585b} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor}{csmp\+::\+Data\+Input\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{f}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The key method of the visitor design pattern. Visit() must be defined for the target object (for instance \doxylink{classcsmp_1_1_node}{Node} objects, or \doxylink{classcsmp_1_1_element}{Element} objects). Since the argument is the actual object, its entire interface is accessible to the visitor in order to carry out operations. Overload this method in the derived class to gain access to target objects and perform the actions that are desired for the visitation. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & is a pointer to the target \doxylink{classcsmp_1_1_face}{Face} (forming part of a boundary). \\
+\hline
+\end{DoxyParams}
+TODO\+: \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000143}{Todo}}]SKM\+: other placements like FV integration points are not considered here yet \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_data_input_visitor_a520c27b9869505dc9809dfb9e9ea49e2}\index{csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_input_visitor_a520c27b9869505dc9809dfb9e9ea49e2} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor}{csmp\+::\+Data\+Input\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{eptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+TODO\+: \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000144}{Todo}}]SKM\+: other placements like FV integration points are not considered here yet \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_data_input_visitor_a4906d861a87bfb4c39df20b125f10d5e}\index{csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_input_visitor_a4906d861a87bfb4c39df20b125f10d5e} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor}{csmp\+::\+Data\+Input\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{gptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_data_input_visitor_aa38e7ab086e4112093d2a9e648f520e9}\index{csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_input_visitor_aa38e7ab086e4112093d2a9e648f520e9} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor}{csmp\+::\+Data\+Input\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{nptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_data_input_visitor_a6162b94ebe5181c010f61798c7543c47}\index{csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::DataInputVisitor$<$ Var, dim $>$@{csmp::DataInputVisitor$<$ Var, dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_data_input_visitor_a6162b94ebe5181c010f61798c7543c47} 
+template$<$typename Var, uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_data_input_visitor}{csmp\+::\+Data\+Input\+Visitor}}$<$ Var, dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{gptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Data\+Input\+Visitor.\+h\item 
+source/modules/model/Data\+Input\+Visitor.\+cpp\end{DoxyCompactItemize}

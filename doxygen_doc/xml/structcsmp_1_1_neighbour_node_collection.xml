@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_neighbour_node_collection" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::NeighbourNodeCollection</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NeighbourNodeCollection&lt; dim &gt;</label>
+        <link refid="structcsmp_1_1_neighbour_node_collection"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/VariablePlacement.h" line="14" column="13" bodyfile="source/includes/model/VariablePlacement.h" bodystart="14" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

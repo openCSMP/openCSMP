@@ -83,8 +83,8 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
   // ----------------------------------------------------------
   this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
   const size_t n_elements_plus_faces{ mesh.Elements() + mesh.Faces() };
-  for ( auto i : info.interior_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
-  for ( auto i : info.perimeter_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
+  for ( auto& i : info.interior_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterfacesBegin(),i-n_elements_plus_faces)) );
+  for ( auto& i : info.perimeter_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterfacesBegin(),i-n_elements_plus_faces)) );
 
   // sorting of the pointers is necessary because the memory addresses of the new pointers will be different than in the last model
   if ( info.interior_elmts.size() == 0 ) {
@@ -127,7 +127,6 @@ which already contain multiplicated yet collocated nodes (can be done in ANSYS).
 template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
-                                   const FiniteElementManager& femgr,
                                    MeshManager<dim>& mesh,
                                    const InterFaceParentElements<dim>& ifset )
   : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
@@ -596,7 +595,7 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     csmp_error.Note( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
                       "user-supplied interface ID set contained duplicates which were removed." );
 #endif
-  if ( cell_ids.size() > mesh.InterFaces() )
+  if ( cell_ids.size() > mesh.Interfaces() )
     csmp_error.Note( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
                        "user-supplied interface-number vector is larger than range of index-to-element-pointer mapping." );
 
@@ -605,7 +604,7 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   const auto offset = mesh.Elements() + mesh.Faces();
   this->cell_vec_.reserve( cell_ids.size() );
   for ( auto& idx : cell_ids ) {
-       InterFace<dim>* ifptr = &(*next(mesh.InterFacesBegin(),idx-offset));
+       InterFace<dim>* ifptr = &(*next(mesh.InterfacesBegin(),idx-offset));
        assert( ifptr != nullptr );
        assert( ifptr->Idx() == idx );
        this->cell_vec_.push_back( ifptr );

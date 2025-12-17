@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_finite_volume_policy" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FiniteVolumePolicy</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> policy for node-centered finite-volume computations; see full specializations for 1D, 2D, 3D. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>csmp::Edge&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_edge"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::Element&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_element"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::Element&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_element"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::Face&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_face"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::FiniteVolumePolicy&lt; 1U, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy_3_011_u_00_01_c_e_l_l_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 1U, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::FiniteVolumePolicy&lt; 2U, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy_3_012_u_00_01_c_e_l_l_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 2U, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 3U, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteVolumePolicy&lt; 3U, Element &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 3U, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::FiniteVolumePolicy&lt; dim, Edge &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Edge &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::FiniteVolumePolicy&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::FiniteVolumePolicy&lt; dim, Face &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Face &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::FiniteVolumePolicy&lt; dim, InterFace &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, InterFace &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+      <node id="11">
+        <label>csmp::InterFace&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_inter_face"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="22" column="13" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="22" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

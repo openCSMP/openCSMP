@@ -7,10 +7,6 @@ using namespace std;
 namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class CELL>
-CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV() {}
-
-
-template<uint32_t dim, template<uint32_t> class CELL>
 CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::CVFEM_Upwind_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                                                         UpwindControlVisitor<dim>& upwind_visitor,
                                                                                         ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,

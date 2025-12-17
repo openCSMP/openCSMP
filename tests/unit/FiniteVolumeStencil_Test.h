@@ -3,13 +3,8 @@
 
 #include "CSMP_definitions.h"
 #include "FiniteElement.h"
-#include "Test.h"
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
 #include "FiniteVolumeStencil.h"
-#endif
+#include "Test.h"
 
 namespace csmp {
 
@@ -37,7 +32,7 @@ class FiniteVolumeStencil_Test : public Test {
     std::vector<FiniteElement*>            vecFEs_;
     
     template<uint32_t dim>
-	  std::vector< Point<dim> > GetPointsOfFacet( const uint32_t& iFacet, const CSMP_FEM_TYPE& elType, 
+	  std::vector< Point<dim> > GetPointsOfFacet( const uint32_t& iFacet, const CSMP_FEM_TYPE& elType,
                                                 const FiniteVolumeStencil<dim>& fvs, const FiniteElement & fe );
     const bool verbose_;
 };

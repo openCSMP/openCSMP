@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_c_s_m_p__physical__constants_8h" kind="file" language="C++">
+    <compoundname>CSMP_physical_constants.h</compoundname>
+    <includes refid="_c_s_m_p__definitions_8h" local="yes">CSMP_definitions.h</includes>
+    <includedby refid="_temperature_density_pressure___example_8cpp" local="yes">examples/source/TemperatureDensityPressure_Example.cpp</includedby>
+    <includedby refid="_integral___n_t__op__d_ni__d_v_8cpp" local="yes">source/modules/integration/pde_operators/analytical_integration/Integral_NT_op_dNi_dV.cpp</includedby>
+    <includedby refid="_upwind___integral__d_n_t__rhsop__g__d_v_8cpp" local="yes">source/modules/integration/pde_operators/analytical_integration/Upwind_Integral_dNT_rhsop_g_dV.cpp</includedby>
+    <includedby refid="_num_integral___n_t__mixed__op__d_ni__d_v_8cpp" local="yes">source/modules/integration/pde_operators/numerical_integration/NumIntegral_NT_mixed_op_dNi_dV.cpp</includedby>
+    <includedby refid="_num_integral__d_n_t__mixed__op__d_n___n_t__v__d_n__d_v_8cpp" local="yes">source/modules/integration/pde_operators/numerical_integration/NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV.cpp</includedby>
+    <includedby refid="_num_integral__d_n_t__op__d_n___n_t__op__dop__d_n__d_v_8cpp" local="yes">source/modules/integration/pde_operators/numerical_integration/NumIntegral_dNT_op_dN_NT_op_dop_dN_dV.cpp</includedby>
+    <includedby refid="_num_integral__d_n_t__op__d_n__d_v___n_t__v__d_n__d_v_8cpp" local="yes">source/modules/integration/pde_operators/numerical_integration/NumIntegral_dNT_op_dN_dV_NT_v_dN_dV.cpp</includedby>
+    <includedby refid="_mechanical_properties_8cpp" local="yes">source/modules/thmc/mechanics/MechanicalProperties.cpp</includedby>
+    <includedby refid="_stress_invariants_8cpp" local="yes">source/modules/thmc/mechanics/StressInvariants.cpp</includedby>
+    <includedby refid="_compute_single_phase_gravity_term_visitor_8cpp" local="yes">source/modules/thmc/single_phase_flow/ComputeSinglePhaseGravityTermVisitor.cpp</includedby>
+    <includedby refid="_single_phase_velocity_visitor_8cpp" local="yes">source/modules/thmc/single_phase_flow/SinglePhaseVelocityVisitor.cpp</includedby>
+    <includedby refid="_velocity_and_volume_flux_8cpp" local="yes">source/modules/thmc/single_phase_flow/VelocityAndVolumeFlux.cpp</includedby>
+    <includedby refid="_h2_o___c_o2___na_cl___flow_functions_8cpp" local="yes">source/modules/thmc/two_phase_flow/H2O_CO2_NaCl_FlowFunctions.cpp</includedby>
+    <includedby refid="_two_phase_flow_functions_8cpp" local="yes">source/modules/thmc/two_phase_flow/TwoPhaseFlowFunctions.cpp</includedby>
+    <includedby refid="_two_phase_model_8cpp" local="yes">source/modules/thmc/two_phase_flow/TwoPhaseModel.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/thmc/CSMP_physical_constants.h</label>
+        <link refid="_c_s_m_p__physical__constants_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>algorithm</label>
+      </node>
+      <node id="15">
+        <label>array</label>
+      </node>
+      <node id="13">
+        <label>cassert</label>
+      </node>
+      <node id="8">
+        <label>cctype</label>
+      </node>
+      <node id="11">
+        <label>cfloat</label>
+      </node>
+      <node id="16">
+        <label>chrono</label>
+      </node>
+      <node id="12">
+        <label>climits</label>
+      </node>
+      <node id="3">
+        <label>cmath</label>
+      </node>
+      <node id="7">
+        <label>cstdarg</label>
+      </node>
+      <node id="6">
+        <label>cstddef</label>
+      </node>
+      <node id="45">
+        <label>cstdint</label>
+      </node>
+      <node id="4">
+        <label>cstdio</label>
+      </node>
+      <node id="5">
+        <label>cstdlib</label>
+      </node>
+      <node id="9">
+        <label>cstring</label>
+      </node>
+      <node id="10">
+        <label>ctime</label>
+      </node>
+      <node id="17">
+        <label>deque</label>
+      </node>
+      <node id="18">
+        <label>exception</label>
+      </node>
+      <node id="19">
+        <label>filesystem</label>
+      </node>
+      <node id="20">
+        <label>fstream</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="22">
+        <label>iomanip</label>
+      </node>
+      <node id="23">
+        <label>iostream</label>
+      </node>
+      <node id="24">
+        <label>istream</label>
+      </node>
+      <node id="25">
+        <label>iterator</label>
+      </node>
+      <node id="26">
+        <label>limits</label>
+      </node>
+      <node id="27">
+        <label>list</label>
+      </node>
+      <node id="28">
+        <label>map</label>
+      </node>
+      <node id="29">
+        <label>memory</label>
+      </node>
+      <node id="30">
+        <label>numeric</label>
+      </node>
+      <node id="31">
+        <label>ostream</label>
+      </node>
+      <node id="32">
+        <label>random</label>
+      </node>
+      <node id="33">
+        <label>set</label>
+      </node>
+      <node id="34">
+        <label>sstream</label>
+      </node>
+      <node id="35">
+        <label>stdexcept</label>
+      </node>
+      <node id="36">
+        <label>string</label>
+      </node>
+      <node id="38">
+        <label>type_traits</label>
+      </node>
+      <node id="37">
+        <label>typeinfo</label>
+      </node>
+      <node id="42">
+        <label>unordered_map</label>
+      </node>
+      <node id="41">
+        <label>unordered_set</label>
+      </node>
+      <node id="39">
+        <label>utility</label>
+      </node>
+      <node id="40">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>CSMP_physical_constants.h</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>CSMP_ReservoirSimulator</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>Created<sp/>by<sp/>Stephan<sp/>Matthai<sp/>on<sp/>12/18/12.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/>Copyright<sp/>(c)<sp/>2012<sp/>Stephan<sp/>Matthai.<sp/>All<sp/>rights<sp/>reserved.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>CSMP_PHYSICAL_CONSTANTS_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_PHYSICAL_CONSTANTS_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_c_s_m_p__definitions_8h" kindref="compound">CSMP_definitions.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16" refid="namespacecsmp_1a7eb608f94da6c10db811e730fb014d89" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a7eb608f94da6c10db811e730fb014d89" kindref="member">CSMP_PI</ref>(3.14159265358979);<sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21" refid="namespacecsmp_1ab039fb02536702957d29d762fb53866c" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1ab039fb02536702957d29d762fb53866c" kindref="member">CSMP_NO_DATA_VALUE</ref>(-1.0e+30);<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23" refid="namespacecsmp_1a74aa9e36b726de0de9b2b62648101192" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a74aa9e36b726de0de9b2b62648101192" kindref="member">ACC_GRAVITY</ref>(9.80655);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="24" refid="namespacecsmp_1ad27f9bfb11d42f3124f2c04246b751c1" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1ad27f9bfb11d42f3124f2c04246b751c1" kindref="member">ATMOSPHERIC_PRESSURE</ref>(101325.);<sp/><sp/></highlight></codeline>
+<codeline lineno="25" refid="namespacecsmp_1a4f7c5bebec0f9301f56717b9e32e8e1e" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a4f7c5bebec0f9301f56717b9e32e8e1e" kindref="member">AVOGADRO</ref>(6.0221415e23);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="26" refid="namespacecsmp_1a75ed0417c939a93b3f424d2c60df6d23" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a75ed0417c939a93b3f424d2c60df6d23" kindref="member">BOHR_RADIUS</ref>(0.529177249e-10);<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="27" refid="namespacecsmp_1a318f6d89b514ea614336c1b236fc2424" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a318f6d89b514ea614336c1b236fc2424" kindref="member">BOLTZMANN</ref>(1.3806505e-23);<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="28" refid="namespacecsmp_1a0fe4175079ef9a706d7dca4dac8f78ca" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a0fe4175079ef9a706d7dca4dac8f78ca" kindref="member">COULOMB</ref>(8.987552e9);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="29" refid="namespacecsmp_1a72366589322dd332e2ec7c485645412c" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a72366589322dd332e2ec7c485645412c" kindref="member">FARADAY</ref>(96485.3383);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="30" refid="namespacecsmp_1ad6a69daba26a2bf3ff190b747464f64b" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1ad6a69daba26a2bf3ff190b747464f64b" kindref="member">G_GRAVITY</ref>(6.67259e-11);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="31" refid="namespacecsmp_1a0037c63d30b6bb3011676514ef26aecb" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a0037c63d30b6bb3011676514ef26aecb" kindref="member">HEAT_FLOW_UNIT</ref>(0.04184);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="32" refid="namespacecsmp_1a23ab183c9c9e48dc812c088162e86959" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a23ab183c9c9e48dc812c088162e86959" kindref="member">IDEAL_GAS_VOLUME</ref>(22.413996e-3);<sp/></highlight></codeline>
+<codeline lineno="33" refid="namespacecsmp_1a7f1f02d31a3bc69d7b2a8b0c47292fbb" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a7f1f02d31a3bc69d7b2a8b0c47292fbb" kindref="member">LOSCHMIDT</ref>(2.6867773e25);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="34" refid="namespacecsmp_1a450e8b3efb8f82cdbb7aa7960efd030e" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a450e8b3efb8f82cdbb7aa7960efd030e" kindref="member">LIGHT_SPEED</ref>(299792458.);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="35" refid="namespacecsmp_1a003fee23acf2a7542d1af6a5538db69e" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a003fee23acf2a7542d1af6a5538db69e" kindref="member">MASS_OF_ATOM</ref>(1.66053886e-27);<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="36" refid="namespacecsmp_1aa8bffcde016547273a0615ac727196c0" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1aa8bffcde016547273a0615ac727196c0" kindref="member">MOLAR_GAS_CONSTANT</ref>(8.31451);<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="37" refid="namespacecsmp_1a197ee7abbf18fc6c46937c2f6cb89393" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a197ee7abbf18fc6c46937c2f6cb89393" kindref="member">MOLAR_PLANCK</ref>(3.990312716e-10);<sp/><sp/></highlight></codeline>
+<codeline lineno="38" refid="namespacecsmp_1a94d4f87475588f68b1ee1e030bc369dd" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a94d4f87475588f68b1ee1e030bc369dd" kindref="member">RYDBERG</ref>(10973731.534);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39" refid="namespacecsmp_1ab8042098447ac4daee038dcf4804ffe3" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1ab8042098447ac4daee038dcf4804ffe3" kindref="member">STEFAN_BOLTZMANN</ref>(5.6704e-8);<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="40" refid="namespacecsmp_1a04368d831a86efc92190655bc7372b18" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacecsmp_1a04368d831a86efc92190655bc7372b18" kindref="member">WIEN_DISPLACEMENT</ref>(2.897756e-3);<sp/></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="source/includes/thmc/CSMP_physical_constants.h"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,436 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_gocad_header" kind="class" language="C++" prot="public">
+    <compoundname>csmp::GocadHeader</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1a1ef0f569d9efacf5b61e8dec4c533960" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadHeader::gocad_type</definition>
+        <argsstring></argsstring>
+        <name>gocad_type</name>
+        <qualifiedname>csmp::GocadHeader::gocad_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="10" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1a204f29e19936bee390c625f2ab275db6" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadHeader::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>csmp::GocadHeader::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="11" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1ad242c5a7946554df52245f4a7944e195" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadHeader::geological_type</definition>
+        <argsstring></argsstring>
+        <name>geological_type</name>
+        <qualifiedname>csmp::GocadHeader::geological_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="12" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1ac1791533f792694fc02167a53f7023d1" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::GocadHeader::cn</definition>
+        <argsstring></argsstring>
+        <name>cn</name>
+        <qualifiedname>csmp::GocadHeader::cn</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="13" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1a98cad1f90347b3cf5404ff2eb62adfb3" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::GocadHeader::solid</definition>
+        <argsstring></argsstring>
+        <name>solid</name>
+        <qualifiedname>csmp::GocadHeader::solid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="14" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1a2886ed426fd4089ac13a89737b04a227" prot="private" static="no" mutable="no">
+        <type>long</type>
+        <definition>long csmp::GocadHeader::sample_size</definition>
+        <argsstring></argsstring>
+        <name>sample_size</name>
+        <qualifiedname>csmp::GocadHeader::sample_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="15" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1a6896fe5f52654414d4a4db01bbd17b18" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::GocadHeader::no_data_values</definition>
+        <argsstring></argsstring>
+        <name>no_data_values</name>
+        <qualifiedname>csmp::GocadHeader::no_data_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="16" column="15" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_gocad_header_1af616cfb8008beccf90a659f088de67bd" prot="private" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_gocad_property_class_header" kindref="compound">GocadPropertyClassHeader</ref> &gt;</type>
+        <definition>std::map&lt;std::string,GocadPropertyClassHeader&gt; csmp::GocadHeader::properties</definition>
+        <argsstring></argsstring>
+        <name>properties</name>
+        <qualifiedname>csmp::GocadHeader::properties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="17" column="15" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a57fba45cd5139973435c0863b34de26b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadHeader::GocadHeader</definition>
+        <argsstring>()</argsstring>
+        <name>GocadHeader</name>
+        <qualifiedname>csmp::GocadHeader::GocadHeader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="20" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="9" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a475e6de85b61d51b52b2b83b5acc066f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadHeader::GocadHeader</definition>
+        <argsstring>(const char *gocad_type, const char *name, const char *geological_name, bool issolid=true)</argsstring>
+        <name>GocadHeader</name>
+        <qualifiedname>csmp::GocadHeader::GocadHeader</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>gocad_type</declname>
+          <defname>gocad_name</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>geological_name</declname>
+          <defname>geo_type</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>issolid</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks header for specifications.</para>
+<para>&apos;gocad_type&apos; is the specific gocad type name, e.g. TSolid or so. &apos;geological_type&apos; is user-defined special name </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="21" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="28" bodyend="33"/>
+        <references refid="classcsmp_1_1_gocad_header_1a475e6de85b61d51b52b2b83b5acc066f" compoundref="_gocad_header_8cpp" startline="28" endline="33">GocadHeader</references>
+        <referencedby refid="classcsmp_1_1_gocad_header_1a475e6de85b61d51b52b2b83b5acc066f" compoundref="_gocad_header_8cpp" startline="28" endline="33">GocadHeader</referencedby>
+        <referencedby refid="classcsmp_1_1_go_cad_interface_1a6d5c70c99f9485be33607b6fab605db0" compoundref="_go_cad_interface_8cpp" startline="2312" endline="2438">csmp::GoCadInterface&lt; dim &gt;::OutputVariablesToTSurface</referencedby>
+        <referencedby refid="classcsmp_1_1_go_cad_interface_1a752851bdc7e233e03f116c3645da6eff" compoundref="_go_cad_interface_8cpp" startline="2744" endline="2968">csmp::GoCadInterface&lt; dim &gt;::OutputVariableToTSolid</referencedby>
+        <referencedby refid="classcsmp_1_1_go_cad_interface_1aa2fce00574c73522de5050bad574c87a" compoundref="_go_cad_interface_8cpp" startline="2500" endline="2675">csmp::GoCadInterface&lt; dim &gt;::OutputVariableToTSolid</referencedby>
+        <referencedby refid="classcsmp_1_1_go_cad_interface_1abcfa60d18d24849fdd2ed2dc6d9d0951" compoundref="_go_cad_interface_8cpp" startline="2071" endline="2274">csmp::GoCadInterface&lt; dim &gt;::OutputVariableToTSurface</referencedby>
+        <referencedby refid="classcsmp_1_1_go_cad_interface_1ad53bbd900d0f59ef4cf9224d05f8d4c4" compoundref="_go_cad_interface_8cpp" startline="1848" endline="2011">csmp::GoCadInterface&lt; dim &gt;::OutputVariableToTSurface</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a2ab30cbaec499cf95f7e79e89a0c83de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadHeader::GocadHeader</definition>
+        <argsstring>(const GocadHeader &amp;h)</argsstring>
+        <name>GocadHeader</name>
+        <qualifiedname>csmp::GocadHeader::GocadHeader</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_gocad_header" kindref="compound">GocadHeader</ref> &amp;</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="24" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1af759c8ccdeb6168a81fb45eb3e674e43" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadHeader::GocadHeader</definition>
+        <argsstring>(std::ifstream &amp;ifn)</argsstring>
+        <name>GocadHeader</name>
+        <qualifiedname>csmp::GocadHeader::GocadHeader</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifn</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="25" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a8f4afc670b785d2dc516c7723c23283b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_gocad_header" kindref="compound">GocadHeader</ref> &amp;</type>
+        <definition>GocadHeader &amp; csmp::GocadHeader::operator=</definition>
+        <argsstring>(const GocadHeader &amp;h)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::GocadHeader::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_gocad_header" kindref="compound">GocadHeader</ref> &amp;</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="26" column="18" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="53" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a7c6e33009564b238b2e8d6c1eab8c905" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::GocadHeader::operator&lt;</definition>
+        <argsstring>(const GocadHeader &amp;h) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>csmp::GocadHeader::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_gocad_header" kindref="compound">GocadHeader</ref> &amp;</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+<para>name string length comparison </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="27" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="117" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a106ff43ac49f17bec66235b2c7223644" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::GocadHeader::~GocadHeader</definition>
+        <argsstring>()</argsstring>
+        <name>~GocadHeader</name>
+        <qualifiedname>csmp::GocadHeader::~GocadHeader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="28" column="5" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="46" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a39b245f9ea2f99c2e6370e1d8f5748c2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string csmp::GocadHeader::Name</definition>
+        <argsstring>() const</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::GocadHeader::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="31" column="18" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a469bac174d315a1672cdd5d6226cd2bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadHeader::Name</definition>
+        <argsstring>(const std::string &amp;s)</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::GocadHeader::Name</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="32" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a453bf5b4da975252e7ca5a5aa2903bf0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadHeader::Name</definition>
+        <argsstring>(char *s)</argsstring>
+        <name>Name</name>
+        <qualifiedname>csmp::GocadHeader::Name</qualifiedname>
+        <param>
+          <type>char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="33" column="17" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a04d1f9bb38e1ee59185bfb329cc736aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::GocadHeader::InitializeFrom</definition>
+        <argsstring>(std::ifstream &amp;ifs)</argsstring>
+        <name>InitializeFrom</name>
+        <qualifiedname>csmp::GocadHeader::InitializeFrom</qualifiedname>
+        <param>
+          <type>std::ifstream &amp;</type>
+          <declname>ifs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="35" column="17" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="124" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a04ecdbc0cf60705a3aaf453636cbf0b9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadHeader::WriteToText</definition>
+        <argsstring>(std::ofstream &amp;ofs) const</argsstring>
+        <name>WriteToText</name>
+        <qualifiedname>csmp::GocadHeader::WriteToText</qualifiedname>
+        <param>
+          <type>std::ofstream &amp;</type>
+          <declname>ofs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="36" column="17" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="175" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a18831df2590f250d853cd1374ab9c524" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadHeader::AddProperty</definition>
+        <argsstring>(const char *pname, double loclip, double hiclip, int32_t pclip=99, int32_t comp=1)</argsstring>
+        <name>AddProperty</name>
+        <qualifiedname>csmp::GocadHeader::AddProperty</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>pname</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>loclip</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>hiclip</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>pclip</declname>
+          <defval>99</defval>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>comp</declname>
+          <defval>1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="38" column="17" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="164" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_gocad_header_1a2829edc07657c71c0438f3a25e4d214b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::GocadHeader::Out</definition>
+        <argsstring>() const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::GocadHeader::Out</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="41" column="10" bodyfile="source/modules/interfaces/gOcad_SKUA/GocadHeader.cpp" bodystart="248" bodyend="266"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::GocadHeader</label>
+        <link refid="classcsmp_1_1_gocad_header"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" line="9" column="1" bodyfile="source/includes/interfaces/gOcad_SKUA/GocadHeader.h" bodystart="9" bodyend="42"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_gocad_header_1a18831df2590f250d853cd1374ab9c524" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1ac1791533f792694fc02167a53f7023d1" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>cn</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1ad242c5a7946554df52245f4a7944e195" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>geological_type</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a1ef0f569d9efacf5b61e8dec4c533960" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>gocad_type</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a57fba45cd5139973435c0863b34de26b" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>GocadHeader</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a475e6de85b61d51b52b2b83b5acc066f" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>GocadHeader</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a2ab30cbaec499cf95f7e79e89a0c83de" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>GocadHeader</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1af759c8ccdeb6168a81fb45eb3e674e43" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>GocadHeader</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a04d1f9bb38e1ee59185bfb329cc736aa" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>InitializeFrom</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a39b245f9ea2f99c2e6370e1d8f5748c2" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a469bac174d315a1672cdd5d6226cd2bf" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a453bf5b4da975252e7ca5a5aa2903bf0" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a204f29e19936bee390c625f2ab275db6" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>name</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a6896fe5f52654414d4a4db01bbd17b18" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>no_data_values</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a7c6e33009564b238b2e8d6c1eab8c905" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>operator&lt;</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a8f4afc670b785d2dc516c7723c23283b" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a2829edc07657c71c0438f3a25e4d214b" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1af616cfb8008beccf90a659f088de67bd" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>properties</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a2886ed426fd4089ac13a89737b04a227" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>sample_size</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a98cad1f90347b3cf5404ff2eb62adfb3" prot="private" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>solid</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a04ecdbc0cf60705a3aaf453636cbf0b9" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>WriteToText</name></member>
+      <member refid="classcsmp_1_1_gocad_header_1a106ff43ac49f17bec66235b2c7223644" prot="public" virt="non-virtual"><scope>csmp::GocadHeader</scope><name>~GocadHeader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

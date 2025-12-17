@@ -4,7 +4,9 @@
 #include "Test.h"
 #include "Box.h"
 
-namespace csmp{
+namespace csmp {
+
+template<uint32_t> class Element;
 
 class Box_Test : public Test
 {
@@ -13,6 +15,8 @@ class Box_Test : public Test
       : model_name_(name) {}
 
     virtual void run();
+    
+    void TestParsingOfFlags();
   
     bool TestBoundaryFlagAssigment2D();
     
@@ -37,9 +41,14 @@ class Box_Test : public Test
     void TestWhetherElementNormalsAreOutwardPointing();
 
   private:
+    std::map<std::string,std::vector<Point<3>>> FormPointCloudsFromBOX_BOUNDARY_Flags( Model<3>& );
+  
     std::string model_name_;
     static const bool verbose_ = true;
 };
+
+bool writePrismWithNormalsToVTK( const csmp::Element<3>* eptr, const std::string& filename );
+bool writePyramidWithNormalsToVTK( const csmp::Element<3>* eptr, const std::string& filename );
 
 } // csmp
 

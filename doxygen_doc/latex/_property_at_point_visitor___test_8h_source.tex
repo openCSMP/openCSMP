@@ -1,0 +1,43 @@
+\doxysection{Property\+At\+Point\+Visitor\+\_\+\+Test.\+h}
+\hypertarget{_property_at_point_visitor___test_8h_source}{}\label{_property_at_point_visitor___test_8h_source}\index{tests/unit/PropertyAtPointVisitor\_Test.h@{tests/unit/PropertyAtPointVisitor\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{PROPERTYATPOINTVISITOR\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{PROPERTYATPOINTVISITOR\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_property_at_point_visitor_8h}{"{}PropertyAtPointVisitor.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor___test}{PropertyAtPointVisitor\_Test}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00011\ \ \ \ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ PropertyAtPointVisitor\_Test(\ \textcolor{keywordtype}{bool}\ verbose\ );}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \string~PropertyAtPointVisitor\_Test();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ run1D\_MeshTests();}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ run2D\_MeshTests();}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ run3D\_MeshTests();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \textcolor{comment}{//\ 1D\ mesh\ test}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ IsoparametricLinear1DMesh\_Test(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionfile\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ varfile\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_type,\ \textcolor{keywordtype}{bool}\ brute\_force\_search,\ \textcolor{keywordtype}{double}\ tolerance\ );}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \textcolor{comment}{//\ 2D\ mesh\ test}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ IsoparametricLinear2DMesh\_Test(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionfile\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ varfile\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_type,\ \textcolor{keywordtype}{bool}\ brute\_force\_search,\ \textcolor{keywordtype}{double}\ tolerance\ );}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{comment}{//\ 3D\ mesh\ test}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ IsoparametricLinear3DMesh\_Test(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ regionfile\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ varfile\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mesh\_type,\ \textcolor{keywordtype}{bool}\ brute\_force\_search,\ \textcolor{keywordtype}{double}\ tolerance\ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ OutputElapsedTime(\ clock\_t\ start,\ clock\_t\ end\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_;}
+\DoxyCodeLine{00033\ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ PROPERTYATPOINTVISITOR\_TEST\_H}}
+
+\end{DoxyCode}

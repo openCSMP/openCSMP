@@ -1,0 +1,795 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_na_cl_saturated_vapor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::NaClSaturatedVapor</compoundname>
+    <includes refid="_na_cl_saturated_vapor_8h" local="yes">eos/h2o_nacl/NaClSaturatedVapor.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a9aba1c92fa3852785e534fd3ba22b46e" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClSaturatedVapor::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::temperature_</qualifiedname>
+        <briefdescription>
+<para>internal reference to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="37" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a2eed55e57432c154344e29008c6d856e" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::NaClSaturatedVapor::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::pressure_</qualifiedname>
+        <briefdescription>
+<para>internal reference to pressure [Pa] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="38" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1acb70a546f9ca2fe19ec26c6365e942f8" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k0_</definition>
+        <argsstring></argsstring>
+        <name>k0_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k0_</qualifiedname>
+        <briefdescription>
+<para>parameter k0 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="40" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a32b94bfc0d125fd41aa5d19c6cfcc754" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k1_</definition>
+        <argsstring></argsstring>
+        <name>k1_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k1_</qualifiedname>
+        <briefdescription>
+<para>parameter k1 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="41" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a29222e3979637bb808e197ddac18c96c" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k2_</definition>
+        <argsstring></argsstring>
+        <name>k2_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k2_</qualifiedname>
+        <briefdescription>
+<para>parameter k2 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="42" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a7da5adf9ab8b49d678022af20c547e1c" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k3_</definition>
+        <argsstring></argsstring>
+        <name>k3_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k3_</qualifiedname>
+        <briefdescription>
+<para>parameter k3 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="43" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a2732c9f0ee57f5e1f14c7c066771eea2" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k4_</definition>
+        <argsstring></argsstring>
+        <name>k4_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k4_</qualifiedname>
+        <briefdescription>
+<para>parameter k4 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="44" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a0f1bf1b67f4b9f8137ac59c8eba95208" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k5_</definition>
+        <argsstring></argsstring>
+        <name>k5_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k5_</qualifiedname>
+        <briefdescription>
+<para>parameter k5 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="45" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1ad21784f2dd20e9092ee3dae5657e1f12" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k6_</definition>
+        <argsstring></argsstring>
+        <name>k6_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k6_</qualifiedname>
+        <briefdescription>
+<para>parameter k6 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="46" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a5ac1501d04710095d41d634b1de0f84c" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k7_</definition>
+        <argsstring></argsstring>
+        <name>k7_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k7_</qualifiedname>
+        <briefdescription>
+<para>parameter k7 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="47" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1ae0fb4720647bfe4b9fd47baa3154dca2" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k8_</definition>
+        <argsstring></argsstring>
+        <name>k8_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k8_</qualifiedname>
+        <briefdescription>
+<para>parameter k8 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="48" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a8641793566bddb722e492c7802ceb24f" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k9_</definition>
+        <argsstring></argsstring>
+        <name>k9_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k9_</qualifiedname>
+        <briefdescription>
+<para>parameter k9 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="49" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1afe430bbfa497c9ef3b50d5c3a94011b9" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k10_</definition>
+        <argsstring></argsstring>
+        <name>k10_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k10_</qualifiedname>
+        <briefdescription>
+<para>parameter k10 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="50" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1ac3d3f16845b692cdaf156ab426129919" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k11_</definition>
+        <argsstring></argsstring>
+        <name>k11_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k11_</qualifiedname>
+        <briefdescription>
+<para>parameter k11 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="51" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a22f36b13958a75ca4bd50377afdd1135" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k12_</definition>
+        <argsstring></argsstring>
+        <name>k12_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k12_</qualifiedname>
+        <briefdescription>
+<para>parameter k12 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="52" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a558a03c3e403cca1cbf16ba29751075e" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k13_</definition>
+        <argsstring></argsstring>
+        <name>k13_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k13_</qualifiedname>
+        <briefdescription>
+<para>parameter k13 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="53" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a81f53a31caeea9f7129a7b034eb64e55" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k14_</definition>
+        <argsstring></argsstring>
+        <name>k14_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k14_</qualifiedname>
+        <briefdescription>
+<para>parameter k14 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="54" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1acf53ac391dcd768de150e5a7bb49250d" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::NaClSaturatedVapor::k15_</definition>
+        <argsstring></argsstring>
+        <name>k15_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::k15_</qualifiedname>
+        <briefdescription>
+<para>parameter k15 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="55" column="18" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a67eff51549042fcfdba43aee286ff3ff" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::pdummy_</definition>
+        <argsstring></argsstring>
+        <name>pdummy_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::pdummy_</qualifiedname>
+        <briefdescription>
+<para>internal pressure parameter [Pa] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="57" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1afae0557ec6e9e6afa12c461c864e1402" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::tdummy_</definition>
+        <argsstring></argsstring>
+        <name>tdummy_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::tdummy_</qualifiedname>
+        <briefdescription>
+<para>internal temperature parameter [C] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="58" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1aa74aa9f9af97760cb8b6d0678ce9b649" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>internal temperature parameter [C] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="59" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a5112abced13144b4d2a78eace71fd00b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::pcurrent_</definition>
+        <argsstring></argsstring>
+        <name>pcurrent_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::pcurrent_</qualifiedname>
+        <briefdescription>
+<para>internal pressure parameter [bar] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="60" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1af90b4f0ce38a6625ec65060ce93f38b4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::pnorm_</definition>
+        <argsstring></argsstring>
+        <name>pnorm_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::pnorm_</qualifiedname>
+        <briefdescription>
+<para>normalized pressure, equation 16 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="61" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a7e8726efdb5805cb1e551859f243aa02" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::massfractionnacl_</definition>
+        <argsstring></argsstring>
+        <name>massfractionnacl_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::massfractionnacl_</qualifiedname>
+        <briefdescription>
+<para>self-explanatory ;-) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="62" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a8344843d5f216f3926d23ea23d3c1b32" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::xsat_</definition>
+        <argsstring></argsstring>
+        <name>xsat_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::xsat_</qualifiedname>
+        <briefdescription>
+<para>mole fraction NaCl on liquidus </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="63" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a58e8fcdaf531905afc6734cdd59e1160" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::xsatatpnacl_</definition>
+        <argsstring></argsstring>
+        <name>xsatatpnacl_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::xsatatpnacl_</qualifiedname>
+        <briefdescription>
+<para>mole fraction NaCl on liquidus at NaCl sublimation pressure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="64" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a23299982792a0e52f917b56f4af4f01e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::delxsat_</definition>
+        <argsstring></argsstring>
+        <name>delxsat_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::delxsat_</qualifiedname>
+        <briefdescription>
+<para>represents one of the term in equation 15 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="65" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a20648f4274af937810fad68ae1e178e5" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::delxgsat_</definition>
+        <argsstring></argsstring>
+        <name>delxgsat_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::delxgsat_</qualifiedname>
+        <briefdescription>
+<para>represents one of the term in equation 15 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="66" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1accc2521a43df9fb776c7fb304adaa25a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::delx_</definition>
+        <argsstring></argsstring>
+        <name>delx_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::delx_</qualifiedname>
+        <briefdescription>
+<para>variable used for computing equation 15 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="67" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1aa5f837ce8c8a5b54bdd6b8414dc6a0e4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::j0_</definition>
+        <argsstring></argsstring>
+        <name>j0_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::j0_</qualifiedname>
+        <briefdescription>
+<para>parameter j0 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="68" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1ac28710c90d632e4639cfe52307e4b7de" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::j1_</definition>
+        <argsstring></argsstring>
+        <name>j1_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::j1_</qualifiedname>
+        <briefdescription>
+<para>parameter j1 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="69" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a37b37a3d58f85d7e04469339eb9cb6a6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::j2_</definition>
+        <argsstring></argsstring>
+        <name>j2_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::j2_</qualifiedname>
+        <briefdescription>
+<para>parameter j2 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="70" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a4a99cc94a092d9ea541f4cd2c86f718f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::j3_</definition>
+        <argsstring></argsstring>
+        <name>j3_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::j3_</qualifiedname>
+        <briefdescription>
+<para>parameter j3 of Driesner &amp; Heinrich, GCA, 2007 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="71" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a1cffd81f3ae9413ae64ec5613274dbd0" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::pnacl_</definition>
+        <argsstring></argsstring>
+        <name>pnacl_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::pnacl_</qualifiedname>
+        <briefdescription>
+<para>NaCl sublimation pressure [bar]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="72" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a0febf46d48ca5f44077da11a4ddcf6cb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::pcrit_</definition>
+        <argsstring></argsstring>
+        <name>pcrit_</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::pcrit_</qualifiedname>
+        <briefdescription>
+<para>Critical pressure of H2O-NaCl [bar]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="73" column="12" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1ae996c6486e940a2a61343af98f4d575f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_na_cl_sublimation_curve" kindref="compound">NaClSublimationCurve</ref></type>
+        <definition>NaClSublimationCurve csmp::NaClSaturatedVapor::naclsubl</definition>
+        <argsstring></argsstring>
+        <name>naclsubl</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::naclsubl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="78" column="28" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a479c99ac684a3f9ccfed2108e8c49ba6" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_curve" kindref="compound">CriticalCurve</ref></type>
+        <definition>CriticalCurve csmp::NaClSaturatedVapor::critcurve</definition>
+        <argsstring></argsstring>
+        <name>critcurve</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::critcurve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="79" column="28" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a5ee1ff7356c25066b70fefc34fbd0373" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_critical_point_h2_o" kindref="compound">CriticalPointH2O</ref></type>
+        <definition>CriticalPointH2O csmp::NaClSaturatedVapor::cp_h2o</definition>
+        <argsstring></argsstring>
+        <name>cp_h2o</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::cp_h2o</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="80" column="28" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_na_cl_saturated_vapor_1a01a00a551e32e25d4147286f409b38e5" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_halite_liquidus" kindref="compound">HaliteLiquidus</ref></type>
+        <definition>HaliteLiquidus csmp::NaClSaturatedVapor::liquidus</definition>
+        <argsstring></argsstring>
+        <name>liquidus</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::liquidus</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="81" column="28" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_1abd993e8f13b163d4832a507285effdfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSaturatedVapor::NaClSaturatedVapor</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure)</argsstring>
+        <name>NaClSaturatedVapor</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::NaClSaturatedVapor</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor</para>
+<para><simplesect kind="attention"><para>Use only this conctructor. <ref refid="classcsmp_1_1_na_cl_saturated_vapor" kindref="compound">NaClSaturatedVapor</ref> computes the NaCl concentration of halite-saturated brine as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, <ref refid="classcsmp_1_1_na_cl_saturated_vapor" kindref="compound">NaClSaturatedVapor</ref> is able to decipher their current values when being queried for the NaCl concentration. Only this constructor is allowed to ensure that functionality, default constructor has been made private. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="28" column="5" bodyfile="source/modules/eos/h2o_nacl/NaClSaturatedVapor.cpp" bodystart="14" bodyend="56"/>
+        <references refid="classcsmp_1_1_critical_curve_1a701178f62bd4859b617a62863dca9c0b" compoundref="_critical_curve_8cpp" startline="14" endline="60">csmp::CriticalCurve::CriticalCurve</references>
+        <references refid="classcsmp_1_1_halite_liquidus_1aeaca336da1757689f6665244539fb82d" compoundref="_halite_liquidus_8cpp" startline="14" endline="31">csmp::HaliteLiquidus::HaliteLiquidus</references>
+        <references refid="classcsmp_1_1_na_cl_sublimation_curve_1ae18bc0284b96a2896b9abd03a221de80" compoundref="_na_cl_sublimation_curve_8cpp" startline="12" endline="16">csmp::NaClSublimationCurve::NaClSublimationCurve</references>
+        <referencedby refid="classcsmp_1_1_twophase_vapor_1a106ce9bbb086b6e21f6bb8056b718fd8" compoundref="_twophase_vapor_8cpp" startline="16" endline="30">csmp::TwophaseVapor::TwophaseVapor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_1a5cf3571a8855db8b296377b9d7d5043d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSaturatedVapor::~NaClSaturatedVapor</definition>
+        <argsstring>()</argsstring>
+        <name>~NaClSaturatedVapor</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::~NaClSaturatedVapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="30" column="5" bodyfile="source/modules/eos/h2o_nacl/NaClSaturatedVapor.cpp" bodystart="61" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_1af517cd94c0722773c0b42f6de1f603c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Value of mass fraction of dissolved NaCl in halite-saturated brine <simplesect kind="attention"><para>The value is based on converting the mole fraction computed from equation 9 in Driesner &amp; Heinrich (2007). Conversion is based on <ref refid="_convert_concentration_units_na_cl_8h_source" kindref="compound">ConvertConcentrationUnitsNaCl.h</ref>; to stay consistent, use values and functions provide therein if you need other units </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="32" column="12" bodyfile="source/modules/eos/h2o_nacl/NaClSaturatedVapor.cpp" bodystart="69" bodyend="73"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_1aeffb0cbd5486c15d4f4f7c538051a712" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::NaClSaturatedVapor::NaClSaturatedVapor</definition>
+        <argsstring>()</argsstring>
+        <name>NaClSaturatedVapor</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::NaClSaturatedVapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="35" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_1af58f2226798ef0db76630e463fe57b93" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::NaClSaturatedVapor::CheckState</definition>
+        <argsstring>()</argsstring>
+        <name>CheckState</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::CheckState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update internal variables and trigger calculation of mass fraction </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="75" column="12" bodyfile="source/modules/eos/h2o_nacl/NaClSaturatedVapor.cpp" bodystart="78" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_na_cl_saturated_vapor_1a9b0a50b63e60a7584bc0a8555a239c08" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::NaClSaturatedVapor::MassFractionNaCl</definition>
+        <argsstring>(const double &amp;t, const double &amp;p)</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::NaClSaturatedVapor::MassFractionNaCl</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>t</declname>
+          <defname>t_</defname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>p</declname>
+          <defname>p_</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Equations 9 and 12-17 of Driesner and Heinrich (2007) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/NaClSaturatedVapor.h" line="76" column="12" bodyfile="source/modules/eos/h2o_nacl/NaClSaturatedVapor.cpp" bodystart="105" bodyend="124"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mass fraction NaCl of halite-saturated vapor in the system H2O-NaCl as a function of temperature and pressure. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich, <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>&quot;NaClSaturatedVapor&quot; is legacy code from Thomas Driesner&apos;s developments for the H2O-NaCl system, and computes the composition of halite-saturated vapor as a function of temperature and pressure. It can be used standalone if only this information is needed. Otherwise, it is only used in the CSMP++ context for building accurate lookup tables for the H2O-NaCl system, which are significantly faster if the full system properties are needed.</para>
+<para>Details of the underlying formulation can be found in</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Construct an instance of &quot;NaClSaturatedVapor&quot; with the temperature (in C) and pressure (in Pa) as constructor arguments. &quot;NaClSaturatedVapor&quot; has an internal mechanism to make sure that it always uses the current value of that temperature and pressure as they exist in your code. Public member names should be self-explanatory, I hope.</para>
+<para>The NaCl concentration can be retrieved in units of mass fraction. If you want to convert these or need values for molar masses of NaCl and H2O, please use <ref refid="_convert_concentration_units_na_cl_8h_source" kindref="compound">ConvertConcentrationUnitsNaCl.h</ref> to stay consistent.</para>
+<para><programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>t(somevalue),<sp/>p(anothervalue);<sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>[C]<sp/>and<sp/>pressure<sp/>[in<sp/>Pa]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">NaClSaturatedVapor<sp/>naclsatvap(t,p);<sp/></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>here,<sp/>t<sp/>and<sp/>p<sp/>may<sp/>be<sp/>updated</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">x<sp/>=<sp/>naclsatvap.MassFractionNaCl();<sp/></highlight><highlight class="comment">//<sp/>compute<sp/>and<sp/>assign<sp/>to<sp/>x<sp/>the<sp/>mass<sp/>fraction<sp/>of<sp/>NaCl<sp/>in<sp/>halite-saturated<sp/>vapor<sp/>for<sp/>current<sp/>t<sp/>and<sp/>p</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>Manual testing against CSP version - OK</para>
+<para><simplesect kind="attention"><para>No range check for temperature and pressure is being performed; these check are considered the responsibility of the user if using this class directly </para>
+</simplesect>
+</para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::NaClSaturatedVapor</label>
+        <link refid="classcsmp_1_1_na_cl_saturated_vapor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/NaClSaturatedVapor.h" line="23" column="3" bodyfile="source/includes/eos/NaClSaturatedVapor.h" bodystart="24" bodyend="82"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1af58f2226798ef0db76630e463fe57b93" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>CheckState</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a5ee1ff7356c25066b70fefc34fbd0373" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>cp_h2o</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a479c99ac684a3f9ccfed2108e8c49ba6" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>critcurve</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1accc2521a43df9fb776c7fb304adaa25a" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>delx_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a20648f4274af937810fad68ae1e178e5" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>delxgsat_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a23299982792a0e52f917b56f4af4f01e" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>delxsat_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1aa5f837ce8c8a5b54bdd6b8414dc6a0e4" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>j0_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1ac28710c90d632e4639cfe52307e4b7de" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>j1_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a37b37a3d58f85d7e04469339eb9cb6a6" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>j2_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a4a99cc94a092d9ea541f4cd2c86f718f" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>j3_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1acb70a546f9ca2fe19ec26c6365e942f8" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k0_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1afe430bbfa497c9ef3b50d5c3a94011b9" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k10_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1ac3d3f16845b692cdaf156ab426129919" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k11_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a22f36b13958a75ca4bd50377afdd1135" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k12_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a558a03c3e403cca1cbf16ba29751075e" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k13_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a81f53a31caeea9f7129a7b034eb64e55" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k14_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1acf53ac391dcd768de150e5a7bb49250d" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k15_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a32b94bfc0d125fd41aa5d19c6cfcc754" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k1_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a29222e3979637bb808e197ddac18c96c" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k2_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a7da5adf9ab8b49d678022af20c547e1c" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k3_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a2732c9f0ee57f5e1f14c7c066771eea2" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k4_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a0f1bf1b67f4b9f8137ac59c8eba95208" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k5_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1ad21784f2dd20e9092ee3dae5657e1f12" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k6_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a5ac1501d04710095d41d634b1de0f84c" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k7_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1ae0fb4720647bfe4b9fd47baa3154dca2" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k8_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a8641793566bddb722e492c7802ceb24f" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>k9_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a01a00a551e32e25d4147286f409b38e5" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>liquidus</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1af517cd94c0722773c0b42f6de1f603c7" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a9b0a50b63e60a7584bc0a8555a239c08" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a7e8726efdb5805cb1e551859f243aa02" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>massfractionnacl_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1abd993e8f13b163d4832a507285effdfa" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>NaClSaturatedVapor</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1aeffb0cbd5486c15d4f4f7c538051a712" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>NaClSaturatedVapor</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1ae996c6486e940a2a61343af98f4d575f" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>naclsubl</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a0febf46d48ca5f44077da11a4ddcf6cb" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>pcrit_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a5112abced13144b4d2a78eace71fd00b" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>pcurrent_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a67eff51549042fcfdba43aee286ff3ff" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>pdummy_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a1cffd81f3ae9413ae64ec5613274dbd0" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>pnacl_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1af90b4f0ce38a6625ec65060ce93f38b4" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>pnorm_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a2eed55e57432c154344e29008c6d856e" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1aa74aa9f9af97760cb8b6d0678ce9b649" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1afae0557ec6e9e6afa12c461c864e1402" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>tdummy_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a9aba1c92fa3852785e534fd3ba22b46e" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a8344843d5f216f3926d23ea23d3c1b32" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>xsat_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a58e8fcdaf531905afc6734cdd59e1160" prot="private" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>xsatatpnacl_</name></member>
+      <member refid="classcsmp_1_1_na_cl_saturated_vapor_1a5cf3571a8855db8b296377b9d7d5043d" prot="public" virt="non-virtual"><scope>csmp::NaClSaturatedVapor</scope><name>~NaClSaturatedVapor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -364,11 +364,11 @@ void MechanicsAndMultiphaseFlow_Example::PrintModelProperties( const Model<2U>& 
          assert( volume_faces == 0U );
          cout <<"\n\t\t\t("<< model.Mesh().Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
       }
-    if ( model.Mesh().InterFaces() > 0 ) {
+    if ( model.Mesh().Interfaces() > 0 ) {
          size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
          currentCellTypes( model.Mesh(), INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
          assert( volume_ifaces == 0U );
-         cout <<"\n\t\t\t("<< model.Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+         cout <<"\n\t\t\t("<< model.Mesh().Interfaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
     cout << "\n==================================================================================================";
     cout << endl;

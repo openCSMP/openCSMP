@@ -1,0 +1,33 @@
+\doxysection{Linear\+Elastic\+Fracture\+Aperture2\+D\+\_\+\+VVCase.\+h}
+\hypertarget{_linear_elastic_fracture_aperture2_d___v_v_case_8h_source}{}\label{_linear_elastic_fracture_aperture2_d___v_v_case_8h_source}\index{tests/integration/LinearElasticFractureAperture2D\_VVCase.h@{tests/integration/LinearElasticFractureAperture2D\_VVCase.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LINEAR\_ELASTIC\_FRACTURE\_APERTURE\_2D\_VVCASE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LINEAR\_ELASTIC\_FRACTURE\_APERTURE\_2D\_VVCASE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_linear_elastic_fracture_aperture2_d___v_v_case}{LinearElasticFractureAperture2D\_VVCase}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00010\ \ \ \ \ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ LinearElasticFractureAperture2D\_VVCase(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ prefix);}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_elastic_fracture_aperture2_d___v_v_case_ae62adab888f5b1fe7d296f43d8e578a5}{run}}();}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_elastic_fracture_aperture2_d___v_v_case_a9ac97a8f00b384a987d233295d0579e3}{set\_min\_avg\_error}}(\textcolor{keywordtype}{double}\ epsilon);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ WriteSolutionToFile(\ std::vector<std::vector<T>>\ data,\ std::string\ name);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ min\_avg\_error\_\ =\ 10.0;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

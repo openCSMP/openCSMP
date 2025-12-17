@@ -1,0 +1,14 @@
+<map id="csmp::CriticalCurve::CriticalCurve" name="csmp::CriticalCurve::CriticalCurve">
+<area shape="rect" id="Node000001" title=" " alt="" coords="480,63,617,103"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_brine.html#a3ab834697c85d10e2dd3dab232ba3171" title=" " alt="" coords="277,13,406,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="464,62,390,42,392,36,466,57"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_na_cl_saturated_vapor.html#abd993e8f13b163d4832a507285effdfa" title=" " alt="" coords="252,63,432,103"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="464,86,433,86,433,80,464,80"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_twophase_liquid.html#acbc78de0d42d3c379186195beb7672a2" title=" " alt="" coords="265,128,419,169"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="468,111,410,130,408,125,467,106"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_c_v_f_e_m___p_h_x___scheme.html#a8729f002b10f167786de431cb2f577cf" title=" " alt="" coords="5,5,204,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="262,28,204,28,204,23,262,23"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_twophase_vapor.html#a106ce9bbb086b6e21f6bb8056b718fd8" title=" " alt="" coords="28,99,181,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="237,102,182,110,181,105,236,96"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="249,140,181,131,182,126,249,134"/>
+</map>

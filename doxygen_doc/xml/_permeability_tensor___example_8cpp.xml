@@ -1,0 +1,465 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_permeability_tensor___example_8cpp" kind="file" language="C++">
+    <compoundname>PermeabilityTensor_Example.cpp</compoundname>
+    <includes refid="_permeability_tensor___example_8h" local="yes">PermeabilityTensor_Example.h</includes>
+    <includes refid="_scalar_variable_8h" local="yes">ScalarVariable.h</includes>
+    <includes refid="_tensor_variable_8h" local="yes">TensorVariable.h</includes>
+    <includes refid="_vector_variable_8h" local="yes">VectorVariable.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>Example.h</label>
+        <link refid="_example_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>examples/source/PermeabilityTensor_Example.cpp</label>
+        <link refid="_permeability_tensor___example_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>PermeabilityTensor_Example.h</label>
+        <link refid="_permeability_tensor___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="53">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>TensorVariable.h</label>
+        <link refid="_tensor_variable_8h_source"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>TensorVariable1.h</label>
+        <link refid="_tensor_variable1_8h_source"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>TensorVariable2.h</label>
+        <link refid="_tensor_variable2_8h_source"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="15">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cctype</label>
+      </node>
+      <node id="13">
+        <label>cfloat</label>
+      </node>
+      <node id="18">
+        <label>chrono</label>
+      </node>
+      <node id="14">
+        <label>climits</label>
+      </node>
+      <node id="5">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdarg</label>
+      </node>
+      <node id="8">
+        <label>cstddef</label>
+      </node>
+      <node id="47">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>cstdio</label>
+      </node>
+      <node id="7">
+        <label>cstdlib</label>
+      </node>
+      <node id="11">
+        <label>cstring</label>
+      </node>
+      <node id="12">
+        <label>ctime</label>
+      </node>
+      <node id="19">
+        <label>deque</label>
+      </node>
+      <node id="20">
+        <label>exception</label>
+      </node>
+      <node id="21">
+        <label>filesystem</label>
+      </node>
+      <node id="22">
+        <label>fstream</label>
+      </node>
+      <node id="23">
+        <label>functional</label>
+      </node>
+      <node id="24">
+        <label>iomanip</label>
+      </node>
+      <node id="25">
+        <label>iostream</label>
+      </node>
+      <node id="26">
+        <label>istream</label>
+      </node>
+      <node id="27">
+        <label>iterator</label>
+      </node>
+      <node id="28">
+        <label>limits</label>
+      </node>
+      <node id="29">
+        <label>list</label>
+      </node>
+      <node id="30">
+        <label>map</label>
+      </node>
+      <node id="31">
+        <label>memory</label>
+      </node>
+      <node id="32">
+        <label>numeric</label>
+      </node>
+      <node id="33">
+        <label>ostream</label>
+      </node>
+      <node id="34">
+        <label>random</label>
+      </node>
+      <node id="35">
+        <label>set</label>
+      </node>
+      <node id="36">
+        <label>sstream</label>
+      </node>
+      <node id="37">
+        <label>stdexcept</label>
+      </node>
+      <node id="38">
+        <label>string</label>
+      </node>
+      <node id="40">
+        <label>type_traits</label>
+      </node>
+      <node id="39">
+        <label>typeinfo</label>
+      </node>
+      <node id="44">
+        <label>unordered_map</label>
+      </node>
+      <node id="43">
+        <label>unordered_set</label>
+      </node>
+      <node id="41">
+        <label>utility</label>
+      </node>
+      <node id="42">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="_permeability_tensor___example_8cpp_1ac25189db92959bff3c6c2adf4c34b50a" prot="public" static="no">
+        <name>DIM</name>
+        <initializer>3U</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/source/PermeabilityTensor_Example.cpp" line="6" column="9" bodyfile="examples/source/PermeabilityTensor_Example.cpp" bodystart="6" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;PermeabilityTensor_Example.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;ScalarVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;TensorVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;VectorVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DIM<sp/>3U</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>PermeabilityTensor_Example::Specifications()</highlight></codeline>
+<codeline lineno="13"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1adce5953feb4828ee24fb935d416a045b" kindref="member">SetTitle</ref>(<sp/></highlight><highlight class="stringliteral">&quot;Permeability<sp/>tensor<sp/>calculations&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a4909bbd859ca62d273c259d1b8b6657a" kindref="member">SetDifficulty</ref>(<sp/>1<sp/>);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/>SetCategory(<sp/></highlight><highlight class="stringliteral">&quot;Software<sp/>Functionality&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a7a2776d1a529fdc5185d24804e249fa4" kindref="member">AddAuthor</ref>(<sp/></highlight><highlight class="stringliteral">&quot;P.<sp/>Lang<sp/>&amp;<sp/>S.<sp/>Azizmohammadi&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="stringliteral">&quot;source<sp/>in:<sp/>PermeabilityTensor_Example.cpp&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="stringliteral">&quot;General<sp/>operations<sp/>with<sp/>csmp<sp/>variable<sp/>types<sp/>scalar,<sp/>vector,<sp/>and<sp/>tensor&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="stringliteral">&quot;Darcy<sp/>flow<sp/>calculations<sp/>using<sp/>a<sp/>full<sp/>tensor<sp/>permeability&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_example_1a460febdef7c98c40ba774ba6670ff786" kindref="member">AddDescription</ref>(<sp/></highlight><highlight class="stringliteral">&quot;and<sp/>pressure<sp/>gradient&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32" refid="classcsmp_1_1_permeability_tensor___example_1adb8049909b705a05d837f5f900afb753" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_permeability_tensor___example_1adb8049909b705a05d837f5f900afb753" kindref="member">PermeabilityTensor_Example::Run</ref>()</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>ESTABLISHING<sp/>OUTPUTSTREAM<sp/>FROM<sp/>BASECLASS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//ostream<sp/>&amp;cout<sp/>=<sp/>*GetStream();</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>creating<sp/>an<sp/>empty<sp/>flow<sp/>rate<sp/>vector(<sp/>3D<sp/>-<sp/>template<sp/>parameter)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;DIM&gt;</ref><sp/>q;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>which<sp/>gives<sp/>us<sp/>a<sp/>flow<sp/>vector<sp/>with<sp/>qx,<sp/>qy,<sp/>qz</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>creating<sp/>ScalarVariables<sp/>for<sp/>cross<sp/>sectional<sp/>area<sp/>and<sp/>viscosity<sp/>respectively</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref><sp/>a(<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,<sp/>1.<sp/>),<sp/>mu(<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,<sp/>1.0e-3<sp/>);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>^^^^^^<sp/>CSMP<sp/>uses<sp/>SI<sp/>units,<sp/>e.g.<sp/>Pa.s</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>now<sp/>we<sp/>prepare<sp/>for<sp/>establishing<sp/>the<sp/>permeability<sp/>tensor<sp/>by<sp/>creating<sp/>a</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>cache<sp/>variable,<sp/>which<sp/>will<sp/>represent<sp/>our<sp/>horizontal<sp/>permeability</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>kHorizontal(<sp/>1.0e-12<sp/>);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>^^^^^^<sp/>[m2]<sp/>~<sp/>1<sp/>Darcy</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>now<sp/>we<sp/>establish<sp/>the<sp/>permeability<sp/>tensor,<sp/>filled<sp/>with<sp/>(PLAIN,<sp/>0.)<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable&lt;DIM&gt;</ref><sp/>kTensor(<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,<sp/>0.<sp/>);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>we<sp/>set<sp/>the<sp/>Kxx<sp/>and<sp/>Kzz<sp/>permeability</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/>kTensor(<sp/>0,0<sp/>)<sp/>=<sp/>kHorizontal;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/>kTensor(<sp/>2,2<sp/>)<sp/>=<sp/>kHorizontal;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>the<sp/>vertical<sp/>permeability<sp/>is<sp/>set<sp/>to<sp/>a<sp/>third<sp/>of<sp/>the<sp/>horizontal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/>kTensor(<sp/>1,1<sp/>)<sp/>=<sp/>kHorizontal<sp/>/<sp/>3.;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>next<sp/>we<sp/>create<sp/>the<sp/>potential<sp/>gradient<sp/>vector<sp/>of<sp/>our<sp/>conceptual<sp/>flow</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;DIM&gt;</ref><sp/>grad(<sp/><ref refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" kindref="member">PLAIN</ref>,<sp/>0.<sp/>);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>^^^^^^^^^<sp/>initialize<sp/>all<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>dPHI<sp/>/<sp/>dX</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/>grad(<sp/>0<sp/>)<sp/>=<sp/>10.;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>dPHI<sp/>/<sp/>dY</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/>grad(<sp/>1<sp/>)<sp/>=<sp/>0.;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>dPHI<sp/>/<sp/>dZ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/>grad(<sp/>2<sp/>)<sp/>=<sp/>0.1;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>calculating<sp/>flow<sp/>vector</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(<sp/>uint32_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>3;<sp/>++i<sp/>)</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>q(<sp/>i<sp/>)<sp/>=<sp/>a()<sp/>/<sp/>mu()<sp/>*<sp/>(<sp/><sp/><sp/>kTensor(<sp/>i,0<sp/>)*grad(<sp/>0<sp/>)</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>kTensor(<sp/>i,1<sp/>)*grad(<sp/>1<sp/>)</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>kTensor(<sp/>i,2<sp/>)*grad(<sp/>2<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>^^^^^<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>^^^^^<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>^^^^^<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>^^^^^</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>the<sp/>Value()<sp/>function<sp/>of<sp/>a<sp/>variable<sp/>returns<sp/>its<sp/>value,<sp/>but<sp/>does<sp/>not<sp/>allow</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>to<sp/>manipilate<sp/>it.<sp/>(<sp/>in<sp/>contrast<sp/>to<sp/>variable()<sp/>which<sp/>allows<sp/>manipulation,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>see<sp/>above</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Outputting<sp/>results</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nExample:<sp/>Cross<sp/>sectional<sp/>area:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>a()<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nExample:<sp/>Fluid<sp/>viscosity:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>mu()<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nExample:<sp/>Permeability<sp/>tensor:<sp/>\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/>kTensor.Out();</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nExample:<sp/>Potetntial<sp/>gradient:<sp/>\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/>grad.Out();</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/>cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nExample:<sp/>Resulting<sp/>flow<sp/>rates:<sp/>\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/>q.Out();</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>Run</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="examples/source/PermeabilityTensor_Example.cpp"/>
+  </compounddef>
+</doxygen>

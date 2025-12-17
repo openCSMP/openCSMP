@@ -1,0 +1,984 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TwoPhaseExplicitNodeCenteredFVTransport</compoundname>
+    <basecompoundref refid="classcsmp_1_1_node_centered_finite_volume_transport" prot="public" virt="non-virtual">csmp::NodeCenteredFiniteVolumeTransport&lt; dim &gt;</basecompoundref>
+    <includes refid="_two_phase_explicit_node_centered_f_v_transport_8h" local="no">TwoPhaseExplicitNodeCenteredFVTransport.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>STP</declname>
+        <defname>STP</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a09f53240233fc64e3a5012a03346c506" prot="private" static="no" mutable="no">
+        <type>std::set&lt; <ref refid="classcsmp_1_1_element" kindref="compound">csmp::Element</ref>&lt; dim &gt; * &gt;</type>
+        <definition>std::set&lt;csmp::Element&lt;dim&gt;*&gt; csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::halo_stencils_</definition>
+        <argsstring></argsstring>
+        <name>halo_stencils_</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::halo_stencils_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="90" column="15" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a3ec4e886c344587f1dce167e3d24f3b7" prot="private" static="no" mutable="no">
+        <type>STP&lt; dim &gt;</type>
+        <definition>STP&lt;dim&gt; csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::stencil_</definition>
+        <argsstring></argsstring>
+        <name>stencil_</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::stencil_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="91" column="31" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ade09c0204be89e3be93f3196e2129dc0" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::RESULT</definition>
+        <argsstring></argsstring>
+        <name>RESULT</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::RESULT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="92" column="26" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a9aedd640d291c09f7f0a7ba5731960c4" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::with_capillary_spreading_</definition>
+        <argsstring></argsstring>
+        <name>with_capillary_spreading_</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::with_capillary_spreading_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="94" column="36" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1af2210f7965c5f34792e7d1854c2f8f3a" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::with_gravitational_forces_</definition>
+        <argsstring></argsstring>
+        <name>with_gravitational_forces_</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::with_gravitational_forces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="95" column="36" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a7904a6efb1c3f6d93c6469cc570a23cf" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::sw_key_</definition>
+        <argsstring></argsstring>
+        <name>sw_key_</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::sw_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="97" column="36" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ac2b1d968796458248aff182b67c01b6e" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::no_flow_bc_key_</definition>
+        <argsstring></argsstring>
+        <name>no_flow_bc_key_</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::no_flow_bc_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="98" column="36" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ab59192c09a0a769e977eb6737d1d4e92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::TwoPhaseExplicitNodeCenteredFVTransport</definition>
+        <argsstring>(const char *region_name, Model&lt; dim &gt; &amp;, const char *porosity=&quot;porosity&quot;, const char *diffusivity=&quot;capillary diffusivity&quot;, const char *advected_prop1=&quot;saturation aqueous phase&quot;, const char *advected_prop2=&quot;saturation carbonic phase&quot;, const char *transp_velocity=&quot;velocity&quot;, const char *nodal_source=&quot;nodal fluid volume source&quot;, bool second_order_accuracy=false, bool with_capillary_spreading=true, bool with_gravitational_forces=false, const char *reference_variable_to_no_flow_bc=&quot;fluid pressure&quot;, const char *thickness_attribute=NULL)</argsstring>
+        <name>TwoPhaseExplicitNodeCenteredFVTransport</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::TwoPhaseExplicitNodeCenteredFVTransport</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>region_name</declname>
+          <defname>group_name</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>porosity</declname>
+          <defval>&quot;porosity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>diffusivity</declname>
+          <defval>&quot;capillary diffusivity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>advected_prop1</declname>
+          <defval>&quot;saturation aqueous phase&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>advected_prop2</declname>
+          <defval>&quot;saturation carbonic phase&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>transp_velocity</declname>
+          <defval>&quot;velocity&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>nodal_source</declname>
+          <defval>&quot;nodal fluid volume source&quot;</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>second_order_accuracy</declname>
+          <defname>second_order_accurate</defname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_capillary_spreading</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_gravitational_forces</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>reference_variable_to_no_flow_bc</declname>
+          <defval>&quot;fluid pressure&quot;</defval>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>thickness_attribute</declname>
+          <defval>NULL</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor for modelling transport by two-phase slightly compressible flow with fluid density and viscosity variations. The properties fluid density and viscosity are expected to be node variables and are interpolated to the FV facet integration points to carry out the computations. The transport scheme is setup for the non-wetting phase. The onus is on the user to update the second phase saturations after each advection step, i.e., calculate sw=1-sn. <linebreak/>
+</para>
+<para>The <ref refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport" kindref="compound">TwoPhaseExplicitNodeCenteredFVTransport</ref> can be constructed for first- and second order calculations. <linebreak/>
+</para>
+<para>Diffusion is only taken into account if second-order accuracy is chosen because the first-order scheme already is so diffusive that adding an extra diffusion term makes little sense. <linebreak/>
+</para>
+<para>The <ref refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport" kindref="compound">TwoPhaseExplicitNodeCenteredFVTransport</ref> gains access via reference to the model to which it is applied to. The user needs to specify the piecewise constant element variables porosity, capillary diffusivity and transport velocity. These must be defined in the CSP_variables.txt file. The variables fluid density and viscosity of the wetting and non-wetting phases must be nodal variables as well. They are interpolated to the facet and sector integration points using the finite element basis functions. <linebreak/>
+</para>
+<para>The transported variable must be nodal since this explicit transport scheme is based on node-centered finite volumes. <linebreak/>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>This constructor creates a minor storage array for repetitively used variables like the finite (pore) volumes, the flux balance for each FV cell and a vector of FV_parameters called FV_stencil_data that holds the FV sector volumes, facet areas and facet normal fluxes which are always updated before the first advection step, when the CFL criterion is computed. This vector will become redundant when the generic FV scheme has been optimized for speed. <linebreak/>
+</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Use <ref refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport" kindref="compound">TwoPhaseExplicitNodeCenteredFVTransport</ref> as constructed with this particular constructor for two-phase flow in a rapidly evolving flow field that necessitates frequent updates of the velocity fields. <linebreak/>
+</para>
+<para>For a weak coupling between phase saturations and total mobility, use the implicit transport module FiniteVolumeTransport. <linebreak/>
+</para>
+<para>Capillary diffusion will not correctly model transport across material interfaces unless these are split. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="15" column="5" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="70" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a9bdafc53e7a6794ff01ec1523f6194ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::~TwoPhaseExplicitNodeCenteredFVTransport</definition>
+        <argsstring>()</argsstring>
+        <name>~TwoPhaseExplicitNodeCenteredFVTransport</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::~TwoPhaseExplicitNodeCenteredFVTransport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="29" column="13" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="118" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a896b0fa8982d13ddcba9bb9b2c38048a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::TransportPhase</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;, double time_interval)</argsstring>
+        <name>TransportPhase</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::TransportPhase</qualifiedname>
+        <reimplements refid="classcsmp_1_1_node_centered_finite_volume_transport_1ad1d6a7630eb4b890531c5a61b9986a68">TransportPhase</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_interval</declname>
+        </param>
+        <briefdescription>
+<para>2-phase flow, transport of the non-wetting phase </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The method is the equivalent to <ref refid="classcsmp_1_1_node_centered_finite_volume_transport_1ad979521202f91de51ac610ec07485654" kindref="member">AdvectVariable()</ref> for 2-phase flow. It advects the non-wetting phase saturation for the user-specified time interval and writes the results back to the current <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> object. <linebreak/>
+ The advected variable field is written back into the supplied <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>.</para>
+<para><simplesect kind="return"><para>The method returns the CFL condition that it determined before the onset of the advection.</para>
+</simplesect>
+<simplesect kind="attention"><para>After every sub-CFL transport step, the method prints a dot on the screen. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="32" column="20" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="315" bodyend="359"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a5cc3b1f3ea214f7a28ff314ebfed716d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::AnisotropicCourantIncrement</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;, double max_time_increment)</argsstring>
+        <name>AnisotropicCourantIncrement</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::AnisotropicCourantIncrement</qualifiedname>
+        <reimplements refid="classcsmp_1_1_node_centered_finite_volume_transport_1adb692c997a6f3e7cb3be728f47b4c418">AnisotropicCourantIncrement</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>max_time_increment</declname>
+        </param>
+        <briefdescription>
+<para>two-phase, takes into account element shape in 2D and 3D unless one deals with 1D domain </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the Courant time increment (CFL citerion) taking into account viscous, gravitational and capillary fluid displacements using the contraints from the provided relative permeability model. The CFL criterion is calculated using the element diameter in the direction of the flow but not account for the deviation from this <ref refid="classvector" kindref="compound">vector&lt;double&gt;</ref> of the flow of the considered phase.</para>
+<para>For the viscous flow the shock speed is used as a multiplier for the total velocity. This may lead to a too tight constraint but is safe for the case where CFL is computed only once at the onset of series of advection steps with an explicit scheme.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>First, a const reference to the current model, a reference to the <ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref> used (this will be a subclass), and, third, the maximum time-increment imposed by external constraints.</para>
+<para><simplesect kind="return"><para>The CFL criterion.</para>
+</simplesect>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The criterion is computed sector by sector for all the finite elements in the entire model.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Method has been designed primarily to give stability to an explicit transport scheme but it also serves as a guide for the timestepping using an implicit approach.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_functions_1messages">
+<title>Messages</title><para>The method alerts the user to the case where CFL is larger than the input max_time_increment which may be the case if there is no flow at all in the domain. Equally, the user is informed if the CFL increment is less than a millisecond (usually a prohibitively small increment). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="35" column="20" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="201" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a223a82d6c2438bbdba2ab63fde150aa3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::DisableCapillarySpreading</definition>
+        <argsstring>()</argsstring>
+        <name>DisableCapillarySpreading</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::DisableCapillarySpreading</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Capillary spreading is modelled by default. This method disables it speeding up computation for large-scale models. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="37" column="11" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="130" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a8bf49aa8723f77e64268da81b156fb0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::EnableCapillarySpreading</definition>
+        <argsstring>()</argsstring>
+        <name>EnableCapillarySpreading</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::EnableCapillarySpreading</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="38" column="11" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="136" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ae8c2cfc9ab36b37d4cf0e82974c989d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::DisableGravitationalForces</definition>
+        <argsstring>()</argsstring>
+        <name>DisableGravitationalForces</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::DisableGravitationalForces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="39" column="11" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a673efa2cbd3ae8652c22d0d32af6c37a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::EnableGravitationalForces</definition>
+        <argsstring>()</argsstring>
+        <name>EnableGravitationalForces</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::EnableGravitationalForces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="40" column="11" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="148" bodyend="151"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a79602ed8b13a33eaecb22559cc33a658" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::SetNoFlowBoundaryConditionKey</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, const char *no_flow_bc=&quot;fluid pressure&quot;)</argsstring>
+        <name>SetNoFlowBoundaryConditionKey</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::SetNoFlowBoundaryConditionKey</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>sg</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>no_flow_bc</declname>
+          <defval>&quot;fluid pressure&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="42" column="11" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="154" bodyend="157"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1aa36edae6b18995625095bffa741c19bd" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::IsInteriorStencil</definition>
+        <argsstring>(const Element&lt; dim &gt; *const) const</argsstring>
+        <name>IsInteriorStencil</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::IsInteriorStencil</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; * const</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+<para>reports whether an element stencil has a face at the boundary of the advection region </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="46" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="110" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1afa9d996f9dce28cf0e38697c7e77b16e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::OutputResults</definition>
+        <argsstring>(const csmp::Index &amp;adv_key, bool show_range) const</argsstring>
+        <name>OutputResults</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::OutputResults</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv_key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <briefdescription>
+<para>writes results back to model </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Copies the result vector to model performing range checks against the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="49" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="364" bodyend="413"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1aa95dd41d4c5d1098aa773d28e6fa1d15" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::OutputResults</definition>
+        <argsstring>(const csmp::Index &amp;adv1_key, const csmp::Index &amp;adv2_key, bool show_range, bool do_range_check) const</argsstring>
+        <name>OutputResults</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::OutputResults</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv1_key</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <declname>adv2_key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>show_range</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>do_range_check</declname>
+        </param>
+        <briefdescription>
+<para>Copies the result vector and the saturation of the other phase to model performing range checks against the <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="51" column="12" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="419" bodyend="480"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1af32e3e649e66814d27c543f9bbdf6f61" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::MinMaxAdvectedProperty</definition>
+        <argsstring>()</argsstring>
+        <name>MinMaxAdvectedProperty</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::MinMaxAdvectedProperty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="55" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="485" bodyend="501"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a5888ecf4b5a0d584aeee807371b606d4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::MinMaxAdvectedPropertyIncludingTheCurrentNode</definition>
+        <argsstring>()</argsstring>
+        <name>MinMaxAdvectedPropertyIncludingTheCurrentNode</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::MinMaxAdvectedPropertyIncludingTheCurrentNode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="57" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="538" bodyend="566"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1af6630ec9d9a3dceb96e41c69c2c8d69c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::MinMaxAdvectedPropertyExceptTheCurrentNode</definition>
+        <argsstring>()</argsstring>
+        <name>MinMaxAdvectedPropertyExceptTheCurrentNode</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::MinMaxAdvectedPropertyExceptTheCurrentNode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="59" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="505" bodyend="534"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a26d3273fb4f6a5e0e550ea4bbd837ede" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::Compose2PhaseSolution</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;, double time_interval, bool divergence_free_correction=false)</argsstring>
+        <name>Compose2PhaseSolution</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::Compose2PhaseSolution</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_interval</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>divergence_free_correction</declname>
+          <defname>with_divergence_free_correction</defname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>builds solution taking into account nodal sources and sinks </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the non-wetting phase saturation at the new time-level for 2-phase flow. <linebreak/>
+</para>
+<para>Solves S^t+1 = S^t - dt/(phi Vi) * sum_j^faces Aj n . [f vt]</para>
+<para><itemizedlist>
+<listitem><para>a single loop over all nodes is required</para>
+</listitem><listitem><para>this steps also considers in and outflow of finite volume cells</para>
+</listitem><listitem><para>(distributed) sources and sinks will be considered in the future</para>
+</listitem></itemizedlist>
+</para>
+<para>Outfluxes at outflow boundaries and poroelastic sources and sinks during transient fluid flow are <linebreak/>
+ compensated for through the consideration of a flux balance vector that is supplied as a method argument. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>time_interval</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the current time-increment for the advection step needs to be specified in order to compose the solution. This time increment must satisfy the CFL condition because this is an explicit transport scheme. <linebreak/>
+</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>This method is used by the higher order-in space accurate transport scheme. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="62" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="595" bodyend="639"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a74a8135d36a4806437060c74d618c9b0" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::FractionalFlowThroughBoundaryFiniteVolume</definition>
+        <argsstring>(const Node&lt; dim &gt; *, TwoPhaseModel&lt; dim &gt; &amp;, double &amp;inflow, double &amp;flux_balance) const</argsstring>
+        <name>FractionalFlowThroughBoundaryFiniteVolume</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::FractionalFlowThroughBoundaryFiniteVolume</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <defname>nd_ptr</defname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>inflow</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>flux_balance</declname>
+        </param>
+        <briefdescription>
+<para>compensate inflow &amp; outflow </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For finite volumes corresponding at the model boundary, the flow across the boundary is calculated also establishing a flux balance if the finite volume extends beyond the boundary so that this balance can be used to split of a source term if necessary.</para>
+<para>The flux balance is equal to the divergence of the flux for the current finite volume (if there is more outflow, the flux balance and divergence are greater than zero).</para>
+<para>The flux balance is calculated from the element stencils that the node is connected to. These give respective sector contributions.</para>
+<para>To get model in and outfluxes the interior stencils are used.</para>
+<para><simplesect kind="return"><para>The method returns the inflow into the model domain and whether the flux balance was evaluated as indicated by the state of a bool. The convention adopted here is that inflow is negative while outflow is positive.</para>
+</simplesect>
+The flux_balance can be evaluated only if the finite volume lies inside the model domain so that it is not truncated and the exterior part can also be used. In this case the method returns true, else false.</para>
+<para><simplesect kind="attention"><para>Use this method only on finite volumes that are located on the boundary of the computational domain. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="66" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="673" bodyend="722"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a0111944f4a1ebc87b767c9ecafbf7796" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::AssignFractionalFlowBoundaryConditions</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;)</argsstring>
+        <name>AssignFractionalFlowBoundaryConditions</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::AssignFractionalFlowBoundaryConditions</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <briefdescription>
+<para>Compensation of in- and outflows for finite volumes that are truncated by region or model boundaries. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="71" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="728" bodyend="755"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a418ccc99dbe171333572061ca9358eb5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::AssignGenericFlowBoundaryConditions</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;)</argsstring>
+        <name>AssignGenericFlowBoundaryConditions</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::AssignGenericFlowBoundaryConditions</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <briefdescription>
+<para>Compensation of in- and outflows for finite volumes that are truncated by region or model boundaries. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="73" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="762" bodyend="906"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1aafa57780f62e2030429ede97a3e4c738" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::DivergenceFreeCorrection</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;, double time_interval)</argsstring>
+        <name>DivergenceFreeCorrection</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::DivergenceFreeCorrection</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_interval</declname>
+        </param>
+        <briefdescription>
+<para>Makes divirgence free correction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="76" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="910" bodyend="949"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a00bfedee304d3818148085220740728d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::AdvectVariable1stOrder</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;, double time_increment)</argsstring>
+        <name>AdvectVariable1stOrder</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::AdvectVariable1stOrder</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_increment</declname>
+        </param>
+        <briefdescription>
+<para>advects non-wetting phase in 2-phase flow (1st-order accurate) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>SolveNonConservativeTransportEquation1stOrder() advects the non-wetting phase in a two-phase flow using the user-supplied relative permeability model. The upstream values of the advected variable are used so that the scheme is unconditionally stable as long as the CFL condition is obeyed.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>time_increment</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The input time-increment must satisfy the CFL condition.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The divergence of the flow field as a consequence of advecting the non-wetting phase only, is treated as a source - sink term that is compensated for in each FV. Transient flow -related sources and sinks are also considered. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="80" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="970" bodyend="1012"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a5a57eaf5aa9d4eae0f76a37fc1333680" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;::AdvectVariable2ndOrder</definition>
+        <argsstring>(TwoPhaseModel&lt; dim &gt; &amp;, double time_increment)</argsstring>
+        <name>AdvectVariable2ndOrder</name>
+        <qualifiedname>csmp::TwoPhaseExplicitNodeCenteredFVTransport::AdvectVariable2ndOrder</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <defname>relperm</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time_increment</declname>
+        </param>
+        <briefdescription>
+<para>advects non-wetting phase in 2-phase flow (2nd-order accurate) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>SolveNonConservativeTransportEquation2ndOrder() advects the non-wetting phase in a two-phase flow using the user-supplied relative permeability model. The MINMOD slope-limited values of the advected variable are interpolated to the FV facet integration points using the FE interpolation functions are used to obtain second-order accuracy in space of this scheme. The scheme is TVD and robust as long as the CFL condition is obeyed.</para>
+<para>The derivatives of the fractional flow function are computed at each facet integration point. Thus, there is a dependency on mesh refinement for the position of the saturation front, i.e. the scheme is more diffusive where the mesh is coarser.</para>
+<para>The divergence of the flow field is treated as a source - sink term that is compensated for in each FV. Transient flow -related sources and sinks are also considered.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>time_increment</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the input time-increment must satisfy the CFL condition.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Use this scheme in models that are not critically dependent on CFL and when the velocity field needs to be updated in very short time-intervals so that little is gained from large transport steps that can be performed using the implicit scheme. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="84" column="10" bodyfile="source/modules/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.cpp" bodystart="1045" bodyend="1111"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>two-phase explicit transport scheme </para>
+    </briefdescription>
+    <detaileddescription>
+<para>&quot;generic_node_centered_finite_volumes/TwoPhaseExplicitNodeCenteredFVTransport.h&quot;</para>
+<para><simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+<simplesect kind="date"><para>2002</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>The <ref refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport" kindref="compound">TwoPhaseExplicitNodeCenteredFVTransport</ref> module performs advection a single non-wetting phase in two-phase flow simulations. It is a CFL dependent transport scheme for arbitrary FE meshes including different FE types and mixes of volume and surface elements. <linebreak/>
+</para>
+<para>The scheme is tolerant in that no specific boundary conditions need to be applied. The value of the advected variable at inflow boundaries is not modified and governs what gets transported into the model domain. <linebreak/>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>Use the explicit scheme if the transport velocity field is rapidly changing / invalidated by the transport itself. In this case the scheme is faster than the implicit scheme. The use of the latter will start to pay off at about CFL=20 or greater. <linebreak/>
+</para>
+<para>Do not use this scheme when the CFL condition based transport increment leads global advection steps that are smaller than about 1/1,000 of the model length in the direction of the flow. In this case the computations would be prohibitively slow.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_v_data_1structure">
+<title>Structure</title><para>The explicit advection scheme consists out of the three modules which are documented in a power-point documentation in the documentation folder. <linebreak/>
+</para>
+<para><ref refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport" kindref="compound">TwoPhaseExplicitNodeCenteredFVTransport</ref> <ref refid="structcsmp_1_1_explicit_stencil_processor" kindref="compound">ExplicitStencilProcessor</ref></para>
+<para>The user will only interact with the <ref refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport" kindref="compound">TwoPhaseExplicitNodeCenteredFVTransport</ref> module. The ExplicitStenProcessor class facilitates the generation of the finite-volume stencil contributions from each finite element, so that the accumulation can proceed on an element by element basis. No FV mesh needs to be stored.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Flux-balances are computed for all finite volumes including those which are located on the boundaries of the <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> or <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> to which the transport scheme is applied. They are compensated for also on all domain boundaries. <linebreak/>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>This is an example of how the second order accurate scheme is applied: <linebreak/>
+</para>
+<para><programlisting><codeline><highlight class="normal"><ref refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ab59192c09a0a769e977eb6737d1d4e92" kindref="member">TwoPhaseExplicitNodeCenteredFVTransport&lt;1U,ExplicitStencilProcessor&gt;</ref>(<sp/></highlight><highlight class="stringliteral">&quot;Model&quot;</highlight><highlight class="normal">,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reservoir_model,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;porosity&quot;</highlight><highlight class="normal">,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;capillary<sp/>diffusivity&quot;</highlight><highlight class="normal">,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;saturation<sp/>water&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;saturation<sp/>oil&quot;</highlight><highlight class="normal">,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal">,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;nodal<sp/>fluid<sp/>volume<sp/>source&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>second_order_accurate<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\n\nTransportPhase:<sp/>Configuring<sp/>TRANSPORT<sp/>simulation:<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>second_order<sp/>)<sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>IMPES:<sp/>SECOND<sp/>ORDER<sp/>SCHEME.&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/>IMPES:<sp/>FIRST<sp/>ORDER<sp/>SCHEME.&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nThe<sp/>grid<sp/>Courant<sp/>number<sp/>is<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>explicit_advector.AnisotropicCourantIncrement(<sp/>reservoir_model<sp/>)<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nEnter<sp/>advection<sp/>time:<sp/>&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>time_interval;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>cin<sp/>&gt;&gt;<sp/>time_interval;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\n\tMeasuring<sp/>the<sp/>time<sp/>required<sp/>to<sp/>solve<sp/>the<sp/>advection<sp/>problem.&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>clock_t<sp/>ticks<sp/>=<sp/>clock();</highlight></codeline>
+<codeline><highlight class="normal"><sp/>explicit_advector.TransportPhase(<sp/>relperm_model,<sp/>time_interval<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/>ticks<sp/>=<sp/>clock()<sp/>-<sp/>ticks;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\n\n\tCPU<sp/>clock<sp/>ticks<sp/>used<sp/>for<sp/>advection<sp/>step:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>ticks<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+</programlisting></para>
+<para><xrefsect id="todo_1_todo000051"><xreftitle>Todo</xreftitle><xrefdescription><para>(3) Remove NCFVTAlgorithm depencency (B)</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::NodeCenteredFiniteVolumeTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_node_centered_finite_volume_transport"/>
+      </node>
+      <node id="1">
+        <label>csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="5">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="2">
+        <label>csmp::NodeCenteredFiniteVolumeTransport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_node_centered_finite_volume_transport"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#adv1_key_</edgelabel>
+          <edgelabel>#diff_key_</edgelabel>
+          <edgelabel>#grad_advprop_key_</edgelabel>
+          <edgelabel>#grad_advprop_limiter_key_</edgelabel>
+          <edgelabel>#mass_center_key_</edgelabel>
+          <edgelabel>#phi_key_</edgelabel>
+          <edgelabel>#src_key_</edgelabel>
+          <edgelabel>#thi_key_</edgelabel>
+          <edgelabel>#vel_key_</edgelabel>
+          <edgelabel>#velo_mult_key_</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::TwoPhaseExplicitNodeCenteredFVTransport&lt; dim, STP &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" line="13" column="1" bodyfile="source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h" bodystart="13" bodyend="99"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a2d61751dc5d77e3f89166af31e5f7a89" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdjustSolverSettings</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a85c4fbdb58c36254e2a73ea8e2136028" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>adv1_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a672ef1177ccf995914d6206b87397792" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>advected_variable_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ad979521202f91de51ac610ec07485654" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdvectVariable</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a00bfedee304d3818148085220740728d" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdvectVariable1stOrder</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ac99db1e9d5b7e982c1d760e0fc162c3a" prot="protected" virt="non-virtual" ambiguityscope="csmp::NodeCenteredFiniteVolumeTransport::"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdvectVariable1stOrder</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a5a57eaf5aa9d4eae0f76a37fc1333680" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdvectVariable2ndOrder</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ac37b4d828c5e36ed87d40edebb6b1427" prot="protected" virt="non-virtual" ambiguityscope="csmp::NodeCenteredFiniteVolumeTransport::"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdvectVariable2ndOrder</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a9a6d9bce8ea7244c580e3970e7031a06" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdvectVariable2ndOrderInSpaceAndTime</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a768228265f4b8e25b542057ae2fd024d" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AdvectVariableSingleStep</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a5cc3b1f3ea214f7a28ff314ebfed716d" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AnisotropicCourantIncrement</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a9abfcfd050074aef529c61eed260cbdc" prot="public" virt="virtual" ambiguityscope="csmp::NodeCenteredFiniteVolumeTransport::"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AnisotropicCourantIncrement</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a040f7ba73ebc67804b4e2b050643b350" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AssignFluxBoundaryConditions</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a0111944f4a1ebc87b767c9ecafbf7796" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AssignFractionalFlowBoundaryConditions</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a418ccc99dbe171333572061ca9358eb5" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AssignGenericFlowBoundaryConditions</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1af810d392d535432743c946f59d6b072d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>AssignScalarBoundaryValues</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1adcb083c96e98d048628b81c235fd9290" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>BackupFacetFluxes</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1afefcb2c27407d529033ad47cbf1889e8" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>baseAdvector_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a2801b5865f9c527e3560b2b9b1e5d911" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>BoundaryFluxes</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a90d3b9319faff1aed87280c76a469053" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>CFL_Multiplier</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a6fd3e58291d898ef9dff93363a39701a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>CFL_Multiplier</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a491af4336aec779c24f1cbebfe99ca1a" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>cfl_multiplier_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1aff97d20c1265aae75a5700c959852ca0" prot="protected" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>CheckTransportVariables</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a26d3273fb4f6a5e0e550ea4bbd837ede" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>Compose2PhaseSolution</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a69ce74fa37e7eec58ff719ab0b5cf9bd" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>diff_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a223a82d6c2438bbdba2ab63fde150aa3" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>DisableCapillarySpreading</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ae8c2cfc9ab36b37d4cf0e82974c989d0" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>DisableGravitationalForces</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a50835f1dfcbae0d4d5922c9475f9e6e3" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>Divergence</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1aafa57780f62e2030429ede97a3e4c738" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>DivergenceFreeCorrection</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a8bf49aa8723f77e64268da81b156fb0c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>EnableCapillarySpreading</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a673efa2cbd3ae8652c22d0d32af6c37a" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>EnableGravitationalForces</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a507489df7c90411b125ac1103da4ea0f" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>FACETFLUXES0</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a4d86469675a964640c219292495133ff" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>FiniteVolume</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a796a92c2f1681bc7c89d496dc31be6b7" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>firstCall_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a731f54e4f238f6c28d5f6b24c7b945c3" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>FLUX_BALANCE</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1af90902b427124c1ba5d87e7deef8c76c" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>FluxBalance</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a7ddbca649a78eeb7d80d54ffabb27a3a" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>FluxThroughBoundaryFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a74a8135d36a4806437060c74d618c9b0" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>FractionalFlowThroughBoundaryFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a959a819ffe6f756ae68598b769cd3275" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>FVPOREVOL</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1aa5ba1189a44201157e13904daefdeec8" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>GetSolver</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ab2540754d3f25abc5fd32f2b5fbbefe4" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>GetSolverSettings</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a2264a09145d1898fe2e62df09e5189a7" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>grad_advprop_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a2e41a3f208c623a0a01eccaf12f64e79" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>grad_advprop_limiter_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a816f30a49b9bd1a14646008805ac91fd" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>grad_advprop_limiter_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a4d6d32c260bc99fce453d5989531785e" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>gref_</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a09f53240233fc64e3a5012a03346c506" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>halo_stencils_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ae6dd507f8dbcb0ba988bc836128ff37d" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>InitialAdvectedPropertyValues</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a5e2c4e92e52a5c7c5883f2d9d73d6383" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>InitialAdvectedPropertyValues</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a9956a45367b253e029a72bb433b03f9f" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>InitializeArraysForFirstOrderMethod</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1abfa262d7f73e2bc066f1ea03355e884e" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>InitializeArraysForSecondOrderMethod</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a814ff0ad4354144f592212f3cd7339a7" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>InitializeFiniteVolumeData</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ab29eb3a570dfa5a1adf1e2360495a754" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>InitializeFiniteVolumeDataParametricToPhysical</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ad06f1afe38f28acd169164dc5bc4e0ef" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>InitializeSectorPoreVolumeData</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1aa36edae6b18995625095bffa741c19bd" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>IsInteriorStencil</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a4e677cb0d9501c17caef5b65e015faa0" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>LTDSATS0</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1adb9e6beddc13fe0f17d2549b38fdd7c7" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>mass_center_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a864cee53da1b87edeadff59e258ad580" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>max_nonlinear_limiting_case_iterations_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1afd2679096b71c1a79da55ef63b43c71e" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>MaxNonlinear2ndOrderIterations</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1af8a417200d91240703ee1071a384f707" prot="protected" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>MeasureAllocatedMemory</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1af32e3e649e66814d27c543f9bbdf6f61" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>MinMaxAdvectedProperty</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1af6630ec9d9a3dceb96e41c69c2c8d69c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>MinMaxAdvectedPropertyExceptTheCurrentNode</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a5888ecf4b5a0d584aeee807371b606d4" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>MinMaxAdvectedPropertyIncludingTheCurrentNode</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a156e8e8b10ce7924ebb70181515f4999" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>ModelInflow</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ac00d03a879b6c065102c63dc1192c8c9" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>ModelOutflow</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a37525784632656714e7d06db6fef1612" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>mref_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a35790fff81073a4b1391de1f05920203" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>MultiplyScalarBoundaryValuesByFiniteVolumeCrossSectionalArea</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a4dea04628d5f0131f982d1bb4da14749" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>MultiplyScalarNodePropertyByFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ac2b1d968796458248aff182b67c01b6e" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>no_flow_bc_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a07bd595b4f331fbc0901c6525bc16283" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>NodeCenteredFiniteVolumeTransport</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1af9aee0e06ad78eaabb494faec9030522" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>NodeCenteredFiniteVolumeTransport</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a906c3034df6560b735a03af236fa4283" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>NodeCenteredFiniteVolumeTransport</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ab7fe410b8613436cb42bb59d3068f4e2" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>NodeCenteredFiniteVolumeTransport</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ac1f2bbb106198d2fd6bd5fbb0a260733" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1afa9d996f9dce28cf0e38697c7e77b16e" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>OutputResults</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1aa95dd41d4c5d1098aa773d28e6fa1d15" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>OutputResults</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1af0f830c78b9d118b55dba466e16aa341" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>phi_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ac6b934ebdfd4cc27b116f87edbaca126" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>PoreVolume</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a1642008399ee1069c8ef537c9fb954d4" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>pref_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a0bbef9edf038c4c6d828eda419dc21a8" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>RecordFluxBalances</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ade09c0204be89e3be93f3196e2129dc0" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>RESULT</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1abaa02b2fb69a712533341662224c0d70" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>SAT0</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a2a926f7c536a6b7ee5f7d5981a39d0f7" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>SecondOrderInSpace</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ad2d42a33ffd92a6d65a1b225251fd006" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>SecondOrderInTime</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a79602ed8b13a33eaecb22559cc33a658" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>SetNoFlowBoundaryConditionKey</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a7c9959f4abf604d347bcbcd9c6ba28a0" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>SMINMAX</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a214ea39a29c5c2592073ab92022d94bb" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>src_key_</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a3ec4e886c344587f1dce167e3d24f3b7" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>stencil_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ac7228ec5696c47c932d207d40bf492dd" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>STENCIL_DATA</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a7904a6efb1c3f6d93c6469cc570a23cf" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>sw_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a21fbc9e088aa8ddb151d35a228880ca3" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>target_nonlinear_limiting_case_residual_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1aaa7d5286b19fdbfcea4f6e01b9f7975f" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>TargetNonlinear2ndOrderResidual</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ad9848b1dafb65534a63f30813ecafcdc" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>thi_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a5dcdd3fb2c5e3b7d6b3d6536852c0366" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>TransformScalarBoundaryValuesIntoNeumannConditions</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a896b0fa8982d13ddcba9bb9b2c38048a" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>TransportPhase</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1ab59192c09a0a769e977eb6737d1d4e92" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>TwoPhaseExplicitNodeCenteredFVTransport</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a6c2b1f748d8076da9b4c049538fea632" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>UpdateProjectedVelocitiesAndFluxBalances</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a847a9ab28947d113c41cc0dbb3c39109" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>var_ncomponents_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1aa3f640ffab442a6bbd0cd8da4266ca90" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>vel_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a433362066fc293425ed25be6fa9a1fdf" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>velo_mult_key_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a03ce1fd26b89a30afadd50e1646cefce" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a083e7feb3f99e31a2a6d590e61f79ec0" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1adebd5c8f0f334dc327ba751de4c5e2e8" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a55683f1c67165d2124c293de8a5a79b4" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>VolumeIntegrate</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a8e4eba344778871f0f1b36d73de4aeb2" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>VolumeIntegrate</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1af13d3506668332b24e2527909029a437" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>VolumeIntegrateScalarFiniteElementVariable</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1aaa98f0e7db32931d3c61c9f9bf2ce1b7" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>VolumeIntegrateScalarFiniteVolumeVariable</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1ad00aa2e0bf03212f193973f1f9ca98ca" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>VolumeIntegrateScalarFiniteVolumeVariable</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a9aedd640d291c09f7f0a7ba5731960c4" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>with_capillary_spreading_</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1af2210f7965c5f34792e7d1854c2f8f3a" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>with_gravitational_forces_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a951b3ec6ec094029a83ba137d03489e9" prot="protected" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>with_lsmgrad_limiter_</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a2a6eaecaa24b60b52dcb9c3a9b659e75" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>WithLsmGradientLimiter</name></member>
+      <member refid="classcsmp_1_1_node_centered_finite_volume_transport_1a19fd2b0cc41bae41445ad7259daf4c9a" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>~NodeCenteredFiniteVolumeTransport</name></member>
+      <member refid="classcsmp_1_1_two_phase_explicit_node_centered_f_v_transport_1a9bdafc53e7a6794ff01ec1523f6194ef" prot="public" virt="virtual"><scope>csmp::TwoPhaseExplicitNodeCenteredFVTransport</scope><name>~TwoPhaseExplicitNodeCenteredFVTransport</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

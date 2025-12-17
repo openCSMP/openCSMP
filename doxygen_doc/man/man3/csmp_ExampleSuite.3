@@ -1,0 +1,101 @@
+.TH "csmp::ExampleSuite" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ExampleSuite \- A suite to contain a number of examples with UI\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ExampleSuite\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, std::vector< \fBExample\fP * > * >::iterator \fBcategory_iterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExampleSuite\fP (const std::string &title, std::ostream *ostream=&std::cout)"
+.br
+.ti -1c
+.RI "std::string \fBGetTitle\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBGetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBSetStream\fP (std::ostream *ostream)"
+.br
+.ti -1c
+.RI "void \fBRun\fP ()"
+.br
+.RI "start the stdIO interface "
+.ti -1c
+.RI "void \fBFree\fP ()"
+.br
+.RI "clear suite of all examples, calls their destructors "
+.ti -1c
+.RI "size_t \fBRegisterExample\fP (\fBExample\fP *example)"
+.br
+.RI "add example to suite (use heap) "
+.ti -1c
+.RI "category_iterator \fBGetCategoriesBegin\fP ()"
+.br
+.ti -1c
+.RI "category_iterator \fBGetCategoriesEnd\fP ()"
+.br
+.ti -1c
+.RI "std::string \fBStripExampleTitle\fP (std::string title) const"
+.br
+.RI "remove typeid from example name "
+.ti -1c
+.RI "void \fBOstreamDoubleUnderlined\fP (std::string) const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A suite to contain a number of examples with UI\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2010
+.RE
+.PP
+.SH "Implementation"
+.PP
+Contains a map which holds one entry for each example category (\fBExample\&.h\fP --> category_) This map entry holds a pointer to a vector which in turn contains pointers to all examples registered to the suite of the respective category\&.
+.SH "Application Examples"
+.PP
+.PP
+.nf
+\&.\&.\&.
+// instantiating ExampleSuite
+ExampleSuite exampleSuite( "CSMP EXAMPLES", &cout );
+
+// register new example
+exampleSuite\&.RegisterExample( new Example1ForSuite() );
+\&.\&.\&.
+exampleSuite\&.RegisterExample ( new YourExampleClass() );
+
+// execute examples in order of registration
+exampleSuite\&.Execute();
+\&.\&.\&.
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

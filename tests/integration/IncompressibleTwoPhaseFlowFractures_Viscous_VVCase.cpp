@@ -42,15 +42,10 @@
 
 // Finite-Volume calculation tools
 #include "StencilProcessor.h"
+#include "FiniteVolumeStencil.h"
 #include "ExplicitStencilProcessor.h"
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseImplicitNodeCenteredFVTransport.h"
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
-#include "FiniteVolumeStencil.h"
-#endif
 
 // Output
 #include "VTU_Interface.h"
@@ -453,8 +448,8 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     //*/****************************************************************************************************
     // Simulation parameters
 
-    double dt;
-    int32_t save_frequency;
+    double  dt{ numeric_limits<double>::max() };
+    int32_t save_frequency{1};
 
     // max time increment: 100 days
     const double MAX_TIME(86400. * 100.);
@@ -732,11 +727,8 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
     //*/****************************************************************************************************
 
-    double model_time;
-    int32_t save_counter,time;
-    model_time= 0.;
-    time = 0;
-    save_counter = 1;
+    double model_time{0.};
+    long   save_counter{1}, time{0};
 
     clock_t start = clock();
 
@@ -748,49 +740,42 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
     while ( model_time < max_time_ )
     {
+       // increment time
+       model_time += time_increment_;
 
-        // increment time
-        model_time += time_increment_;
+       // compute advection of phases
+       tpncfvt_->TransportPhase(*relperm_model_, time_increment_ );
 
-        // compute advection of phases
-        tpncfvt_->TransportPhase(*relperm_model_, time_increment_ );
+		   // update pressure and velocity field
+       UpdateSaturations( *relperm_model_ );
+		   ComputeTotalMobility( *relperm_model_ );
+	     model_->Apply(*steady_state_pressure_solver_);
 
-		//update pressure and velocity field
-		UpdateSaturations( *relperm_model_ );
-		ComputeTotalMobility( *relperm_model_ );
-	    model_->Apply(*steady_state_pressure_solver_);
-
-		// output variables
-        if ( save_counter == save_frequency ) {
-
-      time = model_time / dt;
-
-            
-			// output to VTU files
+		   // output variables
+       if ( save_counter == save_frequency ) {
+            time = static_cast<long>( model_time / dt );
+      			// output to VTU files
             vtu.OutputDataToVTU(  this->getName().c_str(), vtuOutputProps,"Model", time );
             save_counter = 0;
+         }
+       cout<<"\nModel Time: "<<model_time<<"\tTime Increment: "<<time_increment_<<endl;
+       cout<<"\nMax Time: "<<max_time_<<endl;
+       save_counter++;
 
-        }
-        cout<<"\nModel Time: "<<model_time<<"\tTime Increment: "<<time_increment_<<endl;
-        cout<<"\nMax Time: "<<max_time_<<endl;
-        save_counter++;
-
-        // runtime info
-        cout <<"\nmain: RUNTIME : "<< model_time/dt << endl << endl;
-
+       // runtime info
+       cout <<"\nmain: RUNTIME : "<< model_time/dt << endl << endl;
     }
 
     if(dim==2){
-
         model_->OutputToBinaryFile(this->getName().c_str());//csmp binary results.
-
 
         ModelComparator<dim> comparitor;
 
-        double shouldBeZero( comparitor.CompareVSetsRenumberedNodes((this->getName()+".vset").c_str(), (this->getName()+"_Comparison.vset").c_str(),
-                                                        "saturation water", "saturation water", 
-														"IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt", "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt", true ) );
-
+        double shouldBeZero( comparitor.CompareVSetsRenumberedNodes( (this->getName()+".vset").c_str(),
+                                                                     (this->getName()+"_Comparison.vset").c_str(),
+                                                                     "saturation water", "saturation water",
+														                                         "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt",
+                                                                     "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt" ) );
         VSet<dim> vset_comparison;
         double model_time_comparison(model_time);
         vset_comparison.InputFrom( (this->getName()+"_Comparison.vset").c_str(), model_time_comparison );
@@ -798,27 +783,22 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
         VTU_Interface<dim> vtu_comparison( model_comparison);
         vtu_comparison.OutputDataToVTU( "IncompressibleTwoPhaseFlow_Viscous_Comparison", vtuOutputProps,"Model", time );
 
-
         cout<<"L2 norm of difference for comparison: "<<shouldBeZero<<endl;
-
-
         _equal( shouldBeZero, 0., 1.0E-2 );
-
-	}
-	
-	clock_t end = clock();
+	  }
+	  clock_t end = clock();
 
     //*/****************************************************************************************************
 
     unsigned long millisec ((end - start) * 1000 / CLOCKS_PER_SEC);
 
     cout<<"\nIncompressibleTwoPhaseFlowFractures_Viscous_VVCase:"<<endl;
-    cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double)(millisec)/1000.<<" sec; "<<(double)(millisec)/60000.<<" min; "<<(double)(millisec)/3600000.<<" hours)"<<endl;
+    cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double)(millisec)/1000.<<" sec; ";
+    cout<<(double)(millisec)/60000.<<" min; "<<(double)(millisec)/3600000.<<" hours)"<<endl;
 
     // terminate
     delete steady_state_pressure_solver_;
     cout << "\nThat's it..."<< endl;
-
 
 } // end
 

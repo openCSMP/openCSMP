@@ -1,0 +1,39 @@
+.TH "csmp::BinaryFileHandler< S, T >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::BinaryFileHandler< S, T > \- writes objects and collections thereof to binary file  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <BinaryFileHandler\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBSaveAs\fP (const char *s, const std::vector< S > &obj_list)"
+.br
+.ti -1c
+.RI "void \fBSaveAs\fP (const char *s, const std::map< S, T > &obj_list)"
+.br
+.ti -1c
+.RI "bool \fBRead\fP (const char *s, std::vector< S > &obj_list)"
+.br
+.RI "Objects of type S are added in the \fBvector<double>\fP 'obj_list'\&. "
+.ti -1c
+.RI "bool \fBRead\fP (const char *s, std::map< S, T > &obj_list)"
+.br
+.RI "Objects of type T are read and added in the map 'obj_list' with keys S\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class S, class T>
+.br
+class csmp::BinaryFileHandler< S, T >"writes objects and collections thereof to binary file 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

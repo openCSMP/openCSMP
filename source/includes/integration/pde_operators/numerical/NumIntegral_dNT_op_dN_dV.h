@@ -16,11 +16,9 @@ class NumIntegral_dNT_op_dN_dV : public MathOperatorLHS<dim,CELL> {
                               const char* basic,
                               const char* test );
                               
-    virtual ~NumIntegral_dNT_op_dN_dV();
-    
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
   
-    virtual NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const { return new NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
+    NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const override final { return new NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
     
   protected:
     DenseMatrix<DM_MIN>  B_, BT_;

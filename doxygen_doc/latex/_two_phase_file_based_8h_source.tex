@@ -1,0 +1,121 @@
+\doxysection{Two\+Phase\+File\+Based.\+h}
+\hypertarget{_two_phase_file_based_8h_source}{}\label{_two_phase_file_based_8h_source}\index{source/includes/thmc/two\_phase\_flow/TwoPhaseFileBased.h@{source/includes/thmc/two\_phase\_flow/TwoPhaseFileBased.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWO\_PHASE\_FILE\_BASED\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWO\_PHASE\_FILE\_BASED\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_model_8h}{"{}TwoPhaseModel.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_cubic_spline_8h}{"{}CubicSpline.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ Relative\ Permeability\ model\ based\ on\ text\ file\ input\ of\ Kr\ and\ Pc\ vs.\ Seff}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based}{TwoPhaseFileBased}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{explicit}\ TwoPhaseFileBased(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fileName\ );}
+\DoxyCodeLine{00014\ \ \ \ \ TwoPhaseFileBased(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fileName\ );}
+\DoxyCodeLine{00015\ \ \ \ \ TwoPhaseFileBased(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ seff,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ krn\_Phase,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ krw\_Phase,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ pc\_Phase\ \ );}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~TwoPhaseFileBased();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ ReadFile(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fileName\ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_a0a538cae488693457bfe477d3bebec49}{Initialize}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ );}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ relative\ permeabilities}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_a800d9ba356065bde7281f5f779cc4698}{krn\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_a8dc83cd9c1caa549e35dbfbcd71b177e}{krw\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ derivatives\ of\ relative\ permeabilities}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_a729f1a60f075109ac9808bdbcfe6fef2}{dkrnds\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_a104471b771bb3bd18a61385fa357baaa}{dkrwds\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{//\ derivative\ of\ fractional\ flow\ (advection\ multipliers)}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_a5f1285f5a1b4ef1bf520a7d2f5c78c7c}{dfds}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ maximum\ absolute\ value\ returned\ by\ dfds}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_af29463748abf7912ceb927b0abfed514}{MaxFractionalFlowDerivative}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ derivatives\ of\ rel\ perm\ (advection\ multipliers)}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_ac04c6a12dbac32361d22ae40f1d101da}{dGds}}(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ capillary\ pressure}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_ae5e54696662fbadb7a552c415ad67732}{pc\_Phase}}(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ capillary\ pressure\ derivatives}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_a85c36653f624c372d41d2e3a4edb3934}{dpcds\_Phase}}(\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ inverse\ capillary\ pressure\ function}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_ac0b859236051b315686c05d197350fa9}{Sw\_Phase}}(\ \textcolor{keywordtype}{double}\ pc\_Phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ inverse\ capillary\ pressure\ derivative}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_file_based_aa33bee0e3477343cf806ba4d006ed275}{dsdpc\_Phase}}(\ \textcolor{keywordtype}{double}\ pc\_Phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ int32\_t\ \ writeData();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ TwoPhaseFileBased();}
+\DoxyCodeLine{00059\ \ \ \ \ std::streampos\ \ \ \ findPosition(\ std::ifstream\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ \ \ \ \ int32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ readData();}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ std::string\ \ \ \ \ \ \ catchPhrase\_;}
+\DoxyCodeLine{00063\ \ \ \ \ std::ifstream\ \ \ \ \ relpermFile\_;}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ seff\_;}
+\DoxyCodeLine{00066\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ krw\_;}
+\DoxyCodeLine{00067\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ krn\_;}
+\DoxyCodeLine{00068\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ pc\_;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ GRAVITY\_,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LOWER\_LIMIT\_,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MAX\_CAPILLARY\_PRESSURE\_,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MAX\_CAPILLARY\_PRESSURE\_SLOPE\_;}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_cubic_spline}{CubicSpline}}\ \ \ \ \ \ \ krwCurve\_;}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_cubic_spline}{CubicSpline}}\ \ \ \ \ \ \ krnCurve\_;}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_cubic_spline}{CubicSpline}}\ \ \ \ \ \ \ pcCurve\_;}
+\DoxyCodeLine{00078\ \};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00081\ \textcolor{comment}{@class\ TwoPhaseFileBased\ TwoPhaseFileBased\ "{}two\_phase\_flow/TwoPhaseFileBased.h"{}}}
+\DoxyCodeLine{00082\ \textcolor{comment}{@author\ P.\ Lang}}
+\DoxyCodeLine{00083\ \textcolor{comment}{@author\ Georg\ Seidl}}
+\DoxyCodeLine{00084\ \textcolor{comment}{@date\ May\ 2010}}
+\DoxyCodeLine{00085\ \textcolor{comment}{}}
+\DoxyCodeLine{00086\ \textcolor{comment}{@section\ implementation\ Implementation}}
+\DoxyCodeLine{00087\ \textcolor{comment}{Uses\ csmp::CubicSpline\ to\ interpolate\ and\ compute\ derivatives}}
+\DoxyCodeLine{00088\ \textcolor{comment}{Maybe\ consider\ a\ local\ interpolation\ method\ and\ sacrifice\ derivatives\ for\ speed??}}
+\DoxyCodeLine{00089\ \textcolor{comment}{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{@section\ application\ Application}}
+\DoxyCodeLine{00091\ \textcolor{comment}{Use\ RelPerm\ Excel\ Workbook/GUI\ to\ create\ input\ file.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{}}
+\DoxyCodeLine{00093\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00094\ \textcolor{comment}{TwoPhaseFileBased<DIM>\ relperm\_model(\ model.Database(),\ "{}RelPerms.txt"{}\ );}}
+\DoxyCodeLine{00095\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00096\ \textcolor{comment}{}}
+\DoxyCodeLine{00097\ \textcolor{comment}{@section\ input\ Input\ File}}
+\DoxyCodeLine{00098\ \textcolor{comment}{This\ model\ requires\ a\ input\ file\ in\ the\ following\ format}}
+\DoxyCodeLine{00099\ \textcolor{comment}{}}
+\DoxyCodeLine{00100\ \textcolor{comment}{@code}}
+\DoxyCodeLine{00101\ \textcolor{comment}{...SOME\ TEXT...}}
+\DoxyCodeLine{00102\ \textcolor{comment}{}}
+\DoxyCodeLine{00103\ \textcolor{comment}{seff\ \ \ \ \ \ krw\ \ \ \ \ krn\ \ \ \ \ pc}}
+\DoxyCodeLine{00104\ \textcolor{comment}{0\ .\ \ \ \ \ \ \ 0\ \ \ \ \ \ \ 1\ \ \ \ \ \ \ 400000}}
+\DoxyCodeLine{00105\ \textcolor{comment}{...}}
+\DoxyCodeLine{00106\ \textcolor{comment}{.4\ \ \ \ \ \ \ \ .5\ \ \ \ \ \ .7\ \ \ \ \ \ 30000}}
+\DoxyCodeLine{00107\ \textcolor{comment}{...}}
+\DoxyCodeLine{00108\ \textcolor{comment}{1.\ \ \ \ \ \ \ \ 1.\ \ \ \ \ \ 0.\ \ \ \ \ \ 200}}
+\DoxyCodeLine{00109\ \textcolor{comment}{@endcode}}
+\DoxyCodeLine{00110\ \textcolor{comment}{}}
+\DoxyCodeLine{00111\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ TWO\_PHASE\_FILE\_BASED\_H}}
+
+\end{DoxyCode}

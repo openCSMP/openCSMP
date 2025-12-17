@@ -1,0 +1,91 @@
+\doxysection{MJL\+\_\+functions.\+h}
+\hypertarget{_m_j_l__functions_8h_source}{}\label{_m_j_l__functions_8h_source}\index{source/includes/discretisation/MJL\_functions.h@{source/includes/discretisation/MJL\_functions.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MJL\_FUNCTIONS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MJL\_FUNCTIONS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___triangle3_d_8h}{"{}MJL\_Triangle3D.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_m_j_l___polygon_8h}{"{}MJL\_Polygon.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacemjl}{mjl}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ @file\ CSMP\_definitions.h}}
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{@namespace\ mjl}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@brief\ Mathematical\ Library(Lazlo)}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ @addtogroup\ CSMPglobalFunctions}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ @\{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{///\ convex\ hull\ around\ a\ point\ cloud}}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaea8a18b26b51f566412167647313d90e}{insertionHull}}(\ \textcolor{keyword}{const}\ std::vector<mjl::Point>\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 114}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga4036b26d513b7b8b06e505aecdf6aafb}{starShapedPolygon}}(\ \textcolor{keyword}{const}\ std::vector<mjl::Point>\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 110}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga9855cfe021c08cc1f9bde489be203e1c}{convexPolygonIntersect}}(\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ a,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ b\ );\ \textcolor{comment}{//\ MJL,\ p.\ 158\ \ \ \ }}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga4c5b0d0e367b95ba94568213ac285891}{merge}}(\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 214;}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gacd8af910a04c305310a5c4604717022c}{advance}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \textcolor{keywordtype}{bool}\ );\ \textcolor{comment}{//\ MJL,\ p.\ 159}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keywordtype}{void}\ bridge(\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*,\ \mbox{\hyperlink{classmjl_1_1_vertex}{Vertex}}*,\ \textcolor{keywordtype}{int}\ );\ \ \textcolor{comment}{//\ MJL,\ p.\ 215\ \ }}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keywordtype}{void}\ supportingLine(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*,\ LOCATION\ );\ \textcolor{comment}{//\ MJL,\ p.\ 114}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{comment}{///\ convex\ polygon\ method}}
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga053d54563be9acde49470bd3f6b915fa}{pointInConvexPolygon}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}}\&,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 118}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{comment}{///\ Ray\ shooting\ method\ for\ arbitrary\ polygons}}
+\DoxyCodeLine{00038\ POINT\_CLASSIFICATION\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga64cdb764eca9edf178ab6f150b6ea442}{pointInPolygonRS}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 118}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{///\ signed\ angle\ method\ for\ arbitrary\ polygons\ (NB:\ function\ has\ a\ tolerance\ issue}}
+\DoxyCodeLine{00041\ POINT\_CLASSIFICATION\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaefc5a7c57cb80172558eced9b844ee8f}{pointInPolygonSA}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemjl}{mjl}}::\mbox{\hyperlink{classmjl_1_1_point}{Point}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keywordtype}{bool}\ firstContainsSecondRS(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ );\ \textcolor{comment}{//\ SKM}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ INTERSECTION\ \ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gad0c65e760ab51db4f6d69fc3b3df1275}{lineTriangle3DIntersect}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge3_d}{Edge3D}}\&\ e,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}}\&\ p,\ \textcolor{keywordtype}{double}\&\ t\ );}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}*\ \ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga3842086f8e9c889fda20ec752eb9521e}{project}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_triangle3_d}{Triangle3D}}\&\ p,\ \textcolor{keywordtype}{int}\ h,\ \textcolor{keywordtype}{int}\ v\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keywordtype}{bool}\ clipPolygonToEdge(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ );\ \textcolor{comment}{//\ MJL,\ p.\ 127}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{comment}{///\ variation\ of\ clipPolygonToEdge(),\ MJL,\ p.\ 127}}
+\DoxyCodeLine{00052\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga85e8aa8dcc3d8d4c0dd5040561c42762}{clipEdgeToPolygon}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&,\ \mbox{\hyperlink{classmjl_1_1_edge}{Edge}}\&\ );}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{comment}{//\ inlined\ functions}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00061\ \textcolor{comment}{}}
+\DoxyCodeLine{00062\ \textcolor{comment}{@warning\ polygon\ must\ have\ been\ built\ in\ counterclockwise\ way\ (positive)\ for}}
+\DoxyCodeLine{00063\ \textcolor{comment}{this\ to\ work\ !\ \ }}
+\DoxyCodeLine{00064\ \textcolor{comment}{}}
+\DoxyCodeLine{00065\ \textcolor{comment}{advances\ the\ current\ edge\ of\ polygon\ A\ clockwise\ and\ inserts\ this\ edge's\ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{(destination)\ endpoint\ x\ into\ intersection\ polygon\ R\ in\ counter-\/clockwise\ }}
+\DoxyCodeLine{00067\ \textcolor{comment}{fashion,\ if\ x\ of\ A\ is\ inside\ R\ and\ x\ was\ not\ the\ last\ point\ inserted\ into\ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{R.\ }}
+\DoxyCodeLine{00069\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00070\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gacd8af910a04c305310a5c4604717022c}{advance}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ A,\ \mbox{\hyperlink{classmjl_1_1_polygon}{Polygon}}\&\ R,\ \textcolor{keywordtype}{bool}\ inside\ )}
+\DoxyCodeLine{00071\ \ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ advancing\ A\ clockwise\ (polygon\ was\ built\ counter-\/clockwise)\ }}
+\DoxyCodeLine{00073\ \ \ \ \ A.Advance(CLOCKWISE);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{//\ add\ to\ new\ polygon\ in\ counter-\/clockwise\ fashion}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ inside\ \&\&\ (R.Point()\ !=\ A.Point())\ )\ \ R.Insert(\ A.Point()\ );}
+\DoxyCodeLine{00077\ \ \}}
+\DoxyCodeLine{00078\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00079\ \textcolor{comment}{@\}}}
+\DoxyCodeLine{00080\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \}\ \textcolor{comment}{//\ end\ namespace\ mjl}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,110 @@
+\doxysection{csmp\+::Compute\+Gravity\+Term\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_compute_gravity_term_visitor}{}\label{classcsmp_1_1_compute_gravity_term_visitor}\index{csmp::ComputeGravityTermVisitor$<$ dim $>$@{csmp::ComputeGravityTermVisitor$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Compute\+Gravity\+Term\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=231pt]{classcsmp_1_1_compute_gravity_term_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Compute\+Gravity\+Term\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=231pt]{classcsmp_1_1_compute_gravity_term_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_compute_gravity_term_visitor_a6972dd9181e520eea8047d11d3ac7f7a}\label{classcsmp_1_1_compute_gravity_term_visitor_a6972dd9181e520eea8047d11d3ac7f7a} 
+{\bfseries Compute\+Gravity\+Term\+Visitor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{Two\+Phase\+Model}}$<$ dim $>$ \&saturation\+Functions, const char \texorpdfstring{$\ast$}{*}gravity\+Vector\+Tag, const char \texorpdfstring{$\ast$}{*}permeability\+Tag)
+\item 
+\Hypertarget{classcsmp_1_1_compute_gravity_term_visitor_a1856a1f2a2fec0301a6c04fe3aec78ff}\label{classcsmp_1_1_compute_gravity_term_visitor_a1856a1f2a2fec0301a6c04fe3aec78ff} 
+{\bfseries Compute\+Gravity\+Term\+Visitor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const char \texorpdfstring{$\ast$}{*}gravity\+Vector\+Tag, const char \texorpdfstring{$\ast$}{*}permeability\+Tag, const char \texorpdfstring{$\ast$}{*}viscosity\+Tag, const char \texorpdfstring{$\ast$}{*}density\+Tag)
+\item 
+\Hypertarget{classcsmp_1_1_compute_gravity_term_visitor_a94f3eed66143589f2e533a01b43eeb06}\label{classcsmp_1_1_compute_gravity_term_visitor_a94f3eed66143589f2e533a01b43eeb06} 
+{\bfseries Compute\+Gravity\+Term\+Visitor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} gravity\+Vector, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} permeability, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} viscosity, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} density)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_compute_gravity_term_visitor_a7e0770a6bcfcd39dca3d457a2e4f7936}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}element)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a46449d8a657dbe4a2db5f1126e08323d}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_compute_gravity_term_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_compute_gravity_term_visitor_a7e0770a6bcfcd39dca3d457a2e4f7936}\index{csmp::ComputeGravityTermVisitor$<$ dim $>$@{csmp::ComputeGravityTermVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::ComputeGravityTermVisitor$<$ dim $>$@{csmp::ComputeGravityTermVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_compute_gravity_term_visitor_a7e0770a6bcfcd39dca3d457a2e4f7936} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_compute_gravity_term_visitor}{csmp\+::\+Compute\+Gravity\+Term\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{element}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+two cases are currently supported by the code 1) twophase with gravity on the ELEMENT 2) singlephase with gravity on the ELEMENT\+\_\+\+INTEGRATION\+\_\+\+POINT
+
+projection of a vector g(0,-\/1,0) onto a vector r(r\mbox{[}0\mbox{]},r\mbox{[}1\mbox{]},r\mbox{[}2\mbox{]}) (where \texorpdfstring{$\vert$}{|}r\texorpdfstring{$\vert$}{|}=1) is equal to (r, g)r = -\/r\mbox{[}1\mbox{]} r
+
+r\texorpdfstring{$\ast$}{*}=(r\mbox{[}1\mbox{]}\texorpdfstring{$>$}{>}0.\+0?-\/1\+:1) Note that the direction of the gravity force should be oriented downwards
+
+projection of vector g(0,-\/1, 0) onto a surface with a normal vector n(n\mbox{[}0\mbox{]}, n\mbox{[}1\mbox{]}, n\mbox{[}2\mbox{]}) (where \texorpdfstring{$\vert$}{|}n\texorpdfstring{$\vert$}{|}=1) is equal to n x (n x g) = (n, g) n -\/ g = -\/n\mbox{[}1\mbox{]} n -\/ g ~\newline
+
+
+n\texorpdfstring{$\ast$}{*}=(n\mbox{[}1\mbox{]}\texorpdfstring{$>$}{>}0.\+0?-\/1\+:1) Note that the direction of the gravity force should be oriented downwards
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/two\+\_\+phase\+\_\+flow/Compute\+Gravity\+Term\+Visitor.\+h\item 
+source/modules/thmc/two\+\_\+phase\+\_\+flow/Compute\+Gravity\+Term\+Visitor.\+cpp\end{DoxyCompactItemize}

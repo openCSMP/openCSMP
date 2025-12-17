@@ -1,0 +1,726 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_two_phase_transport_p_h_x" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TwoPhaseTransportPHX</compoundname>
+    <includes refid="_two_phase_transport_p_h_x_8h" local="no">TwoPhaseTransportPHX.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a2aff8a48546372ef96b53825d3ee3c5e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>Model&lt;dim&gt;&amp; csmp::TwoPhaseTransportPHX&lt; dim &gt;::model_ref</definition>
+        <argsstring></argsstring>
+        <name>model_ref</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::model_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="39" column="11" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a53faa8292000bb02aaf6dafefd7e7df2" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_upwind_control_visitor" kindref="compound">UpwindControlVisitor</ref>&lt; dim &gt; &amp;</type>
+        <definition>UpwindControlVisitor&lt;dim&gt;&amp; csmp::TwoPhaseTransportPHX&lt; dim &gt;::UpwindVisitor</definition>
+        <argsstring></argsstring>
+        <name>UpwindVisitor</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::UpwindVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="40" column="26" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1afa30726bce8f59d80708dc0093f20ba9" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref>&lt; dim &gt; &amp;</type>
+        <definition>ExplicitFiniteVolumeTransportPHX&lt;dim&gt;&amp; csmp::TwoPhaseTransportPHX&lt; dim &gt;::fv_transport_vapor</definition>
+        <argsstring></argsstring>
+        <name>fv_transport_vapor</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::fv_transport_vapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="41" column="38" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a26e40de25bf94c315cc2ce03ed66b30e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref>&lt; dim &gt; &amp;</type>
+        <definition>ExplicitFiniteVolumeTransportPHX&lt;dim&gt;&amp; csmp::TwoPhaseTransportPHX&lt; dim &gt;::fv_transport_liquid</definition>
+        <argsstring></argsstring>
+        <name>fv_transport_liquid</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::fv_transport_liquid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="42" column="38" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1abfce9e94f2432e3e328cff2af0a27c94" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseTransportPHX&lt; dim &gt;::cfl_dt</definition>
+        <argsstring></argsstring>
+        <name>cfl_dt</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::cfl_dt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="49" column="15" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a6c705e0b5973c6f6d26a2c382dd1f998" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseTransportPHX&lt; dim &gt;::time_step_factor</definition>
+        <argsstring></argsstring>
+        <name>time_step_factor</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::time_step_factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="49" column="22" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a2137a76ae7b9c1ae6acbde9ae3ab4cac" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseTransportPHX&lt; dim &gt;::upper_shell_T</definition>
+        <argsstring></argsstring>
+        <name>upper_shell_T</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::upper_shell_T</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="50" column="15" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1aa5b7d230fe4f32a75cc1a20612c151ed" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseTransportPHX&lt; dim &gt;::lower_shell_T</definition>
+        <argsstring></argsstring>
+        <name>lower_shell_T</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::lower_shell_T</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="50" column="29" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1aeef5e8a7ef2ccf36ebdd821dd8f1b312" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::tffi_key</definition>
+        <argsstring></argsstring>
+        <name>tffi_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::tffi_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="53" column="25" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a4f991f9873e4e5b8ac7cd7799a741b71" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::tffo_key</definition>
+        <argsstring></argsstring>
+        <name>tffo_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::tffo_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="53" column="34" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a98d62112e2f8bf339bba97894916c68b" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::mlfi_key</definition>
+        <argsstring></argsstring>
+        <name>mlfi_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mlfi_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="54" column="25" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1aee5b1f7cb6d86fc88cd91d4a1bdd9d39" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::mlfo_key</definition>
+        <argsstring></argsstring>
+        <name>mlfo_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mlfo_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="54" column="34" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1abe6b25f86b33878f18f71971ebe219c7" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::mvfi_key</definition>
+        <argsstring></argsstring>
+        <name>mvfi_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mvfi_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="55" column="25" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a5dfc48c28d412ab5d45146e7cc87ec47" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::mvfo_key</definition>
+        <argsstring></argsstring>
+        <name>mvfo_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mvfo_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="55" column="34" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1aacde6e59fe38173cb03b0f0f16fd3311" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::slfi_key</definition>
+        <argsstring></argsstring>
+        <name>slfi_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::slfi_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="56" column="25" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1aabf3fe24cf16d880653fb513463caab5" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::slfo_key</definition>
+        <argsstring></argsstring>
+        <name>slfo_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::slfo_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="56" column="34" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a4f237503cd2e45652333ad35039ee854" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::svfi_key</definition>
+        <argsstring></argsstring>
+        <name>svfi_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::svfi_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="57" column="25" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a1f3c55c60e6f387d659abc3d0b903416" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::svfo_key</definition>
+        <argsstring></argsstring>
+        <name>svfo_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::svfo_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="57" column="34" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a50462ace1ca7450113fc294070908b9c" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::TwoPhaseTransportPHX&lt; dim &gt;::T_key</definition>
+        <argsstring></argsstring>
+        <name>T_key</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::T_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="58" column="25" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1aeec2163eb5fcaf33c5a9118fe7036b68" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::tffi</definition>
+        <argsstring></argsstring>
+        <name>tffi</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::tffi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="60" column="19" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1ac23859b9f2b5bb1887acaeaa2f7f2a62" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::tffo</definition>
+        <argsstring></argsstring>
+        <name>tffo</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::tffo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="60" column="24" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a5a27ede52ac8483b2d878ae80081f345" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::mlfi</definition>
+        <argsstring></argsstring>
+        <name>mlfi</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mlfi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="60" column="29" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a2f8bc5fa54690bf4c943370159f0acf8" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::mlfo</definition>
+        <argsstring></argsstring>
+        <name>mlfo</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mlfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="60" column="34" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1aff689e7e0d7873d038e2e046b8a56e76" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::mvfi</definition>
+        <argsstring></argsstring>
+        <name>mvfi</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mvfi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="60" column="39" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a44a4c4c07b43fa24357d2e08653ce45c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::mvfo</definition>
+        <argsstring></argsstring>
+        <name>mvfo</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::mvfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="60" column="44" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a23c8489c6e49e968fce4f612db7bf4c6" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::slfi</definition>
+        <argsstring></argsstring>
+        <name>slfi</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::slfi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="61" column="21" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1ae52492b647cb82a9d3f7c4bf47a7df1c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::slfo</definition>
+        <argsstring></argsstring>
+        <name>slfo</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::slfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="61" column="26" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a96dba8b95443210175dd00c733688047" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::svfi</definition>
+        <argsstring></argsstring>
+        <name>svfi</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::svfi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="61" column="31" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1a010209af9aeb1896815ea35727ac40c2" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::svfo</definition>
+        <argsstring></argsstring>
+        <name>svfo</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::svfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="61" column="36" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_two_phase_transport_p_h_x_1af35b822dcab044bd80dfa8a5d78db9cb" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::TwoPhaseTransportPHX&lt; dim &gt;::temperature</definition>
+        <argsstring></argsstring>
+        <name>temperature</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::temperature</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="61" column="41" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1ae88631fdb919d0ea34e869f8fd447d0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseTransportPHX&lt; dim &gt;::TwoPhaseTransportPHX</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model, UpwindControlVisitor&lt; dim &gt; &amp;upwind_visitor, ExplicitFiniteVolumeTransportPHX&lt; dim &gt; &amp;fv_vapor, ExplicitFiniteVolumeTransportPHX&lt; dim &gt; &amp;fv_liquid)</argsstring>
+        <name>TwoPhaseTransportPHX</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::TwoPhaseTransportPHX</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_upwind_control_visitor" kindref="compound">UpwindControlVisitor</ref>&lt; dim &gt; &amp;</type>
+          <declname>upwind_visitor</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref>&lt; dim &gt; &amp;</type>
+          <declname>fv_vapor</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref>&lt; dim &gt; &amp;</type>
+          <declname>fv_liquid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="23" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="14" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1ac78148d8e5347425186175e75187fb52" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::TwoPhaseTransportPHX&lt; dim &gt;::~TwoPhaseTransportPHX</definition>
+        <argsstring>()</argsstring>
+        <name>~TwoPhaseTransportPHX</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::~TwoPhaseTransportPHX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>default destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="28" column="13" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="47" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1a240068112a3cc1887405b2c16f858eb7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwoPhaseTransportPHX&lt; dim &gt;::AdvectMassConserved</definition>
+        <argsstring>(const double &amp;time_increment)</argsstring>
+        <name>AdvectMassConserved</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::AdvectMassConserved</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>time_increment</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>main function to coordinate two-phase flow </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="30" column="13" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="61" bodyend="86"/>
+        <references refid="classcsmp_1_1_two_phase_transport_p_h_x_1ac51a53468b6b2e8ad0491ea389afe3c1" compoundref="_two_phase_transport_p_h_x_8cpp" startline="157" endline="161">csmp::TwoPhaseTransportPHX&lt; dim &gt;::UpdateProjection</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1a60f2e022141cb618bb46ecc399656308" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::SetLargestTimeStep</definition>
+        <argsstring>(const double &amp;max_time_step)</argsstring>
+        <name>SetLargestTimeStep</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::SetLargestTimeStep</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>max_time_step</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>modify maximum size of time step </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="31" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="53" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1a3cf131fdc705fc72095be6f741ad037d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::WithGravityComponentLiquidAndVapor</definition>
+        <argsstring>()</argsstring>
+        <name>WithGravityComponentLiquidAndVapor</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::WithGravityComponentLiquidAndVapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>active gravity component </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="32" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="149" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1ac51a53468b6b2e8ad0491ea389afe3c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::UpdateProjection</definition>
+        <argsstring>()</argsstring>
+        <name>UpdateProjection</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::UpdateProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>update projection of velocity onto facet normal </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="33" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="157" bodyend="161"/>
+        <referencedby refid="classcsmp_1_1_two_phase_transport_p_h_x_1a240068112a3cc1887405b2c16f858eb7" compoundref="_two_phase_transport_p_h_x_8cpp" startline="61" endline="86">csmp::TwoPhaseTransportPHX&lt; dim &gt;::AdvectMassConserved</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1a6275a81efc763fbcf06db0578331baef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::AddAdvectionVariable</definition>
+        <argsstring>(const char *new_lhs_liquid, const char *new_rhs_liquid, const char *new_lhs_vapor, const char *new_rhs_vapor)</argsstring>
+        <name>AddAdvectionVariable</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::AddAdvectionVariable</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>new_lhs_liquid</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>new_rhs_liquid</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>new_lhs_vapor</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>new_rhs_vapor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>adding further variables for FV calculations </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="34" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="229" bodyend="234"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1ad179059b1f3fe9631d783d5375d84748" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::DetermineFacetFluxes</definition>
+        <argsstring>()</argsstring>
+        <name>DetermineFacetFluxes</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::DetermineFacetFluxes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>calculating facet fluxes for both phases </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="44" column="11" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="91" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1a63ad76cf56a27ea3a0ed7c8c109e1dca" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::CheckDryFiniteVolumesAndAdjustTimestep</definition>
+        <argsstring>()</argsstring>
+        <name>CheckDryFiniteVolumesAndAdjustTimestep</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::CheckDryFiniteVolumesAndAdjustTimestep</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>checking mass-based time step criterion and adjusting time step if necessary </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="45" column="11" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="100" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1a33b2971b5fbb642538bcc40556f67ee4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::PerformFacetFluxes</definition>
+        <argsstring>()</argsstring>
+        <name>PerformFacetFluxes</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::PerformFacetFluxes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>finalize FV calculations </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="46" column="11" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="139" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_two_phase_transport_p_h_x_1af73e1800af79dbb98b601b1fd26cb7e9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwoPhaseTransportPHX&lt; dim &gt;::TrackFluxes</definition>
+        <argsstring>()</argsstring>
+        <name>TrackFluxes</name>
+        <qualifiedname>csmp::TwoPhaseTransportPHX::TrackFluxes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>special function to track fluxes of magmatic fluids </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="47" column="11" bodyfile="source/modules/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.cpp" bodystart="165" bodyend="225"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>class to handle two-phase flow caclulations of FV part within the CVFEM scheme (Weis et al., Geofluids, 2014). </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Philipp Weis, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:philipp.weis@erdw.ethz.ch">philipp.weis@erdw.ethz.ch</ulink></para>
+<para>@changes changes Latest Changes <linebreak/>
+</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Class for two-phase flow calculations within CVFEM scheme.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>To be used within the CVFEM scheme (Weis et al., Geofluids, 2014).</para>
+<para><programlisting><codeline><highlight class="normal">Controls<sp/>two-phase<sp/>flow<sp/>calculations<sp/>by<sp/>coordating<sp/>flow<sp/>of<sp/>vapor<sp/>and<sp/>liquid<sp/>phase</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title><para>Needs <ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref> and <ref refid="classcsmp_1_1_upwind_control_visitor" kindref="compound">UpwindControlVisitor</ref></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title></sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>testing was done in the period before publication in 2014. </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TwoPhaseTransportPHX&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_two_phase_transport_p_h_x"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" line="20" column="1" bodyfile="source/includes/integration/cvfe_hydrothermal/TwoPhaseTransportPHX.h" bodystart="20" bodyend="62"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a6275a81efc763fbcf06db0578331baef" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>AddAdvectionVariable</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a240068112a3cc1887405b2c16f858eb7" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>AdvectMassConserved</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1abfce9e94f2432e3e328cff2af0a27c94" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>cfl_dt</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a63ad76cf56a27ea3a0ed7c8c109e1dca" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>CheckDryFiniteVolumesAndAdjustTimestep</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1ad179059b1f3fe9631d783d5375d84748" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>DetermineFacetFluxes</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a26e40de25bf94c315cc2ce03ed66b30e" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>fv_transport_liquid</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1afa30726bce8f59d80708dc0093f20ba9" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>fv_transport_vapor</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1aa5b7d230fe4f32a75cc1a20612c151ed" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>lower_shell_T</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a5a27ede52ac8483b2d878ae80081f345" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mlfi</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a98d62112e2f8bf339bba97894916c68b" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mlfi_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a2f8bc5fa54690bf4c943370159f0acf8" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mlfo</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1aee5b1f7cb6d86fc88cd91d4a1bdd9d39" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mlfo_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a2aff8a48546372ef96b53825d3ee3c5e" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>model_ref</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1aff689e7e0d7873d038e2e046b8a56e76" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mvfi</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1abe6b25f86b33878f18f71971ebe219c7" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mvfi_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a44a4c4c07b43fa24357d2e08653ce45c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mvfo</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a5dfc48c28d412ab5d45146e7cc87ec47" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>mvfo_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a33b2971b5fbb642538bcc40556f67ee4" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>PerformFacetFluxes</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a60f2e022141cb618bb46ecc399656308" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>SetLargestTimeStep</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a23c8489c6e49e968fce4f612db7bf4c6" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>slfi</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1aacde6e59fe38173cb03b0f0f16fd3311" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>slfi_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1ae52492b647cb82a9d3f7c4bf47a7df1c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>slfo</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1aabf3fe24cf16d880653fb513463caab5" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>slfo_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a96dba8b95443210175dd00c733688047" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>svfi</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a4f237503cd2e45652333ad35039ee854" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>svfi_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a010209af9aeb1896815ea35727ac40c2" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>svfo</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a1f3c55c60e6f387d659abc3d0b903416" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>svfo_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a50462ace1ca7450113fc294070908b9c" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>T_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1af35b822dcab044bd80dfa8a5d78db9cb" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>temperature</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1aeec2163eb5fcaf33c5a9118fe7036b68" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>tffi</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1aeef5e8a7ef2ccf36ebdd821dd8f1b312" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>tffi_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1ac23859b9f2b5bb1887acaeaa2f7f2a62" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>tffo</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a4f991f9873e4e5b8ac7cd7799a741b71" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>tffo_key</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a6c705e0b5973c6f6d26a2c382dd1f998" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>time_step_factor</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1af73e1800af79dbb98b601b1fd26cb7e9" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>TrackFluxes</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1ae88631fdb919d0ea34e869f8fd447d0f" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>TwoPhaseTransportPHX</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1ac51a53468b6b2e8ad0491ea389afe3c1" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>UpdateProjection</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a2137a76ae7b9c1ae6acbde9ae3ab4cac" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>upper_shell_T</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a53faa8292000bb02aaf6dafefd7e7df2" prot="private" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>UpwindVisitor</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1a3cf131fdc705fc72095be6f741ad037d" prot="public" virt="non-virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>WithGravityComponentLiquidAndVapor</name></member>
+      <member refid="classcsmp_1_1_two_phase_transport_p_h_x_1ac78148d8e5347425186175e75187fb52" prot="public" virt="virtual"><scope>csmp::TwoPhaseTransportPHX</scope><name>~TwoPhaseTransportPHX</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

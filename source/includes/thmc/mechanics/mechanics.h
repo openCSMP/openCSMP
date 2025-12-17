@@ -7,36 +7,27 @@
 
 namespace csmp {
 
-
 void planeStressMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
 
-
-
 void planeStrainMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
-
-
 
 void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
 
 void stiffnessMatrix( double E, DenseMatrix<DM_MIN>& D, double length );
 
 
-
 void planeStressMatrix( const std::vector<ScalarVariable >& E, 
                         const std::vector<ScalarVariable >& nu, 
                         std::vector<DenseMatrix<DM_MIN> >& D );
-
-
 
 void planeStrainMatrix( const std::vector<ScalarVariable >& E, 
                         const std::vector<ScalarVariable >& nu, 
                         std::vector<DenseMatrix<DM_MIN> >& D );
 
-
-
 void stiffnessMatrix( const std::vector<ScalarVariable >& E, 
                       const std::vector<ScalarVariable >& nu, 
                       std::vector<DenseMatrix<DM_MIN> >& D );
+
 
 // by the magnitude of the Eigenvalues
 void sortEigenVectorsAndValues( VectorVariable<2U>& vc, TensorVariable<2U>& ts );
@@ -63,8 +54,6 @@ void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
 void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
                                   const Point<3U>& plane_normal, 
                                   double& sigma_n, VectorVariable<3U>& sigma_s );
-
-
 
 
 

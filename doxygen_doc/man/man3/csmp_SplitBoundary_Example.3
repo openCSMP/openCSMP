@@ -1,0 +1,132 @@
+.TH "csmp::SplitBoundary_Example" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SplitBoundary_Example
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Example\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBRun\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBSpecifications\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "\fBExample\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "void \fBSetTitle\fP (const std::string &text)"
+.br
+.RI "Reporting interface\&. "
+.ti -1c
+.RI "void \fBSetCategory\fP (const std::string &text)"
+.br
+.ti -1c
+.RI "void \fBSetDifficulty\fP (const int &difficulty)"
+.br
+.RI "set function, takes care that 0 < difficulty < 4 "
+.ti -1c
+.RI "void \fBAddDescription\fP (const std::string &text)"
+.br
+.RI "allows to add a descrtiption to an example "
+.ti -1c
+.RI "void \fBAddRequirement\fP (const std::string &text)"
+.br
+.RI "allows to add a requirement to an example (files etc\&.\&.) "
+.ti -1c
+.RI "void \fBAddAuthor\fP (const std::string &text)"
+.br
+.RI "allows to add an author to an example "
+.ti -1c
+.RI "std::string \fBGetTitle\fP () const"
+.br
+.RI "example title return function "
+.ti -1c
+.RI "int \fBGetDifficulty\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::string \fBGetCategory\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsEnd\fP () const"
+.br
+.RI "return function "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "void \fBInitialize\fP ()"
+.br
+.RI "assures db to contain data "
+.ti -1c
+.RI "std::ostream * \fBGetStream\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetStream\fP (std::ostream *ostream)"
+.br
+.ti -1c
+.RI "std::string \fBGetExampleFileName\fP (const char *path)"
+.br
+.ti -1c
+.RI "void \fBCreateWorkingDirectoryAndCopyInputModelFiles\fP (std::string &example_name, std::string &model_name, std::string &variable_file, std::string config_file='')"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::SplitBoundary_Example::Run ()\fR [virtual]\fP"
+Put CSMP code that you would like to test here and run it as part of the example suite\&.
+
+.PP
+Systems Modelling and Design model that calculates the effective stress in a dam, using the gravitational loading and the plane stress assumption\&.
+
+.PP
+input models:
+.IP "\(bu" 2
+slope_model1 
+.PP
+
+.PP
+Implements \fBcsmp::Example\fP\&.
+.SS "void csmp::SplitBoundary_Example::Specifications ()\fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Example\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

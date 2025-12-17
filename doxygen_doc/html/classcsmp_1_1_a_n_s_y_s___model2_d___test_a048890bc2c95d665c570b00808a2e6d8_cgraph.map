@@ -1,0 +1,9 @@
+<map id="csmp::ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D" name="csmp::ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D">
+<area shape="rect" id="Node000001" title="misc checks on boundary flags etc." alt="" coords="5,67,261,123"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_a_n_s_y_s___interface.html#a357122e2aed231fe14d22fa2cc751b7d" title=" " alt="" coords="309,29,474,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,70,293,64,294,69,262,75"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_model_topology.html#aa9ea3b665b4bcbf8a5d4d05f8804cf9a" title="eliminate all model regions other than the ones specified in &#39;*&#45;regions.txt&#39; file" alt="" coords="317,119,466,159"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="261,114,302,121,301,126,261,119"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="343,29,341,19,349,10,366,5,391,3,419,5,436,11,434,16,418,10,391,8,367,10,351,15,346,21,348,28"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="343,119,341,109,349,100,366,94,391,92,419,94,436,101,434,106,418,100,391,97,367,99,351,104,346,110,348,117"/>
+</map>

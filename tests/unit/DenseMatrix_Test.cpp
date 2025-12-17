@@ -33,9 +33,9 @@ void DenseMatrix_Test::run()
         B.Identity();
       if ( verbose_ ) B.Out();
     
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 if ( i==j ) _equal( B(i,j), 1., 1E-6 );
                 else        _equal( B(i,j), 0., 1E-6 );
@@ -106,9 +106,9 @@ void DenseMatrix_Test::run()
         ResC( 3, 2 ) = 4.;
         ResC( 3, 3 ) = 6.;
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 //cout << C(i, j) << "  ";
                 //cout << A(i, j) << endl;

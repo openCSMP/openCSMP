@@ -1,0 +1,426 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_a_p___bool_vector_8cpp" kind="file" language="C++">
+    <compoundname>AP_BoolVector.cpp</compoundname>
+    <includes refid="_a_p___bool_vector_8h" local="yes">AP_BoolVector.h</includes>
+    <includes local="no">memory</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="2">
+        <label>AP_BoolVector.h</label>
+        <link refid="_a_p___bool_vector_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/modules/utilities/AP_BoolVector.cpp</label>
+        <link refid="_a_p___bool_vector_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>algorithm</label>
+      </node>
+      <node id="16">
+        <label>array</label>
+      </node>
+      <node id="14">
+        <label>cassert</label>
+      </node>
+      <node id="9">
+        <label>cctype</label>
+      </node>
+      <node id="12">
+        <label>cfloat</label>
+      </node>
+      <node id="17">
+        <label>chrono</label>
+      </node>
+      <node id="13">
+        <label>climits</label>
+      </node>
+      <node id="4">
+        <label>cmath</label>
+      </node>
+      <node id="8">
+        <label>cstdarg</label>
+      </node>
+      <node id="7">
+        <label>cstddef</label>
+      </node>
+      <node id="46">
+        <label>cstdint</label>
+      </node>
+      <node id="5">
+        <label>cstdio</label>
+      </node>
+      <node id="6">
+        <label>cstdlib</label>
+      </node>
+      <node id="10">
+        <label>cstring</label>
+      </node>
+      <node id="11">
+        <label>ctime</label>
+      </node>
+      <node id="18">
+        <label>deque</label>
+      </node>
+      <node id="19">
+        <label>exception</label>
+      </node>
+      <node id="20">
+        <label>filesystem</label>
+      </node>
+      <node id="21">
+        <label>fstream</label>
+      </node>
+      <node id="22">
+        <label>functional</label>
+      </node>
+      <node id="23">
+        <label>iomanip</label>
+      </node>
+      <node id="24">
+        <label>iostream</label>
+      </node>
+      <node id="25">
+        <label>istream</label>
+      </node>
+      <node id="26">
+        <label>iterator</label>
+      </node>
+      <node id="27">
+        <label>limits</label>
+      </node>
+      <node id="28">
+        <label>list</label>
+      </node>
+      <node id="29">
+        <label>map</label>
+      </node>
+      <node id="30">
+        <label>memory</label>
+      </node>
+      <node id="31">
+        <label>numeric</label>
+      </node>
+      <node id="32">
+        <label>ostream</label>
+      </node>
+      <node id="33">
+        <label>random</label>
+      </node>
+      <node id="34">
+        <label>set</label>
+      </node>
+      <node id="35">
+        <label>sstream</label>
+      </node>
+      <node id="36">
+        <label>stdexcept</label>
+      </node>
+      <node id="37">
+        <label>string</label>
+      </node>
+      <node id="39">
+        <label>type_traits</label>
+      </node>
+      <node id="38">
+        <label>typeinfo</label>
+      </node>
+      <node id="43">
+        <label>unordered_map</label>
+      </node>
+      <node id="42">
+        <label>unordered_set</label>
+      </node>
+      <node id="40">
+        <label>utility</label>
+      </node>
+      <node id="41">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//<sp/>include<sp/>declarations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;AP_BoolVector.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;memory&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="classcsmp_1_1_bool_vector_1aa0bcc3f1916606845b69a653b1d260e0" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_bool_vector_1af3891bb3077a33a74c6a11763200e59e" kindref="member">BoolVector::BoolVector</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uSize)<sp/>:</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/>pBits_<sp/>(NULL),</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/>uSize_<sp/>(uSize)<sp/></highlight></codeline>
+<codeline lineno="14"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(<sp/>uSize<sp/>!=<sp/>0<sp/>)<sp/></highlight><highlight class="comment">//if<sp/>not,<sp/>it<sp/>will<sp/>allocate<sp/>1<sp/>byte<sp/>although<sp/>empty</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/>pBits_<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>uint8_t[uSize/8+1];</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>uSize/8+1<sp/>is<sp/>the<sp/>byte<sp/>size</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>initialize<sp/>everything<sp/>to<sp/>false<sp/><sp/><sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/>memset(pBits_,0,<sp/>uSize/8+1);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/>}<sp/></highlight></codeline>
+<codeline lineno="23"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28" refid="classcsmp_1_1_bool_vector_1a6ff02d4ce8c31b58a02b83732e22d45f" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_bool_vector_1af3891bb3077a33a74c6a11763200e59e" kindref="member">BoolVector::BoolVector</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_bool_vector_1af3891bb3077a33a74c6a11763200e59e" kindref="member">BoolVector</ref>&amp;<sp/>bv)<sp/>:</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/>pBits_<sp/>(NULL),</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/>uSize_<sp/>(bv.uSize_)<sp/></highlight></codeline>
+<codeline lineno="31"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(<sp/>uSize_<sp/>!=<sp/>0<sp/>)<sp/></highlight><highlight class="comment">//special<sp/>case</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/>pBits_<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>uint8_t[uSize_/8+1];</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>copy<sp/>bits</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/>memcpy(pBits_,bv.pBits_,uSize_/8+1);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/>}<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44" refid="classcsmp_1_1_bool_vector_1a32fa221a797cfd5a7fb51c9e0c4ce8c6" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_bool_vector_1af3891bb3077a33a74c6a11763200e59e" kindref="member">BoolVector</ref>&amp;<sp/><ref refid="classcsmp_1_1_bool_vector_1a32fa221a797cfd5a7fb51c9e0c4ce8c6" kindref="member">BoolVector::operator=</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_bool_vector_1af3891bb3077a33a74c6a11763200e59e" kindref="member">BoolVector</ref>&amp;<sp/>bv<sp/>)</highlight></codeline>
+<codeline lineno="45"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>&amp;bv<sp/>!=<sp/></highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>uSize_<sp/>=<sp/>bv.uSize_;<sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(<sp/>pBits_<sp/>!=<sp/>NULL<sp/>)<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal"><sp/>[]<sp/>pBits_;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(<sp/>uSize_<sp/>==<sp/>0<sp/>)<sp/>pBits_<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uHowManyBytes<sp/>(<sp/>bv.uSize_/8+1<sp/>);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pBits_<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>uint8_t[uHowManyBytes];</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(pBits_,bv.pBits_,uHowManyBytes);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65" refid="classcsmp_1_1_bool_vector_1af3891bb3077a33a74c6a11763200e59e" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_bool_vector_1af3891bb3077a33a74c6a11763200e59e" kindref="member">BoolVector::BoolVector</ref>()<sp/>:</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/>pBits_<sp/>(<sp/>NULL<sp/>),</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/>uSize_<sp/>(<sp/>0U<sp/>)</highlight></codeline>
+<codeline lineno="68"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="69"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73" refid="classcsmp_1_1_bool_vector_1a8e178bcb783148109c9251b16c657f65" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_bool_vector_1a8e178bcb783148109c9251b16c657f65" kindref="member">BoolVector::~BoolVector</ref>()</highlight></codeline>
+<codeline lineno="74"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">[]<sp/>pBits_;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>BoolVector::Size()</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="81"><highlight class="keyword"></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uSize_;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90" refid="classcsmp_1_1_bool_vector_1ac0bee613cc7b07375ec9797d4d97e849" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_bool_vector_1ac0bee613cc7b07375ec9797d4d97e849" kindref="member">BoolVector::SetBit</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uOffset,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>bValue)</highlight></codeline>
+<codeline lineno="91"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/>(bValue<sp/>!=<sp/>0)<sp/>?<sp/>*(pBits_<sp/>+<sp/>(uOffset<sp/>&gt;&gt;<sp/>3))<sp/>|=<sp/><sp/>(1<sp/>&lt;&lt;<sp/>(uOffset<sp/>&amp;<sp/>0x7))<sp/>:<sp/></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>*(pBits_<sp/>+<sp/>(uOffset<sp/>&gt;&gt;<sp/>3))<sp/>&amp;=<sp/>~(1<sp/>&lt;&lt;<sp/>(uOffset<sp/>&amp;<sp/>0x7));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="94"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101" refid="classcsmp_1_1_bool_vector_1a92048db061ce79230b8b69bb61ffa15c" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_bool_vector_1a92048db061ce79230b8b69bb61ffa15c" kindref="member">BoolVector::GetBit</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uOffset)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="102"><highlight class="keyword"></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>((*(pBits_<sp/>+<sp/>(uOffset<sp/>&gt;&gt;<sp/>3))<sp/>&amp;<sp/>(1<sp/>&lt;&lt;<sp/>(uOffset<sp/>&amp;<sp/>0x7)))<sp/>!=<sp/>0);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112" refid="classcsmp_1_1_bool_vector_1ab5630fa85af9e12464486b0b6bd840ff" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_bool_vector_1ab5630fa85af9e12464486b0b6bd840ff" kindref="member">BoolVector::Resize</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uSize)</highlight></codeline>
+<codeline lineno="113"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(<sp/>uSize<sp/>==<sp/>0<sp/>)<sp/></highlight><highlight class="comment">//special<sp/>case</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>uSize_<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(pBits_<sp/>!=<sp/>NULL)</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">[]<sp/>pBits_;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>pBits_<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/>}<sp/><sp/></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uByteSize(uSize/8+1);<sp/></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uCurrentByteSize(uSize_/8+1);<sp/></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//remember<sp/>old<sp/>bit<sp/>container<sp/>ptr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/>uint8_t<sp/>*<sp/>pBits_Tmp<sp/>=<sp/>pBits_;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//compute<sp/>how<sp/>many<sp/>to<sp/>copy</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uHowMany(std::min(uCurrentByteSize,uByteSize));</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//resize<sp/>bit<sp/>container</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/>pBits_<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>uint8_t[uByteSize];</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//initiallize<sp/>to<sp/>false</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/>memset(pBits_,0,uByteSize);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>copy<sp/>old<sp/>info<sp/>that<sp/>fits<sp/>&amp;<sp/>delete<sp/>temp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pBits_Tmp<sp/>!=<sp/>NULL)</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>memcpy(pBits_,pBits_Tmp,uHowMany);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">[]<sp/>pBits_Tmp;</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//set<sp/>new<sp/>size</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/>uSize_=uSize;</highlight></codeline>
+<codeline lineno="150"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="156" refid="classcsmp_1_1_bool_vector_1a3037d715fd022378b6f1a75a9a6a5569" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_bool_vector_1a3037d715fd022378b6f1a75a9a6a5569" kindref="member">BoolVector::SetAll</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>value)</highlight></codeline>
+<codeline lineno="157"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pBits_!=NULL)</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>uByteSize(uSize_/8+1);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/>memset(pBits_,(value?255:0),uByteSize);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="163"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>BoolVector::Out()</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="168"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nBoolVector::Out:<sp/>not<sp/>defined<sp/>yet.&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="172"><highlight class="normal">}<sp/></highlight><highlight class="comment">//end<sp/>of<sp/>namespace<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/modules/utilities/AP_BoolVector.cpp"/>
+  </compounddef>
+</doxygen>

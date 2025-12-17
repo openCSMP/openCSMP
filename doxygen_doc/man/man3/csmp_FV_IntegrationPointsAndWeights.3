@@ -1,0 +1,118 @@
+.TH "csmp::FV_IntegrationPointsAndWeights< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FV_IntegrationPointsAndWeights< dim > \- Data class that contains all information required to initialize the FiniteElementStencil objects containing the node-centered FV parametric space representations matching the different isoparametric finite element types in CSMP\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FV_IntegrationPointsAndWeights\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFV_IntegrationPointsAndWeights\fP (\fBCSMP_FEM_TYPE\fP type=ISOPARAMETRIC_LINEAR_TRIANGLE)"
+.br
+.ti -1c
+.RI "void \fBFacetIntegrationPoints\fP (std::vector< std::vector< \fBPoint\fP< dim > > > &facet_integration_points) const"
+.br
+.ti -1c
+.RI "void \fBFacetIntegrationWeights\fP (std::vector< std::vector< double > > &facet_integration_weights) const"
+.br
+.ti -1c
+.RI "void \fBSectorIntegrationPoints\fP (std::vector< std::vector< \fBPoint\fP< dim > > > &volume_integration_points) const"
+.br
+.ti -1c
+.RI "void \fBSectorIntegrationWeights\fP (std::vector< std::vector< double > > &volume_integration_weights) const"
+.br
+.ti -1c
+.RI "void \fBProjectionWeights\fP (std::vector< std::vector< double > > &projection_weights) const"
+.br
+.ti -1c
+.RI "void \fBFacetNormals\fP (std::vector< \fBPoint\fP< dim > > &facet_normals) const"
+.br
+.ti -1c
+.RI "void \fBFacetNormalTransformations\fP (std::vector< std::vector< std::pair< double, double > > > &facet_normal_xforms) const"
+.br
+.ti -1c
+.RI "void \fBFacetsSurroundingNode\fP (std::vector< std::vector< uint32_t > > &facets_surrounding_node) const"
+.br
+.ti -1c
+.RI "void \fBEdgePairs\fP (std::vector< std::pair< uint32_t, uint32_t > > &edges_of_element) const"
+.br
+.ti -1c
+.RI "void \fBEdgeMidpoints\fP (std::vector< \fBPoint\fP< dim > > &rst_facet_edge_midpoints) const"
+.br
+.ti -1c
+.RI "void \fBBarycenter\fP (\fBPoint\fP< dim > &rst_barycenter) const"
+.br
+.ti -1c
+.RI "void \fBFacetPoints\fP (std::vector< std::vector< \fBPoint\fP< dim > > > &rst_facet_points) const"
+.br
+.ti -1c
+.RI "void \fBFacetTypes\fP (std::vector< FV_FACET_TYPE > &facet_types) const"
+.br
+.ti -1c
+.RI "void \fBSectorPoints\fP (std::vector< std::vector< \fBPoint\fP< dim > > > &rst_sector_points) const"
+.br
+.ti -1c
+.RI "void \fBSectorEdgePairs\fP (std::vector< std::vector< std::pair< uint32_t, uint32_t > > > &edges_of_sector) const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::FV_IntegrationPointsAndWeights< dim >"Data class that contains all information required to initialize the FiniteElementStencil objects containing the node-centered FV parametric space representations matching the different isoparametric finite element types in CSMP\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&.K\&. Matthaei 
+
+.PP
+S\&. Geiger 
+
+.PP
+A\&.A\&.Mezentsev 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2003
+.RE
+.PP
+Class fills in the C-type arrays of tabulated integration points and weights for further use in inplementation of the CVPEM method in CSMP\&. Characteristic feature of the class is consistent support of the mixed (poly-element) mesh\&.
+.SH "Functionality"
+.PP
+Generates positions of integration points and corresponding weights for numerical integration routines 
+.br
+.SH "Motivation"
+.PP
+Part of a consistent framework for generation of the Finite Element/Finite Volume method in CSP\&. Uses the concept of
+.SH "Implementation"
+.PP
+Using the template specialization mechanism of C++, the class is implemented for different floating point types\&. Currently the class is supporting linear iso-parametric family of Finite Elements with reduced polynomial interpolation basis \&.
+.SH "Application Examples"
+.PP
+No specific application examples are required, as the method is basically called once in the \fBFiniteVolumeStencil\fP class of the great code CSMP\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::FV_IntegrationPointsAndWeights\fP< dim >::FV_IntegrationPointsAndWeights (\fBCSMP_FEM_TYPE\fP typeOfElement = \fRISOPARAMETRIC_LINEAR_TRIANGLE\fP)\fR [explicit]\fP"
+Public constructor of the \fBFV_IntegrationPointsAndWeights\fP class\&. As default constructor of the class is declares private, this constructor should be used in all cases\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fItypeOfElement\fP type of Finite \fBElement\fP in CSMP 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

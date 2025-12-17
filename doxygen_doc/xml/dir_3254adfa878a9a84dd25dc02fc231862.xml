@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_3254adfa878a9a84dd25dc02fc231862" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir</compoundname>
+    <innerdir refid="dir_aad843911be25ec580a9b28468429830">build/CMakeFiles/open-csmp-core.dir/source</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/"/>
+  </compounddef>
+</doxygen>

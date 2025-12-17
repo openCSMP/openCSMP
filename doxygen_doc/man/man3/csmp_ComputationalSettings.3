@@ -1,0 +1,209 @@
+.TH "csmp::ComputationalSettings" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ComputationalSettings \- base class for generic configurations  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ComputationalSettings\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBComputationalSettings\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetOutputTimes\fP (const std::set< double > &times, bool overwrite=true)"
+.br
+.ti -1c
+.RI "void \fBAddOutputTime\fP (double time)"
+.br
+.ti -1c
+.RI "bool \fBIsOutputTime\fP (double time, double tolerance) const"
+.br
+.ti -1c
+.RI "double \fBTimeToNearestOutputTime\fP (double current_time) const"
+.br
+.ti -1c
+.RI "double \fBNearestOutputTime\fP (double current_time) const"
+.br
+.ti -1c
+.RI "size_t \fBOutputTimePosition\fP (double time)"
+.br
+.ti -1c
+.RI "void \fBSetMonitorTimes\fP (const std::set< double > &times, bool overwrite=true)"
+.br
+.ti -1c
+.RI "void \fBAddMonitorTime\fP (double time)"
+.br
+.ti -1c
+.RI "bool \fBIsMonitorTime\fP (double time, double tolerance) const"
+.br
+.ti -1c
+.RI "double \fBTimeToNearestMonitorTime\fP (double current_time) const"
+.br
+.ti -1c
+.RI "double \fBNearestMonitorTime\fP (double current_time) const"
+.br
+.ti -1c
+.RI "size_t \fBMonitorTimePosition\fP (double time)"
+.br
+.ti -1c
+.RI "void \fBDuration\fP (double duration)"
+.br
+.ti -1c
+.RI "double \fBDuration\fP () const"
+.br
+.ti -1c
+.RI "void \fBTimeSteppingApproach\fP (TIME_STRATEGY time_stepping_approach)"
+.br
+.ti -1c
+.RI "TIME_STRATEGY \fBTimeSteppingApproach\fP () const"
+.br
+.ti -1c
+.RI "void \fBTimeIncrement\fP (double)"
+.br
+.ti -1c
+.RI "double \fBTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "void \fBEstablishMultipliers\fP (double &pf_multiplier, double &adv_multiplier) const"
+.br
+.RI "based on the time-stepping strategy, pressure-step and saturation step multipliers are suggested "
+.ti -1c
+.RI "template<uint32_t dim> double \fBTimeIncrementFromVelocityChange\fP (const \fBModel\fP< dim > &sg, double log_velocity_change, double current_delta_t, double max_delta_t)"
+.br
+.RI "algorithm that monitors the flow velocity change from timestep to timestep and suggests a timeincrement on this basis "
+.ti -1c
+.RI "void \fBRemoveAllOutputtimes\fP ()"
+.br
+.ti -1c
+.RI "void \fBRemoveAllMonitortimes\fP ()"
+.br
+.ti -1c
+.RI "double \fBPopOutputTime\fP ()"
+.br
+.RI "step through output times "
+.ti -1c
+.RI "std::set< double >::const_iterator \fBOutputTimesBegin\fP () const"
+.br
+.ti -1c
+.RI "std::set< double >::const_iterator \fBOutputTimesEnd\fP () const"
+.br
+.ti -1c
+.RI "double \fBPopMonitorTime\fP ()"
+.br
+.RI "step through monitor times "
+.ti -1c
+.RI "std::set< double >::const_iterator \fBMonitorTimesBegin\fP () const"
+.br
+.ti -1c
+.RI "std::set< double >::const_iterator \fBMonitorTimesEnd\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBOut\fP (const char *filename) const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+base class for generic configurations 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ComputationalSettings::ComputationalSettings ()"
+The default constructor sets the time stepping strategy to conservative and the run duration to zero\&. No output times are entered into the output time set\&. 
+.br
+
+.PP
+The default time increment is 60 seconds\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void ComputationalSettings::AddMonitorTime (double time)"
+Adds a new output time increment to the current set of output times\&. 
+.SS "void ComputationalSettings::AddOutputTime (double time)"
+Adds a new output time increment to the current set of output times\&. 
+.SS "double ComputationalSettings::Duration () const"
+Returns the scheduled duration of the current simulation\&. 
+.SS "void ComputationalSettings::Duration (double duration)"
+Sets the duration of the current run to the argument value\&. 
+.SS "void ComputationalSettings::EstablishMultipliers (double & pf_multiplier, double & adv_multiplier) const"
+
+.PP
+based on the time-stepping strategy, pressure-step and saturation step multipliers are suggested Changes the supplied arguments pf- and advection multiplier to reflect the user-defined timestepping approach; options are:
+
+.PP
+pedantic, conservative, moderate=normal, aggressive, daring, prescribed 
+.br
+.SH "Input Arguments"
+.PP
+The strategy chosen by the user with the options:
+
+.PP
+.PP
+.nf
+PEDANTIC, CONSERVATIVE, MODERATE, AGGRESSIVE, DARING\&.
+.fi
+.PP
+
+.PP
+The fluid pressure solve frequency multiplier and a multiplier that decides by how much the Courant number shall be overstepped\&. The latter must be <= 1 if the explicit advection scheme is used\&. 
+.SS "bool ComputationalSettings::IsMonitorTime (double value, double tol) const"
+Checks whether the nearest time-increment lies within the user-specified tolerance\&. If so the method returns true, else false\&. 
+.SS "bool ComputationalSettings::IsOutputTime (double value, double tol) const"
+Checks whether the nearest time-increment lies within the user-specified tolerance\&. If so the method returns true, else false\&. 
+.SS "double ComputationalSettings::NearestMonitorTime (double current_time) const"
+Returns the nearest registered monitoring time step with respect to the current_time\&. 
+.SS "double ComputationalSettings::NearestOutputTime (double current_time) const"
+Returns the nearest registered output time step with respect to the current_time\&. 
+.SS "void ComputationalSettings::Out () const\fR [virtual]\fP"
+Prints the current computational settings to screen\&. 
+.SS "void ComputationalSettings::Out (const char * filename) const\fR [virtual]\fP"
+Writes the current run parameters to the ASCII text file that the user specifies as the first method argument\&. 
+.SS "double ComputationalSettings::PopOutputTime ()"
+
+.PP
+step through output times Increments the time-step iterator to the next stored output time and returns the corresponding time value\&. 
+.SS "void ComputationalSettings::SetMonitorTimes (const std::set< double > & times, bool overwrite = \fRtrue\fP)"
+Permits the user to enter a series of unique monitoring times as supplied in the argument set\&. Either over-writing or adding to existing list is optional\&. Overwrite is the default settings\&. 
+.SS "void ComputationalSettings::SetOutputTimes (const std::set< double > & times, bool overwrite = \fRtrue\fP)"
+Permits the user to enter a series of unique output times as supplied in the argument set\&. Either over-writing or adding to existing list is optional\&. Overwrite is the default settings\&. 
+.SS "template<uint32_t dim> template double ComputationalSettings::TimeIncrementFromVelocityChange< 3U > (const \fBModel\fP< dim > & sg, double log_velocity_change, double current_delta_t, double max_delta_t)"
+
+.PP
+algorithm that monitors the flow velocity change from timestep to timestep and suggests a timeincrement on this basis Calculates the maximum permissible time increment based on the current change in velocity and the maximum allowed change in velocity for the next time step\&. If the velocity does not change, the maximum time increment provided by the user is returned\&. The variables "volume flux" and "previous volume flux" are compared and must be computed by the user in the main program\&. The velocity change is only computed if the velocity is below a minimum threshold (1\&.0e-15 m/s)\&. 
+.br
+.SH "Input Arguments"
+.PP
+.IP "\(bu" 2
+The allowed velocity change (in log units)
+.IP "\(bu" 2
+The current time increment (in sec)
+.IP "\(bu" 2
+The maximum time increment (in sec)\&. 
+.PP
+
+.SS "TIME_STRATEGY ComputationalSettings::TimeSteppingApproach () const"
+Returns the current time stepping approach as captured by one of the switches of the enumeration TIME_STRATEGY:
+
+.PP
+.PP
+.nf
+PEDANTIC, CONSERVATIVE, MODERATE, AGGRESSIVE, DARING
+.fi
+.PP
+ 
+.SS "void ComputationalSettings::TimeSteppingApproach (TIME_STRATEGY time_stepping_approach)"
+Sets the time-stepping strategy parameter\&. 
+.SS "double ComputationalSettings::TimeToNearestMonitorTime (double current_time) const"
+Returns time difference to closest monitor time as currently stored by the object\&. If the output time occurs in the past, the time difference would be negative but it is not considered\&. Only output times which occur in the future are considered and they are all positive\&. 
+.SS "double ComputationalSettings::TimeToNearestOutputTime (double current_time) const"
+Returns time difference to closest output time as currently stored by the object\&. If the output time occurs in the past, the time difference would be negative but it is not considered\&. Only output times which occur in the future are considered and they are all positive\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

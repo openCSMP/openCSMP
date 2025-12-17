@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_c68f5f1e6039abb525abf9816f603073" kind="dir">
+    <compoundname>source/modules/property_manipulation</compoundname>
+    <innerdir refid="dir_41c0fd3cb26d7e59dab2d4cb2fcd9fb5">source/modules/property_manipulation/interrelations</innerdir>
+    <innerfile refid="property__manipulation_2_field_variable_8cpp">FieldVariable.cpp</innerfile>
+    <innerfile refid="_material_8cpp">Material.cpp</innerfile>
+    <innerfile refid="_maximum_difference_8cpp">MaximumDifference.cpp</innerfile>
+    <innerfile refid="named_property_values_to_regions_8cpp">namedPropertyValuesToRegions.cpp</innerfile>
+    <innerfile refid="nearest_neighbor_fill_8cpp">nearestNeighborFill.cpp</innerfile>
+    <innerfile refid="point_property_mapping_8cpp">pointPropertyMapping.cpp</innerfile>
+    <innerfile refid="_point_property_to_cell_mapper2_d_8cpp">PointPropertyToCellMapper2D.cpp</innerfile>
+    <innerfile refid="_property_handle_8cpp">PropertyHandle.cpp</innerfile>
+    <innerfile refid="smooth_element_data_8cpp">smoothElementData.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/property_manipulation/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,80 @@
+\doxysection{Inter\+Face\+\_\+\+Test.\+h}
+\hypertarget{_inter_face___test_8h_source}{}\label{_inter_face___test_8h_source}\index{tests/unit/InterFace\_Test.h@{tests/unit/InterFace\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_INTERFACE\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_inter_face_8h}{"{}InterFace.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ Tests\ the\ construction\ of\ InterFace\ via\ its\ constructors\ and\ reconstructors}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ \ \ \ as\ well\ as\ the\ functionality\ of\ the\ interface.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ \ \ \ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ \ \ \ @todo\ only\ 2D\ so\ far;\ expand\ to\ 3D.\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test}{InterFace\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ InterFace\_Test();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \string~InterFace\_Test();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_a08f84748e0d6617b5016ea041c5da2f5}{run}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_a57a5460a60788cd424c21cf9a2fadee5}{Assign\_tests}}();}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_a932961b6114dcac19b5c887889c82da7}{Geometry\_tests}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_ae78896c92f9f07abb16fe93f2040d35d}{NodeCoordinateMatrix\_linear\_test}}();}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_ae8b8eef2ff710176a5f7f5ccfe89201f}{Assign\_Geometry\_quadratic\_test}}();}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_a3c7674dab26b361276b55176e88c3764}{Assign\_Geometry\_quadratic2\_test}}();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_a290c0ca75b53600098b9501dd26c1115}{Assign\_tests\_linear\_3D}}();}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///Data\ for\ test}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_a6ce9953efdd05501aff554771af576e7}{ConstructInterFaceIngredients}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_in,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_out,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in0,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in1,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in2,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out0,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out1,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out2,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_in1,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_in2,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_ou1,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_ou2\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_inter_face___test_aba2095a16a3a2f50d0ebcdca6d13108e}{ConstructInterFaceIngredients\_quadratic}}(\ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_in,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_out,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in0,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in1,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in2,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out0,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out1,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out2,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_in1,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_in2,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_ou1,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<2>\ \&e\_nb\_ou2,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in3,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in4,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_in5,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out3,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out4,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<2>\ \&n\_out5);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ ConstructInterFaceIngredients\_3D(\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3>\ \&e\_in,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3>\ \&e\_out,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_in0,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_in1,\ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_in2,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_in4,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_out0,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_out1,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_out2,\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3>\ \&n\_out4,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3>\ \&e\_nb\_in1,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3>\ \&e\_nb\_in2,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3>\ \&e\_nb\_ou1,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3>\ \&e\_nb\_ou2\ );}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00070\ \};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \}\ \textcolor{comment}{//end\ csmp}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

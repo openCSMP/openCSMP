@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_cd7a448e5c16e17955dd008163ffcdf4" kind="dir">
+    <compoundname>source/modules</compoundname>
+    <innerdir refid="dir_e2a09840eaf529cba9d8ee10872d893f">source/modules/analysis</innerdir>
+    <innerdir refid="dir_d95ca8d951d556c89d3741da14552e1a">source/modules/discretisation</innerdir>
+    <innerdir refid="dir_7f088ea300fc1d54a550d5fd3146720f">source/modules/eos</innerdir>
+    <innerdir refid="dir_2fc4097498a17e61c787a4e85a1bfcff">source/modules/integration</innerdir>
+    <innerdir refid="dir_db2d7fb0fe392299cfc62677f79a1da1">source/modules/interfaces</innerdir>
+    <innerdir refid="dir_35bea275ef5e0f679b39daa32c433e13">source/modules/math</innerdir>
+    <innerdir refid="dir_e5a129ed37ea9f2fba4a008814fd6edc">source/modules/model</innerdir>
+    <innerdir refid="dir_c68f5f1e6039abb525abf9816f603073">source/modules/property_manipulation</innerdir>
+    <innerdir refid="dir_94ed16babfb90c9d2ef20871f2b5bf4c">source/modules/regular_grids</innerdir>
+    <innerdir refid="dir_89543f396753cd93a3cffeda4f273909">source/modules/run_control</innerdir>
+    <innerdir refid="dir_f47205743536733516fb9a75fa760580">source/modules/thmc</innerdir>
+    <innerdir refid="dir_996dec4d05b23f413574717bad262f0e">source/modules/utilities</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/"/>
+  </compounddef>
+</doxygen>

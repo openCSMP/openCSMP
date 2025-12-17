@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_parallel___test_case" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Parallel_TestCase</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_parallel___test_case_1a1cf78d23557137dde244e0b124e6f41e" prot="private" static="no" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::Parallel_TestCase::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::Parallel_TestCase::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Parallel_TestCase.h" line="24" column="18" bodyfile="tests/unit/Parallel_TestCase.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_parallel___test_case_1a96426e650a508098458b9d2e74b9d989" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Parallel_TestCase::Parallel_TestCase</definition>
+        <argsstring>(bool verbose)</argsstring>
+        <name>Parallel_TestCase</name>
+        <qualifiedname>csmp::Parallel_TestCase::Parallel_TestCase</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Parallel_TestCase.h" line="16" column="7" bodyfile="tests/unit/Parallel_TestCase.h" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_parallel___test_case_1a3866c581f9f74eb1841c37ff8dd03fa8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Parallel_TestCase::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::Parallel_TestCase::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Parallel_TestCase.h" line="18" column="20" bodyfile="tests/unit/Parallel_TestCase.cpp" bodystart="18" bodyend="135"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_parallel___test_case_1a2c0f48d96af5a29b27c41780edb8d316" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Parallel_TestCase::UpdateFlowProps</definition>
+        <argsstring>(Model&lt; 3 &gt; &amp;model, TwoPhaseModel&lt; 3 &gt; &amp;saturationFunctions)</argsstring>
+        <name>UpdateFlowProps</name>
+        <qualifiedname>csmp::Parallel_TestCase::UpdateFlowProps</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3 &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; 3 &gt; &amp;</type>
+          <declname>saturationFunctions</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Parallel_TestCase.h" line="21" column="12" bodyfile="tests/unit/Parallel_TestCase.cpp" bodystart="139" bodyend="169"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_parallel___test_case_1a0aea3279b90705f1fde5f4504c555295" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Parallel_TestCase::ComputeTotalVelocity</definition>
+        <argsstring>(csmp::Model&lt; 3U &gt; &amp;model) const</argsstring>
+        <name>ComputeTotalVelocity</name>
+        <qualifiedname>csmp::Parallel_TestCase::ComputeTotalVelocity</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">csmp::Model</ref>&lt; 3U &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Parallel_TestCase.h" line="22" column="12" bodyfile="tests/unit/Parallel_TestCase.cpp" bodystart="173" bodyend="202"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::Parallel_TestCase</label>
+        <link refid="classcsmp_1_1_parallel___test_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Parallel_TestCase</label>
+        <link refid="classcsmp_1_1_parallel___test_case"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/Parallel_TestCase.h" line="13" column="3" bodyfile="tests/unit/Parallel_TestCase.h" bodystart="14" bodyend="25"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_parallel___test_case_1a0aea3279b90705f1fde5f4504c555295" prot="private" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>ComputeTotalVelocity</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_parallel___test_case_1a96426e650a508098458b9d2e74b9d989" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>Parallel_TestCase</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::Parallel_TestCase</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_parallel___test_case_1a3866c581f9f74eb1841c37ff8dd03fa8" prot="public" virt="virtual"><scope>csmp::Parallel_TestCase</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_parallel___test_case_1a2c0f48d96af5a29b27c41780edb8d316" prot="private" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>UpdateFlowProps</name></member>
+      <member refid="classcsmp_1_1_parallel___test_case_1a1cf78d23557137dde244e0b124e6f41e" prot="private" virt="non-virtual"><scope>csmp::Parallel_TestCase</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::Parallel_TestCase</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,55 @@
+\doxysection{Num\+Integral\+\_\+\+NT\+\_\+op1\+\_\+op2\+\_\+d\+Ni\+\_\+d\+V.\+h}
+\hypertarget{_num_integral___n_t__op1__op2__d_ni__d_v_8h_source}{}\label{_num_integral___n_t__op1__op2__d_ni__d_v_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_NT\_op1\_op2\_dNi\_dV.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_NT\_op1\_op2\_dNi\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NumIntegral\_NT\_op1\_op2\_dNi\_dV\_h}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NumIntegral\_NT\_op1\_op2\_dNi\_dV\_h}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@date\ 2005}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{gravity\ term\ in\ transient\ flow:\ -\/S\ /\ dt\ \ +\ \ K\ \ \ \ \ g\ \ \ delta\_rho\ grad\ Z}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mtrl1\ *\ dt\ \ \ mtrl2\ \ oper\ \ \ \ \ \ dN\ (pf)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@note\ only\ use\ in\ BE\ scheme\ where\ storage\ term\ is\ divided\ by\ time-\/increment}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v}{NumIntegral\_NT\_op1\_op2\_dNi\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_aa3cc1b03c89fe4cc998d879ded26e688}{NumIntegral\_NT\_op1\_op2\_dNi\_dV}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ e.g.,\ fluid\ density}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mtrl1,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ e.g.,\ storativity}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mtrl2,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ e.g.,\ conductivity}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );\ \ \ \ \ \ \ \ \textcolor{comment}{//\ e.g.,\ fluid\ pressure}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a5d92f8cd74543cbccbe760c44d3e4a60}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a97d3307eebf44c0801ae48c42a053e52}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a921a45bedd942e0458a9d274fa54f6d2}{MultiplyWithTimeFactor}}(\ \textcolor{keywordtype}{double}\ dt\ )\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a921a45bedd942e0458a9d274fa54f6d2}{override}}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___n_t__op1__op2__d_ni__d_v_a921a45bedd942e0458a9d274fa54f6d2}{final}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ \ \ \ \ \ \ \ \ \ \ IPOL;}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ \ \ \ \ \ \ \ \ \ DN;}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mtrl1\_key,\ mtrl2\_key;}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ oper\_eprop,\ mtrl1\_prop,\ mtrl2\_prop;}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gravity;\ \ \ \textcolor{comment}{//\ acceleration\ of\ gravity}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{const}\ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xyz;\ \textcolor{comment}{//\ 1=x,\ 2=y}}
+\DoxyCodeLine{00042\ \ \ \ \ std::vector<ScalarVariable\ >\ \ oper\_nprop;}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

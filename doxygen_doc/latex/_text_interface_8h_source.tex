@@ -1,0 +1,81 @@
+\doxysection{Text\+Interface.\+h}
+\hypertarget{_text_interface_8h_source}{}\label{_text_interface_8h_source}\index{source/includes/interfaces/TextInterface.h@{source/includes/interfaces/TextInterface.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_TEXT\_INTERFACE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_TEXT\_INTERFACE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_coordinate_transformer_8h}{"{}CoordinateTransformer.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class}\ Matrix;}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ \ CSMP\ Output\ interface\ for\ writing\ model\ variables\ to\ text\ files.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ \ @author\ S.\ K.\ Matthai}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ \ @date\ 14/5/1999}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ \ @copyright\ SKM}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_text_interface}{TextInterface}}\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ TextInterface();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{///\ single\ variable\ text\ column\ output}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a8fc3f19426e50d1fa4f53767143b6137}{OutputDataAsTextColumns}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{///\ single\ variable\ text\ column\ output\ for\ a\ user\ specified\ region}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_afe4b018d08a3ad8ac9714ed924a311ba}{OutputDataAsTextColumns}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ output\ of\ a\ suite\ of\ variables\ with\ same\ placement\ for\ a\ specific\ region;\ user\ can\ transform\ coordinates}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a513ef4bd940aa646eec0573f8066733e}{OutputDataAsTextColumns}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_coordinate_transformer}{CoordinateTransformer}}<dim>\&,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::list<std::string>\&\ output\_variables\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{///\ (row\ numbered)\ single\ variable\ output}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_aa6df1c08a62013f2b5c3a2aed6480bc5}{OutputDataAsTextColumnsNumbered}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ (row\ numbered)\ single\ variable\ output\ for\ a\ user\ specifed\ region}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a7c7d62b3ca06bf3db21f43c21f64d8cc}{OutputDataAsTextColumnsNumbered}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ region,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ (row\ numbered)\ single\ variable\ output\ to\ files\ uniquely\ identified\ by\ timestep}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a0c54930240a4b1092f9a2bc82fe2966d}{OutputDataAsTextColumns}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var,\ \textcolor{keywordtype}{long}\ timestep,\ \textcolor{keywordtype}{bool}\ numbered=\textcolor{keyword}{false}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a50d9beea6ef40d611c1c07cd11aa17e9}{OutputRegionsToTextFiles}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ sg,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ property\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ text\ output\ from\ models\ \ \ }}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ AppendDataToText(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keywordtype}{double}\ time,\ \textcolor{keywordtype}{long}\ idx,\ \textcolor{keywordtype}{double}\ value\ );}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteStringToTextFile(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keyword}{const}\ std::string\&\ str,\ \textcolor{keywordtype}{bool}\ overwrite\ );}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_aa751b90805d4ff74c2ded000633aebaf}{WriteStringToTextFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keywordtype}{bool}\ overwrite\ );}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a277c88cab3408c114d80e79ac052a579}{WriteMatrixToTextfile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ mtrx\ );}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//\ Regular-\/gridded\ image\ files}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a14eeb2660269c4095290e0dae9b4c0d6}{SizeofPixelTextImage256}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ size\_t\&\ m,\ size\_t\&\ n\ );}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_text_interface_a6d560187e62ad65b4a6d24c40be5698e}{ReadPixelTextImage256}}(\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fname,\ Matrix\&\ data\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ IsInNextLine(\ std::ifstream\&\ ifs,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ search\_string\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

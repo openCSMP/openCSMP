@@ -1,0 +1,69 @@
+\doxysection{Quadrilaterator.\+h}
+\hypertarget{_quadrilaterator_8h_source}{}\label{_quadrilaterator_8h_source}\index{source/includes/discretisation/Quadrilaterator.h@{source/includes/discretisation/Quadrilaterator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{QUADRILATERATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{QUADRILATERATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_matrix_8h}{"{}Matrix.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{@brief\ Creates\ a\ quadrilateral\ finite-\/element\ mesh\ from\ the\ input\ bitmap.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{The\ node\ and\ element\ numbering\ is\ from\ 0..n-\/1;\ negative\ numbers\ identify\ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{missing\ neighbor\ elements\ and\ corresponding\ model\ boundary\ identifiers.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@author\ Stephan\ K.\ Matthaei}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{Have\ a\ simple\ procedure\ to\ go\ from\ a\ geometry\ drawn\ with\ a\ pixel-\/type}}
+\DoxyCodeLine{00024\ \textcolor{comment}{tool\ or\ defined\ by\ a\ processed\ image,\ to\ go\ to\ a\ simple\ triangular}}
+\DoxyCodeLine{00025\ \textcolor{comment}{finite-\/element\ mesh\ for\ CSMP\ computations.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_quadrilaterator}{Quadrilaterator}}\ \{}
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_quadrilaterator_aa70fcdeb43c8694069543ea159d7deee}{Quadrilaterator}}(\ \textcolor{keywordtype}{bool}\ harmonic\_permeability\_averaging=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ prompts\ user\ for\ color-\/coded\ permeability\ values\ (0..256)\ matrix\ in\ ascii\ text\ file\ and\ creates\ a\ regular\ quadrilateral\ mesh\ from\ this\ data}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_quadrilaterator_a437452ed5b55eb4142ab65735c25d7e4}{QuadrilateralsFromRegularGrid}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ vset,\ \textcolor{keywordtype}{bool}\ from\_bitmap=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{///\ reads\ 0..256\ valued\ point\ matrix\ of\ color-\/coded\ permeability\ values\ from\ ascii\ text\ file\ and\ creates\ a\ regular,\ yet\ scaled\ quadrilateral\ mesh\ from\ it}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_quadrilaterator_a9e80a910c63bf90e22878d4cf295e721}{QuadrilateralsFromRegularGrid}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ vset,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ x\_extend,\ \textcolor{keywordtype}{double}\ y\_extend,\ \textcolor{keywordtype}{bool}\ from\_bitmap=\textcolor{keyword}{true}\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ regular\ quadrilateral\ mesh\ with\ row\_nodes-\/1\ elements\ in\ the\ vertical,\ anr\ column\_nodes-\/1\ elements\ in\ the\ horizontal\ direction}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_quadrilaterator_a096ed3b0018543230975068f1b5b204d}{QuadrilateralsFromRegularGrid}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ vset,\ \textcolor{keywordtype}{double}\ x\_extend,\ \textcolor{keywordtype}{double}\ y\_extend,\ size\_t\ row\_nodes,\ size\_t\ column\_nodes\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00043\ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ HarmonicPermeabilityAverage(\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keyword}{const}\ csmp::Matrix\&\ perm\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ ReadPixelMatrix(\ \textcolor{keywordtype}{bool}\ from\_bitmap\ );}
+\DoxyCodeLine{00045\ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ ReadPixelMatrix(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name,\ \textcolor{keywordtype}{bool}\ from\_bitmap\ );}
+\DoxyCodeLine{00046\ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ ScaleModelRange(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ vset\_scaled\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ ScaleModelRange(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ vset\_scaled,\ \textcolor{keywordtype}{double}\ x\_dim,\ \textcolor{keywordtype}{double}\ y\_dim\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \ \ \ \ \ size\_t\ \ \ \ MapVertex(\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ n\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ GenerateVSet(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ vset\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ size\_t\ \ rows,\ cols,\ n\_vertices,\ n\_elements;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ harmonic;}
+\DoxyCodeLine{00053\ \ \ \ \ \ Matrix\ \ matrix\_;}
+\DoxyCodeLine{00054\ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_data_input_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::DataInputVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <includes refid="_data_input_visitor_8h" local="no">DataInputVisitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>typename Var</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_data_input_visitor_1a9e08f8c9ba9f6ee51cb25f8609ee9975" prot="private" static="no" mutable="no">
+        <type>const std::vector&lt; double &gt; &amp;</type>
+        <definition>const std::vector&lt;double&gt;&amp; csmp::DataInputVisitor&lt; Var, dim &gt;::input_data_ref_</definition>
+        <argsstring></argsstring>
+        <name>input_data_ref_</name>
+        <qualifiedname>csmp::DataInputVisitor::input_data_ref_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="47" column="24" bodyfile="source/includes/model/DataInputVisitor.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_data_input_visitor_1a7426bc6e7ef882d252be511d1797e712" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::DataInputVisitor&lt; Var, dim &gt;::prop_key_</definition>
+        <argsstring></argsstring>
+        <name>prop_key_</name>
+        <qualifiedname>csmp::DataInputVisitor::prop_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="48" column="29" bodyfile="source/includes/model/DataInputVisitor.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_data_input_visitor_1aaab02112cd7f5af4423d2929e60eee1c" prot="private" static="no" mutable="no">
+        <type>Var</type>
+        <definition>Var csmp::DataInputVisitor&lt; Var, dim &gt;::variable_</definition>
+        <argsstring></argsstring>
+        <name>variable_</name>
+        <qualifiedname>csmp::DataInputVisitor::variable_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="49" column="29" bodyfile="source/includes/model/DataInputVisitor.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_data_input_visitor_1a530d354b1921310f71fb3b5af5c66471" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::DataInputVisitor&lt; Var, dim &gt;::counter_</definition>
+        <argsstring></argsstring>
+        <name>counter_</name>
+        <qualifiedname>csmp::DataInputVisitor::counter_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="50" column="29" bodyfile="source/includes/model/DataInputVisitor.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1ac0639e101baa849456680fa0dc399962" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::DataInputVisitor&lt; Var, dim &gt;::DataInputVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *input_prop, const std::vector&lt; double &gt; &amp;input_data)</argsstring>
+        <name>DataInputVisitor</name>
+        <qualifiedname>csmp::DataInputVisitor::DataInputVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>input_prop</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>input_data</declname>
+        </param>
+        <briefdescription>
+<para>visitor for input of variables placed on the node, element and elsewhere </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="31" column="5" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="16" bodyend="56"/>
+        <references refid="classcsmp_1_1_data_input_visitor_1ac0639e101baa849456680fa0dc399962" compoundref="_data_input_visitor_8cpp" startline="16" endline="56">csmp::DataInputVisitor&lt; Var, dim &gt;::DataInputVisitor</references>
+        <referencedby refid="classcsmp_1_1_data_input_visitor_1ac0639e101baa849456680fa0dc399962" compoundref="_data_input_visitor_8cpp" startline="16" endline="56">csmp::DataInputVisitor&lt; Var, dim &gt;::DataInputVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1a76eeae3d0ec978d32890f81ac1b4f685" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::DataInputVisitor&lt; Var, dim &gt;::~DataInputVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~DataInputVisitor</name>
+        <qualifiedname>csmp::DataInputVisitor::~DataInputVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="35" column="13" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="61" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1a4906d861a87bfb4c39df20b125f10d5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::DataInputVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(Model&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::DataInputVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+          <defname>gptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="37" column="18" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="69" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1a6162b94ebe5181c010f61798c7543c47" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::DataInputVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(Region&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::DataInputVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; *</type>
+          <defname>gptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="38" column="18" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="79" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1a7da6dd51acbcae9a3269173badeedf60" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::DataInputVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::DataInputVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>TODO: <xrefsect id="todo_1_todo000142"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM: other placements like FV integration points are not considered here yet </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="39" column="18" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="89" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1a4b28735f85bdb5514a1cb16730a6585b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::DataInputVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(Face&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::DataInputVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; dim &gt; *</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The key method of the visitor design pattern. Visit() must be defined for the target object (for instance <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> objects, or <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> objects). Since the argument is the actual object, its entire interface is accessible to the visitor in order to carry out operations. Overload this method in the derived class to gain access to target objects and perform the actions that are desired for the visitation. <linebreak/>
+</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is a pointer to the target <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> (forming part of a boundary). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+<para>TODO: <xrefsect id="todo_1_todo000143"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM: other placements like FV integration points are not considered here yet </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="40" column="18" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="108" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1a520c27b9869505dc9809dfb9e9ea49e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::DataInputVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(InterFace&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::DataInputVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>&lt; dim &gt; *</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>TODO: <xrefsect id="todo_1_todo000144"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM: other placements like FV integration points are not considered here yet </para>
+</xrefdescription></xrefsect></para>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="41" column="18" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="128" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1aa38e7ab086e4112093d2a9e648f520e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::DataInputVisitor&lt; Var, dim &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::DataInputVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <defname>nptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="42" column="18" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="149" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_data_input_visitor_1a807868e993002e8e7be539a29515e07c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::DataInputVisitor&lt; Var, dim &gt;::Reset</definition>
+        <argsstring>()</argsstring>
+        <name>Reset</name>
+        <qualifiedname>csmp::DataInputVisitor::Reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/DataInputVisitor.h" line="44" column="11" bodyfile="source/modules/model/DataInputVisitor.cpp" bodystart="161" bodyend="162"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Use this visitor to input raw data into model which is assumed to be ordered in input vector by variable components (for example vector v1x, v1y, v1z, v2x...) visitor will renumber elements or nodes.</para>
+<para><simplesect kind="author"><para>S. K. Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>2006 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::DataInputVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_data_input_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::DataInputVisitor&lt; Var, dim &gt;</label>
+        <link refid="classcsmp_1_1_data_input_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/DataInputVisitor.h" line="29" column="1" bodyfile="source/includes/model/DataInputVisitor.h" bodystart="29" bodyend="51"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a530d354b1921310f71fb3b5af5c66471" prot="private" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>counter_</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1ac0639e101baa849456680fa0dc399962" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>DataInputVisitor</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a9e08f8c9ba9f6ee51cb25f8609ee9975" prot="private" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>input_data_ref_</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a7426bc6e7ef882d252be511d1797e712" prot="private" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>prop_key_</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a807868e993002e8e7be539a29515e07c" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>Reset</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1aaab02112cd7f5af4423d2929e60eee1c" prot="private" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>variable_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a4906d861a87bfb4c39df20b125f10d5e" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a6162b94ebe5181c010f61798c7543c47" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a7da6dd51acbcae9a3269173badeedf60" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a4b28735f85bdb5514a1cb16730a6585b" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a520c27b9869505dc9809dfb9e9ea49e2" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1aa38e7ab086e4112093d2a9e648f520e9" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::DataInputVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::DataInputVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_data_input_visitor_1a76eeae3d0ec978d32890f81ac1b4f685" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>~DataInputVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::DataInputVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

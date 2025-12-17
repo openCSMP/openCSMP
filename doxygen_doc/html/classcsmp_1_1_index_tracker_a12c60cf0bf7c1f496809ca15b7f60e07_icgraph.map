@@ -1,0 +1,16 @@
+<map id="csmp::IndexTracker::Detach" name="csmp::IndexTracker::Detach">
+<area shape="rect" id="Node000001" title="Called when an existing Index is destroyed." alt="" coords="629,96,767,137"/>
+<area shape="rect" id="Node000002" href="$structcsmp_1_1_index.html#a4f25345b8d8bb3230dc0f84a0775dcee" title="Detaches itself from IndexTracker (i.e. called upon destruction)" alt="" coords="438,79,581,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="614,108,582,104,582,99,614,103"/>
+<area shape="rect" id="Node000007" href="$structcsmp_1_1_index.html#acbdfb5b45232eb3eab9bf18fc7e609ec" title="DTor: Detaches intself from IndexTracker." alt="" coords="439,128,580,154"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="614,130,581,134,580,129,614,125"/>
+<area shape="rect" id="Node000003" href="$structcsmp_1_1_index.html#a3d38adc8395a9ace450318dbe3ca2ecc" title="move constructor that takes care of index tracker" alt="" coords="245,29,378,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="440,77,366,58,367,53,441,72"/>
+<area shape="rect" id="Node000004" href="$structcsmp_1_1_index.html#a67ca8bf26803f6322d5e4635a2da72d2" title="Assignment operator." alt="" coords="234,79,390,104"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="423,94,390,94,390,89,423,89"/>
+<area shape="rect" id="Node000006" href="$structcsmp_1_1_index.html#a96e678d743121334a176ad4525a94fcd" title="move assignment operator" alt="" coords="234,128,390,154"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="441,111,367,130,366,125,440,106"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="346,17,335,10,312,8,291,10,280,15,278,20,283,27,279,30,272,21,276,11,290,5,312,3,336,5,349,12"/>
+<area shape="rect" id="Node000005" href="$namespacecsmp.html#aae3141ff59920b4f43a7b2aaaa17fa31" title=" " alt="" coords="5,79,186,104"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="218,94,186,94,186,89,218,89"/>
+</map>

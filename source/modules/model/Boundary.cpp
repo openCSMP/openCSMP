@@ -89,12 +89,14 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior faces
   const size_t  n_elements{ mesh.Elements() }; // needs to be subtracted accessing the face container
+  if ( n_elements > LONG_MAX ) throw out_of_range( "Boundary<dim>::Boundary: 'n_elements' greater than std::distance type (long)");
+      
   for ( size_t i : info.interior_elmts )
-    this->cell_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
+    this->cell_vec_.push_back( &(*next(mesh.FacesBegin(),static_cast<long>(i-n_elements))) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
-    this->cell_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
+    this->cell_vec_.push_back( &(*next(mesh.FacesBegin(),static_cast<long>(i-n_elements))) );
 
   // building the node vector
   // ------------------------
@@ -104,16 +106,16 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior faces
   for ( size_t i : info.interior_nodes )
-    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
+    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),static_cast<long>(i))) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_nodes )
-    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
+    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),static_cast<long>(i))) );
 
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
   // building the vector of vectors of those faces (edges) of the faces that lie on the subdomain perimeter
-  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( static_cast<long>(info.interior_elmts.size()) );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------
@@ -158,15 +160,19 @@ Boundary<dim>::Boundary( const string& boundary_name,
     boundaryFlag_( boxBoundary )
 {
   // moving the supplied Face pointers into the element storage
-  this->cell_vec_.assign( facesBegin, facesEnd );
+  this->cell_vec_.assign( make_move_iterator(facesBegin), make_move_iterator(facesEnd) );
   
-  // initialize BOX_BOUNDARY of nodes
-  InitializeBoundaryFlags( boxBoundary );
+  // establishing boundary node container
+  this->CreateNodePointerVector();
   
   // distinguishing interior from perimeter cells
   // (sorts node and cell vectors into interior and exterior ranges;
   //  initialises boundary face vector bd_face_vec_)
   this->IdentifyPerimeter();
+
+  // initialize BOX_BOUNDARY of nodes
+  // (but only for interior nodes as these are never shared with other boundaries)
+  InitializeBoundaryFlags( boxBoundary );
   
   // trimming off extra capacity
   this->cell_vec_.shrink_to_fit();
@@ -369,11 +375,10 @@ template<class Var>
 bool Boundary<dim>::Out( fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const
 {
   set<string> propList;
-  size_t vCount( 0 ), bytes( sizeof( size_t ) );
 
   this->pref_.ListProperties( place, vtype, propList );
-  vCount = propList.size();
-  fp.write( reinterpret_cast<const char*>(&vCount), bytes );
+  size_t vCount = propList.size();
+  fp.write( reinterpret_cast<const char*>(&vCount), sizeof(vCount) );
   if ( vCount != 0 )
   {
     FEM_Data<Var> femData;
@@ -399,7 +404,8 @@ the outer template provides double = data type and dim = dimension,
 and Var the data type of the property
 (ScalarVariable, VectorVariable, or TensorVariable).
 
-@param data The FEM_Data container with the data that corresponds to the given property
+@param property the name of the variable from PropertyDatabase
+@param property_values The FEM_Data container with the data that corresponds to the given property
 is returned into the second method argument.
 
 @section implementation Implementation
@@ -416,7 +422,7 @@ The idea is to extract the property data that corresponds to this group only.
 */
 template<uint32_t dim>
 template<class Var>
-void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) const
+void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& property_values ) const
 {
   csmp::Index  idx = this->pref_.StorageKey( property );
   Var          var;
@@ -424,43 +430,40 @@ void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data 
 
   switch ( idx.place ) {
     case FACE: {
-      data.Reset( idx, this->cell_vec_.size(), var );
-      for ( typename vector<csmp::Face<dim>*>::const_iterator
-            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ ) {
-        (*eit)->Read( idx, var );
-        data[(*eit)->Idx()] = var;
+      property_values.Reset( idx, this->cell_vec_.size(), var );
+      for ( const auto& eit : this->cell_vec_ ) {
+        eit->Read( idx, var );
+        property_values[eit->Idx()] = var;
       }
     }
-               break;
+      break;
     case NODE: {
-      data.Reset( idx, this->node_vec_.size(), var );
-      for ( typename vector<csmp::Node<dim>*>::const_iterator
-            nit = this->node_vec_.begin(); nit != this->node_vec_.end(); nit++ ) {
-        (*nit)->Read( idx, var );
-        data[(*nit)->Idx()] = var;
+      property_values.Reset( idx, this->node_vec_.size(), var );
+      for ( const auto& nit : this->node_vec_ ) {
+        nit->Read( idx, var );
+        property_values[nit->Idx()] = var;
       }
     }
-               break;
+      break;
     case ELEMENT_INTEGRATION_POINT: {
-      data.Reset( idx, this->IntegrationPoints(), var );
+      property_values.Reset( idx, this->IntegrationPoints(), var );
       size_t counter( 0U );
-      for ( typename vector<csmp::Face<dim>*>::const_iterator
-            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
+      for ( const auto& eit : this->cell_vec_ )
       {
-        for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) {
-          (*eit)->Read( i, idx, var );
-          data[counter + i] = var;
+        for ( uint32_t i{0U}; i<eit->IntegrationPoints(); i++ ) {
+          eit->Read( i, idx, var );
+          property_values[counter + i] = var;
         }
-        counter += (*eit)->IntegrationPoints();
+        counter += eit->IntegrationPoints();
       }
     }
-                                    break;
+      break;
     case BOUNDARY: {
-      data.Reset( idx, 1U, var );
+      property_values.Reset( idx, 1U, var );
       this->Read( idx, var );
-      data[0U] = var;
+      property_values[0U] = var;
     }
-                   break;
+      break;
     default:break; {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
       csmp_error.Note( WARNING, "Boundary::OutputVariableTo",
@@ -512,12 +515,12 @@ template<uint32_t dim>
 template<class Var>
 bool Boundary<dim>::In( fstream& fp, PLACEMENT, VARIABLE_TYPE )
 {
-  size_t vCount( -1 );
-  fp.read( (char*)&vCount, sizeof( size_t ) );
+  size_t vCount = numeric_limits<size_t>::max();
+  fp.read( (char*)&vCount, sizeof(vCount) );
   if ( vCount == 0 )
     return true;
   FEM_Data<Var> femData;
-  for ( size_t i( 0 ); i < vCount; ++i )
+  for ( size_t i{0u}; i < vCount; ++i )
   {
     char propertyName[200];
     if ( !binaryFileRead( fp, propertyName ) )
@@ -581,7 +584,7 @@ void Boundary<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Face<dim>*>::const_iterator
             eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
       {
-        for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
+        for ( uint32_t i{0U}; i<(*eit)->IntegrationPoints(); i++ )
           (*eit)->Store( i, idx, vdata[counter + i] );
         counter += (*eit)->IntegrationPoints();
       }
@@ -657,13 +660,10 @@ void Boundary<dim>::InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary )
   // assigns BOX_BOUNDARY flag to Boundary
   AtBoundary( boxBoundary );
 
-  // establishing boundary node container
-  this->CreateNodePointerVector();
-  
-  // assigning the box boundary flag to nodes where they do not already have another flag (like EDGE etc)
-  for ( auto& nit : this->node_vec_ )
-    if ( nit->AtBoundary() == NOT )
-      nit->AtBoundary( boxBoundary );
+  // assigning the same box boundary flag to all nodes
+  // (later on, these flags can be refined)
+  for ( auto nit=this->NodesBegin(); nit!=this->PerimeterNodesBegin(); ++nit )
+    (*nit)->AtBoundary( boxBoundary );
 
 } // end InitializeBoundaryFlags
 
@@ -902,7 +902,7 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
        const auto face = idx - offset;
        assert( mesh.Faces() > 0 );
        assert( face < mesh.Faces() );
-       Face<dim>* fptr = &(*next(mesh.FacesBegin(),face));
+       Face<dim>* fptr = &(*next(mesh.FacesBegin(),static_cast<long>(face)));
        assert( fptr != nullptr );
        assert( fptr->Idx() == idx );
        this->cell_vec_.push_back( fptr );

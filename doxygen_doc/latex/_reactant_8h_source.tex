@@ -1,0 +1,47 @@
+\doxysection{Reactant.\+h}
+\hypertarget{_reactant_8h_source}{}\label{_reactant_8h_source}\index{source/includes/thmc/geochemistry/Reactant.h@{source/includes/thmc/geochemistry/Reactant.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_REACTANT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_REACTANT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_reactant}{Reactant}}\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ std::string\ \ name;}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keywordtype}{short}\ \ \ phase\_state;\ \textcolor{comment}{//\ 1=solid,\ 2=aqueous,\ 3=gaseous}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ charge;}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{double}\ \ density;}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{double}\ \ molar\_weight;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ Reactant();}
+\DoxyCodeLine{00017\ \ \ \ \ Reactant(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_reactant}{Reactant}}\&\ r\ );}
+\DoxyCodeLine{00018\ \ \ \ \ Reactant(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ n,\ \textcolor{keywordtype}{short}\ st,\ \textcolor{keywordtype}{int}\ ch,\ \textcolor{keywordtype}{double}\ dens,\ \textcolor{keywordtype}{double}\ mw\ );}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_reactant}{Reactant}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_reactant}{Reactant}}\&\ r\ );}
+\DoxyCodeLine{00020\ \ \ \ \ std::string\ Name()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ name;\ \};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ Name(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s\ )\ \ \ \ \ \ \ \{\ name=s;\ \};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ Name(\ \textcolor{keyword}{const}\ std::string\&\ s\ )\{\ name=s;\ \};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{short}\ \ State()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ phase\_state;\ \};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ State(\ \textcolor{keywordtype}{short}\ s\ )\ \ \ \ \ \ \ \ \ \ \ \ \{\ phase\_state=s;\ \};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ Charge()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ charge;\ \};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ Charge(\ \textcolor{keywordtype}{int}\ ch\ )\ \ \ \ \ \ \ \ \ \ \ \ \{\ charge=ch;\ \};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ Density()\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ density;\ \};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ Density(\ \textcolor{keywordtype}{double}\ d\ )\ \ \ \ \ \ \ \ \ \{\ density=d;\ \};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{double}\ MolarWeight()\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ molar\_weight;\ \};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ MolarWeight(\ \textcolor{keywordtype}{double}\ mw\ )\ \ \ \ \{\ molar\_weight=mw;\ \};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ conversions}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{double}\ VolumeFractionToMolality(\ \textcolor{keywordtype}{double}\ fraction,\ \textcolor{keywordtype}{double}\ fluid\_mass\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{double}\ MolalityToVolumeFraction(\ \textcolor{keywordtype}{double}\ molality,\ \textcolor{keywordtype}{double}\ fluid\_mass\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_reactant_a4b1c0da960f5b39fc0172a69d5d5b609}{MolesPerVolumeToMolality}}(\ \textcolor{keywordtype}{double}\ moles,\ \ \ \ \textcolor{keywordtype}{double}\ fluid\_dens\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ MolalityToMolesPerVolume(\ \textcolor{keywordtype}{double}\ molality,\ \textcolor{keywordtype}{double}\ fluid\_dens\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

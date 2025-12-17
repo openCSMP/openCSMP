@@ -1,0 +1,905 @@
+\doxysection{csmp\+::Isoparametric\+Linear\+Prism Class Reference}
+\hypertarget{classcsmp_1_1_isoparametric_linear_prism}{}\label{classcsmp_1_1_isoparametric_linear_prism}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+
+
+Inheritance diagram for csmp\+::Isoparametric\+Linear\+Prism\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_isoparametric_linear_prism__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Isoparametric\+Linear\+Prism\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_isoparametric_linear_prism__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aef049f1e5ef0ca25c9db832824dd4454}\label{classcsmp_1_1_isoparametric_linear_prism_aef049f1e5ef0ca25c9db832824dd4454} 
+{\bfseries Isoparametric\+Linear\+Prism} (uint32\+\_\+t integration\+Points=6)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a19d22823f25c5498aa7ee769c74935e5}{Volume}} ()
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aaa664417cb363205a66347d907726f0a}{Aspect\+Ratio}} ()
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a5a97535f17ba2fe211645d27cc24f25e}{Inner\+Radius}} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aef302c98c4e86fb197483b68d2348bde}{Edge\+Lengths}} (std\+::vector$<$ double $>$ \&vec)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ac167683317315d95dcfbc00d7e8cf952}{Corner\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ab282749483809d6068af792135a272ad}{Corner\+Nodes}} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ab6746a86481dc778ee7b17c9a8172d9a}{Mid\+Side\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a113a81c1e176675ad75c4e6253fb209c}{Counter\+Clockwise\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a46e8b776f44b4a81157656a6a8737c88}{Mid\+Side\+Nodes}} () const
+\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aad6aeeb3fbc4a42cfd508c458b8e4941}{Nodes\+Per\+Face}} (uint32\+\_\+t face) const
+\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aad304836aea3fa43563baea74e6ddd9e}{Element\+Type\+Of\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding face \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a2b18e7ddc9cd1968287d22b0f4b9fd74}{Element\+Type\+Of\+Segment}} (uint32\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding segment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a6d08e010aef3dec1b1b5bbc681aa970b}{Nodes\+Of\+Segment}} (uint32\+\_\+t segm\+\_\+id, std\+::vector$<$ uint32\+\_\+t $>$ \&snids) const
+\begin{DoxyCompactList}\small\item\em reports the egde nodes (0..nodes-\/1) which can be more than 2 in higher-\/order elements \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae06a2521f4e024d1cdbd95328a742087}{Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em reports the face nodes (0..nodes-\/1) of the given face \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a378a031bfa5619de70e01a5bfe5a31ed}{Corner\+Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the corner nodes of the face \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_afd62718afcf8969ade1ef0ed886b2e25}{Nodes\+Connected\+To}} (uint32\+\_\+t node\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the nodes at the other end of the sgment that the argument node is on \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a9981c27373244ecaf7af94f009d1f85c}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&unrml) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e}{N}} (std\+::vector$<$ double $>$ \&N, const std\+::vector$<$ double $>$ \&xyz)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a29a2402fbccabaf8ff12bf871319040f}{N\+\_\+\+At\+Integration\+Point}} (uint32\+\_\+t ip, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e}{N}})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_afb4e1d40cc3c368fe0d51a6498a4ad79}{N\+\_\+\+At\+Bary\+Center}} (std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e}{N}})
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the center of gravity of the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aa91eb3e0495fa63af15ac252bca997a1}{Jacobian\+At\+Integration\+Point}} (uint32\+\_\+t ip)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aa4fe2377b1bcd7a5319645ad5004e65a}{Jacobian\+At}} (const std\+::vector$<$ double $>$ \&rst)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a0cee16dcd439265594f8c9c178df7637}{dN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&dn, const std\+::vector$<$ double $>$ \&xyz)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ac8f4dce61ec1363a09768f48310fa97a}{dN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&DN6)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a2a9f617ad79f749a0dc238f41dbf6cb4}{d\+N\+\_\+\+At\+Node}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, uint32\+\_\+t node)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a9afbf1aa9966651568562ffda8bcba6b}{d\+N\+\_\+\+At\+Integration\+Point}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, uint32\+\_\+t gauss\+\_\+point)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_aa3d8c85176ce21c9cd38526d522a0ed5}{d\+N\+\_\+\+At\+Barycenter}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}})
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a8ff79a4ddb34f5fe69206f25399bfc1d}{Weight\+At\+Integration\+Point}} (uint32\+\_\+t i) const
+\begin{DoxyCompactList}\small\item\em returns the integration weight of the desired quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a4b8ce3016024ff06e66890f0e0857f3b}{Integration\+Point}} (uint32\+\_\+t i, std\+::vector$<$ double $>$ \&xyz) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a02801bde0da7f9f56e3c584e10f8288a}{Extrapolate\+Integration\+Point\+Variable\+To\+Nodes}} (uint32\+\_\+t nvars, const std\+::vector$<$ double $>$ \&IVAR, std\+::vector$<$ double $>$ \&NVAR) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a61dc16e628c1460af9b8c7c14da878f4}{Output\+Node\+Data\+To\+VTK}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const char \texorpdfstring{$\ast$}{*}var\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&DATA) const
+\begin{DoxyCompactList}\small\item\em prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a19b01da2ad0b9a912c129a8d59146007}{Nrst}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e}{N}}) const
+\begin{DoxyCompactList}\small\item\em interpolation functions in parametric space \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_ab991a16509b935cc3b2202bfb7929537}\label{classcsmp_1_1_isoparametric_linear_prism_ab991a16509b935cc3b2202bfb7929537} 
+virtual void {\bfseries Nrst} (double r, double s, double t, double \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e}{N}}) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a4a83087c213f17cbf357e35f42775200}{d\+Nr}} (double r, double s, double t, std\+::vector$<$ double $>$ \&d\+Nr) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a13d7d9d7d177be033d1854343909867a}{d\+Ns}} (double r, double s, double t, std\+::vector$<$ double $>$ \&d\+Ns) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/ds \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_acfd7f65e867bcd1d286b6a7646ddd0e7}{d\+Nt}} (double r, double s, double t, std\+::vector$<$ double $>$ \&d\+Nt) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/dt \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_linear_prism_a8d5562b5d1754674a15bf145b5fe1255}{Reference\+Coordinates}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&mat\+Coords) const
+\begin{DoxyCompactList}\small\item\em for element types defined using a local coordinate system, returns the node coordinates into the argument matrix \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csp\+\_\+fem\+\_\+type, bool isoparametric, bool uses\+\_\+local\+\_\+coordinates, uint32\+\_\+t order\+\_\+of\+\_\+shape\+\_\+functions)
+\item 
+void {\bfseries Current\+ID} (size\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em assigns integer value used to avoid repeating the same operation \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Current\+ID} () const
+\begin{DoxyCompactList}\small\item\em returns integer value for comparison to avoid repeating the same operation \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Dim} () const
+\begin{DoxyCompactList}\small\item\em return minimum spatial dimension in which this element can exist \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Nodes} () const
+\item 
+uint32\+\_\+t {\bfseries Segments} () const
+\begin{DoxyCompactList}\small\item\em returns the number of edges of the FE, i.\+e. the number of connections between nodes \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Faces} () const
+\begin{DoxyCompactList}\small\item\em returns the number of sides the finite element has \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Neighbors} () const
+\begin{DoxyCompactList}\small\item\em neighbor elements that may be connected to this FE in its characteristic space \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Integration\+Points} () const
+\begin{DoxyCompactList}\small\item\em returns number of quadrature points used by current integration scheme \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Interpolation} () const
+\begin{DoxyCompactList}\small\item\em returns order of interpolation scheme\+: linear=1, quadratic=2, cubic=3 \end{DoxyCompactList}\item 
+bool {\bfseries Isoparametric} () const
+\begin{DoxyCompactList}\small\item\em for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions \end{DoxyCompactList}\item 
+bool {\bfseries Uses\+Local\+Coordinates} () const
+\begin{DoxyCompactList}\small\item\em reports whether element is defined in a local (r,s,t) coordinate system; analytically integrated elements are not \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Order\+Of\+Shape\+Functions} () const
+\begin{DoxyCompactList}\small\item\em returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Line} () const
+\item 
+bool {\bfseries Is\+Surface} () const
+\item 
+bool {\bfseries Is\+Volume} () const
+\item 
+bool {\bfseries Is\+Simplex} () const
+\begin{DoxyCompactList}\small\item\em true for linear line-\/, triangle-\/ or tetrahedral elements for which the Jacobian matrix is constant throughout \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries Element\+Type} () const
+\item 
+virtual void {\bfseries Interior\+Nodes} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports the nodes (0..nodes-\/1) of the element which are not shared with any other element \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t {\bfseries Interior\+Nodes} () const
+\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a1dedbd91a6e8765f57dfdaf999494b76}{Unit\+Normal}} () const
+\begin{DoxyCompactList}\small\item\em returns unit normal to element where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae600307171225f53a2615aaffd5afb18}{Unit\+Normal\+At\+Face\+Barycenter}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&nrml)
+\begin{DoxyCompactList}\small\item\em computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework \end{DoxyCompactList}\item 
+double {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j) const
+\begin{DoxyCompactList}\small\item\em accessor for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+void {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j, double val)
+\begin{DoxyCompactList}\small\item\em mutator for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_adb4103981ca8a56bbea237ef71c0cdc1}{d\+N\+\_\+\+At}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, const std\+::vector$<$ double $>$ \&xyz)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae62e0c447141f0e2b7f7a4eb8412278b}{Jacobian}} (const std\+::vector$<$ double $>$ \&dnr)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 1D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 2D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns, const std\+::vector$<$ double $>$ \&dnt)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 3D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce}{Jacobian\+Inverse}} ()
+\begin{DoxyCompactList}\small\item\em initializes the member matrix JINV \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_ae758e82d3b214e9f9c5bda10cd20b515}{Jacobian\+Determinant}} ()
+\begin{DoxyCompactList}\small\item\em returns the determinant of the member Jacobian matrix JAC that must have been initialised before \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a84a69958fd3567565d4dc83037664d97}{Integral\+NN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises interpolation function product matrix N\texorpdfstring{$^\wedge$}{\string^}T x N for analytically integrated elements \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a5d79c3309e261dd0939e5b733aac83d9}{Integrald\+NdN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises interpolation function derivatives product matrix DN\texorpdfstring{$^\wedge$}{\string^}T x DN for element where derivatives are constant \end{DoxyCompactList}\item 
+virtual void {\bfseries Integral\+\_\+d\+NT\+\_\+\+K\+\_\+dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&K)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_af583becda82f4fef39bbe2d4c3b41cea}{Nr}} (double r, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 1D element interpolation functions N(r) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a84befa0a4da0b4b8469ec5e7be89860e}{d\+Nr}} (double r, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 1D element interpolation functions derivatives N(r)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_adb2baab01a52b040d73c10623a0605b2}{Nrs}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions N(r,s) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_af159e5f99a0281ae603ca6ddde9bf6bf}{d\+Nr}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6d2fb4557b0681959501365138c9d3c3}{d\+Ns}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}{DNS}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/ds \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em prints finite element properties to screen \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Static Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ad4aaeb22c3a8da44a33361057ef2097f}{Initial\+ID}} ()
+\begin{DoxyCompactList}\small\item\em returns ID value set to FEM during construction \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a022fd86373136421b00ce343508efe52}{XY}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5de71dcc5e56c2e814d31d798969f437}{JAC}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5c3fd117b986587599dcb441feeb000a}{JINV}}
+\item 
+std\+::vector$<$ double $>$ {\bfseries NRST}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function values \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNR}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNS}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNT}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ uint32\+\_\+t $>$ {\bfseries IDX}
+\begin{DoxyCompactList}\small\item\em convenience storage for integer vectors \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+void {\bfseries Isoparametric} (bool isoparam)
+\item 
+void {\bfseries Uses\+Local\+Coordinates} (bool uses)
+\item 
+void {\bfseries Line\+Element} ()
+\item 
+void {\bfseries Surface\+Element} ()
+\item 
+void {\bfseries Volume\+Element} ()
+\item 
+void {\bfseries Element\+Type} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} etype)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab749771eccc931e112125efe7bf8252c}{dim}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ac8f4f6ea8649710e01ea018c61d93a30}{itp}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a9d9ced72fa35fd6a9fc755a219590820}{npf}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a329300ec856aa91bfe492daf93556b04}{npe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a609a2f0f70b086a278d112761c07c9de}{spe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a36972113f6f8351c891431038f8514bd}{fpe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a5684660784d3f15adffb485e8f47d9f3}{epe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a2509e6d8ab556b6a65a9036a62485df4}{nne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab4ad41c705b9691a4d01ee979b6214cc}{cne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a0729a0486b6febb96160f3e184c3f33f}{gpe}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyDate}{Date}
+1998 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aaa664417cb363205a66347d907726f0a}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!AspectRatio@{AspectRatio}}
+\index{AspectRatio@{AspectRatio}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{AspectRatio()}{AspectRatio()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_aaa664417cb363205a66347d907726f0a} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Aspect\+Ratio (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Computes the element aspect ratio as the ratio between the longest and the shortest boundary segment.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The \doxylink{classcsmp_1_1_element}{Element} is consulted for its global coordinates. \textbackslash{} 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c6148f7a38b639b721013dbd8f8d3f5}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_ab282749483809d6068af792135a272ad}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!CornerNodes@{CornerNodes}}
+\index{CornerNodes@{CornerNodes}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{CornerNodes()}{CornerNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_ab282749483809d6068af792135a272ad} 
+virtual uint32\+\_\+t csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Corner\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_ac167683317315d95dcfbc00d7e8cf952}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!CornerNodes@{CornerNodes}}
+\index{CornerNodes@{CornerNodes}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{CornerNodes()}{CornerNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_ac167683317315d95dcfbc00d7e8cf952} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Corner\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Returns local node ids of the 4 nodes located at the corners of the quadratic tetrahedral element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ids} & Returns an unsigned integer vector with the 4 local corner node ID numbers for the element. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ae3f0ae4a9ad3424ccc4553ff270b155e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a378a031bfa5619de70e01a5bfe5a31ed}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!CornerNodesOfFace@{CornerNodesOfFace}}
+\index{CornerNodesOfFace@{CornerNodesOfFace}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{CornerNodesOfFace()}{CornerNodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a378a031bfa5619de70e01a5bfe5a31ed} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Corner\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the corner nodes of the face 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a9614d03193a707898a0b26336a61d9d9}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a113a81c1e176675ad75c4e6253fb209c}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!CounterClockwiseNodes@{CounterClockwiseNodes}}
+\index{CounterClockwiseNodes@{CounterClockwiseNodes}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{CounterClockwiseNodes()}{CounterClockwiseNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a113a81c1e176675ad75c4e6253fb209c} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Counter\+Clockwise\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Returns the counter-\/clockwise local node numbering for the element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ids} & Returns the counter-\/clockwise local node numbering for the element. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a0cee16dcd439265594f8c9c178df7637}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dN@{dN}}
+\index{dN@{dN}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dN()}{dN()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a0cee16dcd439265594f8c9c178df7637} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::dN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DN}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Computes derivatives of shape functions at a point XY given in global coordinates within the element (also given in global coordinates).\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The element is used to obtain the global shape of the triangle and the interpolation function derivatives at the point XY are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.
+
+\begin{DoxyReturn}{Returns}
+The interpolation-\/function derivative matrix is returned into the second method argument. 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_a0cee16dcd439265594f8c9c178df7637_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_ac8f4dce61ec1363a09768f48310fa97a}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dN@{dN}}
+\index{dN@{dN}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dN()}{dN()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_ac8f4dce61ec1363a09768f48310fa97a} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::dN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DN6}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Compute derivatives of shape functions at corresponding nodes with respect to the global coordinate system.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The element is used to obtain the global shape of the triangle and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em DN6} & The interpolation-\/function derivative matrix is returned into the second method argument. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a3bf543b54ba24535aced15598495730f}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_ac8f4dce61ec1363a09768f48310fa97a_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_ac8f4dce61ec1363a09768f48310fa97a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aa3d8c85176ce21c9cd38526d522a0ed5}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dN\_AtBarycenter@{dN\_AtBarycenter}}
+\index{dN\_AtBarycenter@{dN\_AtBarycenter}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dN\_AtBarycenter()}{dN\_AtBarycenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_aa3d8c85176ce21c9cd38526d522a0ed5} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::d\+N\+\_\+\+At\+Barycenter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a703b7ce9d818248bbd9864dffee30b7c}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_aa3d8c85176ce21c9cd38526d522a0ed5_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a9afbf1aa9966651568562ffda8bcba6b}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dN\_AtIntegrationPoint@{dN\_AtIntegrationPoint}}
+\index{dN\_AtIntegrationPoint@{dN\_AtIntegrationPoint}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dN\_AtIntegrationPoint()}{dN\_AtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a9afbf1aa9966651568562ffda8bcba6b} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::d\+N\+\_\+\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{B}{, }\item[{uint32\+\_\+t}]{gauss\+\_\+point}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+\begin{DoxyEnumerate}
+\item Pre-\/multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J.
+\item The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the gauss point i (i=0...i=gauss points-\/1).
+\end{DoxyEnumerate}\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The first argument is a reference to the parent \doxylink{classcsmp_1_1_element}{Element} object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em B} & The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a885bb35784705f295c5f8ad9aa47f227}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_a9afbf1aa9966651568562ffda8bcba6b_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a2a9f617ad79f749a0dc238f41dbf6cb4}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dN\_AtNode@{dN\_AtNode}}
+\index{dN\_AtNode@{dN\_AtNode}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dN\_AtNode()}{dN\_AtNode()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a2a9f617ad79f749a0dc238f41dbf6cb4} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::d\+N\+\_\+\+At\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{B}{, }\item[{uint32\+\_\+t}]{nd}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+\begin{DoxyEnumerate}
+\item Pre-\/multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point.
+\item The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0...i=gauss points-\/1).
+\end{DoxyEnumerate}\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The first argument is a reference to the parent \doxylink{classcsmp_1_1_element}{Element} object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.
+
+\begin{DoxyReturn}{Returns}
+The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a89d6f320e17b4cfe1f9ddbeade1c9255}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_a2a9f617ad79f749a0dc238f41dbf6cb4_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a4a83087c213f17cbf357e35f42775200}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dNr@{dNr}}
+\index{dNr@{dNr}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dNr()}{dNr()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a4a83087c213f17cbf357e35f42775200} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::d\+Nr (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNR}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+This method and the complementary method \doxylink{classcsmp_1_1_isoparametric_linear_prism_a13d7d9d7d177be033d1854343909867a}{d\+Ns()} compute the shape function derivates with respect to the local coordinate axis \textquotesingle{}r\textquotesingle{}, and \textquotesingle{}s\textquotesingle{}.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method takes the local coordinates of the point at which the shape function derivatives shall be evaluated as third argument.
+
+
+\begin{DoxyParams}{Parameters}
+{\em DNR} & The shape function derivatives are returned into the second method argument which is a floating point vector of the size n=nodes per element.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+see inlined source code in the header file.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The shape function derivatives are needed in most integration procedures for elements. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a5b77ad8925c75b096867822e83bed7cd}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a13d7d9d7d177be033d1854343909867a}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dNs@{dNs}}
+\index{dNs@{dNs}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dNs()}{dNs()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a13d7d9d7d177be033d1854343909867a} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::d\+Ns (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNS}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions derivatives N(r,s,t)/ds 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a1c5cfe76807ea0d685c8e22d74c5582e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_acfd7f65e867bcd1d286b6a7646ddd0e7}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!dNt@{dNt}}
+\index{dNt@{dNt}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{dNt()}{dNt()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_acfd7f65e867bcd1d286b6a7646ddd0e7} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::d\+Nt (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{DNT}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+2D element interpolation functions derivatives N(r,s,t)/dt 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c22543bd89563413954beb8697fa914}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aef302c98c4e86fb197483b68d2348bde}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!EdgeLengths@{EdgeLengths}}
+\index{EdgeLengths@{EdgeLengths}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{EdgeLengths()}{EdgeLengths()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_aef302c98c4e86fb197483b68d2348bde} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Edge\+Lengths (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{len}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em len} & The lengths of the 12 segments will be returned into the vector which is the second method argument.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The segment lengths are computed as simple Euclidian distance between corner vertices of the edge. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac2348fa774457d4adde9354189277d9e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aad304836aea3fa43563baea74e6ddd9e}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!ElementTypeOfFace@{ElementTypeOfFace}}
+\index{ElementTypeOfFace@{ElementTypeOfFace}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{ElementTypeOfFace()}{ElementTypeOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_aad304836aea3fa43563baea74e6ddd9e} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Element\+Type\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the element type that would match that of its corresponding face 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000069}{Todo}}](2-\/P) Remove typid by name fct \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a066cbd92cd983a3c2e73859286280587}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a2b18e7ddc9cd1968287d22b0f4b9fd74}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!ElementTypeOfSegment@{ElementTypeOfSegment}}
+\index{ElementTypeOfSegment@{ElementTypeOfSegment}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{ElementTypeOfSegment()}{ElementTypeOfSegment()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a2b18e7ddc9cd1968287d22b0f4b9fd74} 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Element\+Type\+Of\+Segment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segment}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+reports the element type that would match that of its corresponding segment 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000070}{Todo}}](2-\/P) Remove typid by name fct \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a136f53aa9d4cd295a984ca46c0864ff7}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a02801bde0da7f9f56e3c584e10f8288a}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}}
+\index{ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{ExtrapolateIntegrationPointVariableToNodes()}{ExtrapolateIntegrationPointVariableToNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a02801bde0da7f9f56e3c584e10f8288a} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Extrapolate\+Integration\+Point\+Variable\+To\+Nodes (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nvars}{, }\item[{const std\+::vector$<$ double $>$ \&}]{IVAR}{, }\item[{std\+::vector$<$ double $>$ \&}]{NVAR}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Method returns a vector with a size of 3, containing the consecutively ordered local node numbers of the side of the element which lies at the indicated model boundary. If the element is not on the model boundary an error is reported and the vector is initialized to unspecified.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The parent \doxylink{classcsmp_1_1_element}{Element}, the target boundary of the the \doxylink{classcsmp_1_1_model}{Model} of elements, and a Meschach vector which will hold the the local indices of the identified nodes (0...5).
+
+
+\begin{DoxyParams}{Parameters}
+{\em fnids} & The resulting local node id\textquotesingle{}s are returned into the third method argument.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+While only the element knows which nodes are located at the mode boundary, the \doxylink{classcsmp_1_1_finite_element}{Finite\+Element} knows in which order these appear.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To assign Neumann boundary conditions with a PDE operator for surface integrals. As the linear character of the element do not expect high accuracy, one integration point is enough and used in most of the applications (FE, V1 by Zienkewitch).
+
+Because in the local coordinate system, the pyramid is always straight sided, and the derivatives of the interpolation functions are bilinear, variable values computed at integration points can simply be extrapolated to the nodes. This involves the steps\+:
+
+
+\begin{DoxyEnumerate}
+\item Compute the interpolation function coefficients for the pyramid which is defined by the one integration point.
+\item For each node point compute the values of the interpolation functions and use these to extrapolate the values of the variables at the nodes. 
+\end{DoxyEnumerate}
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ae7ea6940dcaa8403c7c35e70db4ba21c}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a5a97535f17ba2fe211645d27cc24f25e}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!InnerRadius@{InnerRadius}}
+\index{InnerRadius@{InnerRadius}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{InnerRadius()}{InnerRadius()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a5a97535f17ba2fe211645d27cc24f25e} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Inner\+Radius (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+This method attempts to calculate the inner radius of the curved-\/sided quad by talking 1/6 of the perimeter and dividing this measure by the area of the quad.
+
+The procedure is empirically based giving a good match if the quadss are relatively even-\/sided and have straight edges.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The parent element is queried for its node coordinates. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a3ad8c30e7136d47df5ca95907647c538}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_a5a97535f17ba2fe211645d27cc24f25e_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a4b8ce3016024ff06e66890f0e0857f3b}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!IntegrationPoint@{IntegrationPoint}}
+\index{IntegrationPoint@{IntegrationPoint}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{IntegrationPoint()}{IntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a4b8ce3016024ff06e66890f0e0857f3b} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{, }\item[{std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+integration point location transformed into global coordinates \begin{DoxyWarning}{Warning}
+the matrix XYZ must be uptodate 
+\end{DoxyWarning}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_aef00dcb02705580693988e47924a055d}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aa4fe2377b1bcd7a5319645ad5004e65a}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!JacobianAt@{JacobianAt}}
+\index{JacobianAt@{JacobianAt}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{JacobianAt()}{JacobianAt()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_aa4fe2377b1bcd7a5319645ad5004e65a} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Jacobian\+At (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{rst}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a246043f81c66c9f65e08c6a5190ea381}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aa91eb3e0495fa63af15ac252bca997a1}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!JacobianAtIntegrationPoint@{JacobianAtIntegrationPoint}}
+\index{JacobianAtIntegrationPoint@{JacobianAtIntegrationPoint}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{JacobianAtIntegrationPoint()}{JacobianAtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_aa91eb3e0495fa63af15ac252bca997a1} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Jacobian\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac6a31722bbf25abad86ccea3b653953e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a46e8b776f44b4a81157656a6a8737c88}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!MidSideNodes@{MidSideNodes}}
+\index{MidSideNodes@{MidSideNodes}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{MidSideNodes()}{MidSideNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a46e8b776f44b4a81157656a6a8737c88} 
+virtual uint32\+\_\+t csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Mid\+Side\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_ab6746a86481dc778ee7b17c9a8172d9a}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!MidSideNodes@{MidSideNodes}}
+\index{MidSideNodes@{MidSideNodes}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{MidSideNodes()}{MidSideNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_ab6746a86481dc778ee7b17c9a8172d9a} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Mid\+Side\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Returns 0 local node ids of the nodes located at the midsides of the element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ids} & Returns an unsigned integer vector with the 4 local midside-\/node ID numbers for the element. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a8149423046e10426a7eb520164ad3a38}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!N@{N}}
+\index{N@{N}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{N()}{N()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_ae87862e24a894772540e4e60e1c9140e} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::N (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{, }\item[{const std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Outputs the shape functions at the point \textquotesingle{}xyz\textquotesingle{} which must lie within the Prism. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_afb4e1d40cc3c368fe0d51a6498a4ad79}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!N\_AtBaryCenter@{N\_AtBaryCenter}}
+\index{N\_AtBaryCenter@{N\_AtBaryCenter}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{N\_AtBaryCenter()}{N\_AtBaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_afb4e1d40cc3c368fe0d51a6498a4ad79} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+N\+\_\+\+At\+Bary\+Center (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the values of the interpolation functions at the center of gravity of the element 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a6df28d2a7b4bcaff49cb726d6ef0890b}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a29a2402fbccabaf8ff12bf871319040f}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!N\_AtIntegrationPoint@{N\_AtIntegrationPoint}}
+\index{N\_AtIntegrationPoint@{N\_AtIntegrationPoint}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{N\_AtIntegrationPoint()}{N\_AtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a29a2402fbccabaf8ff12bf871319040f} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+N\+\_\+\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{, }\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Computes the interpolation function values at the specified integration point \textquotesingle{}ip\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em N} & The interpolation function values are returned into the third argument. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac1168c0c1cc280d1a1ecba676877d13b}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_afd62718afcf8969ade1ef0ed886b2e25}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!NodesConnectedTo@{NodesConnectedTo}}
+\index{NodesConnectedTo@{NodesConnectedTo}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{NodesConnectedTo()}{NodesConnectedTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_afd62718afcf8969ade1ef0ed886b2e25} 
+std\+::vector$<$ uint32\+\_\+t $>$ csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Nodes\+Connected\+To (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{node}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the nodes at the other end of the sgment that the argument node is on 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ab7196476d9fb740d91384c6c4521b0f5}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_ae06a2521f4e024d1cdbd95328a742087}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!NodesOfFace@{NodesOfFace}}
+\index{NodesOfFace@{NodesOfFace}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{NodesOfFace()}{NodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_ae06a2521f4e024d1cdbd95328a742087} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the face nodes (0..nodes-\/1) of the given face 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a32fc14575277846326041fe914209f9a}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a6d08e010aef3dec1b1b5bbc681aa970b}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!NodesOfSegment@{NodesOfSegment}}
+\index{NodesOfSegment@{NodesOfSegment}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{NodesOfSegment()}{NodesOfSegment()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a6d08e010aef3dec1b1b5bbc681aa970b} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Nodes\+Of\+Segment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segm\+\_\+id}{, }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{snids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the egde nodes (0..nodes-\/1) which can be more than 2 in higher-\/order elements 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a443213e98dc0cc9692bd3eef5a168295}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_aad6aeeb3fbc4a42cfd508c458b8e4941}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!NodesPerFace@{NodesPerFace}}
+\index{NodesPerFace@{NodesPerFace}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{NodesPerFace()}{NodesPerFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_aad6aeeb3fbc4a42cfd508c458b8e4941} 
+uint32\+\_\+t csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Nodes\+Per\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Starting with the smallest local node number, the face nodes are returned in counter clockwise order from the outside looking in. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a3cb7bc938ad00c9f4dbfbfa94c13e781}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a19b01da2ad0b9a912c129a8d59146007}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!Nrst@{Nrst}}
+\index{Nrst@{Nrst}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{Nrst()}{Nrst()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a19b01da2ad0b9a912c129a8d59146007} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Nrst (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{double}]{s}{, }\item[{double}]{t}{, }\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+interpolation functions in parametric space 
+
+void Isoparametric\+Linear\+Prism\+::\+Nrst( double r, double s, vector$<$double$>$\& N ) const
+
+Description\+:
+
+Returns the value of the element interpolation functions at the point \textquotesingle{}rst\textquotesingle{} in local coordinates.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The floating point coordinates \textquotesingle{}r\textquotesingle{}, \textquotesingle{}s\textquotesingle{} and \textquotesingle{}t\textquotesingle{} of the point at which the interpolation shall be carried out.
+
+
+\begin{DoxyParams}{Parameters}
+{\em N} & The fourth method argument is the vector into which the values of the n=nodes interpolation functions at the point \textquotesingle{}rst\textquotesingle{} will be returned.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+See in source code header file.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Method is used to compute property values at the integration points of the element. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a34bd4d39b1a026b1de15f028e9692bd8}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a61dc16e628c1460af9b8c7c14da878f4}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!OutputNodeDataToVTK@{OutputNodeDataToVTK}}
+\index{OutputNodeDataToVTK@{OutputNodeDataToVTK}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{OutputNodeDataToVTK()}{OutputNodeDataToVTK()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a61dc16e628c1460af9b8c7c14da878f4} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Output\+Node\+Data\+To\+VTK (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{var\+\_\+name}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DATA}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a67341585f83bc9d941c67e7a84801248}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_a61dc16e628c1460af9b8c7c14da878f4_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a8d5562b5d1754674a15bf145b5fe1255}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!ReferenceCoordinates@{ReferenceCoordinates}}
+\index{ReferenceCoordinates@{ReferenceCoordinates}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{ReferenceCoordinates()}{ReferenceCoordinates()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a8d5562b5d1754674a15bf145b5fe1255} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Reference\+Coordinates (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{mat\+Coords}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+for element types defined using a local coordinate system, returns the node coordinates into the argument matrix 
+
+Returns the reference coordinates of the element.
+
+\doxylink{classcsmp_1_1_dense_matrix}{Dense\+Matrix$<$\+DM\+\_\+\+MIN$>$} \& mat\+Coords; -\/\texorpdfstring{$>$}{>} Holds the reference coordinates of the finite element. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a34a5c030987c7e9842af332f5ed0d61b}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a9981c27373244ecaf7af94f009d1f85c}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!UnitNormalToFace@{UnitNormalToFace}}
+\index{UnitNormalToFace@{UnitNormalToFace}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{UnitNormalToFace()}{UnitNormalToFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a9981c27373244ecaf7af94f009d1f85c} 
+void csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Unit\+Normal\+To\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face}{, }\item[{std\+::vector$<$ double $>$ \&}]{unrml}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Uses the Triangular\+Facet and \doxylink{classcsmp_1_1_quadrilateral_facet}{Quadrilateral\+Facet} classes to compute the normals to the prism faces. Based of the face nodes as specified in \doxylink{classcsmp_1_1_isoparametric_linear_prism_ae06a2521f4e024d1cdbd95328a742087}{Nodes\+Of\+Face()}
+
+\begin{DoxyAuthor}{Author}
+SKM 15/2/2016
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Test}
+\item[\mbox{\hyperlink{test__test000011}{Test}}]OK \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a39eb6d5a1827783a679870277b4c68b8}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a19d22823f25c5498aa7ee769c74935e5}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!Volume@{Volume}}
+\index{Volume@{Volume}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{Volume()}{Volume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a19d22823f25c5498aa7ee769c74935e5} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Computes Integral N dA = sum\+\_\+1...n Wi Ji Ni. This formulation also gives a meaningful area if the element boundaries are curved. For a description of numerical integration of isoparametric quadratic triangular elements, refer to Cook et al. (1989) 3rd Ed., p. 183.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The finite element which supplies the nodal coordinates from which the area is computed.
+
+\begin{DoxyReturn}{Returns}
+The area (m2) of the finite element. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a16025c5d7f2ac217d2dbedad5d561a06}{csmp\+::\+Finite\+Element}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_linear_prism_a19d22823f25c5498aa7ee769c74935e5_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_linear_prism_a8ff79a4ddb34f5fe69206f25399bfc1d}\index{csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}!WeightAtIntegrationPoint@{WeightAtIntegrationPoint}}
+\index{WeightAtIntegrationPoint@{WeightAtIntegrationPoint}!csmp::IsoparametricLinearPrism@{csmp::IsoparametricLinearPrism}}
+\doxysubsubsection{\texorpdfstring{WeightAtIntegrationPoint()}{WeightAtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_linear_prism_a8ff79a4ddb34f5fe69206f25399bfc1d} 
+double csmp\+::\+Isoparametric\+Linear\+Prism\+::\+Weight\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the integration weight of the desired quadrature point 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac224265aa216deebfcf44b54d2689d1d}{csmp\+::\+Finite\+Element}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+elements/Isoparametric\+Linear\+Prism.\+h\item 
+source/modules/integration/finite\+\_\+elements/Isoparametric\+Linear\+Prism.\+cpp\end{DoxyCompactItemize}

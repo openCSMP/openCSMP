@@ -1,0 +1,1133 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</compoundname>
+    <includes refid="_finite_volume_policy_8h" local="no">FiniteVolumePolicy.h</includes>
+    <templateparamlist>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a5d420d2fff307c1e102007c2d7f9130f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Element&lt; 3U &gt;</definition>
+        <argsstring></argsstring>
+        <name>Element&lt; 3U &gt;</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Element&lt; 3U &gt;</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; 3U &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="167" column="11" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a634f4a22a7fdd129dfe3051bb24bb3f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Face&lt; 3U &gt;</definition>
+        <argsstring></argsstring>
+        <name>Face&lt; 3U &gt;</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Face&lt; 3U &gt;</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>&lt; 3U &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="167" column="11" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ac954dd95cd007f35251cc68157403686" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class InterFace&lt; 3U &gt;</definition>
+        <argsstring></argsstring>
+        <name>InterFace&lt; 3U &gt;</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::InterFace&lt; 3U &gt;</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>&lt; 3U &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="167" column="11" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="171" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a47861e86d1517b42de4d339e013a0e4e" prot="private" static="no" mutable="no">
+        <type>const <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">csmp::FiniteVolumeStencil</ref>&lt; 3U &gt; *</type>
+        <definition>const csmp::FiniteVolumeStencil&lt;3U&gt;* csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::fvptr_</definition>
+        <argsstring></argsstring>
+        <name>fvptr_</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::fvptr_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="176" column="38" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="176" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ab992ac9833aa630ffc96e0f30720c25b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</definition>
+        <argsstring>(const csmp::FiniteVolumeStencil&lt; 3U &gt; *=nullptr)</argsstring>
+        <name>FiniteVolumePolicy</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">csmp::FiniteVolumeStencil</ref>&lt; 3U &gt; *</type>
+          <defname>fvptr</defname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor of the traits class.</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The Traits constructor is called numerous times, it must not allocate memory or do expensive things. It initialises the private variable of the class, associated with the element and MemoryManager and updates Coordinate <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> of the element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="82" column="5" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="27" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a50bdb1a185e0154bd0549d219a35dc22" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</definition>
+        <argsstring>(const FiniteVolumePolicy &amp;p)</argsstring>
+        <name>FiniteVolumePolicy</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="83" column="5" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1afcfe0026b6b4c222b9112979d26df3b9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> &amp;</type>
+        <definition>FiniteVolumePolicy &amp; csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::operator=</definition>
+        <argsstring>(const FiniteVolumePolicy &amp;p)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="84" column="24" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a0465c2e90f2434205435319c2f572aba" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</definition>
+        <argsstring>(FiniteVolumePolicy &amp;&amp;p) noexcept</argsstring>
+        <name>FiniteVolumePolicy</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> &amp;&amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+<para>move semantics </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="86" column="5" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aa91c3e89a1b12dbe2dfad347682bd35b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> &amp;</type>
+        <definition>FiniteVolumePolicy &amp; csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::operator=</definition>
+        <argsstring>(FiniteVolumePolicy &amp;&amp;p) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> &amp;&amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="87" column="24" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aa8b80b29bca011452c3683040c7b14dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::AssignFiniteVolume</definition>
+        <argsstring>(const csmp::FiniteVolumeStencil&lt; 3U &gt; *)</argsstring>
+        <name>AssignFiniteVolume</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::AssignFiniteVolume</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">csmp::FiniteVolumeStencil</ref>&lt; 3U &gt; *</type>
+          <defname>fvptr</defname>
+        </param>
+        <briefdescription>
+<para>connect policy to a finite-volume stencil that must match the parent element </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Connects policy to a finite-volume stencil that must match the parent element. Check is performed in DEBUG mode that the stencil matches parent element. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="90" column="13" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="38" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aec46d50fcefcb34095457a6e98baa6b8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::AssignFiniteVolumeNullPtr</definition>
+        <argsstring>()</argsstring>
+        <name>AssignFiniteVolumeNullPtr</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::AssignFiniteVolumeNullPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="91" column="13" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a34c6716e22b6048c60fd0e09870fa71a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref>&lt; 3U &gt; *const</type>
+        <definition>const FiniteVolumeStencil&lt; 3U &gt; *const csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FV</definition>
+        <argsstring>() const</argsstring>
+        <name>FV</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FV</qualifiedname>
+        <briefdescription>
+<para>access the stencil functionality directly </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="94" column="39" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="52" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a6da63f30f2f836a5a8378cb981bcba4a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Facets</definition>
+        <argsstring>() const</argsstring>
+        <name>Facets</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Facets</qualifiedname>
+        <briefdescription>
+<para>the surface patches that constitute the outside walls of the finite volume </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns number of facets, 0 if no <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref> assigned. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="97" column="14" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="68" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a1954cb65fe8587751fae5f21f9444da2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Sectors</definition>
+        <argsstring>() const</argsstring>
+        <name>Sectors</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Sectors</qualifiedname>
+        <briefdescription>
+<para>the volumetric partitions of the finite elements that belong to the different node-centered finite volumes </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns number of sectors, 0 if no <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref> assigned. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="100" column="14" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="60" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a744221302258cfd179b94ccf648270b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::IntegrationPointsPerSector</definition>
+        <argsstring>() const</argsstring>
+        <name>IntegrationPointsPerSector</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::IntegrationPointsPerSector</qualifiedname>
+        <briefdescription>
+<para>volume quadrature points: usually one, but there may be multiple </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns number of integration points per sector, 0 if no <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref> assigned. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="103" column="14" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="76" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ac501a6b378d8940150481e9ee76fdafc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::IntegrationPointsPerFacet</definition>
+        <argsstring>() const</argsstring>
+        <name>IntegrationPointsPerFacet</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::IntegrationPointsPerFacet</qualifiedname>
+        <briefdescription>
+<para>surface quadrature points: usually one, but there may be multiple </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns number of integration points per facet, 0 if no <ref refid="classcsmp_1_1_finite_volume_stencil" kindref="compound">FiniteVolumeStencil</ref> assigned. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="106" column="14" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="84" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a8ca20d8d7e1579d565f7a5afaf51eb23" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::N_AtFacetIntegrationPoint</definition>
+        <argsstring>(uint32_t iFacet, uint32_t ip) const</argsstring>
+        <name>N_AtFacetIntegrationPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::N_AtFacetIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+<para>finite-element interpolation function values Ni output to NRST vector (stored by the current finite element) at the numbered facet integration point </para>
+        </briefdescription>
+        <detaileddescription>
+<para>SKM add-on (no rst vector needed !) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="109" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="100" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1af06b13191f570eecab441c8845a6871d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::N_AtFacetIntegrationPoint</definition>
+        <argsstring>(uint32_t iFacet, uint32_t ip, std::vector&lt; double &gt; &amp;NRST) const</argsstring>
+        <name>N_AtFacetIntegrationPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::N_AtFacetIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>NRST</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="110" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="132" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1afb249541c8acca58327eedeb97580c53" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::N_AtSectorIntegrationPoint</definition>
+        <argsstring>(uint32_t iSector, uint32_t ip) const</argsstring>
+        <name>N_AtSectorIntegrationPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::N_AtSectorIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iSector</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <briefdescription>
+<para>SKM add-on. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="111" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="165" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a38416013e2862526399d9ebec5e54588" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Local_dN_At</definition>
+        <argsstring>(const Point&lt; 3U &gt; &amp;rst) const</argsstring>
+        <name>Local_dN_At</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::Local_dN_At</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <briefdescription>
+<para>interpolation function derivatives at point specified in local coordinates; result is returned into NRST vector of current finite element </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The method gets parametric derivatives of interpolation functions at given parametric coordinates.</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Normally the method is called in connection with all the operations, using the transformation from parametric to physical space and back. For that purpose, the user can use public variable of the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> class, containing derivateves: stl vectors DNR,DNS,DNT. For example, before constructing the Jacobian matrix of the transformation rst-&gt;xyz the user should always call this method. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="114" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="213" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1af6e758392fcc00e86b3dc7390558d1d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::dN_At</definition>
+        <argsstring>(const Point&lt; 3U &gt; &amp;rst, DenseMatrix&lt; DM_MIN &gt; &amp;DN) const</argsstring>
+        <name>dN_At</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::dN_At</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <declname>rst</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DN</declname>
+        </param>
+        <briefdescription>
+<para>interpolation function derivatives at point specified in local coordinates returned into NRST vector of current finite element + detJ for integration </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>SKM: Caution! - not clear what FEM matrices have to do with FV traits </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="117" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="238" bodyend="312"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aecb109f17aeb99df83eb7fb106fa6486" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtFacetIntegrationPoint</definition>
+        <argsstring>(uint32_t iFacet, uint32_t ip, const csmp::Index &amp;) const</argsstring>
+        <name>PropertyValueAtFacetIntegrationPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtFacetIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>prop_key</defname>
+        </param>
+        <briefdescription>
+<para>interpolates value of scalar node variable to facet integration point (XYZ) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns double value of property at given internal facet integration point.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iFacet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet isnside the FE </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the integration point on the facet </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>prop_key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>key of the property name</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>For current implementation index ip is constrained to 0 only, i.e-&gt; the FVPEM method is working with 1 facet integration point only. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="120" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="345" bodyend="373"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a8ee3e488bfd62dd2f35f3a01d70ee1e9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtSectorIntegrationPoint</definition>
+        <argsstring>(uint32_t iSector, uint32_t ip, const csmp::Index &amp;) const</argsstring>
+        <name>PropertyValueAtSectorIntegrationPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtSectorIntegrationPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iSector</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>prop_key</defname>
+        </param>
+        <briefdescription>
+<para>interpolates value of scalar node variable to sector integration point (XYZ) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns double value of property at given volume integration point, inside the volumetric sector of FE, composing FV.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the integration point on the facet; </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>prop_key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>key of the property name;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>For current implementation index ip is constrained to 0 only, i.e-&gt; the FVPEM method is working with 1 volume sector integration point only. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="123" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="392" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aea32b1dc8d6c6d71987cdbe0661fdb96" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtFacetIntegrationPoint</definition>
+        <argsstring>(const csmp::Index &amp;, uint32_t iFacet, uint32_t ip, Var &amp;) const</argsstring>
+        <name>PropertyValueAtFacetIntegrationPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtFacetIntegrationPoint</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>prop_key</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>Var &amp;</type>
+          <defname>var</defname>
+        </param>
+        <briefdescription>
+<para>interpolate values of any node variable to facet integration point (XYZ) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>Does not work for array variables at the moment. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="127" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="428" bodyend="463"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a46db2c49967904b2e3f621347661dc2f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Var</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtSectorIntegrationPoint</definition>
+        <argsstring>(const csmp::Index &amp;, uint32_t iSector, uint32_t ip, Var &amp;) const</argsstring>
+        <name>PropertyValueAtSectorIntegrationPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::PropertyValueAtSectorIntegrationPoint</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>prop_key</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>iSector</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ip</declname>
+        </param>
+        <param>
+          <type>Var &amp;</type>
+          <defname>var</defname>
+        </param>
+        <briefdescription>
+<para>interpolate values of any node variable to sector integration point (XYZ) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="131" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="490" bodyend="522"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a564d4b69f259ce9d73ebedfa46f9ddc2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetIntegral</definition>
+        <argsstring>(uint32_t iFacet, const csmp::Index &amp;) const</argsstring>
+        <name>FacetIntegral</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetIntegral</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+          <defname>iSector</defname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>prop_key</defname>
+        </param>
+        <briefdescription>
+<para>integrates value of property over the area of the facet </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method calculates the surface integral for given scalar property and finite volume sector.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iSector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the target sector of the FE; </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>prop_key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>key of the integrated property name;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>As the method calculates the value of the surface integral for given property and facet, the value is returned by the method. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="134" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="562" bodyend="589"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a835c243e5c30bc2abbdf05232af755d4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::SectorIntegral</definition>
+        <argsstring>(uint32_t iSector, const csmp::Index &amp;) const</argsstring>
+        <name>SectorIntegral</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::SectorIntegral</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iSector</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>prop_key</defname>
+        </param>
+        <briefdescription>
+<para>integrates value of property over the sector </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method calculates the value of the volume integral for given scalar property and volume sector of finite element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iSector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal sector inside the FE; </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>prop_key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>key of the integrated property name;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>As the method calculates the value of the volume integral for the given property and volume sector, the value is returned by the method. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="137" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="609" bodyend="631"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a10ea17794e3f015ad754da8afaa5f1a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ProjectionOnFacetNormal</definition>
+        <argsstring>(uint32_t iFacet, const csmp::Index &amp;) const</argsstring>
+        <name>ProjectionOnFacetNormal</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ProjectionOnFacetNormal</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>prop_key</defname>
+        </param>
+        <briefdescription>
+<para>reads value of vector property and projects it onto facet normal in physical space; returns projected value </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method carries out projection of the given by name vector property on the normal of the internal facet. In this implementation of the method, projection is done in physical space-&gt; The surface parameter corresponds to local number of surfaces per node, 3 or 4 for vertice 5 of the pyramid.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iFacet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet inside the FE; </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>prop_key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>key of the property name;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>returned value of the determinant of the transformation of the topologically quadrilateral facet from parametric space of that surface to physical space;</para>
+</simplesect>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The method defines the normal to the facet in physical space, using standard FE methodology of normal definition, fitting the quadrilateral patch to the corner points of the facet in physical space-&gt; This method could be rather computationally expensive, therefore parametric projection on surface normal is more efficient.</para>
+<para>For current implementation index ip is constrained to 0 only, i.e-&gt; the FVPEM method is working with 1 facet integration point only. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="140" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="710" bodyend="751"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a6980a1fa814a0dcf7a028617049da238" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ProjectionOnFacetNormal</definition>
+        <argsstring>(uint32_t iFacet, const VectorVariable&lt; 3U &gt; &amp;) const</argsstring>
+        <name>ProjectionOnFacetNormal</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ProjectionOnFacetNormal</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; 3U &gt; &amp;</type>
+          <defname>vc</defname>
+        </param>
+        <briefdescription>
+<para>projects value of vector property onto facet normal in physical space; returns projection </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Overloaded method carries out projection of the given vector property on the normal of the internal facet. In this implementation of the method, projection is done in physical space-&gt; The surface parameter corresponds to local number of surfaces per node, 3 or 4 for vertice 5 of the pyramid.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iFacet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet isnside the FE; </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>vc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>vector variable (not by database name) for projection;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>returned value of the determinant of the transformation of the topologically quadrilateral facet from parametric space of that surface to physical space;</para>
+</simplesect>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>This overloaded method defines the normal to the facet in physical space, using standard FE methodology of normal definition, fitting the quadrilateral patch to the corner points of the facet in physical space-&gt; This method could be rather computationally expensive, therefore parametric projection on surface normal is more efficient.</para>
+<para>For current implementation index ip is constrained to 0 only, i.e-&gt; the FVPEM method is working with 1 facet integration point only. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="143" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="670" bodyend="679"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a99ee84c149f207425e57c92be3130592" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::SectorVolume</definition>
+        <argsstring>(uint32_t iSector) const</argsstring>
+        <name>SectorVolume</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::SectorVolume</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iSector</declname>
+        </param>
+        <briefdescription>
+<para>returns subvolume of finite element that corresponds to the requested finite volume sector </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method calculates the volume for the given volumetric sector.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iSector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet isnside the FE;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Method automatically takes into account composite nature of the sector at the apex of the pyramid. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="146" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="773" bodyend="790"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ae8e04953b780e75651c2c1c516208150" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetArea</definition>
+        <argsstring>(uint32_t iFacet) const</argsstring>
+        <name>FacetArea</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetArea</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <briefdescription>
+<para>returns the area of the finite-volume facet in physical space as obtained by construction of facet in physical space </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method calculates the surface area for the given facet.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iFacet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet inside the FE;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>This method takes the tabulated facet points, converts them to physical space, and then calculates the area of the given facet. If the element is a surface element, then only two points describe the facet, therefore, only the distance between these two points will be calculated. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="149" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="808" bodyend="831"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a0f42aada684b805a5f7462e1853f92c0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetAreaMapped</definition>
+        <argsstring>(uint32_t iFacet) const</argsstring>
+        <name>FacetAreaMapped</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetAreaMapped</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <briefdescription>
+<para>returns the area of the finite volume facet in physical space as obtained by Jacobian transformation of area in parametric space </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="152" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="919" bodyend="977"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1acf5ae7bb7f86ca947261f2c8c4edf8a8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt; 3U &gt; csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetNormal</definition>
+        <argsstring>(uint32_t iFacet) const</argsstring>
+        <name>FacetNormal</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetNormal</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <briefdescription>
+<para>returns the unit normal to the finite-volume facet </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Normal is generated in physical space, using quadrilateral patch, fitted to the facet. Method returns the determinant of the Jacobian for the surface at integration point (=facet area).</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iFacet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet is inside the FE;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref> containing physical normal coordinates.</para>
+</simplesect>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>This method defines the normal to the facet in physical space, using standard FE methodology of normal definition, fitting the quadrilateral patch to the corner points of the facet in physical space-&gt; This method could be rather computationally expensive, therefore parametric definition of the surface normal is more efficient.</para>
+<para>For current implementation index ip is constrained to 0 only, i.e-&gt; the FVPEM method is working with 1 facet integration point only. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="155" column="11" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="859" bodyend="905"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a0e7a76c03bf9a8f4b5a2fc6ec972c7a1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt; 3U &gt; csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetNormalMapped</definition>
+        <argsstring>(uint32_t iFacet) const</argsstring>
+        <name>FacetNormalMapped</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetNormalMapped</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <briefdescription>
+<para>transforms the facet normal from parametric to physical space and optionally normalises it to obtain a unit length </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Maps the normal from parametric space to physical space using a 1D to 3D Jacobian in a volumetric element </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="158" column="11" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="984" bodyend="1072"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a69dc3e0bb8cc4356f8ad9061257cf601" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ParametricFacetArea</definition>
+        <argsstring>(uint32_t iFacet) const</argsstring>
+        <name>ParametricFacetArea</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ParametricFacetArea</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <briefdescription>
+<para>returns the facet area in parametric space </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method calculates the value of the facet area in the parametric space of the given finite element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iFacet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet isnside the FE;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>The method is applicable to the algorithm of the parametric calculation of fluxes. It should be used together with the method ParametricProjectionOnFacetNormal(). </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="161" column="12" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="1087" bodyend="1099"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a6fe24b07b0fa3a78b51262dd146fe435" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt; 3U &gt; csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ParametricFacetNormal</definition>
+        <argsstring>(uint32_t iFacet) const</argsstring>
+        <name>ParametricFacetNormal</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::ParametricFacetNormal</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <briefdescription>
+<para>returns the normal to the facet in parametric space </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Reference normal is returned.</para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>iFacet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>index (No) of the internal facet isnside the FE;</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>reference to STL vector of the reference normal coordinates.</para>
+</simplesect>
+</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Application of the method gives the reference normal. This reference normal is used to find outwards pointing normal to the facet, not taking care of the orientation of the boundary loop of the facet. Dot product of the reference normal and any normal in physical or parametric realisation can be used to define outward pointing normal. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="164" column="11" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="1119" bodyend="1126"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a55fec87d00f0b60a951d49f94bb7fea2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt; 3U &gt; csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetPoint</definition>
+        <argsstring>(uint32_t iFacet, uint32_t iPoint) const</argsstring>
+        <name>FacetPoint</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FacetPoint</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>iFacet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>iPoint</declname>
+        </param>
+        <briefdescription>
+<para>returns facet corner point in physical coordinates using RST_to_XYX </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="167" column="11" bodyfile="source/modules/integration/finite_volumes/FiniteVolumePolicy3.cpp" bodystart="911" bodyend="915"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a5c18e8d8dc45eb231590e7466f2717bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</definition>
+        <argsstring>(const CELL&lt; 3U &gt; &amp;)</argsstring>
+        <name>FiniteVolumePolicy</name>
+        <qualifiedname>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;::FiniteVolumePolicy</qualifiedname>
+        <param>
+          <type>const CELL&lt; 3U &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="175" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Policy of the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> class which provides it with the functionality needed for finite-volume stencil formation, i.e. node-centered finite-volume computations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>S.K. Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>2003</para>
+</simplesect>
+Class is the implementation of the TRAITS design pattern. The traits template technique, pioneered by Nathan Myers,is a means of bundling type-dependent declarations together.In essence, using traits allows you to mix and match certain types and and values with contexts that use them in a flexible manner, while keeping your code readable and maintainable. <linebreak/>
+</para>
+<para>In our case for example, such code design permits to maintain efficient access to the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> class, thus giving the possibility to tie up Finite Volume and Finite <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> parts of the stencil implementation. <linebreak/>
+</para>
+<sect1 id="classcsmp_1_1_tensor_variable_3_013_u_01_4_1functionality">
+<title>Functionality</title><para>Provides a set of functionality to perform operations, used in the CVCELL transport method, implemented in CSMP. This includes calculation of volumes of sectors and surfaces of internal division walls - facets - inside the element, definition of projections of the velocity at the facet integration point on the normal to the facet, required for flux calculation, etc.</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Part of a consistent framework for generation of the Finite Element/Finite Volume method in CSP. Uses the concept of the TRAITS design pattern for efficient access to the the <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> class of CSP. Give the possibility for elegant coupling and access to Finite <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> and Finite Volume frameworks inside CSMP.</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>Uses the traints desigh pattern. Currently the class is supporting linear iso-parametric family of Finite Elements with reduced polynomial interpolation basis. Distinctive feature of the <ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> class is the possibility to access</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1examples">
+<title>Application Examples</title><para>No specific application examples are required, as the method is multiply <linebreak/>
+ called the great code CSP, within the implementation of the classes ExplicitFiniteVolumeProcessor and others. <linebreak/>
+</para>
+<para>TODO: <xrefsect id="todo_1_todo000027"><xreftitle>Todo</xreftitle><xrefdescription><para>(3) Put finiteVolumeAuxiliaryFunctions into <ref refid="classcsmp_1_1_finite_volume_policy" kindref="compound">FiniteVolumePolicy</ref> class (A) TODO: </para>
+<para>SKM try to do computations in parametric space</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+      <node id="1">
+        <label>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 3U, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::FiniteVolumePolicy&lt; uint32_t, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy"/>
+      </node>
+      <node id="1">
+        <label>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</label>
+        <link refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; 3U, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" line="80" column="1" bodyfile="source/includes/integration/finite_volumes/FiniteVolumePolicy.h" bodystart="80" bodyend="177"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aa8b80b29bca011452c3683040c7b14dd" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>AssignFiniteVolume</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aec46d50fcefcb34095457a6e98baa6b8" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>AssignFiniteVolumeNullPtr</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1af6e758392fcc00e86b3dc7390558d1d9" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>dN_At</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a5d420d2fff307c1e102007c2d7f9130f" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>Element&lt; 3U &gt;</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a634f4a22a7fdd129dfe3051bb24bb3f9" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>Face&lt; 3U &gt;</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ae8e04953b780e75651c2c1c516208150" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FacetArea</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a0f42aada684b805a5f7462e1853f92c0" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FacetAreaMapped</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a564d4b69f259ce9d73ebedfa46f9ddc2" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FacetIntegral</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1acf5ae7bb7f86ca947261f2c8c4edf8a8" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FacetNormal</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a0e7a76c03bf9a8f4b5a2fc6ec972c7a1" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FacetNormalMapped</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a55fec87d00f0b60a951d49f94bb7fea2" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FacetPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a6da63f30f2f836a5a8378cb981bcba4a" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>Facets</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ab992ac9833aa630ffc96e0f30720c25b" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FiniteVolumePolicy</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a50bdb1a185e0154bd0549d219a35dc22" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FiniteVolumePolicy</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a0465c2e90f2434205435319c2f572aba" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FiniteVolumePolicy</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a5c18e8d8dc45eb231590e7466f2717bf" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FiniteVolumePolicy</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a34c6716e22b6048c60fd0e09870fa71a" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>FV</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a47861e86d1517b42de4d339e013a0e4e" prot="private" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>fvptr_</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ac501a6b378d8940150481e9ee76fdafc" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>IntegrationPointsPerFacet</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a744221302258cfd179b94ccf648270b7" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>IntegrationPointsPerSector</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1ac954dd95cd007f35251cc68157403686" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>InterFace&lt; 3U &gt;</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a38416013e2862526399d9ebec5e54588" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>Local_dN_At</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a8ca20d8d7e1579d565f7a5afaf51eb23" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>N_AtFacetIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1af06b13191f570eecab441c8845a6871d" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>N_AtFacetIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1afb249541c8acca58327eedeb97580c53" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>N_AtSectorIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1afcfe0026b6b4c222b9112979d26df3b9" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aa91c3e89a1b12dbe2dfad347682bd35b" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a69dc3e0bb8cc4356f8ad9061257cf601" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>ParametricFacetArea</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a6fe24b07b0fa3a78b51262dd146fe435" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>ParametricFacetNormal</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a10ea17794e3f015ad754da8afaa5f1a7" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>ProjectionOnFacetNormal</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a6980a1fa814a0dcf7a028617049da238" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>ProjectionOnFacetNormal</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aecb109f17aeb99df83eb7fb106fa6486" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>PropertyValueAtFacetIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1aea32b1dc8d6c6d71987cdbe0661fdb96" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>PropertyValueAtFacetIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a8ee3e488bfd62dd2f35f3a01d70ee1e9" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>PropertyValueAtSectorIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a46db2c49967904b2e3f621347661dc2f" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>PropertyValueAtSectorIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a835c243e5c30bc2abbdf05232af755d4" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>SectorIntegral</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a1954cb65fe8587751fae5f21f9444da2" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>Sectors</name></member>
+      <member refid="classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_1a99ee84c149f207425e57c92be3130592" prot="public" virt="non-virtual"><scope>csmp::FiniteVolumePolicy&lt; 3U, CELL &gt;</scope><name>SectorVolume</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

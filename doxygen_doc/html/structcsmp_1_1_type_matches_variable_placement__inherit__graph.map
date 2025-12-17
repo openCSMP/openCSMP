@@ -1,0 +1,19 @@
+<map id="csmp::TypeMatchesVariablePlacement&lt; T, IT &gt;" name="csmp::TypeMatchesVariablePlacement&lt; T, IT &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="855,5,1030,87"/>
+<area shape="rect" id="Node000002" href="$structcsmp_1_1_type_matches_variable_placement_3_01_boundary_00_01_b_o_u_n_d_a_r_y_01_4.html" title=" " alt="" coords="5,186,240,267"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="841,53,700,60,540,72,390,89,330,100,284,113,251,128,220,147,166,188,162,184,217,143,249,123,282,108,329,95,390,84,539,67,700,55,840,48"/>
+<area shape="rect" id="Node000003" href="$structcsmp_1_1_type_matches_variable_placement_3_01_element_00_01_e_l_e_m_e_n_t_01_4.html" title=" " alt="" coords="264,186,480,267"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="841,53,771,59,693,70,612,87,534,113,471,148,417,188,414,184,468,143,532,108,610,82,692,65,771,53,841,47"/>
+<area shape="rect" id="Node000004" href="$structcsmp_1_1_type_matches_variable_placement_3_01_face_00_01_f_a_c_e_01_4.html" title=" " alt="" coords="503,186,678,267"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="842,81,764,113,701,149,644,188,641,183,698,145,762,108,840,76"/>
+<area shape="rect" id="Node000005" href="$structcsmp_1_1_type_matches_variable_placement_3_01_inter_face_00_01_i_n_t_e_r___f_a_c_e_01_4.html" title=" " alt="" coords="702,186,946,267"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="910,100,852,187,848,184,906,97"/>
+<area shape="rect" id="Node000006" href="$structcsmp_1_1_type_matches_variable_placement_3_01_model_00_01_m_o_d_e_l_01_4.html" title=" " alt="" coords="970,186,1156,267"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1017,95,1029,109,1048,147,1059,185,1054,186,1043,149,1024,112,1013,99"/>
+<area shape="rect" id="Node000007" href="$structcsmp_1_1_type_matches_variable_placement_3_01_node_00_01_n_o_d_e_01_4.html" title=" " alt="" coords="1179,186,1354,267"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1045,59,1111,77,1144,91,1175,108,1215,144,1246,184,1241,187,1211,148,1172,113,1142,96,1109,83,1044,64"/>
+<area shape="rect" id="Node000008" href="$structcsmp_1_1_type_matches_variable_placement_3_01_region_00_01_r_e_g_i_o_n_01_4.html" title=" " alt="" coords="1378,186,1577,267"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1045,47,1112,53,1185,64,1262,82,1334,108,1364,124,1393,143,1441,184,1438,188,1390,147,1362,129,1332,113,1260,87,1184,70,1111,58,1045,53"/>
+<area shape="rect" id="Node000009" href="$structcsmp_1_1_type_matches_variable_placement_3_01_split_boundary_00_01_s_p_l_i_t___b_o_u_n_d_a_r_y_01_4.html" title=" " alt="" coords="1601,178,1775,274"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1045,49,1172,56,1315,68,1447,85,1500,96,1541,108,1596,139,1643,176,1640,180,1593,143,1539,113,1499,101,1446,90,1314,73,1171,61,1045,54"/>
+</map>

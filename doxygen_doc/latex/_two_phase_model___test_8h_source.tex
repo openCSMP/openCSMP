@@ -1,0 +1,48 @@
+\doxysection{Two\+Phase\+Model\+\_\+\+Test.\+h}
+\hypertarget{_two_phase_model___test_8h_source}{}\label{_two_phase_model___test_8h_source}\index{tests/unit/TwoPhaseModel\_Test.h@{tests/unit/TwoPhaseModel\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWO\_PHASE\_MODEL\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWO\_PHASE\_MODEL\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_two_phase_model}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{///\ PL\ Nov\ 2010}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test}{TwoPhaseModel\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{explicit}\ TwoPhaseModel\_Test(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<1U>*,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ testName,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ krn,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ krw,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pc,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ upToElementNumber\ =\ 0\ );}
+\DoxyCodeLine{00022\ \ \ \string~TwoPhaseModel\_Test();}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ model\_;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<1U>*\ twoPhaseModel\_;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ size\_t\ upToElementNumber\_;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ krn\_key\_,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ krw\_key\_,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ pc\_key\_;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ std::list<std::string>\ vtuOutputProps\_;}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ TWO\_PHASE\_MODEL\_TEST\_H}}
+
+\end{DoxyCode}

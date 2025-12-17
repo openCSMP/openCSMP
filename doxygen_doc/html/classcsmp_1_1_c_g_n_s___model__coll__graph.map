@@ -1,0 +1,21 @@
+<map id="csmp::CGNS_Model&lt; dim &gt;" name="csmp::CGNS_Model&lt; dim &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="361,1451,537,1639"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_model.html" title="Model the playground for the physics of interest." alt="" coords="332,873,566,1401"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="452,1417,452,1451,446,1451,446,1417"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_region_interface.html" title=" " alt="" coords="27,460,197,806"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,792,226,822,335,979,331,982,221,825,202,795"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_region_interface.html" title="Policy of the class model for the management of its labeled subdomains that are equivalent to the par..." alt="" coords="5,16,194,361"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="107,376,110,460,104,460,102,377"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_boundary_interface.html" title=" " alt="" coords="236,470,427,796"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="375,809,390,872,385,874,370,811"/>
+<area shape="rect" id="Node000006" href="$classcsmp_1_1_boundary_interface.html" title="Policy of Model class for the management of internal and external boundaries which are of a lower spa..." alt="" coords="219,26,431,351"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="330,366,332,470,327,471,325,366"/>
+<area shape="rect" id="Node000007" href="$classcsmp_1_1_split_boundary_interface.html" title=" " alt="" coords="457,442,681,823"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="523,838,514,874,509,872,518,837"/>
+<area shape="rect" id="Node000008" href="$classcsmp_1_1_split_boundary_interface.html" title=" " alt="" coords="455,5,704,371"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="578,386,576,442,571,442,572,386"/>
+<area shape="rect" id="Node000009" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="717,490,890,775"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="718,789,695,825,632,913,568,996,563,993,628,909,691,822,714,786"/>
+<area shape="rect" id="Node000010" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="728,46,901,331"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="813,345,810,491,804,491,808,345"/>
+</map>

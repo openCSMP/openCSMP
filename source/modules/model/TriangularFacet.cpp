@@ -23,8 +23,11 @@ double triangleArea( const Point<2U>& pt0,
 
 
 /**
-    creates the unit normal to the triangle defined by the points in 
+    Creates  unit normal to the triangle defined by the points in
     counter-clockwise order.
+    
+    For example, if the counter-clockwise points are located in the XY plane, the normal will
+    be point to +Z, given the right-hand coordinate system that CSMP uses.
 */
 Point<3U>  normalOfTriangle( const Point<3U>& pt0, 
                              const Point<3U>& pt1, 
@@ -38,13 +41,14 @@ Point<3U>  normalOfTriangle( const Point<3U>& pt0,
   
 }
 
-// TODO: clarify / fix this (suggestion 1(z-direction) if counter-clockwise nodes, else -1
-/// normal is zero as it points into the coordinate direction that does not exist
+
+/// normal is NAN as it points into the coordinate direction that does not exist
 Point<2U>  normalOfTriangle( const Point<2U>&,
                              const Point<2U>&,
                              const Point<2U>& )
  {
-    return Point<2U>();
+    return Point<2U>( std::numeric_limits<double>::quiet_NaN(),
+                      std::numeric_limits<double>::quiet_NaN() );
  }
 
 

@@ -14,7 +14,7 @@ EOS_CO2H2ONaCl_Spycher04::EOS_CO2H2ONaCl_Spycher04()
     : R ( 8.314472 ), // gas constant in m3 Pa K-1 mol-1
       stoichio ( 2 ), // stoichiometric number of ions contained in the dissolved salt,
       // it is taken 2 for NaCl, (Spycher, 2004)
-      a_h2oco2 ( 7.89e+0 ), //  Pa m6 K0.5 mol–2
+      a_h2oco2 ( 7.89e+0 ), //  Pa m6 K0.5 molÃ±2
       b_co2 ( 2.780E-5 ), //  m3/mol
       b_h2o ( 1.818e-5 ), //  m3/mol
       b_mix ( 2.78e-5 ), //  m3/mol
@@ -523,7 +523,7 @@ double EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double pressure,
     // T in C
     // thermEquilConstH2o without unit
 
-    // range T 10–110°C
+    // range T 10Ã±110âˆžC
 
     //thermEquilConstH2o for P0=1 bar
 
@@ -561,7 +561,7 @@ double EOS_CO2H2ONaCl_Spycher04::thermEquilConstH2o( double temperature )
     // T in C
     // thermEquilConstH2o without unit
 
-    // range T 12–110°C
+    // range T 12Ã±110âˆžC
 
     //thermEquilConstCo2G for P0=1 bar
 */
@@ -594,7 +594,7 @@ double EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2G( double temperature )
     // T in C
     // thermEquilConstCo2L without unit
 
-    // range T 12–31°C
+    // range T 12Ã±31âˆžC
 
 */
 double EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2L( double temperature )
@@ -632,8 +632,8 @@ double EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2L( double temperature )
     // activityCoefficient without unit, we should transform it to fraction molar to be used
     // mSalt molality in mol/Kg
 
-    // range T : 20 – 400°C
-    // range msalt: 0–6.5 m
+    // range T : 20 Ã± 400âˆžC
+    // range msalt: 0Ã±6.5 m
 
 */
 double EOS_CO2H2ONaCl_Spycher04::activityCoefficientDrummond1981(double pressure, double temperature, double mSalt )
@@ -746,8 +746,8 @@ double EOS_CO2H2ONaCl_Spycher04::activityCoefficientDuanSun2003( double temperat
     // activityCoefficient without unit, en mole fraction ready to use
 
 
-    // range T : 0 – 350 C
-    // range NaCl molality: 0–1.95 m
+    // range T : 0 Ã± 350 C
+    // range NaCl molality: 0Ã±1.95 m
 */
 double EOS_CO2H2ONaCl_Spycher04::activityCoefficientBattistelliEtal1997( double temperature,
                                                                  double mSalt )
@@ -783,8 +783,8 @@ double EOS_CO2H2ONaCl_Spycher04::activityCoefficientBattistelliEtal1997( double 
     // T in C
     // mSalt molality in mol/Kg
 
-    // range T : 40 – 160 C
-    // range NaCl molality: 0–6.0 m
+    // range T : 40 Ã± 160 C
+    // range NaCl molality: 0Ã±6.0 m
     // just the NaCl was taken into account
 */
 double EOS_CO2H2ONaCl_Spycher04::activityCoefficientRumpf1994( double pressure ,double temperature,double mSalt )
@@ -1197,7 +1197,7 @@ double EOS_CO2H2ONaCl_Spycher04::massFracNaClInAqueousPhase( double molarFracCo2
 
     // Range T:  283 < T < 380
 
-    // a_Co2 unit is Pa m6 K0.5 mol–2
+    // a_Co2 unit is Pa m6 K0.5 molÃ±2
 
 
     //assumption infinite H2O diluation
@@ -1216,7 +1216,7 @@ double EOS_CO2H2ONaCl_Spycher04::a_Co2(double temperature)
     dummy1 *=  temp;
     aCo2   -=  dummy1;
     aCo2   *=  1.0e5;
-    aCo2   *=  1.0e-12; // conversion from bar cm6 K0.5 mol–2 to Pa m6 K0.5 mol–2
+    aCo2   *=  1.0e-12; // conversion from bar cm6 K0.5 molÃ±2 to Pa m6 K0.5 molÃ±2
 
     return   aCo2;
 }
@@ -1438,8 +1438,8 @@ double EOS_CO2H2ONaCl_Spycher04::x_salt(double molalityCO2, double msalt )
     //  Lawrence Berkeley National Laboratory,
     //  Berkely, CA
 
-    // valid for   0 < T < 300 °C
-    //  Temperature in          °C
+    // valid for   0 < T < 300 âˆžC
+    //  Temperature in          âˆžC
     //  volume Partial Molar CO2 is  the apparent molar volume of dissolved CO2 (m3/mol)
 
 */
@@ -1471,11 +1471,11 @@ double EOS_CO2H2ONaCl_Spycher04::volumePartialMolarCo2( double temperature )
     //
     //  Density in              kg/m^3
     //  Pressure in             Pa
-    //  Temperature in          °C
+    //  Temperature in          âˆžC
     //  Salt Concentration in   mass fraction
 
     // valid for a range of pressure: 1 < P < 350 bar
-    // valid for a range of temperature: 20 < T < 150 °C
+    // valid for a range of temperature: 20 < T < 150 âˆžC
     // valid for a range of salt molality : 0 < m_salt < 6 molality
     //   equivalent to salt mass fraction : 0 < massFracSalt < 0.95347 %weight
 */
@@ -1495,7 +1495,7 @@ double EOS_CO2H2ONaCl_Spycher04::densityBrine( double pressure,
             densBrine(0.),
             dummy1(0.),
             press ( pressure * 1e-6 ), //converting from Pa to MPa
-            temp(degreeCToKelvin(temperature)), //converting from °C to K
+            temp(degreeCToKelvin(temperature)), //converting from âˆžC to K
             massFracSalt(0.0);
 
     massFracSalt = molalNaClToMassFracNaClInAqueousPhase(mSalt)*1.e-2; //conversion from salt molality to salt mass fraction
@@ -1654,7 +1654,7 @@ double EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhaseZ( double pressure,
                                                         double phaseVolumeCo2 )
 {
     //  Pressure in             Pa
-    //  Temperature in          °C
+    //  Temperature in          âˆžC
     //  phaseVolumeCo2 in       m^3
     double temp(degreeCToKelvin(temperature)); //conversion to K
 
@@ -1681,11 +1681,11 @@ double EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhaseZ( double pressure,
 
     //  Viscosity in            Pa s
     //  Pressure in             Pa
-    //  Temperature in          °C
+    //  Temperature in          âˆžC
     //  Salt molality in   mol/Kg
 
     // valid for a range of pressure: 1 < P < 350 bar
-    // valid for a range of temperature: 20 < T < 150 °C
+    // valid for a range of temperature: 20 < T < 150 âˆžC
     // valid for a range of salt molality : 0 < msalt < 6 molality
 
 
@@ -1766,7 +1766,7 @@ double EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double pressure,
     //  The transport properties of carbon dioxide
     //  J. Phys. Chem. Ref. Data, Vol. 19, No. 3
     //
-    //  [temperature] = °C
+    //  [temperature] = âˆžC
     //  [density]     = kg/m^3
     //  [viscosity]   = Pa s
 
@@ -1831,7 +1831,7 @@ double EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double temperature,
     Desorption of carbon dioxide from aqueous potash solutions with and without the addition of arsenite as a catalyst
     Trans. Inst. Chem. Eng. 50, 300-309
 
-    [temperature] = °C
+    [temperature] = âˆžC
     [molecularDiffCoeffCo2intoBrine] = m^2/s
     [viscoBrine] = Pa s
 */
@@ -1857,13 +1857,13 @@ double EOS_CO2H2ONaCl_Spycher04::molecularDiffCoeffCo2intoBrine( double temperat
     //  Geochimica et Cosmochimica acta, vol 67, No 16
 
     //  Pressure in             Pa
-    //  Temperature in          °C
+    //  Temperature in          âˆžC
 */
 double EOS_CO2H2ONaCl_Spycher04::equilKH2o( double temperature,
                                     double pressure,
                                     double kH2o )
 {
-    double temp(degreeCToKelvin(temperature)); //conversion from °C to K
+    double temp(degreeCToKelvin(temperature)); //conversion from âˆžC to K
 
     return kH2o * exp( (pressure - p0) * vH2o / (R * temp) );
 }
@@ -1877,13 +1877,13 @@ double EOS_CO2H2ONaCl_Spycher04::equilKH2o( double temperature,
 //  Geochimica et Cosmochimica acta, vol 67, No 16
 
 //  Pressure in             Pa
-//  Temperature in          °C
+//  Temperature in          âˆžC
 */
 double EOS_CO2H2ONaCl_Spycher04::equilKCo2( double temperature,
                                     double pressure,
                                     double kCo2G )
 {
-    double temp(degreeCToKelvin(temperature)); //conversion from °C to K
+    double temp(degreeCToKelvin(temperature)); //conversion from âˆžC to K
 
     return kCo2G * exp( (pressure - p0) * vCo2 / (R * temp) );
 }
@@ -2040,7 +2040,7 @@ double EOS_CO2H2ONaCl_Spycher04::KH2o(double pressure, double temperature )
 /**
 
     // Hassanzadeh et al 2008,
-    // Predicting PVT data for CO2–brine mixtures for
+    // Predicting PVT data for CO2Ã±brine mixtures for
     // black-oil simulation of CO2 geological storage
 
 */
@@ -2076,7 +2076,7 @@ double EOS_CO2H2ONaCl_Spycher04::GasFormationVolumeFactor( double pressure, doub
 
 /**
     // Hassanzadeh et al 2008,
-    // Predicting PVT data for CO2–brine mixtures for
+    // Predicting PVT data for CO2Ã±brine mixtures for
     // black-oil simulation of CO2 geological storage
 
     // Vwater @RC / Vwater @SC  unit => Rm^3/Sm^3

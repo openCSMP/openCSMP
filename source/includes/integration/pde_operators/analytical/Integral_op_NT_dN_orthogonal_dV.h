@@ -15,8 +15,8 @@ class Integral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim,CELL> {
                                      const char* basic,            // e.g., fluid pressure
                                      const char* test );           // streamfunction
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
 
   private:
     DenseMatrix<DM_MIN>  M, DNORTHO, NT; 

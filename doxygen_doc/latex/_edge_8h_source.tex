@@ -1,0 +1,120 @@
+\doxysection{Edge.\+h}
+\hypertarget{_edge_8h_source}{}\label{_edge_8h_source}\index{source/includes/model/Edge.h@{source/includes/model/Edge.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ Edge.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ Open\ CSMP++}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 19/10/2022.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_EDGE\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_EDGE\_H}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_local_variable_storage_8h}{"{}LocalVariableStorage.h"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_policy_8h}{"{}FiniteElementPolicy.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_volume_policy_8h}{"{}FiniteVolumePolicy.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_face}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_face}{Face}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_visitor}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}};}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element_manager}{FiniteElementManager}};}
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil_manager}{FiniteVolumeStencilManager}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ Line\ "{}face"{}\ that\ knows\ its\ surface\ Face\ neighbors.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ Supports\ computations\ on\ the\ boundaries\ of\ 3D\ models.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ Variable\ placement\ is\ FACE.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ Can\ be\ a\ manifold.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ @todo\ design\ issue:\ edges\ should\ only\ exist\ only\ in\ 3D\ models\ because,\ only\ there,\ they\ can\ have\ Face\ neighbors.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ @todo\ remove\ templatisation,\ making\ this\ a\ 3D\ only\ entity}}
+\DoxyCodeLine{00031\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00032\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00033\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_edge}{FiniteElementPolicy}}<\mbox{\hyperlink{classcsmp_1_1_edge}{dim}},\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}>,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_edge}{FiniteVolumePolicy}}<\mbox{\hyperlink{classcsmp_1_1_edge}{dim}},\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}>,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_edge}{LocalVariableStorage}}<\mbox{\hyperlink{classcsmp_1_1_edge}{dim}},\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}>\ \{}
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{///\ custom\ constructor,\ finds\ face\ ids\ and\ assigns\ nodes\ automatically}}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_edge_a4ac7410e8588cb9fd9639536247a2e7b}{Edge}}(\ \mbox{\hyperlink{classcsmp_1_1_finite_element}{FiniteElement}}*,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{FiniteVolumeStencil}}<dim>*,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>*\ \textcolor{keyword}{const}\ inner\_parent,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>*\ \textcolor{keyword}{const}\ outer\_parent,\ \textcolor{comment}{///<\ if\ any}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\&,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_integration_point_variables}{IntegrationPointVariables}}\&\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \string~Edge()\ \{\}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{///\ Local\ variable\ storage\ interface}}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \mbox{\hyperlink{classcsmp_1_1_edge_a9a9ece1f71df460ae569528a19f23209}{Placement}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ FACE;\ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ uint32\_t\ \ Nodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<uint32\_t>(node\_connector\_.size());\ \}}
+\DoxyCodeLine{00051\ \ \ \ \ uint32\_t\ \ Neighbors()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 2U;\ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ uint32\_t\ \ ConnectedNeighbors()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{///\ sides\ of\ Face\ object\ by\ analogy\ with\ Element}}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_edge_aaa007ebe66b285cefef42c7ced30b7d9}{uint32\_t}}\ \ \mbox{\hyperlink{classcsmp_1_1_edge_aaa007ebe66b285cefef42c7ced30b7d9}{Faces}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ 2U;\ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{///\ only\ constant\ iterators\ are\ provided\ because\ the\ user\ is\ not\ supposed\ to\ change\ the\ node\ pr\ neighbor\ connectivity\ (done\ by\ MeshManager)}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_edge}{std}}::\mbox{\hyperlink{classcsmp_1_1_edge}{vector}}<\mbox{\hyperlink{classcsmp_1_1_edge}{Node}}<\mbox{\hyperlink{classcsmp_1_1_edge}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_edge}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_edge}{NodesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_edge}{std}}::\mbox{\hyperlink{classcsmp_1_1_edge}{vector}}<\mbox{\hyperlink{classcsmp_1_1_edge}{Node}}<\mbox{\hyperlink{classcsmp_1_1_edge}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_edge}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_edge}{NodesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{///\ to\ apply\ visitors\ whose\ application\ level\ is\ Boundary\ and\ target\ is\ Edge}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_edge_af19d103c97a0e160b7312f9bf31f444c}{Accept}}(\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\&\ );}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ access\ the\ nodes\ that\ are\ connected\ to\ the\ Edge}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_edge_a9d56fa14fea862bcbd4663cfaf3c8d3d}{N}}(\ uint32\_t\ n\_local\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{///\ access\ the\ neighbor\ faces\ of\ this\ face}}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_edge_ab1d441bdc7a4fd020c87f46bc9542265}{Neighbor}}(\ \mbox{\hyperlink{classcsmp_1_1_edge_ab1d441bdc7a4fd020c87f46bc9542265}{uint32\_t}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{///\ initialisation\ of\ \ nodes\ x\ dim\ matrix\ with\ the\ \ coordinates\ of\ the\ Edge's\ nodes}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_edge_afd35568c2036e13985b8320717a2eca0}{NodeCoordinateMatrix}}(\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{///\ on-\/the-\/fly\ 0..n-\/1\ numbering\ stored\ in\ a\ mutable\ local\ variable\ (therefore\ const)}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \mbox{\hyperlink{classcsmp_1_1_edge_a82a4804920748319c272292bdd7f975c}{Idx}}(\ \mbox{\hyperlink{classcsmp_1_1_edge_a82a4804920748319c272292bdd7f975c}{size\_t}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \ \ size\_t\ Idx()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{///\ higher-\/dimensional\ Face\ located\ on\ side\ opposite\ to\ where\ the\ unit\ normal\ points;\ will\ always\ be\ present}}
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_edge_ac731bd41ebb8630187984fa01b5b0e09}{InnerParent}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{///\ higher-\/dimensional\ Face\ located\ on\ the\ side\ of\ the\ face\ to\ which\ the\ unit\ normal\ points;\ @attention\ does\ not\ exist\ on\ model\ boundary}}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_edge_a98d05221893aa36c73fc1bcff6747f71}{OuterParent}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_edge_ae6f11113d75c349f108b99c9b02967fd}{Parent}}(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga5d179634969d40eee2a383f783d570cb}{INTERFACE\_SIDE}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{///\ returns\ which\ Face\ of\ the\ higher\ dimensional\ inner\ neighbor\ Face\ this\ Edge\ shares\ its\ nodes\ with}}
+\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_edge_adb6d9273e5d15b9eb3b02e03bca95e53}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_edge_adb6d9273e5d15b9eb3b02e03bca95e53}{InnerParentFaceID}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00087\ \ \ \ \ uint32\_t\ OuterParentFaceID()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{//\ \ Face\ geometry\ operations}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{///\ returns\ length\ of\ the\ Edge;\ method\ assumes\ same\ role\ as\ Volume()\ for\ the\ element}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_edge_abd8794f3384513027c30bfe7e306d15e}{Length}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{///\ the\ centre\ of\ gravity\ of\ the\ element}}
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \mbox{\hyperlink{classcsmp_1_1_edge_a7c1598b22f1ae18cc430881cd7a42c34}{BaryCenter}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ Out()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ innerParent\_;\ \ \ \ \textcolor{comment}{///<\ higher-\/dimensional\ neighbor\ in\ opposite\ direction\ of\ unit\ normal\ (always\ there)}}
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_face}{Face}}<dim>*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ outerParent\_;\ \ \ \ \textcolor{comment}{///<\ higher-\/dimensional\ neighbor\ element\ in\ direction\ of\ interface\ normal}}
+\DoxyCodeLine{00104\ \ \ \ \ std::vector<Node<dim>*>\ \ node\_connector\_;\ \textcolor{comment}{///<\ pointers\ to\ the\ nodes\ of\ the\ face}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{mutable}\ size\_t\ \ idx\_;}
+\DoxyCodeLine{00106\ \ \ \ \ uint32\_t\ \ \ inner\_parent\_face\_id\_\ =\ \mbox{\hyperlink{classcsmp_1_1_edge}{UNSPECIFIED}};\ \textcolor{comment}{///<\ face\ number\ of\ inside\ higher-\/dimensional\ parent\ Face}}
+\DoxyCodeLine{00107\ \ \ \ \ uint32\_t\ \ \ outer\_parent\_face\_id\_\ =\ \mbox{\hyperlink{classcsmp_1_1_edge}{UNSPECIFIED}};\ \textcolor{comment}{///<\ face\ number\ of\ outside\ higher-\/dimensional\ parent\ Face}}
+\DoxyCodeLine{00108\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}<dim>*\ nbor\_edge0\_=\textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00109\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}<dim>*\ nbor\_edge1\_=\textcolor{keywordtype}{nullptr};\ \ \textcolor{comment}{///<\ the\ neighbors\ of\ the\ edge}}
+\DoxyCodeLine{00110\ \};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ CSMP\_EDGE\_H\ */}}
+
+\end{DoxyCode}

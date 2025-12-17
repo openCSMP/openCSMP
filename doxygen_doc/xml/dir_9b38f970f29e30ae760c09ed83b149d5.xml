@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_9b38f970f29e30ae760c09ed83b149d5" kind="dir">
+    <compoundname>source/modules/integration/solver</compoundname>
+    <innerdir refid="dir_39173ba4e66af10bb98f09f36077d3d2">source/modules/integration/solver/SAMG_profiles</innerdir>
+    <innerfile refid="_eigen_solver_8cpp">EigenSolver.cpp</innerfile>
+    <innerfile refid="_gauss___solver_8cpp">Gauss_Solver.cpp</innerfile>
+    <innerfile refid="_gauss_jordan___solver_8cpp">GaussJordan_Solver.cpp</innerfile>
+    <innerfile refid="_l_udcmp___solver_8cpp">LUdcmp_Solver.cpp</innerfile>
+    <innerfile refid="meschach_8cpp">meschach.cpp</innerfile>
+    <innerfile refid="_meschach___solver_8cpp">Meschach_Solver.cpp</innerfile>
+    <innerfile refid="_p_a_r_d_i_s_o___solver_8cpp">PARDISO_Solver.cpp</innerfile>
+    <innerfile refid="_s_a_m_g___configurator_8cpp">SAMG_Configurator.cpp</innerfile>
+    <innerfile refid="_s_a_m_g___exception_8cpp">SAMG_Exception.cpp</innerfile>
+    <innerfile refid="_s_a_m_g___settings_8cpp">SAMG_Settings.cpp</innerfile>
+    <innerfile refid="_s_a_m_g___solver_8cpp">SAMG_Solver.cpp</innerfile>
+    <innerfile refid="_solver_8cpp">Solver.cpp</innerfile>
+    <innerfile refid="_solver_settings_8cpp">SolverSettings.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/solver/"/>
+  </compounddef>
+</doxygen>

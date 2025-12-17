@@ -1,0 +1,373 @@
+\chapter{Open-\/\+CSMP++ README }
+\hypertarget{md__r_e_a_d_m_e}{}\label{md__r_e_a_d_m_e}\index{Open-\/CSMP++ README@{Open-\/CSMP++ README}}
+\label{md__r_e_a_d_m_e_autotoc_md99}%
+\Hypertarget{md__r_e_a_d_m_e_autotoc_md99}%
+
+
+Some background. CSMP (Complex Systems Modeling Platform) is a C++17 ANSI / ISO standard-\/compliant application programmer interface (API). It is a library of numerical methods for the combined simulation of thermal–hydrological–mechanical–chemical (THMC) processes, and has been designed for complex models of the subsurface, spanning a range of length scales.
+
+This CSMP repository contains implementations of the finite-\/element-\/ (FEM) and finite volume (FVM) methods and combinations thereof. In addition to solution methods for elliptic-\/parabolic and hyberbolic partial differential equations, it provides implementations of\+:
+
+CSMP\textquotesingle{}s\textquotesingle{} unique data model supporting computations on regions, boundaries and internal discontinuities. Material properties and dependent variables stored using a tree structures representing the mesh. Computational domains can evolve in shape and properties over time, and multi-\/domain simulations, where different physics are modelled in different regions, can be implemented.
+
+Constitutive relationships for THMC processes Equations of state Property modeling and simulation analysis functionality Local (asynchronous) time-\/stepping methods and support for dynamic mesh adaptivity, facilitating goal-\/based simulation.
+
+CSMP forms the basis of a wide variety of simulation programs, including discrete fracture and matrix modelling, upscaling and reservoir simulation. Publications on these applications are furnished upon request.\hypertarget{md__r_e_a_d_m_e_autotoc_md100}{}\doxysection{\texorpdfstring{Quick Start}{Quick Start}}\label{md__r_e_a_d_m_e_autotoc_md100}
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Clone the repository\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git\ clone\ https://gitlab.com/csmp/open-\/csmp-\/2024.git}
+\DoxyCodeLine{cd\ open-\/csmp-\/2024}
+
+\end{DoxyCode}
+
+\item {\bfseries{Create and enter build directory\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{mkdir\ build\ \&\&\ cd\ build}
+
+\end{DoxyCode}
+
+\item {\bfseries{Configure with CMake\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake\ ..\ -\/DCMAKE\_BUILD\_TYPE=Release}
+
+\end{DoxyCode}
+
+\item {\bfseries{Build the project\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ -\/j\$(nproc)\ \ \#\ For\ Linux}
+\DoxyCodeLine{make\ -\/j\$(sysctl\ -\/n\ hw.ncpu)\ \ \#\ For\ macOS}
+
+\end{DoxyCode}
+
+\item {\bfseries{Run tests (optional)\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ctest}
+
+\end{DoxyCode}
+
+\item {\bfseries{Start with examples\+:}}
+\begin{DoxyItemize}
+\item Check the {\ttfamily examples/} directory for sample code
+\item Copy {\ttfamily examples/example\+\_\+inputs/} to a new location for your own experiments
+\item Use {\ttfamily examples/\+Experimental\+\_\+\+Example.\+cpp} as a template for new development
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+
+For more detailed instructions, see the Building CSMP section below.\hypertarget{md__r_e_a_d_m_e_autotoc_md101}{}\doxysection{\texorpdfstring{Installation}{Installation}}\label{md__r_e_a_d_m_e_autotoc_md101}
+CSMP can be installed to a custom location using CMake\textquotesingle{}s installation feature. This is useful for system-\/wide or user-\/specific installations.\hypertarget{md__r_e_a_d_m_e_autotoc_md102}{}\doxysubsection{\texorpdfstring{User-\/specific Installation (Recommended for Development)}{User-\/specific Installation (Recommended for Development)}}\label{md__r_e_a_d_m_e_autotoc_md102}
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Create an installation directory\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{mkdir\ -\/p\ \string~/local/csmp}
+
+\end{DoxyCode}
+
+\item {\bfseries{Configure with the installation prefix\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cd\ build}
+\DoxyCodeLine{cmake\ ..\ -\/DCMAKE\_INSTALL\_PREFIX=\string~/local/csmp\ -\/DCMAKE\_BUILD\_TYPE=Release}
+
+\end{DoxyCode}
+
+\item {\bfseries{Build and install\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ -\/j\$(nproc)\ \ \#\ For\ Linux}
+\DoxyCodeLine{make\ -\/j\$(sysctl\ -\/n\ hw.ncpu)\ \ \#\ For\ macOS}
+\DoxyCodeLine{make\ install}
+
+\end{DoxyCode}
+
+\end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md103}{}\doxysubsection{\texorpdfstring{System-\/wide Installation}{System-\/wide Installation}}\label{md__r_e_a_d_m_e_autotoc_md103}
+For system-\/wide installation (requires sudo privileges)\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cd\ build}
+\DoxyCodeLine{cmake\ ..\ -\/DCMAKE\_INSTALL\_PREFIX=/usr/local\ -\/DCMAKE\_BUILD\_TYPE=Release}
+\DoxyCodeLine{make\ -\/j\$(nproc)\ \ \#\ For\ Linux}
+\DoxyCodeLine{make\ -\/j\$(sysctl\ -\/n\ hw.ncpu)\ \ \#\ For\ macOS}
+\DoxyCodeLine{sudo\ make\ install}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md104}{}\doxysubsection{\texorpdfstring{Installation Structure}{Installation Structure}}\label{md__r_e_a_d_m_e_autotoc_md104}
+The installation creates the following directory structure under the chosen prefix\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{prefix/}
+\DoxyCodeLine{├──\ bin/\ \ \ \ \ \ \ \ \ \ \#\ Executables}
+\DoxyCodeLine{├──\ include/\ \ \ \ \ \ \#\ Header\ files}
+\DoxyCodeLine{├──\ lib/\ \ \ \ \ \ \ \ \ \ \#\ Libraries}
+\DoxyCodeLine{└──\ share/\ \ \ \ \ \ \ \ \#\ Documentation\ and\ other\ resources}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md105}{}\doxysubsection{\texorpdfstring{Post-\/\+Installation}{Post-\/\+Installation}}\label{md__r_e_a_d_m_e_autotoc_md105}
+To use the installed executables, add the installation\textquotesingle{}s {\ttfamily bin} directory to your PATH\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\#\ For\ user-\/specific\ installation}
+\DoxyCodeLine{echo\ 'export\ PATH=\string~/local/csmp/bin:\$PATH'\ >>\ \string~/.bashrc\ \ \#\ For\ bash}
+\DoxyCodeLine{echo\ 'export\ PATH=\string~/local/csmp/bin:\$PATH'\ >>\ \string~/.zshrc\ \ \ \#\ For\ zsh}
+\DoxyCodeLine{}
+\DoxyCodeLine{\#\ For\ system-\/wide\ installation}
+\DoxyCodeLine{echo\ 'export\ PATH=/usr/local/bin:\$PATH'\ >>\ \string~/.bashrc\ \ \ \ \#\ For\ bash}
+\DoxyCodeLine{echo\ 'export\ PATH=/usr/local/bin:\$PATH'\ >>\ \string~/.zshrc\ \ \ \ \ \#\ For\ zsh}
+
+\end{DoxyCode}
+
+
+After adding to PATH, either restart your terminal or run\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{source\ \string~/.bashrc\ \ \#\ For\ bash}
+\DoxyCodeLine{source\ \string~/.zshrc\ \ \ \#\ For\ zsh}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md106}{}\doxysection{\texorpdfstring{Building CSMP (Library, Examples and Tests) with CMake}{Building CSMP (Library, Examples and Tests) with CMake}}\label{md__r_e_a_d_m_e_autotoc_md106}
+This guide explains how to build the CSMP project using CMake, a tool that helps manage the build process across different platforms. This is especially useful if you are new to building software on Linux or other Unix-\/like systems.\hypertarget{md__r_e_a_d_m_e_autotoc_md107}{}\doxysubsection{\texorpdfstring{What is CMake?}{What is CMake?}}\label{md__r_e_a_d_m_e_autotoc_md107}
+CMake is not a build system itself, but rather a tool that {\itshape generates} build system files (like Makefiles) for your specific operating system and compiler. This means you write a {\ttfamily CMake\+Lists.\+txt} file once, and CMake can generate build files for many different environments (like Make on Linux, Ninja, or even Xcode projects on mac\+OS).\hypertarget{md__r_e_a_d_m_e_autotoc_md108}{}\doxysubsection{\texorpdfstring{The CMake Workflow}{The CMake Workflow}}\label{md__r_e_a_d_m_e_autotoc_md108}
+The typical CMake workflow involves three main steps\+:
+
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Configure\+:}} Run {\ttfamily cmake} in a build directory to process the {\ttfamily CMake\+Lists.\+txt} files and generate the build system (e.\+g., Makefiles).
+\item {\bfseries{Build\+:}} Run the generated build system (e.\+g., {\ttfamily make}) to compile the source code and create executables and libraries. There are multiple options here.
+\item {\bfseries{Install\+:}} Install the built software to a specified location.
+\end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md109}{}\doxysubsection{\texorpdfstring{Prerequisites}{Prerequisites}}\label{md__r_e_a_d_m_e_autotoc_md109}
+Before you begin, make sure you have the following installed on your system\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries{CMake\+:}} You can download it from \href{https://cmake.org/}{\texttt{cmake.\+org}} or install it using your system\textquotesingle{}s package manager (e.\+g., {\ttfamily sudo apt-\/get install cmake} on Ubuntu, {\ttfamily brew install cmake} on mac\+OS).
+\item {\bfseries{A C++ Compiler\+:}} Such as GCC or Clang. Install using your system\textquotesingle{}s package manager (e.\+g., {\ttfamily sudo apt-\/get install build-\/essential} on Ubuntu).
+\item {\bfseries{Make\+:}} This is usually included with build tools (like {\ttfamily build-\/essential}).
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md110}{}\doxysubsection{\texorpdfstring{Step-\/by-\/\+Step Build Guide}{Step-\/by-\/\+Step Build Guide}}\label{md__r_e_a_d_m_e_autotoc_md110}
+It is highly recommended to perform an {\bfseries{out-\/of-\/source build}}. This means you build the project in a separate directory from your source code. This keeps your source directory clean and makes it easy to start over if something goes wrong.
+
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Open a Terminal\+:}} Navigate to the root directory of the project in your terminal.
+\item {\bfseries{Create a Build Directory\+:}} Create a new directory where the build files will be generated. A common name is {\ttfamily build}. {\ttfamily bash mkdir build }
+\item {\bfseries{Navigate into the Build Directory\+:}} {\ttfamily bash cd build }
+\item {\bfseries{Configure the Project\+:}} Run {\ttfamily cmake} from inside the {\ttfamily build} directory, pointing it to the root of your source code (which is the directory above your current location, represented by {\ttfamily ..}).
+
+{\ttfamily bash cmake .. }
+
+By default, this will configure a {\ttfamily Debug} build. You can specify the build type using the {\ttfamily -\/DCMAKE\+\_\+\+BUILD\+\_\+\+TYPE} option\+:
+\begin{DoxyItemize}
+\item For a release build (optimized)\+: {\ttfamily bash cmake .. -\/DCMAKE\+\_\+\+BUILD\+\_\+\+TYPE=Release }
+\item For a debug build (with debugging symbols)\+: {\ttfamily bash cmake .. -\/DCMAKE\+\_\+\+BUILD\+\_\+\+TYPE=Debug }
+\end{DoxyItemize}
+
+You can also enable specific options defined in the {\ttfamily CMake\+Lists.\+txt} files using the {\ttfamily -\/D} flag. For example\+:
+\begin{DoxyItemize}
+\item To enable the SAMG solver (if you a license to this commercial linear algebra package and configured it with CMake)\+: {\ttfamily bash cmake .. -\/DCMAKE\+\_\+\+BUILD\+\_\+\+TYPE=Release -\/Dsamg=ON }
+\item To enable the SKM unit tests\+: {\ttfamily bash cmake .. -\/DBUILD\+\_\+\+SKM\+\_\+\+TESTS=ON }
+\item You can combine options\+: {\ttfamily bash cmake .. -\/DCMAKE\+\_\+\+BUILD\+\_\+\+TYPE=Release -\/Dsamg=ON -\/DBUCCESS\+\_\+\+SKM\+\_\+\+TESTS=ON }
+\end{DoxyItemize}
+
+After running the configure step, CMake will generate the build files in the {\ttfamily build} directory. You should see output indicating that the configuration was successful.
+\item {\bfseries{Build the Project\+:}} Now that the build files are generated, you can use the {\ttfamily make} command (or the command for your chosen build system) to compile the code.
+
+{\ttfamily bash make }
+
+To speed up the build process by using multiple processor cores, you can use the {\ttfamily -\/j} flag followed by the number of cores you want to use. A common practice is to use all available cores\+:
+
+{\ttfamily bash make -\/j\$(nproc) \# For Linux make -\/j\$(sysctl -\/n hw.\+ncpu) \# For mac\+OS }
+
+The build process will compile the source files and create the libraries and executables.
+\item {\bfseries{Run Tests (Optional)\+:}} If testing was enabled during configuration ({\ttfamily -\/DBUILD\+\_\+\+TESTING=ON}), you can run the tests using CTest from the {\ttfamily build} directory.
+
+{\ttfamily bash ctest }
+
+To see more detailed output during testing, use the {\ttfamily -\/V} flag\+:
+
+{\ttfamily bash ctest -\/V }
+\item {\bfseries{Install the Project (Optional)\+:}} If an install target is defined in the {\ttfamily CMake\+Lists.\+txt} file, you can install the built project.
+
+{\ttfamily bash make install }
+
+You can specify an installation prefix during the CMake configure step using {\ttfamily -\/DCMAKE\+\_\+\+INSTALL\+\_\+\+PREFIX=/path/to/install}.
+\end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md111}{}\doxysubsection{\texorpdfstring{Cleaning the Build}{Cleaning the Build}}\label{md__r_e_a_d_m_e_autotoc_md111}
+If you need to clean the build directory (e.\+g., to start a fresh build), you can either\+:
+
+
+\begin{DoxyEnumerate}
+\item Run the clean target from the build directory\+: {\ttfamily bash make clean }
+\item Simply delete the {\ttfamily build} directory and create it again. This is often the safest way to ensure a completely clean build. {\ttfamily bash cd .. rm -\/rf build mkdir build cd build }
+\end{DoxyEnumerate}
+
+This covers the basic steps to configure and build the project using CMake. If you encounter specific errors, they often provide clues about missing dependencies or configuration issues. Much success\hypertarget{md__r_e_a_d_m_e_autotoc_md112}{}\doxysubsection{\texorpdfstring{Adding your own new files}{Adding your own new files}}\label{md__r_e_a_d_m_e_autotoc_md112}
+
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/project/repository/web_editor.html\#create-a-file}{\texttt{Create}} or \href{https://docs.gitlab.com/ee/user/project/repository/web_editor.html\#upload-a-file}{\texttt{upload}} files
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/gitlab-basics/add-file.html\#add-a-file-using-the-command-line}{\texttt{Add files using the command line}} or push an existing Git repository with the following command\+:
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cd\ existing\_repo}
+\DoxyCodeLine{git\ remote\ add\ origin\ https://gitlab.com/csmp/open-\/csmp-\/2024.git}
+\DoxyCodeLine{git\ branch\ -\/M\ main}
+\DoxyCodeLine{git\ push\ -\/uf\ origin\ main}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md113}{}\doxysubsection{\texorpdfstring{Integrate with other tools}{Integrate with other tools}}\label{md__r_e_a_d_m_e_autotoc_md113}
+
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://gitlab.com/csmp/open-csmp-2024/-/settings/integrations}{\texttt{Set up project integrations}}
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md114}{}\doxysubsection{\texorpdfstring{Collaborate with your team}{Collaborate with your team}}\label{md__r_e_a_d_m_e_autotoc_md114}
+
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/project/members/}{\texttt{Invite team members and collaborators}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html}{\texttt{Create a new merge request}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/project/issues/managing_issues.html\#closing-issues-automatically}{\texttt{Automatically close issues from merge requests}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/project/merge_requests/approvals/}{\texttt{Enable merge request approvals}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html}{\texttt{Set auto-\/merge}}
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md115}{}\doxysubsection{\texorpdfstring{Test and Deploy}{Test and Deploy}}\label{md__r_e_a_d_m_e_autotoc_md115}
+Use the built-\/in continuous integration in Git\+Lab.
+
+
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/ci/quick_start/index.html}{\texttt{Get started with Git\+Lab CI/\+CD}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/application_security/sast/}{\texttt{Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/topics/autodevops/requirements.html}{\texttt{Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/user/clusters/agent/}{\texttt{Use pull-\/based deployments for improved Kubernetes management}}
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] \href{https://docs.gitlab.com/ee/ci/environments/protected_environments.html}{\texttt{Set up protected environments}}
+\end{DoxyItemize}
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md116}{}\doxysection{\texorpdfstring{Details}{Details}}\label{md__r_e_a_d_m_e_autotoc_md116}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md117}{}\doxysubsection{\texorpdfstring{Name}{Name}}\label{md__r_e_a_d_m_e_autotoc_md117}
+The Complex Systems Modelling Platform (Open-\/\+CSMP++)\hypertarget{md__r_e_a_d_m_e_autotoc_md118}{}\doxysubsection{\texorpdfstring{Description}{Description}}\label{md__r_e_a_d_m_e_autotoc_md118}
+Multi-\/physics simulation of complex geologic systems needs to express dynamic behaviours manifesting as plumes, convection cells and-\/or fracturing and faulting. The "{}playing field"{} is the geomodel. Instabilities emerge across multiple length scales and create unique complex patterns and statistical distributions. The Complex Systems Modelling Platform (CSMP++) employs a space-\/time adaptive collocated finite element – finite volume discretization of geomodel to simulate subsurface behaviour, with a focus on geo-\/energy systems. This discretisation is implemented with dynamic polymorphic data structures. The code uses policy-\/based class design, and elements, nodes and other data structures implemented as class templates.
+
+CSMP is a C++17 ANSI / ISO standard-\/compliant application programmer interface (API). It is a library of numerical methods for the combined simulation of thermal–hydrological–mechanical–chemical (THMC) processes, and has been designed for complex models of the subsurface, spanning a range of length scales.
+
+This CSMP repository contains implementations of the finite-\/element-\/ (FEM) and finite volume (FVM) methods and combinations thereof. In addition to solution methods for elliptic-\/parabolic and hyberbolic partial differential equations, it provides implementations of\+:
+
+CSMP\textquotesingle{}s\textquotesingle{} unique data model supporting computations on regions, boundaries and internal discontinuities. Material properties and dependent variables stored using a tree structures representing the mesh. Computational domains can evolve in shape and properties over time, and multi-\/domain simulations, where different physics are modelled in different regions, can be implemented.
+
+Constitutive relationships for THMC processes Equations of state Property modeling and simulation analysis functionality Local (asynchronous) time-\/stepping methods and support for dynamic mesh adaptivity, facilitating goal-\/based simulation.
+
+CSMP forms the basis of a wide variety of simulation programs, including discrete fracture and matrix modelling, upscaling and reservoir simulation. Publications on these applications are furnished upon request.
+
+CSMP is documented using DOxgen, using this tool\textquotesingle{}s specific syntax that is explained in doc/howto/\+CSMP\+\_\+doxygen\+\_\+doc\+\_\+guidelines\+\_\+basic.\+pdf and its advanced version. Thus, most functions have an abbreviated triple slash (///) explanation in the header file, while class documentation is in the header and source files.
+
+Additional documentation is in doc/\+CSMP\+\_\+\+User\+Guide.\+docx, the Interface\+\_\+\+Guide and the Open\+\_\+\+CSMP\+\_\+detailed\+\_\+overview.\+ppt presentation. Some documentation of the third-\/party libraries is provided in doc/thirdparty\+\_\+libraries.\hypertarget{md__r_e_a_d_m_e_autotoc_md119}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{md__r_e_a_d_m_e_autotoc_md119}
+Try to learn how to use CSMP with the examples executable (examples/), models (examples/data), and configurations. Modify and combine these to create new functionality. Place such new code into the example template "{}\+Experimental\+\_\+\+Example.\+cpp."{} Do not create related builds and simulation output inside of the CSMP repository, but, instead, copy the directory examples/example\+\_\+inputs/ and the files contained therein into a new location (for example C\+:/csmp/sandbox/). This way you do not run the risk of committing unwieldy files to the repository once you will get developer rights.\hypertarget{md__r_e_a_d_m_e_autotoc_md120}{}\doxysubsection{\texorpdfstring{Support}{Support}}\label{md__r_e_a_d_m_e_autotoc_md120}
+Contact me via email (\href{mailto:stephan.matthai@icloud.com}{\texttt{stephan.\+matthai@icloud.\+com}}), seek help via the Gitlab repository site (also consulting its issue tracker), or contact other members of the CSMP community.\hypertarget{md__r_e_a_d_m_e_autotoc_md121}{}\doxysubsection{\texorpdfstring{Roadmap}{Roadmap}}\label{md__r_e_a_d_m_e_autotoc_md121}
+The communities goal is to release Open-\/\+CSMP++ in 2025, following the successful dissolution of the CSMP Originator\textquotesingle{}s Group of Universities developers agreement.\hypertarget{md__r_e_a_d_m_e_autotoc_md122}{}\doxysubsection{\texorpdfstring{Contributing}{Contributing}}\label{md__r_e_a_d_m_e_autotoc_md122}
+Of course we are open to-\/ and most grateful for contributions to CSMP and we are practicing a strict code-\/review process for this purpose. To qualify for this review, the source code must be standard-\/compliant, documented using DOxygen, and accompanied by passing unit or integration tests, depending on what is applicable.\hypertarget{md__r_e_a_d_m_e_autotoc_md123}{}\doxysubsection{\texorpdfstring{Authors and acknowledgment}{Authors and acknowledgment}}\label{md__r_e_a_d_m_e_autotoc_md123}
+CSMP would not have become what it is today through the inspiration and hard work of many individuals.
+
+Conceived in 1995, by the author at Stanford University, CSMP\textquotesingle{}s\textquotesingle{} application programmer interface (API) follows an object-\/oriented design using C++ templates. In collaboration with S. G. Roberts (ANU, Australia) its prototype was finalised and applied to fluid flow in faults \mbox{[}36-\/38\mbox{]} and fractures \mbox{[}67\mbox{]}. From 1996-\/99 as a member of C. A. Heinrich\textquotesingle{}s Fluids and Ore Deposits Group at the ETHZ, Switzerland, SKM extended CSP, applying it to fracture flow \mbox{[}35\mbox{]} and reactive transport simulation of the formation of the giant Mount Isa copper deposit, Australia \mbox{[}34\mbox{]}. These simulations support the hypothesis that the Cu-\/orebody formed by the mixing of a reduced fluid with an oxidised one transporting the copper. From 2001-\/08 at Imperial College, London (UK), CSP adopted C++11, and inter-\/faced with the geomodelling software g\+Ocad and the finite-\/element meshing tool ICEM Tetra (ICEM Technologies, now ANSYS) and the fracture-\/geometry generators Frac\+Man and FRED (Golder Associates). To employ hybrid-\/element meshes, A. Me-\/zentsev implemented missing finite-\/element types in the library. Advised by C. Pain, Mezentsev and the author added higher-\/order accurate implicit immiscible two-\/phase flow and transport modules to CSP \mbox{[}32\mbox{]}. These were applied to discrete-\/fracture and matrix (DFM) models \mbox{[}5,33\mbox{]} and in water flooding simulations of naturally fractured and structurally complex reservoirs \mbox{[}30-\/33\mbox{]}. Palusny et al. \mbox{[}49\mbox{]} subsequently refac-\/tored CSP\textquotesingle{}s collocated finite element – finite volume framework and applied it to fracture-\/propagation modelling \mbox{[}47-\/48\mbox{]}. Paluszny \mbox{[}46\mbox{]} further extended this code to 3D fragmentation, including contact detection, transfer of tractions, and a J-\/integral based formulation to evaluate crack-\/tip stresses, combined with dynamic remeshing. In the same decade, at ETHZ, T. Driesner developed an H2\+O-\/\+Na\+Cl equation of state \mbox{[}13\mbox{]} and S. Geiger a thermohaline convection module \mbox{[}18-\/19\mbox{]}, IMPES multi-\/phase fluid-\/flow module \mbox{[}20-\/21\mbox{]}, and a black-\/oil model for fracture flow \mbox{[}17\mbox{]}. Cou-\/mou, Matthai, Geiger, and Driesner \mbox{[}6\mbox{]} parallelised CSP using MPI-\/\+CH \mbox{[}10\mbox{]} and ran simulations of thermohaline convection at mid-\/ocean ridges \mbox{[}7,9\mbox{]}. This simulation study is an excellent illustration how emergent behaviour explains the frequency and variation of seafloor hydrothermal venting as well as characteristic black-\/ and white-\/smoker vent temperatures that naturally arise from the nonlinear pressure-\/temperature dependent density and viscosity of brine, obviating the need to invoke sudden perme-\/ability changes to explain episodicity of high-\/\+Raleigh number convection. From 2009-\/14, at Montanuniversitaet Leoben, P. Lang, R. Manasipov, J. Mindel and SKM refactored CSP using policy-\/based class design, introducing the distributed variable storage system that is studied in this paper. Manasipov wrote a Petrel/\+Eclipse interface, complementing the unstructured grid g\+Ocad -\/ SKUA-\/\+ANSYS-\/\+CSP fracture upscaling \mbox{[}29\mbox{]} and reservoir simulation workflows \mbox{[}39-\/40\mbox{]}. Inspired by C. Cordes \& W. Kinzelbach \mbox{[}11\mbox{]}, S. Bazr-\/\+Afkan et al. \mbox{[}3\mbox{]} devised a new method to simulate satu-\/ration-\/jump discontinuities in fractured media, developing a finite element-\/centred FECFVM transport scheme, applying it to Gas-\/\+Oil Gravity Drainage (GOGD) of naturally fractured reservoirs \mbox{[}28\mbox{]}. The ETHZ and Berlin teams made major progress modelling high-\/enthalpy magmatic hydrothermal systems, e.\+g., \mbox{[}71-\/72\mbox{]}, including the formation of ore shells in porphyry copper systems \mbox{[}59-\/60\mbox{]}. A new strategic alli-\/ance with Fiona Whitaker (Bristol, UK) was formed on reactive transport modelling and D. Kulik, A. Leal, and G. Kosakovski (now D. Miron) at the Paul-\/\+Scherer Insti-\/tute (PSI), Villigen, Switzerland, interfacing CSP (now CSMP++) with their open-\/source C++ code GEMS. First applications of GEMS-\/\+CSMP focused on carbonate dissolution and dolomitization \mbox{[}76-\/77\mbox{]}, but also on other reactive transport processes \mbox{[}75\mbox{]}. Over the last decade, at Melbourne University, SKM refactored the core of CSMP to draw on C++17 language features such as rvalue (\&\&) references / move semantics, lambda functions, ranges, constexpr and more. Mesh management was improved to better support the modelling of discontinuities such as faults (Fig. 1) and mesh evo-\/lution with time. For crack propagation modelling \mbox{[}53-\/54\mbox{]} and the representation of saturation and capillary pressure discontinuities \mbox{[}68\mbox{]}, an earlier embedded discontinui-\/ty discretisation \mbox{[}43\mbox{]} was improved. Based on the CSMP API, the Australian Carbon Geo-\/\+Sequestration compositional (CO2-\/\+H2\+O-\/\+Na\+Cl) simulator (ACGSS) was devel-\/oped and benchmarked \mbox{[}62\mbox{]} and applied to understand plume spreading in highly heterogeneous porous media \mbox{[}4,61\mbox{]}. ACGSS is space-\/time adaptive, implementing Discrete Event Simulation (DES, \mbox{[}24\mbox{]}) and pre-\/emptive event processing (PEP, \mbox{[}44\mbox{]}), in CSMP\textquotesingle{}s unstructured collocated finite element – finite volume discretisation \mbox{[}63-\/64\mbox{]}. Most recently, this framework has been applied successfully to numerical up-\/scaling of relative permeability and capillary pressure using periodic flux \mbox{[}27\mbox{]} and double-\/periodic flux and pressure boundary conditions \mbox{[}78\mbox{]}. In the Fluid\+Flower benchmarking study \mbox{[}15\mbox{]}, CSMP simulations ("{}\+Melbourne"{}) were the only ones con-\/ducted with a hybrid method as opposed to a FV-\/only discretisation, delivering rea-\/sonable forecasts with only about one third of the model degrees of freedom used by the other participants. In 2022, A. Tertois (Aspen\+Tech) developed a direct interface between SKUA (former-\/ly Gocad) and CSMP facilitating lossless transfer of geomodels. Youssef et al. \mbox{[}79\mbox{]} demonstrate its application to multiphase fluid flow simulation through cross-\/bedded sandstone, cf., \mbox{[}69\mbox{]}. In the meantime, the ETHZ -\/ Melbourne University collaboration produced CSMP applications to thermal fluid convection in fault zones \mbox{[}50-\/51\mbox{]}, the simulation of high-\/enthalpy geothermal systems \mbox{[}12, 58-\/60,73\mbox{]}, and the propagation of magmat-\/ic-\/volatile driven fractures in the carapace of magmatic intrusions \mbox{[}54\mbox{]}. Liem et al. \mbox{[}25\mbox{]} used CSMP\textquotesingle{}s discrete fracture and matrix modelling capabilities in an ensemble-\/\+Kalman filter-\/based (ESMDA) calibration of fracture aperture in a field-\/data based DFM model, using far-\/field stress-\/based apertures as a prior \mbox{[}40, submitted\mbox{]}. At Im-\/perial, Salimzadeh et al. \mbox{[}57\mbox{]} presented the first thermo-\/hydro-\/mechanical CSP model for deformable fractured geothermal systems. Salimzadeh and Nick \mbox{[}56\mbox{]} also consid-\/ered reactive transport processes in these. At the Danish Institute of Technology (DTU), Peters et al. \mbox{[}52\mbox{]} studied the performance of multilateral geothermal wells. The topic was revisited in \mbox{[}74\mbox{]}. As CSP developers moved institutions, in 2010, the community spanned ETHZ, Imperial (A. Palusnzny), HWU (S. Geiger, R. Annewandtner), and TU Berlin (D. Coumou, P. Weiss). In 2009 the Montanuniversitaet Leoben joined (L. Mosser, P. Lang, J. Mindel, R. Manasipov, A Yapparova), then DTU, Denmark in 2012 (H.\+M. Nick and students), and Melbourne University in 2014 (Q. Shao, H. Agheshliu, L.\+K. Tran). In 2016, ENSG, France, joined the community (M. Raguenel, F. Bonneau), then UQ (L. Gross), Australia. In 2017, S. Salimzadeh joined CSIRO, Clayton, Aus-\/tralia, leading a team developing CSMP hydraulic fracture propagation models and a new Gmsh interface. To foster inter-\/institutional collaboration many workshops were organised, starting in 2004 at Seealpsee, Switzerland. At the 2010 Bad Gams work-\/shop, Austria, in search for a unique name, CSP was renamed CSMP. J. Mindel introduced a github-\/based continuous integration system, replacing the previous SVN-\/based system, also adding routine unit and integration testing.\hypertarget{md__r_e_a_d_m_e_autotoc_md124}{}\doxysubsection{\texorpdfstring{Cited publications}{Cited publications}}\label{md__r_e_a_d_m_e_autotoc_md124}
+
+\begin{DoxyEnumerate}
+\item Alexandrescu, A.\+: Modern C++ Design\+: Generic Programming and Design Patterns Applied. Addison-\/\+Wesley (2001).
+\end{DoxyEnumerate}
+
+Arabas, S., Jarecka, D., Jaruga, A., Fijalkowski, M.\+: Formula translation in Blitz++, Numpy and modern Fortran\+: a case study of the language choice tradeoffs. Scientific Programming 22, pp. 201-\/22. DOI 10.\+3233/\+SPR-\/140379 (2014).
+\begin{DoxyEnumerate}
+\item Bazrafkan, S., Matthai, S.\+K., Mindel, J.\+E.\+: The finite-\/element-\/centered finite-\/volume discretization method (FECFVM) for multiphase transport in porous media with sharp material discontinuities. In\+: ECMOR XIV—14th European Conference on the Mathematics of Oil Recovery, vol. 2014, no. 1, pp. 1–22. European Association of Geoscientists \& Engineers (2014).
+\item Boon, M., Matthäi, S.\+K., Shao, Q., Youssef, A.\+A., Mishra, A., Benson, S.\+M.\+: Aniso-\/tropic rate-\/dependent saturation functions for compositional simulation of sandstone composites. Journal of Petroleum Science and Engineering, 209, p.\+109934 (2022).
+\item Bourbiaux, B.\+: Fractured reservoir simulation\+: A challenging and rewarding issue. Oil \& Gas Science and Technology—\+Revue de l\textquotesingle{}Institut Français du Pétrole, 65(2), pp. 227–238 (2010).
+\item Coumou, D., Matthäi, S., Geiger, S. and Driesner, T.\+: A parallel FE–\+FV scheme to solve fluid flow in complex geologic media. Computers \& Geosciences, 34(12), pp.\+1697-\/1707 (2008).
+\item Coumou, D., Driesner, T. and Heinrich, C.\+A.\+: The structure and dynamics of mid-\/ocean ridge hydrothermal systems. Science, 321(5897), pp.\+1825-\/1828 (2008).
+\item Chauvin, B.\+P., Lovely, P.\+J., Stockmeyer, J.\+M., Plesch, A., Caumon, G., Shaw, J.\+H.\+: Val-\/idating novel boundary conditions for three-\/dimensional mechanics-\/based restora-\/tion\+: An extensional sandbox model example. AAPG Bulletin, 102(2), pp. 245–266 (2018).
+\item Coumou, D., Driesner, T., Heinrich, C.\+A.\+: The structure and dynamics of mid-\/ocean ridge hydrothermal systems. Science, 321(5897), pp. 1825–1828 (2008).
+\item Coumou, D., Matthäi, S., Geiger, S., Driesner, T.\+: A parallel FE–\+FV scheme to solve fluid flow in complex geologic media. Computers \& Geosciences, 34(12), pp. 1697–1707 (2008).
+\item Cordes, C., Kinzelbach, W.\+: Continuous groundwater velocity fields and path lines in linear, bilinear, and trilinear finite elements. Water Resources Research, 28(11), pp. 2903–2911 (1992).
+\item Driesner, T., Weis, P., Scott, S.\+: A new generation of numerical simulation tools for studying the hydrology of geothermal systems to "{}supercritical"{} and magmatic condi-\/tions. In\+: World Geothermal Congress (2015).
+\item Driesner, T., Geiger, S., Heinrich, C.\+A., Matthäi, S.\+K.\+: Modeling multiphase flow of H2\+O–\+Na\+Cl fluids by combining CSP5.\+0 with So\+Wat2.\+0. Geochimica et Cosmo-\/chimica Acta, 70(18/\+Supplement), p. A147 (2006).
+\item Durlofsky, L.\+J., Aziz, K.\+: Advanced techniques for reservoir simulation and modeling of nonconventional wells. Stanford University (US) (2004).
+\item Flemisch, B., Nordbotten, J.\+M., Fernø, M., Juanes, R., Both, J.\+W., Class, H., Delshad, M., Doster, F., Ennis-\/\+King, J., Franc, J., Geiger, S.\+: The Fluid\+Flower Validation Benchmark Study for the Storage of CO₂. Transport in Porous Media, pp. 1–48 (2023).
+\item Gamma, E. Helm, R., Johnson, R., Vlissides, J.\+: Design Patterns\+: Elements of Reusable Object-\/\+Oriented Software. Boston\+: Addison-\/\+Wesley (1995).
+\item Geiger, S., Matthäi, S., Niessner, J., Helmig, R.\+: Black-\/oil simulations for three-\/component, three-\/phase flow in fractured porous media. SPE Journal, 14(02), pp. 338–354 (2009).
+\item Geiger, S., Driesner, T., Heinrich, C.\+A., Matthäi, S.\+K.\+: Multiphase thermohaline con-\/vection in the earth\textquotesingle{}s crust\+: I. A new finite element–finite volume solution technique combined with a new equation of state for Na\+Cl–\+H2O. Transport in Porous Media, 63, pp. 399–434 (2006).
+\item Geiger, S., Driesner, T., Heinrich, C.\+A., Matthäi, S.\+K.\+: On the dynamics of Na\+Cl–\+H₂O fluid convection in the Earth\textquotesingle{}s crust. Journal of Geophysical Research\+: Solid Earth, 110(B7) (2005).
+\item Geiger, S., Roberts, S., Matthäi, S.\+K., Zoppou, C., Burri, A.\+: Combining finite element and finite volume methods for efficient multiphase flow simulations in highly heter-\/ogeneous and structurally complex geologic media. Geofluids 4(4), 284–299 (2004).
+\item Geiger, S., Roberts, S., Matth, S.\+K. and Zoppou, C.\+: Combining finite volume and finite element methods to simulate fluid flow in geologic media. Anziam Journal, 44, pp.\+C180-\/C201 (2002).
+\item Gries, S., Metsch, B., Terekhov, K.\+M., Tomin, P.\+: System-\/\+AMG for fully coupled reser-\/voir simulation with geomechanics. In\+: SPE Reservoir Simulation Conference, p. D021\+S011\+R003. SPE (2019).
+\item Juanes, R., Samper, J., Molinero, J.\+: A general and efficient formulation of fractures and boundary conditions in the finite element method. International Journal for Numerical Methods in Engineering 54(12), 1751–1774 (2002).
+\item Karimabadi, H., Driscoll, J., Omelchenko, Y.\+A., Omidi, N.\+: A new asynchronous methodology for modeling of physical systems\+: breaking the curse of Courant condi-\/tion. Journal of Computational Physics 205(2), 755–775 (2005).
+\item Liem, M., Matthai, S.\+K., Jenny, P.\+: Estimation of fracture aperture in naturally frac-\/tured reservoirs using an ensemble smoother with multiple data assimilation. In\+: ECMOR 2022, vol. 2022, pp. 1–18. European Association of Geoscientists \& Engi-\/neers (2022).
+\item Lovely, P.\+J., Jayr, S.\+N., Medwedeff, D.\+A.\+: Practical and efficient three-\/dimensional structural restoration using an adaptation of the Geo\+Chron model. AAPG Bulletin 102(10), 1985–2016 (2018).
+\item Matthai, S. K., \& Tran, L. K. (2023). Numeric determination of relative permeability of heterogeneous porous media with capillary discontinuities. Advances in Water Re-\/sources, 175, 104430.
+\item Matthai, S., Bazrafkan, S.\+: Simulation of gas oil gravity drainage\+: comparison of the dual continuum with the discrete-\/fracture and matrix approach. In\+: Second EAGE Workshop on Naturally Fractured Reservoirs, pp. cp-\/371. European Association of Geoscientists \& Engineers (2013).
+\item Matthai, S. K., \& Nick, H. M. (2009). Upscaling two-\/phase flow in naturally fractured reservoirs. AAPG bulletin, 93(11), 1621-\/1632.
+\item Matthai, S.\+K., Mezentsev, A., Belayneh, M.\+: Finite element–node-\/centered finite-\/volume two-\/phase-\/flow experiments with fractured rock represented by unstructured hybrid-\/element meshes. SPE Reservoir Evaluation \& Engineering 10(06), 740–756 (2007a).
+\item Matthai, S.\+K., Geiger, S., Roberts, S.\+G., Paluszny, A., Belayneh, M., Burri, A., Me-\/zentsev, A., Lu, H., Coumou, D., Driesner, T., Heinrich, C.\+A.\+: Numerical simulation of multi-\/phase fluid flow in structurally complex reservoirs. Geological Society, Lon-\/don, Special Publications 292(1), 405–429 (2007b).
+\item Matthai, S.\+K., Mezentsev, A., Belayneh, M.\+: Control-\/volume finite-\/element two-\/phase flow experiments with fractured rock represented by unstructured 3D hybrid meshes. In\+: SPE Reservoir Simulation Conference, pp. SPE-\/93341. SPE (2005).
+\item Matthai, S.\+K., Belayneh, M.\+: Fluid flow partitioning between fractures and a permea-\/ble rock matrix. Geophysical Research Letters 31(7) (2004).
+\item Matthai, S.\+K., Heinrich, C.\+A., Driesner, T.\+: Is the Mount Isa copper deposit the product of forced brine convection in the footwall of a major reverse fault? Geology 32(4), 357–360 (2004).
+\item Matthäi, S. K. (2003). Fluid flow and (reactive) transport in fractured and faulted rock. Journal of Geochemical Exploration, 78, 179-\/182.
+\item Matthäi, S.\+K., Geiger, S. and Roberts, S.\+G.\+: Complex Systems Platform\+: CSP3\+D3. 0\+: user\textquotesingle{}s guide. ETH Zurich, \href{https://doi.org/10.3929/ethz-a-004432279}{\texttt{https\+://doi.\+org/10.\+3929/ethz-\/a-\/004432279}} (2001).
+\item Matthai, S.\+K., Aydin, A., Pollard, D.\+D., Roberts, S.\+G.\+: Simulation of transient well-\/test signatures for geologically realistic faults in sandstone reservoirs. SPE Journal 3(01), 62–76 (1998).
+\item Matthai, S.\+K., Roberts, S.\+G.\+: Transient versus continuous fluid flow in seismically ac-\/tive faults\+: an investigation by electric analogue and numerical modelling. In\+: Fluid Flow and Transport in Rocks\+: Mechanisms and Effects, pp. 263–295. Springer, Dor-\/drecht (1997).
+\item Matthai, S.\+K., Roberts, S.\+G.\+: The influence of fault permeability on single-\/phase fluid flow near fault-\/sand intersections\+: results from steady-\/state high-\/resolution models of pressure-\/driven fluid flow. AAPG Bulletin 80(11), 1763–1779 (1996).
+\item Milliotte, C., Jonoud, S., Wennberg, O.\+P., Matthäi, S.\+K., Jurkiw, A., Mosser, L.\+: Well-\/data-\/based discrete fracture and matrix modelling and flow-\/based upscaling of multi-\/layer carbonate reservoir horizons (2018).
+\item Milliotte, C., Matthai, S.\+: From seismic interpretation to reservoir model\+: an integrated study accounting for the structural complexity of the Vienna Basin using an unstruc-\/tured reservoir grid. First Break 32(5) (2014).
+\item Mindel, J.\+E., Alt-\/\+Epping, P., Les Landes, A.\+A., et al.\+: Benchmark study of simulators for thermo-\/hydraulic modelling of low enthalpy geothermal processes. Geothermics 96, Article 102130 (2021).
+\item Nick, H.\+M., Matthai, S.\+K.\+: A hybrid finite‐element finite‐volume method with em-\/bedded discontinuities for solute transport in heterogeneous media. Vadose Zone Journal 10(1), 299–312 (2011).
+\item Omelchenko, Y.\+A., Karimabadi, H.\+: A time-\/accurate explicit multi-\/scale technique for gas dynamics. Journal of Computational Physics 226(1), 282–300 (2007).
+\item Palsberg, J., Jay, C.\+B.\+: The essence of the visitor pattern. In\+: Proceedings. The Twenty-\/\+Second Annual International Computer Software and Applications Conference (Compsac\textquotesingle{}98), pp. 9–15. IEEE (1998).
+\item Paluszny, A. \& Zimmerman, R. W. (2011). Numerical simulation of multiple 3D frac-\/ture propagation using arbitrary meshes. Computer Methods in Applied Mechanics and Engineering, 200(9-\/12), 953-\/966.
+\item Paluszny, A., Matthai, S.\+K.\+: Impact of fracture development on the effective permea-\/bility of porous rocks as determined by 2‐D discrete fracture growth modeling. Jour-\/nal of Geophysical Research\+: Solid Earth 115(B2) (2010).
+\item Paluszny, A., Matthai, S.\+K.\+: Numerical modeling of discrete multi-\/crack growth ap-\/plied to pattern formation in geological brittle media. International Journal of Solids and Structures 46(18–19), 3383–3397 (2009).
+\item Paluszny, A., Matthai, S.\+K., Hohmeyer, M.\+: Hybrid finite element–finite volume dis-\/cretization of complex geologic structures and a new simulation workflow demon-\/strated on fractured rocks. Geofluids 7(2), 186–208 (2007).
+\item Patterson, J.\+W., Driesner, T., Matthai, S., Tomlinson, R.\+: Heat and fluid transport in-\/duced by convective fluid circulation within a fracture or fault. Journal of Geophysi-\/cal Research\+: Solid Earth 123(4), 2658–2673 (2018a).
+\item Patterson, J.\+W., Driesner, T., Matthai, S.\+K.\+: Self‐organizing fluid convection patterns in an en echelon fault array. Geophysical Research Letters 45(10), 4799–4808 (2018b).
+\item Peters, E., Blöcher, G., Salimzadeh, S., Egberts, P.\+J., Cacace, M.\+: Modelling of multi-\/lateral well geometries for geothermal applications. Advances in Geosciences 45, 209–215 (2018).
+\item Pezzulli, E., Nejati, M., Salimzadeh, S., Matthäi, S.\+K., Driesner, T.\+: An enhanced J‐integral for hydraulic fracture mechanics. International Journal for Numerical and Analytical Methods in Geomechanics 46(11), 2163–2190 (2022).
+\item Pezzulli, E.\+: Simulating hydraulic fracture propagation in crustal processes. Doctoral Dissertation, ETH Zurich (2022).
+\item Ponting, D.\+K.\+: Corner point geometry in reservoir simulation. In\+: ECMOR I-\/1st Euro-\/pean Conference on the Mathematics of Oil Recovery, pp. cp-\/234. European Associa-\/tion of Geoscientists \& Engineers (1989).
+\item Salimzadeh, S., Nick, H.\+M.\+: A coupled model for reactive flow through deformable fractures in enhanced geothermal systems. Geothermics 81, 88–100 (2019).
+\item Salimzadeh, S., Paluszny, A., Nick, H.\+M., Zimmerman, R.\+W.\+: A three-\/dimensional coupled thermo-\/hydro-\/mechanical model for deformable fractured geothermal sys-\/tems. Geothermics 71, 212–224 (2018).
+\item Scott, S.\+W., Driesner, T.\+: Permeability changes resulting from quartz precipitation and dissolution around upper crustal intrusions. Geofluids 2018(1), Article 6957306 (2018).
+\item Scott, S., Driesner, T., Weis, P.\+: The thermal structure and temporal evolution of high-\/enthalpy geothermal systems. Geothermics 62, 33–47 (2016).
+\item Scott, S., Driesner, T., Weis, P.\+: Geologic controls on supercritical geothermal re-\/sources above magmatic intrusions. Nature Communications 6(1), Article 7837 (2015).
+\item Shao, Q., Boon, M., Youssef, A., Kurtev, K., Benson, S.\+M., Matthai, S.\+K.\+: Modelling CO2 plume spreading in highly heterogeneous rocks with anisotropic, rate-\/dependent saturation functions\+: A field-\/data based numeric simulation study of Otway. Interna-\/tional Journal of Greenhouse Gas Control 119, Article 103699 (2022).
+\item Shao, Q., Matthai, S., Driesner, T., Gross, L.\+: Predicting plume spreading during CO2 geo-\/sequestration\+: benchmarking a new hybrid finite element–finite volume composi-\/tional simulator with asynchronous time marching. Computational Geosciences 25, pp. 299–323 (2021).
+\item Shao, Q., Matthai, S.\+: Numerical modelling of CO2 migration through faulted storage strata with a new asynchronous FE-\/\+FV compositional simulator. In\+: ECMOR XVII, vol. 2020, pp. 1–16. European Association of Geoscientists \& Engineers (2020).
+\item Shao, Q., Matthai, S.\+K., Gross, L.\+: Efficient modelling of solute transport in heteroge-\/neous media with discrete event simulation. Journal of Computational Physics 384, pp. 134–150 (2019).
+\item Shao, Q., Matthai, S., Gross, L.\+: Efficient modelling of CO2 injection and plume spreading with discrete event simulation (DES). In\+: 14th Greenhouse Gas Control Technologies Conference Melbourne, pp. 21–26 (2018).
+\item Stüben, K., Ruge, J.\+W., Clees, T., Gries, S.\+: Algebraic multigrid\+: from academia to in-\/dustry. In\+: Scientific Computing and Algorithms in Industrial Simulations\+: Projects and Products of Fraunhofer SCAI, pp. 83–119 (2017).
+\item Taylor, W.\+L., Pollard, D.\+D., Aydin, A.\+: Fluid flow in discrete joint sets\+: field observa-\/tions and numerical simulations. Journal of Geophysical Research\+: Solid Earth 104(B12), 28983–29006 (1999).
+\item Tran, L.\+K., Kim, J.\+C., Matthai, S.\+K.\+: Simulation of two-\/phase flow in porous media with sharp material discontinuities. Advances in Water Resources 142, Article 103636 (2020).
+\item Tertois, A.\+: Cross-\/bedding, bedforms, and tetrahedral meshes. In\+: 85th EAGE Annual Conference \& Exhibition (including the Workshop Programme), vol. 2024, pp. 1–5. European Association of Geoscientists \& Engineers (2024).
+\item Vandevoorde, D., Josuttis, N.\+M.\+: C++ templates\+: the complete guide. Addison-\/\+Wesley Professional (2002).
+\item Weis, P., Driesner, T., Coumou, D., Geiger, S.\+: Hydrothermal, multiphase convection of H2\+O‐\+Na\+Cl fluids from ambient to magmatic temperatures\+: A new numerical scheme and benchmarks for code comparison. Geofluids 14(3), 347–371 (2014).
+\item Weis, P., Driesner, T., Heinrich, C.\+A.\+: Porphyry-\/copper ore shells form at stable pres-\/sure-\/temperature fronts within dynamic fluid plumes. Science 338(6114), 1613–1616 (2012).
+\item Yapparova, A., Lamy-\/\+Chappuis, B., Scott, S.\+W., Gunnarsson, G., Driesner, T.\+: Cold water injection near the magmatic heat source can enhance production from high-\/enthalpy geothermal fields. Geothermics 112, Article 102744 (2023).
+\item Yapparova, A., Lamy-\/\+Chappuis, B., Scott, S.\+W., Driesner, T.\+: A Peaceman-\/type well model for the 3D Control Volume Finite Element Method and numerical simulations of supercritical geothermal resource utilization. Geothermics 105, Article 102516 (2022).
+\item Yapparova, A., Miron, G.\+D., Kulik, D.\+A., Kosakowski, G., Driesner, T.\+: An advanced reactive transport simulation scheme for hydrothermal systems modelling. Geother-\/mics 78, 138–153 (2019).
+\item Yapparova, A., Gabellone, T., Whitaker, F., Kulik, D.\+A., Matthäi, S.\+K.\+: Reactive transport modelling of dolomitisation using the new CSMP++ GEM coupled code\+: governing equations, solution method and benchmarking results. Transport in Po-\/rous Media 117(3), 385–413 (2017a).
+\item Yapparova, A., Gabellone, T., Whitaker, F., Kulik, D.\+A., Matthäi, S.\+K.\+: Reactive transport modelling of hydrothermal dolomitisation using the CSMP++ GEM coupled code\+: effects of temperature and geological heterogeneity. Chemical Geology 466, 562–574 (2017b).
+\item Youssef, A. A., Shao, Q., \& Matthäi, S. K. (2024). Computing Relative Permeability and Capillary Pressure of Heterogeneous Rocks Using Realistic Boundary Condi-\/tions. Transport in Porous Media, 1-\/26.
+\item Youssef, A., Tertois, A., Shao, Q., Matthai, S.\+: Simulating unsteady CO2 flow through brine-\/saturated cross-\/bedded sandstones\+: towards relative permeability curves for unstable displacement. In\+: ECMOR 2022, earthdoc.
+\item Knuth, D.\+E., 2007. Computer programming as an art. In ACM Turing award lec-\/tures (p. 1974).
+\end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md125}{}\doxysubsection{\texorpdfstring{License}{License}}\label{md__r_e_a_d_m_e_autotoc_md125}
+Open-\/\+CSMP++ is going to be licensed under L-\/\+GPL.\hypertarget{md__r_e_a_d_m_e_autotoc_md126}{}\doxysubsection{\texorpdfstring{Project status}{Project status}}\label{md__r_e_a_d_m_e_autotoc_md126}
+CSMP\textquotesingle{}s development is ongoin at a number of international institutions. This library is the stable branch of CSMP, supporting a range of applications developed on top of it such as the Australian Carbon Geo-\/\+Sequestration Simulator (ACGSS). Another branch is a work in progress, refactoring the finite element and finite volume libraries for massively parallel computations and introducing Eigen\textquotesingle{}s expression templates for matrix algebra into the code, replacing \doxylink{classcsmp_1_1_dense_matrix}{csmp\+::\+Dense\+Matrix} and its associated functionality. 

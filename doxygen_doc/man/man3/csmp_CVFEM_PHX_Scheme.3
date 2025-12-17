@@ -1,0 +1,135 @@
+.TH "csmp::CVFEM_PHX_Scheme< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CVFEM_PHX_Scheme< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <CVFEM_PHX_Scheme\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCVFEM_PHX_Scheme\fP (\fBModel\fP< dim > &, bool with_gravity=true)"
+.br
+.ti -1c
+.RI "\fB~CVFEM_PHX_Scheme\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetLargestTimeStep\fP (double timestep)"
+.br
+.ti -1c
+.RI "void \fBChangeTimeStepTo\fP (double timestep)"
+.br
+.ti -1c
+.RI "void \fBInitialFluidPropertiesFromPTX\fP ()"
+.br
+.ti -1c
+.RI "void \fBPrepareTransientCalculations\fP ()"
+.br
+.ti -1c
+.RI "double \fBApply\fP ()"
+.br
+.ti -1c
+.RI "void \fBTemperatureDependentHeatCapacityRock\fP (double cpr_min_ext, double t_min_ext, double cpr_max_ext, double t_max_ext)"
+.br
+.ti -1c
+.RI "void \fBOpenBoundaries\fP (double T_gradC, double p_Pa, double wt)"
+.br
+.ti -1c
+.RI "void \fBOpenBoundaries\fP (double wt)"
+.br
+.ti -1c
+.RI "void \fBCheckConsistency\fP (bool check)"
+.br
+.ti -1c
+.RI "void \fBSetBrickWallLimiterTo\fP (bool limit)"
+.br
+.ti -1c
+.RI "void \fBAddAdvectionVariable\fP (const char *balanced_variable, const char *new_lhs_liquid, const char *new_rhs_liquid, const char *new_lhs_vapor, const char *new_rhs_vapor)"
+.br
+.ti -1c
+.RI "void \fBAdjust_CFL_Criterion\fP (double scale_factor, bool take_pore_velocity)"
+.br
+.ti -1c
+.RI "void \fBGetFacetFluxFromInsideNodeToOutsideNode\fP (\fBElement\fP< dim > &e, unsigned int facet_idx, double &flux_liquid, double &flux_vapor)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::CVFEM_PHX_Scheme< dim >"
+.PP
+\fBAuthor\fP
+.RS 4
+Philipp Weis, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+philipp.weis@erdw.ethz.ch
+
+.PP
+@changes changes Latest Changes
+.SH "Motivation"
+.PP
+Class to perform calculations of CVFEM PHX scheme\&.
+.SH "Usage"
+.PP
+Uses CVFEM scheme (Weis et al\&., Geofluids, 2014)\&.
+
+.PP
+.PP
+.nf
+.fi
+.PP
+.SH "Dependencies"
+.PP
+\fBCVFEM_PHX_VariableNames\fP \fBTwoPhaseTransportPHX\fP \fBCVFEM_PressureGradientVisitor\fP \fBPoreVolumeVisitor\fP \fBNumIntegral_NT_lhsop_N_dV\fP \fBNumIntegral_NT_op_N_dV\fP \fBCVFEM_NumIntegral_dNT_op_dN_dV\fP \fBCVFEM_PointSource_rhsop\fP \fBNumIntegral_NT_lhs_nodal_op_N_dV\fP \fBNumIntegral_NT_rhs_nodal_op_N_dV\fP \fBCVFEM_Upwind_NumIntegral_dNT_op_dN_dV\fP \fBCVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV\fP \fBNaClH2OPropertiesVisitorPHX\fP \fBCVFEM_Visitor\fP \fBLimiter\fP \fBPDE_Integrator\fP \fBBrine\fP ConvertConcentrationUnitsNaCl
+.SH "Known issues"
+.PP
+.SH "Testing"
+.PP
+testing was done in the period before publication in 2014\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::CVFEM_PHX_Scheme (\fBModel\fP< dim > & model_ref, bool with_gravity = \fRtrue\fP)\fR [explicit]\fP"
+custom constructor add extra functionality for alternative solver if needed
+.SS "template<uint32_t dim> \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::~\fBCVFEM_PHX_Scheme\fP ()"
+custom destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::AddAdvectionVariable (const char * balanced_variable, const char * new_lhs_liquid, const char * new_rhs_liquid, const char * new_lhs_vapor, const char * new_rhs_vapor)"
+add further variables for FV calculations 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::Adjust_CFL_Criterion (double scale_factor, bool take_pore_velocity)"
+modifying cfl criterion 
+.SS "template<uint32_t dim> double \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::Apply ()"
+main function to apply CVFEM scheme in transeint calculations, returns time step used for calculations 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::ChangeTimeStepTo (double tstep)"
+adjusting timestep 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::CheckConsistency (bool check)"
+switch consostency check on or off 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::GetFacetFluxFromInsideNodeToOutsideNode (\fBElement\fP< dim > & e, unsigned int facet_idx, double & flux_liquid, double & flux_vapor)"
+access function to transient fluxes 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::InitialFluidPropertiesFromPTX ()"
+initialize fluid properties from current PTX conditions 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::OpenBoundaries (double T_gradC, double p_Pa, double wt)"
+switch on open top, specifying temperature, pressure and salinity of inflowing fluid 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::OpenBoundaries (double wt)"
+switch on open top, specifying salinity of inflowing fluid 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::PrepareTransientCalculations ()"
+preparation before transient calculations, calculating pressure gradient and updwind nodes from current status 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::SetBrickWallLimiterTo (bool limit)"
+switch brick wall limiter for fluid pressure on or off 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::SetLargestTimeStep (double tstep)"
+modifying maximum size of time step 
+.SS "template<uint32_t dim> void \fBcsmp::CVFEM_PHX_Scheme\fP< dim >::TemperatureDependentHeatCapacityRock (double cpr_min_ext, double t_min_ext, double cpr_max_ext, double t_max_ext)"
+performing consistency check between CVFEM_visitors and FV calculations - currently not in use modify calculations of temperature-dependent heat capacity of the rock 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

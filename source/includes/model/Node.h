@@ -61,7 +61,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     ~Node();
 
     /// compares memory location, idx_, BREP classifier and boundary flag
-    bool operator==( const Node<dim>& );
+    bool operator==( const Node<dim>& ) const;
 
     /// Local variable storage interface
     PLACEMENT Placement() const { return NODE; }

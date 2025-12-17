@@ -1,0 +1,146 @@
+.TH "csmp::SneddonCrack_VVCase" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SneddonCrack_VVCase
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSneddonCrack_VVCase\fP (const char *prefix)"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_min_avg_error\fP (double epsilon)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::SneddonCrack_VVCase::run ()\fR [virtual]\fP"
+Author: E\&. Pezzulli & M\&. Nejati 
+.SH "Linear Elasticity: Plane stress/strain problem with central crack under uniform tension; testing the aperture profile of the crack"
+.PP
+Domain: "Infinite" 2D rectangle shaped model length LxL meters with central crack of half length a where L/a > 20 Mesh: Linear/Quadratic Triangles tested OK; Quadrilaterials have to be tested Material: Linear ELastic Isotropic Material: E=Young's Modulus, nu= Poisson's Ratio; Loading: No stress on boundaries\&. BC: Zero x and y displacements on LEFT BOTTOM Corner (CRN1), and zero y displacement on CRN2 (BOTTOM RIGHT) 
+.SH "ConfigFiles: (\&.asc, \&.dat)"
+.PP
+The solution for the aperture w(x) of a horizontal fracture of half length a with origin x=0 representing middle of crack:
+
+.PP
+Plane Strain: (aperture) w = 2*Uy 4*(1 - v^2)*P/E * (a^2 - x^2 )^(1/2) E = youngs Modulus, v = Poisson Ration, a = crack half length, x = distance along crack with origin at midpoint
+
+.PP
+Marji - 2006 - Crack Tip Elements - doi:10\&.1016/j\&.ijsolstr\&.2005\&.04\&.042 Sneddon - 1946 - The opening of griffith cracks (factor of two wrong!)
+
+.PP
+The following implementation is testing the creation of the \fBFracture\fP Class, its initialisation and creation of \fBInterFace\fP Objects, constructed from opposite face pairs of the master and slave Boundaries of a 2D fracture\&. The calculation and calibration of a Unit Normal and the creation of midPoint Elements within the fracture, which are however not used/tested to work\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+The following implemetation relies on LinearElasticityIsotropicDeformation2D_VVcase to work
+.RE
+.PP
+Assumptions of \fBTest\fP: 1) Relies on \fBBoundary\fP Naming convention when created from lower dimensional region ========================================================================================== 
+.SH "Elasticity with Central Crack VV_Case"
+.PP
+.PP
+ 
+.SS "Setting up Fracture Configuration"
+.PP
+ 
+.SS "Elasto-Lubrication Parameter Configuration"
+.PP
+ 
+.SS "Elasticity Boundary Conditions"
+================================================================== 
+.SH "Elasticity Equations"
+.PP
+.PP
+.nf
+ K u = - Cp
+.fi
+.PP
+
+.PP
+K = int BT D B dV C = int NT n N dS
+
+.PP
+================================================================== 
+.SH "Displacement Solution & Verification"
+.PP
+========================================= 
+.SH "Outputing to VTU"
+.PP
+ANALYTICAL SOLUTION
+.PP
+Implements \fBcsmp::Test\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

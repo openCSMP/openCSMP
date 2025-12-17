@@ -2,7 +2,7 @@
 #define NOGDI
 
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "Catch2.hpp"
 
 
 #include "ScalarVar_Test.h"

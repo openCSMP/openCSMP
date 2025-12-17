@@ -1,0 +1,122 @@
+\doxysection{Newton\+Raphson\+Solve0\texorpdfstring{$<$}{<} dim, functor, real \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{class_newton_raphson_solve0}{}\label{class_newton_raphson_solve0}\index{NewtonRaphsonSolve0$<$ dim, functor, real $>$@{NewtonRaphsonSolve0$<$ dim, functor, real $>$}}
+
+
+This template class is an encapsulation of the one dimensional Newton\+Raphson iteration algorithm. It allows for calculating df twice at each iteration, or d2f, to increase the spead of convergance. It also can be used in situations with boundaries. The orignal source cand be viewed or downloaded \href{NewtonRaphson.h}{\texttt{here.}}~\newline
+  
+
+
+
+
+{\ttfamily \#include $<$Newton\+Raphson.\+h$>$}
+
+
+
+Collaboration diagram for Newton\+Raphson\+Solve0\texorpdfstring{$<$}{<} dim, functor, real \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=207pt]{class_newton_raphson_solve0__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_newton_raphson_solve0_a08370c22747f88dd2a9997dab006bff3}\label{class_newton_raphson_solve0_a08370c22747f88dd2a9997dab006bff3} 
+bool {\bfseries get\+\_\+boundary\+\_\+solution} () const
+\begin{DoxyCompactList}\small\item\em returns \+\_\+boundary\+\_\+solution \end{DoxyCompactList}\item 
+\Hypertarget{class_newton_raphson_solve0_a3926ca4a3cee801036760560913f5391}\label{class_newton_raphson_solve0_a3926ca4a3cee801036760560913f5391} 
+void {\bfseries set\+\_\+d2f} (real(functor$<$ dim $>$\+::\texorpdfstring{$\ast$}{*}d2f)(real))
+\begin{DoxyCompactList}\small\item\em used to set the second order differential \end{DoxyCompactList}\item 
+\Hypertarget{class_newton_raphson_solve0_a861548a0d9237c6e0c7728a42a6d0c61}\label{class_newton_raphson_solve0_a861548a0d9237c6e0c7728a42a6d0c61} 
+void {\bfseries set\+\_\+check\+\_\+boundary} (bool check\+\_\+boundary)
+\begin{DoxyCompactList}\small\item\em used to turn boundary checking on or off \end{DoxyCompactList}\item 
+\Hypertarget{class_newton_raphson_solve0_a7edf5a3b98492ba820546b6e40a920bd}\label{class_newton_raphson_solve0_a7edf5a3b98492ba820546b6e40a920bd} 
+void {\bfseries set\+\_\+min\+\_\+x} (real min\+\_\+x)
+\begin{DoxyCompactList}\small\item\em used to set the minimum of the solution set \end{DoxyCompactList}\item 
+\Hypertarget{class_newton_raphson_solve0_a17fa723b85bac11ff1c4048ae4d12cc5}\label{class_newton_raphson_solve0_a17fa723b85bac11ff1c4048ae4d12cc5} 
+void {\bfseries set\+\_\+max\+\_\+x} (real max\+\_\+x)
+\begin{DoxyCompactList}\small\item\em used to set the maximum of the solution set \end{DoxyCompactList}\item 
+\Hypertarget{class_newton_raphson_solve0_a0b52dd09b78594d47a9a1840c4faa669}\label{class_newton_raphson_solve0_a0b52dd09b78594d47a9a1840c4faa669} 
+real {\bfseries get\+\_\+x\+\_\+converge} () const
+\begin{DoxyCompactList}\small\item\em used to retrieve the convergance value \end{DoxyCompactList}\item 
+\Hypertarget{class_newton_raphson_solve0_a1a9e57d85d71b7449225a40bd7800800}\label{class_newton_raphson_solve0_a1a9e57d85d71b7449225a40bd7800800} 
+real {\bfseries get\+\_\+f\+\_\+converge} () const
+\begin{DoxyCompactList}\small\item\em used to retrieve the final value of f \end{DoxyCompactList}\item 
+\Hypertarget{class_newton_raphson_solve0_a1c25f597ef6ad1e94804e747d34cd59c}\label{class_newton_raphson_solve0_a1c25f597ef6ad1e94804e747d34cd59c} 
+functor$<$ dim $>$ \& {\bfseries get\+\_\+functor} ()
+\begin{DoxyCompactList}\small\item\em this returns a reference to the parent object with the hidden variables \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_newton_raphson_solve0_a204bc9e3c798e81a5c5f97c0b13257aa}{Newton\+Raphson\+Solve0}} (real X0, real Epsilon, bool Twice\+\_\+df, unsigned int max\+\_\+iter, functor$<$ dim $>$ \&F, real(functor$<$ dim $>$\+::\texorpdfstring{$\ast$}{*}f)(real), real(functor$<$ dim $>$\+::\texorpdfstring{$\ast$}{*}df)(real), real(functor$<$ dim $>$\+::\texorpdfstring{$\ast$}{*}d2f)(real)=NULL, real fsolve=0, bool check\+\_\+boundary=false, real min\+\_\+x=0, real max\+\_\+x=0)
+\item 
+\Hypertarget{class_newton_raphson_solve0_ab43a9d9badc8d43fadc810242be5552d}\label{class_newton_raphson_solve0_ab43a9d9badc8d43fadc810242be5552d} 
+void {\bfseries do\+\_\+iteration} (ostream \texorpdfstring{$\ast$}{*}output)
+\begin{DoxyCompactList}\small\item\em This function does the calculations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class functor, class real$>$\newline
+class Newton\+Raphson\+Solve0$<$ dim, functor, real $>$}
+This template class is an encapsulation of the one dimensional Newton\+Raphson iteration algorithm. It allows for calculating df twice at each iteration, or d2f, to increase the spead of convergance. It also can be used in situations with boundaries. The orignal source cand be viewed or downloaded \href{NewtonRaphson.h}{\texttt{here.}}~\newline
+ 
+
+An object of class \doxylink{class_newton_raphson_solve0}{Newton\+Raphson\+Solve0} is created with a call to the constructor, \doxylink{class_newton_raphson_solve0_a204bc9e3c798e81a5c5f97c0b13257aa}{Newton\+Raphson\+Solve0\+::\+Newton\+Raphson\+Solve0}, which takes arguments for the starting point, X0, the convergance stopping point, Epsilon, and a functor f, and a functor df, which is the derivative of f. ~\newline
+ The function do\+\_\+iteration, attempts to find the value of x, \+\_\+x\+\_\+converge, which solves the equation, (\+\_\+F.\texorpdfstring{$\ast$}{*}\+\_\+f(\+\_\+x\+\_\+converge) -\/ \+\_\+f\+\_\+solve) \texorpdfstring{$<$}{<} \+\_\+epsilon. ~\newline
+ The second derivative d2f can optionally be supplied. If check\+\_\+boundary is set to true, then boundary solutions can be solved also. The member function do\+\_\+iteration, starts the iterative process. ~\newline
+ The file Newton\+Raphson.\+cpp contains 3 examples of how this template class can be used. The source code for Newton\+Raphson.\+cpp can be downloaded \href{NewtonRaphson.cpp}{\texttt{here.}}~\newline
+ 
+
+\label{doc-constructors}
+\Hypertarget{class_newton_raphson_solve0_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_newton_raphson_solve0_a204bc9e3c798e81a5c5f97c0b13257aa}\index{NewtonRaphsonSolve0$<$ dim, functor, real $>$@{NewtonRaphsonSolve0$<$ dim, functor, real $>$}!NewtonRaphsonSolve0@{NewtonRaphsonSolve0}}
+\index{NewtonRaphsonSolve0@{NewtonRaphsonSolve0}!NewtonRaphsonSolve0$<$ dim, functor, real $>$@{NewtonRaphsonSolve0$<$ dim, functor, real $>$}}
+\doxysubsubsection{\texorpdfstring{NewtonRaphsonSolve0()}{NewtonRaphsonSolve0()}}
+{\footnotesize\ttfamily \label{class_newton_raphson_solve0_a204bc9e3c798e81a5c5f97c0b13257aa} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class functor, class real$>$ \\
+\mbox{\hyperlink{class_newton_raphson_solve0}{Newton\+Raphson\+Solve0}}$<$ dim, functor, real $>$\mbox{\hyperlink{class_newton_raphson_solve0}{\+::\+Newton\+Raphson\+Solve0}} (\begin{DoxyParamCaption}\item[{real}]{X0}{, }\item[{real}]{Epsilon}{, }\item[{bool}]{Twice\+\_\+df}{, }\item[{unsigned int}]{max\+\_\+iter}{, }\item[{functor$<$ dim $>$ \&}]{F}{, }\item[{real(functor$<$ dim $>$\+::\texorpdfstring{$\ast$}{*}}]{f~}{)(real), }\item[{real(functor$<$ dim $>$\+::\texorpdfstring{$\ast$}{*}}]{df~}{)(real), }\item[{real(functor$<$ dim $>$\+::\texorpdfstring{$\ast$}{*}}]{d2f~}{)(real) = {\ttfamily NULL}, }\item[{real}]{fsolve}{ = {\ttfamily 0}, }\item[{bool}]{check\+\_\+boundary}{ = {\ttfamily false}, }\item[{real}]{min\+\_\+x}{ = {\ttfamily 0}, }\item[{real}]{max\+\_\+x}{ = {\ttfamily 0}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+This constructor sets everything needed by the algorithm. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{in}}  & {\em X0} & This is the starting point of the search. It is stored as the data member, \+\_\+x0. \\
+\hline
+\mbox{\texttt{in}}  & {\em Epsilon} & The is used to define the end point of the iterative procedure, do\+\_\+iteration. The loop will terminate when the abs(F(xi) -\/ fsolve)) is less than Epsilon. It is stored as the data member, \+\_\+epsilon. \\
+\hline
+\mbox{\texttt{in}}  & {\em Twice\+\_\+df} & If Twice\+\_\+df then the derivative of F, at point i, is approximated as (F(x\mbox{[}i\mbox{]})+f(x\mbox{[}i-\/1\mbox{]})\texorpdfstring{$\ast$}{*}.5 which approximates the derivative of F over the interval x\mbox{[}i\mbox{]} to x\mbox{[}i-\/1\mbox{]}. It is stored as the data member, \+\_\+F. \\
+\hline
+\mbox{\texttt{in}}  & {\em max\+\_\+iter} & The maximum number of iterations before do\+\_\+iteration, will terminate. It is stored as the data member \+\_\+max\+\_\+iter. \\
+\hline
+\mbox{\texttt{in}}  & {\em F} & This reference to a functor object serves as the object for calling the member function pointers f, df and d2f. It is stored as the data member \+\_\+F. \\
+\hline
+\mbox{\texttt{in}}  & {\em f} & This pointer to a member function is used to calculate the function to solved. It is stored as the data member \+\_\+f. \\
+\hline
+\mbox{\texttt{in}}  & {\em df} & This pointer to a member function is used to calculate the derivative of the function to solved. It is stored as the data member \+\_\+df. \\
+\hline
+\mbox{\texttt{in}}  & {\em d2f} & This pointer to a member function is used to calculate the second derivative of the function to solved. It is stored as the data member \+\_\+d2f. \\
+\hline
+\mbox{\texttt{in}}  & {\em fsolve} & This is the value of f to be solved. It\textquotesingle{}s default value is 0. It is stored as the data member \+\_\+fsolve. \\
+\hline
+\mbox{\texttt{in}}  & {\em check\+\_\+boundary} & If true then the algorithm will check constrain the search so that it only stays within min\+\_\+x and max\+\_\+x. If the search goes outside of the range then the solution is set to the boundary value. It is stored as the data member \+\_\+check\+\_\+boundary. \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{class_newton_raphson_solve0_a204bc9e3c798e81a5c5f97c0b13257aa_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{class_newton_raphson_solve0_a204bc9e3c798e81a5c5f97c0b13257aa_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/Newton\+Raphson.\+h\end{DoxyCompactItemize}

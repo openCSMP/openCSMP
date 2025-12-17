@@ -1,0 +1,885 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::IAPWS_H2OPropertiesVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ad9ccd876ef376ef6ea6cbbe629a2e8f2" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_dynamic_viscosity" kindref="compound">DynamicViscosity</ref></type>
+        <definition>DynamicViscosity csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::viscosity</definition>
+        <argsstring></argsstring>
+        <name>viscosity</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::viscosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="76" column="22" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ad477072e859065175460955f2df7a399" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::verbose</definition>
+        <argsstring></argsstring>
+        <name>verbose</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::verbose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="77" column="24" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a131db9822e2d8e602513f35ea69b14de" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::with_steam</definition>
+        <argsstring></argsstring>
+        <name>with_steam</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::with_steam</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="77" column="32" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a9b9b8ab9c33b623f62fc63b77dbed72c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::failed</definition>
+        <argsstring></argsstring>
+        <name>failed</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::failed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="77" column="43" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a21536073c9eec3deac8705e25c2896c5" prot="private" static="no" mutable="no">
+        <type>Prop *</type>
+        <definition>Prop* csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::props</definition>
+        <argsstring></argsstring>
+        <name>props</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::props</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="78" column="24" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a194cdc88c4eb7b2684b778e907c164e7" prot="private" static="no" mutable="no">
+        <type>Prop *</type>
+        <definition>Prop * csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::lprops</definition>
+        <argsstring></argsstring>
+        <name>lprops</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::lprops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="78" column="30" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a02e7c927855b814d6859f22a4bb6ee7c" prot="private" static="no" mutable="no">
+        <type>Prop *</type>
+        <definition>Prop * csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::sprops</definition>
+        <argsstring></argsstring>
+        <name>sprops</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::sprops</qualifiedname>
+        <briefdescription>
+<para>PROST output structures. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="78" column="37" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a6d2a6f758cdf230d098ff81df9ce910a" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::Tf</definition>
+        <argsstring></argsstring>
+        <name>Tf</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::Tf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a0e1e31c5268eff2bbc8319411e87d7ac" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::Pf</definition>
+        <argsstring></argsstring>
+        <name>Pf</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::Pf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="28" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a268f58dea56a014cc54377286dbc1cea" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::rho</definition>
+        <argsstring></argsstring>
+        <name>rho</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::rho</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="31" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a7addbed4b6fabab614358261bf4a4fab" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::cp</definition>
+        <argsstring></argsstring>
+        <name>cp</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::cp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="35" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1aa31f7b0bbffd400982b7add3b904aac5" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::h</definition>
+        <argsstring></argsstring>
+        <name>h</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::h</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="38" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a79134d38481de6db0454eba8f3d969dd" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="40" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1afcfe44a5af52a8a1f1d540c53a1db938" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::mu</definition>
+        <argsstring></argsstring>
+        <name>mu</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::mu</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="42" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a5bd13ef1faa1d5df85357fd126001315" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::alpha</definition>
+        <argsstring></argsstring>
+        <name>alpha</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::alpha</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="45" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a6e0d0d17f3dd52a43f9c9cea87cd663c" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::beta</definition>
+        <argsstring></argsstring>
+        <name>beta</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::beta</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="79" column="51" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a702392f1d08504ff0a2a4baeb5fe51ff" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::P_key</definition>
+        <argsstring></argsstring>
+        <name>P_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::P_key</qualifiedname>
+        <briefdescription>
+<para>fluid pressure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="80" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a3204c2e4effbeae5a89e49e969d9f527" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::T_key</definition>
+        <argsstring></argsstring>
+        <name>T_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::T_key</qualifiedname>
+        <briefdescription>
+<para>temperature </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="81" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a0b0f0ec4ccc7efc850e0e4633fe7bc68" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::cp_key</definition>
+        <argsstring></argsstring>
+        <name>cp_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::cp_key</qualifiedname>
+        <briefdescription>
+<para>fluid heat capacity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="82" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a59d948104904b2b3e0c89f8078850907" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::h_key</definition>
+        <argsstring></argsstring>
+        <name>h_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::h_key</qualifiedname>
+        <briefdescription>
+<para>fluid enthalpy </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="83" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ac743f7447cd56bd69a4a9f2b47b18bc3" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::s_key</definition>
+        <argsstring></argsstring>
+        <name>s_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::s_key</qualifiedname>
+        <briefdescription>
+<para>saturation steam </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="84" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a5fc0f9021362dbb5c034a519abf0663d" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::mu_key</definition>
+        <argsstring></argsstring>
+        <name>mu_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::mu_key</qualifiedname>
+        <briefdescription>
+<para>fluid viscosity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="85" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1af9364cf0408023d6cb0fdde07c985814" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::alpha_key</definition>
+        <argsstring></argsstring>
+        <name>alpha_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::alpha_key</qualifiedname>
+        <briefdescription>
+<para>fluid expansivity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="86" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ab746c21b984aa69251c9e7123c2cc6fc" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::beta_key</definition>
+        <argsstring></argsstring>
+        <name>beta_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::beta_key</qualifiedname>
+        <briefdescription>
+<para>fluid compressibility </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="87" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae3b89d9099dbc699b61abdddc2f4118f" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::rho_key</definition>
+        <argsstring></argsstring>
+        <name>rho_key</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::rho_key</qualifiedname>
+        <briefdescription>
+<para>fluid density </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="88" column="25" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a0153fd47bcb4aab163718ac766c91cbe" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::temk</definition>
+        <argsstring></argsstring>
+        <name>temk</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::temk</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="89" column="23" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a579a734c05aa7acf233febfb0b8b02df" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::dens</definition>
+        <argsstring></argsstring>
+        <name>dens</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::dens</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="89" column="28" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae3ea38b367e48ff7fa6e4ea7e416cc7e" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::dp</definition>
+        <argsstring></argsstring>
+        <name>dp</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::dp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="90" column="23" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a854acb1f8949649dec85a95d7fba7de8" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::dt</definition>
+        <argsstring></argsstring>
+        <name>dt</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::dt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="90" column="26" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a05ed8c22cf5f98912c1bfe5997f0dac0" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::kelvin</definition>
+        <argsstring></argsstring>
+        <name>kelvin</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::kelvin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="90" column="29" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a91e926d6934d1c14e57d4b147b82a3a4" prot="private" static="no" mutable="no">
+        <type>const double</type>
+        <definition>const double csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::bar</definition>
+        <argsstring></argsstring>
+        <name>bar</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::bar</qualifiedname>
+        <briefdescription>
+<para>convergence for PROST </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="90" column="36" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a2e10f88f3a3364f39bfcc2d55b567384" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *fluidPressure, const char *fluidDensity, const char *fluidViscosity, bool with_steam=false, bool verbose=false)</argsstring>
+        <name>IAPWS_H2OPropertiesVisitor</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::IAPWS_H2OPropertiesVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidPressure</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidDensity</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidViscosity</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_steam</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>custom constructor using internally predefined variable names for, H, cp, alpha, and beta </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="18" column="5" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="12" bodyend="45"/>
+        <references refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a2e10f88f3a3364f39bfcc2d55b567384" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="12" endline="45">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</references>
+        <references refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a67d0296c394f5a31aad875e687d6fbeb" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="182" endline="214">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::PlacementChecks</references>
+        <referencedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a2e10f88f3a3364f39bfcc2d55b567384" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="12" endline="45">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae98156fee7af98190643c0cac7689c17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, Index &amp;fluidPressure, Index &amp;fluidTemperature, Index &amp;fluidDensity, Index &amp;fluidViscosity, Index &amp;fluidEnthalpy, Index &amp;fluidHeatCapacity, Index &amp;fluidExpansivity, Index &amp;fluidCompressibility, bool with_steam=false, bool verbose=false)</argsstring>
+        <name>IAPWS_H2OPropertiesVisitor</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::IAPWS_H2OPropertiesVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidPressure</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidTemperature</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidDensity</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidViscosity</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidEnthalpy</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidHeatCapacity</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidExpansivity</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> &amp;</type>
+          <declname>fluidCompressibility</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_steam</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>custom constructor allowing the user to choose names for, H, cp, alpha, and beta </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="26" column="5" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="51" bodyend="89"/>
+        <references refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae98156fee7af98190643c0cac7689c17" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="51" endline="89">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</references>
+        <references refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a67d0296c394f5a31aad875e687d6fbeb" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="182" endline="214">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::PlacementChecks</references>
+        <referencedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae98156fee7af98190643c0cac7689c17" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="51" endline="89">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a6b06519d515418705556bb8297671125" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *fluidPressure, const char *fluidTemperature, const char *fluidDensity, const char *fluidViscosity, const char *fluidEnthalpy, const char *fluidHeatCapacity, const char *fluidExpansivity, const char *fluidCompressibility, bool with_steam=false, bool verbose=false)</argsstring>
+        <name>IAPWS_H2OPropertiesVisitor</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::IAPWS_H2OPropertiesVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidPressure</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidTemperature</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidDensity</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidViscosity</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidEnthalpy</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidHeatCapacity</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidExpansivity</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidCompressibility</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_steam</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="38" column="5" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="92" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1af6777d096cbbb646fc6da8bd757f494f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;sg, const char *temperature, const char *fluidPressure, const char *fluidDensity, const char *fluidViscosity, bool with_steam=false)</argsstring>
+        <name>IAPWS_H2OPropertiesVisitor</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::IAPWS_H2OPropertiesVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>sg</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>temperature</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidPressure</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidDensity</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fluidViscosity</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>with_steam</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>constructor when only the fluid density and viscosity are required </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For output of only the fluid density and the fluid viscosity. The other variables are computed but not reported.</para>
+<para><simplesect kind="attention"><para>Variable output is controlled by the variable keys. If variables are not initialized (place==UNDEFINED), they will not be output.</para>
+</simplesect>
+<simplesect kind="attention"><para>the only extra variable that is used if steam is enabled, is the &apos;saturation steam&apos;. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="51" column="5" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="145" bodyend="174"/>
+        <references refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1af6777d096cbbb646fc6da8bd757f494f" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="145" endline="174">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</references>
+        <referencedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1af6777d096cbbb646fc6da8bd757f494f" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="145" endline="174">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a3d91810f80e9f191750df8f1196b4113" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::~IAPWS_H2OPropertiesVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~IAPWS_H2OPropertiesVisitor</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::~IAPWS_H2OPropertiesVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="58" column="13" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="224" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a67d0296c394f5a31aad875e687d6fbeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::PlacementChecks</definition>
+        <argsstring>()</argsstring>
+        <name>PlacementChecks</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::PlacementChecks</qualifiedname>
+        <briefdescription>
+<para>checks whether the user specified variables have a placement that is compatible with this visitor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="61" column="10" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="182" bodyend="214"/>
+        <referencedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a2e10f88f3a3364f39bfcc2d55b567384" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="12" endline="45">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</referencedby>
+        <referencedby refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae98156fee7af98190643c0cac7689c17" compoundref="_i_a_p_w_s___h2_o_properties_visitor_8cpp" startline="51" endline="89">csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::IAPWS_H2OPropertiesVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ab373a37dae4d5ebdf412f466e4265548" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Node&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_node" kindref="compound">Node</ref>&lt; dim &gt; *</type>
+          <defname>n</defname>
+        </param>
+        <briefdescription>
+<para>when all properties are calculated as <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> properties </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="64" column="18" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="231" bodyend="331"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a7f134fc4a8eb13463bb5d2129f96552f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+<para>when density and viscosity are calculated at the element integration points </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="67" column="18" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="337" bodyend="439"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a06e8e74a5425ff2f0a337a3e76946ab0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Model&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; *</type>
+        </param>
+        <briefdescription>
+<para>to ascertain that nothing gets done at the level of the model </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="70" column="18" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1aff217dd398e3462e76f2252ead897cdb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;::Verbose</definition>
+        <argsstring>()</argsstring>
+        <name>Verbose</name>
+        <qualifiedname>csmp::IAPWS_H2OPropertiesVisitor::Verbose</qualifiedname>
+        <briefdescription>
+<para>optional screen output of calculation results </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="73" column="10" bodyfile="source/modules/eos/h2o/IAPWS_H2OPropertiesVisitor.cpp" bodystart="219" bodyend="219"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Stephan K. Matthaei </para>
+</simplesect>
+<simplesect kind="date"><para>1999</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Calculates the PVT properties of pure H2O at the Nodes of a mesh, because this is also where the dependent variables P,T are located.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_visitor_1applicability">
+<title>Applicability</title><para>The visitor calculates the physical variables &quot;nodal fluid density&quot; [kg m-3], &quot;nodal relative fluid density&quot; [kg m-3] for a reference pressure, &quot;nodal heat capacity liquid&quot; [J kg K-1], &quot;nodal enthalpy liquid&quot; [J kg], &quot;nodal fluid viscosity&quot; [Pa s-1] and, optionally, also the same properties of the gas phase with the names &quot;nodal heat capacity steam&quot;, &quot;nodal enthalpy steam&quot;, as well as the &quot;nodal saturation&quot;. </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::IAPWS_H2OPropertiesVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" line="15" column="1" bodyfile="source/includes/eos/IAPWS_H2OPropertiesVisitor.h" bodystart="15" bodyend="91"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a5bd13ef1faa1d5df85357fd126001315" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>alpha</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1af9364cf0408023d6cb0fdde07c985814" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>alpha_key</name></member>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a91e926d6934d1c14e57d4b147b82a3a4" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>bar</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a6e0d0d17f3dd52a43f9c9cea87cd663c" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>beta</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ab746c21b984aa69251c9e7123c2cc6fc" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>beta_key</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a7addbed4b6fabab614358261bf4a4fab" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>cp</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a0b0f0ec4ccc7efc850e0e4633fe7bc68" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>cp_key</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a579a734c05aa7acf233febfb0b8b02df" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>dens</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae3ea38b367e48ff7fa6e4ea7e416cc7e" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>dp</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a854acb1f8949649dec85a95d7fba7de8" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>dt</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a9b9b8ab9c33b623f62fc63b77dbed72c" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>failed</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1aa31f7b0bbffd400982b7add3b904aac5" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>h</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a59d948104904b2b3e0c89f8078850907" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>h_key</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a2e10f88f3a3364f39bfcc2d55b567384" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>IAPWS_H2OPropertiesVisitor</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae98156fee7af98190643c0cac7689c17" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>IAPWS_H2OPropertiesVisitor</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a6b06519d515418705556bb8297671125" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>IAPWS_H2OPropertiesVisitor</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1af6777d096cbbb646fc6da8bd757f494f" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>IAPWS_H2OPropertiesVisitor</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a05ed8c22cf5f98912c1bfe5997f0dac0" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>kelvin</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a194cdc88c4eb7b2684b778e907c164e7" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>lprops</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1afcfe44a5af52a8a1f1d540c53a1db938" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>mu</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a5fc0f9021362dbb5c034a519abf0663d" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>mu_key</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a702392f1d08504ff0a2a4baeb5fe51ff" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>P_key</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a0e1e31c5268eff2bbc8319411e87d7ac" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Pf</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a67d0296c394f5a31aad875e687d6fbeb" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>PlacementChecks</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a21536073c9eec3deac8705e25c2896c5" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>props</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a268f58dea56a014cc54377286dbc1cea" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>rho</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ae3b89d9099dbc699b61abdddc2f4118f" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>rho_key</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ac743f7447cd56bd69a4a9f2b47b18bc3" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>s_key</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a02e7c927855b814d6859f22a4bb6ee7c" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>sprops</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a3204c2e4effbeae5a89e49e969d9f527" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>T_key</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a0153fd47bcb4aab163718ac766c91cbe" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>temk</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a6d2a6f758cdf230d098ff81df9ce910a" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Tf</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1aff217dd398e3462e76f2252ead897cdb" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ad477072e859065175460955f2df7a399" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>verbose</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ad9ccd876ef376ef6ea6cbbe629a2e8f2" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>viscosity</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1ab373a37dae4d5ebdf412f466e4265548" prot="public" virt="virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a7f134fc4a8eb13463bb5d2129f96552f" prot="public" virt="virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a06e8e74a5425ff2f0a337a3e76946ab0" prot="public" virt="virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a131db9822e2d8e602513f35ea69b14de" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>with_steam</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a79134d38481de6db0454eba8f3d969dd" prot="private" virt="non-virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>x</name></member>
+      <member refid="classcsmp_1_1_i_a_p_w_s___h2_o_properties_visitor_1a3d91810f80e9f191750df8f1196b4113" prot="public" virt="virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>~IAPWS_H2OPropertiesVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::IAPWS_H2OPropertiesVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

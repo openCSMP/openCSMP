@@ -1,0 +1,108 @@
+\doxysection{Tensor\+Variable1.\+h}
+\hypertarget{_tensor_variable1_8h_source}{}\label{_tensor_variable1_8h_source}\index{source/includes/model/TensorVariable1.h@{source/includes/model/TensorVariable1.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_TENSOR\_VARIABLE1\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_TENSOR\_VARIABLE1\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_scalar_variable_8h}{"{}ScalarVariable.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_vector_variable1_8h}{"{}VectorVariable1.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{///\ @brief\ 1D\ full\ specialization\ of\ tensor-\/type\ variable\ template\ (other\ tensors\ are\ declared\ in\ files\ \#1,\ \#2)}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable_3_011_u_01_4}{TensorVariable}}<1U>\ \{}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\_TYPE}}\ VariableType\ =\ TENSOR;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ TensorVariable();}
+\DoxyCodeLine{00016\ \ \ \ \ TensorVariable(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}},\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{double}\&\ \ \ \ \ \ \ \ operator()(\ uint32\_t\ i,\ uint32\_t\ j\ );}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ \ operator()(\ uint32\_t\ i,\ uint32\_t\ j\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ Component(\ uint32\_t,\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ Component(\ uint32\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator+(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator-\/(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator*(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator/(\ \textcolor{keywordtype}{double}\ val\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator+=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator-\/=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator*=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator/=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ sc\ );}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ sc\ );}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ sc\ );}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ sc\ );}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator+(\ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator-\/(\ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator*(\ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\ \ operator*(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ v\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\ \ operator*(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ v\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ operator/(\ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator+=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ );}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator-\/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ );}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator/=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ );}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator*=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ t\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator=(\ \textcolor{keywordtype}{double}\ val\ );}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\&\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ \ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ operator!=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ operator<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ IsWithinRange(\ \textcolor{keywordtype}{double}\ vmin,\ \textcolor{keywordtype}{double}\ vmax\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ Has\_NaN\_Values()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ std::isnan(data);\ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\&\ \ \ Flag(\ uint32\_t\ i=0\ );}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ \ \ Flag(\ uint32\_t\ i=0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ Size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ no\ resizing\ but\ new\ values}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable_3_011_u_01_4_a8fd00c0017c94e2b15c3382a998c1cce}{Identity}}();}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ MinElement()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ MaxElement()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ Determinant()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ Trace()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ Adjoint()\ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ Inverse()\ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00074\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}\ \ \ Transposed()\ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EigenValues(\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ vecEigenvalues\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ Eigen(\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ vvEigenvalues,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<1U>\&\ tvEigenvectors,\ \textcolor{keywordtype}{bool}\ bNormalize\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ EigenNonSymmetric(\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ eigenVals,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<1U>\&\ eigenVecs\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ AssignToRow(\ uint32\_t,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ vc\ );}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ AssignToColumn(\ uint32\_t,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ vc\ );}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\ Row(\ uint32\_t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\ Column(\ uint32\_t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ In();}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable_3_011_u_01_4_af3c3bab8fe8b56a05a798fa3e1913ac3}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ In(\ std::fstream\&\ fp\ );}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ Out(\ std::fstream\&\ fp\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\_FLAG}}\ \ flag;}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ data;}
+\DoxyCodeLine{00092\ \};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\ \ operator*(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\&\ vc,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<1U>\&\ ts\ );}
+\DoxyCodeLine{00096\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\ \ operator*(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<1U>\&\ vc,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<1U>\&\ ts\ );}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{comment}{//\ copyright\ (c)\ 2001\ by\ S.K.\ Matthaei,\ S.\ Geiger\ \&\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

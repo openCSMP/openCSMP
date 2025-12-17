@@ -1,0 +1,52 @@
+.TH "csmp::SumOfProducts" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SumOfProducts
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSumOfProducts\fP (const \fBSumOfProducts\fP &s)"
+.br
+.ti -1c
+.RI "\fBSumOfProducts\fP & \fBoperator=\fP (const \fBSumOfProducts\fP &s)"
+.br
+.ti -1c
+.RI "void \fBAddProduct\fP (const std::map< int32_t, double > &product)"
+.br
+.ti -1c
+.RI "double \fBSum\fP (const double a[]) const"
+.br
+.ti -1c
+.RI "void \fBErase\fP ()"
+.br
+.ti -1c
+.RI "void \fBInitializeFrom\fP (const char *s, std::map< std::string, std::pair< int, double > > &withval, std::map< std::string, int > &withoutval)"
+.br
+.ti -1c
+.RI "void \fBTokenizeString\fP (char *s, const char *delim, std::list< std::string > &li) const"
+.br
+.ti -1c
+.RI "std::vector< std::map< int, double > >::iterator \fBBegin\fP ()"
+.br
+.ti -1c
+.RI "std::vector< std::map< int, double > >::iterator \fBEnd\fP ()"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::SumOfProducts::InitializeFrom (const char * s, std::map< std::string, std::pair< int, double > > & withval, std::map< std::string, int > & withoutval)"
+takes character string containing the righthandside of the Algebraic equation and builds itself from this string\&. 
+.SS "double csmp::SumOfProducts::Sum (const double a[]) const"
+Add all the terms in the sum, using the supplied values in 'a' if the product term index is greater than zero and the stored terms (constants) where the index is less than zero\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

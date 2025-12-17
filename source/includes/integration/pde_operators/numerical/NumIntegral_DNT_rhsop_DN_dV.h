@@ -31,15 +31,14 @@ class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim,CELL> {
                                  const char* integral_multiplier,
                                  const char* oper,          
                                  const char* test );
-                                 
-    virtual ~NumIntegral_DNT_rhsop_DN_dV() {}
     
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
     void IgnoreOperand( bool ignore );
-    virtual NumIntegral_DNT_rhsop_DN_dV<dim,CELL>* clone() const
+  
+    NumIntegral_DNT_rhsop_DN_dV<dim,CELL>* clone() const override final
       { return new NumIntegral_DNT_rhsop_DN_dV<dim,CELL> (*this); }
       
   private:

@@ -2722,7 +2722,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 		_equal( fArea, 1., fTolerance );
 
 		//area mapped
-		_info("Facet area test.  Method 2 (FaceAreaMapped in FiniteVolumeTraits) ");
+		_info("Facet area test.  Method 2 (FacetAreaMapped in FiniteVolumeTraits) ");
     double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );

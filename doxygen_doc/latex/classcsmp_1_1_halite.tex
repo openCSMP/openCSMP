@@ -1,0 +1,147 @@
+\doxysection{csmp\+::Halite Class Reference}
+\hypertarget{classcsmp_1_1_halite}{}\label{classcsmp_1_1_halite}\index{csmp::Halite@{csmp::Halite}}
+
+
+Properties of the mineral halite (crystalline Na\+Cl) as a function of temperature and pressure.  
+
+
+
+
+{\ttfamily \#include "{}eos/h2o\+\_\+nacl/\+Halite.\+h"{}}
+
+
+
+Collaboration diagram for csmp\+::Halite\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=186pt]{classcsmp_1_1_halite__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_halite_aca8a8da4016325f5d414dfc3eed7fb66}{Halite}} (const double \&externaltemperature, const double \&externalpressure)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_halite_a6ee42840d1025e8045459ae8588b858c}{\texorpdfstring{$\sim$}{\string~}\+Halite}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_halite_a65f03eaa12be5edbb059c6d0ceb6eae7}{Mass\+Fraction\+Na\+Cl}} () const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_halite_a218ddf3195d016884c5e7c681af89b75}{Density}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_halite_a38cc9c3ddff106b5defb3f7089935728}{Molar\+Volume}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_halite_a37ba9383da93b9671d6a95129dfe63b4}{Compressibility}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_halite_ae997aeab4183ade7e5ee2ced79ed9f95}{Enthalpy}} ()
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_halite_a85fbd9f89e19b8a2e5e157adf723df06}{Heat\+Capacity}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Properties of the mineral halite (crystalline Na\+Cl) as a function of temperature and pressure. 
+
+\begin{DoxyAuthor}{Author}
+Thomas Driesner, ETH Zuerich 
+\end{DoxyAuthor}
+\hypertarget{compare_floats_8h_contact}{}\doxysubsection{\texorpdfstring{Contact}{Contact}}\label{compare_floats_8h_contact}
+\href{mailto:thomas.driesner@erdw.ethz.ch}{\texttt{thomas.\+driesner@erdw.\+ethz.\+ch}}\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+"{}\+Halite"{} is legacy code from Thomas Driesner\textquotesingle{}s developments for the H2\+O-\/\+Na\+Cl system and is mostly used to build accurate lookup tables for the H2\+O-\/\+Na\+Cl system, which are then actually used by CSMP++. It can be used instead of \doxylink{classcsmp_1_1_halite_lookup}{Halite\+Lookup} but will be slower.
+
+"{}\+Halite"{} computes various properties of the mineral halite (solid crystalline salt, Na\+Cl) as a function of temperature and pressure \mbox{[}Celsius, Pa\mbox{]} according to the papers
+
+Driesner T. and Heinrich C.\+A. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part I\+: Correlation formulae for phase relations in temperature-\/pressure-\/composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4880-\/4901.
+
+Driesner T. (2007)\+: The system H2\+O-\/\+Na\+Cl. Part II\+: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNa\+Cl. Geochimica et Cosmochimica Acta 71, 4902-\/4919.\hypertarget{classcsmp_1_1_upwind_control_visitor_usage}{}\doxysubsection{\texorpdfstring{Usage}{Usage}}\label{classcsmp_1_1_upwind_control_visitor_usage}
+~\newline
+ Construct an instance of "{}\+Halite"{} with temperature (in C) and pressure (in Pa) as they exist in the code that is supposed to use "{}\+Halite"{} as constructor variables. "{}\+Halite"{} has an internal mechanism to make sure that it always uses the current values of temperature and pressure . Public member names should be self-\/explanatory, I hope.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ t;\ \textcolor{comment}{//\ temperature\ [C]\ in\ user's\ application}}
+\DoxyCodeLine{\textcolor{keywordtype}{double}\ p;\ \textcolor{comment}{//\ pressure\ [Pa]\ in\ user's\ application\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_halite_aca8a8da4016325f5d414dfc3eed7fb66}{Halite}}\ halite(t,p);}
+\DoxyCodeLine{...}
+\DoxyCodeLine{t\ =\ some\_value;}
+\DoxyCodeLine{p\ =\ some\_other\_value;}
+\DoxyCodeLine{cout\ <<\ halite.Density()\ <<\ endl;\ \textcolor{comment}{//\ will\ return\ density\ at\ the\ new\ t\ and\ p\ conditions}}
+
+\end{DoxyCode}
+\hypertarget{classcsmp_1_1_upwind_control_visitor_dependencies}{}\doxysubsection{\texorpdfstring{Dependencies}{Dependencies}}\label{classcsmp_1_1_upwind_control_visitor_dependencies}
+~\newline
+ requires "{}\+Convert\+Concentration\+Units\+Na\+Cl.\+h"{} to ensure consistent unit conversions ~\newline
+\hypertarget{compare_floats_8h_testing}{}\doxysubsection{\texorpdfstring{Testing}{Testing}}\label{compare_floats_8h_testing}
+testing was done in the period before publication in 2007, prior to writing this documentation, no details are available anymore 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_halite_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_halite_aca8a8da4016325f5d414dfc3eed7fb66}\index{csmp::Halite@{csmp::Halite}!Halite@{Halite}}
+\index{Halite@{Halite}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{Halite()}{Halite()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_aca8a8da4016325f5d414dfc3eed7fb66} 
+csmp\+::\+Halite\+::\+Halite (\begin{DoxyParamCaption}\item[{const double \&}]{externaltemperature}{, }\item[{const double \&}]{externalpressure}{}\end{DoxyParamCaption})}
+
+custom constructor
+
+\begin{DoxyAttention}{Attention}
+Use only this conctructor. \doxylink{classcsmp_1_1_halite}{Halite} computes halite properties as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, \doxylink{classcsmp_1_1_halite_liquidus}{Halite\+Liquidus} is able to decipher their current values when being queried for halite properties. Only this constructor is allowed to ensure that functionality, default constructor has been made private. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_halite_a6ee42840d1025e8045459ae8588b858c}\index{csmp::Halite@{csmp::Halite}!````~Halite@{\texorpdfstring{$\sim$}{\string~}Halite}}
+\index{````~Halite@{\texorpdfstring{$\sim$}{\string~}Halite}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Halite()}{\string~Halite()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_a6ee42840d1025e8045459ae8588b858c} 
+csmp\+::\+Halite\+::\texorpdfstring{$\sim$}{\string~}\+Halite (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+destructor 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_halite_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_halite_a37ba9383da93b9671d6a95129dfe63b4}\index{csmp::Halite@{csmp::Halite}!Compressibility@{Compressibility}}
+\index{Compressibility@{Compressibility}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{Compressibility()}{Compressibility()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_a37ba9383da93b9671d6a95129dfe63b4} 
+double csmp\+::\+Halite\+::\+Compressibility (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Isothermal compressibility \mbox{[}Pa-\/1\mbox{]} of halite as a function of temperature and pressure \Hypertarget{classcsmp_1_1_halite_a218ddf3195d016884c5e7c681af89b75}\index{csmp::Halite@{csmp::Halite}!Density@{Density}}
+\index{Density@{Density}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{Density()}{Density()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_a218ddf3195d016884c5e7c681af89b75} 
+double csmp\+::\+Halite\+::\+Density (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Density \mbox{[}kg/m3\mbox{]} of halite as a function of temperature and pressure \Hypertarget{classcsmp_1_1_halite_ae997aeab4183ade7e5ee2ced79ed9f95}\index{csmp::Halite@{csmp::Halite}!Enthalpy@{Enthalpy}}
+\index{Enthalpy@{Enthalpy}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{Enthalpy()}{Enthalpy()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_ae997aeab4183ade7e5ee2ced79ed9f95} 
+double csmp\+::\+Halite\+::\+Enthalpy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Specific enthalpy \mbox{[}J/kg\mbox{]} of halite as a function of temperature and pressure \begin{DoxyAttention}{Attention}
+Enthalpy NEVER has an absolute value but is computed relative to a reference value. For the conventions adopted here, please check Driesner (2007). 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_halite_a85fbd9f89e19b8a2e5e157adf723df06}\index{csmp::Halite@{csmp::Halite}!HeatCapacity@{HeatCapacity}}
+\index{HeatCapacity@{HeatCapacity}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{HeatCapacity()}{HeatCapacity()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_a85fbd9f89e19b8a2e5e157adf723df06} 
+double csmp\+::\+Halite\+::\+Heat\+Capacity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Specific heat capacity \mbox{[}J/kg/C\mbox{]} of halite as a function of temperature and pressure \Hypertarget{classcsmp_1_1_halite_a65f03eaa12be5edbb059c6d0ceb6eae7}\index{csmp::Halite@{csmp::Halite}!MassFractionNaCl@{MassFractionNaCl}}
+\index{MassFractionNaCl@{MassFractionNaCl}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{MassFractionNaCl()}{MassFractionNaCl()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_a65f03eaa12be5edbb059c6d0ceb6eae7} 
+double csmp\+::\+Halite\+::\+Mass\+Fraction\+Na\+Cl (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Value of mass fraction of Na\+Cl in halite (trivial as that is always 1.\+0) \Hypertarget{classcsmp_1_1_halite_a38cc9c3ddff106b5defb3f7089935728}\index{csmp::Halite@{csmp::Halite}!MolarVolume@{MolarVolume}}
+\index{MolarVolume@{MolarVolume}!csmp::Halite@{csmp::Halite}}
+\doxysubsubsection{\texorpdfstring{MolarVolume()}{MolarVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_halite_a38cc9c3ddff106b5defb3f7089935728} 
+double csmp\+::\+Halite\+::\+Molar\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Molar volume \mbox{[}cm3/mol\mbox{]} of halite as a function of temperature and pressure; used by other classes of the H2\+O-\/\+Na\+Cl eos module 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/eos/Halite.\+h\item 
+source/modules/eos/h2o\+\_\+nacl/Halite.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,148 @@
+\doxysection{csmp\+::Boundary\+Interface\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_boundary_interface___test}{}\label{classcsmp_1_1_boundary_interface___test}\index{csmp::BoundaryInterface\_Test@{csmp::BoundaryInterface\_Test}}
+
+
+tests refactored functionality related to boundaries.  
+
+
+
+
+{\ttfamily \#include $<$Boundary\+Interface\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Boundary\+Interface\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=222pt]{classcsmp_1_1_boundary_interface___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Boundary\+Interface\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=222pt]{classcsmp_1_1_boundary_interface___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_boundary_interface___test_a3842888782da98946dcd3dd1f8285bba}{run}} ()
+\begin{DoxyCompactList}\small\item\em testing "{}"{}fault\+\_\+boundary\+\_\+test"{} creation of a segmented boundary from region \textquotesingle{}fault\textquotesingle{} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_boundary_interface___test_a4568104d1b6d4bdc5fa348149ee91222}{Test\+Box\+Shaped\+Model}} ()
+\begin{DoxyCompactList}\small\item\em can Box-\/shaped model creation be accomplished and how fast \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+tests refactored functionality related to boundaries. 
+
+Input models\+:
+\begin{DoxyItemize}
+\item fault\+\_\+boundary\+\_\+test -\/ normal fault offsetting central reservoir layer creating complex intersection relationships uses the mesh stored in Fault\+Boundary\+Test 
+\end{DoxyItemize}
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_boundary_interface___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_boundary_interface___test_a3842888782da98946dcd3dd1f8285bba}\index{csmp::BoundaryInterface\_Test@{csmp::BoundaryInterface\_Test}!run@{run}}
+\index{run@{run}!csmp::BoundaryInterface\_Test@{csmp::BoundaryInterface\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface___test_a3842888782da98946dcd3dd1f8285bba} 
+void csmp\+::\+Boundary\+Interface\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+testing "{}"{}fault\+\_\+boundary\+\_\+test"{} creation of a segmented boundary from region \textquotesingle{}fault\textquotesingle{} 
+
+Testing 2016-\/17 refactored functionality of \doxylink{classcsmp_1_1_boundary_interface}{Boundary\+Interface} and \doxylink{classcsmp_1_1_boundary}{Boundary} classes\+:
+
+Create\+Internal\+Boundary\+From() assuming a dim-\/1 region, label and count material juxtaposition relationships
+
+discerning patches by values for the region in terms of the diagnostic element variable
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_boundary_interface___test_a3842888782da98946dcd3dd1f8285bba_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_boundary_interface___test_a4568104d1b6d4bdc5fa348149ee91222}\index{csmp::BoundaryInterface\_Test@{csmp::BoundaryInterface\_Test}!TestBoxShapedModel@{TestBoxShapedModel}}
+\index{TestBoxShapedModel@{TestBoxShapedModel}!csmp::BoundaryInterface\_Test@{csmp::BoundaryInterface\_Test}}
+\doxysubsubsection{\texorpdfstring{TestBoxShapedModel()}{TestBoxShapedModel()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_boundary_interface___test_a4568104d1b6d4bdc5fa348149ee91222} 
+void csmp\+::\+Boundary\+Interface\+\_\+\+Test\+::\+Test\+Box\+Shaped\+Model (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+can Box-\/shaped model creation be accomplished and how fast 
+
+Tests\+:
+
+
+\begin{DoxyEnumerate}
+\item whether Box-\/shaped model creation be accomplished,
+\item whether the regions and their perimeters are correctly constructured
+\item how fast model creation is 
+\end{DoxyEnumerate}Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_boundary_interface___test_a4568104d1b6d4bdc5fa348149ee91222_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Boundary\+Interface\+\_\+\+Test.\+h\item 
+tests/unit/Boundary\+Interface\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

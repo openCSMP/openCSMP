@@ -1,0 +1,259 @@
+\doxysection{VTK\+\_\+\+Type.\+h}
+\hypertarget{_v_t_k___type_8h_source}{}\label{_v_t_k___type_8h_source}\index{source/includes/interfaces/VTK/VTK\_Type.h@{source/includes/interfaces/VTK/VTK\_Type.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{VTK\_TYPE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{VTK\_TYPE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_element_8h}{"{}FiniteElement.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{///\ polygonal\ data\ types\ supported\ by\ the\ Visual\ Tool\ Kit\ (VTK)\ from\ kitware.com}}
+\DoxyCodeLine{00009\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{namespacecsmp_aabe538a469c723c9324782594badb034}{VTK\_TYPE}}\ \textcolor{comment}{//\ keep\ default\ int\ because\ it\ is\ written\ to\ file}}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \ \ VTK\_VERTEX=1,}
+\DoxyCodeLine{00012\ \ \ VTK\_POLY\_VERTEX=2,}
+\DoxyCodeLine{00013\ \ \ VTK\_LINE=3,}
+\DoxyCodeLine{00014\ \ \ VTK\_POLYLINE=4,}
+\DoxyCodeLine{00015\ \ \ VTK\_TRIANGLE=5,}
+\DoxyCodeLine{00016\ \ \ VTK\_TRIANGLE\_STRIP=6,}
+\DoxyCodeLine{00017\ \ \ VTK\_POLYGON=7,}
+\DoxyCodeLine{00018\ \ \ VTK\_QUAD=9,}
+\DoxyCodeLine{00019\ \ \ VTK\_TETRA=10,}
+\DoxyCodeLine{00020\ \ \ VTK\_HEXAHEDRON=12,}
+\DoxyCodeLine{00021\ \ \ VTK\_WEDGE=13,}
+\DoxyCodeLine{00022\ \ \ VTK\_PYRAMID=14,}
+\DoxyCodeLine{00023\ \ \ VTK\_QUADRATIC\_EDGE=21,}
+\DoxyCodeLine{00024\ \ \ VTK\_QUADRATIC\_TRIANGLE=22,}
+\DoxyCodeLine{00025\ \ \ VTK\_QUADRATIC\_QUAD=23,}
+\DoxyCodeLine{00026\ \ \ VTK\_QUADRATIC\_TETRA=24,}
+\DoxyCodeLine{00027\ \ \ VTK\_QUADRATIC\_HEXAHEDRON=25,}
+\DoxyCodeLine{00028\ \ \ VTK\_QUADRATIC\_WEDGE=26,}
+\DoxyCodeLine{00029\ \ \ VTK\_QUADRATIC\_PYRAMID=27,}
+\DoxyCodeLine{00030\ \ \ VTK\_BIQUADRATIC\_QUAD=28,}
+\DoxyCodeLine{00031\ \ \ VTK\_BIQUADRATIC\_TRIANGLE=34}
+\DoxyCodeLine{00032\ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{inline}\ std::string\ parseVTK\_TYPE(\ \textcolor{keywordtype}{int}\ type\_id\ )\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{switch}(\ type\_id\ )\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_VERTEX:}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_VERTEX"{}};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLY\_VERTEX:}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_POLY\_VERTEX"{}};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_LINE:}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_LINE"{}};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLYLINE:}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_POLYLINE"{}};}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TRIANGLE:}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_TRIANGLE"{}};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TRIANGLE\_STRIP:}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_TRIANGLE\_STRIP"{}};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLYGON:}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_POLYGON"{}};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUAD:}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUAD"{}};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TETRA:}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_TETRA"{}};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_HEXAHEDRON:}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_HEXAHEDRON"{}};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_WEDGE:}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_WEDGE"{}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_PYRAMID:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_PYRAMID"{}};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_EDGE:}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUADRATIC\_EDGE"{}};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_TRIANGLE:}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUADRATIC\_TRIANGLE"{}};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_QUAD:}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUADRATIC\_QUAD"{}};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_TETRA:}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUADRATIC\_TETRA"{}};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_HEXAHEDRON:}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUADRATIC\_HEXAHEDRON"{}};}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_WEDGE:}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUADRATIC\_WEDGE"{}};}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_PYRAMID:}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_QUADRATIC\_PYRAMID"{}};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_BIQUADRATIC\_QUAD:}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_BIQUADRATIC\_QUAD"{}};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_BIQUADRATIC\_TRIANGLE:}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VTK\_IQUADRATIC\_TRIANGLE"{}};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ std::string\ failure\_message\{\textcolor{stringliteral}{"{}\(\backslash\)nparseVTK\_TYPE:\ type\_id="{}}\};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ failure\_message\ +=\ std::to\_string(type\_id);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ failure\_message\ +=\ \textcolor{stringliteral}{"{}\ out-\/of-\/range\ of\ VTK\_TYPE\ identifiers.\(\backslash\)n"{}};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ failure\_message.c\_str();}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}undefined"{}};}
+\DoxyCodeLine{00085\ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{comment}{/**\ from\ FiniteElement.h}}
+\DoxyCodeLine{00089\ \textcolor{comment}{enum\ CSMP\_FEM\_TYPE\ :\ std::int8\_t\ \{\ UNKNOWN,}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINEAR\_BAR,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUADRATIC\_BAR,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ BAR\_3\ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CUBIC\_BAR,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ BAR\_4}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINEAR\_TRIANGLE,}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINEAR\_TRIANGLE3D,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ =\ 8,}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINEAR\_QUADRILATERAL,}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINEAR\_CUBOID,}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINEAR\_RECTANGLE,}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BARYCENTRIC\_LINEAR\_TRIANGLE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TRI\_3\_X\ \ \ \ \ \ \ \ \ \ =\ 9,}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUADRATIC\_TRIANGLE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ 2D\ \&\ 3D\ TRI\_6\ \ \ \ =\ 10,}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BARYCENTRIC\_QUADRATIC\_TRIANGLE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TRI\_6\_X\ \ \ \ \ \ \ \ \ \ =\ 11,}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CUBIC\_TRIANGLE,}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINEAR\_TETRAHEDRON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TETRA\_4\ \ \ \ \ \ \ \ \ \ =\ 4,}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QUADRATIC\_TETRAHEDRON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TETRA\_10\ \ \ \ \ \ \ \ \ =\ 5,}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BARYCENTRIC\_QUADRATIC\_TETRAHEDRON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ PYRA\_5\ \ \ \ \ \ \ \ \ \ \ =\ 18,}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CUBIC\_TETRAHEDRON,}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_LINEAR\_BAR,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ BAR\_2\ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_BAR,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ BAR\_3\ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_CUBIC\_BAR,}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_LINEAR\_TRIANGLE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TRI\_3\ \ \ \ \ \ \ \ \ \ \ \ =\ 8,}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_BARYCENTRIC\_LINEAR\_TRIANGLE,\ \ \ \ \ \ \ \ \ \ \ \ //\ TRI\_3\_X\ \ \ \ \ \ \ \ \ \ =\ 9,}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_TRIANGLE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ 2D\ \&\ 3D\ TRI\_6\ \ \ \ =\ 10,}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_BARYCENTRIC\_QUADRATIC\_TRIANGLE,\ \ \ \ \ \ \ \ \ //\ TRI\_6\_X\ \ \ \ \ \ \ \ \ \ =\ 11,}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_CUBIC\_TRIANGLE,}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_LINEAR\_TETRAHEDRON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TETRA\_4\ \ \ \ \ \ \ \ \ \ =\ 4,}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_TETRAHEDRON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ TETRA\_10\ \ \ \ \ \ \ \ \ =\ 5,}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_BARYCENTRIC\_QUADRATIC\_TETRAHEDRON,\ \ \ \ //\ TETRA\_11}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_CUBIC\_TETRAHEDRON,}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_LINEAR\_PYRAMID,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ PYRA\_5\ \ \ \ \ \ \ \ \ \ \ =\ 18,}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_PYRAMID13,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ PYRA\_13\ \ \ \ \ \ \ \ \ \ =\ 24,}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_PYRAMID14,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ PYRA\_14\ \ \ \ \ \ \ \ \ \ =\ 22,}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_CUBIC\_PYRAMID,}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_LINEAR\_PRISM,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ PENTA\_6\ \ \ \ \ \ \ \ \ \ =\ 12,}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_PRISM15,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ PENTA\_15\ \ \ \ \ \ \ \ \ =\ 13,}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_PRISM18,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ PENTA\_18\ \ \ \ \ \ \ \ \ =\ 21,}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_CUBIC\_PRISM,}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_LINEAR\_QUADRILATERAL,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ QUAD\_4\ \ \ \ \ \ \ \ \ \ \ =\ 14,}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_BARYCENTRIC\_LINEAR\_QUADRILATERAL,\ \ \ \ \ //\ QUAD\_4\_X\ \ \ \ \ \ \ \ \ =\ 15,}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_QUADRILATERAL,\ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ QUAD\_8\ \ \ \ \ \ \ \ \ \ \ =\ 16,}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_BARYCENTRIC\_QUADRATIC\_QUADRILATERAL,\ \ //\ QUAD\_8\_X\ \ \ \ \ \ \ \ \ =\ 17,}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_QUADRILATERAL9,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ QUAD\_9\ \ \ \ \ \ \ \ \ \ \ =\ 19,}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_CUBIC\_QUADRILATERAL,}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_LINEAR\_HEXAHEDRON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ HEXA\_8\ \ \ \ \ \ \ \ \ \ \ =\ 6,}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_HEXAHEDRON20,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ HEXA\_20\ \ \ \ \ \ \ \ \ \ =\ 7,}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_QUADRATIC\_HEXAHEDRON27,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ HEXA\_27\ \ \ \ \ \ \ \ \ \ =\ XX,}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ISOPARAMETRIC\_CUBIC\_HEXAHEDRON,}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ZERO\_DIMENSIONAL\_FACE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ the\ face\ of\ a\ line\ element}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ POINT\_ELEMENT,}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ POLYGONAL\_ELEMENT,}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ POLYHEDRAL\_ELEMENT,}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXPERIMENTAL\_ELEMENT,}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00142\ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\_FEM\_TYPE}}\ \mbox{\hyperlink{namespacecsmp_af1134c1eae3a3ebf7f581059701aa363}{csmpTypeFromVTK\_TYPE}}(\ \mbox{\hyperlink{namespacecsmp_aabe538a469c723c9324782594badb034}{VTK\_TYPE}}\ type\_id\ )}
+\DoxyCodeLine{00143\ \ \ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{switch}(\ type\_id\ )\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_VERTEX:}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ POINT\_ELEMENT;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLY\_VERTEX:}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ POLYGONAL\_ELEMENT;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_LINE:}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_BAR;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLYLINE:}
+\DoxyCodeLine{00152\ \textcolor{comment}{//\ \ \ \ \ \ return\ "{}VTK\_POLYLINE"{};}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TRIANGLE:}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_TRIANGLE;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TRIANGLE\_STRIP:}
+\DoxyCodeLine{00156\ \textcolor{comment}{//\ \ \ \ \ \ return\ "{}VTK\_TRIANGLE\_STRIP"{};}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLYGON:}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ POLYGONAL\_ELEMENT;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUAD:}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_QUADRILATERAL;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TETRA:}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_TETRAHEDRON;}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_HEXAHEDRON:}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_HEXAHEDRON;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_WEDGE:}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_PRISM;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_PYRAMID:}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_LINEAR\_PYRAMID;}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_EDGE:}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_BAR;}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_TRIANGLE:}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_TRIANGLE;}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_QUAD:}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_QUADRILATERAL;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_TETRA:}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_TETRAHEDRON;}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_HEXAHEDRON:}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_HEXAHEDRON20;\ \textcolor{comment}{//\ check\ whether\ this\ element\ matches\ correctly}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_WEDGE:}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_PRISM15;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_PYRAMID:}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_PYRAMID13;}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_BIQUADRATIC\_QUAD:}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_QUADRATIC\_QUADRILATERAL9;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_BIQUADRATIC\_TRIANGLE:}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ISOPARAMETRIC\_BARYCENTRIC\_QUADRATIC\_TRIANGLE;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\ \textcolor{stringliteral}{"{}ERROR\ csmpTypeFromVTK\_TYPE:\ no\ corresponding\ CSMP\ element\ found,\ returning\ UNKNOWN"{}});}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordflow}{return}\ UNKNOWN;}
+\DoxyCodeLine{00191\ \ \ \}\ \textcolor{comment}{//\ end}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ nodesPer\_VTK\_TYPE(\ \mbox{\hyperlink{namespacecsmp_aabe538a469c723c9324782594badb034}{VTK\_TYPE}}\ type\_id\ )}
+\DoxyCodeLine{00196\ \ \ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordflow}{switch}(\ type\_id\ )\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_VERTEX:}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLY\_VERTEX:}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ UNSPECIFIED;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_LINE:}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 2;}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLYLINE:}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ UNSPECIFIED;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TRIANGLE:}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 3;}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TRIANGLE\_STRIP:}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ UNSPECIFIED;}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_POLYGON:}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ UNSPECIFIED;}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUAD:}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_TETRA:}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_HEXAHEDRON:}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 8;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_WEDGE:}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 6;}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_PYRAMID:}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 5;}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_EDGE:}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 3;}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_TRIANGLE:}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 6;}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_QUAD:}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 8;}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_TETRA:}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 8;}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_HEXAHEDRON:}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 20;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_WEDGE:}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 15;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_QUADRATIC\_PYRAMID:}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 13;}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_BIQUADRATIC\_QUAD:}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 9;}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VTK\_BIQUADRATIC\_TRIANGLE:}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 7;}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\ \textcolor{stringliteral}{"{}ERROR\ nodesPer\_VTK\_TYPE:\ VTK\_Type\ not\ recognised"{}});}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keywordflow}{return}\ UNSPECIFIED;}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \}\ \textcolor{comment}{//\ end\ nodesPer\_VTK\_TYPE}}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \textcolor{comment}{//\ TODO:\ put\ the\ conversions\ for\ the\ attributes\ integer\ and\ floating-\/point\ types\ here\ as\ well}}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,77 @@
+\doxysection{csmp\+::Small\+Set\texorpdfstring{$<$}{<} T, N \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_small_set}{}\label{classcsmp_1_1_small_set}\index{csmp::SmallSet$<$ T, N $>$@{csmp::SmallSet$<$ T, N $>$}}
+
+
+{\ttfamily \#include $<$Small\+Set.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Small\+Set\texorpdfstring{$<$}{<} T, N \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{classcsmp_1_1_small_set__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a18a98a9daddf51e250392676629fca54}\label{classcsmp_1_1_small_set_a18a98a9daddf51e250392676629fca54} 
+typedef T {\bfseries value\+\_\+type}
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a4093bff560dc52e2a3efc019faeaa514}\label{classcsmp_1_1_small_set_a4093bff560dc52e2a3efc019faeaa514} 
+typedef std\+::vector$<$ T $>$\+::iterator {\bfseries iterator}
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a62def62859625ef6ba67a8480bf8be80}\label{classcsmp_1_1_small_set_a62def62859625ef6ba67a8480bf8be80} 
+typedef std\+::vector$<$ T $>$\+::const\+\_\+iterator {\bfseries const\+\_\+iterator}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a393b9b065886d9123edba47511ea01e4}\label{classcsmp_1_1_small_set_a393b9b065886d9123edba47511ea01e4} 
+std\+::pair$<$ iterator, bool $>$ {\bfseries insert} (const value\+\_\+type \&value)
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a13353b3ec4ca76503739ed5846c52a0e}\label{classcsmp_1_1_small_set_a13353b3ec4ca76503739ed5846c52a0e} 
+std\+::pair$<$ iterator, bool $>$ {\bfseries insert} (value\+\_\+type \&\&value)
+\item 
+\Hypertarget{classcsmp_1_1_small_set_aa2c94760d02e5633163255696756963c}\label{classcsmp_1_1_small_set_aa2c94760d02e5633163255696756963c} 
+bool {\bfseries empty} () const
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a922e22acd96ede115e079694a4cae7c0}\label{classcsmp_1_1_small_set_a922e22acd96ede115e079694a4cae7c0} 
+size\+\_\+t {\bfseries size} () const
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a8e26f364835849471275f093c3f5be8d}\label{classcsmp_1_1_small_set_a8e26f364835849471275f093c3f5be8d} 
+iterator {\bfseries begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a974233037fa2aca5042ed2cef693e9a3}\label{classcsmp_1_1_small_set_a974233037fa2aca5042ed2cef693e9a3} 
+const\+\_\+iterator {\bfseries begin} () const
+\item 
+\Hypertarget{classcsmp_1_1_small_set_aeadfe47ef5e021cd87423a4f107aca38}\label{classcsmp_1_1_small_set_aeadfe47ef5e021cd87423a4f107aca38} 
+iterator {\bfseries end} ()
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a0ed5dde423481988bd3d8f53eec7e12e}\label{classcsmp_1_1_small_set_a0ed5dde423481988bd3d8f53eec7e12e} 
+const\+\_\+iterator {\bfseries end} () const
+\item 
+\Hypertarget{classcsmp_1_1_small_set_ac902284f4a9988a4362ef3818db72464}\label{classcsmp_1_1_small_set_ac902284f4a9988a4362ef3818db72464} 
+iterator {\bfseries find} (const value\+\_\+type \&value)
+\item 
+\Hypertarget{classcsmp_1_1_small_set_aa3adddeb82f63ec2e5815732b4e221b9}\label{classcsmp_1_1_small_set_aa3adddeb82f63ec2e5815732b4e221b9} 
+const\+\_\+iterator {\bfseries find} (const value\+\_\+type \&value) const
+\item 
+\Hypertarget{classcsmp_1_1_small_set_ad5e04cce537e1e067969b2a7a24b4925}\label{classcsmp_1_1_small_set_ad5e04cce537e1e067969b2a7a24b4925} 
+void {\bfseries erase} (const value\+\_\+type \&value)
+\item 
+\Hypertarget{classcsmp_1_1_small_set_a12fbcdf8b5827013e03f62931be8f7e5}\label{classcsmp_1_1_small_set_a12fbcdf8b5827013e03f62931be8f7e5} 
+size\+\_\+t {\bfseries count} (const value\+\_\+type \&value) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T, unsigned N = 32$>$\newline
+class csmp\+::\+Small\+Set$<$ T, N $>$}
+A small set of trivial types, represented as a sorted vector. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/utilities/Small\+Set.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,34 @@
+'UnitSquareFracs_irregular-configuration.txt' (single-phase flow & transport)
+
+# (2) global material properties
+thickness		1.0
+permeability		1.0e-14
+porosity		0.25
+# mechanical properties of the rock matrix and fractures
+Youngs modulus		4.5e10
+shear modulus		1.5e10
+failure			0.
+Poissons ratio		0.2
+tensile strength	1.0e6
+friction coefficient	0.6
+cohesion		5.0e5
+# sandstone 20% porosity: range 30-70 MPa
+unconfined compressive strength	4.0e7
+joint roughness coefficient	5.
+# initial conditions
+# hydrostatic pressure at a depth of 2500m
+fluid pressure		24100325.
+fluid volume source	0.0
+
+# (3) local material properties (of the FRAC)
+# the actual permeability is multiplied with the fracture thickness to get 
+# correct value
+FRACS	complete	permeability			3.572917e-9
+FRACS	complete	porosity			3.50e-3
+# closure aperture (20 micro-metres)
+FRACS	complete	thickness			2.0e-5
+
+# (4) hydrostatic fluid pressure gradient and initial concentration of 3
+LEFT	Dirichlet	fluid pressure		1.97202e7	1.97202e7	1.97202e7	1.97202e7
+RIGHT	Dirichlet	fluid pressure		0.	0.	0.	0.	0.
+# LEFT	Plain		concentration		3.	3.	3.	3.

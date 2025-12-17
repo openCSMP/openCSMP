@@ -14,15 +14,12 @@ class NumIntegral_SetRHS_to_Zero : public MathOperatorRHS<dim,CELL> {
     NumIntegral_SetRHS_to_Zero( const PropertyDatabase<dim>&,
                                 const char* test );
     
-    virtual ~NumIntegral_SetRHS_to_Zero();
-    
     /// since there is no material Operand nothing needs to be done
-    virtual void GetOperands( const CELL<dim>& ) {}
+    void GetOperands( const CELL<dim>& ) override final { /* no operands need to be collected */ }
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
 
-    virtual NumIntegral_SetRHS_to_Zero<dim,CELL>* clone() const
-      { return new NumIntegral_SetRHS_to_Zero<dim,CELL> (*this); }
+    NumIntegral_SetRHS_to_Zero<dim,CELL>* clone() const override final { return new NumIntegral_SetRHS_to_Zero<dim,CELL> (*this); }
 };
 
 } // csmp

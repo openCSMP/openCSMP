@@ -969,7 +969,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionInBoundingBox( const char
 
 
 
-/** Assuming that the supplied n-nodes are in sequence of a polyline, method forms n-1 line elements putting them into a now limer-dimensional region
+/** Assuming that the supplied n-nodes are in sequence of a polyline, method forms n-1 line elements putting them into a lower-dimensional region
  */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionName, vector<Node<dim>*>& nodes, bool is_unique )

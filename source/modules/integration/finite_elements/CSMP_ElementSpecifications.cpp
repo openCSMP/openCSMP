@@ -1,7 +1,10 @@
 #include "CSMP_ElementSpecifications.h"
+#include "CSMP_definitions.h"
 #include "Box.h"
 #include "Exception.h"
 #include "FiniteElement.h"
+
+using namespace std;
 
 namespace csmp {
 
@@ -1019,7 +1022,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+                 return std::pair<uint32_t,uint32_t>{ numeric_limits<uint32_t>::max(), numeric_limits<uint32_t>::max() };
             }
          // hexahedra
          case ISOPARAMETRIC_LINEAR_HEXAHEDRON:
@@ -1043,7 +1046,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+                 return std::pair<uint32_t,uint32_t>{ numeric_limits<uint32_t>::max(), numeric_limits<uint32_t>::max() };
             }
          // prisms
          case ISOPARAMETRIC_LINEAR_PRISM:
@@ -1063,7 +1066,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+                 return std::pair<uint32_t,uint32_t>{ numeric_limits<uint32_t>::max(), numeric_limits<uint32_t>::max() };
             }
          // pyramids
          case ISOPARAMETRIC_LINEAR_PYRAMID:
@@ -1082,7 +1085,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+                 return std::pair<uint32_t,uint32_t>{ numeric_limits<uint32_t>::max(), numeric_limits<uint32_t>::max() };
             }
          // triangles
          case ISOPARAMETRIC_LINEAR_TRIANGLE:
@@ -1099,7 +1102,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+                 return std::pair<uint32_t,uint32_t>{ numeric_limits<uint32_t>::max(), numeric_limits<uint32_t>::max() };
             }
          // quadrilaterals
          case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
@@ -1115,7 +1118,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+                 return std::pair<uint32_t,uint32_t>{ numeric_limits<uint32_t>::max(), numeric_limits<uint32_t>::max() };
              }
          // line elements
          case ISOPARAMETRIC_LINEAR_BAR:
@@ -1130,7 +1133,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
            std::cerr <<"element type could not be identified.\n";
       }
       
-    return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+    return std::pair<uint32_t,uint32_t>{ numeric_limits<uint32_t>::max(), numeric_limits<uint32_t>::max() };
     
  } // end CornerNodesPerSegmentForElementOfType
 
@@ -1156,7 +1159,7 @@ uint32_t  CSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType( int8
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return UINT_MAX;
+                 return numeric_limits<uint32_t>::max();
             }
          // hexahedra
          case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20:
@@ -1177,7 +1180,7 @@ uint32_t  CSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType( int8
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return UINT_MAX;
+                 return numeric_limits<uint32_t>::max();
             }
          // prisms
          case ISOPARAMETRIC_QUADRATIC_PRISM15:
@@ -1195,7 +1198,7 @@ uint32_t  CSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType( int8
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return UINT_MAX;
+                 return numeric_limits<uint32_t>::max();
             }
          // pyramids
          case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
@@ -1224,7 +1227,7 @@ uint32_t  CSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType( int8
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return UINT_MAX;
+                 return numeric_limits<uint32_t>::max();
             }
          // quadrilaterals
          case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
@@ -1236,7 +1239,7 @@ uint32_t  CSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType( int8
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";
-                 return UINT_MAX;
+                 return numeric_limits<uint32_t>::max();
              }
          // line elements
          case ISOPARAMETRIC_QUADRATIC_BAR:

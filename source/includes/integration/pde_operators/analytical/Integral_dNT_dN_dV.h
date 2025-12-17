@@ -23,12 +23,10 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class Integral_dNT_dN_dV : public MathOperatorRHS<dim,CELL> {
   public:
     Integral_dNT_dN_dV( const PropertyDatabase<dim>&, const char* test );
-                        
-    virtual ~Integral_dNT_dN_dV() {}
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& )  override final;
   
-    virtual Integral_dNT_dN_dV<dim,CELL>* clone() const { return new Integral_dNT_dN_dV<dim,CELL> (*this); }
+    virtual Integral_dNT_dN_dV<dim,CELL>* clone() const override final { return new Integral_dNT_dN_dV<dim,CELL> (*this); }
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, UNITY; 

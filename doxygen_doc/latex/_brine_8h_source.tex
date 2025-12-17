@@ -1,0 +1,199 @@
+\doxysection{Brine.\+h}
+\hypertarget{_brine_8h_source}{}\label{_brine_8h_source}\index{source/includes/eos/Brine.h@{source/includes/eos/Brine.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{BRINE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{BRINE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_water_8h}{"{}Water.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_threephase_h_l_v_8h}{"{}ThreephaseHLV.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_states_8h}{"{}States.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_critical_curve_8h}{"{}CriticalCurve.h"{}}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/*\ \ \ Changelog}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ \ Nov.\ 27,\ 2012,\ Thomas\ Driesner:\ initial\ port\ to\ CSMP++}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ \ October\ 2014,\ Thomas\ Driesner:\ }}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ \ -\/\ redid\ porting\ to\ CSMP++}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ \ \ -\/\ changed\ pressure\ units\ of\ interface\ to\ Pa}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ \ -\/\ changed\ concentration\ units\ to\ mass\ fraction\ NaCl}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ \ -\/\ changed\ formatting\ to\ adhere\ better\ to\ CSMP++\ style\ guide}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ \ -\/\ added\ doxygen\ documentation}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ \ -\/\ basic,\ manual\ testing\ against\ CSP\ version\ -\/\ OK}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00023\ \{}
+\DoxyCodeLine{00024\ \ \ \textcolor{comment}{///\ Thermodynamic\ properties\ of\ H2O-\/NaCl\ solutions}}
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_brine}{Brine}}}
+\DoxyCodeLine{00026\ \ \ \{}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_a3ab834697c85d10e2dd3dab232ba3171}{Brine}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externaltemperature,\ \ \ \textcolor{comment}{//\ [C]}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalpressure,\ \ \ \ \ \ \textcolor{comment}{//\ [Pa]}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ externalcomposition);\ \ \textcolor{comment}{//\ [mass\ fraction\ NaCl]}}
+\DoxyCodeLine{00033\ \ \ \ \ \string~\mbox{\hyperlink{classcsmp_1_1_brine_a4399c2af9f96f9fcf7f8148fb394422b}{Brine}}();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_a66a94a888d081877be3aecdea9e2d22d}{MolarVolume}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [cm3\ mole-\/1]}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_a4b3982d04820f3c3ee06fc022c321ef8}{DMolarVolumeDT}}();\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [cm3\ mole\ C-\/1]}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_a405bcfaf2650940ec005971d4fe515ca}{Density}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [kg\ m-\/3]}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_af0802fe086365798d8392259d70467b5}{CompressibilityBar}}();\ \ \ \ \ \ \ \textcolor{comment}{//\ [bar-\/1]}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_a67d22b158c1a560d3c64278d24e22d06}{Compressibility}}();\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa-\/1]}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_a8d3e22cdd2dd23b77ee668693fa34f49}{Expansivity}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [C-\/1]}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_aad9f6fbcdd61f9d8e9de4bca9b1f97d6}{IsochoreSlope}}();\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa\ C-\/1]}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_a0d2d8f016b24ee0e4328993a133dda94}{Enthalpy}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [J\ kg-\/1]}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_acffa26e700b8822e073678c249c6228d}{HeatCapacity}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [J\ kg-\/1\ C-\/1]}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_brine_aae5ab76535748b4eb3929b11ad1fc385}{Viscosity}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [Pa\ s]}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ Brine();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ default\ constructor\ private\ as\ public\ makes\ no\ sense}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{const}\ \ \textcolor{keywordtype}{double}\&\ temperature\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ const\ ref\ to\ temperature\ [C]\ in\ flow\ code}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{const}\ \ \textcolor{keywordtype}{double}\&\ pressure\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ const\ ref\ to\ fluid\ pressure\ [Pa]\ in\ flow\ code}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{const}\ \ \textcolor{keywordtype}{double}\&\ composition\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ const\ ref\ to\ salinity\ [mass\ fraction\ NaCl]\ in\ flow\ code}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{const}\ \ \textcolor{keywordtype}{double}\ \ visc\_u0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ parameter\ of\ Viscosity\ function}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{const}\ \ \textcolor{keywordtype}{double}\ \ visc\_u1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ parameter\ of\ Viscosity\ function}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{const}\ \ \textcolor{keywordtype}{double}\ \ visc\_muc800\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ parameter\ of\ Viscosity\ function}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ tcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ temperature\ variable\ [C]}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ pcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ pressure\ variable\ [bar]}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ xcurrent\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ composition\ variable\ [mole\ fraction\ NaCl]}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ density\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ density\ [kg\ m-\/3]}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ molarvolume\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ molar\ volume\ of\ solution\ [cm3\ mole-\/1]}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dmolarvolumedt\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ temperature\ derivative\ of\ molarvolume\_}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dmolarvolumedp\_;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ molarvolume\_}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ expansivity\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ themal\ expansivity\ [C-\/1]}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ compressibility\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ isothermal\ compressibility\ [bar-\/1]}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ isochore\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ isochore\ slope\ [bar\ C-\/1]}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ enthalpy\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ specific\ enthalpy\ [J\ kg-\/1]}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ heatcapacity\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ for\ specific\ heat\ capacity\ [J\ kg-\/1\ C-\/1]}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ tdummy\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ temperature\ variable\ [C]\ for\ interfacing\ with\ dummywater\ member}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ pdummy\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ pressure\ variable\ [bar]}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ pdummyPa\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ pressure\ variable\ [Pa]\ for\ interfacing\ with\ dummywater\ member}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ muw\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ pure\ water\ dynamic\ viscosity}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ viscosity\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ variable\ dynamic\ viscosity\ of\ solution\ }}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ pdummy\_mu\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ variable\ within\ viscosity\ computation}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ xm\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ internal\ composition\ variable\ within\ viscosity\ computation}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ nacl\_a0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n1,XNaCl=1\ in\ eq\ 11\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ nacl\_a1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n2,XNaCl=1\ in\ eq\ 11\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h\_nacl\_a0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ q1,XNaCl=1\ in\ eq\ 25\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h\_nacl\_a1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ q2,XNaCl=1\ in\ eq\ 26\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dnacl\_a0dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ nacl\_a0\_}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dnacl\_a1dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ nacl\_a1\_}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ a0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n1\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ a0\_1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n11\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h\_a0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ q1\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h\_a0\_1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ q11\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ da0dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ a0\_}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ da0\_1dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ a0\_1\_}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ a1\_0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n21\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ a1\_1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n22\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ a1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n2\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h\_a1\_1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ q21\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h\_a1\_2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ q22\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ h\_a1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ q2\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ da1\_0dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ a1\_0\_}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ da1\_1dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ a1\_1\_}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ da1dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ a1\_}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a0\_0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n300\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a0\_1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n301\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a0\_2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n302\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n30\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a1\_0\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n310\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a1\_1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n311\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a1\_2\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n312\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ dev\_a1\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parameter\ n31\ of\ Driesner,\ GCA\ 2007}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a0\_0dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a0\_0\_}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a0\_1dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a0\_1\_}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a0\_2dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a0\_2\_}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a0dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a0\_}}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a1\_0dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a1\_0\_}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a1\_1dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a1\_1\_}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a1\_2dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a1\_2\_}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ ddev\_a1dp\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ pressure\ derivative\ of\ dev\_a1\_}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ CheckStatus();}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ UpdateParameters(\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x);}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ MolarVolumeFromWater();}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ DMolarVolumeDT(\ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\_\ );}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ DMolarVolumeDP(\ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\_\ );}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ MolarVolumeHighTX(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\_,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p\_,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x\_);}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ MolarVolumeLowT();}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ Enthalpy(\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\_,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ p\_,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x\_);}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ HeatCapacity(\ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x\_);}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ Viscosity(\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ t\_,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ x\_,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&\ muw\_);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_water}{Water}}\ \ \ \ \ \ \ \ \ \ \ \ dummywater;}
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_threephase_h_l_v}{ThreephaseHLV}}\ \ \ \ hlv;}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_critical_curve}{CriticalCurve}}\ \ \ \ critcurve;}
+\DoxyCodeLine{00134\ \ \ \ \ States\ \ \ \ \ \ \ \ \ \ \ mystate;}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \};\ \textcolor{comment}{//\ end\ class\ declaration\ Brine}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ @class\ Brine\ Brine.h\ "{}eos/h2o\_nacl/Brine.h"{}}}
+\DoxyCodeLine{00141\ \textcolor{comment}{}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00145\ \textcolor{comment}{}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ @changes\ changes\ Latest\ Changes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ Brine\ is\ legacy\ code\ from\ Thomas\ Driesner's\ developments\ for\ the\ H2O-\/NaCl\ system,\ but\ it\ is\ REQUIRED\ in\ the\ CSMP\ context.\ There,\ it\ is\ essential\ to\ build\ accurate\ lookup\ tables\ for\ the\ H2O-\/NaCl\ system,\ which\ are\ then\ actually\ used\ by\ CSMP.\ As\ long\ as\ we\ don't\ distribute\ the\ lookup\ tables\ per\ se\ for\ the\ various\ platforms,\ the\ Brine\ legacy\ will\ remain\ in\ CSMP.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ Brine\ computes\ the\ properties\ of\ H<sub>2</sub>O-\/NaCl\ fluids\ as\ a\ function\ of\ temperature-\/pressure-\/composition\ [Celsius,\ bar,\ mole\ fraction\ NaCl]\ ,\ according\ to\ the\ paper}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ Driesner\ T.\ (2007):\ The\ system\ H2O-\/NaCl.\ Part\ II:\ Correlations\ for\ molar\ volume,\ enthalpy,\ and\ isobaric\ heat\ capacity\ from\ 0\ to\ 1000oC,\ 1\ to\ 5000\ bar,\ and\ 0\ to\ 1\ XNaCl.\ Geochimica\ et\ Cosmochimica\ Acta\ 71,\ 4902-\/4919.}}
+\DoxyCodeLine{00154\ \textcolor{comment}{}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ @section\ usage\ Usage}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ Construct\ an\ instance\ of\ "{}Brine"{}\ with\ the\ temperature\ (in\ C),\ Pressure\ (Pa)\ and\ NaCl\ Concentration\ (mass\ fraction)\ that\ live\ in\ your\ code\ part\ as\ constructor\ arguments.\ "{}Brine"{}\ has\ an\ internal\ mechanism\ (via\ const\&)\ to\ make\ sure\ that\ it\ always\ uses\ the\ current\ values\ of\ temperature,\ pressure,\ and\ composition\ that\ you\ have\ calculated\ externally.\ Public\ member\ names\ should\ be\ self-\/explanatory.\ Don't\ experiment\ with\ making\ private\ memebrs\ public\ as\ that\ will\ almost\ inevitably\ lead\ to\ wrong\ results!}}
+\DoxyCodeLine{00157\ \textcolor{comment}{}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ @code}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ double\ temperature(100.0);\ \ \ \ \ \ \ //\ temperature\ in\ your\ code}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ double\ fluid\_pressure(10.0e6);\ \ \ //\ fluid\ pressure\ in\ your\ code}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ double\ massfraction\_nacl(0.1);\ \ \ //\ mass\ fraction\ NaCl\ in\ fluid,\ in\ your\ code}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ Brine\ \ \ \ brine(temperature,\ fluid\_pressure,\ massfraction\_nacl);\ //\ instantiate\ a\ Brine\ object}}
+\DoxyCodeLine{00164\ \textcolor{comment}{}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ ...\ //\ simulation\ goes\ on}}
+\DoxyCodeLine{00166\ \textcolor{comment}{}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ //\ new\ values\ for\ temperature,\ fluid\ pressure,\ and\ composition\ have\ been\ computed:}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ temperature\ \ \ \ \ \ =\ newtemperature;}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ fluid\_pressure\ \ \ =\ new\_fluid\_pressure;}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ massfractionnacl\ =\ new\_massfraction\_nacl;}}
+\DoxyCodeLine{00171\ \textcolor{comment}{}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ //\ retrieve\ and\ assign\ new\ fluid\ properties,\ no\ need\ to\ new\ communicate\ he\ new\ temperature,\ fluid\ pressure,\ and\ composition,\ they\ are\ "{}known"{}\ automatically\ by\ Brine}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ rho\ =\ brine.Density();}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ mu\ \ =\ brine.Viscosity();}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ cp\ \ =\ brine.HeatCapacity();}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ ...\ //\ move\ on}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ @endcode}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ @section\ dependencies\ Dependencies}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ Performance\ is\ not\ optimized.\ Whenever\ one\ of\ the\ public\ members\ is\ invoked\ ALL\ properties\ are\ being\ computed.\ There\ is\ currently\ no\ intention\ to\ improve\ this\ as\ Brine\ should\ only\ be\ used\ to\ compute\ the\ lookup\ tables.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ Pressure()\ still\ returns\ values\ in\ bars,\ a\ legacy\ from\ the\ SoWat\ development.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ Composition()\ is\ in\ mole\ fraction\ NaCl,\ to\ convert\ to\ other\ units,\ the\ functions\ in\ "{}ConvertConcentrationUnitsNaCl.h"{}\ may\ be\ useful}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ @section\ testing\ Testing}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ testing\ was\ done\ in\ the\ period\ before\ publication\ in\ 2007,\ prior\ to\ writing\ this\ documentation,\ no\ details\ are\ available\ anymore}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \}}
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

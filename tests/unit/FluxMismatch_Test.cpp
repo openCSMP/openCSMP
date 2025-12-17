@@ -1,4 +1,5 @@
 #include "FluxMismatch_Test.h"
+#include "FiniteVolumeStencil.h"
 #include "AP_testUtilities.h"
 #include "vsetMakers.h"
 #include "Model.h"
@@ -10,12 +11,6 @@
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "CSMP_highLevelUtilities.h"
 #include "Standard_IO_Handler.h"
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
-#include "FiniteVolumeStencil.h"
-#endif
 
 using namespace std;
 

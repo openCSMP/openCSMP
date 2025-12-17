@@ -2257,7 +2257,7 @@ template bool collectBorderFacesOfComputationRegion( const Model<1U>&, const Mod
 /*
 template<uint32_t dim>
 bool collectBorderFacesOfComputationBoundary( const Model<dim>& model, const Boundary<dim>& comp_domain,
-                                              vector<const csmp::Edge<dim>* const>& boundary_faces )
+                                              vector<const csmp::Edge<dim>*>& boundary_faces )
   {
      // forgetting older settings
      boundary_faces.clear();
@@ -2284,9 +2284,9 @@ bool collectBorderFacesOfComputationBoundary( const Model<dim>& model, const Bou
      
   } // end collectBorderFacesOfComputationDomain
 
-template bool collectBorderFacesOfComputationBoundary( const Model<3U>&, const Boundary<3U>&, vector<const Edge<3U>* const>& );
-template bool collectBorderFacesOfComputationBoundary( const Model<2U>&, const Boundary<2U>&, vector<const Edge<2U>* const>& );
-template bool collectBorderFacesOfComputationBoundary( const Model<1U>&, const Boundary<1U>&, vector<const Edge<1U>* const>& );
+template bool collectBorderFacesOfComputationBoundary( const Model<3U>&, const Boundary<3U>&, vector<const Edge<3U>*>& );
+template bool collectBorderFacesOfComputationBoundary( const Model<2U>&, const Boundary<2U>&, vector<const Edge<2U>*>& );
+template bool collectBorderFacesOfComputationBoundary( const Model<1U>&, const Boundary<1U>&, vector<const Edge<1U>*>& );
 */
 
 
@@ -2296,7 +2296,8 @@ template bool collectBorderFacesOfComputationBoundary( const Model<1U>&, const B
       
 */
 template<uint32_t dim>
-bool collectInterfacesInComputationRegion( const Model<dim>& model, const ModelSubDomain<dim,Element>& comp_domain,
+bool collectInterfacesInComputationRegion( const Model<dim>& model,
+                                           const ModelSubDomain<dim,Element>& comp_domain,
                                            vector<const InterFace<dim>*>& splitboundary_interfaces )
  {
      // forgetting older settings
@@ -2307,11 +2308,11 @@ bool collectInterfacesInComputationRegion( const Model<dim>& model, const ModelS
      
      // searching existing faces to see whether their parents are situated on the boundary of
      // the computational domain
-     for ( auto ift=model.Mesh().InterFacesBegin(); ift!=model.Mesh().InterFacesEnd(); ++ift ) {
+     for ( auto ift=model.Mesh().InterfacesBegin(); ift!=model.Mesh().InterfacesEnd(); ++ift ) {
           // all Faces have higher-dim element parents on the inside
           if ( comp_domain.IsPerimeterCell( (*ift).InnerParent() ) &&
                comp_domain.IsPerimeterCell( (*ift).OuterParent() ) ) {
-               splitboundary_interfaces.push_back( const_cast<InterFace<dim>* const>(&(*ift)) );
+               splitboundary_interfaces.push_back( const_cast<InterFace<dim>*>(&(*ift)) );
             }
         }
      // vector will be unique already, but may be too big
@@ -2355,10 +2356,6 @@ void PDE_Integrator<dim, CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditio
     if (!this->setup_established_)
       throw csmp::Exception(ERROR, "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
         "please call EstablishMatrixSetup() prior to this method.");
-
-    if (this->basic_operands_.empty())
-      throw csmp::Exception(ERROR, "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
-        "No (basic) operands have been specified...");
 
     // unique node-numbers from 0..n-1 are required for this condensation
     gref.RenumberNodes();

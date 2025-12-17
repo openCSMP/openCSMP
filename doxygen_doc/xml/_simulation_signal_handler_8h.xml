@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_simulation_signal_handler_8h" kind="file" language="C++">
+    <compoundname>SimulationSignalHandler.h</compoundname>
+    <includes local="no">csignal</includes>
+    <includes local="no">iostream</includes>
+    <includedby refid="_simulator_control_8h" local="yes">source/includes/run_control/SimulatorControl.h</includedby>
+    <includedby refid="_simulation_signal_handler_8cpp" local="yes">source/modules/run_control/SimulationSignalHandler.cpp</includedby>
+    <includedby refid="_simulator_setup_8cpp" local="yes">source/modules/run_control/SimulatorSetup.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>source/includes/run_control/SimulationSignalHandler.h</label>
+        <link refid="_simulation_signal_handler_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csignal</label>
+      </node>
+      <node id="3">
+        <label>iostream</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>source/includes/run_control/SimulationSignalHandler.h</label>
+        <link refid="_simulation_signal_handler_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>source/includes/run_control/SimulatorControl.h</label>
+        <link refid="_simulator_control_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="class_simulation_signal_handler" prot="public">SimulationSignalHandler</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="_simulation_signal_handler_8h_1a2fe05966c80c1517ac191f3b9cd2be5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void HandleSignal</definition>
+        <argsstring>(int sig_code)</argsstring>
+        <name>HandleSignal</name>
+        <param>
+          <type>int</type>
+          <declname>sig_code</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/SimulationSignalHandler.h" line="7" column="6" bodyfile="source/modules/run_control/SimulationSignalHandler.cpp" bodystart="23" bodyend="113" declfile="source/includes/run_control/SimulationSignalHandler.h" declline="7" declcolumn="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>SIMULATION_SIGNAL_HANDLER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SIMULATION_SIGNAL_HANDLER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;csignal&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>HandleSignal(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sig_code);</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17" refid="class_simulation_signal_handler" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">SimulationSignalHandler</highlight></codeline>
+<codeline lineno="18"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>SimulationSignalHandler();</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>~SimulationSignalHandler();</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>OutputVTUSignal(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>signal){outputVTUSignal_<sp/>=<sp/>signal;}</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>OutputVTUSignal(){</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>outputVTUSignal_;}</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>used<sp/>for<sp/>monitoring<sp/>data<sp/>output</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>OutputMonitorDataSignal(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>signal){outputMonitorDataSignal_=<sp/>signal;}</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>OutputMonitorDataSignal(){</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>outputMonitorDataSignal_;}</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>output<sp/>restart<sp/>file.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>OutputRestartFileSignal(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>signal){outputRestartSignal_<sp/>=<sp/>signal;}</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>OutputRestartFileSignal(){</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>outputRestartSignal_;}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>QuitSignal(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>signal){this-&gt;quitSignal_<sp/>=<sp/>signal;}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>QuitSignal(){</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>this-&gt;quitSignal_;}</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>SignalRaised(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>signal){interactiveSignalRaised_<sp/>=<sp/>signal;}</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>SignalRaised(){</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>interactiveSignalRaised_;}</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//void<sp/>HandleSignal(int<sp/>sig_code);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>outputVTUSignal_;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>outputRestartSignal_;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>quitSignal_;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>interactiveSignalRaised_;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>outputMonitorDataSignal_;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>SIMULATION_SIGNAL_HANDLER_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/includes/run_control/SimulationSignalHandler.h"/>
+  </compounddef>
+</doxygen>

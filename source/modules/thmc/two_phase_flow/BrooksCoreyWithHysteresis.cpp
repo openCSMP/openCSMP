@@ -228,7 +228,7 @@ double BrooksCoreyWithHysteresis<dim>::MaxFractionalFlowDerivative() const
 // pc covers the full saturation range, pc is capped if sw<swr     
 // tested: O.K.     
 template<uint32_t dim>
-double BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
+double BrooksCoreyWithHysteresis<dim>::pc_Phase() const
 {
    // compute sw_eff for which pc = 40MPa, seff_min = (pc/pd)^-lamda
    // applying the limit on capillary pressure 
@@ -243,11 +243,8 @@ double BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
 // dpcdS covers the full saturation range, dpcdS is capped if sw<swr
 // tested: O.K.    
 template<uint32_t dim>
-double BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
+double BrooksCoreyWithHysteresis<dim>::dpcds_Phase() const
 {
-   // the wetting phase has no capilllary pressure
-   if ( phase == 1U ) return static_cast<double>(0.);
-
    // compute Se for which pc = 40MPa, seff_min = (pc/pd)^-lamda
    const double Se_min = std::pow( TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ / pm1, -pm2 );
    // applying the limit on capillary pressure and its derivative

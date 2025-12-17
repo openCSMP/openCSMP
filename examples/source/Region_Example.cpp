@@ -42,12 +42,6 @@ void Region_Example::Specifications()
 
 void Region_Example::Run()
 {
-   /*
-  //  Create a model from ANSYS mesh and configure it from file
-   const char* model_name="fracs4";
-   ANSYS_Model3D  model( model_name, "CSMP-1phase-variables.txt");
-   */
-
    string model_name;
    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'fracs4':"<<endl;
    cin.ignore();

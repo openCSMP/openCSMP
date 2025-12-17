@@ -259,7 +259,7 @@ double FractureMatrixUpscaled<dim>::dGds( ) const
 
 
 template<uint32_t dim>
-void FractureMatrixUpscaled<dim>::Out( int phase ) const
+void FractureMatrixUpscaled<dim>::Out( uint32_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nFractureMatrixUpscaled<"<< dim << ">::Out: Additional properties: "<< endl;

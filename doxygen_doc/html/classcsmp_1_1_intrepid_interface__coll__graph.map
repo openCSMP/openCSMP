@@ -1,0 +1,3 @@
+<map id="csmp::IntrepidInterface" name="csmp::IntrepidInterface">
+<area shape="rect" id="Node000001" title="interface to import GeoModeller / CGAL tetra/triangle meshes; superseded by VTK connection" alt="" coords="5,5,150,72"/>
+</map>

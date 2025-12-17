@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;</compoundname>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4_1ab9887cd1f4cc23c6a2ec4a52589bba14" prot="public" static="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>typedef std::vector&lt;double&gt; csmp::VariableTypeTraits&lt; dim, ARRAY &gt;::ReturnType</definition>
+        <argsstring></argsstring>
+        <name>ReturnType</name>
+        <qualifiedname>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;::ReturnType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VariableTypeTraits.h" line="41" column="25" bodyfile="source/includes/model/VariableTypeTraits.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4_1a9e4d0b15fb5118b1d0e071c58cfe7a8d" prot="public" static="no">
+        <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref></type>
+        <definition>typedef ArrayVariable csmp::VariableTypeTraits&lt; dim, ARRAY &gt;::VariableType</definition>
+        <argsstring></argsstring>
+        <name>VariableType</name>
+        <qualifiedname>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;::VariableType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/VariableTypeTraits.h" line="42" column="27" bodyfile="source/includes/model/VariableTypeTraits.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::VariableTypeTraits&lt; dim, vt &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits"/>
+      </node>
+      <node id="1">
+        <label>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; dim, ARRAY &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::VariableTypeTraits&lt; dim, vt &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits"/>
+      </node>
+      <node id="1">
+        <label>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;</label>
+        <link refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4"/>
+        <childnode refid="2" relation="template-instance">
+          <edgelabel>&lt; dim, ARRAY &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/VariableTypeTraits.h" line="39" column="3" bodyfile="source/includes/model/VariableTypeTraits.h" bodystart="40" bodyend="43"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4_1ab9887cd1f4cc23c6a2ec4a52589bba14" prot="public" virt="non-virtual"><scope>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;</scope><name>ReturnType</name></member>
+      <member refid="structcsmp_1_1_variable_type_traits_3_01dim_00_01_a_r_r_a_y_01_4_1a9e4d0b15fb5118b1d0e071c58cfe7a8d" prot="public" virt="non-virtual"><scope>csmp::VariableTypeTraits&lt; dim, ARRAY &gt;</scope><name>VariableType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

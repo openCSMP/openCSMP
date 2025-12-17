@@ -1,0 +1,495 @@
+\doxysection{csmp\+::ANSYS\+\_\+\+Element\+Specifications Class Reference}
+\hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications}{}\label{classcsmp_1_1_a_n_s_y_s___element_specifications}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+
+
+Represents ANSYS element type specifications that are needed prior to model construction in order to identify corresponding element types in CSMP++.  
+
+
+
+
+{\ttfamily \#include $<$ANSYS\+\_\+\+Element\+Specifications.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::ANSYS\+\_\+\+Element\+Specifications\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=255pt]{classcsmp_1_1_a_n_s_y_s___element_specifications__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_ab13b4534cf743ee7d4d6055638a2be36}{CSMP\+\_\+\+Type\+From\+\_\+\+ANSYS\+\_\+\+Type}} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type, bool isoparametric, uint32\+\_\+t dim)
+\item 
+static \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a965135067f99644f4336d0f62976c450}{CSMP\+\_\+\+Type\+From\+\_\+\+ANSYS\+\_\+\+Type\+Name}} (const std\+::string \&ANSYS\+\_\+finite\+\_\+element\+\_\+type, bool isoparametric, uint32\+\_\+t dim)
+\item 
+static std\+::string \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a20db90e7455efdf68ac6ffb84e9f68c9}{CSMP\+\_\+\+Type\+Name\+From\+\_\+\+ANSYS\+\_\+\+Type}} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type, bool isoparametric, uint32\+\_\+t dim)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_abf968631f219c1a41823a1b3663905e6}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_abf968631f219c1a41823a1b3663905e6} 
+static std\+::string {\bfseries CSMP\+\_\+\+Type\+Name\+From\+\_\+\+ANSYS\+\_\+\+Type\+Name} (const std\+::string \&ANSYS\+\_\+finite\+\_\+element\+\_\+type, bool isoparametric, uint32\+\_\+t dim)
+\item 
+static int8\+\_\+t \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a0cb644ba4805fddfef5197b7491c42f1}{ANSYS\+\_\+\+Type}} (const std\+::string \&FEtype)
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a2fa7d7616ba7de7160b54f61115ae4de}{Nodes\+Per\+Element\+Of\+Type}} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a8f0b03b9ff974d272cd030baedffd31e}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_a8f0b03b9ff974d272cd030baedffd31e} 
+static size\+\_\+t {\bfseries Faces\+Per\+Element\+Of\+Type} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a9749122d9953e3bd3bde4a55b50afafe}{Neighbors\+Per\+Element\+Of\+Type}} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_ad7eda7c06425d5610882102f3166c48e}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_ad7eda7c06425d5610882102f3166c48e} 
+static size\+\_\+t {\bfseries Nodes\+Per\+Face\+For\+Element\+Of\+Type} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type, size\+\_\+t face)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a493954639323cf9b1c9fa38926c670fb}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_a493954639323cf9b1c9fa38926c670fb} 
+static size\+\_\+t {\bfseries Face\+Node\+For\+Element\+Of\+Type} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type, size\+\_\+t face, size\+\_\+t face\+\_\+node)
+\item 
+static bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a3b0f4d5433692ed89db95557102d8fc3}{Line\+Element}} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+static bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a40bd5eb1dd4774ec494969efac597627}{Surface\+Element}} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+static bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a0ad4fcefca69ca045d38bc5782a9afb8}{Volume\+Element}} (int8\+\_\+t ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a7f06c7b6d52512ac12655c7b7c4bf573}{Minimum\+Spatial\+Dimension}} (const std\+::string \&ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a11e44f680e818817280d060539736f0e}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_a11e44f680e818817280d060539736f0e} 
+static bool {\bfseries Line\+Element} (const std\+::string \&ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a32fb25f51b2e5282e0ce9122692293cd}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_a32fb25f51b2e5282e0ce9122692293cd} 
+static bool {\bfseries Surface\+Element} (const std\+::string \&ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_ae11e5620466d6b041ddf8fd64a806c67}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_ae11e5620466d6b041ddf8fd64a806c67} 
+static bool {\bfseries Volume\+Element} (const std\+::string \&ANSYS\+\_\+finite\+\_\+element\+\_\+type)
+\item 
+static void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a7de89e3d7cc4ee8a2cc16891dd31c3e0}{Line\+Elements}} (std\+::list$<$ std\+::string $>$ \&line\+\_\+elements)
+\item 
+static void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a24b61539dccbf474d56f57cf5364bfef}{Surface\+Elements}} (std\+::list$<$ std\+::string $>$ \&surf\+\_\+elements)
+\item 
+static void \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a80220ffe782ad67213cf277e6e4d7fba}{Volume\+Elements}} (std\+::list$<$ std\+::string $>$ \&vol\+\_\+elements)
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_aed188bb084cfc7647fbfff45b628f85c}{Interpolation\+Order}} (const std\+::string \&etype)
+\item 
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a536b209345a7e009914f62a04940abd2}\label{classcsmp_1_1_a_n_s_y_s___element_specifications_a536b209345a7e009914f62a04940abd2} 
+static size\+\_\+t {\bfseries Interpolation\+Order} (int8\+\_\+t etype)
+\item 
+static bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a43563cba473a6af83c171eca2d7a85f7}{Linear\+Element}} (int8\+\_\+t etype)
+\item 
+static bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_a9d4a9a82112ac68e01d34c805e835a3c}{Quadratic\+Element}} (int8\+\_\+t etype)
+\item 
+static bool \mbox{\hyperlink{classcsmp_1_1_a_n_s_y_s___element_specifications_ac6417d9280b0b1e953e8a76f088abf81}{Cubic\+Element}} (int8\+\_\+t etype)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents ANSYS element type specifications that are needed prior to model construction in order to identify corresponding element types in CSMP++. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2003
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Relates the ANSYS finite element types to the generic finite element names that are used inside of CSP. Also additional diagnostics are obtained as to whether the element is a line, surface, or volume, and whether the element uses linear, quadratic or cubic basis functions. Furthermore the element can be queried for the number of neighbors and its minimum spatial dimension.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+ANSYS definitions of element types and their identification numbers are the following. They are only partially mapped to CSP and incorporated into enumerations to avoid the pollution of the csp namespace. ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#ifndef\ MAX\_NODES\_ELEMENT}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ MIXED\ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ NODE\ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BAR\_2\ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BAR\_3\ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TETRA\_4\ \ \ \ \ 4}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TETRA\_10\ \ \ \ 5}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_8\ \ \ \ \ \ 6}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_20\ \ \ \ \ 7}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_3\ \ \ \ \ \ \ 8}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_3\_X\ \ \ \ \ 9}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_6\ \ \ \ \ \ \ 10}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_6\_X\ \ \ \ \ 11}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_6\ \ \ \ \ 12\ }\textcolor{comment}{//\ prism\ elements\ }}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_15\ \ \ \ 13}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_18\ \ \ \ 21\ }\textcolor{comment}{//\ quadratic\ prisms\ with\ face\ nodes\ on\ sides}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_4\ \ \ \ \ \ 14}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_4\_X\ \ \ \ 15}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_8\ \ \ \ \ \ 16}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_8\_X\ \ \ \ 17}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PYRA\_5\ \ \ \ \ \ 18}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_9\ \ \ \ \ \ 19}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_27\ \ \ \ \ 20}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PYRA\_14\ \ \ \ \ 22}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PYRA\_13\ \ \ \ \ 24}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ POLYGON\ \ \ \ \ 23}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ N\_ELEMENT\_TYPES\ 25}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ MAX\_NODES\_ELEMENT\ \ \ 27}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ MAX\_EDGES\_ELEMENT\ \ \ 12}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ MAX\_FACES\_ELEMENT\ \ \ \ 6}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ MAX\_FACE\_SIDES\ \ \ \ \ \ 10}}
+\DoxyCodeLine{}
+\DoxyCodeLine{Element\ masks\ are\ defined\ in\ terms\ of\ member\ functions\ which}
+\DoxyCodeLine{recognize\ line-\/,\ surface-\/,\ and\ volumetric\ elements:}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ EDGE\_ELEMENT\_MASK\ \ \ \ \ \ ((1\ <<\ BAR\_2)\ |\ (1\ <<\ BAR\_3))}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ SURFACE\_ELEMENT\_MASK\ \ \ ((1\ <<\ TRI\_3)\ |\ (1\ <<\ TRI\_6)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ QUAD\_4)\ |\ (1\ <<\ QUAD\_8))}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ VOLUME\_ELEMENT\_MASK\ \ \ \ ((1\ <<\ TETRA\_4)\ |\ (1\ <<\ TETRA\_10)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ HEXA\_8)\ |\ (1\ <<\ HEXA\_20)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_6)\ |\ (1\ <<\ PENTA\_15)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PYRA\_5)\ |\ (1\ <<\ HEXA\_27)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_18)\ |\ (1\ <<\ PYRA\_14)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PYRA\_13))}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ LINEAR\_ELEMENT\_MASK\ \ \ \ ((1\ <<\ NODE)\ |\ (1\ <<\ BAR\_2)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ TETRA\_4)\ |\ (1\ <<\ HEXA\_8)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ TRI\_3)\ |\ (1\ <<\ PENTA\_6)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ QUAD\_4)\ |\ (1\ <<\ PYRA\_5))}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUADRATIC\_ELEMENT\_MASK\ ((1\ <<\ BAR\_3)\ |\ (1\ <<\ TETRA\_10)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ HEXA\_20)\ |\ (1\ <<\ TRI\_6)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_15)\ |\ (1\ <<\ QUAD\_8)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ QUAD\_9)\ |\ (1\ <<\ HEXA\_27)\ |\ \ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PENTA\_18)\ |\ (1\ <<\ PYRA\_14)\ |\ \(\backslash\)}}
+\DoxyCodeLine{\textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1\ <<\ PYRA\_13))}}
+
+\end{DoxyCode}
+
+
+TODO\+: make all the member functions static so this becomes a trait like numeric\+\_\+limits$<$$>$() 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a0cb644ba4805fddfef5197b7491c42f1}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!ANSYS\_Type@{ANSYS\_Type}}
+\index{ANSYS\_Type@{ANSYS\_Type}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{ANSYS\_Type()}{ANSYS\_Type()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a0cb644ba4805fddfef5197b7491c42f1} 
+int8\+\_\+t csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+ANSYS\+\_\+\+Type (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{FEtype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns the ANSYS integer flag corresponding to the ANSYS element name string. \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_ab13b4534cf743ee7d4d6055638a2be36}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!CSMP\_TypeFrom\_ANSYS\_Type@{CSMP\_TypeFrom\_ANSYS\_Type}}
+\index{CSMP\_TypeFrom\_ANSYS\_Type@{CSMP\_TypeFrom\_ANSYS\_Type}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{CSMP\_TypeFrom\_ANSYS\_Type()}{CSMP\_TypeFrom\_ANSYS\_Type()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_ab13b4534cf743ee7d4d6055638a2be36} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+CSMP\+\_\+\+Type\+From\+\_\+\+ANSYS\+\_\+\+Type (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{, }\item[{bool}]{isoparametric}{, }\item[{uint32\+\_\+t}]{dim}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns the CSMP finite element type enum identifier that corresponds to the ANSYS type as identified by an integer identifier. The user needs to specify whether an isoparametric or globally interpolated element shall be returned because ANSYS elements can be converted into both. ~\newline
+
+
+Note however that ANSYS fits quadratic or cubic elements to the bounding curves. Thus, global interpolation will give incorrect results as it works only for straight-\/sided elements. \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a965135067f99644f4336d0f62976c450}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!CSMP\_TypeFrom\_ANSYS\_TypeName@{CSMP\_TypeFrom\_ANSYS\_TypeName}}
+\index{CSMP\_TypeFrom\_ANSYS\_TypeName@{CSMP\_TypeFrom\_ANSYS\_TypeName}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{CSMP\_TypeFrom\_ANSYS\_TypeName()}{CSMP\_TypeFrom\_ANSYS\_TypeName()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a965135067f99644f4336d0f62976c450} 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+CSMP\+\_\+\+Type\+From\+\_\+\+ANSYS\+\_\+\+Type\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{ANSYS\+\_\+element\+\_\+type}{, }\item[{bool}]{isoparametric}{, }\item[{uint32\+\_\+t}]{dim}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns the CSMP finite element type enum identifier that corresponds to the ANSYS type as identified by a character string. The user needs to specify whether an isoparametric or globally interpolated element shall be returned because ANSYS elements can be converted into both. ~\newline
+
+
+Note however that ANSYS fits quadratic or cubic elements to the bounding curves. Thus, global interpolation will give incorrect results as it works only for straight-\/sided elements. \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a20db90e7455efdf68ac6ffb84e9f68c9}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!CSMP\_TypeNameFrom\_ANSYS\_Type@{CSMP\_TypeNameFrom\_ANSYS\_Type}}
+\index{CSMP\_TypeNameFrom\_ANSYS\_Type@{CSMP\_TypeNameFrom\_ANSYS\_Type}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{CSMP\_TypeNameFrom\_ANSYS\_Type()}{CSMP\_TypeNameFrom\_ANSYS\_Type()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a20db90e7455efdf68ac6ffb84e9f68c9} 
+std\+::string csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+CSMP\+\_\+\+Type\+Name\+From\+\_\+\+ANSYS\+\_\+\+Type (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{, }\item[{bool}]{isoparametric}{, }\item[{uint32\+\_\+t}]{dim}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns the CSP finite element type name that corresponds to the ANSYS type as identified by an integer identifier. The user needs to specify whether an isoparametric or globally interpolated element shall be returned because ANSYS elements can be converted into both. ~\newline
+
+
+Note however that ANSYS fits quadratic or cubic elements to the bounding curves. Thus, global interpolation will give incorrect results as it works only for straight-\/sided elements. \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_ac6417d9280b0b1e953e8a76f088abf81}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!CubicElement@{CubicElement}}
+\index{CubicElement@{CubicElement}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{CubicElement()}{CubicElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_ac6417d9280b0b1e953e8a76f088abf81} 
+bool csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Cubic\+Element (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns whether the ANSYS element type specifier denotes a finite element type that uses cubic basis functions. ANSYS element types with such characteristics are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cubic}
+\DoxyCodeLine{==============}
+\DoxyCodeLine{HEXA\_32\ \ \ \ \ 32}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_aed188bb084cfc7647fbfff45b628f85c}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!InterpolationOrder@{InterpolationOrder}}
+\index{InterpolationOrder@{InterpolationOrder}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{InterpolationOrder()}{InterpolationOrder()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_aed188bb084cfc7647fbfff45b628f85c} 
+size\+\_\+t csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Interpolation\+Order (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Method deduces order of element interpolation functions from the input finite-\/element type.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The ANSYS type name of the finite element that shall be queried. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+size\+\_\+t giving the order of interpolation (1=linear, 2=quadratic etc.)
+\end{DoxyReturn}
+The interpolation order is returned as an unsigned integer value\+: 1 = linear, 2 = quadratic, 3 = cubic. \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a43563cba473a6af83c171eca2d7a85f7}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!LinearElement@{LinearElement}}
+\index{LinearElement@{LinearElement}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{LinearElement()}{LinearElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a43563cba473a6af83c171eca2d7a85f7} 
+bool csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Linear\+Element (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns whether the ANSYS element type specifier denotes a finite element type that uses linear basis functions. ANSYS element types with such characteristics are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{linear}
+\DoxyCodeLine{==============}
+\DoxyCodeLine{BAR\_2\ \ \ \ \ \ \ \ 2}
+\DoxyCodeLine{TETRA\_4\ \ \ \ \ \ 4}
+\DoxyCodeLine{HEXA\_8\ \ \ \ \ \ \ 6}
+\DoxyCodeLine{TRI\_3\ \ \ \ \ \ \ \ 8}
+\DoxyCodeLine{TRI\_3\_X\ \ \ \ \ \ 9}
+\DoxyCodeLine{PENTA\_6\ \ \ \ \ 12}
+\DoxyCodeLine{QUAD\_4\ \ \ \ \ \ 14}
+\DoxyCodeLine{QUAD\_4\_X\ \ \ \ 15}
+\DoxyCodeLine{PYRA\_5\ \ \ \ \ \ 18}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a3b0f4d5433692ed89db95557102d8fc3}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!LineElement@{LineElement}}
+\index{LineElement@{LineElement}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{LineElement()}{LineElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a3b0f4d5433692ed89db95557102d8fc3} 
+bool csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Line\+Element (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns true if the ANSYS input element type is a line. Possible ANSYS types are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{element\ type\ \ \ \ \ identifier}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BAR\_2\ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BAR\_3\ \ \ \ \ \ \ 3}}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a7de89e3d7cc4ee8a2cc16891dd31c3e0}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!LineElements@{LineElements}}
+\index{LineElements@{LineElements}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{LineElements()}{LineElements()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a7de89e3d7cc4ee8a2cc16891dd31c3e0} 
+void csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Line\+Elements (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::string $>$ \&}]{line\+\_\+elements}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns a list of line type elements that includes both the ANSYS types and the corresponding CSP types (see \doxylink{_finite_element_8h}{Finite\+Element.\+h}). The output strings are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ANSYS\ element\ type}
+\DoxyCodeLine{BAR\_2\ \ BAR\_3\ \ BAR\_4}
+\DoxyCodeLine{CSMP\ types}
+\DoxyCodeLine{LINEAR\_BAR\ \ }
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_BAR}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_BAR}
+\DoxyCodeLine{ISOPARAMETRIC\_CUBIC\_BAR}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a7f06c7b6d52512ac12655c7b7c4bf573}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!MinimumSpatialDimension@{MinimumSpatialDimension}}
+\index{MinimumSpatialDimension@{MinimumSpatialDimension}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{MinimumSpatialDimension()}{MinimumSpatialDimension()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a7f06c7b6d52512ac12655c7b7c4bf573} 
+size\+\_\+t csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Minimum\+Spatial\+Dimension (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{ANSYS\+\_\+finite\+\_\+element\+\_\+type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+The element type used defines the spatial dimension of the model. It is indicative only of the minimum dimension since lines and surfaces can also exist in 3D space, which the name makes explicit. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+Method expects a string argument that contains the ANSYS element type to deduce the spatial dimension from. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+size\+\_\+t The minimum spatial dimension is returned as an unsigned integer ranging from 1(=1D) to 3(=3D). 
+\end{DoxyReturn}
+\Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a9749122d9953e3bd3bde4a55b50afafe}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!NeighborsPerElementOfType@{NeighborsPerElementOfType}}
+\index{NeighborsPerElementOfType@{NeighborsPerElementOfType}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{NeighborsPerElementOfType()}{NeighborsPerElementOfType()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a9749122d9953e3bd3bde4a55b50afafe} 
+size\+\_\+t csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Neighbors\+Per\+Element\+Of\+Type (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns the number of neighbors of the input ANSYS finite element type. \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a2fa7d7616ba7de7160b54f61115ae4de}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!NodesPerElementOfType@{NodesPerElementOfType}}
+\index{NodesPerElementOfType@{NodesPerElementOfType}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{NodesPerElementOfType()}{NodesPerElementOfType()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a2fa7d7616ba7de7160b54f61115ae4de} 
+size\+\_\+t csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Nodes\+Per\+Element\+Of\+Type (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns the number of nodes of the ANSYS element type as identified by the ANSYS element number. ~\newline
+
+
+ANSYS defines the following element identification strings and flags\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{element\ type\ \ \ \ \ identifier}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BAR\_2\ \ \ \ \ \ \ 2\ \ \ \#define\ TETRA\_4\ \ \ \ \ 4}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ BAR\_3\ \ \ \ \ \ \ 3\ \ \ \#define\ TETRA\_10\ \ \ \ 5}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_8\ \ \ \ \ \ 6\ \ \ \#define\ QUAD\_4\ \ \ \ \ \ 14\ \ \#define\ QUAD\_8\_X\ \ \ \ 17}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_20\ \ \ \ \ 7\ \ \ \#define\ QUAD\_4\_X\ \ \ \ 15\ \ \#define\ QUAD\_9\ \ \ \ \ \ 19}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_27\ \ \ \ \ 20\ \ \#define\ QUAD\_8\ \ \ \ \ \ 16}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_3\ \ \ \ \ \ \ 8}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_3\_X\ \ \ \ \ 9}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_6\ \ \ \ \ \ \ 10}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_6\_X\ \ \ \ \ 11}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_6\ \ \ \ \ 12\ \ \#define\ PYRA\_5\ \ \ \ \ \ 18}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_15\ \ \ \ 13\ \ \#define\ PYRA\_14\ \ \ \ \ 22}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_18\ \ \ \ 21\ \ \#define\ PYRA\_13\ \ \ \ \ 24}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ POLYGON\ \ \ \ \ 23}}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a9d4a9a82112ac68e01d34c805e835a3c}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!QuadraticElement@{QuadraticElement}}
+\index{QuadraticElement@{QuadraticElement}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{QuadraticElement()}{QuadraticElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a9d4a9a82112ac68e01d34c805e835a3c} 
+bool csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Quadratic\+Element (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns whether the ANSYS element type specifier denotes a finite element type that uses quadratic basis functions. ANSYS element types with such characteristics are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{quadratic}
+\DoxyCodeLine{==============}
+\DoxyCodeLine{TETRA\_10\ \ \ \ \ 5}
+\DoxyCodeLine{BAR\_3\ 3}
+\DoxyCodeLine{HEXA\_20\ \ \ \ \ \ 7}
+\DoxyCodeLine{TRI\_6\ \ \ \ \ \ \ 10}
+\DoxyCodeLine{TRI\_6\_X\ \ \ \ \ 11}
+\DoxyCodeLine{PENTA\_15\ \ \ \ 13}
+\DoxyCodeLine{QUAD\_8\ \ \ \ \ \ 16}
+\DoxyCodeLine{QUAD\_8\_X\ \ \ \ 17}
+\DoxyCodeLine{QUAD\_9\ \ \ \ \ \ 19}
+\DoxyCodeLine{PENTA\_18\ \ \ \ 21}
+\DoxyCodeLine{PYRA\_14\ \ \ \ \ 22}
+\DoxyCodeLine{PYRA\_13\ \ \ \ \ 24}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a40bd5eb1dd4774ec494969efac597627}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!SurfaceElement@{SurfaceElement}}
+\index{SurfaceElement@{SurfaceElement}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{SurfaceElement()}{SurfaceElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a40bd5eb1dd4774ec494969efac597627} 
+bool csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Surface\+Element (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns true if the ANSYS input element type is a surface element. Possible surface element types are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{element\ type\ \ \ \ \ identifier}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_4\ \ \ \ \ \ 14\ \ \#define\ QUAD\_8\_X\ \ \ \ 17}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_4\_X\ \ \ \ 15\ \ \#define\ QUAD\_9\ \ \ \ \ \ 19}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ QUAD\_8\ \ \ \ \ \ 16}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_3\ \ \ \ \ \ \ \ \ 8}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_3\_X\ \ \ \ \ 9}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_6\ \ \ \ \ \ \ \ 10}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TRI\_6\_X\ \ 11}}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a24b61539dccbf474d56f57cf5364bfef}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!SurfaceElements@{SurfaceElements}}
+\index{SurfaceElements@{SurfaceElements}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{SurfaceElements()}{SurfaceElements()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a24b61539dccbf474d56f57cf5364bfef} 
+void csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Surface\+Elements (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::string $>$ \&}]{surf\+\_\+elements}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns a list of the ANSYS surface element type names and the corresponding CSP types. These are\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ANSYS\ element\ type\ \ \ \ \ identifier}
+\DoxyCodeLine{TRI\_3\ \ \ \ \ \ \ 8}
+\DoxyCodeLine{TRI\_3\_X\ \ \ \ \ 9}
+\DoxyCodeLine{TRI\_6\ \ \ \ \ \ \ 10}
+\DoxyCodeLine{TRI\_6\_X\ \ \ \ \ 11}
+\DoxyCodeLine{QUAD\_4\ \ \ \ \ \ 14\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{QUAD\_4\_X\ \ \ \ 15\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{QUAD\_8\ \ \ \ \ \ 16}
+\DoxyCodeLine{QUAD\_8\_X\ \ \ \ 17}
+\DoxyCodeLine{QUAD\_9\ \ \ \ \ \ 19}
+\DoxyCodeLine{CSP\ types}
+\DoxyCodeLine{LINEAR\_TRIANGLE}
+\DoxyCodeLine{LINEAR\_TRIANGLE3D}
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_TRIANGLE}
+\DoxyCodeLine{BARYCENTRIC\_LINEAR\_TRIANGLE}
+\DoxyCodeLine{QUADRATIC\_TRIANGLE}
+\DoxyCodeLine{BARYCENTRIC\_QUADRATIC\_TRIANGLE}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_TRIANGLE}
+\DoxyCodeLine{ISOPARAMETRIC\_CUBIC\_TRIANGLE}
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_QUADRILATERAL}
+\DoxyCodeLine{ISOPARAMETRIC\_BARYCENTRIC\_LINEAR\_QUADRILATERAL}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_QUADRILATERAL}
+\DoxyCodeLine{ISOPARAMETRIC\_BARYCENTRIC\_QUADRATIC\_QUADRILATERAL}
+\DoxyCodeLine{ISOPARAMETRIC\_CUBIC\_QUADRILATERAL}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a0ad4fcefca69ca045d38bc5782a9afb8}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!VolumeElement@{VolumeElement}}
+\index{VolumeElement@{VolumeElement}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{VolumeElement()}{VolumeElement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a0ad4fcefca69ca045d38bc5782a9afb8} 
+bool csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Volume\+Element (\begin{DoxyParamCaption}\item[{int8\+\_\+t}]{etype}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns true if the ANSYS input element type is a volumetric element. Possible ANSYS volumetric element types are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{element\ type\ \ \ \ \ identifier}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TETRA\_4\ \ \ \ \ 4\ \ \ \#define\ TETRA\_10\ \ \ \ 5}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_8\ \ \ \ \ \ 6\ \ \ }}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_20\ \ \ \ \ 7\ \ \ }}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_27\ \ \ \ \ 20\ \ }}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_6\ \ \ \ \ 12\ \ \#define\ PYRA\_5\ \ \ \ \ \ 18}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_15\ \ \ \ 13\ \ \#define\ PYRA\_14\ \ \ \ \ 22}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_18\ \ \ \ 21\ \ \#define\ PYRA\_13\ \ \ \ \ 24}}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_a_n_s_y_s___element_specifications_a80220ffe782ad67213cf277e6e4d7fba}\index{csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}!VolumeElements@{VolumeElements}}
+\index{VolumeElements@{VolumeElements}!csmp::ANSYS\_ElementSpecifications@{csmp::ANSYS\_ElementSpecifications}}
+\doxysubsubsection{\texorpdfstring{VolumeElements()}{VolumeElements()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_a_n_s_y_s___element_specifications_a80220ffe782ad67213cf277e6e4d7fba} 
+void csmp\+::\+ANSYS\+\_\+\+Element\+Specifications\+::\+Volume\+Elements (\begin{DoxyParamCaption}\item[{std\+::list$<$ std\+::string $>$ \&}]{vol\+\_\+elements}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Returns a list of the ANSYS element type names that denote volumetric elements and the corresponding CSP types. These are\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ANSYS\ element\ type\ \ \ \ \ identifier}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ TETRA\_4\ \ \ \ \ 4\ \ \ \#define\ TETRA\_10\ \ \ \ 5}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_8\ \ \ \ \ \ 6\ \ \ }}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_20\ \ \ \ \ 7\ \ \ }}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ HEXA\_27\ \ \ \ \ 20\ \ }}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_6\ \ \ \ \ 12\ \ \#define\ PYRA\_5\ \ \ \ \ \ 18}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_15\ \ \ \ 13\ \ \#define\ PYRA\_14\ \ \ \ \ 22}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ PENTA\_18\ \ \ \ 21\ \ \#define\ PYRA\_13\ \ \ \ \ 24}}
+\DoxyCodeLine{CSMP\ element\ type}
+\DoxyCodeLine{LINEAR\_TETRAHEDRON}
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_TETRAHEDRON}
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_HEXAHEDRON}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_HEXAHEDRON20}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_HEXAHEDRON27}
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_PYRAMID}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_PYRAMID13}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_PYRAMID14}
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_PRISM}
+\DoxyCodeLine{ISOPARAMETRIC\_LINEAR\_PRISM}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_PRISM15}
+\DoxyCodeLine{ISOPARAMETRIC\_QUADRATIC\_PRISM18}
+
+\end{DoxyCode}
+ 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+ANSYS/ANSYS\+\_\+\+Element\+Specifications.\+h\item 
+source/modules/interfaces/\+ANSYS/ANSYS\+\_\+\+Element\+Specifications.\+cpp\end{DoxyCompactItemize}

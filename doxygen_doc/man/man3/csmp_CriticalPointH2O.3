@@ -1,0 +1,134 @@
+.TH "csmp::CriticalPointH2O" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CriticalPointH2O
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include 'eos/h2o_nacl/CriticalPointH2O\&.h'\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "double \fBTemperature\fP () const"
+.br
+.ti -1c
+.RI "double \fBPressure\fP () const"
+.br
+.ti -1c
+.RI "double \fBMassFractionNaCl\fP () const"
+.br
+.ti -1c
+.RI "double \fBDensity\fP () const"
+.br
+.ti -1c
+.RI "double \fBMolarVolume\fP () const"
+.br
+.ti -1c
+.RI "double \fBEnthalpy\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.br
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.br
+ 
+.RE
+.PP
+.SH "Contact"
+.PP
+
+.br
+ thomas.driesner@erdw.ethz.ch 
+.br
+
+.PP
+@changes changes Latest Changes 
+.br
+ Oct\&. 6, 2012: ported to CSMP++, changed Pressure() to Pa\&. 
+.br
+.SH "Motivation"
+.PP
+
+.br
+ \fBCriticalPointH2O\fP contains the critical parameters (temperature, pressure, composition, density, molar volume, and specific enthalpy) of pure H2O according the 1984 IAPS or Haar-Gallagher-Kell equation of state (check www\&.iapws\&.org for more information)\&.
+.SH "Dependencies"
+.PP
+
+.br
+ requires "ConvertConcentrationUnitsNaCl\&.h"
+.SH "Testing"
+.PP
+
+.br
+ testing was done in the period before publication in 2007, prior to writing this documentation, no details are a\\ vailable anymore
+
+.PP
+
+.br
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.br
+ 
+.RE
+.PP
+.SH "Contact"
+.PP
+
+.br
+ thomas.driesner@erdw.ethz.ch 
+.br
+.SH "Motivation"
+.PP
+
+.br
+ \fBTriplePointH2O\fP contains the triple point parameters (temperature, pressure) of pure H2O\&.
+
+.PP
+
+.br
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.br
+ 
+.RE
+.PP
+.SH "Contact"
+.PP
+
+.br
+ thomas.driesner@erdw.ethz.ch 
+.br
+.SH "Motivation"
+.PP
+
+.br
+ \fBTriplePointNaCl\fP contains the triple point parameters (temperature, pressure, and composition) of the pure NaCl phase halite, liquid, and vapor at its triple point according to the fits obtained in the paper
+
+.PP
+Driesner T\&. and Heinrich C\&.A\&. (2007): The system H2O-NaCl\&. Part I: Correlation formulae for phase relations in temperature-pressure-composition space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl\&. Geochimica et Cosmochimica Acta 71, 4880-4901\&.
+.SH "Dependencies"
+.PP
+
+.br
+.SH "Testing"
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

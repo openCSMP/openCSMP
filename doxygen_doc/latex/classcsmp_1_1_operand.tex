@@ -1,0 +1,869 @@
+\doxysection{csmp\+::Operand\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_operand}{}\label{classcsmp_1_1_operand}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+
+
+Interface for all of CSMP\textquotesingle{}s variable types facilitating that they can be used together in computations; currently used only by \doxylink{classcsmp_1_1_interrelation}{Interrelation}; outdated design, refactoring required.  
+
+
+
+
+{\ttfamily \#include $<$Operand.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Operand\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{classcsmp_1_1_operand__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand_a48005bae4b03d67afba4c6b0553d0d6b}{Operand}} ()
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand_a92a10ac26f83bcd4a776225047a76df6}{Operand}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a62bd0037e59fff6a7bb71764f49c7e2a}\label{classcsmp_1_1_operand_a62bd0037e59fff6a7bb71764f49c7e2a} 
+{\bfseries Operand} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand_a75ebcca862c5e2df0ad300df9d6d68f8}{Operand}} (const char \texorpdfstring{$\ast$}{*}var, const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand_a06dfe7cde6038d4bb1ab38d90d1c57f6}{Operand}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a8756b218f08a7450c23a2a5ea5fe8968}\label{classcsmp_1_1_operand_a8756b218f08a7450c23a2a5ea5fe8968} 
+{\bfseries Operand} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a36ff780cb4da9bbf5f2ecafa50451037}\label{classcsmp_1_1_operand_a36ff780cb4da9bbf5f2ecafa50451037} 
+{\bfseries Operand} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_ad9b22cad41cdab9e5a482e11b7cfc761}\label{classcsmp_1_1_operand_ad9b22cad41cdab9e5a482e11b7cfc761} 
+{\bfseries Operand} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a8422ae7c13bf1bdca9a7b9bd6d1c75f4}\label{classcsmp_1_1_operand_a8422ae7c13bf1bdca9a7b9bd6d1c75f4} 
+{\bfseries Operand} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \mbox{\hyperlink{classcsmp_1_1_operand_a2c2b6807fbcee7edd9810c1a7489c2ae}{operator+}} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a1a07efcbd546e0365839c3e5fb5e408f}\label{classcsmp_1_1_operand_a1a07efcbd546e0365839c3e5fb5e408f} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} {\bfseries operator-\/} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_aaed95790548f2f150be306fffc9d712c}\label{classcsmp_1_1_operand_aaed95790548f2f150be306fffc9d712c} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (double) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_adb5a234d5ade1f15f2b3bec9bb3a7da8}\label{classcsmp_1_1_operand_adb5a234d5ade1f15f2b3bec9bb3a7da8} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} {\bfseries operator/} (double) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \mbox{\hyperlink{classcsmp_1_1_operand_af8ba545291e5a0248e851172b3e21ecf}{operator+}} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a4ab7fd5d00675ca299ad81459a699662}\label{classcsmp_1_1_operand_a4ab7fd5d00675ca299ad81459a699662} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} {\bfseries operator-\/} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a582155e65a28b5a0a3d2af84cb73705f}\label{classcsmp_1_1_operand_a582155e65a28b5a0a3d2af84cb73705f} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a3ce9d7d71b43f577cd08cae058df61ed}\label{classcsmp_1_1_operand_a3ce9d7d71b43f577cd08cae058df61ed} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} {\bfseries operator/} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& \mbox{\hyperlink{classcsmp_1_1_operand_a3aae09b80758842342bf5225c87ddd06}{operator+=}} (double)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a36564f6c291016ea145a3381b930a725}\label{classcsmp_1_1_operand_a36564f6c291016ea145a3381b930a725} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator-\/=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a90933a76f0477a396384740a52c70783}\label{classcsmp_1_1_operand_a90933a76f0477a396384740a52c70783} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (double)
+\item 
+\Hypertarget{classcsmp_1_1_operand_ae22f78f2db7628021ff7dff3fbdfcb82}\label{classcsmp_1_1_operand_ae22f78f2db7628021ff7dff3fbdfcb82} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator/=} (double)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& \mbox{\hyperlink{classcsmp_1_1_operand_a600887200a8af809db443ae60b90ad72}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_aa4de9176754756a67ba2695e0459d0c8}\label{classcsmp_1_1_operand_aa4de9176754756a67ba2695e0459d0c8} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_acdb1b12c5cd47c1b570e053aad648efa}\label{classcsmp_1_1_operand_acdb1b12c5cd47c1b570e053aad648efa} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_ab8febcc8c0962c6dfaf5713bbd96ecf6}\label{classcsmp_1_1_operand_ab8febcc8c0962c6dfaf5713bbd96ecf6} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& \mbox{\hyperlink{classcsmp_1_1_operand_a028dabb41c8343f4c1c5a369f45a25c9}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_aef1a52f3a11c42e91fff256becca5870}\label{classcsmp_1_1_operand_aef1a52f3a11c42e91fff256becca5870} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_aecf894a9cd13580867c0d72068836f03}\label{classcsmp_1_1_operand_aecf894a9cd13580867c0d72068836f03} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_ae9f7feb559c5b178cc5c456feabbf24a}\label{classcsmp_1_1_operand_ae9f7feb559c5b178cc5c456feabbf24a} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& \mbox{\hyperlink{classcsmp_1_1_operand_ac4c9b5f5c26a7e81250dab1dae550b09}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_af9d8ce82d619e06f6cd9d42fa205a400}\label{classcsmp_1_1_operand_af9d8ce82d619e06f6cd9d42fa205a400} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a3437f555b53cf35afc1effc51d7b9bfd}\label{classcsmp_1_1_operand_a3437f555b53cf35afc1effc51d7b9bfd} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a3dc798861b245f306a2b6ea9ca932c33}\label{classcsmp_1_1_operand_a3dc798861b245f306a2b6ea9ca932c33} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a278a52f89e123896f7b147287eab8476}\label{classcsmp_1_1_operand_a278a52f89e123896f7b147287eab8476} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator+=} (const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Array. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_operand_aea46118facbb9828f4c47d85810010d6}\label{classcsmp_1_1_operand_aea46118facbb9828f4c47d85810010d6} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a1f7fe2816266849f6f316123bdc41619}\label{classcsmp_1_1_operand_a1f7fe2816266849f6f316123bdc41619} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a8579fbbc200f80660a73fa9b0355f258}\label{classcsmp_1_1_operand_a8579fbbc200f80660a73fa9b0355f258} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_aa859653b7bfae9b166f189148bcb6411}\label{classcsmp_1_1_operand_aa859653b7bfae9b166f189148bcb6411} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator+=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\begin{DoxyCompactList}\small\item\em Flagged Array. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_operand_a8cc196a0dce2483b8da39fe7d6f8bea9}\label{classcsmp_1_1_operand_a8cc196a0dce2483b8da39fe7d6f8bea9} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a19da35fc0ea788271456f18f50b77f73}\label{classcsmp_1_1_operand_a19da35fc0ea788271456f18f50b77f73} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_aa20b47df3ac512ac0297adb204871fe1}\label{classcsmp_1_1_operand_aa20b47df3ac512ac0297adb204871fe1} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& \mbox{\hyperlink{classcsmp_1_1_operand_a2cecaf7c9c8e9f86c0375f57bddb6cb1}{operator+=}} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_af44b21be8c2641fae3dbb43b8fabd600}\label{classcsmp_1_1_operand_af44b21be8c2641fae3dbb43b8fabd600} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a05311408382a0201cf785862c3b17bee}\label{classcsmp_1_1_operand_a05311408382a0201cf785862c3b17bee} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a30e078442a9fcf63b0a8d9916e8846ef}\label{classcsmp_1_1_operand_a30e078442a9fcf63b0a8d9916e8846ef} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator/=} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&)
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_operand_ad369cd72c023678737e5c82e68ddf4e1}{operator$>$}} (double val) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a8b0c8d4d847804dd09ccd385f8d547c8}\label{classcsmp_1_1_operand_a8b0c8d4d847804dd09ccd385f8d547c8} 
+bool {\bfseries operator$<$} (double val) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_aa07ceee335d7c3e7d83368572dfbf074}\label{classcsmp_1_1_operand_aa07ceee335d7c3e7d83368572dfbf074} 
+bool {\bfseries operator$>$=} (double val) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_abf51ec323e866f42b725537bd277157b}\label{classcsmp_1_1_operand_abf51ec323e866f42b725537bd277157b} 
+bool {\bfseries operator$<$=} (double val) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a4d33cf321f6a17e76f3d4d96ed06c938}\label{classcsmp_1_1_operand_a4d33cf321f6a17e76f3d4d96ed06c938} 
+bool {\bfseries operator==} (double val) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_ac1a4b54d08c9706ebb159a55a5da3460}\label{classcsmp_1_1_operand_ac1a4b54d08c9706ebb159a55a5da3460} 
+bool {\bfseries operator!=} (double val) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_afa765c808571484fa346fe5168166622}\label{classcsmp_1_1_operand_afa765c808571484fa346fe5168166622} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_ab79f0a48aac47ac9156b42ca80fb30e3}\label{classcsmp_1_1_operand_ab79f0a48aac47ac9156b42ca80fb30e3} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a792f96af62752719c71e4af573c67b9c}\label{classcsmp_1_1_operand_a792f96af62752719c71e4af573c67b9c} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a0f9a1d370c33ad7046088a996b79e2b4}\label{classcsmp_1_1_operand_a0f9a1d370c33ad7046088a996b79e2b4} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_abb3f4e951c1f5a30a1e8e1ce673b4492}\label{classcsmp_1_1_operand_abb3f4e951c1f5a30a1e8e1ce673b4492} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a53da28df1eea8cb5d9803c68d4aacf6d}\label{classcsmp_1_1_operand_a53da28df1eea8cb5d9803c68d4aacf6d} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_add3b6fbdc15f1cd776f3236ced53e015}\label{classcsmp_1_1_operand_add3b6fbdc15f1cd776f3236ced53e015} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a2ad4740d38369e89d416d572f87c81f1}\label{classcsmp_1_1_operand_a2ad4740d38369e89d416d572f87c81f1} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_adedea74d676e6395efbc5127e3c9104a}\label{classcsmp_1_1_operand_adedea74d676e6395efbc5127e3c9104a} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_aa672b1c273284557bfab93c83dc2cbbf}\label{classcsmp_1_1_operand_aa672b1c273284557bfab93c83dc2cbbf} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_aa2802d4113e9842e209a49be20824836}\label{classcsmp_1_1_operand_aa2802d4113e9842e209a49be20824836} 
+bool {\bfseries operator$>$} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_af94896dad6df9e226e19e7bd3bd11307}\label{classcsmp_1_1_operand_af94896dad6df9e226e19e7bd3bd11307} 
+bool {\bfseries operator$<$} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a70dca91b124e15ff9ff48339de87a40e}\label{classcsmp_1_1_operand_a70dca91b124e15ff9ff48339de87a40e} 
+bool {\bfseries operator$>$=} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_aaea9bc5055ba358ee176e327f86bc8ec}\label{classcsmp_1_1_operand_aaea9bc5055ba358ee176e327f86bc8ec} 
+bool {\bfseries operator$<$=} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_ae88ac902f04dbc52d0de7510346cdc52}\label{classcsmp_1_1_operand_ae88ac902f04dbc52d0de7510346cdc52} 
+bool {\bfseries operator==} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a04fb50b464b09834adba48a768cb266d}\label{classcsmp_1_1_operand_a04fb50b464b09834adba48a768cb266d} 
+bool {\bfseries operator!=} (\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&) const
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& \mbox{\hyperlink{classcsmp_1_1_operand_aabb7a6031229f0dc5d6b8b16ddbf10f8}{operator=}} (double)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a47734a94e10926cf1113bd273bf51bbf}\label{classcsmp_1_1_operand_a47734a94e10926cf1113bd273bf51bbf} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a3beeee8940f7bc6fff9382ebbef82234}\label{classcsmp_1_1_operand_a3beeee8940f7bc6fff9382ebbef82234} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_ab26cc4109f28f10d0c849a0310cbe3c3}\label{classcsmp_1_1_operand_ab26cc4109f28f10d0c849a0310cbe3c3} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a4fb25ac10336a9a6185c0f179ddda0de}\label{classcsmp_1_1_operand_a4fb25ac10336a9a6185c0f179ddda0de} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a8afa3d8a0a30aff6565de1125d3856eb}\label{classcsmp_1_1_operand_a8afa3d8a0a30aff6565de1125d3856eb} 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \& \mbox{\hyperlink{classcsmp_1_1_operand_ac0789c557287e37c95397ebd41f4c6bd}{operator=}} (const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_operand_a08f1673bf3f7a2793a6716d976f1a6a7}\label{classcsmp_1_1_operand_a08f1673bf3f7a2793a6716d976f1a6a7} 
+void {\bfseries Name} (const char \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classcsmp_1_1_operand_a5c49bf1caf484be42677207e488ced28}\label{classcsmp_1_1_operand_a5c49bf1caf484be42677207e488ced28} 
+std\+::string {\bfseries Name} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_ae9f2aff4687d59e7e33a2aa7a1404969}\label{classcsmp_1_1_operand_ae9f2aff4687d59e7e33a2aa7a1404969} 
+size\+\_\+t {\bfseries Size} ()
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea}{Is\+Within\+Range}} () const
+\item 
+{\footnotesize template$<$class cspT$>$ }\\bool \mbox{\hyperlink{classcsmp_1_1_operand_ab159a909fbb03f2bac6f0fd7a25816e0}{Is\+Within\+Range}} (const cspT \&val) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a09ba0d050059c268bebd894afc65ffd4}\label{classcsmp_1_1_operand_a09ba0d050059c268bebd894afc65ffd4} 
+double {\bfseries Max\+Value} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_adb3333147573977e6dbec86efedb47bd}\label{classcsmp_1_1_operand_adb3333147573977e6dbec86efedb47bd} 
+double {\bfseries Min\+Value} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_af0116870e4e1f81d1f21e2a817505f04}\label{classcsmp_1_1_operand_af0116870e4e1f81d1f21e2a817505f04} 
+const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \& {\bfseries Key} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a72eafa779bab03fb6b03f7f9a5337191}\label{classcsmp_1_1_operand_a72eafa779bab03fb6b03f7f9a5337191} 
+size\+\_\+t {\bfseries Index} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_aa73a2279c5a433d99aa0b2f5f7328dcc}\label{classcsmp_1_1_operand_aa73a2279c5a433d99aa0b2f5f7328dcc} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Placement} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a2f9131dc3f25b681c6630b5ffff8d91c}\label{classcsmp_1_1_operand_a2f9131dc3f25b681c6630b5ffff8d91c} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Type} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a249828fd68656c98582819c03b342be2}\label{classcsmp_1_1_operand_a249828fd68656c98582819c03b342be2} 
+size\+\_\+t {\bfseries Calculation\+Offset} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_ad22fc810f5c9ebb3785baeb37b437048}\label{classcsmp_1_1_operand_ad22fc810f5c9ebb3785baeb37b437048} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Output\+Condition} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_ab21ab3eaf5497edfaf3fb4a42f458e10}\label{classcsmp_1_1_operand_ab21ab3eaf5497edfaf3fb4a42f458e10} 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}} {\bfseries Essential\+Condition} () const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a8ebb0b905faf7ddcbcc159f557f901a1}\label{classcsmp_1_1_operand_a8ebb0b905faf7ddcbcc159f557f901a1} 
+void {\bfseries Calculation\+Offset} (size\+\_\+t)
+\item 
+\Hypertarget{classcsmp_1_1_operand_adffa3099eea61748055dc107e01af0be}\label{classcsmp_1_1_operand_adffa3099eea61748055dc107e01af0be} 
+void {\bfseries Output\+Condition} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+\Hypertarget{classcsmp_1_1_operand_a7ec943cd7118cd288a4c13ddee479f2f}\label{classcsmp_1_1_operand_a7ec943cd7118cd288a4c13ddee479f2f} 
+void {\bfseries Essential\+Condition} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}})
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_operand_a5165c41996d9bd8a79ee9b6b1d08d1e0}{Assign\+To}} (\mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a197b5c86d535babb46fa7b209b2b10ab}\label{classcsmp_1_1_operand_a197b5c86d535babb46fa7b209b2b10ab} 
+void {\bfseries Assign\+To} (\mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a19ff9f17bdb35d875c93c58fb9c08256}\label{classcsmp_1_1_operand_a19ff9f17bdb35d875c93c58fb9c08256} 
+void {\bfseries Assign\+To} (\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_ad2ceaf65ac32e222d32af90b0f6f6526}\label{classcsmp_1_1_operand_ad2ceaf65ac32e222d32af90b0f6f6526} 
+void {\bfseries Assign\+To} (\mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&) const
+\item 
+\Hypertarget{classcsmp_1_1_operand_a39bcb0ffec834c54fefe704b1522612b}\label{classcsmp_1_1_operand_a39bcb0ffec834c54fefe704b1522612b} 
+void {\bfseries Assign\+To} (\mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&) const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_operand_ab6f1b0fc42a00c4d288a275d7510e0ce}{Print\+Value}} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_operand_a254847c0ee69f0886faf9e8a61c00702}{Out}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Operand$<$ dim $>$}
+Interface for all of CSMP\textquotesingle{}s variable types facilitating that they can be used together in computations; currently used only by \doxylink{classcsmp_1_1_interrelation}{Interrelation}; outdated design, refactoring required. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+Stephen G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Forget for a moment all about the rest of the CSMP code except for the basic variables \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} and \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable} and think of the possibility of creating objects that are overloaded such that you can write expressions for the whole mesh object or sub-\/regions thereof, which read like mathematical equations in which the variables refer to local or distributed data. ~\newline
+
+
+This quest was the design intent of the \doxylink{classcsmp_1_1_operand}{Operand} class and it brings CSP users close to this goal when they are prepared to write their own \doxylink{classcsmp_1_1_interrelation}{Interrelation} subclasses. The goal is fully realized through the new \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} classes for use in main() programs. These are however only complementary to the \doxylink{classcsmp_1_1_operand}{Operand} and \doxylink{classcsmp_1_1_interrelation}{Interrelation} mechanism, because they do not encapsulate the calculations which Interrelations do.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+Apart from being able to write mathematical expressions which are applied to the whole \doxylink{classcsmp_1_1_model}{Model} or sub-\/\+Regions thereof (as is facilitated through the \doxylink{classcsmp_1_1_property_handle}{Property\+Handle} class), there is a need to use distributed instances of properties in calculations inside objects which are still efficient and allow the user to partially ignore variable IDs and the variable placement in the mesh (\doxylink{classcsmp_1_1_node}{Node}, Integration\+Point or \doxylink{classcsmp_1_1_element}{Element}). This requires (1) the use of a notation to represent the variable in mathematical expressions, and (2) an association of the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of the variable with the notation such that it does not need to be requested from the \doxylink{classcsmp_1_1_property_database}{Property\+Database} every time the expression is evaluated. Finally (3), temporary variable storage is needed to allow that a value can be range-\/checked before it is written back into the \doxylink{classcsmp_1_1_model}{Model} storage. This buffer is essential when it comes to checking where in a chain of expressions, a physically meaningless value was produced.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+Operands are used in Interrelations, Algorithms, Algorithms, and \doxylink{classcsmp_1_1_visitor}{Visitor} objects.\hypertarget{classcsmp_1_1_v_data_structure}{}\doxysubsection{\texorpdfstring{Structure}{Structure}}\label{classcsmp_1_1_v_data_structure}
+The \doxylink{classcsmp_1_1_operand}{Operand} is a simple class object with a String containing its name, a \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} describing the represented variable, and each one of the basic CSMP variables as well as an output condition flag which specifies the \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} of the property locations which the variable is permitted to overwrite if the calculation yielded a result which is within the permitted range.\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+A \doxylink{structcsmp_1_1_index}{csmp\+::\+Index}, a String, an output \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} and CSP basic variables (\doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, and \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}).\hypertarget{classcsmp_1_1_time_step_evaluator_collaborations}{}\doxysubsection{\texorpdfstring{Collaborations}{Collaborations}}\label{classcsmp_1_1_time_step_evaluator_collaborations}
+Operands collaborate with CSP basic variables and the enumerations which are defined in \doxylink{_c_s_m_p__definitions_8h}{CSMP\+\_\+definitions.\+h} (e.\+g., \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG}...).\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}{}\doxysubsection{\texorpdfstring{Consequences}{Consequences}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_consequences}
+The operators $+, -, *, /, +=, -=, *=, /= $ are overloaded for Operands such that they can interact with eachother, double data, and the CSP basic variables. One should not write expressions like A = C. Following the logic of an assignment, A = B means\+: The \doxylink{classcsmp_1_1_operand}{Operand} A now refers to exactly the same variable as B and it will also contain the same values. If \doxylink{classcsmp_1_1_operand}{Operand} A represents a property stored in the \doxylink{classcsmp_1_1_model}{Model}, the variable A will no longer exist following the assignment. ~\newline
+
+
+Importantly, scalar-\/, vector-\/, and tensor variables are more than just mathematical variables in that they also contain a STATUS flag which specifies how they are treated in the assembly of the finite-\/element equations. This requires some rules about the flag assignment\+: If you say
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{A\ =\ C\ +\ B;}
+
+\end{DoxyCode}
+
+
+the temporary variable that is created will be flagged like the lefthand operator before the assigment. If $C = PLAIN$ and $B=DIRICH$, A will be $PLAIN$. If the combined operator += is used, A will retain its original flag because the assignment here uses the assignment as defined for scalar variables. ~\newline
+
+
+If you compare an \doxylink{classcsmp_1_1_operand}{Operand} with a \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} enumeration, the comparison will be carried out using all flag(s) of the underlying variable. Thus, if a vector variable in a 2D calculation has two different flags (for instance, a DIRICH flag for the X displacement and a PLAIN flag for the Y displacement) a comparison will evaluate as false. In this case one should use Vector\+Variable\+::\+Flag( int i) to carry out a more specific comparison. Any comparisons with not initialized Operands or Operands that store NAN values in the variables will evaluate as false.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+By default, Operands have storage for a single variable value of type \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, or \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}, but only if this variable exists in the \doxylink{classcsmp_1_1_property_database}{Property\+Database} (in contrast, Property\+Handles spawn the generation of a new variable in the \doxylink{classcsmp_1_1_property_database}{Property\+Database} if the variable does not exist). ~\newline
+
+
+The need for large computations imposes stringend constraints on the properties of Operands. They may be big in size because there will only be a few, but their overloaded operators have to be efficient since single calculations may involve millions of calls to those. Already a function call overhead is significant for the overloaded operators. To avoid this overhead auto-\/inlining is used in the compilation.
+
+The construction of temporary \textquotesingle{}Operands\textquotesingle{} in expressions like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{C\ =\ A\ +\ 32.5;}
+
+\end{DoxyCode}
+
+
+should also be avoided. In those cases the construction by the compiler of temporary objects (object x which will be assigned to C) can be avoided only in some cases through construction of the Operands in the return statements of the overloaded operators. ~\newline
+
+
+To avoid the creation of temporaries you should rather write\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{C\ =\ 32.5;\(\backslash\)}
+\DoxyCodeLine{C\ +=\ A;}
+
+\end{DoxyCode}
+
+
+Operands also store a \textquotesingle{}calculation offset\textquotesingle{} which is used by Algorithms to modify the placement of dependent variables in computations involving the \doxylink{classcsmp_1_1_operand}{Operand} variable, when coupled systems of equations are solved.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Operands are typically used in Algorithms and Interrelations. When you derive a subclass from an \doxylink{classcsmp_1_1_interrelation}{Interrelation}, you first create a \doxylink{classcsmp_1_1_operand}{Operand} reference to a physical variable in your model\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_operand_a48005bae4b03d67afba4c6b0553d0d6b}{Operand}}\&\ \ K;}
+
+\end{DoxyCode}
+
+
+You then associate the \doxylink{classcsmp_1_1_operand}{Operand} with a property which has been defined before as a member of the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. This happens in your interrelation constructor.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{K(\ GlobalProperty(\textcolor{stringliteral}{"{}conductivity"{}})\ )}
+
+\end{DoxyCode}
+
+
+This defines K as a notation for \textquotesingle{}conductivity\textquotesingle{}. You can now use K in expressions using CSMP basic variables and other Operands\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{K\ +=\ PHI\ /\ 322.1\ -\/\ 45.0;}
+
+\end{DoxyCode}
+ 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_operand_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_operand_a48005bae4b03d67afba4c6b0553d0d6b}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!Operand@{Operand}}
+\index{Operand@{Operand}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Operand()}{Operand()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a48005bae4b03d67afba4c6b0553d0d6b} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Operand (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+The default constructor of the \doxylink{classcsmp_1_1_operand}{Operand} sets the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} type to SCALAR, the placement to MODEL and the index to ULONG\+\_\+\+MAX. The \doxylink{classcsmp_1_1_operand}{Operand} will have no name, its output flag will be PLAIN, the essential flag DIRICH, and the value rangle will be -\/1.\+0e+50 to 1.\+0e+50. The calculation offset will be zero. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a48005bae4b03d67afba4c6b0553d0d6b_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a48005bae4b03d67afba4c6b0553d0d6b_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_operand_a92a10ac26f83bcd4a776225047a76df6}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!Operand@{Operand}}
+\index{Operand@{Operand}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Operand()}{Operand()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a92a10ac26f83bcd4a776225047a76df6} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Operand (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Operands can be constructed efficiently using only a \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} as argument. In this case they will have no name, a variable range from -\/1.\+0e+50 to 1.\+0e+50, and a calculation offset of zero. The output flag will be PLAIN and the essential flag will be DIRICH.
+
+
+\begin{DoxyParams}{Parameters}
+{\em idx} & name of the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of the variable with which the \doxylink{classcsmp_1_1_operand}{Operand} shall be associated. This index must correspond to a physical variable which is already known to the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a92a10ac26f83bcd4a776225047a76df6_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a92a10ac26f83bcd4a776225047a76df6_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_operand_a75ebcca862c5e2df0ad300df9d6d68f8}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!Operand@{Operand}}
+\index{Operand@{Operand}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Operand()}{Operand()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a75ebcca862c5e2df0ad300df9d6d68f8} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Operand (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{var}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{p}{}\end{DoxyParamCaption})}
+
+This constructor will fully initialize an \doxylink{classcsmp_1_1_operand}{Operand} using the current variable data from the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. The \doxylink{classcsmp_1_1_operand}{Operand} name will be that of the supplied variable, the calculation offset will be zero. The output flag will be PLAIN and the essential flag will be DIRICH.
+
+
+\begin{DoxyParams}{Parameters}
+{\em var} & the name of the variable with which the \doxylink{classcsmp_1_1_operand}{Operand} shall be associated. This name must be already known to the \doxylink{classcsmp_1_1_property_database}{Property\+Database} a reference of which is passed as a second argument to the constructor.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the property database cannot identify the variable by its name, it will report an error and the \doxylink{classcsmp_1_1_operand}{Operand} will not be initialized properly. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a75ebcca862c5e2df0ad300df9d6d68f8_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a75ebcca862c5e2df0ad300df9d6d68f8_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_operand_a06dfe7cde6038d4bb1ab38d90d1c57f6}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!Operand@{Operand}}
+\index{Operand@{Operand}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Operand()}{Operand()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a06dfe7cde6038d4bb1ab38d90d1c57f6} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Operand (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{idx}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&}]{sc}{}\end{DoxyParamCaption})}
+
+Efficient constructor for temporary operands needed in mathematical expressions like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Op\_A\ =\ Op\_B\ +\ Op\_C;}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em idx} & the name of the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of the variable with which the \doxylink{classcsmp_1_1_operand}{Operand} shall be associated. This index must correspond to a physical variable which is already known to the \doxylink{classcsmp_1_1_property_database}{Property\+Database}.\\
+\hline
+{\em sc} & an initialized CSP variable, the type of which must be equivalent to the type specified in the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index}\texorpdfstring{$>$}{>}\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+These seemingly \textquotesingle{}weird\textquotesingle{} constructors have been created only because they allow a smart compiler to create temporaries in the place of their application (return value optimization).
+
+The resulting temporary Operands have the name \textquotesingle{}tmp\textquotesingle{} (also remember that, in large computations, one should write x = 0; x += \doxylink{classcsmp_1_1_operand}{Operand} + \doxylink{classcsmp_1_1_operand}{Operand}; if one can, to avoid the creation of temporaries all together.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Temporary variables in mathematical expressions involving Operands. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a06dfe7cde6038d4bb1ab38d90d1c57f6_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{classcsmp_1_1_operand_a06dfe7cde6038d4bb1ab38d90d1c57f6_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_operand_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_operand_a5165c41996d9bd8a79ee9b6b1d08d1e0}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!AssignTo@{AssignTo}}
+\index{AssignTo@{AssignTo}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AssignTo()}{AssignTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a5165c41996d9bd8a79ee9b6b1d08d1e0} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Assign\+To (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&}]{s}{}\end{DoxyParamCaption}) const}
+
+Inputs the CSMP basic variable associated with the \doxylink{classcsmp_1_1_operand}{Operand} into the supplied variable.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & A CSMP variable, ie., a \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} or \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+When you cannot use any of the overloaded operators of the \doxylink{classcsmp_1_1_operand}{Operand} class for your specific calculation, just output the \doxylink{classcsmp_1_1_operand}{Operand} variable into a basic CSMP variable and manipulate it directly.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+\doxylink{classcsmp_1_1_operand_a5165c41996d9bd8a79ee9b6b1d08d1e0}{Assign\+To()} will cause the program to terminate if you try to assign an \doxylink{classcsmp_1_1_operand}{Operand} variable to a variable of the wrong type. \Hypertarget{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!IsWithinRange@{IsWithinRange}}
+\index{IsWithinRange@{IsWithinRange}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IsWithinRange()}{IsWithinRange()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Is\+Within\+Range (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Tests whether the value of the physical variable is within the bounds that were specified for that variable inside the \doxylink{classcsmp_1_1_property_database}{Property\+Database} record. If \doxylink{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea}{Is\+Within\+Range()} is called for a temporary \doxylink{classcsmp_1_1_operand}{Operand}, the positions of the variable value relative to the default variable range of -\/1e+50 to 1e+50 will be tested for. If the variable type is a vector, its length will be compared with the range, and if the variable type is a tensor its largest and its smallest element will be range-\/checked.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+Optionally, rather than testing the variable which is associated with the \doxylink{classcsmp_1_1_operand}{Operand}, external CSP basic variables can be tested for the range specified for the \doxylink{classcsmp_1_1_operand}{Operand}. Just supply a constant reference to the test variable to \doxylink{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea}{Is\+Within\+Range()}.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+A range check is performed automatically on output variables in subclasses of Interrelations, before the calculated values are stored in the Memory\+Manager. This is a fundamental CSP feature, prohibiting error propagation in complex simulations. \Hypertarget{classcsmp_1_1_operand_ab159a909fbb03f2bac6f0fd7a25816e0}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!IsWithinRange@{IsWithinRange}}
+\index{IsWithinRange@{IsWithinRange}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{IsWithinRange()}{IsWithinRange()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_ab159a909fbb03f2bac6f0fd7a25816e0} 
+template$<$uint32\+\_\+t dim$>$ \\
+template$<$typename cspT$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Is\+Within\+Range (\begin{DoxyParamCaption}\item[{const cspT \&}]{val}{}\end{DoxyParamCaption}) const}
+
+Tests the supplied value or components thereof for whether it lies within the physical meaninful range which was assigned to the \doxylink{classcsmp_1_1_operand}{Operand} when it was constructed.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The value which shall be tested is supplied as first argument to the overloaded method \doxylink{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea}{Is\+Within\+Range()}. The supported argument types are double, and the basic CSP variables \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, and \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}.
+
+\begin{DoxyReturn}{Returns}
+The method returns the boolean variable \textquotesingle{}true\textquotesingle{} if the argument value is in the physical meaningful range; else it returns \textquotesingle{}false\textquotesingle{}.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+\doxylink{classcsmp_1_1_operand_a74bd1baa50881000d06a5cdc8a3861ea}{Is\+Within\+Range()} tests each component of its argument for whether it lies in the specified range. Thus, for a tensor argument, 9 checks are performed if the model is three dimensional.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Before a property value is returned to the \doxylink{classcsmp_1_1_model}{Model} storage, it is tested for whether it lies in the permitted range.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the value is out of range the method prints a message to \textquotesingle{}stderr\textquotesingle{} and outputs the violating variable value(s). \Hypertarget{classcsmp_1_1_operand_af8ba545291e5a0248e851172b3e21ecf}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_af8ba545291e5a0248e851172b3e21ecf} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \&}]{op}{}\end{DoxyParamCaption}) const}
+
+Create temporary Operands with the same \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} as the \doxylink{classcsmp_1_1_operand}{Operand} on the left of the operator in the mathematical expression. The basic CSP variable of the temporary Operands will have been transformed using the operator an the right-\/side argument of it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & An \doxylink{classcsmp_1_1_operand}{Operand} which will appear on the right of the operator in the mathematical expression involving the lefthand \doxylink{classcsmp_1_1_operand}{Operand}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+NOTE\+: These overloaded Operands will return Operands which have exactly the same \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} as the \doxylink{classcsmp_1_1_operand}{Operand} on the lefthandside of the operator sign in the expression in which they are used. Thus beware of writing something like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Op1\ =\ Op2\ *\ 322.4;}
+
+\end{DoxyCode}
+
+
+This will overwrite the Op1 with the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of Op2 because the assignment operator is used. The overloaded operators are still useful for expressions like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Op1\ +=\ Op2\ *\ 322.4;}
+
+\end{DoxyCode}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+These overloaded operators use the overloaded operators of CSP basic variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-\/side vector with a left-\/side tensor, are enabled. \Hypertarget{classcsmp_1_1_operand_a2c2b6807fbcee7edd9810c1a7489c2ae}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a2c2b6807fbcee7edd9810c1a7489c2ae} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator+ (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption}) const}
+
+Create temporary Operands with the same \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} as the \doxylink{classcsmp_1_1_operand}{Operand} on the left of the operator in the mathematical expression. The basic CSP variable of the temporary Operands will have been transformed using the operator an the right-\/side argument of it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em val} & A double value typically typedef\textquotesingle{}ed as a fT. The value will appear on the right of the operator in the mathematical expression involving the \doxylink{classcsmp_1_1_operand}{Operand}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+NOTE\+: These overloaded Operands will return Operands which have exactly the same \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} as the \doxylink{classcsmp_1_1_operand}{Operand} on the lefthandside of the operator sign in the expression in which they are used. Thus beware of writing something like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Op1\ =\ Op2\ *\ 322.4;}
+
+\end{DoxyCode}
+
+
+This will overwrite the Op1 with the \doxylink{structcsmp_1_1_index}{csmp\+::\+Index} of Op2 because the assignment operator is used. The overloaded operators are still useful for expressions like\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Op1\ +=\ Op2\ *\ 322.4;}
+
+\end{DoxyCode}
+ \Hypertarget{classcsmp_1_1_operand_a2cecaf7c9c8e9f86c0375f57bddb6cb1}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a2cecaf7c9c8e9f86c0375f57bddb6cb1} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \&}]{op}{}\end{DoxyParamCaption})}
+
+Transforms the basic variable associated with the lefthand \doxylink{classcsmp_1_1_operand}{Operand} by the right-\/side \doxylink{classcsmp_1_1_operand}{Operand} variable using the arithmetic operators +, -\/, \texorpdfstring{$\ast$}{*}, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions. Since only the mathematical transformation is defined, the other internal variables of the lefthand \doxylink{classcsmp_1_1_operand}{Operand} will not be affected by a call to one of these operators.
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & A constant reference to an \doxylink{classcsmp_1_1_operand}{Operand} which will appear on the right of the operator in the mathematical expression involving the \doxylink{classcsmp_1_1_operand}{Operand}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. This is also the safe way of writing expressions involving several Operands, because the possibility of accidentially overwriting an \doxylink{classcsmp_1_1_operand}{Operand} with another is ruled out. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The overloaded operators use the overloaded operators of CSP basic variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-\/side vector with a left-\/side tensor, are enabled. \Hypertarget{classcsmp_1_1_operand_a600887200a8af809db443ae60b90ad72}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a600887200a8af809db443ae60b90ad72} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&}]{sc}{}\end{DoxyParamCaption})}
+
+Transforms the basic variable associated with the lefthand \doxylink{classcsmp_1_1_operand}{Operand} by the right-\/side \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable} using the arithmetic operators +, -\/, \texorpdfstring{$\ast$}{*}, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sc} & A \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable} value typically typedef\textquotesingle{}ed as a fT. The value will appear on the right of the operator in the mathematical expression involving the \doxylink{classcsmp_1_1_operand}{Operand}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The overloaded operators use the overloaded operators of CSP basic variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-\/side vector with a left-\/side tensor, are enabled. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_operand_a600887200a8af809db443ae60b90ad72_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_operand_ac4c9b5f5c26a7e81250dab1dae550b09}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_ac4c9b5f5c26a7e81250dab1dae550b09} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&}]{ts}{}\end{DoxyParamCaption})}
+
+Transforms the basic variable associated with the lefthand \doxylink{classcsmp_1_1_operand}{Operand} by the right-\/side \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable} using the arithmetic operators +, -\/, \texorpdfstring{$\ast$}{*}, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ts} & A \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable} which will appear on the right of the operator in the mathematical expression involving the \doxylink{classcsmp_1_1_operand}{Operand}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The overloaded operators use the overloaded operators of CSP basic variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-\/side vector with a left-\/side tensor, are enabled.
+
+Right-\/side Tensor\+Variables can only be added to, subtracted from, multiplied with or divide other Tensor\+Variables. The left-\/side \doxylink{classcsmp_1_1_operand}{Operand} must therefore also be a \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}. If this is not the case the program will be terminated and a fatal error will be reported. \Hypertarget{classcsmp_1_1_operand_a028dabb41c8343f4c1c5a369f45a25c9}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a028dabb41c8343f4c1c5a369f45a25c9} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&}]{vc}{}\end{DoxyParamCaption})}
+
+Transforms the basic variable associated with the lefthand \doxylink{classcsmp_1_1_operand}{Operand} by the right-\/side \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} using the arithmetic operators +, -\/, \texorpdfstring{$\ast$}{*}, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vc} & A \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable} which will appear on the right of the operator in the mathematical expression involving the \doxylink{classcsmp_1_1_operand}{Operand}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The overloaded operators use the overloaded operators of CSP basic variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-\/side vector with a left-\/side tensor, are enabled.
+
+For the addition (+) and subtraction (-\/) operators the application is restricted to the case where the variable associated with the \doxylink{classcsmp_1_1_operand}{Operand} is also a vector. If this is not the case the program will be terminated and a fatal error will be reported. \Hypertarget{classcsmp_1_1_operand_a3aae09b80758842342bf5225c87ddd06}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a3aae09b80758842342bf5225c87ddd06} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator+= (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption})}
+
+Transforms the basic variable associated with the lefthand \doxylink{classcsmp_1_1_operand}{Operand} by the right-\/side double using the arithmetic operators +, -\/, \texorpdfstring{$\ast$}{*}, or / . The C++ short form for writing a = a + b; as a += b; is used in such expressions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em val} & A double value typically typedef\textquotesingle{}ed as a fT. The value will appear on the right of the operator in the mathematical expression involving the \doxylink{classcsmp_1_1_operand}{Operand}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Avoids the creation of temporaries and should therefore be prefered in mathematical expressions involving Operands. ~\newline
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The overloaded operators use the overloaded operators of CSP basic variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Depending on the basic variable types of the left and rigth Operands errors may be reported, for instance, when you try to add a tensor to a scalar variable. Mathematically meaningful operations, like multiplying a right-\/side vector with a left-\/side tensor, are enabled. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_operand_a3aae09b80758842342bf5225c87ddd06_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_operand_ac0789c557287e37c95397ebd41f4c6bd}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_ac0789c557287e37c95397ebd41f4c6bd} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \&}]{op}{}\end{DoxyParamCaption})}
+
+This assignment operator creates an \doxylink{classcsmp_1_1_operand}{Operand} that is exactly identical to the \doxylink{classcsmp_1_1_operand}{Operand} on the left side of the expression. Thus, it will overwrite whatever definition the \doxylink{classcsmp_1_1_operand}{Operand} on the left side of the expression had and using this operator for
+
+K = Pf
+
+While this is exactly the functionality which one expects from a C++ assignment operator, it means that K will refer to Pf from now on and the variable with which K was associated, will not be accessible anymore by this \doxylink{classcsmp_1_1_operand}{Operand}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & A reference to the \doxylink{classcsmp_1_1_operand}{Operand} which will be assigned.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The method checks for self-\/assigment before setting the internal data.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The copy constructor and for duplication of Operands. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_operand_ac0789c557287e37c95397ebd41f4c6bd_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_operand_aabb7a6031229f0dc5d6b8b16ddbf10f8}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_aabb7a6031229f0dc5d6b8b16ddbf10f8} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}$<$ dim $>$ \& \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator= (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption})}
+
+Assignments of CSP basic variables to Operands are implemented as assignment operators in which the type of the variable which is associated with the \doxylink{classcsmp_1_1_operand}{Operand} determines the outcome of the assignment. This restricts the number of meaningful assignments for CSP basic variables\+: Scalars can be assigned to vectors and tensors but not the other way around. Vectors cannot be assigned to tensors and vice versa.
+
+
+\begin{DoxyParams}{Parameters}
+{\em val} & Constant references to double, \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, and \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}.\\
+\hline
+\end{DoxyParams}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The assignments are implemented using the overloaded operators of the CSP basic variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Erratic assignments may halt the program and lead to an error report including the name of the \doxylink{classcsmp_1_1_operand}{Operand} to which the assignment was attempted. \Hypertarget{classcsmp_1_1_operand_ad369cd72c023678737e5c82e68ddf4e1}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{operator$>$()}{operator>()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_ad369cd72c023678737e5c82e68ddf4e1} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::operator$>$ (\begin{DoxyParamCaption}\item[{double}]{val}{}\end{DoxyParamCaption}) const}
+
+Operands can be compared with other Operands, double values, and CSP basic variables. Whether this comparison is meaningful, depends on the variable types on the left and right-\/side of the comparitors, and errors will be reported for obviously nonsensical comparisons. Comparisons of variables of the same type are straightforward and the comparison of a \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable} with a double is as well.
+
+If a vector variable is compared with a scalar, this implementation of comparitors will compare the length of the vector with the scalar, since in most cases this is a physically sensible thing to do. ~\newline
+
+
+If you compare a tensor variable with a scalar, this comparison will use the largest or the smallest element in the tensor, but the comparitors \textquotesingle{}==\textquotesingle{} and \textquotesingle{}!=\textquotesingle{} are not defined. Vectors can ~\newline
+ not be compared with tensors. ~\newline
+
+
+Only Operands with the same type of associated variables can be compared.
+
+
+\begin{DoxyParams}{Parameters}
+{\em val} & A constant reference to any of the types, double, \doxylink{classcsmp_1_1_operand}{Operand}, \doxylink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}, \doxylink{classcsmp_1_1_vector_variable}{Vector\+Variable}, or \doxylink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}. ~\newline
+\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean variable which evaluates to true or false.
+\end{DoxyReturn}
+\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+In as far as possible, the overloaded operators of the basic CSP variables are used to ascertain consistency of CSP variable behaviour. No provisions are made for the comparison of enumeration \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} flags. This would open a confusing array of possibilities. All comparitors are constant methods which means that they do not change the state of Operands.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Typically, you want to compare Operands with floating-\/point numbers in \textquotesingle{}if\textquotesingle{} statements inside of Calculate() methods of \doxylink{classcsmp_1_1_interrelation}{Interrelation} subclasses. This may involve statements like if ( T \texorpdfstring{$>$}{>} 500.\+0 )... This type of comparisons is fully supported by the overloaded comparitors of the \doxylink{classcsmp_1_1_operand}{Operand} class.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The most common runtime message that you may get using a comparitor is
+
+\textquotesingle{}cannot compare \texorpdfstring{$\ast$}{*} variable with \texorpdfstring{$\ast$}{*} variable\textquotesingle{}
+
+To make it easier to track down where this error occurred, the name of the \doxylink{classcsmp_1_1_operand}{Operand} involved in the comparison will be reported as well. Remember, however, that temporary Operands have no distinct names. \Hypertarget{classcsmp_1_1_operand_a254847c0ee69f0886faf9e8a61c00702}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!Out@{Out}}
+\index{Out@{Out}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_a254847c0ee69f0886faf9e8a61c00702} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Out (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Standard CSP method to check the state of an \doxylink{classcsmp_1_1_operand}{Operand} by printing it to stdout. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_operand_a254847c0ee69f0886faf9e8a61c00702_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_operand_ab6f1b0fc42a00c4d288a275d7510e0ce}\index{csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}!PrintValue@{PrintValue}}
+\index{PrintValue@{PrintValue}!csmp::Operand$<$ dim $>$@{csmp::Operand$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PrintValue()}{PrintValue()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_operand_ab6f1b0fc42a00c4d288a275d7510e0ce} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_operand}{csmp\+::\+Operand}}$<$ dim $>$\+::\+Print\+Value (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+Calls the \doxylink{classcsmp_1_1_operand_a254847c0ee69f0886faf9e8a61c00702}{Out()} method of the current variable of the \doxylink{classcsmp_1_1_operand}{Operand}. This will print the CSP basic variable values and the \doxylink{group___c_s_m_p__global__enumerations_ga98d2031b830da37499a1b512d9dca4b9}{VARIABLE\+\_\+\+FLAG} flags which is useful for testing a derived \doxylink{classcsmp_1_1_interrelation}{Interrelation} before using it in computations. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_operand_ab6f1b0fc42a00c4d288a275d7510e0ce_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_operand_ab6f1b0fc42a00c4d288a275d7510e0ce_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Operand.\+h\item 
+source/modules/model/Operand.\+cpp\end{DoxyCompactItemize}

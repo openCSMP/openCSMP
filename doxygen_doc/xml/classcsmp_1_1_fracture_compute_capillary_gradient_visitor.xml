@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::FractureComputeCapillaryGradientVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a75ee717438a3899e41d2a13c1989720f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+        <definition>Model&lt;dim&gt;&amp; csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::model_</definition>
+        <argsstring></argsstring>
+        <name>model_</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::model_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="27" column="13" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1ab1caabadfab92162b3c814f0e46adb36" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; *</type>
+        <definition>TwoPhaseModel&lt;dim&gt;* csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::saturationfunctions_</definition>
+        <argsstring></argsstring>
+        <name>saturationfunctions_</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::saturationfunctions_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="28" column="21" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a42f7e781a20dd5f2d2c0231ac2f6e736" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::fracPcGradientKey_</definition>
+        <argsstring></argsstring>
+        <name>fracPcGradientKey_</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::fracPcGradientKey_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="29" column="13" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a891601366acff918429fef9def8cb015" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::fracPcGradientTermKey_</definition>
+        <argsstring></argsstring>
+        <name>fracPcGradientTermKey_</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::fracPcGradientTermKey_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="29" column="32" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a83b87f045035ceddbd9af69453cfb099" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">Index</ref></type>
+        <definition>Index csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::fracPermKey_</definition>
+        <argsstring></argsstring>
+        <name>fracPermKey_</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::fracPermKey_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="29" column="55" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a71bf94a8ddb19a912469d64200b6b10f" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::fracPcGradient_</definition>
+        <argsstring></argsstring>
+        <name>fracPcGradient_</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::fracPcGradient_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="30" column="22" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a923bb825cbbda4d5f333e42d6bb3202a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::FractureComputeCapillaryGradientVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;model, TwoPhaseModel&lt; dim &gt; &amp;saturationFunctions, const char *fracPcGradientTag, const char *fracPcGradientTermTag, const char *fracPermTag)</argsstring>
+        <name>FractureComputeCapillaryGradientVisitor</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::FractureComputeCapillaryGradientVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_two_phase_model" kindref="compound">TwoPhaseModel</ref>&lt; dim &gt; &amp;</type>
+          <declname>saturationFunctions</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fracPcGradientTag</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fracPcGradientTermTag</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>fracPermTag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="17" column="7" bodyfile="source/modules/thmc/fractures/FractureComputeCapillaryGradientVisitor.cpp" bodystart="10" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a455ea97e7857da83b670333f03ff7e38" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::~FractureComputeCapillaryGradientVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~FractureComputeCapillaryGradientVisitor</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::~FractureComputeCapillaryGradientVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="22" column="15" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1aa0660ca0f0278eb5806ec60880265f75" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *element)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::FractureComputeCapillaryGradientVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="24" column="20" bodyfile="source/modules/thmc/fractures/FractureComputeCapillaryGradientVisitor.cpp" bodystart="24" bodyend="40"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::FractureComputeCapillaryGradientVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" line="14" column="3" bodyfile="source/includes/thmc/fractures/FractureComputeCapillaryGradientVisitor.h" bodystart="15" bodyend="31"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a71bf94a8ddb19a912469d64200b6b10f" prot="private" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>fracPcGradient_</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a42f7e781a20dd5f2d2c0231ac2f6e736" prot="private" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>fracPcGradientKey_</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a891601366acff918429fef9def8cb015" prot="private" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>fracPcGradientTermKey_</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a83b87f045035ceddbd9af69453cfb099" prot="private" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>fracPermKey_</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a923bb825cbbda4d5f333e42d6bb3202a" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>FractureComputeCapillaryGradientVisitor</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a75ee717438a3899e41d2a13c1989720f" prot="private" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>model_</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1ab1caabadfab92162b3c814f0e46adb36" prot="private" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>saturationfunctions_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1aa0660ca0f0278eb5806ec60880265f75" prot="public" virt="virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_fracture_compute_capillary_gradient_visitor_1a455ea97e7857da83b670333f03ff7e38" prot="public" virt="virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>~FractureComputeCapillaryGradientVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::FractureComputeCapillaryGradientVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

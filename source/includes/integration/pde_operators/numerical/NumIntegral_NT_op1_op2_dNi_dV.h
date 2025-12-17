@@ -26,11 +26,11 @@ class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim,CELL> {
                                    const char* mtrl2,         // e.g., conductivity
                                    const char* test );        // e.g., fluid pressure
     
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual void MultiplyWithTimeFactor( double dt );
+    void MultiplyWithTimeFactor( double dt ) override final;
   
   private:
     std::vector<double>           IPOL;

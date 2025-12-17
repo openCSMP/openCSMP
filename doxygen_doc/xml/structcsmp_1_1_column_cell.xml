@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_column_cell" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::ColumnCell</compoundname>
+    <includes refid="_pillar_8h" local="no">Pillar.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_column_cell_1a5bcc3abf1488df1b0cc7d29710525e2f" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::ColumnCell::k</definition>
+        <argsstring></argsstring>
+        <name>k</name>
+        <qualifiedname>csmp::ColumnCell::k</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/Pillar.h" line="90" column="10" bodyfile="source/includes/interfaces/Eclipse/Pillar.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_column_cell_1a859e9d6827cf05c8fdf48ad1262bdc5f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::ColumnCell::skew</definition>
+        <argsstring></argsstring>
+        <name>skew</name>
+        <qualifiedname>csmp::ColumnCell::skew</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/Pillar.h" line="91" column="8" bodyfile="source/includes/interfaces/Eclipse/Pillar.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_column_cell_1a352fb0252311a65e6f826e4527499a92" prot="public" static="no" mutable="no">
+        <type>ECLIPSE_CELL_CLASSIFICATION</type>
+        <definition>ECLIPSE_CELL_CLASSIFICATION csmp::ColumnCell::classification</definition>
+        <argsstring></argsstring>
+        <name>classification</name>
+        <qualifiedname>csmp::ColumnCell::classification</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/Pillar.h" line="92" column="31" bodyfile="source/includes/interfaces/Eclipse/Pillar.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_column_cell_1a00a222a5cd1036119b8723b912388b9a" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::ColumnCell::z[4][2]</definition>
+        <argsstring>[4][2]</argsstring>
+        <name>z</name>
+        <qualifiedname>csmp::ColumnCell::z</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/Eclipse/Pillar.h" line="93" column="10" bodyfile="source/includes/interfaces/Eclipse/Pillar.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A column cell, in Eclipse convention ordering. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::ColumnCell</label>
+        <link refid="structcsmp_1_1_column_cell"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/Eclipse/Pillar.h" line="89" column="1" bodyfile="source/includes/interfaces/Eclipse/Pillar.h" bodystart="89" bodyend="94"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_column_cell_1a352fb0252311a65e6f826e4527499a92" prot="public" virt="non-virtual"><scope>csmp::ColumnCell</scope><name>classification</name></member>
+      <member refid="structcsmp_1_1_column_cell_1a5bcc3abf1488df1b0cc7d29710525e2f" prot="public" virt="non-virtual"><scope>csmp::ColumnCell</scope><name>k</name></member>
+      <member refid="structcsmp_1_1_column_cell_1a859e9d6827cf05c8fdf48ad1262bdc5f" prot="public" virt="non-virtual"><scope>csmp::ColumnCell</scope><name>skew</name></member>
+      <member refid="structcsmp_1_1_column_cell_1a00a222a5cd1036119b8723b912388b9a" prot="public" virt="non-virtual"><scope>csmp::ColumnCell</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

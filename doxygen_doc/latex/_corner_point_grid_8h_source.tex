@@ -1,0 +1,192 @@
+\doxysection{Corner\+Point\+Grid.\+h}
+\hypertarget{_corner_point_grid_8h_source}{}\label{_corner_point_grid_8h_source}\index{source/includes/regular\_grids/CornerPointGrid.h@{source/includes/regular\_grids/CornerPointGrid.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CORNER\_POINT\_GRID\_UOM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CORNER\_POINT\_GRID\_UOM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_corner_point_cell_8h}{"{}CornerPointCell.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_pillar_8h}{"{}Pillar.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ Hash\ table\ utility\ class\ for\ storing\ (i,j,k)\ coordinates,\ in\ this\ case\ the\ i,j,k\ indices\ of\ the\ CornerPointGrid}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structijk}{ijk}}\ \{}
+\DoxyCodeLine{00011\ \ \ uint32\_t\ \ i,\ j,\ k;}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \textcolor{keywordtype}{bool}\ operator<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structijk}{ijk}}\&\ rhs\ )\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ i\ !=\ rhs.i\ )\ \textcolor{keywordflow}{return}\ i\ <\ rhs.i;}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ j\ !=\ rhs.j\ )\ \textcolor{keywordflow}{return}\ j\ <\ rhs.j;}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ j\ <\ rhs.j;}
+\DoxyCodeLine{00017\ \ \ \ \ \}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \textcolor{keywordtype}{bool}\ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structijk}{ijk}}\&\ rhs\ )\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ i\ ==\ rhs.i\ \&\&\ j\ ==\ rhs.j\ \&\&\ k\ ==\ rhs.k;}
+\DoxyCodeLine{00021\ \ \ \ \ \}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ ijk(\ uint32\_t\ i,\ uint32\_t\ j,\ uint32\_t\ k\ )}
+\DoxyCodeLine{00024\ \ \ \ \ :\ i(\ i\ ),\ j(\ j\ ),\ k(\ k\ )\ \{\}}
+\DoxyCodeLine{00025\ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{namespace}\ std\ \{\ \textcolor{comment}{//\ extending\ standard\ by\ template\ specialisation}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{/**\ Hashtable\ support\ for\ ijk\ */}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structstd_1_1hash_3_01ijk_01_4}{hash}}<\mbox{\hyperlink{structstd_1_1hash_3_01ijk_01_4}{ijk}}>\ \{}
+\DoxyCodeLine{00032\ \ \ size\_t\ operator()(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structijk}{ijk}}\&\ key\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00033\ \ \ \ \ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ hash<size\_t>\ h;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{comment}{//\ (1\ +\ sqrt\ 5)\ *\ 2\string^30}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ size\_t\ s\ =\ 0xcf1bbcdd;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \textcolor{comment}{//\ Boost\ hash\_combine\ function}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ s\ \string^=\ h(\ key.i\ )\ +\ 0x9e3779b9\ +\ (s\ <<\ 6)\ +\ (s\ >>\ 2);}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ s\ \string^=\ h(\ key.j\ )\ +\ 0x9e3779b9\ +\ (s\ <<\ 6)\ +\ (s\ >>\ 2);}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ s\ \string^=\ h(\ key.k\ )\ +\ 0x9e3779b9\ +\ (s\ <<\ 6)\ +\ (s\ >>\ 2);}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ s;}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}\ \textcolor{comment}{//\ end\ std}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_cell_generator}{CellGenerator}};}
+\DoxyCodeLine{00051\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}};}
+\DoxyCodeLine{00052\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}};}
+\DoxyCodeLine{00053\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00054\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_point}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_cell_centered_grid}{CellCenteredGrid}}}
+\DoxyCodeLine{00057\ \{}
+\DoxyCodeLine{00058\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ CellCenteredGrid();}
+\DoxyCodeLine{00061\ \ \ \string~CellCenteredGrid();}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_cell_centered_grid_ad8b393eda0fb12f1791df3e4f71d5185}{Clear}}();}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \textcolor{keywordtype}{void}\ AssignDimensionX(\ size\_t\ NX\ );}
+\DoxyCodeLine{00066\ \ \ \textcolor{keywordtype}{void}\ AssignDimensionY(\ size\_t\ NY\ );}
+\DoxyCodeLine{00067\ \ \ \textcolor{keywordtype}{void}\ AssignDimensionZ(\ size\_t\ NZ\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ size\_t\ GetNumCells()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ \ \ std::vector<csmp::ScalarVariable>\&\ GetCellDepths();}
+\DoxyCodeLine{00071\ \ \ std::vector<csmp::ScalarVariable>\&\ GetCellSizes(\ size\_t\ direction\ );}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ size\_t\ NX\_;\ \textcolor{comment}{//\ max\ index\ of\ cell\ in\ x\ direction}}
+\DoxyCodeLine{00076\ \ \ size\_t\ NY\_;\ \textcolor{comment}{//\ max\ index\ of\ cell\ in\ y\ direction}}
+\DoxyCodeLine{00077\ \ \ size\_t\ NZ\_;\ \textcolor{comment}{//\ max\ index\ of\ cell\ in\ z\ direction}}
+\DoxyCodeLine{00078\ \ \ std::vector<csmp::ScalarVariable>\ dx\_;\ \ \ \textcolor{comment}{//\ cell\ sizes\ \ (\ dx\ )}}
+\DoxyCodeLine{00079\ \ \ std::vector<csmp::ScalarVariable>\ dy\_;\ \ \ \textcolor{comment}{//\ cell\ sizes\ \ (\ dy\ )}}
+\DoxyCodeLine{00080\ \ \ std::vector<csmp::ScalarVariable>\ dz\_;\ \ \ \textcolor{comment}{//\ cell\ sizes\ \ (\ dz\ )}}
+\DoxyCodeLine{00081\ \ \ std::vector<csmp::ScalarVariable>\ tops\_;\ \textcolor{comment}{//\ cell\ depths\ (\ ztop\ )}}
+\DoxyCodeLine{00082\ \};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{}}
+\DoxyCodeLine{00087\ \textcolor{comment}{@class\ CornerPointGrid\ \ CornerPointGrid}}
+\DoxyCodeLine{00088\ \textcolor{comment}{@author\ A.J.\ Bromage}}
+\DoxyCodeLine{00089\ \textcolor{comment}{@date\ 2018}}
+\DoxyCodeLine{00090\ \textcolor{comment}{}}
+\DoxyCodeLine{00091\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00092\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{CornerPointGrid}}\ \{}
+\DoxyCodeLine{00093\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00094\ \ \ CornerPointGrid();}
+\DoxyCodeLine{00095\ \ \ \string~CornerPointGrid();}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_a38c23e1bcbf434ac85f39cf70f7353da}{CreateModel}}(\ \textcolor{keyword}{const}\ std::string\&\ \ \ \ \ model\_name,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ \ \ \ \ \ \ \ vset,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\&\ \ \ model\_topology,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ zcorn,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::string>\&\ regions,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::string>\&\ faults,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::string>\&\ wells,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ tetra\_mesh,}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ exclude\_inactive\_cells}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ VarType>}
+\DoxyCodeLine{00109\ \ \ \textcolor{keywordtype}{void}\ WritePropertyToVSet(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ \ \ \ \ \ \ \ \ \ \ \ \ vset,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<VarType>\&\ prop\_data,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ \ \ \ \ \ \ \ \ \ prop\_name,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\&\ \ \ \ \ \ prop\_place\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \textcolor{comment}{///\ return\ the\ number\ of\ blocks\ the\ grid\ has\ in\ the\ given\ direction}}
+\DoxyCodeLine{00115\ \ \ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_a47aca34bf9073f03b5acf91e548eb02a}{size\_t}}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_a47aca34bf9073f03b5acf91e548eb02a}{DimensionI}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ NX\_;\ \}}
+\DoxyCodeLine{00116\ \ \ size\_t\ DimensionJ()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ NY\_;\ \}}
+\DoxyCodeLine{00117\ \ \ size\_t\ DimensionK()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ NZ\_;\ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \textcolor{keywordtype}{void}\ AssignDimensions(\ uint32\_t\ nx,\ uint32\_t\ ny,\ uint32\_t\ nz\ );}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \textcolor{keywordtype}{void}\ Resize(\ uint32\_t\ nx,\ uint32\_t\ ny\ );}
+\DoxyCodeLine{00122\ \ \ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_pillar}{Pillar}}\&\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_af736ac5c6b20968f9fa6cc2d266b4f28}{operator}}()(\ uint32\_t\ i,\ uint32\_t\ j\ );}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ std::vector<uint8\_t>\&\ GetCellActivity();}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ size\_t\ OrdinaryNodes()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ ordinaryNodes\_;\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ std::multimap<ijk,size\_t>\&\ IJKMap()\ \{\ \textcolor{keywordflow}{return}\ elementMap;\ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid_a369907a8420b40bb54bc303d130c801a}{ConvertFromReservoirToCSMPcoordinateSystem}}(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ pt\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00131\ \ \ \textcolor{keywordtype}{bool}\ ConstructLineElement(\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ size\_t\&\ new\_elemt\_idx\ );}
+\DoxyCodeLine{00132\ \ \ \textcolor{keywordtype}{bool}\ ConstructLineElement(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k\ );}
+\DoxyCodeLine{00133\ \ \ \mbox{\hyperlink{classcsmp_1_1_cell_generator}{CellGenerator}}*\ GetCellGenerator()\ \{\ \textcolor{keywordflow}{return}\ generator\_;\ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00136\ \ \ size\_t\ NX\_;\ \textcolor{comment}{///<\ max\ index\ of\ cell\ in\ x\ direction}}
+\DoxyCodeLine{00137\ \ \ size\_t\ NY\_;\ \textcolor{comment}{///<\ max\ index\ of\ cell\ in\ y\ direction}}
+\DoxyCodeLine{00138\ \ \ size\_t\ NZ\_;\ \textcolor{comment}{///<\ max\ index\ of\ cell\ in\ z\ direction}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ std::vector<csmp::Pillar>\ pillars\_;}
+\DoxyCodeLine{00141\ \ \ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{std}}::\mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{map}}<\mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{std}}::\mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{pair}}<\mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{uint32\_t}},\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{uint32\_t}}>,\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{Column}}>\ \mbox{\hyperlink{classcsmp_1_1_corner_point_grid}{columns\_}};}
+\DoxyCodeLine{00142\ \ \ std::multimap<ijk,\ size\_t>\ elementMap;}
+\DoxyCodeLine{00143\ \ \ \mbox{\hyperlink{classcsmp_1_1_cell_generator}{CellGenerator}}*\ generator\_;}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ size\_t\ badHexahedra\_;}
+\DoxyCodeLine{00146\ \ \ size\_t\ badPyramids\_;}
+\DoxyCodeLine{00147\ \ \ size\_t\ badTetrahedra\_;}
+\DoxyCodeLine{00148\ \ \ size\_t\ badPrisms\_;}
+\DoxyCodeLine{00149\ \ \ size\_t\ badLines\_;}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \textcolor{comment}{//\ These\ are\ the\ model-\/building\ steps\ in\ order}}
+\DoxyCodeLine{00152\ \ \ \textcolor{keywordtype}{void}\ InitializeGridSpecs();}
+\DoxyCodeLine{00153\ \ \ \textcolor{keywordtype}{void}\ ConstructPillarsAndColumns(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ zcorn\ );}
+\DoxyCodeLine{00154\ \ \ \textcolor{keywordtype}{void}\ ConstructFiniteElementsFromColumns(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ vset\ );}
+\DoxyCodeLine{00155\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0000(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_HEXAHEDRON}}
+\DoxyCodeLine{00156\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0001(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMIDS\_310\_312}}
+\DoxyCodeLine{00157\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0010(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMIDS\_201\_203}}
+\DoxyCodeLine{00158\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0011(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PRISM\_23}}
+\DoxyCodeLine{00159\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0100(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMIDS\_130\_132}}
+\DoxyCodeLine{00160\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0101(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_TETRAHEDRONS\_130\_132}}
+\DoxyCodeLine{00161\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0110(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PRISM\_12}}
+\DoxyCodeLine{00162\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell0111(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMID\_0}}
+\DoxyCodeLine{00163\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell1000(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMIDS\_021\_023}}
+\DoxyCodeLine{00164\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell1001(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PRISM\_03}}
+\DoxyCodeLine{00165\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell1010(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_TETRAHEDRONS\_021\_023}}
+\DoxyCodeLine{00166\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell1011(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMID\_1}}
+\DoxyCodeLine{00167\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell1100(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PRISM\_01}}
+\DoxyCodeLine{00168\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell1101(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMID\_2}}
+\DoxyCodeLine{00169\ \ \ \textcolor{keywordtype}{bool}\ ConstructEclipseCell1110(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}\&\ \ cell,\ uint32\_t\&\ i,\ uint32\_t\&\ j,\ uint32\_t\&\ k,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellAbove,\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_column_cell}{ColumnCell}}*\ cellBeneath\ );\ \textcolor{comment}{//Eclipse\ cell\ type:\ ECLIPSE\_CELL\_PYRAMID\_3}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \textcolor{comment}{///\ To\ add\ the\ degenerated\ elements\ into\ the\ map\ storage}}
+\DoxyCodeLine{00172\ \ \ \textcolor{keywordtype}{void}\ AddElementToMap(\ uint32\_t\ i,\ uint32\_t\ j,\ uint32\_t\ k,\ size\_t\ elementID\ );}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ size\_t\ active\_elements\_;}
+\DoxyCodeLine{00175\ \ \ std::vector<uint8\_t>\ cell\_activity\_;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ active/inactive\ cells}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ uint8\_t\&\ CellActivity(\ uint32\_t\ i,\ uint32\_t\ j,\ uint32\_t\ k\ );}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ size\_t\ NX\_x\_NY\_;\ \textcolor{comment}{///<\ specifications\ of\ mesh\ derived\ from\ grid}}
+\DoxyCodeLine{00180\ \ \ size\_t\ elements\_,\ ordinaryNodes\_;}
+\DoxyCodeLine{00181\ \ \ std::vector<csmp::Point<3U>\ >\ \ axes\_;\ \textcolor{comment}{///<\ reservoir\ coordinate\ system}}
+\DoxyCodeLine{00182\ \};}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

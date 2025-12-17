@@ -1375,14 +1375,14 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
         while ( start != end ) {
             bool applies = false;
             const auto n_nodes{ (*start).Nodes() };
-            for ( auto j{0U}; j<n_nodes; j++ )
+            for ( uint32_t j{0U}; j<n_nodes; j++ )
               if ( (*start).N( j )->IsWithinRange( prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
                 this->cell_vec_.push_back( &(*start) );
-                for ( auto i{0U}; i<n_nodes; i++ )
+                for ( uint32_t i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1391,15 +1391,15 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
       case ELEMENT_INTEGRATION_POINT:
         while ( start != end ) {
             bool applies = false;
-            for ( auto j{0U}; j<(*start).IntegrationPoints(); j++ )
+            for ( uint32_t j{0U}; j<(*start).IntegrationPoints(); j++ )
               if ( (*start).IsWithinRange( j, prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
                 this->cell_vec_.push_back( &(*start) );
-                const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i{0U}; i<n_nodes; i++ )
+                const auto n_nodes{ (*start).Nodes() };
+                for ( uint32_t i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1410,15 +1410,15 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             bool applies = false;
             assert( (*start).IntegrationPointsPerSector() == 1 );
             auto n_sectors{ (*start).FV()->Sectors() };
-            for ( auto j{0U}; j<n_sectors; j++ )
+            for ( uint32_t j{0U}; j<n_sectors; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
                 this->cell_vec_.push_back( &(*start) );
-                const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i{0U}; i<n_nodes; i++ )
+                const auto n_nodes{ (*start).Nodes() };
+                for ( uint32_t i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1429,7 +1429,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             bool applies = false;
             assert( (*start).IntegrationPointsPerFacet() == 1 );
             const auto n_facets{ (*start).FV()->Facets() };
-            for ( auto j{0U}; j<n_facets; j++ )
+            for ( uint32_t j{0U}; j<n_facets; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1437,7 +1437,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( applies == true ) {
                 this->cell_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i{0U}; i<n_nodes; i++ )
+                for ( uint32_t i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1448,7 +1448,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( (*start).IsWithinRange( prop_key, min, max ) ) {
                 this->cell_vec_.push_back( &(*start) );
                 const auto n_nodes{ (*start).Nodes() };
-                for ( auto i{0U}; i<n_nodes; i++ )
+                for ( uint32_t i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1869,9 +1869,9 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
 
   res.CellVector().reserve( a.Cells() + b.Cells() );
   for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
-    res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
+    res.CellVector().push_back( const_cast<Element<dim>*>(*it) );
   for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
-    res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
+    res.CellVector().push_back( const_cast<Element<dim>*>(*it) );
   
   sort( res.CellVector().begin(), res.CellVector().end() );
   res.CellVector().erase( unique(res.CellVector().begin(), res.CellVector().end()), res.CellVector().end() );
@@ -1909,7 +1909,7 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
   for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
     if ( binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) ||
          binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
-      res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
+      res.CellVector().push_back( const_cast<Element<dim>*>(*it) );
 
   res.CellVector().shrink_to_fit();
 
@@ -1946,7 +1946,7 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
     if ( !binary_search( b.CellsBegin(), b.PerimeterCellsBegin(), (*it) ) &&
          !binary_search( b.PerimeterCellsBegin(), b.CellsEnd(), (*it) ) )
-      res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
+      res.CellVector().push_back( const_cast<Element<dim>*>(*it) );
 
   res.CellVector().shrink_to_fit();
 
@@ -1983,12 +1983,12 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
   for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
     if ( !binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) &&
          !binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
-      res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
+      res.CellVector().push_back( const_cast<Element<dim>*>(*it) );
 
   for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
     if ( !binary_search( b.CellsBegin(), b.PerimeterCellsBegin(), (*it) ) &&
          !binary_search( b.PerimeterCellsBegin(), b.CellsEnd(), (*it) ) )
-      res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
+      res.CellVector().push_back( const_cast<Element<dim>*>(*it) );
 
   // removing potential duplicates
   sort( res.CellVector().begin(), res.CellVector().end() );
@@ -2513,6 +2513,7 @@ double  Region<dim>::SurfaceArea() const
   auto    bit( this->bd_face_vec_.begin() );
   double  area{0.};
 
+  // in 3D we are computing the surface area of volumetric regions
   if constexpr ( dim == 3U ) {
       // for all elements located on the region boundary
       for ( auto i = this->InteriorCells(); i<this->Cells(); ++i, ++bit )
@@ -2521,7 +2522,7 @@ double  Region<dim>::SurfaceArea() const
           const uint32_t face( (*bit)[j] );
           auto fnids = this->cell_vec_[i]->FE()->NodesOfFace( face );
           const CSMP_FEM_TYPE etype( this->cell_vec_[i]->FE()->ElementTypeOfFace( face ) );
-          // triangular face
+          // triangular face (works also for quadratic mesh since the corner nodes come first)
           if ( isTriangular(etype) )
             area += triangleArea( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
                                   this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
@@ -2532,28 +2533,44 @@ double  Region<dim>::SurfaceArea() const
                                 this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
                                 this->cell_vec_[i]->N( fnids[2U] )->Coordinate(),
                                 this->cell_vec_[i]->N( fnids[3U] )->Coordinate() );
-          // linear face
+                                
+          // linear face (perimeter length is accumulated)
           else if ( isLineElement(etype) ) {
-            area += distance( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(), this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
-            //csmp_error.Note( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
+            area += distance( this->cell_vec_[i]->N(0U)->Coordinate(), this->cell_vec_[i]->N(1U)->Coordinate() );
           }
-          // additional case of point face where a line-element is perpendicular to a boundary node
         }
     }
-  // in 2D the face is a segment the length of which has to be used
+  // in 2D we are computing the perimeter (length) of surface objects
   else if constexpr ( dim == 2U ) {
       // for all surface elements on the region boundary (excluding line elements)
-      for ( size_t i = this->InteriorCells(); i<this->Cells(); i++, bit++ )
-        if ( this->cell_vec_[i]->FE()->IsSurface() )
-          for ( size_t j{0U}; j<(*bit).size(); j++ ) {
-            auto fnids = this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j] );
-            area += distance( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(), this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
+      for ( size_t eid = this->InteriorCells(); eid<this->Cells(); ++eid )
+        // for this to work, elements must be surface elements
+        if ( this->cell_vec_[eid]->IsSurface() ) {
+            for ( uint32_t face{0u}; face<this->PerimeterFaces(eid); ++face ) {
+                 // returns local face id of face #face that lies on perimeter of model subdomain
+                 auto fnids = this->cell_vec_[eid]->CornerNodesOfFace( this->PerimeterFace( eid, face ) );
+                 area += distance( (*fnids.begin())->Coordinate(), (*fnids.rbegin())->Coordinate() );
+              }
           }
+        // error the cross-sectional area of a line element region without special attribute is meaningless
+        else return numeric_limits<double>::signaling_NaN();
     }
 
   return area;
 
 } // end SurfaceArea
+
+       /*
+        if ( this->cell_vec_[i]->FE()->IsSurface() )
+          for ( size_t j{0U}; j<(*bit).size(); j++ ) {
+            auto fnids = this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j] );
+            // reporting the length of the line elements surrounding the surface elements
+            area += distance( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(), this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
+          }
+        */
+
+
+
 
 
 /**

@@ -1,0 +1,361 @@
+.TH "csmp::ODE_StiffSolver" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ODE_StiffSolver \- Burlisch-Stoer solver for a stiff systemof ordinary differential equations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ODE_StiffSolver\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBODE_StiffSolver\fP (const std::vector< \fBSumOfProductsWithExponents\fP > &equations)"
+.br
+.ti -1c
+.RI "double & \fBoperator()\fP (size_t i)"
+.br
+.RI "assign initial conditions and read computed values (equations 1\&.\&.\&.n) "
+.ti -1c
+.RI "double \fBoperator[]\fP (size_t i) const"
+.br
+.RI "retrieve the time derivatives from the last step before the solver quit "
+.ti -1c
+.RI "void \fBTolerance\fP (double epsilon)"
+.br
+.ti -1c
+.RI "double \fBTolerance\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBEquations\fP () const"
+.br
+.ti -1c
+.RI "void \fBIntermediateStepsToSave\fP (size_t s)"
+.br
+.ti -1c
+.RI "size_t \fBIntermediateStepsToSave\fP () const"
+.br
+.ti -1c
+.RI "void \fBInitialConditions\fP (const std::vector< double > &init)"
+.br
+.ti -1c
+.RI "void \fBReadODEsFrom\fP (const char *file)"
+.br
+.ti -1c
+.RI "void \fBReadODEsFrom\fP (const char *file, std::vector< std::pair< int32_t, std::string > > &coefs, std::vector< std::pair< int32_t, std::string > > &dependent_comps, std::vector< std::pair< int32_t, std::string > > &independent_comps)"
+.br
+.ti -1c
+.RI "bool \fBSolve\fP (double time, double init_stepsize, size_t n_savesteps, double tolerance=1\&.0e\-10, bool print_step_numbers=false)"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "void \fBOutputResults\fP () const"
+.br
+.ti -1c
+.RI "void \fBOutputResultsTo\fP (const char *textfile) const"
+.br
+.ti -1c
+.RI "void \fBOutputLastDerivatives\fP () const"
+.br
+.ti -1c
+.RI "void \fBEvaluateIndependentProductTerms\fP (const double dependent_vals[], std::vector< double > &indep_vals)"
+.br
+.ti -1c
+.RI "void \fBResetIndependentProductTerms\fP (std::vector< std::pair< int32_t, std::string > > &ind, std::vector< double > &vals)"
+.br
+.ti -1c
+.RI "void \fBAssignIndependentProductTerms\fP (std::vector< std::pair< int32_t, std::string > > &ind, std::vector< double > &vals)"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const std::vector< int32_t > &vec) const"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const std::vector< double > &vec) const"
+.br
+.ti -1c
+.RI "void \fBOut\fP (const std::vector< std::vector< double > > &vec) const"
+.br
+.ti -1c
+.RI "void \fBOut\fP (int32_t *vec, int32_t n)"
+.br
+.ti -1c
+.RI "void \fBOut\fP (double *vec, int32_t n)"
+.br
+.ti -1c
+.RI "void \fBOut\fP (double **vec, int32_t m, int32_t n)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Burlisch-Stoer solver for a stiff systemof ordinary differential equations\&. 
+
+
+.SH "Motivation"
+.PP
+A great variety of physical processes are best described by non-linear systems of ordinary differential equations (ODEs) which describe the change of the system\&. Typically, these ODEs can only be integrated (solved) numerically as is the case for rate-dependent chemical reactions\&. If the rate coefficients differ among the equations by many orders of magnitude, the systems are called stiff\&. The main numerical problem imposed by the 'stiffness' is that, for instance in a time-dependent system, some equilibria described by individual ODE equations are obtained very fast while other equations evolve very slowly\&. Coupling such different equations together, therefore requires very small time steps to limit the change in each step over periods where rapid changes occur\&. Large timesteps are however essential in periods of minor change to obtain a solution in a reasonable amount of time\&. 
+.br
+
+.PP
+Solution methods which provide the necessary adaptive timestepping are known as stiff ODE solvers, and the motivation for the design of the class \fBODE_StiffSolver\fP is to make a robust solver of this kind available to CSP\&. 
+.br
+.SH "Intent"
+.PP
+The class \fBODE_StiffSolver\fP encapsulates a semi-implicit form of a Burlisch-Stoer method as described by Bader and Deuflhard (1983) into a code module which is also capable of the house keeping and analytical differentiation of the actual ordinary differential equations\&. Textfile input provides an interface for the definition and description of the system of equations in human-readable form\&. The equations are linked in a matrix scheme which uses LU decomposition and back substitution of the results after the inversion of the matrix in each timestep\&. The integration routine 'odeint' controls the timestep size using the cross derivatives of all of the individual ODEs\&. For this purpose, the derivatives are assembled into a Jacobian matrix\&. Additional methods are provided to change coefficients in individual equations without having to redine them\&. This capability is useful, for instance, if activities or surface area changes in an equilibration calculation\&. 
+.br
+.SH "Applicability"
+.PP
+The class \fBODE_StiffSolver\fP is useful only for relatively small systems of ODEs (<50 degrees of freedom)\&. Runtime scales with number of ODEs which is also readily explained on a physical basis\&. Since the ODE coefficients will influence the condition number of the solution matrix, these must not differ from one-another by more than the numerical (double) precision\&. Otherwise the matrix will become singular\&. The solution speed also limits the applicability of the stiff ODE integration algorithm in serial application in a finite-element model\&.
+.SH "Implementation"
+.PP
+The implementation of the ODE solver stems from the second edition of Numerical Recipes in C by Press et al\&. 1996 (p\&. 742ff) which also provides detailed documentation of functions included\&. The original names of the functions which have been integrated as private methods of the class \fBODE_StiffSolver\fP are derivs(), jacobn(), ludcmp(), lubksb(), simpr() pzextr(), odeint(), and stifbs()\&. Additional auxiliary methods manage storage in the peculiar numerical recipe way\&.
+
+.PP
+The method implemented herein goes back to Bader, G\&. and Deuflhard, P\&. 1983, Numerische Mathematik 41, 373-398\&.
+.SH "Participants"
+.PP
+The objects \fBSumOfProductsWithExponents\fP and \fBSumOfProducts\fP are used to represent individual OD equations in the stiff solver object\&.
+.SH "Collaboration"
+.PP
+Inside the CSP framework the class \fBODE_StiffSolver\fP is used by the ReactionVisitor object\&. This object uses the solver to find fluid-rock equilibria in individual finite elements\&.
+.SH "Consequences"
+.PP
+The \fBODE_StiffSolver\fP form a sequentially applied reaction module in the object-oriented implementation of an decoupled incremental transport followed by reaction scheme for reactive transport calculations with CSP\&.
+.SH "Examples"
+.PP
+The \fBODE_StiffSolver\fP can be applied using its \fBSolve()\fP method inside of other CSP objects or it can be used as a stand-alone tool to solve non-linear ODEs\&. The system of equations is defined in a textfile starting with an underlined headline followed by a blank line, e\&.g\&.:
+
+.PP
+.PP
+.nf
+carbonate \- dissolution example
+===============================
+
+independent variables
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+dependent variable definitions for which is solved for (aqueous, gaseous, and solid)
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+OH_1m  CO2_aq  CC  Ca_2p  H_1p  H2O_aq  HCO3_1m  
+
+equilibrium constants (in sequence of listed reactions, same number)
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+KF=4\&.37e\-2  KB1=3\&.4593938e\-12  KB2=8\&.336811e+10  KB3=9727\&.4722
+
+reactions (odes) A + B \-> C (K):  dA/dt = \-kf [A][B] + kf [C] / K
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-&mdash;
+OH_1m    = \-KF H_1p OH_1m    +  KB1 H2O_aq
+CO2_aq   = \-KF CO2_aq H2O_aq +  KB2 HCO3_1m H_1p
+CC       = \-KF CC H_1p       +  KB3 HCO3_1m Ca_2p
+Ca_2p    =  KF CC H_1p       + \-KB3 HCO3_1m Ca_2p
+H_1p     =  KF CO2_aq H2O_aq + \-KB2 HCO3_1m H_1p + \-KF CC H_1p + KB3 HCO3_1m Ca_2p + \-KF H_1p OH_1m + KB1 H2O_aq
+H2O_aq   =  KF H_1p OH_1m    + \-KB1 H2O_aq
+HCO3_1m  =  KF CO2_aq H2O_aq + \-KB2 HCO3_1m H_1p + KF CC H_1p + \-KB3 HCO3_1m Ca_2p
+.fi
+.PP
+
+.PP
+Independent variables are specified next (such as constant coefficients)\&. In this example, there are no independent variables\&. Again there is an underlined headline followed by the data and a blank line\&.
+
+.PP
+The next block defines the names of the dependent variables in the equations (i\&.e\&., those variables which shall be calculated as a function of time)\&. Importantly, no '+' or '-' signs must be used here since these symbols are reserved by the equation parser for algebraic operations\&. A similar block follows, specifying the numerical values of the equation coefficients using the assigment operator without blank space\&. In the example, forward and backward reaction rates are specified in terms of dissolution data and the equilibrium constants\&. This first order kinetic approach is described by Carl Steefel in the Min\&. Soc\&. America volume on reactive transport processes\&. 
+.br
+
+.PP
+A following 'reaction' block defines the actual ordinary differential equations in terms of the notation established above\&. Importantly, the ODEs must be listed in exactly the same order in which the dependent variables were defined before\&. There must be exactly one equation for each dependent variable and the stochiometry of the aqueous species/minerals determines the exponents and multipliers of the equation coefficients\&. This derives directly from the related mass-action expressions\&. 
+.br
+
+.PP
+Everything which follows after the blank line below the equation block is ignored\&. Here the user can insert comments and a discussion of the system he defined and its time-dependent behaviour\&.
+
+.PP
+Of course, the described syntax can also be used to define arbitrary ODE systems other than sets of reaction equations\&.
+
+.PP
+copyright (c) 1999 by Dr\&. Stephan K\&. Matthaei & Stephen G\&. Roberts 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::ODE_StiffSolver::ODE_StiffSolver (const std::vector< \fBSumOfProductsWithExponents\fP > & equations)\fR [explicit]\fP"
+Builds the ODE solver, initializing the Kaps-Rentrop parameters for the adaptive stepsize algorithm and a number of other constants used by the solver\&. GROW and SHRNK define by how much the stepsize can increase or decrease in one step, and TINY defines a threshold value below which entries in the solution matrix will be zeroed\&. Memory is allocated for the solution and jacobian matrices and vectors which store temporary variables\&. The system of equations is build\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIequations\fP A vector of ordinary differential equations which define system to be integrated by the solver\&. The equations are stored as STL maps inside of the '\fBSumOfProductsWithExponents\fP' class objects\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The constructor calls the private method AllocateSolverMemory() to allocate the matrices and vectors\&.
+.SH "Application Examples"
+.PP
+Standard constructor for the ODE solver\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::ODE_StiffSolver::AssignIndependentProductTerms (std::vector< std::pair< int32_t, std::string > > & ind, std::vector< double > & vals)"
+The method uses position integers and new values to change independent product terms in a system of differential equations which was already defined earlier\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIind\fP An STL vector of integer - string pairs defines the name of the independent variables/coefficient, its position index in the equation and its numerical value\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The method first calls \fBResetIndependentProductTerms()\fP and then re-assigns new values using STL vector assignment\&.
+.SH "Application Examples"
+.PP
+To change independent variables in equations without redefining the system of equations\&. This may apply for instance if PT-dependent equilibrium constants are used in a model in which the temperature varies\&. 
+.SS "void csmp::ODE_StiffSolver::EvaluateIndependentProductTerms (const double dependent_vals[], std::vector< double > & indep_vals)"
+A change of the coefficients in the system of equations, for instance by \fBResetIndependentProductTerms()\fP necessitates a reavaluation of the product terms as done in derivs()\&. \fBEvaluateIndependentProductTerms()\fP was written for this purpose and is called inside odeint()\&. 
+.br
+.SH "Input Arguments"
+.PP
+The methods requires the values of the dependent variables as first argument\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvals\fP the new derivatives (righthand sides of the ODEs) are returned into the STL vector which is supplied as second argument\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The righthand side values are calculated using the Sum() method of the \fBSumOfProducts\fP class object\&. The terms are added in the output vector at the locations 1\&.\&.\&.n\&.
+.SH "Application Examples"
+.PP
+The method is called inside of odeint(), after \fBResetIndependentProductTerms()\fP, if and only if independent parameters were modified between solution steps\&.
+.SH "Messages"
+.PP
+Currently, the method reports the calculated values for each product term\&. 
+.SS "void csmp::ODE_StiffSolver::InitialConditions (const std::vector< double > & init)"
+Sets the initial values of the dependent variables for the starting step of the calculation\&. In the case of a chemical rate-dependent speciation calculation with the ODE solver, initial conditions are the starting activities of the aqueous species and minerals\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIinit\fP A constant reference to an STL vector with the initial dependent variable values\&. 
+.RE
+.PP
+
+.SS "void csmp::ODE_StiffSolver::IntermediateStepsToSave (size_t s)"
+Defines the number of intermediate solution steps which shall be saved before the integration interval is covered\&. The storage for these steps is allocated correspondingly\&. The solver attempts to distribute the save steps evenly over the timespan of interest\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The number of steps which shall be saved\&. 
+.RE
+.PP
+
+.SS "void csmp::ODE_StiffSolver::Out () const"
+Prints the defined differential and potential algebraic equations involving independent variables to screen\&. The differential equation are stored as \fBSumOfProductsWithExponents\fP objects and the algebraic equations as \fBSumOfProducts\fP objects\&. The \fBOut()\fP methods of these classes are used to obtain the output\&. 
+.br
+.SH "Implementation"
+.PP
+Calls the \fBOut()\fP interfaces of the \fBSumOfProductsWithExponents\fP and \fBSumOfProducts\fP class objects\&.
+.SH "Application Examples"
+.PP
+To externalize the state of the solver to examine whether the system of equations has been correctly parsed from the input file\&. 
+.SS "void csmp::ODE_StiffSolver::Out (const std::vector< int32_t > & vec) const"
+Prints an stl vector, or a C 1- or 2D-array indexed from 1\&.\&.\&.n to screen\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIvec\fP The template object to be printed\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+All of these output routines assume an indexing from 1\&.\&.\&.n\&. 
+.SS "void csmp::ODE_StiffSolver::OutputResults () const"
+Prints the results including intermediate steps to the screen\&. 
+.SS "void csmp::ODE_StiffSolver::OutputResultsTo (const char * textfile) const"
+Writes the results of a calculation to a user-defined textfile with the extension '\&.txt'\&. Each line will give the timestep and the values of each dependent variable\&. The output may be corrupted when not enough savesteps were specified to accurately portray the system behaviour\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fItextfile\fP The name of the textfile to which the results shall be written to\&. 
+.RE
+.PP
+
+.SS "void csmp::ODE_StiffSolver::ReadODEsFrom (const char * file)"
+Initializes the system of ordinary differential equations maintained by the ODE solver from a textfile with the format specified in the documentation of the ODE solver object (
+.PP
+\fBApplicationExample section)\&. \fP
+.RS 4
+
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP the name of the textfile which contains the definition of the system of differential equations\&.
+.RE
+.PP
+The textfile itself consists of 5 text blocks always starting with an underlined heading and separated by blank lines\&. The blocks are: the file header (1), the independent variables (2), the dependent variables (3), the equation coefficients (4), and the equations themselves (5)\&. Text after the blank line following the last equation is ignored\&. This gives the user the possibility to add comments\&.
+.SH "Implementation"
+.PP
+The method uses STL functionality to parse the textfile and store the interpreted equations into a vector of \fBSumOfProductsWithExponents\fP objects\&.
+.SH "Messages"
+.PP
+The method tries to analyze the reasons for parsing mistakes and reports corresponding messages to the user\&. Common mistakes include missing blank lines between definition blocks or mispelled independent or dependent variable names or the use of reserved '+,-' notation in variable names\&. An error is reported also when the number of differential equations does not correspond to the number of dependent variables\&. 
+.SS "void csmp::ODE_StiffSolver::ResetIndependentProductTerms (std::vector< std::pair< int32_t, std::string > > & ind, std::vector< double > & vals)"
+The need to change independent equation coefficients (such as activity coefficients) as the values of dependent variables change in an evolution of a system is accounted for by this method\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIind\fP The method takes vector arguments which define the new product coefficients\&. The individual products in the equations are identified by integers (e\&.g\&. product 1, product 2, etc\&.) and negative integers denote independent product coefficients (those that are not calculated by ODEs)\&. The values correspond to the exponents of the terms\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The SumOfProductWithExpondents is defined as pairs of c\&.idx/coefficient and e\&.idx/exponents\&. The method performs on all independent variables in the ODEs, on every ODE, in every product which the ODE contains, if the tested independent variable is part of this product\&. Also, for all independent variables in algebraic equations, in every algebraic equation, in every product which the equation contains, if the independent variable is part of this product, the coefficient will be modified\&. The correct index is abs(idx-1) since all independent var indices are set as negative (-1\&.\&.\&.-n)\&. The exponents stay untouched\&.
+.SH "Application Examples"
+.PP
+The method is called inside of odeint() if independent variables are part of the system of differential equations\&. The capability to change coefficients while the ODE solver converges to a solution allows to modify, for instance, the activities of chemical species as their concentrations change over time\&. 
+.SS "bool csmp::ODE_StiffSolver::Solve (double time, double init_stepsize, size_t n_savesteps, double tolerance = \fR1\&.0e\-10\fP, bool print_step_numbers = \fRfalse\fP)"
+Evolves the system of equations from the starting time (t=0) over a user-specified period of time and returns the dependent variable values at the end of the timespan, as well as intermediate values if this is requested\&. 
+.br
+.SH "Input Arguments"
+.PP
+The first argument defines the timespan over which the system shall be evolved and the second argument sets the size of the first timestep which shall be calculated\&. If this initial timestep is too large and it already bridges pronounced changes which would normally occur in the system, no solution may be obtained\&. 
+.br
+
+.PP
+The third argument gives the number of intermediate steps which shall be saved in the solution process\&. The default value is zero since one is usually only interested in the final solution\&. In this case the solver will perform significantly faster\&. 
+.br
+
+.PP
+The fourth argument defines the precision to which the dependent variable values shall be approximated to at each timestep\&. This parameter strongly influences the number of iterations which the solver must perform to find a solutions\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+a boolean variable indicating whether a solution was found or not\&. The solution can be retrieved simply with the () operator of the ODE-solver object\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+The method relies on the Numerical Recipes C functions odeint(), stifbs(), simpr(), and pzextr() as documented on p\&. 744ff in the book\&. The results will be saved into a file with the same name as the equation systems file but with the extension '\&.results'\&.
+.SH "Application Examples"
+.PP
+For practical purposes the initial step size and tolerance which can be obtained varies considerable with the type of OD equations which shall be integrated over time\&. For the chemical reaction calculations carried out so far, an initial step size of 1\&.0e-17 and a tolerance of 1\&.0e-10 has proved useful\&. The solver will rapidly increase the stepsize if it is too small, but it will fail to converge if the first step was too large\&. It seems impossible to achieve convergence at a tolerance smaller than 1\&.0e-12 in most of the examined systems\&.
+
+.PP
+Before using a system of equations in a finite-element model, a series of tests for a host of initial values is recommended to get a feel for the time-characteristics of the system behaviour and to tune the \fBSolve()\fP arguments accordingly\&. This is best achieved by saving about 100 steps and examining these with a plot program to understand system behaviour\&.
+.SH "Messages"
+.PP
+Upon completion, the solver returns the number of successful and bad solution steps which were performed\&. Other messages may include those issued by methods which are called internally, for instance, when the matrix inversion routine failed to find a solution\&. Usually, a large percentage of bad steps indicates a problem with the system of equations\&. The most common problem may be that the system is too stiff, i\&.e\&. that the dependent variable coefficients diverge by more than 16 orders of magnitude (about the limit for this double-precision implementation of the solver)\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

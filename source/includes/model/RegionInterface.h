@@ -187,7 +187,7 @@ class RegionInterface {
                                     
 
     // -----------------------------------------------
-    // Manipulations with already existed Regions
+    // Manipulations with already existing Regions
     // -----------------------------------------------
 
     /// assigns unique region-indicative variable values to the elements of all unique regions and returns name value mapping vector[value]=name

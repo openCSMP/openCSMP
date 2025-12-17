@@ -1,0 +1,10 @@
+<map id="csmp::PropertyDatabase::AddProperty" name="csmp::PropertyDatabase::AddProperty">
+<area shape="rect" id="Node000001" title="adding a property at runtime from the command line (NB: you should call method CreateProperty() of mo..." alt="" coords="5,39,172,79"/>
+<area shape="rect" id="Node000002" href="$structcsmp_1_1_parameter.html#ab0addaa017dcca8bb981d9fcb2fdf7f1" title="define a physical variable at runtime, using console input (stdin)" alt="" coords="220,5,417,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,44,204,40,205,45,172,50"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_property_database.html#aa250a020d765e4a8fe7c3083ad79848b" title=" " alt="" coords="235,71,402,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,68,220,75,219,80,171,73"/>
+<area shape="rect" id="Node000004" href="$structcsmp_1_1_index.html#a4a84f8220a8133265973a50d2062ff33" title=" " alt="" coords="465,78,598,104"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="402,88,449,88,449,94,402,94"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="496,79,489,70,493,60,508,54,532,52,558,54,571,61,569,66,556,59,532,57,509,59,497,64,494,69,500,76"/>
+</map>

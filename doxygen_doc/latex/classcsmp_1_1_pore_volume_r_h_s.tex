@@ -1,0 +1,98 @@
+\doxysection{csmp\+::Pore\+Volume\+RHS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_pore_volume_r_h_s}{}\label{classcsmp_1_1_pore_volume_r_h_s}\index{csmp::PoreVolumeRHS$<$ dim $>$@{csmp::PoreVolumeRHS$<$ dim $>$}}
+
+
+Accumulates the pore-\/volume -\/ advected variable product into the right-\/hand vector as divided by the time increment.  
+
+
+
+
+{\ttfamily \#include $<$Pore\+Volume\+RHS.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Pore\+Volume\+RHS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_pore_volume_r_h_s__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Pore\+Volume\+RHS\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_pore_volume_r_h_s__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_pore_volume_r_h_s_aee6c4cd4dd1be85553ddab424a8112da}\label{classcsmp_1_1_pore_volume_r_h_s_aee6c4cd4dd1be85553ddab424a8112da} 
+{\bfseries Pore\+Volume\+RHS} (const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, SECTOR\+\_\+\+INTEGRATION\+\_\+\+POINT $>$ \&spv\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ \&fpv\+\_\+key, const \mbox{\hyperlink{structcsmp_1_1_i_n_d_e_x}{csmp\+::\+INDEX}}$<$ SCALAR, NODE $>$ \&transported\+\_\+variable\+\_\+key)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_pore_volume_r_h_s_a591f88e18268b864146d75fb29d8ffc5}{Accumulate\+Finite\+Volume}} (const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&right\+\_\+hand\+\_\+vector) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_pore_volume_r_h_s_affc7ca77c825667853cdb22add74ebe1}{Accumulate\+Stencil}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&right\+\_\+hand\+\_\+vector) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_vector_operator}{csmp\+::\+Vector\+Operator$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Multiply\+With\+Time\+Increment} (double dt)
+\begin{DoxyCompactList}\small\item\em includes the time increment in the multiplication factor for this operator \end{DoxyCompactList}\item 
+void {\bfseries Factor} (double value)
+\begin{DoxyCompactList}\small\item\em set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-\/1), multiplication or division (fac=1/value) \end{DoxyCompactList}\item 
+double {\bfseries Factor} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Pore\+Volume\+RHS$<$ dim $>$}
+Accumulates the pore-\/volume -\/ advected variable product into the right-\/hand vector as divided by the time increment. 
+
+This method will always be the first ADD\+\_\+\+ACCUMULATE task for the righthandside.
+
+\begin{DoxyAuthor}{Author}
+SKM 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+6/12/2016 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_pore_volume_r_h_s_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_pore_volume_r_h_s_a591f88e18268b864146d75fb29d8ffc5}\index{csmp::PoreVolumeRHS$<$ dim $>$@{csmp::PoreVolumeRHS$<$ dim $>$}!AccumulateFiniteVolume@{AccumulateFiniteVolume}}
+\index{AccumulateFiniteVolume@{AccumulateFiniteVolume}!csmp::PoreVolumeRHS$<$ dim $>$@{csmp::PoreVolumeRHS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AccumulateFiniteVolume()}{AccumulateFiniteVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pore_volume_r_h_s_a591f88e18268b864146d75fb29d8ffc5} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_pore_volume_r_h_s}{csmp\+::\+Pore\+Volume\+RHS}}$<$ dim $>$\+::\+Accumulate\+Finite\+Volume (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \&}]{fv}{, }\item[{std\+::vector$<$ double $>$ \&}]{rhs}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Expects that the facet fluxes are uptodate as precomputed before by the \doxylink{classcsmp_1_1_flux_evaluator}{Flux\+Evaluator}. Furthermore this assumes that the node indexes have been updated for the computational domain. 
+
+Implements \mbox{\hyperlink{classcsmp_1_1_vector_operator}{csmp\+::\+Vector\+Operator$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_pore_volume_r_h_s_affc7ca77c825667853cdb22add74ebe1}\index{csmp::PoreVolumeRHS$<$ dim $>$@{csmp::PoreVolumeRHS$<$ dim $>$}!AccumulateStencil@{AccumulateStencil}}
+\index{AccumulateStencil@{AccumulateStencil}!csmp::PoreVolumeRHS$<$ dim $>$@{csmp::PoreVolumeRHS$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AccumulateStencil()}{AccumulateStencil()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_pore_volume_r_h_s_affc7ca77c825667853cdb22add74ebe1} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_pore_volume_r_h_s}{csmp\+::\+Pore\+Volume\+RHS}}$<$ dim $>$\+::\+Accumulate\+Stencil (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&}]{e}{, }\item[{std\+::vector$<$ double $>$ \&}]{rhs}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Expects that the facet fluxes are uptodate as precomputed before by the \doxylink{classcsmp_1_1_flux_evaluator}{Flux\+Evaluator}. Furthermore this assumes that the node indexes have been updated for the computational domain. 
+
+Implements \mbox{\hyperlink{classcsmp_1_1_vector_operator}{csmp\+::\+Vector\+Operator$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/Pore\+Volume\+RHS.\+h\item 
+source/modules/integration/finite\+\_\+volumes/generic\+\_\+transport\+\_\+scheme/source/Pore\+Volume\+RHS.\+cpp\end{DoxyCompactItemize}

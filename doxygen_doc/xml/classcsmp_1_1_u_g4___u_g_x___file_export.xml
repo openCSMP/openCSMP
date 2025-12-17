@@ -1,0 +1,1005 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_u_g4___u_g_x___file_export" kind="class" language="C++" prot="public">
+    <compoundname>csmp::UG4_UGX_FileExport</compoundname>
+    <includes refid="_u_g4___u_g_x___file_export_8h" local="no">UG4_UGX_FileExport.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ad03ac3996cd969aa27e0d43d1d040c22" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; size_t, size_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;size_t,size_t&gt; &gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::edges_</definition>
+        <argsstring></argsstring>
+        <name>edges_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::edges_</qualifiedname>
+        <briefdescription>
+<para>global edge end-node IDs for all edges in the model as needed by UG (n...total) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="219" column="17" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a4851cbb370fd2a25452929778b5fc4a5" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, size_t &gt;</type>
+        <definition>std::map&lt;size_t,size_t&gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::csmp_edges_</definition>
+        <argsstring></argsstring>
+        <name>csmp_edges_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::csmp_edges_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="221" column="15" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a1a9f0a1b5f298db52278dc827ddd90c7" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, size_t &gt;</type>
+        <definition>std::map&lt;size_t,size_t&gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::csmp_edges_inverted_</definition>
+        <argsstring></argsstring>
+        <name>csmp_edges_inverted_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::csmp_edges_inverted_</qualifiedname>
+        <briefdescription>
+<para>mapping between CSMP element/face IDs and edge number in UG </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="221" column="27" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1acd2e4d88faa24edf7370b9cb4fbbb5ae" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; std::set&lt; size_t &gt;, std::array&lt; size_t, 3 &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;std::set&lt;size_t&gt;,std::array&lt;size_t,3&gt; &gt; &gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::tria_faces_</definition>
+        <argsstring></argsstring>
+        <name>tria_faces_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::tria_faces_</qualifiedname>
+        <briefdescription>
+<para>triangle faces numbered continuously from 0..faces-1, second original node order </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="223" column="18" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a283af2e117b0a237683a46c8cad85e31" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; std::set&lt; size_t &gt;, std::array&lt; size_t, 4 &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;std::set&lt;size_t&gt;,std::array&lt;size_t,4&gt; &gt; &gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::quad_faces_</definition>
+        <argsstring></argsstring>
+        <name>quad_faces_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::quad_faces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="224" column="18" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ae8166fb61d429f716d29b649d77a9da0" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; std::set&lt; size_t &gt;, size_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;std::set&lt;size_t&gt;,size_t&gt; &gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::tetra_volumes_</definition>
+        <argsstring></argsstring>
+        <name>tetra_volumes_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::tetra_volumes_</qualifiedname>
+        <briefdescription>
+<para>volumes = tets + hexa + prism + pyra, numbered continuously </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="226" column="18" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="226" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1afea28d8d02ccd3dde9651563268a1f7d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; std::set&lt; size_t &gt;, size_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;std::set&lt;size_t&gt;,size_t&gt; &gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::hexa_volumes_</definition>
+        <argsstring></argsstring>
+        <name>hexa_volumes_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::hexa_volumes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="227" column="54" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a9ff9389f5c2eab0d02ab2dff36df2a23" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; std::set&lt; size_t &gt;, size_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;std::set&lt;size_t&gt;,size_t&gt; &gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::prism_volumes_</definition>
+        <argsstring></argsstring>
+        <name>prism_volumes_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::prism_volumes_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="228" column="54" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="228" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1afd8ec47b03e60f00e1aadde3f89d3296" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::pair&lt; std::set&lt; size_t &gt;, size_t &gt; &gt;</type>
+        <definition>std::vector&lt;std::pair&lt;std::set&lt;size_t&gt;,size_t&gt; &gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::pyra_volumes_</definition>
+        <argsstring></argsstring>
+        <name>pyra_volumes_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::pyra_volumes_</qualifiedname>
+        <briefdescription>
+<para>volumetric elements present only in 3D models </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="229" column="54" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1acda04c6e7b5de4644995b868f2412ca2" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, size_t &gt;</type>
+        <definition>std::map&lt;size_t,size_t&gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::csmp_faces_</definition>
+        <argsstring></argsstring>
+        <name>csmp_faces_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::csmp_faces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="231" column="14" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a233ead747fc8bf929c24a3340a3ae450" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, size_t &gt;</type>
+        <definition>std::map&lt;size_t,size_t&gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::csmp_faces_inverted_</definition>
+        <argsstring></argsstring>
+        <name>csmp_faces_inverted_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::csmp_faces_inverted_</qualifiedname>
+        <briefdescription>
+<para>mapping between CSMP element/face IDs and face-number in UG </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="231" column="26" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a9d91dc2b045568eee60a34cb92427f3c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; bool &gt;</type>
+        <definition>std::vector&lt;bool&gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::edges_in_csmp_</definition>
+        <argsstring></argsstring>
+        <name>edges_in_csmp_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::edges_in_csmp_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="233" column="17" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a8b7b1d808effc85a6f8d77d8dfebeda3" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; bool &gt;</type>
+        <definition>std::vector&lt;bool&gt; csmp::UG4_UGX_FileExport&lt; dim &gt;::faces_in_csmp_</definition>
+        <argsstring></argsstring>
+        <name>faces_in_csmp_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::faces_in_csmp_</qualifiedname>
+        <briefdescription>
+<para>vectors that can be queried before a search of a CSMP object is carried out to see whether it exists at all </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="233" column="32" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ab81a4d4e8a7fa24b2dbdb84777364a1e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::with_region_edge_output_</definition>
+        <argsstring></argsstring>
+        <name>with_region_edge_output_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::with_region_edge_output_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="236" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a8d08c96d293fffeaf4a82d3ca6aa29ba" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::with_region_face_output_</definition>
+        <argsstring></argsstring>
+        <name>with_region_face_output_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::with_region_face_output_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="237" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="237" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a188af500321ce37e297abd6d6f7da499" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::with_region_volume_output_</definition>
+        <argsstring></argsstring>
+        <name>with_region_volume_output_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::with_region_volume_output_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="238" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ad7b890cc3b5b45059c8301394ce64167" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::with_boundary_edge_output_</definition>
+        <argsstring></argsstring>
+        <name>with_boundary_edge_output_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::with_boundary_edge_output_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="240" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="240" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a7d23d32e2f45ec758960d5fcd8543bcf" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::with_boundary_face_output_</definition>
+        <argsstring></argsstring>
+        <name>with_boundary_face_output_</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::with_boundary_face_output_</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="241" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="241" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a1f3cd30e929f079c998239c7119a98d0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::UG4_UGX_FileExport&lt; dim &gt;::UG4_UGX_FileExport</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;)</argsstring>
+        <name>UG4_UGX_FileExport</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::UG4_UGX_FileExport</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="161" column="14" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="50" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a8856f9c2c2d529d91f53c8d3b38ace94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::Write_UGX_FileASCII</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;, const std::string &amp;file_name)</argsstring>
+        <name>Write_UGX_FileASCII</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::Write_UGX_FileASCII</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_name</declname>
+        </param>
+        <briefdescription>
+<para>filename without extension which will be appended </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes UGX file in text format (UTF-8), in which all CSMP elements are assigned property values in the form of face_attachments and volume_attachments. Naive version where the XML tags are handcrafted.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>model</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>CSMP model </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>file_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>filename without extension. .UGX will be appended.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="attention"><para>method assumes that the nodes and elements have already been numbered from 0..n-1 following UG&apos;s conventions</para>
+</simplesect>
+<simplesect kind="attention"><para>no_data_value = -numeric_limits&lt;float&gt;::max() will be written for each edge, face, and volume for which there is no equivalent in CSMP model</para>
+</simplesect>
+</para>
+<sect1 id="classcsmp_1_1_u_g4___u_g_x___file_export_1Export">
+<title>Sequence (using the keywords that were defined by S. Reiter for the UGX format</title><para>vertices edges faces (triangles, quads) volumes (tetra, hexa, prism, pyra)</para>
+<para>vertex_attachments (Dirichlet conditions etc.) <xrefsect id="todo_1_todo000127"><xreftitle>Todo</xreftitle><xrefdescription><para>edge_attachments to implement the line element properties from CSM face_attachments (surfaces elements) volume_attachments (volume elements)</para>
+</xrefdescription></xrefsect></para>
+<para>subsetblock - <ref refid="classcsmp_1_1_region" kindref="compound">csmp::Region</ref> named objects <xrefsect id="todo_1_todo000128"><xreftitle>Todo</xreftitle><xrefdescription><para>subsetblock - <ref refid="classcsmp_1_1_boundary" kindref="compound">csmp::Boundary</ref> named objects </para>
+<para>setsetblock - <ref refid="classcsmp_1_1_split_boundary" kindref="compound">csmp::SplitBoundary</ref> objects</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="164" column="10" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="615" bodyend="1049"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ade4bd8735ddde03bd861b12e227cad92" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::UG4_UGX_FileExport&lt; dim &gt;::UG4_UGX_FileExport</definition>
+        <argsstring>()=delete</argsstring>
+        <name>UG4_UGX_FileExport</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::UG4_UGX_FileExport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="167" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a11ba3386461ab150fff405013a19a425" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::UG4_UGX_FileExport&lt; dim &gt;::UG4_UGX_FileExport</definition>
+        <argsstring>(const UG4_UGX_FileExport &amp;)=delete</argsstring>
+        <name>UG4_UGX_FileExport</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::UG4_UGX_FileExport</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_u_g4___u_g_x___file_export" kindref="compound">UG4_UGX_FileExport</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="168" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a7919053eaa4f4ed5abdb59effcf08a40" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectEdges</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;)</argsstring>
+        <name>CollectEdges</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectEdges</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <briefdescription>
+<para>Loops over the unique regions in the model to make a vector of the unique edges (node-iD pairs) in the model (corner nodes only) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Loops over region &quot;Model&quot;, making a vector of unique edges (node-iD pairs) storing their corner nodes only.</para>
+<para>Elimination of duplicates and the sorting of the edges vector guarantees that the edges are always in the same order. The mapping between the UG4 edge IDs and CSMP line elements co-inciding with UG4 edges is created after the sorting and elimination of duplicates.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>model</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is used for data collection but not modified</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<xrefsect id="todo_1_todo000129"><xreftitle>Todo</xreftitle><xrefdescription><para>deal with potential <ref refid="classcsmp_1_1_edge" kindref="compound">Edge</ref> objects in 3D models </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="171" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1069" bodyend="1155"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a9891b96f5921b07694c2ab9f9bff65ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectFaces</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;)</argsstring>
+        <name>CollectFaces</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectFaces</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <briefdescription>
+<para>creates two sorted vectors for triangular and quadrilateral elements, respectively </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This method collects all potential faces in the model into a face array: triangles first, quadrilaterals next. For UG faces that correspond to surface elements in CSMP model, their ID is recorded in a map for later retrieval.</para>
+<para><simplesect kind="attention"><para>Order of nodes in &apos;faces&apos; does not matter, only the global ID numbers are required by UG4 </para>
+</simplesect>
+<simplesect kind="attention"><para>&apos;faces&apos; related to CSMP boundaries must not be collected extra at this stage because they are already included since they match up with the element faces </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="174" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1177" bodyend="1421"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1af5b541dcab35d522c7f8be9784d8b7c5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectVolumes</definition>
+        <argsstring>(const Model&lt; dim &gt; &amp;)</argsstring>
+        <name>CollectVolumes</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectVolumes</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <briefdescription>
+<para>creates sorted vectors for tetra, hexa, prism, and pyramid elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="177" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1433" bodyend="1508"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a817a9c0b52634caadb3308274dbaaead" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectEdgesInRegion</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, std::vector&lt; size_t &gt; &amp;region_edges) const</argsstring>
+        <name>CollectEdgesInRegion</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectEdgesInRegion</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+          <defname>domain</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>region_edges</declname>
+        </param>
+        <briefdescription>
+<para>Finds the ID numbers of the edges in the global edge vector inside of the region. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Method determines the position of the edges in the current region within the global &apos;edges&apos; vector.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>region_edges</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is where the results are stored. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>number of unique edges in the region </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="181" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1525" bodyend="1555"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a59afd9f27c535439d6eeb29d62ab23a1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectFacesInRegion</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, std::vector&lt; size_t &gt; &amp;region_faces) const</argsstring>
+        <name>CollectFacesInRegion</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectFacesInRegion</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+          <defname>domain</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>region_faces</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="182" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1561" bodyend="1727"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ae1754df997d7a41a4cef6147da1d14de" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectVolumesInRegion</definition>
+        <argsstring>(const Region&lt; dim &gt; &amp;, std::vector&lt; size_t &gt; &amp;region_volumes) const</argsstring>
+        <name>CollectVolumesInRegion</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectVolumesInRegion</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+          <defname>domain</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>region_volumes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Collecting the volumetric elements in the region in the order tetra, hexa, prism, pyra. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="183" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1737" bodyend="1802"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1aa1614ea89b574224f303ab3dba727506" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectEdgesInBoundary</definition>
+        <argsstring>(const Boundary&lt; dim &gt; &amp;, std::vector&lt; size_t &gt; &amp;region_edges) const</argsstring>
+        <name>CollectEdgesInBoundary</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectEdgesInBoundary</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>domain</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>region_edges</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="185" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1812" bodyend="1841"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a59953cd8025185e36f2f83a60b9197c5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::UG4_UGX_FileExport&lt; dim &gt;::CollectFacesInBoundary</definition>
+        <argsstring>(const Boundary&lt; dim &gt; &amp;, std::vector&lt; size_t &gt; &amp;region_faces) const</argsstring>
+        <name>CollectFacesInBoundary</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::CollectFacesInBoundary</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>domain</defname>
+        </param>
+        <param>
+          <type>std::vector&lt; size_t &gt; &amp;</type>
+          <declname>region_faces</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="186" column="12" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1868" bodyend="1908"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ac82fc80eb814f076155ab7aa46372591" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::HasTriangles</definition>
+        <argsstring>() const</argsstring>
+        <name>HasTriangles</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::HasTriangles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="189" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="189" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a44432c13d9607dd47a764092d52b6e66" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::HasQuadrilaterals</definition>
+        <argsstring>() const</argsstring>
+        <name>HasQuadrilaterals</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::HasQuadrilaterals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="190" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="190" bodyend="190"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a2e78f06f583a1e9fe7610c6358414305" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::HasTetrahedra</definition>
+        <argsstring>() const</argsstring>
+        <name>HasTetrahedra</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::HasTetrahedra</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="191" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="191" bodyend="191"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a1bfd94c5d018da3640648c1bef341b9e" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::HasHexahedra</definition>
+        <argsstring>() const</argsstring>
+        <name>HasHexahedra</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::HasHexahedra</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="192" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="192" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a98a916749c20e557ca0fa4beaad66d75" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::HasPrisms</definition>
+        <argsstring>() const</argsstring>
+        <name>HasPrisms</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::HasPrisms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="193" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="193" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1af368a652f56e4a993af8a05ef9770d93" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::UG4_UGX_FileExport&lt; dim &gt;::HasPyramids</definition>
+        <argsstring>() const</argsstring>
+        <name>HasPyramids</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::HasPyramids</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="194" column="10" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="194" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a4867fb2582f88a2f3693c41018a5fd14" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>unsigned long</type>
+        <definition>unsigned long csmp::UG4_UGX_FileExport&lt; dim &gt;::EquivalentEdgeInCSMP</definition>
+        <argsstring>(size_t ug_idx) const</argsstring>
+        <name>EquivalentEdgeInCSMP</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::EquivalentEdgeInCSMP</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>ug_idx</declname>
+        </param>
+        <briefdescription>
+<para>returns CSMP line element/face/interface idx if it exists or UNSPECIFIED if not </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Finds corresponding CSMP line element or returns UNSPECIFIED </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="197" column="19" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="78" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a5319079d1891f8c5bf49606304ed60e9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>unsigned long</type>
+        <definition>unsigned long csmp::UG4_UGX_FileExport&lt; dim &gt;::EquivalentFaceInCSMP</definition>
+        <argsstring>(size_t ug_idx) const</argsstring>
+        <name>EquivalentFaceInCSMP</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::EquivalentFaceInCSMP</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>ug_idx</declname>
+        </param>
+        <briefdescription>
+<para>returns CSMP line element/face/interface idx if it exists or UNSPECIFIED if not </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Finds corresponding CSMP line element or returns UNSPECIFIED </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="200" column="19" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="88" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a1619cc50125cd3c1751d3e9a1706b6d9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::UG4_UGX_FileExport&lt; dim &gt;::WriteVertexVariableValue</definition>
+        <argsstring>(std::ofstream &amp;, const csmp::Index &amp;, const Region&lt; dim &gt; &amp;, size_t ug_cell_idx, bool &amp;print_whitespace) const</argsstring>
+        <name>WriteVertexVariableValue</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::WriteVertexVariableValue</qualifiedname>
+        <param>
+          <type>std::ofstream &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ug_cell_idx</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>print_whitespace</declname>
+        </param>
+        <briefdescription>
+<para>using the node numbering in the region &apos;<ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&apos; the property values at the vertices are written out </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="203" column="10" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="167" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1aafe76adda5dd10b14e51d2cd8f9ac1bf" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::UG4_UGX_FileExport&lt; dim &gt;::WriteEdgeVariableValue</definition>
+        <argsstring>(std::ofstream &amp;, const csmp::Index &amp;, const Region&lt; dim &gt; &amp;, size_t ug_cell_idx, bool &amp;print_whitespace) const</argsstring>
+        <name>WriteEdgeVariableValue</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::WriteEdgeVariableValue</qualifiedname>
+        <param>
+          <type>std::ofstream &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ug_cell_idx</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>print_whitespace</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="205" column="10" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="241" bodyend="314"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a6545b2b58a8bbbaf64c58ef9d93339dc" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::UG4_UGX_FileExport&lt; dim &gt;::WriteFaceVariableValue</definition>
+        <argsstring>(std::ofstream &amp;, const csmp::Index &amp;, const MeshManager&lt; dim &gt; &amp;, size_t ug_cell_idx, bool &amp;print_whitespace) const</argsstring>
+        <name>WriteFaceVariableValue</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::WriteFaceVariableValue</qualifiedname>
+        <param>
+          <type>std::ofstream &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ug_cell_idx</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>print_whitespace</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>For cell-based variables (<ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref>, <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>), writes its value, considering SCALAR, VECTOR and TENSOR variables and printing no_data values as appropriate. The variable placement in the CSMP <ref refid="structcsmp_1_1_index" kindref="compound">Index</ref> is the one which will be considered.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ofs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output textfile stream UTF-8 on linux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>var_key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>variable accessor in CSMP </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> which contains the variable values of interest stored on <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> or <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>, respectively. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ug_cell_idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>continous numbering of faces in CSMP </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>print_whitespace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>to avoid printing blanks at the beginning of attachment arrays</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="attention"><para>method has to switch print_whitespace on </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="207" column="10" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="333" bodyend="426"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1a3c794cafecc10be4ae5e4f3df4b6c78d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::UG4_UGX_FileExport&lt; dim &gt;::WriteVolumeVariableValue</definition>
+        <argsstring>(std::ofstream &amp;, const csmp::Index &amp;, const MeshManager&lt; dim &gt; &amp;, size_t ug_cell_idx, bool &amp;print_whitespace) const</argsstring>
+        <name>WriteVolumeVariableValue</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::WriteVolumeVariableValue</qualifiedname>
+        <param>
+          <type>std::ofstream &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>ug_cell_idx</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>print_whitespace</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Same as previous method, but for volumetric 3D elements only. <simplesect kind="attention"><para>method assumes that there is an exact match between CSMP volume cell index and UG volume index. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="209" column="10" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="436" bodyend="505"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_u_g4___u_g_x___file_export_1ac8d58e9475e870af944a7f3c908ae599" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::UG4_UGX_FileExport&lt; dim &gt;::UG_VariableType</definition>
+        <argsstring>(const csmp::Index &amp;) const</argsstring>
+        <name>UG_VariableType</name>
+        <qualifiedname>csmp::UG4_UGX_FileExport::UG_VariableType</qualifiedname>
+        <param>
+          <type>const <ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref> &amp;</type>
+          <defname>index</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="212" column="17" bodyfile="source/modules/interfaces/UG4_UGX_FileExport.cpp" bodystart="1921" bodyend="1944"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Export interface for writing text files in the .ugx format using XML for the formatting. Explanations of the UG4 output tags.</para>
+<para>Drawing on the information provided in &apos;file_io_ugx*&apos; in conjunction with the GridWriterUGX class. Some enumerations in grid/grid_base_objects.h</para>
+<para>To assign properties to the grid, attachment traits are used. These are: vertex, edge, face and volume.</para>
+<para><simplesect kind="attention"><para>Design choices had to be made to crerate the additional edge and face data that UG4 needs for during the output:</para>
+</simplesect>
+Importantly, CSMP models store edges and faces only if these are needed as lower-dimensional entities for computations (well and fracture modelling, assignment of boundary condtions etc.). In UG4 they are always needed and their numbering must be unique.</para>
+<para>The choice made for the implementation of this CSMP-UG4 interface is that those edges and faces that are present in the CSMP model are later identified in the edges and faces vectors created for UG. What is output is the &quot;model domain&quot; plus the faces (and interfaces) touching it. Their &apos;idx&apos; is mapped that of the edge and faces created for UG.</para>
+<para><ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> and <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> output enlists all the nodes, edges and faces that belong to these, although UG4 only wants them to be listed once. Here, the feature in Promesh which eliminates excess edges and faces is relied upon.</para>
+<para><simplesect kind="attention"><para>properties are no associated with regions but communicated as node, edge, face and volume attachments. Since the CSMP model only contains property values for those elements, faces, interfaces and nodes present in there, no-data values are printed for all the other ones needed by UG.</para>
+</simplesect>
+</para>
+<sect1 id="classcsmp_1_1_u_g4___u_g_x___file_export_1Example">
+<title>Example</title><para>One of the UGX files from the examples directorty ofg UG4. @Code</para>
+<para>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; &lt;grid name=&quot;defGrid&quot;&gt; &lt;vertices coords=&quot;3&quot;&gt;0 0 0 0.5 ... &lt;/vertices&gt;</para>
+<para>&lt;edges&gt;1 8 ...&lt;/edges&gt; &lt;triangles&gt;1 8 232 ...&lt;/quadrilaterals&gt; &lt;tetrahedrons&gt;90 36 226 232 226 ...&lt;/tetrahedrons&gt; &lt;hexahedrons&gt;10 92 196 98 6 84 193 102 ...&lt;/hexahedrons&gt; &lt;pyramids&gt;80 90 8 1 232 ...&lt;/pyramids&gt;</para>
+<para>&lt;volume_attachment name=&quot;PORO&quot; type=&quot;double&quot; passOn=&quot;1&quot; global=&quot;1&quot;&gt;0.34971 0.337518 0.326172 ...&lt;/volume_attachment&gt; &lt;volume_attachment name=&quot;PERM&quot; type=&quot;double&quot; passOn=&quot;1&quot; global=&quot;1&quot;&gt;1.91727 2.05433 2.14788 ...&lt;/volume_attachment&gt;</para>
+<para>&lt;subset_handler name=&quot;defSH&quot;&gt; &lt;subset name=&quot;Flex&quot; color=&quot;0.588235 0.588235 1 1&quot; state=&quot;262144&quot;&gt; &lt;vertices&gt;12 13 14 15 16 17 ...&lt;/vertices&gt; &lt;edges&gt;8 9 10 11 12 13 14 15 ...&lt;/edges&gt; &lt;faces&gt;338 339 340 341 ...&lt;/faces&gt; &lt;volumes&gt;80 81 82 83 ...&lt;/volumes&gt; &lt;/subset&gt;</para>
+<para>&lt;subset name=&quot;Fixed&quot; color=&quot;1 0 0 1&quot; state=&quot;393216&quot;&gt; &lt;vertices&gt;36 226 90 232 ...&lt;/vertices&gt; &lt;edges&gt;536 73 582 539 501 ...&lt;/edges&gt; &lt;faces&gt;84 10 80 85 86 81 11 ...&lt;/faces&gt; &lt;volumes&gt;0 1 2 3 4 5 6 7 8 9 10 ...&lt;/volumes&gt; &lt;/subset&gt;</para>
+<para>&lt;subset name=&quot;Force&quot; color=&quot;0 1 0 1&quot; state=&quot;393216&quot;&gt; &lt;vertices&gt;63 182 224 144 145 225&lt;/vertices&gt; &lt;edges&gt;256 456 454 181 182 459 461&lt;/edges&gt; &lt;faces&gt;517 523&lt;/faces&gt; &lt;/subset&gt;</para>
+<para>&lt;/subset_handler&gt; &lt;selector name=&quot;defSel&quot;&gt; &lt;projection_handler name=&quot;defPH&quot; subset_handler=&quot;0&quot;&gt; &lt;default type=&quot;default&quot;&gt;0 0&lt;/default&gt; &lt;/projection_handler&gt; &lt;/grid&gt;</para>
+</sect1>
+<sect1 id="classcsmp_1_1_u_g4___u_g_x___file_export_1XML">
+<title>tags used</title><para>The hierarchical XML tags above are getting processed here using the functionality in XML. Comments in XML files are inserted using The tags suported here were defined by Andreas Vogel, and this is the correspondence list to CSMP types:</para>
+<para>grid -&gt; mesh vertices -&gt; nodes edges, triangles, quadrilaterals -&gt; line elements, triangular elements, quadrilateral elements etc. subset = region or boundary subset_handler -&gt; class without specific purpose yet. Only a single subset handler needs to be present. Its name is &quot;defSH&quot; (default subset handler)</para>
+<para>projection_handler for the transformation of coordinates to another systems</para>
+<para>vertex, edge, face, volume -&gt; element type independent identifier of elements of a specific topologic dimensionality</para>
+<para><simplesect kind="attention"><para>the .ugx format requires lists for all the subentities of the actual finite elements in a mesh. These are listed using the implicit integer numbers of the nodes ( vertices). It follows, that a 3D models needs:</para>
+</simplesect>
+&lt;edges&gt; unique pairs of nodes that define the edges of all elements in the model</para>
+<para>&lt;triangles&gt; the vertex ids (0..n-1) that define the faces of simplex elements &lt;quadrilaterals&gt; the faces of hexadral, prism, and pyramid elements</para>
+<para>Note that these numbers have to be repeated for each region and boundary of the mesh, using the same numbering implicit to their order.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_u_g4___u_g_x___file_export_1Storing">
+<title>the properties of a model</title><para>Variables are stored as &quot;attachments.&quot;</para>
+</sect1>
+<sect1 id="classcsmp_1_1_u_g4___u_g_x___file_export_1Variable">
+<title>Types</title><para>common_attachments.h defines the types of variables that can be associated with nodes, edges, faces and elements. These are spelled out also in` global_attachments.h -&gt; attachment_info_traits -&gt; distinguishing double, float, int, bool, vector1, vector2, vector3, vector4.</para>
+<para>Vectors and matrices are typedef&apos;d in /common/math/ug_math_types.h</para>
+<para>matrix22, matrix33, matrix44</para>
+<para>All these types are referred to via strings in the output .ugx file.</para>
+<para><simplesect kind="attention"><para>UGX file only stores straight-sided elements with corner nodes only. Any refinement occurs inside of UG. This may include obtaining body-fitted representations of curves etc.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM #date 3/12/2-23 </para>
+</simplesect>
+</para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::UG4_UGX_FileExport&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_u_g4___u_g_x___file_export"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/UG4_UGX_FileExport.h" line="159" column="1" bodyfile="source/includes/interfaces/UG4_UGX_FileExport.h" bodystart="159" bodyend="242"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a7919053eaa4f4ed5abdb59effcf08a40" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectEdges</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1aa1614ea89b574224f303ab3dba727506" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectEdgesInBoundary</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a817a9c0b52634caadb3308274dbaaead" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectEdgesInRegion</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a9891b96f5921b07694c2ab9f9bff65ed" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectFaces</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a59953cd8025185e36f2f83a60b9197c5" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectFacesInBoundary</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a59afd9f27c535439d6eeb29d62ab23a1" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectFacesInRegion</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1af5b541dcab35d522c7f8be9784d8b7c5" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectVolumes</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ae1754df997d7a41a4cef6147da1d14de" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>CollectVolumesInRegion</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a4851cbb370fd2a25452929778b5fc4a5" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>csmp_edges_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a1a9f0a1b5f298db52278dc827ddd90c7" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>csmp_edges_inverted_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1acda04c6e7b5de4644995b868f2412ca2" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>csmp_faces_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a233ead747fc8bf929c24a3340a3ae450" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>csmp_faces_inverted_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ad03ac3996cd969aa27e0d43d1d040c22" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>edges_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a9d91dc2b045568eee60a34cb92427f3c" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>edges_in_csmp_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a4867fb2582f88a2f3693c41018a5fd14" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>EquivalentEdgeInCSMP</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a5319079d1891f8c5bf49606304ed60e9" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>EquivalentFaceInCSMP</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a8b7b1d808effc85a6f8d77d8dfebeda3" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>faces_in_csmp_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a1bfd94c5d018da3640648c1bef341b9e" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>HasHexahedra</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a98a916749c20e557ca0fa4beaad66d75" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>HasPrisms</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1af368a652f56e4a993af8a05ef9770d93" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>HasPyramids</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a44432c13d9607dd47a764092d52b6e66" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>HasQuadrilaterals</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a2e78f06f583a1e9fe7610c6358414305" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>HasTetrahedra</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ac82fc80eb814f076155ab7aa46372591" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>HasTriangles</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1afea28d8d02ccd3dde9651563268a1f7d" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>hexa_volumes_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a9ff9389f5c2eab0d02ab2dff36df2a23" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>prism_volumes_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1afd8ec47b03e60f00e1aadde3f89d3296" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>pyra_volumes_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a283af2e117b0a237683a46c8cad85e31" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>quad_faces_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ae8166fb61d429f716d29b649d77a9da0" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>tetra_volumes_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1acd2e4d88faa24edf7370b9cb4fbbb5ae" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>tria_faces_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a1f3cd30e929f079c998239c7119a98d0" prot="public" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>UG4_UGX_FileExport</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ade4bd8735ddde03bd861b12e227cad92" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>UG4_UGX_FileExport</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a11ba3386461ab150fff405013a19a425" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>UG4_UGX_FileExport</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ac8d58e9475e870af944a7f3c908ae599" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>UG_VariableType</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ad7b890cc3b5b45059c8301394ce64167" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>with_boundary_edge_output_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a7d23d32e2f45ec758960d5fcd8543bcf" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>with_boundary_face_output_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1ab81a4d4e8a7fa24b2dbdb84777364a1e" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>with_region_edge_output_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a8d08c96d293fffeaf4a82d3ca6aa29ba" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>with_region_face_output_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a188af500321ce37e297abd6d6f7da499" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>with_region_volume_output_</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a8856f9c2c2d529d91f53c8d3b38ace94" prot="public" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>Write_UGX_FileASCII</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1aafe76adda5dd10b14e51d2cd8f9ac1bf" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>WriteEdgeVariableValue</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a6545b2b58a8bbbaf64c58ef9d93339dc" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>WriteFaceVariableValue</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a1619cc50125cd3c1751d3e9a1706b6d9" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>WriteVertexVariableValue</name></member>
+      <member refid="classcsmp_1_1_u_g4___u_g_x___file_export_1a3c794cafecc10be4ae5e4f3df4b6c78d" prot="private" virt="non-virtual"><scope>csmp::UG4_UGX_FileExport</scope><name>WriteVolumeVariableValue</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,44 @@
+\doxysection{Integral\+\_\+\+NT\+\_\+\+M\+\_\+d\+V\+\_\+\+Triangle.\+h}
+\hypertarget{_integral___n_t___m__d_v___triangle_8h_source}{}\label{_integral___n_t___m__d_v___triangle_8h_source}\index{source/includes/integration/pde\_operators/analytical/Integral\_NT\_M\_dV\_Triangle.h@{source/includes/integration/pde\_operators/analytical/Integral\_NT\_M\_dV\_Triangle.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{Integral\_NT\_M\_dV\_Triangle\_h}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{Integral\_NT\_M\_dV\_Triangle\_h}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00013\ \textcolor{comment}{@author\ S.\ Roberts}}
+\DoxyCodeLine{00014\ \textcolor{comment}{@date\ 1999\ */}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{///\ to\ map\ FV\ solution\ to\ FEM\ framework\ (Bijective\ Mapping)}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle}{Integral\_NT\_M\_dV\_Triangle}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle}{dim}},\mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle}{CELL}}>\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle_ab2e5de02f253e7bf0907c7a8e83c86b2}{Integral\_NT\_M\_dV\_Triangle}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mapped\_property\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle_adc0ba977bfd4a585c23d12658f7b3bba}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_integral___n_t___m__d_v___triangle_a3b519d73d33a390cc0051efcdb1a803c}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ std::vector<ScalarVariable\ >\ NPROP;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vol\_div3;}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00033\ \textcolor{comment}{copyright\ (c)\ 1999\ by\ Dr.\ Stephan\ K.\ Matthaei\ \&\ Stephen\ G.\ Roberts\ */}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

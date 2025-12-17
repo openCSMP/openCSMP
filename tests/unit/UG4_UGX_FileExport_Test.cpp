@@ -30,7 +30,7 @@ namespace csmp {
     @todo Currently the UG subsets in the subsethandler for CSMP Boundary objects are not visible in UG,
     upon visual examination the file-based output looks the same as for the successful output of Region objects.
 */
-void UG4_UGX_FileExport_Test::Run()
+void UG4_UGX_FileExport_Test::run()
  {
     // 2D Test case without SplitBoundary objects
     // ------------------------------------------
@@ -59,9 +59,7 @@ void UG4_UGX_FileExport_Test::Run()
     
     // 3D Test case using model the ANSYS model 'prism_mesh'
     // -----------------------------------------------------
-    ANSYS_Model3D  model3D( "prism_test", "UG4_UGX_FileExport-variables.txt",
-                             true   /* binary_file */
-                          );
+    ANSYS_Model3D  model3D( "prism_test", "UG4_UGX_FileExport-variables.txt", true /* use binary ansys file */ );
     printRangeOfVariable( model3D, "element number" );
     printRangeOfVariable( model3D, "face number" );
     printRangeOfVariable( model3D, "node number" );

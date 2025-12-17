@@ -1,0 +1,110 @@
+\doxysection{Fluidproperties.\+h}
+\hypertarget{_fluidproperties_8h_source}{}\label{_fluidproperties_8h_source}\index{source/includes/eos/Fluidproperties.h@{source/includes/eos/Fluidproperties.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{FLUIDPROPERTIES\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{FLUIDPROPERTIES\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_states_8h}{"{}States.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/*\ Changelog}}
+\DoxyCodeLine{00008\ \textcolor{comment}{}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ 13\ July\ 2006,\ Thomas\ Driesner\ :}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ -\/\ added\ dxdt,\ dxdp,\ smf}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ -\/\ cp\ now\ has\ it's\ exact\ meaning\ (i.e.,\ at\ constant\ p\ and\ x)\ only\ for\ single\ phases}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ -\/\ a\ new\ member\ dhdt\ is\ an\ apparent\ heat\ capacity,\ i.e.,\ the\ derivative\ at\ constant\ p\ and\ at\ constant\ phase\ state;}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ \ for\ example,\ this\ would\ be\ the\ enthalpy\ change\ of\ liquid\ at\ twophase\ conditions\ (=\ non-\/constant\ composition)\ }}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ \ per\ unit\ temperature}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ 17\ August\ 2006,\ Thomas\ Driesner\ :\ added\ int\ "{}state"{},\ see\ definition\ in\ States.h}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ 2008-\/2011,\ Thomas\ Driesner\ :\ removed\ numerous\ properties\ (data\ members)\ that\ are\ not\ needed\ in\ standard\ csmp\ applications}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ 2012,\ Thomas\ Driesner\ :\ initial\ port\ to\ csmp++}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ February\ 2014,\ Thomas\ Driesner\ :\ revising\ port\ to\ csmp++}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}}
+\DoxyCodeLine{00023\ \{}
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}}
+\DoxyCodeLine{00025\ \ \ \{}
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ Fluidproperties();}
+\DoxyCodeLine{00028\ \ \ \ \ \string~Fluidproperties();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ Fluidproperties(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\&);}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}\&);}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{double}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ t,\ \ \ \ \ \textcolor{comment}{//\ temperature\ [C]}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ p,\ \ \ \ \ \textcolor{comment}{//\ pressure\ \ \ \ [Pa]}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ x,\ \ \ \ \ \textcolor{comment}{//\ mole\ fraction\ NaCl\ []}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ wt,\ \ \ \ \textcolor{comment}{//\ weight\ percent\ NaCl\ []}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ smf,\ \ \ \textcolor{comment}{//\ mass\ fraction\ NaCl,\ i.e.\ wt/100\ []}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ rho,\ \ \ \textcolor{comment}{//\ density\ [kg/m\string^3]}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ h,\ \ \ \ \ \textcolor{comment}{//\ specific\ enthalpy\ [J/kg]}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ cp,\ \ \ \ \textcolor{comment}{//\ isobaric\ heat\ capacity\ [J/kg/C]}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ beta,\ \ \textcolor{comment}{//\ compressibility\ [Pa\string^-\/1]}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ s,\ \ \ \ \ \textcolor{comment}{//\ saturation\ []}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ mf,\ \ \ \ \textcolor{comment}{//\ mass\ fraction\ of\ the\ respective\ phase\ (i.e.:\ m/m\_total)\ }}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ mu;\ \ \ \ \textcolor{comment}{//\ dynamic\ viscosity\ [Pa\ s]}}
+\DoxyCodeLine{00045\ \ \ \ \ States\ state;\ \textcolor{comment}{//\ as\ defined\ in\ States.h}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ InitToZero();}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ InitToBogus();}
+\DoxyCodeLine{00048\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}::InitToZero()}
+\DoxyCodeLine{00053\ \ \ \{}
+\DoxyCodeLine{00054\ \ \ \ \ t\ \ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00055\ \ \ \ \ p\ \ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00056\ \ \ \ \ x\ \ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00057\ \ \ \ \ wt\ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00058\ \ \ \ \ smf\ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00059\ \ \ \ \ rho\ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00060\ \ \ \ \ h\ \ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00061\ \ \ \ \ cp\ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00062\ \ \ \ \ beta\ \ =\ 0.0e0;}
+\DoxyCodeLine{00063\ \ \ \ \ s\ \ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00064\ \ \ \ \ mf\ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00065\ \ \ \ \ mu\ \ \ \ =\ 0.0e0;}
+\DoxyCodeLine{00066\ \ \ \ \ state\ =\ none;}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00068\ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcsmp_1_1_fluidproperties}{Fluidproperties}}::InitToBogus()}
+\DoxyCodeLine{00071\ \ \ \{}
+\DoxyCodeLine{00072\ \ \ \ \ t\ \ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00073\ \ \ \ \ p\ \ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00074\ \ \ \ \ x\ \ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00075\ \ \ \ \ wt\ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00076\ \ \ \ \ smf\ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00077\ \ \ \ \ rho\ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00078\ \ \ \ \ h\ \ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00079\ \ \ \ \ cp\ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00080\ \ \ \ \ beta\ \ =\ 9.9e99;}
+\DoxyCodeLine{00081\ \ \ \ \ s\ \ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00082\ \ \ \ \ mf\ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00083\ \ \ \ \ mu\ \ \ \ =\ 9.9e99;}
+\DoxyCodeLine{00084\ \ \ \ \ state\ =\ none;}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00086\ \ \ \}}
+\DoxyCodeLine{00087\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ @struct\ Fluidproperties\ Fluidproperties.h\ "{}eos/h2o\_nacl/Fluidproperties.h"{}}}
+\DoxyCodeLine{00089\ \textcolor{comment}{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ @author\ Thomas\ Driesner,\ ETH\ Zuerich}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ @section\ contact\ Contact\ }}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ thomas.driesner@erdw.ethz.ch}}
+\DoxyCodeLine{00093\ \textcolor{comment}{}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ @section\ motivation\ Motivation}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ Fluidproperties\ is\ essentially\ a\ container\ for\ all\ kinds\ of\ fluid\ properties\ used\ in\ simulations.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ @section\ issues\ Known\ issues}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ This\ version\ is\ legacy\ that\ is\ still\ used\ but\ the\ design\ should\ be\ improved\ and\ made\ more\ flexible.\ The\ current\ version\ contains\ way\ too\ many\ variables\ and\ cannot\ be\ constructed\ with\ fewer\ or\ more\ arguments.\ Also,\ converting\ to\ a\ struct\ might\ be\ better.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \}\textcolor{comment}{//csmp}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00104\ \textcolor{comment}{//\ FLUIDPROPERTIES\_H}}
+
+\end{DoxyCode}

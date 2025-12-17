@@ -1,0 +1,27 @@
+\doxysection{source/includes/interfaces/\+Maple/\+Maple\+Interface.h File Reference}
+\hypertarget{_maple_interface_8h}{}\label{_maple_interface_8h}\index{source/includes/interfaces/Maple/MapleInterface.h@{source/includes/interfaces/Maple/MapleInterface.h}}
+{\ttfamily \#include "{}CSMP\+\_\+definitions.\+h"{}}\newline
+Include dependency graph for Maple\+Interface.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_maple_interface_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecsmp}{csmp}}
+\begin{DoxyCompactList}\small\item\em Complex System Modeling Platform. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespacecsmp_a6e7f5d8823ae1983655a2f588cc43439}{csmp\+::write\+Variable\+To\+Maple\+Text\+File}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 1U $>$ \&sg, const char \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structvariable}{variable}}, uint32\+\_\+t timestep, double time)
+\begin{DoxyCompactList}\small\item\em creates 1D dataset for plotting; output needs to be pasted into a Maple worksheet \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a6c9fc3556b86941e1c8a8ca489fc0fad}\label{namespacecsmp_a6c9fc3556b86941e1c8a8ca489fc0fad} 
+void {\bfseries csmp\+::write\+Variable\+To\+Maple\+Text\+File} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 1U $>$ \&sg, const char \texorpdfstring{$\ast$}{*}group, const char \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structvariable}{variable}}, uint32\+\_\+t timestep, double time)
+\begin{DoxyCompactList}\small\item\em creates 1D dataset from a target region for plotting; output needs to be pasted into a Maple worksheet \end{DoxyCompactList}\item 
+\Hypertarget{namespacecsmp_a835d6c3a144133d890ce41c2b0ea6af3}\label{namespacecsmp_a835d6c3a144133d890ce41c2b0ea6af3} 
+void {\bfseries csmp\+::write\+Variables\+To\+Maple\+Text\+File} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 1U $>$ \&sg, const char \texorpdfstring{$\ast$}{*}variable1, const char \texorpdfstring{$\ast$}{*}variable2, uint32\+\_\+t timestep, double time)
+\begin{DoxyCompactList}\small\item\em as above, but for plotting pairs of variables \end{DoxyCompactList}\end{DoxyCompactItemize}

@@ -1,0 +1,168 @@
+.TH "csmp::NodeFunctions_Test" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NodeFunctions_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <NodeFunctions_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNodeFunctions_Test\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+TODO: these functions still need to be testsed
+
+.PP
+/ if there is only one parent element expected, then use this method instead of 'parentElementsSharedByFace' 
+.PP
+.nf
+template<uint32_t dim>
+std::pair<Element<dim>*,size_t>  parentElement( std::vector<Node<dim>*>::const_iterator first,
+                                                std::vector<Node<dim>*>::const_iterator last );
+
+.fi
+.PP
+
+.PP
+/ for a node that lies on an internal surface, method reports which of volumetric parent elements lie on the inside and which on the outside of this surface; throws if assumptions are not met 
+.PP
+.nf
+template<uint32_t dim>
+std::pair<std::vector<Element<dim>*>,std::vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const low_dim_node );
+
+.fi
+.PP
+
+.PP
+/ determines role of \fBNode\fP (simple mesh node vs\&. geometric constraint), using BOX flagging and parent element connectivity, 
+.PP
+.nf
+template<uint32_t dim>
+TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const );
+
+.fi
+.PP
+
+.PP
+/ prints Idx and boundary flag values of the nodes that this node is connected with 
+.PP
+.nf
+template<uint32_t dim>
+void printNeighbors( const Node<dim>* const );
+
+.fi
+.PP
+
+.PP
+/ prints current parent information and checks for duplicate parents 
+.PP
+.nf
+template<uint32_t dim>
+void printParents( const Node<dim>* const );
+
+.fi
+.PP
+
+.PP
+/ calculates the size of the \fBNode\fP excluding the dynamic contribution to the stored variables 
+.PP
+.nf
+template<uint32_t dim>
+size_t sizeOf( const Node<dim>* const );
+
+.fi
+.PP
+ 
+.PP
+.nf
+@author SKM
+@date 7/7/24
+
+.fi
+.PP
+ 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::NodeFunctions_Test::NodeFunctions_Test ()"
+custom models uses "CSMP-1phase-variables\&.txt" 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::NodeFunctions_Test::run ()\fR [virtual]\fP"
+THE MASTER TEST FUNCTION 
+.PP
+Implements \fBcsmp::Test\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

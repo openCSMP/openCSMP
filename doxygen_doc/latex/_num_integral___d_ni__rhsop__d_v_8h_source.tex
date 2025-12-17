@@ -1,0 +1,58 @@
+\doxysection{Num\+Integral\+\_\+\+DNi\+\_\+rhsop\+\_\+d\+V.\+h}
+\hypertarget{_num_integral___d_ni__rhsop__d_v_8h_source}{}\label{_num_integral___d_ni__rhsop__d_v_8h_source}\index{source/includes/integration/pde\_operators/numerical/NumIntegral\_DNi\_rhsop\_dV.h@{source/includes/integration/pde\_operators/numerical/NumIntegral\_DNi\_rhsop\_dV.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_DNI\_RHSOP\_DV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NUM\_INTEGRAL\_DNI\_RHSOP\_DV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_math_operator_r_h_s_8h}{"{}MathOperatorRHS.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{enum}\ SPATIAL\_DERIVATIVE\ \{\ X\_DIRECTION=0,\ Y\_DIRECTION=1,\ Z\_DIRECTION=2\ \};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ std::string\ parse(\ SPATIAL\_DERIVATIVE\ );}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ Volume\ integral\ over\ the\ gradient\ of\ the\ Operand\ in\ the\ direction\ i\ (i=x,y,z).}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ Accumulation\ into\ the\ right-\/hand\ side\ of\ the\ linear\ algebraic\ system\ Ax=b}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ @author\ SKM\ 6-\/12-\/2016}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ @note\ created\ to\ compute\ a\ grad\ P\ right-\/handside\ for\ a\ 2-\/step\ Stokes}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ lubrication\ solver.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL=\mbox{\hyperlink{classcsmp_1_1_element}{Element}}>}
+\DoxyCodeLine{00025\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v}{NumIntegral\_DNi\_rhsop\_dV}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v}{MathOperatorRHS}}<\mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v}{dim}},\mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v}{CELL}}>\ \{}
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v_a7f154c93b53f2ffd196379654778eb83}{NumIntegral\_DNi\_rhsop\_dV}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ oper,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ test\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \string~NumIntegral\_DNi\_rhsop\_dV();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ reads\ the\ operand\ values\ from\ the\ nodes\ and\ stores\ them\ in\ a\ vector}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v_a5ac5720a0574b698ece507d11fec15f7}{GetOperands}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v_a49646c96a9f9a4a65d86d4b1c7a35b52}{ComputeContribution}}(\ \textcolor{keyword}{const}\ CELL<dim>\&\ )\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ to\ chose\ the\ spatial\ derivate\ direction\ of\ interest;\ default\ is\ Y-\/axis}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_num_integral___d_ni__rhsop__d_v_ad0cb2af6a2c0654e14ef7a62d43e0442}{SpatialDerivative}}(\ SPATIAL\_DERIVATIVE\ );}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ NumIntegral\_DNi\_rhsop\_dV<dim,CELL>*\ clone()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ NumIntegral\_DNi\_rhsop\_dV<dim,CELL>\ (*\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00044\ \ \ \ \ NumIntegral\_DNi\_rhsop\_dV();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ SPATIAL\_DERIVATIVE\ \ \ \ \ \ \ \ \ \ \ xyz\_;\ \ \ \ \ \textcolor{comment}{///<\ direction\ of\ partial\ derivative\ of\ interest}}
+\DoxyCodeLine{00047\ \ \ \ \ std::vector<ScalarVariable>\ \ op\_vec\_;\ \ \textcolor{comment}{///<\ nodal\ operand\ values}}
+\DoxyCodeLine{00048\ \};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

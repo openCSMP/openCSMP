@@ -1,0 +1,39 @@
+.TH "csmp::StreamingPotential< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::StreamingPotential< dim > \- algorithm and interrelation required to compute streaming potential  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <StreamingPotential\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStreamingPotential\fP (\fBModel\fP< dim > &)"
+.br
+.RI "the streaming potential method "
+.ti -1c
+.RI "void \fBEvaluatePotential\fP (\fBModel\fP< dim > &, const char *potential='streaming potential')"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::StreamingPotential< dim >"algorithm and interrelation required to compute streaming potential 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::StreamingPotential\fP< dim >::EvaluatePotential (\fBModel\fP< dim > & sg, const char * potential = \fR'streaming potential'\fP)"
+0 = div^2 phi - c div^2 p
+
+.PP
+an arbitrary point somewhere in the model is used as a reference "electrode" it is assigned a Dirichlet potential value of zero\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

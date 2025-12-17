@@ -26,9 +26,9 @@ class NumIntegral_NT_op_N_dS : public MathOperatorRHS<dim,Face> {
     NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>&,
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( const Face<dim>& );
+    void ComputeContribution( const Face<dim>& ) override final;
     
-    virtual NumIntegral_NT_op_N_dS<dim>* clone() const { return new NumIntegral_NT_op_N_dS<dim> (*this); }
+    NumIntegral_NT_op_N_dS<dim>* clone() const override final { return new NumIntegral_NT_op_N_dS<dim> (*this); }
 
   private:
     size_t  nodal_degrees_of_freedom;

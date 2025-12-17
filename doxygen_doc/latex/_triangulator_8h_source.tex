@@ -1,0 +1,55 @@
+\doxysection{Triangulator.\+h}
+\hypertarget{_triangulator_8h_source}{}\label{_triangulator_8h_source}\index{source/includes/discretisation/Triangulator.h@{source/includes/discretisation/Triangulator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_TRIANGULATOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_TRIANGULATOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class}\ Matrix;}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_v_set}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{@brief\ Creates\ a\ triangular\ element\ mesh\ from\ the\ pixels\ of\ the\ regular\ grid.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{Boundaries\ that\ are\ defined\ by\ changes\ in\ the\ pixel\ values\ are\ used\ to\ control}}
+\DoxyCodeLine{00015\ \textcolor{comment}{how\ the\ pixels\ are\ split\ such\ that\ a\ smooth\ boundary\ is\ created.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@author\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00019\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{Have\ a\ simple\ procedure\ to\ go\ from\ a\ geometry\ drawn\ with\ a\ pixel-\/type}}
+\DoxyCodeLine{00024\ \textcolor{comment}{tool\ or\ defined\ by\ a\ processed\ image,\ to\ go\ to\ a\ simple\ triangular}}
+\DoxyCodeLine{00025\ \textcolor{comment}{finite-\/element\ mesh\ for\ CSP\ computations.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_triangulator}{Triangulator}}\ \{}
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ Triangulator();}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_triangulator_ab420a7832700c821881b3916a4bf6021}{TrianglesFromRegularGrid}}(\ \textcolor{keyword}{const}\ Matrix\&\ grid,\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ vs\ );}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00035\ \ \ \ \ \ size\_t\ m\_mtrx,\ n\_mtrx;}
+\DoxyCodeLine{00036\ \ \ \ \ \ size\_t\ n\_vertices,\ n\_elements;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \textcolor{keywordtype}{double}\ elperm,\ elperm2;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \textcolor{keywordtype}{short}\ TestOutline(\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ n,\ \textcolor{keyword}{const}\ Matrix\&\ perm,\ \textcolor{keywordtype}{double}\&\ el\_perm\ );}
+\DoxyCodeLine{00040\ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ MapVertex(\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ n\ );}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{///\ reads\ pixel-\/based\ text\ input\ file\ and\ use\ triangulator\ to\ generate\ VSet}}
+\DoxyCodeLine{00044\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\ \mbox{\hyperlink{namespacecsmp_a9ad6d3d57727857fd0252c87eb1ce766}{readTextPixelData}}();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+
+\end{DoxyCode}

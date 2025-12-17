@@ -28,12 +28,13 @@ void replaceWhiteSpaceBy( std::string&, char ascii_char );
 
 /// converts types to strings without loss of precision (std::to_string limits to 6 significant digits)
 template <typename T>
-inline std::string number_to_string( const T& value ) {
+inline std::string number_to_string(const T& value) {
   std::stringstream sstr;
-  sstr << std::setprecision( 16 ) << std::ios::scientific << value;
+  sstr.imbue(std::locale::classic()); // Ensure decimal point
+  constexpr int precision = std::is_same<T, float>::value ? 8 : 16;
+  sstr << std::setprecision(precision) << std::scientific << value;
   return sstr.str();
 }
-
 
 /// scientific-format string with appropriate digits (without loss of precision (std::to_string limits to 6 significant digits)
 template <typename T>
@@ -42,8 +43,8 @@ inline std::string numberToString( const T& value, bool verbose=false ) {
       // int snprintf ( char * s, size_t n, const char * format, ... );
       //                sign + digit +  dp +       digits          + e + sign + expo + \0 (15 significant digits)
       std::string dstring( 1 + 1 +      1  + (DBL_DECIMAL_DIG - 1) + 1 + 1    + 5, '\0');
-      auto slen = snprintf( &dstring[0], dstring.size(), "%1.14e", value );
-      dstring.resize(slen);
+      auto slen = snprintf( &dstring[0], dstring.size(), "%.14e", value );
+      dstring.resize( static_cast<size_t>(slen) );
       if ( verbose ) std::cout <<"\nmain: floating point value: "<< dstring <<" vs. "<< value << std::endl;
       return dstring;
     }
@@ -51,12 +52,13 @@ inline std::string numberToString( const T& value, bool verbose=false ) {
     {
       //                sign + digit +  dp +       digits          + e + sign + expo + \0 (8 significant digits)
       std::string fstring( 1 + 1 +      1  + (FLT_DECIMAL_DIG - 1) + 1 + 1    + 3, '\0');
-      auto slen = snprintf( &fstring[0], fstring.size(), "%1.7e", value );
-      fstring.resize(slen);
+      auto slen = snprintf( &fstring[0], fstring.size(), "%.7e", value );
+      fstring.resize( static_cast<size_t>(slen) );
       if ( verbose ) std::cout <<"\nmain: floating point value: "<< fstring <<" vs. "<< value << std::endl;
       return fstring;
     }
-  return number_to_string( value );
+// SKM_FIX  return number_to_string( value );
+  return std::to_string( value );
 }
 
 
@@ -115,6 +117,42 @@ bool isInputFileEmpty( std::ifstream& );
 #if defined _MSC_VER || defined __MINGW32__
 char * strptime( const char *s, const char *format, struct tm *tm );
 #endif
+
+
+
+
+/** Check if a string or string_view contains a substring
+ 
+    @param haystack The string to search in
+    @param needle   The substring to search for
+    @return true if `needle` is found in `haystack`
+*/
+constexpr bool contains(std::string_view haystack, std::string_view needle) noexcept {
+    return haystack.find(needle) != std::string_view::npos;
+}
+
+/// Overload for std::string
+inline bool contains(const std::string& haystack, const std::string& needle) noexcept {
+    return contains(std::string_view(haystack), std::string_view(needle));
+}
+
+/// Overload for std::string and string_view combinations
+inline bool contains(const std::string& haystack, std::string_view needle) noexcept {
+    return contains(std::string_view(haystack), needle);
+}
+
+inline bool contains(std::string_view haystack, const std::string& needle) noexcept {
+    return contains(haystack, std::string_view(needle));
+}
+
+// Overloads for C-style strings
+inline bool contains(const std::string& haystack, const char* needle) noexcept {
+    return contains(std::string_view(haystack), std::string_view(needle));
+}
+
+inline bool contains(std::string_view haystack, const char* needle) noexcept {
+    return contains(haystack, std::string_view(needle));
+}
 
 
 } // end csmp

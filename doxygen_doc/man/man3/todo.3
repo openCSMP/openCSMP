@@ -1,0 +1,1478 @@
+.TH "todo" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+todo \- To do list 
+.PP
+
+
+.PP
+.IP "\fBMember \fBcsmp::addCellCentroid\fP (\fBPolygonGridManager\fP *pgm, map< set< size_t >, \fBGridNode\fP * > &additional_points, set< set< size_t > > &additional_edges, \fBGridNode\fP *&cgn, const \fBvector< GridNode * >\fP &nodes, const vector< \fBvector< size_t >\fP > &face_nodes)
+.IP "" 1c
+remove reference to pointer in argument list, it's simply too dangerous  
+
+.PP
+.IP "\fBMember \fBcsmp::addHexaCellTo\fP (Cell::Vector &, \fBGridNode\fP *const, \fBGridNode\fP *const, \fBGridNode\fP *const, \fBGridNode\fP *const, \fBGridNode\fP *const, \fBGridNode\fP *const, \fBGridNode\fP *const, \fBGridNode\fP *const)
+.IP "" 1c
+create struct to group swath of arguments  
+
+.PP
+.IP "\fBClass \fBcsmp::ANSYS_SplitBoundaryMatch_Test\fP 
+.IP "" 1c
+insert _test() macros into the two test functions deciding on quantities to analyse 
+
+.PP
+
+.PP
+function that matches node coordinates across interfaces fails in some cases although the interfaces themselves were matched before; fix  
+
+.PP
+.IP "\fBMember \fBcsmp::ArithmeticMean< dim, var >::ArithmeticMean\fP (const \fBPropertyDatabase< dim >\fP &p, const char *res_prop, const char *prop_to_avg)
+.IP "" 1c
+(2-D) (2-P) Use template parameter here!  
+
+.PP
+.IP "\fBMember \fBcsmp::Boundary< dim >::~Boundary\fP ()
+.IP "" 1c
+FIX THIS CONCEPTUAL MISUNDERSTANDING ALL THE WAY THROUGH: the faces are managed by the \fBMeshManager\fP  
+
+.PP
+.IP "\fBMember \fBcsmp::BoundaryInterface< dim, BOUNDARY_COMPLEX >::CreateBoundaryAround\fP (const char *region)
+.IP "" 1c
+should HULL be partitioned for consistency with boundary naming conventions? - this would require the identification of the names of the adjacent regions\&. It could be made optional / dependent on the presence of an initialised region identifier\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::BoundaryInterface< dim, BOUNDARY_COMPLEX >::CreateBoundaryBetween\fP (const char *region1, const char *region2)
+.IP "" 1c
+check 
+
+.PP
+.IP "\fBMember \fBcsmp::boundingBox\fP (const \fBVData\fP &, size_t elmt)
+.IP "" 1c
+does not work yet; too many potential configurations of the neighbor element have to be handled
+
+.PP
+does not repair any surface elements that are covering the faces of the tetrahedra and would need to be adjusted 
+
+.PP
+.IP "\fBMember \fBcsmp::Box_Test::run\fP ()
+.IP "" 1c
+SKM add testing in 2D  
+
+.PP
+.IP "\fBClass \fBcsmp::BrittleFailureVisitor< dim >\fP 
+.IP "" 1c
+SKM: this visitor should include the influence of pore pressure\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::canBeIRREGULAR\fP (\fBBOX_BOUNDARY\fP)
+.IP "" 1c
+figure out whether edges and corners should be included?  
+
+.PP
+.IP "\fBMember \fBcsmp::checkNeighborNormalsForConsistentOrientation\fP (const \fBRegion< 1U >\fP &subdomain)
+.IP "" 1c
+TODO: use static_assert<> here on the template argument  
+
+.PP
+.IP "\fBMember \fBcsmp::collectInterfacesInComputationRegion\fP (const \fBModel< dim >\fP &model, const \fBModelSubDomain< dim, Element >\fP &comp_domain, vector< const \fBInterFace< dim >\fP * > &splitboundary_interfaces)
+.IP "" 1c
+we must make sure that these line faces are not included into the computational domain! - Create new type ? 
+
+.PP
+
+.PP
+an edge could be a lower-dimensional face that knows its higher dimensional faces 
+
+.PP
+.IP "\fBMember \fBcsmp::computeFV_Diameter_Normal_VerticalExtent\fP (\fBModel< dim >\fP &model, const std::string &region_name)
+.IP "" 1c
+the "dip vector" variables and thickness attributes need to be computed elsewhere 
+
+.PP
+the "dip vector" variables and thickness attributes need to be computed elsewhere  
+
+.PP
+.IP "\fBMember \fBcsmp::consistencyCheck\fP (const \fBNodeManifold< dim >\fP &, bool verbose)
+.IP "" 1c
+use diagnostics like, element types (line, surface, volume) 
+
+.PP
+
+.PP
+use the material IDs of adjacent elements that share a node manifold 
+
+.PP
+
+.PP
+use initialiser_list<> or something to create little comparitor functions that make the comparisons more readable 
+
+.PP
+
+.PP
+consider the special case of a multiplicated point in 2D which cannot be a splitboundary  
+
+.PP
+.IP "\fBMember \fBcsmp::containsPoint\fP (\fBElement< dim >\fP *, const \fBPoint< dim >\fP &, size_t region_idx)
+.IP "" 1c
+make this method general  
+
+.PP
+.IP "\fBMember \fBcsmp::containsPointLinearTriangle\fP (\fBElement< dim >\fP *elmt, const \fBPoint< dim >\fP &point, size_t region_idx)
+.IP "" 1c
+make this method general  
+
+.PP
+.IP "\fBMember \fBcsmp::CoordinateTransformer< dim >::Transform\fP (\fBPoint< dim >\fP &) const
+.IP "" 1c
+make sure that specified sequence is honored  
+
+.PP
+.IP "\fBMember \fBcsmp::CornerPointCell::GetNumFaces\fP (size_t fid) const
+.IP "" 1c
+remove argument because it has no impact on number of faces returned\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::CornerPointGrid::CreateModel\fP (const std::string &model_name, \fBcsmp::VSet< 3U >\fP &vset, \fBcsmp::ModelTopology\fP &model_topology, const std::vector< double > &zcorn, std::set< std::string > &regions, std::set< std::string > &faults, std::set< std::string > &wells, bool tetra_mesh, bool exclude_inactive_cells)
+.IP "" 1c
+this is confused! - why should the corner point grid be responsible for building the CSMP model? - code should be in the \fBEclipseModel\fP
+
+.PP
+regions are not recognised properly\&.  
+
+.PP
+.IP "\fBStruct \fBcsmp::CRC3_RockType8\fP 
+.IP "" 1c
+: appears to be vertically layered? 
+
+.PP
+: appears to be vertically layered? 
+
+.PP
+: appears to be vertically layered?  
+
+.PP
+.IP "\fBMember \fBcsmp::CubicSpline::Derivative\fP (const double x) const
+.IP "" 1c
+improve by using analytic derivative  
+
+.PP
+.IP "\fBMember \fBcsmp::DataInputVisitor< Var, dim >::Visit\fP (\fBElement< dim >\fP *)
+.IP "" 1c
+SKM: other placements like FV integration points are not considered here yet  
+
+.PP
+.IP "\fBMember \fBcsmp::DataInputVisitor< Var, dim >::Visit\fP (\fBFace< dim >\fP *)
+.IP "" 1c
+SKM: other placements like FV integration points are not considered here yet  
+
+.PP
+.IP "\fBMember \fBcsmp::DataInputVisitor< Var, dim >::Visit\fP (\fBInterFace< dim >\fP *)
+.IP "" 1c
+SKM: other placements like FV integration points are not considered here yet  
+
+.PP
+.IP "\fBMember \fBcsmp::doesPointExist\fP (const map< set< size_t >, \fBGridNode\fP * > &additional_points, \fBGridNode\fP *&pt, \fBGridNode\fP *const pt0, \fBGridNode\fP *const pt1, \fBGridNode\fP *const pt2, \fBGridNode\fP *const pt3)
+.IP "" 1c
+SKM method should return an iterator rather than a naked pointer to a map element 
+
+.PP
+.IP "\fBMember \fBcsmp::EclipseInterface::Read_COORD\fP (std::ifstream &ifs, char *text_line, size_t line_length)
+.IP "" 1c
+SKM write Out() const function for \fBCornerPointGrid\fP testing  
+
+.PP
+.IP "\fBClass \fBcsmp::Edge< dim >\fP 
+.IP "" 1c
+design issue: edges should only exist only in 3D models because, only there, they can have \fBFace\fP neighbors\&. 
+
+.PP
+
+.PP
+remove templatisation, making this a 3D only entity  
+
+.PP
+.IP "\fBClass \fBcsmp::Element< dim >\fP 
+.IP "" 1c
+(3) Write faster code to determine whether a \fBPoint\fP is contained in a certain element (A) 
+
+.PP
+.IP "\fBMember \fBcsmp::Element< dim >::LengthInDirection\fP (const \fBVectorVariable< dim >\fP &vecDirection) const
+.IP "" 1c
+this method could be optimised if only the corner nodes would be used 
+
+.PP
+.IP "\fBMember \fBcsmp::EOS_CO2H2ONaCl_Spycher04::Y_Co2\fP (double pressure, double temperature, double msalt)
+.IP "" 1c
+DOES THIS MAKE SENSE?  
+
+.PP
+.IP "\fBClass \fBcsmp::ErrorHandler\fP 
+.IP "" 1c
+SKM - resolve how \fBErrorHandler\fP should interact with exception handling
+
+.PP
+SKM - use typename capability to find out from which inherited object the message came
+
+.PP
+SKM - allow user to intervene and fix some problems 
+
+.PP
+.IP "\fBMember \fBcsmp::ExplicitNodeCenteredFiniteVolumeTransport< dim, STP >::AdvectVariable\fP (double time_interval, double cfl_multiplication_factor, bool apply_flux_balance_correction, bool update_pore_volumes)
+.IP "" 1c
+(3) Needs timestep reduction and DIRICHLET inflow condition 
+
+.PP
+NEEDS TO BECOME A VIRTUAL FUNCTION TEMPLATE)  
+
+.PP
+.IP "\fBMember \fBcsmp::ExplicitTransport< dim >::OutgoingVolumetricFlow\fP () const
+.IP "" 1c
+SKM check whether the variable 'outflow' can be used for this, saving some computations\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::Face< dim >::LengthInDirection\fP (const \fBVectorVariable< dim >\fP &vecDirection) const
+.IP "" 1c
+this method could be optimised if only the corner nodes would be used 
+
+.PP
+.IP "\fBClass \fBcsmp::FEM_Data< csp_type >\fP 
+.IP "" 1c
+SKM: since this class is used to store models to disk, padded CSMP types rather than short int's and doubles are stored\&. This makes models on disk very big\&.  
+
+.PP
+.IP "\fBNamespace \fBcsmp::femDataOutputDispatch\fP 
+.IP "" 1c
+explain what this is good for  
+
+.PP
+.IP "\fBMember \fBcsmp::findSplitInterfaceElements\fP (const \fBRegion< dim >\fP &subdomain, vector< pair< pair< \fBElement< dim >\fP *, uint32_t >, pair< \fBElement< dim >\fP *, uint32_t > > > &interface_elmt_pairs)
+.IP "" 1c
+test method on Chloe's dataset  
+
+.PP
+.IP "\fBClass \fBcsmp::FiniteElement\fP 
+.IP "" 1c
+make this class a Singleton and avoid pointer connections with elements 
+
+.PP
+.IP "\fBMember \fBcsmp::FiniteElement::ElementTypeOfFace\fP (uint32_t face) const
+.IP "" 1c
+(2-P) Remove typid by name fct  
+
+.PP
+.IP "\fBMember \fBcsmp::FiniteElement::ElementTypeOfSegment\fP (uint32_t segment) const
+.IP "" 1c
+(2-P) Remove typid by name fct  
+
+.PP
+.IP "\fBClass \fBcsmp::FiniteElement_Test\fP 
+.IP "" 1c
+(3) ConsecutiveNodesAtBoundary Test(not implemented for most FEMs) 
+
+.PP
+
+.PP
+(3) Think about _equal vs _test in some cases 
+
+.PP
+
+.PP
+(3) Add more feedback when ordering matters 
+
+.PP
+.IP "\fBClass \fBcsmp::FiniteElement_TestData\fP 
+.IP "" 1c
+(3) Verbose for read in feedback 
+
+.PP
+.IP "\fBClass \fBcsmp::FiniteElementManager\fP 
+.IP "" 1c
+SKM: currently all the existing element types are hardwired into this class and must always be present\&. Make this dynamic, loading elements only on demand\&. 
+
+.PP
+.IP "\fBClass \fBcsmp::FiniteVolumePolicy< 3U, CELL >\fP 
+.IP "" 1c
+(3) Put finiteVolumeAuxiliaryFunctions into \fBFiniteVolumePolicy\fP class (A) TODO: 
+
+.PP
+
+.PP
+SKM try to do computations in parametric space 
+
+.PP
+.IP "\fBMember \fBcsmp::FiniteVolumeStencilSpeed_Test::DivergenceFreeTotalVelocityField\fP (\fBModel< 3U >\fP &, double delta_pf)
+.IP "" 1c
+influx surface integral: \fBNumIntegral_NT_op_N_dS<2U>\fP influx( model\&.Database(), "influx", "fluid pressure" );  
+
+.PP
+.IP "\fBClass \fBcsmp::FluxEvaluator< dim, USER >\fP 
+.IP "" 1c
+double FluxBalanceFromGradP_K_mu_C0( Node<dim>* const ) const; 
+
+.PP
+
+.PP
+double FluxBalanceFromGradP_KK_mu_C0( Node<dim>* const ) const; 
+
+.PP
+
+.PP
+include dispersion and options for diffusive fluxes 
+
+.PP
+.IP "\fBMember \fBcsmp::Geothermal_Example::Run\fP ()
+.IP "" 1c
+: SKM: fix configuration file, it requests face properties that are not present in variables file 
+
+.PP
+
+.PP
+: SKM: add gravity to the calculations 
+
+.PP
+.IP "\fBClass \fBcsmp::GridNode\fP 
+.IP "" 1c
+check whether this class is needed at all, if so, remove all un-used interfaces\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::H2O_CO2_NaCl_FlowFunctions< dim, USER >::dfds\fP (\fBElement< dim >\fP *const, uint32_t phase) const
+.IP "" 1c
+TODO: test whether this produces plausible results  
+
+.PP
+.IP "\fBMember \fBcsmp::H2O_CO2_NaCl_FlowFunctions< dim, USER >::dfds_at\fP (\fBElement< dim >\fP *const, uint32_t phase, double sw) const
+.IP "" 1c
+check whether code for end-member cases has to be reinstated\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::H2O_CO2_NaCl_FlowFunctions< dim, USER >::dfds_at_Numerical\fP (\fBElement< dim >\fP *const, double sw, double delta_s=0\&.001) const
+.IP "" 1c
+check whether code for end-member cases has to be reinstated\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::H2O_CO2_NaCl_FlowFunctions< dim, USER >::InterpolateAqueousPhase\fP (\fBElement< dim >\fP *const, double &sw, double &rhow, double &muw) const
+.IP "" 1c
+TODO: check whether this could be improved by reading the element phase state\&. 
+
+.PP
+.IP "\fBClass \fBcsmp::H2OFluidProperties\fP 
+.IP "" 1c
+.IP "    \(bu" 6
+check faster equilibration route for twophase conditions via enthalpy check
+.IP "    \(bu" 6
+lots of assignments in UpdatePropertiesXXX not needed anymore? 
+.PP
+
+.PP
+.IP "\fBClass \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP 
+.IP "" 1c
+MUST WE BLEND BETWEEN HORIZONTAL AND VERTICAL FLOW?
+
+.PP
+: perhaps define irreducible water saturation and use it in relperm model 
+
+.PP
+
+.PP
+: check how this can be handled efficiently for a suite of composite rocktypes 
+
+.PP
+
+.PP
+: think about what parameters to keep rather than using functions to compute them on the fly when needed
+
+.PP
+: change FlowRateDependentLayerSaturations that it deals with horizontal and vertical flow and all funky cases 
+
+.PP
+.IP "\fBMember \fBcsmp::HeterogeneityAndRateAwareModel< dim >::dpcds_Phase\fP () const
+.IP "" 1c
+dpcdsw is zero as soon as one of the phases is immobile to avoid that CFL is influenced while capillary spreading is not possible\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::ImplicitTransport< dim >::OutgoingVolumetricFlow\fP () const
+.IP "" 1c
+SKM check whether the variable 'outflow' can be used for this, saving some computations\&.  
+
+.PP
+.IP "\fBStruct \fBcsmp::Index\fP 
+.IP "" 1c
+SKM: (3-F) complete scheme for compile-time variables 
+
+.PP
+.IP "\fBMember \fBcsmp::Index::In\fP (std::fstream &fp)
+.IP "" 1c
+(1-C) Meaningless return statement  
+
+.PP
+.IP "\fBMember \fBcsmp::Index::Out\fP (std::fstream &fp) const
+.IP "" 1c
+(1-C) Meaningless return statement  
+
+.PP
+.IP "\fBClass \fBcsmp::INDEXandVariables_Test\fP 
+.IP "" 1c
+test new methods that allow the selective reading of \fBArrayVariable\fP members\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::INDEXandVariables_Test::run\fP ()
+.IP "" 1c
+(2-F) \fBTest\fP for \fBInterFace\fP and \fBSplitBoundary\fP properties 
+
+.PP
+.IP "\fBClass \fBcsmp::IndexTracker\fP 
+.IP "" 1c
+SKM 2/2017 - The \fBIndexTracker\fP -> update methodology seems to fail if \fBArrayVariable\fP objects of different length are created at runtime; fix or rethink approach\&. 
+
+.PP
+.IP "\fBClass \fBcsmp::IntegrationPointToNodePropertyVisitor< Var, dim >\fP 
+.IP "" 1c
+(1) \fBIntegrationPointToNodePropertyVisitor\fP is not extrapolating correctly (A) 
+
+.PP
+
+.PP
+(1) SKM: consider using the element specific method ExtrapolateIntegrationPointToNodeProperty for this task 
+
+.PP
+.IP "\fBMember \fBcsmp::InterFace< dim >::LengthInDirection\fP (const \fBVectorVariable< dim >\fP &vecDirection) const
+.IP "" 1c
+this method could be optimised if only the corner nodes would be used 
+
+.PP
+.IP "\fBClass \fBcsmp::InterFace_Test\fP 
+.IP "" 1c
+only 2D so far; expand to 3D\&.  
+
+.PP
+.IP "\fBClass \fBcsmp::Interrelation< dim >\fP 
+.IP "" 1c
+(1) Remove interrelations after porting functionality to \fBPropertyHandle\fP and visitors (A) 
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricLinearPyramid::IsoparametricLinearPyramid\fP (uint32_t integrationPoints=5)
+.IP "" 1c
+(3) Check streched PYRS? - PhysicalToParametric fails???  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricLinearQuadrilateral::MidSideNodes\fP (std::vector< uint32_t > &ids) const
+.IP "" 1c
+(3) Check what should be assigned  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricLinearTriangle::MidSideNodes\fP (std::vector< uint32_t > &ids) const
+.IP "" 1c
+(3) Check what should be assigned  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricQuadraticPrism::dN_AtBarycenter\fP (\fBDenseMatrix< DM_MIN >\fP &M)
+.IP "" 1c
+(3) Check barycenter  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricQuadraticPrism::IntegralNN\fP (\fBDenseMatrix< DM_MIN >\fP &M)
+.IP "" 1c
+Check at all  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricQuadraticPrism::N_AtBaryCenter\fP (std::vector< double > &N)
+.IP "" 1c
+(3) Check barycenter  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricQuadraticPyramid::NodesPerFace\fP (uint32_t face) const
+.IP "" 1c
+ANSYS convention  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricQuadraticQuadrilateral::OutputNodeDataToVTK\fP (const char *file_name, const char *var_name, \fBDenseMatrix< DM_MIN >\fP &DATA) const
+.IP "" 1c
+(3) Check index of bnodes  
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricQuadraticTetrahedron::N\fP (std::vector< double > &N, const std::vector< double > &xyz)
+.IP "" 1c
+SKM: does not find the correct location of the point xyz in local coordinates\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency\fP (const \fBElement< 3U >\fP &)
+.IP "" 1c
+check how accurate this result can be expected to be?  
+
+.PP
+.IP "\fBMember \fBcsmp::Jacobian_Integral_dNT_op_dN_dV< dim, CELL >::ComputeContribution\fP (const CELL< dim > &) override final
+.IP "" 1c
+(3) Compute Jacobian  
+
+.PP
+.IP "\fBMember \fBcsmp::Jacobian_Upwind_Integral_dNT_op_dN_dV< dim, CELL >::ComputeContribution\fP (const CELL< dim > &) override final
+.IP "" 1c
+compute Jacobian  
+
+.PP
+.IP "\fBClass \fBcsmp::LineElementMesher< dim >\fP 
+.IP "" 1c
+ADD BOUNDARY FLAGS, \fBTOPOTYPE\fP, AND MATERIAL IDENTIFIERS TO VSET! 
+
+.PP
+
+.PP
+create \fBNodeManifold\fP objects in case of a split boundary 
+
+.PP
+
+.PP
+create \fBBOX_BOUNDARY\fP flags 
+
+.PP
+
+.PP
+create neighbor connectivity  
+
+.PP
+.IP "\fBClass \fBcsmp::LocalVariableStorage< dim, STOREE >\fP 
+.IP "" 1c
+(3-D) We could now even go for a single Read/Write function templatized on Variable type\&. Variable placement would then be needed to be available in variables\&. 
+
+.PP
+(2-D) DocMe (index arithmetic)  
+
+.PP
+.IP "\fBMember \fBcsmp::LocalVariableStorage< dim, STOREE >::AddProperty\fP (const \fBcsmp::Index\fP &)
+.IP "" 1c
+(2-F) Integration point properties not supported 
+
+.PP
+(2-F) Asserts missing  
+
+.PP
+.IP "\fBMember \fBcsmp::LocalVariableStorage< dim, STOREE >::Data::arrayLength\fP 
+.IP "" 1c
+only one size?  
+
+.PP
+.IP "\fBMember \fBcsmp::LocalVariableStorage< dim, STOREE >::Data::flaggedArrayLength\fP 
+.IP "" 1c
+only one size?  
+
+.PP
+.IP "\fBMember \fBcsmp::LocalVariableStorage< dim, STOREE >::DeleteProperty\fP (const \fBcsmp::Index\fP &)
+.IP "" 1c
+(2-F) Asserts missing  
+
+.PP
+.IP "\fBMember \fBcsmp::LocalVariableStorage< dim, STOREE >::IsWithinRange\fP (const \fBcsmp::Index\fP &, double, double) const
+.IP "" 1c
+replace this super wasteful method  
+
+.PP
+.IP "\fBMember \fBcsmp::LocalVariableStorage< dim, STOREE >::IsWithinRange\fP (uint32_t sector_or_facet, uint32_t ip, const \fBcsmp::Index\fP &, double, double) const
+.IP "" 1c
+refactor: for vectors, tensors and array variables this method is terribly inefficient as it creates temporaries for the checking\&.  
+
+.PP
+.IP "\fBClass \fBcsmp::Matrix\fP 
+.IP "" 1c
+SKM - implement non-member global methods for multiplication etc\&.  
+
+.PP
+.IP "\fBClass \fBcsmp::MeshIterator< dim, CELL >\fP 
+.IP "" 1c
+needs to be completed to become useful 
+
+.PP
+
+.PP
+use this breadth-first graph traversal rather than any other method to discover patch of CELLs\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::MeshManager< dim >::BuildConnectivity\fP (typename std::vector< CELL< dim > * >\fBconst_iterator\fP first, typename std::vector< CELL< dim > * >\fBconst_iterator\fP last)
+.IP "" 1c
+disambiguate connectivity between \fBFace\fP and \fBInterFace\fP object at manifolds 
+
+.PP
+deal with potential manifolds relating to lower-dimensional cells 
+
+.PP
+.IP "\fBMember \fBcsmp::MeshManager< dim >::Initialize\fP (const \fBPropertyDatabase< dim >\fP &, const \fBVSet< dim >\fP &, bool initialise_FV_stencils)
+.IP "" 1c
+SKM: create manifolds to deal with lower-dimensional elements that have multiple neighbors per face\&. 
+
+.PP
+.IP "\fBClass \fBcsmp::MeshManager_Test\fP 
+.IP "" 1c
+\fBFiniteElementManager_Test\fP 
+
+.PP
+
+.PP
+FiniteVolumeManager_Test 
+
+.PP
+.IP "\fBMember \fBcsmp::minimumDistanceBetween\fP (const Domain< dim > &d1, const Domain< dim > &d2)
+.IP "" 1c
+(2-F) (2-C) Should return a vector instead  
+
+.PP
+.IP "\fBMember \fBcsmp::minMaxEigenValues\fP (const \fBTensorVariable< dim >\fP &ts, double &tmin, double &tmax)
+.IP "" 1c
+SKM this wants to be a lambda function in the next method\&.  
+
+.PP
+.IP "\fBClass \fBcsmp::Model< dim >\fP 
+.IP "" 1c
+(3) Put Apply(PDE_Int) back into domain classes (from \fBModel\fP to Boundaries etc\&.\&.\&.) 
+
+.PP
+
+.PP
+(3) Replace references to groupMap_ and uniqueGroupMap_ in Model\&.cpp by corresponding Interface functionality 
+
+.PP
+
+.PP
+(3) \fBTest\fP binary IO of SplitBoundaries  
+
+.PP
+.IP "\fBMember \fBcsmp::Model< dim >::Accept\fP (\fBcsmp::Visitor< dim >\fP &)
+.IP "" 1c
+SKM (1) Reorganize this so that no confusion remains where the visitor goes\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::Model< dim >::CreateProperty\fP (const char *new_prop, const char *notation, const char *unit, \fBVARIABLE_TYPE\fP type=SCALAR, \fBPLACEMENT\fP place=NODE, uint32_t vsize=1, double vmin=-1\&.0e+30, double vmax=1\&.0e+30, std::string usage="???")
+.IP "" 1c
+(1-F) Support for BOUNDARY\&.\&.\&. / SPLIT_BOUNDARY (create overload taking index)  
+
+.PP
+.IP "\fBMember \fBcsmp::Model< dim >::DeleteProperty\fP (const char *property)
+.IP "" 1c
+(1-F) Support for new placements  
+
+.PP
+.IP "\fBMember \fBcsmp::Model< dim >::Model\fP ()
+.IP "" 1c
+SKM deprecate; make the default constructor private to comply with inheritance principles  
+
+.PP
+.IP "\fBClass \fBcsmp::ModelComparator< dim >\fP 
+.IP "" 1c
+(1) seperate comparisons of meshes from properties discretised on them 
+
+.PP
+
+.PP
+(3) Different error norms 
+
+.PP
+
+.PP
+(3) Different properties of same model 
+
+.PP
+
+.PP
+(3) Cor diff var types 
+
+.PP
+
+.PP
+(3) Cefactor(outsource) functions once diff var types implemented 
+
+.PP
+
+.PP
+(3) Cefactor static, no sense anymore - DONE(or not so much???) 
+
+.PP
+
+.PP
+(3) Cefaults for var file param 
+
+.PP
+
+.PP
+(3) Compare list of properties  
+
+.PP
+.IP "\fBMember \fBcsmp::ModelSubDomain< dim, CELL >::IdentifyPerimeter\fP ()
+.IP "" 1c
+(1) Does not work for quadratic regions 
+
+.PP
+.IP "\fBMember \fBcsmp::ModelSubDomain< dim, CELL >::InputPropertyValue\fP (const char *input_prop, const Var &new_value, \fBSUBDOMAIN_PART\fP sd=COMPLETE)
+.IP "" 1c
+(3-D) Refactor!! This is a potential bug if wrong integration properties are used!  
+
+.PP
+.IP "\fBMember \fBcsmp::ModelSubDomain< dim, CELL >::PartitionCellVector\fP ()
+.IP "" 1c
+due to the searching, this method is a speed bottleneck; can it be improved\&.  
+
+.PP
+.IP "\fBClass \fBcsmp::ModelSubDomain_Test\fP 
+.IP "" 1c
+void RebuildSubDomainAfterChangeOfCellVector(); 
+
+.PP
+.IP "\fBClass \fBcsmp::MohrCoulombFailure_Visitor< dim >\fP 
+.IP "" 1c
+SKM: this visitor should include the influence of pore pressure\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::NaClBoilingCurve::VaporPressure\fP ()
+.IP "" 1c
+Implement range checking and error handling  
+
+.PP
+.IP "\fBMember \fBcsmp::NaClMeltingCurve::PmeltFromT\fP ()
+.IP "" 1c
+Implement range checking and error handling  
+
+.PP
+.IP "\fBMember \fBcsmp::NaClMeltingCurve::TmeltFromP\fP ()
+.IP "" 1c
+Implement range checking and error handling  
+
+.PP
+.IP "\fBMember \fBcsmp::NaClSublimationCurve::VaporPressure\fP ()
+.IP "" 1c
+Implement range checking and error handling  
+
+.PP
+.IP "\fBMember \fBcsmp::NodeCenteredFiniteVolumeAlgorithm< dim >::OutputResults_NonlinearNewtonRaphson\fP (const \fBPropertyDatabase< dim >\fP &, size_t result_phase, const \fBcsmp::Index\fP &adv1_key, const \fBcsmp::Index\fP &adv2_key, bool show_range)
+.IP "" 1c
+JM move these kinds of testing methods into the subclasses that are used for the testing:
+
+.PP
+SMK: Dear SKM (from JM): This method is needed by the Newton Raphson procedure\&. Please contact me directly if these things are important\&. It is NOT a testing method\&. I do my best to not perform any "sloppy" copying\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::NodeCenteredFiniteVolumeAlgorithm< dim >::OutputResultsWithL2NormRes\fP (const \fBPropertyDatabase< dim >\fP &, const \fBcsmp::Index\fP &adv_key, bool show_range) const
+.IP "" 1c
+JM move these kinds of testing methods into the subclasses that are used for the testing: JM addition  
+
+.PP
+.IP "\fBClass \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >\fP 
+.IP "" 1c
+(1) Bring theta-limited space time second-order accurate scheme back to work (A)  
+
+.PP
+.IP "\fBMember \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >::AdvectVariable\fP (double time_interval, double cfl_multiplication_factor=1\&., bool apply_flux_balance_correction=true, bool update_pore_volumes=false)
+.IP "" 1c
+(1) The SAMG solver should be created one time or the SAMG_Setting should be modified, otherwise it doesn't converge\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >::AdvectVariable2ndOrder\fP (\fBNodeCenteredFiniteVolumeAlgorithm< dim >\fP &, double time_increment, bool with_flux_balance_correction)
+.IP "" 1c
+(1) There're two flux balance corrections in item 2\&.3 and item 2\&.8\&. Should be only one correction\&. By the moment the item 2\&.8 is commented\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >::AdvectVariable2ndOrderInSpaceAndTime\fP (\fBNodeCenteredFiniteVolumeAlgorithm< dim >\fP &, double time_increment, bool with_flux_balance_correction)
+.IP "" 1c
+(1) Does not create sharp profile yet and fails in the presence of sources and sinks  
+
+.PP
+.IP "\fBMember \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >::AdvectVariableSingleStep\fP (double time_increment, bool apply_flux_balance_correction=true, bool update_pore_volumes=false)
+.IP "" 1c
+(1) The SAMG solver should be created one time or the SAMG_Setting should be modified, otherwise it doesn't converge\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::NodeCenteredFiniteVolumeTransport< dim >::UpdateProjectedVelocitiesAndFluxBalances\fP ()
+.IP "" 1c
+fix! - flux balances are not correct for nodes that lie in the inside of the model but on the perimeter of the target region\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::NodeManifoldManager< dim >::NodeManifoldManager\fP (plf::colony< \fBNode< dim >\fP > &node_pointer_storage, VData::manifoldContainer::const_iterator first, VData::manifoldContainer::const_iterator last)
+.IP "" 1c
+make sure that the map:key nodes are ideed contained in the manifolds\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::NT_op< dim, CELL >::ComputeContribution\fP (const CELL< dim > &) override final
+.IP "" 1c
+(1) Not tested yet, maybe, the loads must be on the midside nodes  
+
+.PP
+.IP "\fBMember \fBcsmp::NumIntegral_dNT_op_dN_dV_InterFace< dim >::ComputeContribution\fP (const \fBInterFace< dim >\fP &) override final
+.IP "" 1c
+in GetOperands implement the collection of material operands from integration points otherwise second part of method will not work  
+
+.PP
+.IP "\fBMember \fBcsmp::NumIntegral_dNT_op_dN_dV_InterFace< dim >::GetOperands\fP (const \fBInterFace< dim >\fP &) override final
+.IP "" 1c
+fix for vector or tensor material operands which may be needed if the permeability is a vector or tensor 
+
+.PP
+
+.PP
+use harmonic mean of the permeabilities of the parent elements on the inside and outside\&. 
+
+.PP
+
+.PP
+implement for integration point variables  
+
+.PP
+.IP "\fBMember \fBcsmp::NumIntegral_dNT_op_dN_dV_InterFace< dim >::InitialiseCoordinateMatrix\fP (const \fBInterFace< dim >\fP &, \fBDenseMatrix< DM_MIN >\fP &) const
+.IP "" 1c
+Before using this in computations test that the finite element swap works and that the node numbering of the contribution matches that of the prism or hexa\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region< dim >::ComputeContribution\fP (const \fBInterFace< dim >\fP &) override final
+.IP "" 1c
+in GetOperands implement the collection of material operands from integration points otherwise second part of method will not work  
+
+.PP
+.IP "\fBMember \fBcsmp::NumIntegral_dudn_rhsop_u_dS< dim >::ComputeContribution\fP (const \fBInterFace< dim >\fP &) override final
+.IP "" 1c
+in GetOperands implement the collection of material operands from integration points otherwise second part of method will not work  
+
+.PP
+.IP "\fBClass \fBcsmp::OverburdenPressureVisitor< dim >\fP 
+.IP "" 1c
+SKM: this visitor should include the influence of pore pressure\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::ParallelPlateFracture_Example::Run\fP ()
+.IP "" 1c
+SKM: REWRITE: simplify the example to \fBVSet\fP operations: input and output only 
+
+.PP
+.IP "\fBMember \fBcsmp::Parameter::In\fP (std::fstream &fp)
+.IP "" 1c
+(1-C) Meaningless return statement  
+
+.PP
+.IP "\fBMember \fBcsmp::Parameter::Out\fP (std::fstream &fp) const
+.IP "" 1c
+(1-C) Meaningless return statement  
+
+.PP
+.IP "\fBMember \fBcsmp::parentElementsSharingMultipleEdgeNodes\fP (const vector< \fBNode< 3U >\fP * > &edge_nodes, map< \fBElement< 3 >\fP *, vector< \fBNode< 3 >\fP * > > &segm_parents, bool find_segment_ids)
+.IP "" 1c
+check wether this method breaks for quadratic and cubic elements?  
+
+.PP
+.IP "\fBMember \fBcsmp::parseElementType\fP (\fBCSMP_FEM_TYPE\fP)
+.IP "" 1c
+check list after major VTK updates to track changes 
+
+.PP
+.IP "\fBMember \fBcsmp::PDE_Integrator< dim, CELLTYPE >::CoupleDomainsAcrossSplitBoundary\fP (\fBModelSubDomain< dim, CELLTYPE >\fP &)
+.IP "" 1c
+: refactor this method from Luat to increase efficiency 
+
+.PP
+perhaps introduce new flag called \fBVARIABLE_FLAG\fP : COUPLED to express the state of the variable at the internal \fBSplitBoundary\fP\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::PDE_Integrator< dim, CELLTYPE >::Reset\fP (bool delete_math_operators=true)
+.IP "" 1c
+is Reset is this needed?)  
+
+.PP
+.IP "\fBMember \fBcsmp::PDE_Integrator_CRM< dim, CELLTYPE >::CoupleDomainsAcrossSplitBoundary\fP (\fBModelSubDomain< dim, CELLTYPE >\fP &)
+.IP "" 1c
+perhaps introduce new flag called \fBVARIABLE_FLAG\fP : COUPLED to express the state of the variable at the internal \fBSplitBoundary\fP\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::PDE_Integrator_CRM< dim, CELLTYPE >::Reset\fP (bool delete_math_operators=true)
+.IP "" 1c
+is Reset is this needed?)  
+
+.PP
+.IP "\fBClass \fBcsmp::PDE_Integrator_Test\fP 
+.IP "" 1c
+test that the PDE operators are accumulated into the right places in the lefthand matrix 
+
+.PP
+
+.PP
+test that late accumulate methods do the right things 
+
+.PP
+
+.PP
+test accumulation of boundary integrals 
+
+.PP
+
+.PP
+test coupling of domains by \fBSplitBoundary\fP integrals 
+
+.PP
+
+.PP
+test accumulation of a coupled system 
+
+.PP
+
+.PP
+test that the contacts between domain and boundaries are identified correctly for the accumulation of surface integrals at the boundary 
+
+.PP
+
+.PP
+move all the testing that relates to matrix inversion into Solver_Test and specific subclasses 
+
+.PP
+
+.PP
+test repeated use of integrator in a time-dependent problem: matrix retention vs\&. reconstruction, test change of DOF from step to step 
+
+.PP
+.IP "\fBMember \fBcsmp::pointPropertyMapping\fP (const std::string &model_name)
+.IP "" 1c
+TODO: implement averaging of the log10 of property value where these vary dramatically like permeability etc\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::PolygonGridManager::AddNode\fP (const \fBcsmp::Point< 3U >\fP &)
+.IP "" 1c
+SKM: when vector is resized all the stored pointers will be invalidated during rereconstruction; avoid!  
+
+.PP
+.IP "\fBMember \fBcsmp::PressureDiffusion_Example::Run\fP ()
+.IP "" 1c
+SKM: to fix: method cannot handle element input variables 
+
+.PP
+influx surface integral: \fBNumIntegral_NT_op_N_dS<2U>\fP influx( model\&.Database(), "influx", "fluid pressure" );  
+
+.PP
+.IP "\fBMember \fBcsmp::PropertyDatabase< dim >::AddProperty\fP ()
+.IP "" 1c
+(3-D) These cout should become either \fBException\fP or errors using \fBErrorHandler\fP 
+
+.PP
+
+.PP
+(3-D) Refactor to use overload internally  
+
+.PP
+.IP "\fBClass \fBcsmp::PropertyHandle< dim >\fP 
+.IP "" 1c
+!!! SKM: fix math function calls and catch IEEE exceptions 
+
+.PP
+
+.PP
+SKM: deal with new variable placements 
+
+.PP
+
+.PP
+(1) Crashes when it wants to create a REGION property (A) 
+
+.PP
+
+.PP
+(3) A range of switch statements must be extended for type REGION, FACE, INTER_FACE (A) 
+
+.PP
+.IP "\fBMember \fBcsmp::PropertyHandle< dim >::operator*=\fP (const \fBPropertyHandle\fP &op)
+.IP "" 1c
+(1-F) key\&.type, key\&.place should be opkey\&.type, key\&.place  
+
+.PP
+.IP "\fBClass \fBcsmp::PropertyStorageSpeed_Test\fP 
+.IP "" 1c
+This is actually a test case, plus it contains no test criteria/statements  
+
+.PP
+.IP "\fBClass \fBcsmp::PVTX_Calculator_H2O_CO2_NaCl< dim >\fP 
+.IP "" 1c
+lookup tables not considered yet\&. 
+
+.PP
+
+.PP
+salt only case fails  
+
+.PP
+.IP "\fBMember \fBcsmp::read_CSV_File\fP (string filename, \fBvector< string >\fP &col_titles, vector< \fBvector< double >\fP > &rows_of_columns)
+.IP "" 1c
+this wants to be a CSV_Reader module, not just a function\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::Region< dim >::Accept\fP (\fBVisitor< dim >\fP &) override
+.IP "" 1c
+SKM provide methods for the new variable placements\&.
+
+.PP
+SKM refactor the loops using constants and pre-incrementation to speed them up 
+
+.PP
+.IP "\fBMember \fBcsmp::Region< dim >::SurfaceArea\fP () const
+.IP "" 1c
+SKM: method will produce nonsense if line elements intersect the boundary\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::Region_Test::run\fP ()
+.IP "" 1c
+test for \fBModel\fP as non-unique region is commented out because rest of code is broken
+
+.PP
+check again for code coverage: a number of important methods are not tested yet like: CreateBetween() CorrectLowDimRegionOrientation() VolumeIntegral_x_Thickness() 
+
+.PP
+.IP "\fBClass \fBcsmp::RegionInterface< dim, REGION_COMPLEX >\fP 
+.IP "" 1c
+!!! all methods that create regions from regions must also copy potential regional property values to these 
+
+.PP
+.IP "\fBMember \fBcsmp::RegionInterface< dim, REGION_COMPLEX >::FormRegionFrom\fP (const char *regionname, const std::set< std::string > &region_names)
+.IP "" 1c
+SKM remove method as it duplicates \fBMergeRegions()\fP; returns number of elements  
+
+.PP
+.IP "\fBMember \fBcsmp::RegionInterface< dim, REGION_COMPLEX >::FormRegionsFrom\fP (const \fBModelTopology\fP &, bool ignore_domain_type_identifiers=false)
+.IP "" 1c
+for the debug version, put in a check that verifies that all element ids stored in the model topology are actually contained in the mesh\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::RegionInterface< dim, REGION_COMPLEX >::RemoveFromRegion\fP (const char *region, const char *region_to_subtract)
+.IP "" 1c
+check (for volumetric regions) whether the removal of these elements has thus-far undiscovered consequences 
+
+.PP
+.IP "\fBMember \fBcsmp::RegionInterface< dim, REGION_COMPLEX >::RemoveRegionPartitionsFor\fP (const char *name)
+.IP "" 1c
+(1) SKM: logic of this method seems to be broken and it does not always work\&. Refactor!  
+
+.PP
+.IP "\fBMember \fBcsmp::RelativePermeabilityModel_Test::Test\fP (\fBTwoPhaseModel< 1U >\fP &relperm, bool extended_property_set)
+.IP "" 1c
+(2-C) Rm rtti (entire file, lots of refs) 
+
+.PP
+(2-C) Rm rtti  
+
+.PP
+.IP "\fBClass \fBcsmp::SAMG_Solver\fP 
+.IP "" 1c
+(1) Check line 254: is resetting res_in allowed if we use relative convergence 
+
+.PP
+
+.PP
+(3) Convergence check 670: 679 check eps or fabs(eps)? 
+
+.PP
+
+.PP
+(1) Look into runtime debug error when solving systems with vector as variable 
+
+.PP
+
+.PP
+(3) Try mpl::is_volatile type trait to check whether they should manage the pointers they are supplied with in the constructor (B) 
+
+.PP
+.IP "\fBMember \fBcsmp::sharedPerimeterCells\fP (const \fBModelSubDomain< dim, CELL >\fP &subdomain1, const \fBModelSubDomain< dim, CELL >\fP &subdomain2, vector< pair< pair< CELL< dim > *, uint32_t >, pair< CELL< dim > *, uint32_t > > > &matching_cells)
+.IP "" 1c
+check for interpenetrating regions 
+
+.PP
+.IP "\fBClass \fBcsmp::SimulatorControl< dim >\fP 
+.IP "" 1c
+document this code\&.
+
+.PP
+SKM move to applications, geothermal energy storage simulator 
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorControl< dim >::OutputRestartFile\fP (bool manually_triggered=false)
+.IP "" 1c
+make an option here, that if the connectivity hasn't changed we do not need to output the connectivity, saving time\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorControl< dim >::OutputSimulationTimeToScreen\fP (double time)
+.IP "" 1c
+Hualp! -> use standard library 
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorControl< dim >::OutputVariableToRegionVTUFiles\fP ()
+.IP "" 1c
+put conditional output options here (i\&.e\&. OutputTimes)  
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorControl< dim >::SetOutputTimes\fP (size_t n, double starttime=0\&.0)
+.IP "" 1c
+double check if it isn't convenient to set the output intervals related to start time (i\&.e\&. (duration-starttime)/n)\&. At the moment, this does not seem so\&. --Julian  
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorMonitor< dim >::CalculateDimensionsAndPerimeters\fP (std::vector< double > &rowdata)
+.IP "" 1c
+multiplication with porosity is not supported as with regions\&. To be resolved later on\&. 
+
+.PP
+multiplication with porosity is not supported as with regions\&. To be resolved later on\&. 
+
+.PP
+multiplication with porosity is not supported as with regions\&. To be resolved later on\&. 
+
+.PP
+multiplication with porosity is not supported as with regions\&. To be resolved later on\&.  
+
+.PP
+.IP "\fBClass \fBcsmp::SimulatorSetup< dim >\fP 
+.IP "" 1c
+documentation is needed (probably Julian Mindel)
+
+.PP
+SKM move to applications, geothermal energy storage simulator 
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorSetup< dim >::Add_DESCompatible_Integrator\fP (std::string name)
+.IP "" 1c
+in principle, integrators will be executed in the sequence they were created\&. This could be done by checking the order of the SAMG_Solvers, to avoid creating wrappers for \fBPDE_Integrator\fP and NCFVT classes\&. This seems easier said than done, as many things need to happen between solver calls\&. Perhaps it is better to allow the usage of names are keys and call the correct one when desired\&. This is left to the user\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorSetup< dim >::ReadOptionsFromRegionsFile\fP ()
+.IP "" 1c
+flag if eof is reached\&. Perhaps throw an exception\&. Some region should be in there!  
+
+.PP
+.IP "\fBMember \fBcsmp::SimulatorSetup< dim >::SetupWellRatesBasedOnRateVariables\fP ()
+.IP "" 1c
+This should probably use a map of well names vs which field is supposed to be used to read in the rates, as well as which phase, if other than single phase flow is intended\&. 
+
+.PP
+
+.PP
+first thing to do is check that all input information froms from fields defined on the region\&. 
+
+.PP
+this needs to be constructed better\&. Better logic for other users to create their own simulators\&.  
+
+.PP
+.IP "\fBStruct \fBcsmp::SimulatorSetupParameter\fP 
+.IP "" 1c
+documentation is needed (probably Julian Mindel)
+
+.PP
+SKM move to applications, geothermal energy storage simulator  
+
+.PP
+.IP "\fBMember \fBcsmp::SKUA_Interface::ImportElementPropertyValuesFromSKUA\fP (\fBModel< dim >\fP &, const std::string &data_file=std::string())
+.IP "" 1c
+TODO: expand to handle tensor properties as well 
+
+.PP
+.IP "\fBMember \fBcsmp::smoothElementData\fP (\fBModel< dim >\fP &model, const std::string &region_to_be_smoothed, const std::string &variable_name, int number_of_smoothing_cycles, bool log10_smoothing, bool in_plane_smoothing, bool output_model_to_binary)
+.IP "" 1c
+perhaps use sqrt() of values for a milder form of value compression  
+
+.PP
+.IP "\fBMember \fBcsmp::SourceVisitor< dim >::Visit\fP (\fBElement< dim >\fP *)
+.IP "" 1c
+need to find a more efficient way to perform this calculation\&. Julian 19\&.02\&.2016  
+
+.PP
+.IP "\fBMember \fBcsmp::SplitBoundaryInterface< dim, SPLITBOUNDARY_COMPLEX >::RemoveSplitBoundary\fP (const char *split_boundary, bool erase_interfaces)
+.IP "" 1c
+Provide the option to fuse the mesh back together again\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::SplitBoundaryInterface< dim, SPLITBOUNDARY_COMPLEX >::RemoveSplitBoundary\fP (\fBcsmp::SplitBoundary< dim >\fP &, bool erase_interfaces)
+.IP "" 1c
+Provide the option to fuse the mesh back together again\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::SplitBoundaryPressureDiffusion_Test::run\fP ()
+.IP "" 1c
+influx surface integral: \fBNumIntegral_NT_op_N_dS<2U>\fP influx( model\&.Database(), "influx", "fluid pressure" );  
+
+.PP
+.IP "\fBMember \fBcsmp::splitString\fP (string str, char delimiter)
+.IP "" 1c
+document this function  
+
+.PP
+.IP "\fBClass \fBcsmp::StatisticalAnalyzer< dim >\fP 
+.IP "" 1c
+refactor such that Maple specific output is done by MapleInterface class\&. 
+
+.PP
+.IP "\fBClass \fBcsmp::SteadyStateDiffusor< dim, CELLTYPE >\fP 
+.IP "" 1c
+(3) Make generic so that it can take both numerically and analytically integrated FEs  
+
+.PP
+.IP "\fBClass \fBcsmp::TDDUnitTest_Example\fP 
+.IP "" 1c
+(3) Implement Suite features for functioal tests(csmp binary comparison, speed, vtk comparison(DONE)\&.\&.\&.)  
+
+.PP
+.IP "\fBMember \fBcsmp::TensorVariable< 2U >::TensorVariable\fP ()
+.IP "" 1c
+SKM initialise array elements in the initialiser list  
+
+.PP
+.IP "\fBClass \fBcsmp::TensorVariable< 3U >\fP 
+.IP "" 1c
+(2-D) Const/Non const access operator convention not consistent with VectorVariable/ArrayVariable  
+
+.PP
+.IP "\fBMember \fBcsmp::TensorVariable< 3U >::Resize\fP (uint32_t, double newValue=std::numeric_limits< double >::quiet_NaN())
+.IP "" 1c
+remove  
+
+.PP
+.IP "\fBClass \fBcsmp::TensorVariable_Test\fP 
+.IP "" 1c
+(1-T) Put flag tests back in  
+
+.PP
+.IP "\fBClass \fBcsmp::TensorVariable_Test2\fP 
+.IP "" 1c
+(1-T) Put flag tests back in  
+
+.PP
+.IP "\fBMember \fBcsmp::TestSuite::run\fP ()
+.IP "" 1c
+(1-D) Put exception catch around each test and report as failed if throw, instead of throwing all the way out of this member, halting test routine  
+
+.PP
+.IP "\fBMember \fBcsmp::ThermalVisitor< dim >::SetInitialProperties\fP (\fBModel< dim >\fP *model)
+.IP "" 1c
+if this visitor gets applied to another region than the model, all hell will break loose! - fix 
+
+.PP
+.IP "\fBMember \fBcsmp::TOPOTYPE\fP 
+.IP "" 1c
+some flags do not exist in certain dimensions: in 1D PERIMETER_POINT is the same as INTERSECTION_POINT  
+
+.PP
+.IP "\fBClass \fBcsmp::TwoPhaseExplicitNodeCenteredFVTransport< dim, STP >\fP 
+.IP "" 1c
+(3) Remove NCFVTAlgorithm depencency (B) 
+
+.PP
+.IP "\fBMember \fBcsmp::TwoPhaseFlowFunctions< dim, USER >::dfds\fP (\fBElement< dim >\fP *const, uint32_t phase) const
+.IP "" 1c
+check whether code for end-member cases has to be reinstated\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::TwoPhaseFlowFunctions< dim, USER >::dfds_at\fP (\fBElement< dim >\fP *const, double sw) const
+.IP "" 1c
+check whether code for end-member cases has to be reinstated\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::TwoPhaseFlowFunctions< dim, USER >::dfds_at_Numerical\fP (\fBElement< dim >\fP *const, double sw, double delta_s=0\&.001) const
+.IP "" 1c
+check whether code for end-member cases has to be reinstated\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::TwoPhaseModel< dim >::Initialize\fP (const \fBElement< dim >\fP &e)
+.IP "" 1c
+SKM averages tensor properties, but should create tensor mobilities in stead  
+
+.PP
+.IP "\fBMember \fBcsmp::UG4_UGX_FileExport< dim >::Write_UGX_FileASCII\fP (const \fBModel< dim >\fP &, const std::string &file_name)
+.IP "" 1c
+edge_attachments to implement the line element properties from CSM face_attachments (surfaces elements) volume_attachments (volume elements)
+
+.PP
+subsetblock - \fBcsmp::Boundary\fP named objects 
+
+.PP
+
+.PP
+setsetblock - \fBcsmp::SplitBoundary\fP objects 
+
+.PP
+.IP "\fBMember \fBcsmp::UG4_UGX_FileExport_Test::Run\fP ()
+.IP "" 1c
+Currently the UG subsets in the subsethandler for CSMP \fBBoundary\fP objects are not visible in UG, upon visual examination the file-based output looks the same as for the successful output of \fBRegion\fP objects\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::updateHaloElementConnectivity\fP (typename vector< \fBElement< dim >\fP * >::iterator first, typename vector< \fBElement< dim >\fP * >::iterator last)
+.IP "" 1c
+If the face with the deleted neighbor belongs to a lower dimensional element, it may be a manfold that is potentially connected to other remaining element(s)\&. In this case, replace the deleted neighbor that will be deleted with another adjacent lower-dimensional element sharing its face nodes\&. This requires searching because there is no knowledge stored about face-node sharing alternative neighbors\&. 
+
+.PP
+.IP "\fBClass \fBcsmp::Variables_Test\fP 
+.IP "" 1c
+Add tests for variables placed on \fBSplitBoundary\fP objects\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::Variables_Test::run\fP ()
+.IP "" 1c
+(2-F) \fBTest\fP for \fBInterFace\fP and \fBSplitBoundary\fP properties 
+
+.PP
+.IP "\fBMember \fBcsmp::variableType\fP (const Var &)
+.IP "" 1c
+achieve this with a compile time computation\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::VData::EstablishElementConnectivity2D\fP ()
+.IP "" 1c
+SKM 4/10/21: the line-element functionality is duplicated elsewhere in CSMP and must also be fixed because it is probably not working\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::VData::EstablishElementConnectivity3D\fP ()
+.IP "" 1c
+only use face corner nodes to identify matching faces 
+
+.PP
+
+.PP
+needs to take into account potentials Faces and Interfaces\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::VectorVariable< 3U >::EuclideanNormalize\fP ()
+.IP "" 1c
+replace with more generic function  
+
+.PP
+.IP "\fBMember \fBcsmp::VSet< dim >::InputFromTextFile\fP (const char *file_dot_txt)
+.IP "" 1c
+read 'pmtrl' and property data as well 
+
+.PP
+.IP "\fBMember \fBcsmp::VSet< dim >::Out\fP (bool data_as_well=true) const
+.IP "" 1c
+write non-scalar property data as well 
+
+.PP
+.IP "\fBMember \fBcsmp::VSet< dim >::ParallelInputFrom\fP (const char *bin_file, double &time, size_t &first_outerhalo)
+.IP "" 1c
+Refactor to work with \fBPropertyData\fP based variable storage  
+
+.PP
+.IP "\fBMember \fBcsmp::VSet< dim >::ParallelOutputTo\fP (const char *bin_file, double time, size_t first_outerhalo) const
+.IP "" 1c
+Refactor to work with \fBPropertyData\fP based variable storage 
+
+.PP
+.IP "\fBClass \fBcsmp::VTK_Interface< dim >\fP 
+.IP "" 1c
+(3) Outputs an inconsistent number of elements and number of points for a quadratic element in case of vector output (A) 
+
+.PP
+
+.PP
+(3) Fails to output constraint point properties correctly (A) 
+
+.PP
+
+.PP
+(3) Display quadratic FEM with the corresponding VTK primitives (A) 
+
+.PP
+
+.PP
+(3) Display 2D regions using VTK polygons (A) 
+
+.PP
+
+.PP
+(3) Save data as VTK binaries (A) 
+
+.PP
+
+.PP
+(3) Create and store connectivity only once and then just add new data blocks to files (A)  
+
+.PP
+.IP "\fBClass \fBcsmp::VTU_Interface< dim >\fP 
+.IP "" 1c
+(3) Fix tensor output( if dim == 2 ) 
+
+.PP
+
+.PP
+(3) Exceptions 
+
+.PP
+
+.PP
+(3) Implement true/false checks in bool members 
+
+.PP
+
+.PP
+(3) In insertConnectivityFile<dim> check whether insertion sucessfull 
+
+.PP
+
+.PP
+(3) Update doc 
+
+.PP
+
+.PP
+(3) think about bringing in mem alloc class to manage vtu files 
+
+.PP
+
+.PP
+(3) Additional info in xml header(see legacy vtu interface) 
+
+.PP
+
+.PP
+(3) Replace list by set as property container 
+
+.PP
+break class into smaller functional units and remove code bloat by duplication\&. 
+
+.PP
+
+.PP
+simplify interfaces\&. 
+
+.PP
+.IP "\fBMember \fBcsmp::VTU_Interface< dim >::CloseFile\fP (const std::string &fileName, const std::string &extension, \fBXML_Document\fP &)
+.IP "" 1c
+(2-F) This should return filename up to user call  
+
+.PP
+.IP "\fBMember \fBcsmp::VTU_Interface< dim >::DeleteConnectivity\fP ()
+.IP "" 1c
+SKM verify this deletion process; looks like that there may be a memory leak\&.  
+
+.PP
+.IP "\fBMember \fBcsmp::VTU_Interface< dim >::GetConnectivityMap\fP (const \fBModelSubDomain< dim, Element >\fP &subDomain)
+.IP "" 1c
+how about some typedefs?  
+
+.PP
+.IP "\fBMember \fBcsmp::VTU_Interface< dim >::OutputTensorToVTU\fP (const std::string &fileName, const std::string &propertyCaption, const std::vector< std::vector< double > > &tensor)
+.IP "" 1c
+(3) Check inner vector sizes  
+
+.PP
+.IP "\fBMember \fBcsmp::Water::Water\fP (const double &externaltemperature, const double &externalpressure)
+.IP "" 1c
+read up on smart pointers in order to be able to do safe installation of PROST newProp calls into initializer list\&. Di, the initialization of the ak and bij arrays is still in the constructor body\&.  
+
+.PP
+.IP "\fBClass \fBcsmp::XML_Document\fP 
+.IP "" 1c
+(3) Range check current level up/down 
+
+.PP
+
+.PP
+(3) Integrate reading/parsing features 
+
+.PP
+
+.PP
+(3) Implement vector to hold node names per level to allow for auto closing etc\&.\&.\&. 
+
+.PP
+.IP "\fBFile \fBFiniteElement\&.h\fP 
+.IP "" 1c
+(3) Make FiniteElements singletons 
+
+.PP
+
+.PP
+(3) Manage elements in a more generic way 
+
+.PP
+

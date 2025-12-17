@@ -1,67 +1,71 @@
 #include "TDDUnitTest_Example.h"
 
-// Use CATCH_CONFIG_MAIN if you want Catch to supply main().
-#define CATCH_CONFIG_RUNNER
-#include "catch.hpp" // this was the header file until 2022, now there is a complete libraryZZ
+#include "CSMP_definitions.h"
+#include "Exception.h"
+#include "compareFloats.h"
+//#include "open-csmp-2024/tests/TestSuite.h"
+//#include "open-csmp-2024/tests/Test.h"
+#include "TestSuite.h"
+#include "Test.h"
 
 using namespace std;
 
 namespace csmp {
 
 // class to test
-class Unit_c
-  {
+class Unit_c {
   public:
-    int foo1( int a ) { return a/a; }
-    int foo2( int a ) { return a*a; }
+    int Foo1( int a ) const { return a/a; }
+    int Foo2( int a ) const { return a*a; }
   };
 
+  // @note this is a Test not an example
+class FooFunction_Test : public Test {
+  public:
+    ~FooFunction_Test() override final {}
+    void run() override final { TestFunctions(); }
 
-// this comes first(failing)
-struct UnitTest_c
+  private:
+    void TestFunctions() {
+         Unit_c sut;
+         _info("TestFunctions: Testing the member functions of class Unit_c...");
+         _equal( sut.Foo1( 5 ), 1, 1.0e-6 );
+         _test( approximatelyEqual( sut.Foo1(5), 1 ) );
+         _test( sut.Foo2( 5 ) > 5 );
+         // provoked failure
+         _test( sut.Foo2( 5 ) < 20 );
+      }
+};
+
+  void TDDUnitTest_Example::Specifications()
   {
-      // system under test
-      Unit_c sut;
-
-      void test1() { CHECK(sut.foo1( 5 ) == 1); }
-      void test2() { CHECK(sut.foo1( 5 ) > 5); }
-  };
-
-
-void TDDUnitTest_Example::Specifications()
-  {
-    SetTitle( "TDD - (unit) Test-Driven Development of software" );
+    SetTitle( "Test-Driven Development=TDD of unit tests" );
     SetDifficulty( 1 );
     SetCategory( "C++" );
-    AddAuthor( "P. Lang" );
+    AddAuthor( "SKM" );
     AddDescription( "source in: TDDUnitTest_Example.cpp" );
     AddDescription( "how to use a unit test for test driven development" );
   }
-  
 
+
+
+
+/**
+    Demonstrates the testing macros defined in 'Test.h'
+*/
 void TDDUnitTest_Example::Run()
   {
-      // If you don't use CATCH_CONFIG_MAIN, this is the minimal
-      // infrastructure required to run a test.
+     cout <<"\n"<<"Verification of the functions foo1() and foo2(): running tests...";
+     
+     TestSuite example_suite("CSMP examples unit-test suite (analogous to testing mechanism used in tests/unit/", &cout );
 
-      Catch::Session session;
-      session.run();
+     example_suite.addTest( new FooFunction_Test() );
+
+     // running the test
+     example_suite.run();
+     long nFail = example_suite.report();
+     example_suite.free();
+     cout << "\n"<<"TDDUnitTest_Example::Run: Total unit test failures: " << nFail << endl;
   }
-  
-
-// Basic test
-TEST_CASE("Test 1", "") {
-    REQUIRE_NOTHROW(UnitTest_c().test1());
-}
-
-// Test with a fixture
-TEST_CASE_METHOD(UnitTest_c, "Test 2", "[create]") {
-    REQUIRE_NOTHROW(test1());
-}
-
-// Correctly failing test
-TEST_CASE("Test 3", "[!shouldfail]") {
-    REQUIRE_NOTHROW(UnitTest_c().test2());
-}
 
 } // csmp

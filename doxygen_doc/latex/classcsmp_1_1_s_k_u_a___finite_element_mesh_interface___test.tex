@@ -1,0 +1,116 @@
+\doxysection{csmp\+::SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test}{}\label{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test}\index{csmp::SKUA\_FiniteElementMeshInterface\_Test@{csmp::SKUA\_FiniteElementMeshInterface\_Test}}
+
+
+Tests SKUA models from basic to more advanced.  
+
+
+
+
+{\ttfamily \#include $<$SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test_a6dba46746407e05b88824d226c348598}{run}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Tests SKUA models from basic to more advanced. 
+
+/ consecutive numbering of nodes and elements
+
+/ mesh consistency (Jacobians, element volume range, non-\/manifold vertices, triangle boxes
+
+/ pfverts, disambiguated neighbors of lower-\/dimensional elements / consistent facing directions of surface elements / consecutive numbering of series of line elements / material IDs / test assignment of box boundary flags (sides, edges, corners) / property assignment / use of regions file (is this still needed?) ADVANCED / generation of boundaries / generation of split boundaries 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test_a6dba46746407e05b88824d226c348598}\index{csmp::SKUA\_FiniteElementMeshInterface\_Test@{csmp::SKUA\_FiniteElementMeshInterface\_Test}!run@{run}}
+\index{run@{run}!csmp::SKUA\_FiniteElementMeshInterface\_Test@{csmp::SKUA\_FiniteElementMeshInterface\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test_a6dba46746407e05b88824d226c348598} 
+void csmp\+::\+SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+consecutive numbering of nodes and elements mesh consistency (Jacobians, element volume range, non-\/manifold vertices, triangle boxes pfverts, disambiguated neighbors of lower-\/dimensional elements consistent facing directions of surface elements consecutive numbering of series of line elements material IDs test assignment of box boundary flags (sides, edges, corners) property assignment use of regions file (is this still needed?)
+
+generation of boundaries generation of split boundaries
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_s_k_u_a___finite_element_mesh_interface___test_a6dba46746407e05b88824d226c348598_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test.\+h\item 
+tests/unit/SKUA\+\_\+\+Finite\+Element\+Mesh\+Interface\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

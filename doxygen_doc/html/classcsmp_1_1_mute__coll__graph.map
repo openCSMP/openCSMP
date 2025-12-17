@@ -1,0 +1,3 @@
+<map id="csmp::Mute" name="csmp::Mute">
+<area shape="rect" id="Node000001" title="Allows redirection of the output streams cout and cerr from the screen to null (output goes nowhere) ..." alt="" coords="5,5,100,173"/>
+</map>

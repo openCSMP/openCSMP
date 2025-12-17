@@ -1,0 +1,210 @@
+.TH "csmp::Geothermal_Example" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::Geothermal_Example
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcsmp::Example\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBRun\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBSpecifications\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "\fBExample\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "void \fBSetTitle\fP (const std::string &text)"
+.br
+.RI "Reporting interface\&. "
+.ti -1c
+.RI "void \fBSetCategory\fP (const std::string &text)"
+.br
+.ti -1c
+.RI "void \fBSetDifficulty\fP (const int &difficulty)"
+.br
+.RI "set function, takes care that 0 < difficulty < 4 "
+.ti -1c
+.RI "void \fBAddDescription\fP (const std::string &text)"
+.br
+.RI "allows to add a descrtiption to an example "
+.ti -1c
+.RI "void \fBAddRequirement\fP (const std::string &text)"
+.br
+.RI "allows to add a requirement to an example (files etc\&.\&.) "
+.ti -1c
+.RI "void \fBAddAuthor\fP (const std::string &text)"
+.br
+.RI "allows to add an author to an example "
+.ti -1c
+.RI "std::string \fBGetTitle\fP () const"
+.br
+.RI "example title return function "
+.ti -1c
+.RI "int \fBGetDifficulty\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::string \fBGetCategory\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsEnd\fP () const"
+.br
+.RI "return function "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "void \fBInitialize\fP ()"
+.br
+.RI "assures db to contain data "
+.ti -1c
+.RI "std::ostream * \fBGetStream\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetStream\fP (std::ostream *ostream)"
+.br
+.ti -1c
+.RI "std::string \fBGetExampleFileName\fP (const char *path)"
+.br
+.ti -1c
+.RI "void \fBCreateWorkingDirectoryAndCopyInputModelFiles\fP (std::string &example_name, std::string &model_name, std::string &variable_file, std::string config_file='')"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::Geothermal_Example::Run ()\fR [virtual]\fP"
+
+.PP
+\fBTodo\fP
+.RS 4
+: SKM: fix configuration file, it requests face properties that are not present in variables file 
+
+.PP
+: SKM: add gravity to the calculations
+.RE
+.PP
+set as desired
+
+.PP
+Assignment of material properties, initial conditions, and boundary
+
+.PP
+node visitor for computation of equation of state and transport properties
+
+.PP
+element visitor to calculate thermal contraction or expansion related source/sink terms
+
+.PP
+transform rock properties from the nodes to the elements (why is this needed?)
+
+.PP
+to quickly replace SAMG with LU solver when necessary, uncomment
+
+.PP
+.PP
+ 
+.SS "2\&. Setting up finite element algorithms for PT diffusion"
+computation of initial steady-state fluid pressure
+
+.PP
+finite element computation of transient pressure
+
+.PP
+nodal fluid volume source for mass correction term
+
+.PP
+transient thermal diffusion
+
+.PP
+.PP
+ 
+.SS "3\&. Setting up finite volume algorithms for mass and enthalpy advection"
+.PP
+ 
+.SS "4\&. Pressure, temperature, mass and enthalpy transfer computation"
+time
+
+.PP
+definition of output properties - comment out if not wanted
+
+.PP
+Model-wide node-property initialisation including H2O-EOS calculation of fluid density etc\&.
+
+.PP
+extrapolation of nodal heat capacity, compressibility and density to the element
+
+.PP
+computation of the hydraulic conductivity K=rho k / mu
+
+.PP
+initializing pressure in the model followed by a repeated fluid and rock property calculation
+
+.PP
+setting mass transfer and enthalphy (advected properties) to Dirich at those boundaries where p, t are Dirichlet
+
+.PP
+initial output of model state into timestep 0
+
+.PP
+.PP
+ 
+.SS "5\&. PT-equlibration loop"
+thermal diffusion
+
+.PP
+enthalphy transport
+
+.PP
+update of PT dependent properties
+
+.PP
+pressure diffusion
+
+.PP
+output of results
+.PP
+Implements \fBcsmp::Example\fP\&.
+.SS "void csmp::Geothermal_Example::Specifications ()\fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Example\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

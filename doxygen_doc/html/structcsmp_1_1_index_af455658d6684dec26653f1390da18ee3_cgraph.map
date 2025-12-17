@@ -1,0 +1,13 @@
+<map id="csmp::Index::Index" name="csmp::Index::Index">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,47,139,72"/>
+<area shape="poly" id="edge6_Node000001_Node000001" title=" " alt="" coords="41,48,35,38,39,28,51,22,72,20,94,23,106,29,103,34,93,28,72,25,53,27,42,32,40,37,45,45"/>
+<area shape="rect" id="Node000002" href="$structcsmp_1_1_index.html#abb874a9f4479e5436f285b7c65b26524" title="Registers an IndexTracker (does not detach from current!)" alt="" coords="187,5,326,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,43,180,32,182,38,133,49"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_index_tracker.html#a6cf491413a4fce44db086a25038727c4" title="Called when a new Index is copied using an existing Index." alt="" coords="188,79,325,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,70,173,79,172,84,134,76"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="221,79,219,69,225,60,238,55,256,53,277,55,288,61,286,66,275,60,256,58,239,60,229,64,225,70,226,78"/>
+<area shape="rect" id="Node000004" href="$structcsmp_1_1_index.html#a459d7e434854a790a303dcc20cc47949" title=" " alt="" coords="396,61,518,87"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="325,88,380,81,381,86,326,93"/>
+<area shape="rect" id="Node000005" href="$classcsmp_1_1_index_tracker.html#aab0c0d4cbc7ccf5495c08f87e1909aeb" title="print all currently registered Index objects" alt="" coords="374,111,540,136"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="326,105,359,109,358,114,325,110"/>
+</map>

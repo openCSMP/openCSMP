@@ -40,9 +40,6 @@ class MeshDiagnostics {
   
     /// checks whether the any value of a computed node variable (P,T,C) lies outside of the range of the values in its neighborhood
     bool DetectNonMonotonicity( const Model<dim>&, const char* variable_of_interest ) const;
-    
-    /// nodes that are not connected to any cells
-    bool DetectOrphanNodes( const Model<dim>& ) const;
 
   private:
     /// recomputes a consistent node-numbering for all surfaces in the mesh

@@ -1,0 +1,440 @@
+.TH "csmp::StressesAndStrains< 2U >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::StressesAndStrains< 2U > \- 2D stress & strain are output as tensor variables, if they are nodal variables they are extrapolated to the nodes in two application cycles\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <StressesAndStrains2\&.h>\fP
+.PP
+Inherits \fBcsmp::MathOperatorLHS< 2U, Element >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStressesAndStrains\fP (const \fBModel\fP< 2U > &sg, const char *oper, const char *basic, const char *test, bool plane_strain, bool principal_vectors)"
+.br
+.RI "compute principal stresses and strains "
+.ti -1c
+.RI "void \fBGetOperands\fP (const \fBElement\fP< 2U > &) override final"
+.br
+.RI "get displacement values to compute {d} vector "
+.ti -1c
+.RI "void \fBComputeContribution\fP (const \fBElement\fP< 2U > &) override final"
+.br
+.RI "{e} = [B]{d}, {s} = [D]{e} at integration points "
+.ti -1c
+.RI "void \fBWriteOperands\fP (\fBElement\fP< 2U > &) override final"
+.br
+.RI "write {e} to each elements "
+.ti -1c
+.RI "void \fBPlaneStress\fP (bool yes_no=true)"
+.br
+.ti -1c
+.RI "bool \fBIsPlaneStress\fP () const"
+.br
+.ti -1c
+.RI "void \fBPrincipalStrainsAndStresses\fP (bool yes_no)"
+.br
+.ti -1c
+.RI "\fBStressesAndStrains\fP< 2U > * \fBclone\fP () const override final"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::MathOperatorLHS< 2U, Element >\fP
+.in +1c
+.ti -1c
+.RI "\fBMathOperatorLHS\fP (const \fBPropertyDatabase\fP< dim > &, const char *basic, const char *test)"
+.br
+.ti -1c
+.RI "\fBMathOperatorLHS\fP & \fBoperator=\fP (const \fBMathOperatorLHS\fP &)"
+.br
+.ti -1c
+.RI "std::string \fBName\fP () const"
+.br
+.RI "\fBOperand\fP Functions\&. "
+.ti -1c
+.RI "virtual void \fBOut\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBMaterialOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBMaterialOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBMaterialOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBMaterialOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBMaterialOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBMaterialOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBBasicOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBBasicOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBBasicOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBBasicOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBBasicOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBBasicOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBBasicOperandOffset\fP () const"
+.br
+.ti -1c
+.RI "const \fBParameter\fP & \fBTestOperand\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndex\fP & \fBTestOperandKey\fP () const"
+.br
+.ti -1c
+.RI "std::string \fBTestOperandName\fP () const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBTestOperandType\fP () const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBTestOperandPlacement\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBTestOperandDataDepth\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBTestOperandOffset\fP () const"
+.br
+.ti -1c
+.RI "bool \fBAdd\fP () const"
+.br
+.RI "Accumulation Process Settings\&. "
+.ti -1c
+.RI "bool \fBSubtract\fP () const"
+.br
+.ti -1c
+.RI "bool \fBAddLater\fP () const"
+.br
+.ti -1c
+.RI "bool \fBSubtractLater\fP () const"
+.br
+.ti -1c
+.RI "bool \fBMultiply\fP () const"
+.br
+.ti -1c
+.RI "bool \fBLumpedFormulation\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBApplicationCycle\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBApplicationCycles\fP () const"
+.br
+.ti -1c
+.RI "double \fBMultiplyBy\fP () const"
+.br
+.ti -1c
+.RI "bool \fBMultiplyWithTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "bool \fBDivideByTimeIncrement\fP () const"
+.br
+.ti -1c
+.RI "void \fBAddAccumulate\fP ()"
+.br
+.RI "Set flags and properties\&. "
+.ti -1c
+.RI "void \fBSubtractAccumulate\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddAccumulateLater\fP ()"
+.br
+.ti -1c
+.RI "void \fBSubtractAccumulateLater\fP ()"
+.br
+.ti -1c
+.RI "void \fBMultiplyAccumulate\fP ()"
+.br
+.ti -1c
+.RI "void \fBPropertyAtIntegrationPoint\fP (const \fBElement\fP< dim > &, const \fBcsmp::Index\fP &, uint32_t ip, \fBDenseMatrix\fP< DM_MIN > &)"
+.br
+.RI "interpolation of property if isoparametric elements are used "
+.ti -1c
+.RI "virtual void \fBGetOperands\fP (const \fBElement\fP< dim > &)"
+.br
+.RI "getting data from the \fBElement\fP, \fBFace\fP, \fBInterFace\fP "
+.ti -1c
+.RI "virtual void \fBComputeContribution\fP (const \fBElement\fP< dim > &)"
+.br
+.RI "integration performed on \fBElement\fP, \fBFace\fP, \fBInterFace\fP "
+.ti -1c
+.RI "virtual void \fBWriteOperands\fP (\fBElement\fP< dim > &)"
+.br
+.RI "writing data to the \fBElement\fP, \fBFace\fP, \fBInterFace\fP "
+.ti -1c
+.RI "virtual void \fBMultiplyWithTimeFactor\fP (double dt)"
+.br
+.RI "multiply with time increment if this is desired "
+.ti -1c
+.RI "virtual void \fBAssignToGlobal\fP (const \fBElement\fP< dim > &, \fBSparseMatrix\fP &)"
+.br
+.RI "assigment to the left hand side global matrix (after everything was calculated ) "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBScalarVariable\fP > \fByoungs_\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBScalarVariable\fP > \fBpratio_\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBDenseMatrix\fP< DM_MIN > > \fBSTIFF_\fP"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::MathOperatorLHS< 2U, Element >\fP
+.in +1c
+.ti -1c
+.RI "std::string \fBname_\fP"
+.br
+.RI "name of operator "
+.ti -1c
+.RI "\fBParameter\fP \fBop\fP"
+.br
+.RI "material property operand "
+.ti -1c
+.RI "std::pair< \fBParameter\fP, size_t > \fBbop\fP"
+.br
+.RI "basic function operand and calculation offset "
+.ti -1c
+.RI "std::pair< \fBParameter\fP, size_t > \fBtop\fP"
+.br
+.RI "test function operand and calculation offset "
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBLHS\fP"
+.br
+.RI "solution matrix to be accumulated "
+.ti -1c
+.RI "std::vector< \fBDenseMatrix\fP< DM_MIN > > \fBMTRL\fP"
+.br
+.RI "material property matrix(es) needed for PDE operand "
+.ti -1c
+.RI "\fBDenseMatrix\fP< DM_MIN > \fBDERIV\fP"
+.br
+.RI "shape function derivative matrix "
+.ti -1c
+.RI "std::vector< double > \fBIPOL\fP"
+.br
+.RI "shape function vector "
+.ti -1c
+.RI "double \fBfactor_\fP"
+.br
+.RI "constant scaling factor "
+.ti -1c
+.RI "bool \fBadd_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBsubtract_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBadd_accumulate_later_\fP"
+.br
+.ti -1c
+.RI "bool \fBsubtract_accumulate_later_\fP"
+.br
+.ti -1c
+.RI "bool \fBmultiply_accumulate_\fP"
+.br
+.ti -1c
+.RI "bool \fBlump_matrices_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBapplication_cycles_\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBapplication_cycle_\fP"
+.br
+.ti -1c
+.RI "bool \fBtime_multiply_\fP"
+.br
+.ti -1c
+.RI "bool \fBtime_divide_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+2D stress & strain are output as tensor variables, if they are nodal variables they are extrapolated to the nodes in two application cycles\&. 
+
+
+.PP
+\fBNote\fP
+.RS 4
+Compressive strains and stresses are positive\&.
+
+.PP
+the strain and stress component vectors are normalised to 1\&. 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "\fBcsmp::StressesAndStrains\fP< 2U >::StressesAndStrains (const \fBModel\fP< 2U > & sg, const char * oper, const char * basic, const char * test, bool planestrain, bool principal_vectors)"
+
+.PP
+compute principal stresses and strains Constructs the post-processing math operator for 2D calculations\&. Thus, the user must specify whether he/she is interested in plane stress or plane strain computations (this must be exactly the same setting as for the actual computation), and they have the option of computing the additional variables (character strings): 
+.br
+
+.PP
+.PP
+.nf
+name                type        placement
+\-\-\-\-                \-\-\-\-        \-\-\-\-\-\-\-\-\-
+strain              tensor      cpoint
+'strain1'           vector      cpoint  (principal strain axes)
+'strain2'           vector      cpoint
+('strain3')         vector      cpoint
+'dilatation'        scalar      cpoint
+'principal strain'  vector      cpoint  (magnitudes of elongation in the principal directions)
+'stress'            tensor      cpoint
+'sigma1'            vector      cpoint  (principal stress axes)
+'sigma2'            vector      cpoint
+('sigma3')          vector      cpoint
+'mean stress'       scalar      cpoint  (= (sigma1 + sigma2 +sigma3 / 3)
+'principal stress'  vector      cpoint  (magnitudes of the principal stresses)
+.fi
+.PP
+
+.PP
+Clearly, these variables must be present in the variable database file for the operator to work\&. 
+.br
+
+.PP
+The stiffness matrices needed for the stress computation are calculated from the user-specified variables for 'Young's modulus' and 'Poisson's ratio'\&.
+.SH "Input Arguments"
+.PP
+Three character strings for the input variables of the calculation 'Young's modulus', 'Poisson's ratio', and 'displacement', a boolean variable to toggle between plane stress and plane strain and another boolean variable specifying whether principal strains and stresses shall be computed\&. 
+.br
+.SH "Messages"
+.PP
+The names of the output variables are hard-wired in this operator\&. Thus, checks are performed whether these variables actually exist in the variable database and errors are reported if they don't or if they have the wrong placement or type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIoper\fP Young's modulus  
+.br
+\fIbasic\fP Poisson's ratio  
+.br
+\fItest\fP displacement  
+.br
+\fIplanestrain\fP stresses will be computed suppressing any displacement perpendicular to the 2D model 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBStressesAndStrains\fP< 2U > * \fBcsmp::StressesAndStrains\fP< 2U >::clone () const\fR [inline]\fP, \fR [final]\fP, \fR [override]\fP, \fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::MathOperatorLHS< 2U, Element >\fP\&.
+.SS "void \fBcsmp::StressesAndStrains\fP< 2U >::ComputeContribution (const \fBElement\fP< 2U > & e)\fR [final]\fP, \fR [override]\fP"
+
+.PP
+{e} = [B]{d}, {s} = [D]{e} at integration points 
+.IP "1." 4
+From the nodal displacements, compute the strains at the integration points (=optimal locations, Barlow, 1977), using the interpolation function derivative matrices at these points\&. 
+.br
+
+.IP "2." 4
+Linearly extrapolate the strains back from the integration points to the nodes\&. In this step, bilinear extrapolation is carried out by the specific finite element used\&. Only linear variations in strain over the element are supported at this stage (C1 elements)\&. The nodal strains are averaged among the adjacent elements since they diverge at these locations from one-another\&. This is done in a second application cycle of this postprocessing mathoperator\&. 
+.br
+
+.PP
+.SH "Input Arguments"
+.PP
+A reference to the \fBElement\fP for which the post-processing is done\&. 
+.SS "void \fBcsmp::StressesAndStrains\fP< 2U >::GetOperands (const \fBElement\fP< 2U > & e)\fR [final]\fP, \fR [override]\fP"
+
+.PP
+get displacement values to compute {d} vector Reads the displacements (specified as test-function \fBOperand\fP) of each node for further processing by the \fBComputeContribution()\fP method\&. 
+.br
+
+.PP
+Then Youngs modulus and the Poisson's ratio are read and the stiffness matrix is build 
+.br
+.SH "Input Arguments"
+.PP
+The element from which accumulation into the global matrix takes place and the time-increment over which the force will be applied\&. 
+.br
+.SH "Implementation"
+.PP
+Since the forces are nodal properties the GetOperands method of the base class \fBMathOperatorRHS\fP must be overloaded, such that the nodal \fBOperand\fP can be retrieved\&. 
+.SS "void \fBcsmp::StressesAndStrains\fP< 2U >::PlaneStress (bool yes_no = \fRtrue\fP)"
+Allows to toggle between plane stress and plane strain computations in two-dimensional models\&. Clearly, this method only has an effect in 2D calculations and the chosen computation must match the preceding Algorithm\&. 
+.br
+.SH "Input Arguments"
+.PP
+A boolean variable specifying whether the material property matrix used shall be initialized for plane strain or plane stress\&. 
+.br
+.SH "Messages"
+.PP
+If the method is called in a 3D calculation, the user is warned that it will have no effect\&. 
+.SS "void \fBcsmp::StressesAndStrains\fP< 2U >::PrincipalStrainsAndStresses (bool yes_no)"
+Allows to toggle the addional computation of the variables:
+
+.PP
+.PP
+.nf
+name                type        placement
+\-\-\-\-                \-\-\-\-        \-\-\-\-\-\-\-\-\-
+strain              tensor      node
+'strain1'           vector      node    (principal strain axes)
+'strain2'           vector      node
+('strain3')         vector      node
+'dilatation'        scalar      node
+'principal strain'  vector      node    (magnitudes of elongation in the principal directions)
+'stress'            tensor      node
+'sigma1'            vector      node    (principal stress axes)
+'sigma2'            vector      node
+('sigma3')          vector      node
+'mean stress'       scalar      node    (= (sigma1 + sigma2 +sigma3 / 3)
+'principal stress'  vector      node    (magnitudes of the principal stresses)
+.fi
+.PP
+
+.PP
+on or off\&. Clearly, these variables must be present in the variable database file for the method to work\&. 
+.br
+.SH "Input Arguments"
+.PP
+The boolean variable which specifies whether one wants the additional computations or not\&. The default is 'true'\&. 
+.SS "void \fBcsmp::StressesAndStrains\fP< 2U >::WriteOperands (\fBElement\fP< 2U > & e)\fR [final]\fP, \fR [override]\fP"
+
+.PP
+write {e} to each elements Outputs the computed strains to the \fBModel<2U>\fP storage checking the range of each variable using the ranges associated with each of the Operands\&. x
+
+.PP
+If principal stresses and strains were requested this method also does the necessary computations before outputting these variables\&. 
+.br
+.SH "Input Arguments"
+.PP
+A reference to the property memory manager and the \fBElement\fP for which the variables are output\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

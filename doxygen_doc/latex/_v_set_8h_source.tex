@@ -1,0 +1,168 @@
+\doxysection{VSet.\+h}
+\hypertarget{_v_set_8h_source}{}\label{_v_set_8h_source}\index{source/includes/integration/finite\_elements/VSet.h@{source/includes/integration/finite\_elements/VSet.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_VSET\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_VSET\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_data_8h}{"{}VData.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_property_data_8h}{"{}PropertyData.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00010\ \textcolor{comment}{}}
+\DoxyCodeLine{00011\ \textcolor{comment}{@brief\ Container\ for\ polygonal\ data\ and\ associated\ properties}}
+\DoxyCodeLine{00012\ \textcolor{comment}{implemented\ on\ the\ basis\ of\ NCSA\ (Urbana,\ Champagne,\ Illinois,\ USA)\ VSet\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{that\ forms\ part\ of\ their\ HDF\ data\ file\ storage.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{@author\ Stephan\ K.\ Matthai}}
+\DoxyCodeLine{00016\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00017\ \textcolor{comment}{@date\ 1996}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_v_data}{VData}}\ \{}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ VSet();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ single\ element\ type\ constructor}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_a703fc687a8f7cc06f79581f9ad20e7e7}{VSet}}(\ uint32\_t\ nodes\_per\_element,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ uint32\_t\ nbors\_per\_element,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ int8\_t\ \ \ csmp\_etype,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ size\_t\ nodes,\ size\_t\ elmts\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ multiple\ element\ type\ constructor}}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_aa6b0485e4efb2e124ccb94b384ffc902}{VSet}}(\ \textcolor{keyword}{const}\ std::vector<int8\_t>\&\ \ fem\_types,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::deque<uint32\_t>\&\ npes,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::deque<uint32\_t>\&\ epes,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ size\_t\ nodes\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ resizing\ meshes\ with\ only\ a\ single\ element\ type}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_ab985b7a8a99a9c5202398e14e124bb1b}{Resize}}(\ uint32\_t\ nodes\_per\_element,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ nbors\_per\_element,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int8\_t\ csmp\_etype,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ nodes,\ size\_t\ elmts\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ use\ for\ meshes\ with\ multiple\ element\ sizes}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a9a7936e4b01781de7cd84b60682a7532}{Resize}}(\ \textcolor{keyword}{const}\ std::deque<int8\_t>\&\ etypes,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::deque<uint32\_t>\&\ npes,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::deque<uint32\_t>\&\ epes,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ nodes,\ size\_t\ faces,\ size\_t\ interfaces\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ node\ coordinates}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_acccb3188c54e7bb89ece4da5437a3597}{AddXYZ}}(\ \textcolor{keyword}{const}\ std::deque<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::deque<\textcolor{keywordtype}{double}>\&\ y,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::deque<\textcolor{keywordtype}{double}>\&\ z\ );}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{///\ the\ IDs\ of\ the\ nodes\ that\ make\ up\ each\ element\ }}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{AddPlist}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{size\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{first}},}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{size\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{last}}\ );}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{AddPlist}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{deque}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{size\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{first}},}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{deque}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{size\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aab1a113f6c7f3fa64291df8c6c534105}{last}}\ );}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{///\ the\ equi-\/dimensional\ neighbors\ adjacent\ to\ the\ numbered\ element\ faces\ plus\ boundary\ identifiers\ where\ there\ is\ no\ neighbor}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{AddPfverts}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{int64\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{first}},}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{size\_t}},\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{int64\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{last}}\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{AddPfverts}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{deque}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{int64\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{first}},}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{deque}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{int64\_t}}>\ >::\mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_affbb39c13eaf1e1fe8d4d5f93284ca65}{last}}\ );}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{///\ adds\ BOX\_BOUNDARY\ flag\ values\ to\ VData}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{AddBFlags}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{int8\_t}}>::\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{first}},}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{int8\_t}}>::\mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_af4cf0571e7b6cb5853771594ed48cca9}{last}}\ );}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ adds\ boundary\ representation\ geometry\ identifiers\ for\ the\ nodes\ to\ the\ VSet}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{AddBREP\_Flags}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{int8\_t}}>::\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{first}},}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{int8\_t}}>::\mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a2fd0d4caf092b150c100cbbf744c5ea8}{last}}\ );}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{///\ rocktype\ identifiers\ for\ elements\ only}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{AddPmtrl}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{int32\_t}}>::\mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{first}},}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{int32\_t}}>::\mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_aea58c55699c0081c1ca7e1f0ec1467dd}{last}}\ );}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ adds\ node-\/manifold\ information\ to\ the\ VSet}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a4328a7668a5b30c0e65cc77c49cd70ad}{AddPmanifold}}(\ VData::manifoldContainer::const\_iterator\ first,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VData::manifoldContainer::const\_iterator\ last\ );}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ the\ VSet\ contains\ any\ distributed\ variable\ values\ stored\ in\ PropertyData\ objects}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_aa44de0912a218fe42f8c70e9fc0cb8f8}{DataEmpty}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{///\ adds\ variable\ dataset\ to\ 'property\_map\_'\ data\ member\ of\ VSet}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_v_set_afaf25c1d237ed5e98f5d6f81e2ae5aec}{AddData}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\&\ );}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{///\ retrieves\ property\ data\ from\ VSet\ (if\ any)}}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_property_data}{PropertyData}}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_aa1be86d1c82d8e397b8eb137128f0f61}{Data}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{///\ if\ the\ property\ records\ contain\ FV\ data}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a6b28f2f5355e3b2d15d88bb4ca6a1cbd}{ContainsFiniteVolumeIntegrationPointData}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{///\ const\ iterators\ for\ the\ material\ ID\ record\ (one\ for\ each\ element;\ none\ for\ face\ and\ interface\ objects)}}
+\DoxyCodeLine{00099\ \ \ \ \ std::vector<int32\_t>::const\_iterator\ \mbox{\hyperlink{classcsmp_1_1_v_set}{PmtrlBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set}{int32\_t}}>::\mbox{\hyperlink{classcsmp_1_1_v_set}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{PmtrlEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ int32\_t\ Pmtrl(\ size\_t\ elmt\ )\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ pmtrl\_.at(elmt);\ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{///\ const\ iterators\ for\ the\ propery\ collection}}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{string}},\mbox{\hyperlink{classcsmp_1_1_v_set}{PropertyData}}>::\mbox{\hyperlink{classcsmp_1_1_v_set}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{PropertyValuesBegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{string}},\mbox{\hyperlink{classcsmp_1_1_v_set}{PropertyData}}>::\mbox{\hyperlink{classcsmp_1_1_v_set}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_v_set}{PropertyValuesEnd}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classcsmp_1_1_v_set_ae15918ac1c6556022cddd32f63b30f91}{RemoveData}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ s\ )\ -\/>\ \mbox{\hyperlink{classcsmp_1_1_v_set_ae15918ac1c6556022cddd32f63b30f91}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_ae15918ac1c6556022cddd32f63b30f91}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set}{string}},\mbox{\hyperlink{classcsmp_1_1_v_set}{PropertyData}}>::\mbox{\hyperlink{classcsmp_1_1_v_set}{iterator}};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{///\ writes\ complete\ VSet\ to\ binary\ file\ with\ the\ given\ time\ stamp}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_ab216d43dfc58d8eea308f9af1928aba1}{OutputTo}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ bin\_file,\ \textcolor{keywordtype}{double}\ time\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{///\ reads\ binary\ files\ written\ with\ OutputTo()\ and\ initialises\ the\ VSet\ with\ it;\ the\ time\ stamp\ is\ returned\ in\ second\ argument}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_aebbdf15340e8f8f3bd6b29bfe21fbbdd}{InputFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ bin\_file,\ \textcolor{keywordtype}{double}\&\ time\ );}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{///\ reads\ binary\ files\ written\ with\ OutputTo()\ and\ initialises\ the\ VSet\ with\ it;\ the\ time\ stamp\ is\ returned\ in\ second\ argument;\ it\ can\ read\ only\ a\ subset\ of\ variables\ by\ using\ third\ argument}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_aa43d6b4cdbfa5752ee5873ffdac6bc75}{InputFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ bin\_file,\ \textcolor{keywordtype}{double}\&\ time,\ \textcolor{keyword}{const}\ std::set<std::string>\&\ subset\_variables\ );}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{///\ permits\ to\ initialise\ a\ VSet\ from\ a\ text\ file\ (see\ detailed\ DOxygen\ documentation\ for\ format)}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_a35e642227b0475434ac4de1f943b5b14}{InputFromTextFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_dot\_txt\ );}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{///\ output\ VSet\ to\ binary\ file\ which\ has\ partitions\ and\ halos\ defining\ their\ overlap}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_a2288211530bdce3c1d1d63258ab93bca}{ParallelOutputTo}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ bin\_file,\ \textcolor{keywordtype}{double}\ time,\ size\_t\ first\_outerhalo\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_a56928e1c755e628dcd551077a69704d9}{ParallelInputFrom}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ bin\_file,\ \textcolor{keywordtype}{double}\&\ time,\ size\_t\&\ first\_outerhalo\ );}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{///\ selects\ specific\ elements\ from\ the\ VSet\ that\ shall\ be\ retained\ while\ all\ others\ are\ deleted\ (including\ nodes),\ returns\ new\ range}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_a9c3b964f898e7cb427cd31ac295b9d85}{ReduceTo}}(\ \textcolor{keyword}{const}\ std::map<size\_t,size\_t>\&\ old\_and\_new\_consecutive\_element\_ids\ );}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{///\ updates\ pmtrl\ and\ property\ storage\ to\ size\ changes\ in\ VData}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a41931ddf441b74f8c54566999adfa61d}{UpdatePropertyStorage}}();}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{///\ deletes\ all\ content\ of\ the\ VSet}}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_ac1e76ff26b8868ea0487c854fa829af3}{Erase}}();}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{///\ uses\ the\ node\ coordinates\ to\ infer\ the\ model\ dimension:\ if\ Z-\/range=zero,\ dim=2,\ if\ Y-\/range=2,\ dim=1,\ else\ dim=3}}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_a4a4aac3e7fc919ce099dc79ca55da251}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a4a4aac3e7fc919ce099dc79ca55da251}{MeshDimension}}(\ \textcolor{keywordtype}{bool}\ check\_coordinates\ =\ \textcolor{keyword}{false}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{///\ prints\ the\ VSet\ to\ the\ console}}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_a3e761eabf0f84f3192c1ff9d55062886}{Out}}(\ \textcolor{keywordtype}{bool}\ data\_as\_well=\textcolor{keyword}{true}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{///\ writes\ C++17\ \ code\ that\ reproduces\ a\ hardwired\ version\ of\ the\ current\ VSet}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_v_set_a873b43f136a1e9d69d842a9c1ce57697}{OutCPP17}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cpp\_file\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_af4f607958e69dcabb4df01dcd0c20230}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_af4f607958e69dcabb4df01dcd0c20230}{map}}<\mbox{\hyperlink{classcsmp_1_1_v_set_af4f607958e69dcabb4df01dcd0c20230}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_af4f607958e69dcabb4df01dcd0c20230}{string}},\mbox{\hyperlink{classcsmp_1_1_v_set_af4f607958e69dcabb4df01dcd0c20230}{PropertyData}}>\ \ \mbox{\hyperlink{classcsmp_1_1_v_set_af4f607958e69dcabb4df01dcd0c20230}{property\_map\_}};\ \ \textcolor{comment}{///<\ container\ for\ variables\ distributed\ on\ the\ mesh}}
+\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_acdd960f28be068d5d81a2086e76fa6b7}{std}}::\mbox{\hyperlink{classcsmp_1_1_v_set_acdd960f28be068d5d81a2086e76fa6b7}{vector}}<\mbox{\hyperlink{classcsmp_1_1_v_set_acdd960f28be068d5d81a2086e76fa6b7}{int32\_t}}>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set_acdd960f28be068d5d81a2086e76fa6b7}{pmtrl\_}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ \ rocktype\ identifiers;\ one\ per\ element;\ for\ transfer\ to\ 'material\_id\_'}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ VSet\_Test;}
+\DoxyCodeLine{00151\ \};}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{comment}{///\ extrapolates\ element\ property\ values\ stored\ in\ VSet\ to\ its\ vertices}}
+\DoxyCodeLine{00154\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{class}\ VarType>}
+\DoxyCodeLine{00155\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a454b86bd00b667e07e864d97e187fcde}{extrapolateElementToNodeProperty}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<dim>\&,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<VarType>\&\ \ elmnt\_values,}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<VarType>\&\ \ \ \ \ \ \ \ nodal\_values\ );}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

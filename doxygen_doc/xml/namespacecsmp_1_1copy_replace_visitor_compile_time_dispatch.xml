@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="namespacecsmp_1_1copy_replace_visitor_compile_time_dispatch" kind="namespace" language="C++">
+    <compoundname>csmp::copyReplaceVisitorCompileTimeDispatch</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="_copy_replace_visitor_8cpp_1a019acd489d02f41917cadd118f0cac28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class V</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::copyReplaceVisitorCompileTimeDispatch::initializeVariable</definition>
+        <argsstring>(V &amp;, const PropertyDatabase&lt; dim &gt; &amp;, const char *)</argsstring>
+        <name>initializeVariable</name>
+        <qualifiedname>csmp::copyReplaceVisitorCompileTimeDispatch::initializeVariable</qualifiedname>
+        <param>
+          <type>V &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const char *</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/model/CopyReplaceVisitor.cpp" line="18" column="10" bodyfile="source/modules/model/CopyReplaceVisitor.cpp" bodystart="18" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="_copy_replace_visitor_8cpp_1a4f172bc7f058d03f116978ec0bb67246" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::copyReplaceVisitorCompileTimeDispatch::initializeVariable</definition>
+        <argsstring>(ArrayVariable &amp;var, const PropertyDatabase&lt; dim &gt; &amp;pdb, const char *propertyName)</argsstring>
+        <name>initializeVariable</name>
+        <qualifiedname>csmp::copyReplaceVisitorCompileTimeDispatch::initializeVariable</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_array_variable" kindref="compound">ArrayVariable</ref> &amp;</type>
+          <declname>var</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>pdb</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>propertyName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/model/CopyReplaceVisitor.cpp" line="24" column="10" bodyfile="source/modules/model/CopyReplaceVisitor.cpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="_copy_replace_visitor_8cpp_1ad0f8cd409a6dadb8cedf40af21ad795a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>dim</declname>
+            <defname>dim</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void csmp::copyReplaceVisitorCompileTimeDispatch::initializeVariable</definition>
+        <argsstring>(FlaggedArrayVariable &amp;var, const PropertyDatabase&lt; dim &gt; &amp;pdb, const char *propertyName)</argsstring>
+        <name>initializeVariable</name>
+        <qualifiedname>csmp::copyReplaceVisitorCompileTimeDispatch::initializeVariable</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_flagged_array_variable" kindref="compound">FlaggedArrayVariable</ref> &amp;</type>
+          <declname>var</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>pdb</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>propertyName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/modules/model/CopyReplaceVisitor.cpp" line="30" column="10" bodyfile="source/modules/model/CopyReplaceVisitor.cpp" bodystart="30" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/model/CopyReplaceVisitor.cpp" line="15" column="3"/>
+  </compounddef>
+</doxygen>

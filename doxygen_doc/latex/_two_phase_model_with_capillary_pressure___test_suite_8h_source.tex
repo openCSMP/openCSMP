@@ -1,0 +1,356 @@
+\doxysection{Two\+Phase\+Model\+With\+Capillary\+Pressure\+\_\+\+Test\+Suite.\+h}
+\hypertarget{_two_phase_model_with_capillary_pressure___test_suite_8h_source}{}\label{_two_phase_model_with_capillary_pressure___test_suite_8h_source}\index{tests/unit/TwoPhaseModelWithCapillaryPressure\_TestSuite.h@{tests/unit/TwoPhaseModelWithCapillaryPressure\_TestSuite.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TWOPHASEMODEL\_TESTS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TWOPHASEMODEL\_TESTS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_suite_8h}{"{}TestSuite.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model1_d_8h}{"{}Model1D.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_model___test_8h}{"{}TwoPhaseModel\_Test.h"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_property_handle_8h}{"{}PropertyHandle.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_vector_variable_8h}{"{}VectorVariable.h"{}}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_suite_8h}{"{}TestSuite.h"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_brooks_corey_8h}{"{}BrooksCorey.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_corey_8h}{"{}Corey.h"{}}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_fourar_lenormand_8h}{"{}FourarLenormand.h"{}}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_van_genuchten_8h}{"{}VanGenuchten.h"{}}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_file_based_8h}{"{}TwoPhaseFileBased.h"{}}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}Experimental2PhaseModel.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_experimental_r_t_8h}{"{}ExperimentalRT.h"{}}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_fracture_matrix_upscaled_8h}{"{}FractureMatrixUpscaled.h"{}}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_brooks_corey_with_hysteresis_8h}{"{}BrooksCoreyWithHysteresis.h"{}}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_two_phase_model_8h}{"{}LinearTwoPhaseModel.h"{}}}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\{}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{comment}{///\ PL\ Nov\ 2010}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite}{TwoPhaseModel\_TestSuite}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00027\ \{}
+\DoxyCodeLine{00028\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{explicit}\ TwoPhaseModel\_TestSuite(\ \mbox{\hyperlink{classcsmp_1_1_test_suite}{TestSuite}}\&\ suite\ )\ :\ suite\_(suite),\ free\_(\ \textcolor{keyword}{true}\ )\{\}}
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{virtual}\ \string~TwoPhaseModel\_TestSuite()\ \{\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{free}}\mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{(}}\mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{)}};\ \}}
+\DoxyCodeLine{00032\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00033\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{free}}();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{keywordtype}{void}\ AssignSaturationValues(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \mbox{\hyperlink{classcsmp_1_1_test_suite}{TestSuite}}\&\ \ suite\_;}
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ free\_;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ \ rock\_model\_;}
+\DoxyCodeLine{00043\ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ \ fracture\_rock\_model\_;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{comment}{///\ resets\ model\ properties\ before\ test}}
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite}{TwoPhaseModel\_TestSuite}}::\mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite_a3210799bc9df0dc72a16a9f749908004}{free}}()}
+\DoxyCodeLine{00049\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{if}(\ !free\_\ \ )}
+\DoxyCodeLine{00051\ \ \ \ \ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\ rock\_model\_\ !=\ NULL\ )}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ rock\_model\_;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\ fracture\_rock\_model\_\ !=\ NULL\ )}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ fracture\_rock\_model\_;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ free\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{///\ assign\ saturation\ values}}
+\DoxyCodeLine{00063\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite}{TwoPhaseModel\_TestSuite}}::AssignSaturationValues(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<1U>*\ model\ )}
+\DoxyCodeLine{00064\ \{}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ Saturation\ values}}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<1>\&\ \ sg(model-\/>Region(\textcolor{stringliteral}{"{}Model"{}}));}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ satw\_key\ =\ model-\/>Database().StorageKey(\textcolor{stringliteral}{"{}saturation\ water"{}});}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ \ satn\_key\ =\ model-\/>Database().StorageKey(\textcolor{stringliteral}{"{}saturation\ oil"{}});}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ sat\_incr(1./model-\/>Mesh().Nodes());}
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{ScalarVariable}}\ \ \ \ \ \ \ saturation;}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ generating\ a\ range\ of\ saturation\ values\ for\ water\ and\ oil}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordflow}{for}\ (\ vector<Node<1U>*>::iterator}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ it=sg.NodesBegin();\ it!=sg.NodesEnd();\ it++\ )}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ saturation\mbox{\hyperlink{classcsmp_1_1_scalar_variable_a7f0ab5431406d975d6e1de988f369176}{(}}\mbox{\hyperlink{classcsmp_1_1_scalar_variable_a7f0ab5431406d975d6e1de988f369176}{)}}\ =\ 0.\ +\ sat\_incr\ *\ (*it)-\/>Idx();}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ (*it)-\/>Store(\ satw\_key,\ saturation\ );}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ saturation\ =\ 1.\ -\/\ saturation;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ (*it)-\/>Store(\ satn\_key,\ saturation\ );}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model___test_suite}{TwoPhaseModel\_TestSuite}}::run()}
+\DoxyCodeLine{00085\ \{}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ free\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \textcolor{keyword}{const}\ uint32\_t\ \ N\_ELEMENTS(100);}
+\DoxyCodeLine{00090\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ length(1.);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \textcolor{comment}{//\ creating\ 1D\ TestModel\ with\ a\ matrix\ and\ fracture\ region}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ fracture\_rock\_model\_\ \ =\ \textcolor{keyword}{new}\ Model1D<1U>(\ \textcolor{stringliteral}{"{}FractureRockModel1D"{}},\ \textcolor{stringliteral}{"{}CSMP-\/2phase-\/variables.txt"{}},\ length,\ N\_ELEMENTS\ );}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ vector<uint32\_t>\ \ \ elms;}
+\DoxyCodeLine{00097\ \ \ elms.reserve(\ N\_ELEMENTS\ );}
+\DoxyCodeLine{00098\ \ \ \textcolor{keywordflow}{for}\ (\ uint32\_t\ i\ =\ 0;\ i\ <\ 40;\ ++i\ )}
+\DoxyCodeLine{00099\ \ \ \ \ elms.push\_back(i);}
+\DoxyCodeLine{00100\ \ \ \textcolor{keywordflow}{for}\ (\ uint32\_t\ i\ =\ 60;\ i\ <\ N\_ELEMENTS;\ ++i\ )}
+\DoxyCodeLine{00101\ \ \ \ \ elms.push\_back(i);}
+\DoxyCodeLine{00102\ \ \ fracture\_rock\_model\_-\/>FormRegionFrom(\ \textcolor{stringliteral}{"{}ROCK"{}},\ elms\ );}
+\DoxyCodeLine{00103\ \ \ elms.erase(\ elms.begin(),\ elms.end()\ );}
+\DoxyCodeLine{00104\ \ \ \textcolor{keywordflow}{for}\ (\ uint32\_t\ i=40;\ i<60;\ i++\ )}
+\DoxyCodeLine{00105\ \ \ \ \ elms.push\_back(i);}
+\DoxyCodeLine{00106\ \ \ fracture\_rock\_model\_-\/>FormRegionFrom(\ \textcolor{stringliteral}{"{}FRACTURE"{}},\ elms\ );}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \textcolor{comment}{//\ creating\ 1D\ TestModel\ with\ just\ a\ matrix\ region}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ rock\_model\_\ \ \ \ \ \ \ \ \ \ \ =\ \textcolor{keyword}{new}\ Model1D<1U>(\ \textcolor{stringliteral}{"{}RockModel1D"{}},\ \textcolor{stringliteral}{"{}CSMP-\/2phase-\/variables.txt"{}},\ length,\ N\_ELEMENTS\ );}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ elms.erase(\ elms.begin(),\ elms.end()\ );}
+\DoxyCodeLine{00114\ \ \ \textcolor{keywordflow}{for}\ (\ uint32\_t\ i\ =\ 0;\ i<N\_ELEMENTS;\ i++\ )}
+\DoxyCodeLine{00115\ \ \ \ \ elms.push\_back(i);}
+\DoxyCodeLine{00116\ \ \ rock\_model\_-\/>FormRegionFrom(\ \textcolor{stringliteral}{"{}ROCK"{}},\ elms\ );}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \textcolor{comment}{//\ Assign\ properties}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \textcolor{comment}{//\ Adding\ properties\ that\ are\ not\ in\ the\ variables\ file}}
+\DoxyCodeLine{00122\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}fracture\ matrix\ interface\ area"{}}\ )\ )}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}fracture\ matrix\ interface\ area"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{00124\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}fracture\ porosity"{}}\ )\ )}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}fracture\ porosity"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{00126\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}fracture\ matrix\ flux\ ratio"{}}\ )\ )}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}fracture\ matrix\ flux\ ratio"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{00128\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}block\ radius"{}}\ )\ )}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}block\ radius"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{00130\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}fracture\ aperture"{}}\ )\ )}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}fracture\ aperture"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}previous\ water\ saturation\ barycenter"{}}\ )\ )}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}previous\ water\ saturation\ barycenter"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{00135\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}previous\ water\ saturation\ barycenter"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.2\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00136\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}inflection\ water\ saturation\ barycenter"{}}\ )\ )}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}inflection\ water\ saturation\ barycenter"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ ELEMENT\ );}
+\DoxyCodeLine{00138\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}inflection\ water\ saturation\ barycenter"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.2\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}initial\ saturation\ water"{}}\ )\ )}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}initial\ saturation\ water"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ NODE\ );}
+\DoxyCodeLine{00142\ \ \ \textcolor{keywordflow}{if}\ (\ !fracture\_rock\_model\_-\/>Database().IsDefined(\ \textcolor{stringliteral}{"{}maximum\ residual\ oil\ saturation"{}}\ )\ )}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ fracture\_rock\_model\_-\/>CreateProperty(\ \textcolor{stringliteral}{"{}maximum\ residual\ oil\ saturation"{}},\ \ \textcolor{stringliteral}{"{}SI"{}},\ SCALAR,\ NODE\ );}
+\DoxyCodeLine{00144\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}maximum\ residual\ oil\ saturation"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.4\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \textcolor{comment}{//\ Matrix\ properties}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<1U>\ \ Vd(\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9a2d373b048f997a96c661862c40f2fcae}{DIRICH}},\ \ 1.0e-\/10\ );\ \ \ \textcolor{comment}{//\ Prescribed\ velocity}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ fluid\_pressure\ (\ 5.0e7\ );}
+\DoxyCodeLine{00151\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ visc\_water\ \ \ \ \ (\ 1.0e-\/3\ );}
+\DoxyCodeLine{00152\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ visc\_oil\ \ \ \ \ \ \ (\ 3.0e-\/3\ );}
+\DoxyCodeLine{00153\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ dens\_water\ \ \ \ \ (\ 1000.\ );}
+\DoxyCodeLine{00154\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ dens\_oil\ \ \ \ \ \ \ (\ 800.\ );}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ vector<\textcolor{keywordtype}{double}>\ porosity\ \ \ \ \ \ \ (\ 1,\ 0.5\ );}
+\DoxyCodeLine{00157\ \ \ vector<\textcolor{keywordtype}{double}>\ permeability\ \ \ (\ 1,\ 1.0e-\/12\ );}
+\DoxyCodeLine{00158\ \ \ vector<\textcolor{keywordtype}{double}>\ swr\ \ \ \ \ \ \ \ \ \ \ \ (\ 1,\ 0.2\ );}
+\DoxyCodeLine{00159\ \ \ vector<\textcolor{keywordtype}{double}>\ snr\ \ \ \ \ \ \ \ \ \ \ \ (\ 1,\ 0.25\ );}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ vector<\textcolor{keywordtype}{double}>\ lambda\ \ \ \ \ \ \ \ \ (\ 1,\ 2.0\ );\ \ \ \ \ \textcolor{comment}{//\ Brooks\ Corey,\ Corey}}
+\DoxyCodeLine{00162\ \ \ vector<\textcolor{keywordtype}{double}>\ entry\_pressure\ (\ 1,\ 2.0e3\ );\ \ \ \textcolor{comment}{//\ Brooks\ Corey,\ Corey}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ vector<\textcolor{keywordtype}{double}>\ exp\_w\ \ \ \ \ \ \ \ \ \ (\ 1,\ 2.0\ );\ \ \ \ \ \textcolor{comment}{//\ Corey\ exponent\ for\ wetting\ phase}}
+\DoxyCodeLine{00165\ \ \ vector<\textcolor{keywordtype}{double}>\ exp\_n\ \ \ \ \ \ \ \ \ \ (\ 1,\ 1.5\ );\ \ \ \ \ \textcolor{comment}{//\ Corey\ exponent\ for\ non-\/wetting\ phase}}
+\DoxyCodeLine{00166\ \ \ vector<\textcolor{keywordtype}{double}>\ krwr\ \ \ \ \ \ \ \ \ \ \ (\ 1,\ 1.0\ );\ \ \ \ \ \textcolor{comment}{//\ Corey\ end-\/point\ wetting\ phase\ relative\ permeability}}
+\DoxyCodeLine{00167\ \ \ vector<\textcolor{keywordtype}{double}>\ krnr\ \ \ \ \ \ \ \ \ \ \ (\ 1,\ 0.98\ );\ \ \ \ \textcolor{comment}{//\ Corey\ end-\/point\ non-\/wetting\ phase\ relative\ permeability}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ vector<\textcolor{keywordtype}{double}>\ VG\_n\ \ \ \ \ \ \ \ \ \ \ (\ 1,\ 3.0\ );\ \ \ \ \ \textcolor{comment}{//\ Van\ Genuchten\ rel.perm.\ parameter}}
+\DoxyCodeLine{00170\ \ \ vector<\textcolor{keywordtype}{double}>\ VG\_alpha\ \ \ \ \ \ \ (\ 1,\ 0.37\ );\ \ \ \ \textcolor{comment}{//\ Van\ Genuchten\ cap.\ press.\ parameter}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ vector<\textcolor{keywordtype}{double}>\ fracture\_aperture(\ 1,\ 1.0-\/3\ );\ \textcolor{comment}{//\ Fourar\ Lenormand}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \textcolor{comment}{//\ Fracture\ Matrix\ interaction\ for\ rock\ model}}
+\DoxyCodeLine{00175\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}fracture\ aperture"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,fracture\_aperture[0])\ );}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \textcolor{comment}{//\ Matrix\ and\ global\ properties\ for\ rock\ model}}
+\DoxyCodeLine{00178\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}fluid\ pressure"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}fluid\_pressure\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00179\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}velocity"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Vd\ );}
+\DoxyCodeLine{00180\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}viscosity\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}visc\_water\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00181\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}viscosity\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}visc\_oil\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00182\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}density\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}dens\_water\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00183\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}density\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}dens\_oil\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00184\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}permeability"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,permeability[0])\ );}
+\DoxyCodeLine{00185\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}porosity"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,porosity[0])\ );}
+\DoxyCodeLine{00186\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}},\ \ \ \ \ makeScalar(PLAIN,swr[0])\ );}
+\DoxyCodeLine{00187\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ makeScalar(PLAIN,snr[0])\ );}
+\DoxyCodeLine{00188\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}van\ genuchten\ parameter"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,VG\_n[0])\ );}
+\DoxyCodeLine{00189\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}van\ genuchten\ alpha"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,VG\_alpha[0])\ );}
+\DoxyCodeLine{00190\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}brooks\ corey\ parameter"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,lambda[0])\ );}
+\DoxyCodeLine{00191\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}entry\ pressure"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,entry\_pressure[0])\ );}
+\DoxyCodeLine{00192\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}corey\ exponent\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,exp\_w[0])\ );}
+\DoxyCodeLine{00193\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}corey\ exponent\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,exp\_n[0])\ );}
+\DoxyCodeLine{00194\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}relperm\ endpoint\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,krwr[0])\ );}
+\DoxyCodeLine{00195\ \ \ rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}relperm\ endpoint\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,krnr[0])\ );}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ AssignSaturationValues(\ rock\_model\_);}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \textcolor{comment}{//\ Fracture\ Matrix\ interaction\ for\ fracture-\/rock\ model}}
+\DoxyCodeLine{00200\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}fracture\ aperture"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,fracture\_aperture[0])\ );}
+\DoxyCodeLine{00201\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}fracture\ matrix\ interface\ area"{}},\ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}2.0\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00202\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}fracture\ porosity"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.1\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00203\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}fracture\ matrix\ flux\ ratio"{}},\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}5.0\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00204\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}initial\ saturation\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.01\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );\ \textcolor{comment}{//\ as\ needed\ for\ transfer\ function}}
+\DoxyCodeLine{00205\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}volume\ flux"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}1.0e-\/9\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );\ \textcolor{comment}{//\ for\ scaling\ of\ transfer\ contribution}}
+\DoxyCodeLine{00206\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}block\ radius"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.7\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \textcolor{comment}{//\ Matrix\ and\ global\ properties\ for\ fracture-\/rock\ model}}
+\DoxyCodeLine{00209\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}fluid\ pressure"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}fluid\_pressure\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00210\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}velocity"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Vd\ );}
+\DoxyCodeLine{00211\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}viscosity\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}visc\_water\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00212\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}viscosity\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}visc\_oil\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00213\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}density\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}dens\_water\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00214\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}density\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}dens\_oil\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00215\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}permeability"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,permeability[0])\ );}
+\DoxyCodeLine{00216\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}porosity"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,porosity[0])\ );}
+\DoxyCodeLine{00217\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}},\ \ \ \ \ makeScalar(PLAIN,swr[0])\ );}
+\DoxyCodeLine{00218\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ makeScalar(PLAIN,snr[0])\ );}
+\DoxyCodeLine{00219\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}van\ genuchten\ parameter"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,VG\_n[0])\ );}
+\DoxyCodeLine{00220\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}van\ genuchten\ alpha"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,VG\_alpha[0])\ );}
+\DoxyCodeLine{00221\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}brooks\ corey\ parameter"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,lambda[0])\ );}
+\DoxyCodeLine{00222\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}entry\ pressure"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,entry\_pressure[0])\ );}
+\DoxyCodeLine{00223\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}corey\ exponent\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,exp\_w[0])\ );}
+\DoxyCodeLine{00224\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}corey\ exponent\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,exp\_n[0])\ );}
+\DoxyCodeLine{00225\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}relperm\ endpoint\ water"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,krwr[0])\ );}
+\DoxyCodeLine{00226\ \ \ fracture\_rock\_model\_-\/>InputPropertyValue(\ \textcolor{stringliteral}{"{}relperm\ endpoint\ oil"{}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ makeScalar(PLAIN,krnr[0])\ );}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \textcolor{comment}{//\ Fracture\ properties}}
+\DoxyCodeLine{00229\ \ \ \mbox{\hyperlink{classcsmp_1_1_region}{Region}}<1>\&\ fractures\ =\ fracture\_rock\_model\_-\/>Region(\ \textcolor{stringliteral}{"{}FRACTURE"{}}\ );}
+\DoxyCodeLine{00230\ \ \ fractures.InputPropertyValue(\ \textcolor{stringliteral}{"{}permeability"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}1.0E-\/9\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00231\ \ \ fractures.InputPropertyValue(\ \textcolor{stringliteral}{"{}porosity"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}1.0\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00232\ \ \ fractures.InputPropertyValue(\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.0\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00233\ \ \ fractures.InputPropertyValue(\ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.0\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00234\ \ \ fractures.InputPropertyValue(\ \textcolor{stringliteral}{"{}entry\ pressure"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.0\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00235\ \ \ fractures.InputPropertyValue(\ \textcolor{stringliteral}{"{}brooks\ corey\ parameter"{}},\ \mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{makeScalar}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{(}}\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6}{PLAIN}}\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{,}}0.0\mbox{\hyperlink{namespacecsmp_a045796fbaba7d5053c66ae8e794e5f9b}{)}}\ );}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ AssignSaturationValues(\ fracture\_rock\_model\_);}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \textcolor{comment}{//\ TwoPhaseModel\ tests}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ suite\_.addTest(\ \textcolor{keyword}{new}\ TwoPhaseModel\_Test(\ rock\_model\_,}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ BrooksCorey<1U>(\ rock\_model\_-\/>Database(),}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}permeability"{}},\ \textcolor{stringliteral}{"{}viscosity\ oil"{}},\ \textcolor{stringliteral}{"{}viscosity\ water"{}},}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}density\ oil"{}},\ \textcolor{stringliteral}{"{}density\ water"{}},}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}brooks\ corey\ parameter"{}},}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}entry\ pressure"{}},}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}saturation\ water"{}},}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}}),}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}csmp::TwoPhaseModel\_BrooksCorey\_Test"{}},}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ oil"{}},}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ water"{}},}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}capillary\ pressure"{}})\ );}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ suite\_.addTest(\ \textcolor{keyword}{new}\ TwoPhaseModel\_Test(\ rock\_model\_,}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ Corey<1U>(\ rock\_model\_-\/>Database(),}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}permeability"{}},\ \textcolor{stringliteral}{"{}viscosity\ oil"{}},\ \textcolor{stringliteral}{"{}viscosity\ water"{}},}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}density\ oil"{}},\ \textcolor{stringliteral}{"{}density\ water"{}},}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}brooks\ corey\ parameter"{}},}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}entry\ pressure"{}},}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}corey\ exponent\ oil"{}},\textcolor{stringliteral}{"{}corey\ exponent\ water"{}},}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}relperm\ endpoint\ oil"{}},\textcolor{stringliteral}{"{}relperm\ endpoint\ water"{}},}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}saturation\ water"{}},}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}}),}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}csmp::TwoPhaseModel\_Corey\_Test"{}},}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ oil"{}},}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ water"{}},}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}capillary\ pressure"{}}\ )\ );}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ suite\_.addTest(\ \textcolor{keyword}{new}\ TwoPhaseModel\_Test(\ rock\_model\_,}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ LinearTwoPhaseModel<1U>(\ rock\_model\_-\/>Database(),}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}permeability"{}},\ \textcolor{stringliteral}{"{}viscosity\ oil"{}},\ \textcolor{stringliteral}{"{}viscosity\ water"{}},}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}density\ oil"{}},\ \textcolor{stringliteral}{"{}density\ water"{}},}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}entry\ pressure"{}},}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}saturation\ water"{}},}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}}),}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}csmp::TwoPhaseModel\_LinearTwoPhaseModel\_Test"{}},}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ oil"{}},}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ water"{}},}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}capillary\ pressure"{}}\ )\ );}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ suite\_.addTest(\ \textcolor{keyword}{new}\ TwoPhaseModel\_Test(\ rock\_model\_,}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ VanGenuchten<1U>(\ rock\_model\_-\/>Database(),}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}permeability"{}},\ \textcolor{stringliteral}{"{}viscosity\ oil"{}},\ \textcolor{stringliteral}{"{}viscosity\ water"{}},}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}density\ oil"{}},\ \textcolor{stringliteral}{"{}density\ water"{}},}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}van\ genuchten\ parameter"{}},}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}van\ genuchten\ alpha"{}},}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}saturation\ water"{}},}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}}),}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}csmp::TwoPhaseModel\_VanGenuchten\_Test"{}},}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ oil"{}},}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ water"{}},}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}capillary\ pressure"{}}\ )\ );}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ suite\_.addTest(\ \textcolor{keyword}{new}\ TwoPhaseModel\_Test(\ rock\_model\_,}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ FourarLenormand<1U>(\ rock\_model\_-\/>Database(),}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}fracture\ aperture"{}},}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}permeability"{}},\ \textcolor{stringliteral}{"{}viscosity\ oil"{}},\ \textcolor{stringliteral}{"{}viscosity\ water"{}},}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}density\ oil"{}},\ \textcolor{stringliteral}{"{}density\ water"{}},}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}saturation\ water"{}},}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}residual\ saturation\ non-\/wetting\ phase"{}},\ \textcolor{stringliteral}{"{}residual\ saturation\ wetting\ phase"{}}),}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}csmp::TwoPhaseModel\_FourarLenormand\_Test"{}},}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ oil"{}},}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ water"{}},}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}capillary\ pressure"{}}\ )\ );}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ suite\_.addTest(\ \textcolor{keyword}{new}\ TwoPhaseModel\_Test(\ rock\_model\_,}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ TwoPhaseFileBased<1U>(\ rock\_model\_-\/>Database(),\ \textcolor{stringliteral}{"{}TwoPhaseFileBasedIn.txt"{}}\ ),}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}csmp::TwoPhaseModel\_TwoPhaseFileBased\_Test"{}},}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ oil"{}},}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}nodal\ relative\ permeability\ water"{}},}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}capillary\ pressure"{}}\ )\ );}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ suite\_.addTest(\ new\ TwoPhaseModel\_Test(\ model\_,}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ new\ BrooksCoreyWithHysteresis<1U>(\ model\_-\/>Database(),}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}brooks\ corey\ parameter"{},}}
+\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}entry\ pressure"{}\ ),}}
+\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}csmp::TwoPhaseModel\_BrooksCoreyWithHysteresis\_Test"{},}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}nodal\ relative\ permeability\ oil"{},}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}nodal\ relative\ permeability\ water"{},}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}capillary\ pressure"{}\ )\ );}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ suite\_.addTest(\ new\ TwoPhaseModel\_Test(\ fracture\_rock\_model\_,}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ new\ FractureMatrixUpscaled<1U>(\ model\_-\/>Database(),}}
+\DoxyCodeLine{00329\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}permeability"{},\ "{}viscosity\ oil"{},\ "{}viscosity\ water"{},}}
+\DoxyCodeLine{00330\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}density\ oil"{},\ "{}density\ water"{},}}
+\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}brooks\ corey\ parameter"{},\ "{}entry\ pressure"{},}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}fracture\ matrix\ interface\ area"{},}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}fracture\ porosity"{},\ "{}porosity"{},}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}fracture\ matrix\ flux\ ratio"{},}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}volume\ flux"{},\ "{}initial\ saturation\ water"{},}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}block\ radius"{}\ ),}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}csmp::TwoPhaseModel\_FractureMatrixUpscaled\_Test"{},}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}nodal\ relative\ permeability\ oil"{},}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}nodal\ relative\ permeability\ water"{},}}
+\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}capillary\ pressure"{},}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 20\ )\ );}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \}\ \textcolor{comment}{//\ run}}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ TWOPHASEMODEL\_TESTS\_H}}
+
+\end{DoxyCode}

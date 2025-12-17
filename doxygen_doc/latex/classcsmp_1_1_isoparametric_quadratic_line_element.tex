@@ -1,0 +1,674 @@
+\doxysection{csmp\+::Isoparametric\+Quadratic\+Line\+Element Class Reference}
+\hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element}{}\label{classcsmp_1_1_isoparametric_quadratic_line_element}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+
+
+Inheritance diagram for csmp\+::Isoparametric\+Quadratic\+Line\+Element\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_isoparametric_quadratic_line_element__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Isoparametric\+Quadratic\+Line\+Element\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_isoparametric_quadratic_line_element__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_ad20da72c54ad29af21d4dd41a58d6a99}\label{classcsmp_1_1_isoparametric_quadratic_line_element_ad20da72c54ad29af21d4dd41a58d6a99} 
+{\bfseries Isoparametric\+Quadratic\+Line\+Element} (uint32\+\_\+t dimensions=2)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7e615d4d48fd60773e35d2659608fcc8}{Volume}} ()
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_af042c5cf9944e6b68b97c5845605a3b1}{Corner\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports only the corner nodes (0..nodes-\/1) of the element \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a2ba15c9cf15b5d457d020f586c9b28c4}{Corner\+Nodes}} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_afc8a863ca884bbf698181c547fd8676f}{Mid\+Side\+Nodes}} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports only the mid-\/edge nodes (0..nodes-\/1) of the element \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a35cdfec5fff2c6605e58489c6c88fbe3}{Mid\+Side\+Nodes}} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_afa90ba0142300bc094ced138d0be8048}{Nodes\+Of\+Segment}} (uint32\+\_\+t segm\+\_\+id, std\+::vector$<$ uint32\+\_\+t $>$ \&snids) const
+\begin{DoxyCompactList}\small\item\em segments are numbered like faces \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a2a79285fc241b8d71ea374eefd7ca950}{Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_ac79c90573d22726e8137684de81083d9}{Corner\+Nodes\+Of\+Face}} (uint32\+\_\+t face\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the corner nodes of the face \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7cb1010a94ac0091fbdbea69c330f3e6}{Nodes\+Connected\+To}} (uint32\+\_\+t node\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em returns the local numbers of the nodes at the other end of the sgment that the argument node is on \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a6b3e858dccfd44b1b4e48e66fb0d14fe}{N\+\_\+\+At\+Bary\+Center}} (std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{N}})
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the center of gravity of the element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_ac146cd92159c3642b152bcebc5ca48a5}\label{classcsmp_1_1_isoparametric_quadratic_line_element_ac146cd92159c3642b152bcebc5ca48a5} 
+virtual void {\bfseries Counter\+Clockwise\+Nodes} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a50f7b4eb15e6ea6adee2f08399d5387c}{Edge\+Lengths}} (std\+::vector$<$ double $>$ \&vec)
+\begin{DoxyCompactList}\small\item\em assuming straight segments between the nodes \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a2921abddd5332d414fac7e83627e8a91}{Weight\+At\+Integration\+Point}} (uint32\+\_\+t i) const
+\begin{DoxyCompactList}\small\item\em returns the integration weight of the desired quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_abbb38dc34933853889110f5c5f71c3bb}{N\+\_\+\+At\+Integration\+Point}} (uint32\+\_\+t IP, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{N}})
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the given quadrature point \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a643a444148c8b42aa93e7e8ac4b779d7}{Jacobian\+At\+Integration\+Point}} (uint32\+\_\+t IP)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a476ee50a8c7f6b823c0f8bedd579e09c}{Jacobian\+Inverse}} ()
+\begin{DoxyCompactList}\small\item\em return determinant J for values of previous function \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a0b8b2428d10593865d5a339ba15274ee}{dN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}})
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_adff61be20d1c22c54675b5518a8add09}{d\+N\+\_\+\+At\+Node}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, uint32\+\_\+t node)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a11f266f395615274432becfa4a51ffe4}{d\+N\+\_\+\+At\+Integration\+Point}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, uint32\+\_\+t IP)
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a319bd782d436c69a9efdc97d4756b4dc}{d\+N\+\_\+\+At\+Barycenter}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}})
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_ad19f0c64215cef98de863add807c9655}{IntegralN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}})
+\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a9f2f72929c24c047b0b05851a21d0879}{Unit\+Normal}} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a245c686edf1dec4dde876aae5b7a6a6e}{Integration\+Point}} (uint32\+\_\+t i, std\+::vector$<$ double $>$ \&xyz) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7717384f07dc958bdef1285c3554913f}{Extrapolate\+Integration\+Point\+Variable\+To\+Nodes}} (uint32\+\_\+t nvars, const std\+::vector$<$ double $>$ \&IVAR, std\+::vector$<$ double $>$ \&NVAR) const
+\begin{DoxyCompactList}\small\item\em using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a439923c83ce6c4b65eb53dac5a40b3f1}{Output\+Node\+Data\+To\+VTK}} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const char \texorpdfstring{$\ast$}{*}var\+\_\+name, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&DATA) const
+\begin{DoxyCompactList}\small\item\em prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a5ada67d18b85fa985842e2119739c301}{Nr}} (double r, std\+::vector$<$ double $>$ \&nr) const
+\begin{DoxyCompactList}\small\item\em Cheung et al. p. 26, Cook et al., p. 164. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_aded067a01e0c1f657b322d9b5b4e90cc}\label{classcsmp_1_1_isoparametric_quadratic_line_element_aded067a01e0c1f657b322d9b5b4e90cc} 
+virtual void {\bfseries Nr} (double r, double \texorpdfstring{$\ast$}{*}nr) const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_a7bf32125d537c667ebd1388ce5831057}{d\+Nr}} (double r, std\+::vector$<$ double $>$ \&dnr) const
+\begin{DoxyCompactList}\small\item\em Cheung et al. p. 26. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_isoparametric_quadratic_line_element_af9bfb14b864c0cd601c245f5f69ab510}{Reference\+Coordinates}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&mat\+Coords) const
+\begin{DoxyCompactList}\small\item\em for element types defined using a local coordinate system, returns the node coordinates into the argument matrix \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} csp\+\_\+fem\+\_\+type, bool isoparametric, bool uses\+\_\+local\+\_\+coordinates, uint32\+\_\+t order\+\_\+of\+\_\+shape\+\_\+functions)
+\item 
+void {\bfseries Current\+ID} (size\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em assigns integer value used to avoid repeating the same operation \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries Current\+ID} () const
+\begin{DoxyCompactList}\small\item\em returns integer value for comparison to avoid repeating the same operation \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Dim} () const
+\begin{DoxyCompactList}\small\item\em return minimum spatial dimension in which this element can exist \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Nodes} () const
+\item 
+uint32\+\_\+t {\bfseries Segments} () const
+\begin{DoxyCompactList}\small\item\em returns the number of edges of the FE, i.\+e. the number of connections between nodes \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Faces} () const
+\begin{DoxyCompactList}\small\item\em returns the number of sides the finite element has \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Neighbors} () const
+\begin{DoxyCompactList}\small\item\em neighbor elements that may be connected to this FE in its characteristic space \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a3cb7bc938ad00c9f4dbfbfa94c13e781}{Nodes\+Per\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em returns how many nodes make up a particular face; some elements have different numbers \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Integration\+Points} () const
+\begin{DoxyCompactList}\small\item\em returns number of quadrature points used by current integration scheme \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Interpolation} () const
+\begin{DoxyCompactList}\small\item\em returns order of interpolation scheme\+: linear=1, quadratic=2, cubic=3 \end{DoxyCompactList}\item 
+bool {\bfseries Isoparametric} () const
+\begin{DoxyCompactList}\small\item\em for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions \end{DoxyCompactList}\item 
+bool {\bfseries Uses\+Local\+Coordinates} () const
+\begin{DoxyCompactList}\small\item\em reports whether element is defined in a local (r,s,t) coordinate system; analytically integrated elements are not \end{DoxyCompactList}\item 
+uint32\+\_\+t {\bfseries Order\+Of\+Shape\+Functions} () const
+\begin{DoxyCompactList}\small\item\em returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions \end{DoxyCompactList}\item 
+bool {\bfseries Is\+Line} () const
+\item 
+bool {\bfseries Is\+Surface} () const
+\item 
+bool {\bfseries Is\+Volume} () const
+\item 
+bool {\bfseries Is\+Simplex} () const
+\begin{DoxyCompactList}\small\item\em true for linear line-\/, triangle-\/ or tetrahedral elements for which the Jacobian matrix is constant throughout \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} {\bfseries Element\+Type} () const
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c6148f7a38b639b721013dbd8f8d3f5}{Aspect\+Ratio}} ()
+\begin{DoxyCompactList}\small\item\em returns the ratio between the maximum and minimum spatial extent of the element \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_a3ad8c30e7136d47df5ca95907647c538}{Inner\+Radius}} ()
+\begin{DoxyCompactList}\small\item\em returns the radius of the largest sphere that could be inscribed in the element \end{DoxyCompactList}\item 
+virtual void {\bfseries Interior\+Nodes} (std\+::vector$<$ uint32\+\_\+t $>$ \&ids) const
+\begin{DoxyCompactList}\small\item\em reports the nodes (0..nodes-\/1) of the element which are not shared with any other element \end{DoxyCompactList}\item 
+virtual uint32\+\_\+t {\bfseries Interior\+Nodes} () const
+\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_finite_element_a066cbd92cd983a3c2e73859286280587}{Element\+Type\+Of\+Face}} (uint32\+\_\+t face) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding face \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} \mbox{\hyperlink{classcsmp_1_1_finite_element_a136f53aa9d4cd295a984ca46c0864ff7}{Element\+Type\+Of\+Segment}} (uint32\+\_\+t segment) const
+\begin{DoxyCompactList}\small\item\em reports the element type that would match that of its corresponding segment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a39eb6d5a1827783a679870277b4c68b8}{Unit\+Normal\+To\+Face}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&unrml) const
+\begin{DoxyCompactList}\small\item\em returns the unit normal to element face (for planar elements, normal lies in that plane; expects XY matrix to be initialised with node coordinates \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae600307171225f53a2615aaffd5afb18}{Unit\+Normal\+At\+Face\+Barycenter}} (uint32\+\_\+t face, std\+::vector$<$ double $>$ \&nrml)
+\begin{DoxyCompactList}\small\item\em computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework \end{DoxyCompactList}\item 
+double {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j) const
+\begin{DoxyCompactList}\small\item\em accessor for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+void {\bfseries XYZ} (uint32\+\_\+t i, uint32\+\_\+t j, double val)
+\begin{DoxyCompactList}\small\item\em mutator for coordinate matrix which is associated with the element \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_aac8b400d7e198282e0b8196df3338858}{N}} (std\+::vector$<$ double $>$ \&N, const std\+::vector$<$ double $>$ \&xyz)
+\begin{DoxyCompactList}\small\item\em reports the values of the interpolation functions at the point given in global coordinates; \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_adb4103981ca8a56bbea237ef71c0cdc1}{d\+N\+\_\+\+At}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&, const std\+::vector$<$ double $>$ \&xyz)
+\begin{DoxyCompactList}\small\item\em returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a246043f81c66c9f65e08c6a5190ea381}{Jacobian\+At}} (const std\+::vector$<$ double $>$ \&rst)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point defined in parametric space (r,s,t) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_ae62e0c447141f0e2b7f7a4eb8412278b}{Jacobian}} (const std\+::vector$<$ double $>$ \&dnr)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 1D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 2D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual void {\bfseries Jacobian} (const std\+::vector$<$ double $>$ \&dnr, const std\+::vector$<$ double $>$ \&dns, const std\+::vector$<$ double $>$ \&dnt)
+\begin{DoxyCompactList}\small\item\em initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for 3D element using the supplied intpol.\+f.\+derivatives \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_finite_element_ae758e82d3b214e9f9c5bda10cd20b515}{Jacobian\+Determinant}} ()
+\begin{DoxyCompactList}\small\item\em returns the determinant of the member Jacobian matrix JAC that must have been initialised before \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a84a69958fd3567565d4dc83037664d97}{Integral\+NN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises interpolation function product matrix N\texorpdfstring{$^\wedge$}{\string^}T x N for analytically integrated elements \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a5d79c3309e261dd0939e5b733aac83d9}{Integrald\+NdN}} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em initialises interpolation function derivatives product matrix DN\texorpdfstring{$^\wedge$}{\string^}T x DN for element where derivatives are constant \end{DoxyCompactList}\item 
+virtual void {\bfseries Integral\+\_\+d\+NT\+\_\+\+K\+\_\+dN} (\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&K)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_adb2baab01a52b040d73c10623a0605b2}{Nrs}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions N(r,s) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_af159e5f99a0281ae603ca6ddde9bf6bf}{d\+Nr}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6d2fb4557b0681959501365138c9d3c3}{d\+Ns}} (double r, double s, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}{DNS}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s)/ds \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a34bd4d39b1a026b1de15f028e9692bd8}{Nrst}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_aa13754bef9eb502c77561f216d0258e7}{NRST}}) const
+\begin{DoxyCompactList}\small\item\em 3D element interpolation functions N(r,s,t) \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a5b77ad8925c75b096867822e83bed7cd}{d\+Nr}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a8602e2b2682d1734501fa44da5f4a230}{DNR}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/dr \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a1c5cfe76807ea0d685c8e22d74c5582e}{d\+Ns}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a1a9d9ee7a3326164b35a523273dc54c9}{DNS}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/ds \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_finite_element_a6c22543bd89563413954beb8697fa914}{d\+Nt}} (double r, double s, double t, std\+::vector$<$ double $>$ \&\mbox{\hyperlink{classcsmp_1_1_finite_element_a203a9d019620abee39fdbe7847ee8df0}{DNT}}) const
+\begin{DoxyCompactList}\small\item\em 2D element interpolation functions derivatives N(r,s,t)/dt \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\begin{DoxyCompactList}\small\item\em prints finite element properties to screen \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Static Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+static size\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ad4aaeb22c3a8da44a33361057ef2097f}{Initial\+ID}} ()
+\begin{DoxyCompactList}\small\item\em returns ID value set to FEM during construction \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a022fd86373136421b00ce343508efe52}{XY}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5de71dcc5e56c2e814d31d798969f437}{JAC}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a5c3fd117b986587599dcb441feeb000a}{JINV}}
+\item 
+std\+::vector$<$ double $>$ {\bfseries NRST}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function values \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNR}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNS}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries DNT}
+\begin{DoxyCompactList}\small\item\em convenience storage for interpolation function derivatives \end{DoxyCompactList}\item 
+std\+::vector$<$ uint32\+\_\+t $>$ {\bfseries IDX}
+\begin{DoxyCompactList}\small\item\em convenience storage for integer vectors \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Finite\+Element} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+{\bfseries Finite\+Element} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&)=default
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_finite_element}{Finite\+Element}} \&\&)=default
+\item 
+void {\bfseries Isoparametric} (bool isoparam)
+\item 
+void {\bfseries Uses\+Local\+Coordinates} (bool uses)
+\item 
+void {\bfseries Line\+Element} ()
+\item 
+void {\bfseries Surface\+Element} ()
+\item 
+void {\bfseries Volume\+Element} ()
+\item 
+void {\bfseries Element\+Type} (\mbox{\hyperlink{group___c_s_m_pglobal_enums_ga182d1fe97a0151d464d8170c0fafa872}{CSMP\+\_\+\+FEM\+\_\+\+TYPE}} etype)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab749771eccc931e112125efe7bf8252c}{dim}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ac8f4f6ea8649710e01ea018c61d93a30}{itp}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a9d9ced72fa35fd6a9fc755a219590820}{npf}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a329300ec856aa91bfe492daf93556b04}{npe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a609a2f0f70b086a278d112761c07c9de}{spe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a36972113f6f8351c891431038f8514bd}{fpe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a5684660784d3f15adffb485e8f47d9f3}{epe}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a2509e6d8ab556b6a65a9036a62485df4}{nne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_ab4ad41c705b9691a4d01ee979b6214cc}{cne}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_element_a0729a0486b6febb96160f3e184c3f33f}{gpe}}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \mbox{\hyperlink{classcsmp_1_1_finite_element_a64381c8d0e2f4840551c2da986fb9a25}{M}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyDate}{Date}
+2002 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei 
+\end{DoxyAuthor}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a2ba15c9cf15b5d457d020f586c9b28c4}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!CornerNodes@{CornerNodes}}
+\index{CornerNodes@{CornerNodes}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{CornerNodes()}{CornerNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a2ba15c9cf15b5d457d020f586c9b28c4} 
+virtual uint32\+\_\+t csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Corner\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_af042c5cf9944e6b68b97c5845605a3b1}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!CornerNodes@{CornerNodes}}
+\index{CornerNodes@{CornerNodes}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{CornerNodes()}{CornerNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_af042c5cf9944e6b68b97c5845605a3b1} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Corner\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports only the corner nodes (0..nodes-\/1) of the element 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ae3f0ae4a9ad3424ccc4553ff270b155e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_ac79c90573d22726e8137684de81083d9}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!CornerNodesOfFace@{CornerNodesOfFace}}
+\index{CornerNodesOfFace@{CornerNodesOfFace}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{CornerNodesOfFace()}{CornerNodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_ac79c90573d22726e8137684de81083d9} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Corner\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{face\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the corner nodes of the face 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a9614d03193a707898a0b26336a61d9d9}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a0b8b2428d10593865d5a339ba15274ee}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!dN@{dN}}
+\index{dN@{dN}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{dN()}{dN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a0b8b2428d10593865d5a339ba15274ee} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::dN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DN}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Compute derivatives of interpolation functions at corresponding nodes with respect to the global coordinate system. ~\newline
+
+
+It is assumed that the element is a straight line in space.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The element is used to obtain the global interpolation of the tetrahedron and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes. ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em DN} & The interpolation-\/function derivative matrix is returned into the second method argument. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a3bf543b54ba24535aced15598495730f}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a319bd782d436c69a9efdc97d4756b4dc}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!dN\_AtBarycenter@{dN\_AtBarycenter}}
+\index{dN\_AtBarycenter@{dN\_AtBarycenter}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{dN\_AtBarycenter()}{dN\_AtBarycenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a319bd782d436c69a9efdc97d4756b4dc} 
+double csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::d\+N\+\_\+\+At\+Barycenter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DM}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a703b7ce9d818248bbd9864dffee30b7c}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a11f266f395615274432becfa4a51ffe4}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!dN\_AtIntegrationPoint@{dN\_AtIntegrationPoint}}
+\index{dN\_AtIntegrationPoint@{dN\_AtIntegrationPoint}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{dN\_AtIntegrationPoint()}{dN\_AtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a11f266f395615274432becfa4a51ffe4} 
+double csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::d\+N\+\_\+\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DN}{, }\item[{uint32\+\_\+t}]{gauss\+\_\+point}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Jacobian\+For( DNR, x) functions return the determinant of the Jacobian matrices for the spatial dimension x
+
+The inverse of a matrix A-\/1 is equal to 1/detJ(A) \texorpdfstring{$\ast$}{*} A\texorpdfstring{$^\wedge$}{\string^}T (transposed). It is used to compute the interpolation function derivatives in global coordinates as
+
+DN\+\_\+global = DN\texorpdfstring{$^\wedge$}{\string^}T J-\/1\texorpdfstring{$^\wedge$}{\string^}T ops J-\/1 DN 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a885bb35784705f295c5f8ad9aa47f227}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_adff61be20d1c22c54675b5518a8add09}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!dN\_AtNode@{dN\_AtNode}}
+\index{dN\_AtNode@{dN\_AtNode}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{dN\_AtNode()}{dN\_AtNode()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_adff61be20d1c22c54675b5518a8add09} 
+double csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::d\+N\+\_\+\+At\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DN}{, }\item[{uint32\+\_\+t}]{nd}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+\begin{DoxyEnumerate}
+\item Pre-\/multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point. ~\newline
+
+\item The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0...i=gauss points-\/1). ~\newline
+
+\end{DoxyEnumerate}\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The first argument is a reference to the parent \doxylink{classcsmp_1_1_element}{Element} object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed. ~\newline
+
+
+\begin{DoxyReturn}{Returns}
+The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a89d6f320e17b4cfe1f9ddbeade1c9255}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a7bf32125d537c667ebd1388ce5831057}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!dNr@{dNr}}
+\index{dNr@{dNr}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{dNr()}{dNr()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a7bf32125d537c667ebd1388ce5831057} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::d\+Nr (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{std\+::vector$<$ double $>$ \&}]{dnr}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Cheung et al. p. 26. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a84befa0a4da0b4b8469ec5e7be89860e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a50f7b4eb15e6ea6adee2f08399d5387c}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!EdgeLengths@{EdgeLengths}}
+\index{EdgeLengths@{EdgeLengths}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{EdgeLengths()}{EdgeLengths()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a50f7b4eb15e6ea6adee2f08399d5387c} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Edge\+Lengths (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{vec}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+assuming straight segments between the nodes 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac2348fa774457d4adde9354189277d9e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a7717384f07dc958bdef1285c3554913f}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}}
+\index{ExtrapolateIntegrationPointVariableToNodes@{ExtrapolateIntegrationPointVariableToNodes}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{ExtrapolateIntegrationPointVariableToNodes()}{ExtrapolateIntegrationPointVariableToNodes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a7717384f07dc958bdef1285c3554913f} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Extrapolate\+Integration\+Point\+Variable\+To\+Nodes (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nvars}{, }\item[{const std\+::vector$<$ double $>$ \&}]{IVAR}{, }\item[{std\+::vector$<$ double $>$ \&}]{NVAR}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes 
+
+Extrapolation member( gauss points to nodes )
+
+Expects input vector to be of size nvars \texorpdfstring{$\ast$}{*} gauss points and in format \mbox{[} var1 @ gp1, var2 @ gp1, var3 @ gp1, var1 @ gp2, var2 @ gp2, var3 @ gp2 for all gauss points, with nvar == 3 \mbox{]} 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ae7ea6940dcaa8403c7c35e70db4ba21c}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_ad19f0c64215cef98de863add807c9655}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!IntegralN@{IntegralN}}
+\index{IntegralN@{IntegralN}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{IntegralN()}{IntegralN()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_ad19f0c64215cef98de863add807c9655} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+IntegralN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{EPROP}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+This assumes that the interpolated data are supplied as a symmetric material element property matrix (this analytic expression exists only if the values do not vary over the nodes) EPROP can also contain normal and tangential forces such that \begin{DoxyVerb}       ft fn
+\end{DoxyVerb}
+ EPROP = -\/fn ft
+
+analytic solution, eqn 2.\+9, Cheung et al. p. 26 \Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a245c686edf1dec4dde876aae5b7a6a6e}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!IntegrationPoint@{IntegrationPoint}}
+\index{IntegrationPoint@{IntegrationPoint}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{IntegrationPoint()}{IntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a245c686edf1dec4dde876aae5b7a6a6e} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{, }\item[{std\+::vector$<$ double $>$ \&}]{xyz}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+integration point location transformed into global coordinates \begin{DoxyWarning}{Warning}
+the matrix XYZ must be uptodate 
+\end{DoxyWarning}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_aef00dcb02705580693988e47924a055d}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a643a444148c8b42aa93e7e8ac4b779d7}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!JacobianAtIntegrationPoint@{JacobianAtIntegrationPoint}}
+\index{JacobianAtIntegrationPoint@{JacobianAtIntegrationPoint}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{JacobianAtIntegrationPoint()}{JacobianAtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a643a444148c8b42aa93e7e8ac4b779d7} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Jacobian\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+initialises JAC = DN\texorpdfstring{$\ast$}{*}\+XY (intpl. derivative \texorpdfstring{$\ast$}{*} coordinate matrix) parametric-\/to-\/physical space transformation matrix for given quadrature point 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac6a31722bbf25abad86ccea3b653953e}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a476ee50a8c7f6b823c0f8bedd579e09c}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!JacobianInverse@{JacobianInverse}}
+\index{JacobianInverse@{JacobianInverse}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{JacobianInverse()}{JacobianInverse()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a476ee50a8c7f6b823c0f8bedd579e09c} 
+double csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Jacobian\+Inverse (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+return determinant J for values of previous function 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a3639fc962596899333d6a65cb1ef66ce}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a35cdfec5fff2c6605e58489c6c88fbe3}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!MidSideNodes@{MidSideNodes}}
+\index{MidSideNodes@{MidSideNodes}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{MidSideNodes()}{MidSideNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a35cdfec5fff2c6605e58489c6c88fbe3} 
+virtual uint32\+\_\+t csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Mid\+Side\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_afc8a863ca884bbf698181c547fd8676f}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!MidSideNodes@{MidSideNodes}}
+\index{MidSideNodes@{MidSideNodes}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{MidSideNodes()}{MidSideNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_afc8a863ca884bbf698181c547fd8676f} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Mid\+Side\+Nodes (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{ids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports only the mid-\/edge nodes (0..nodes-\/1) of the element 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a8149423046e10426a7eb520164ad3a38}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a6b3e858dccfd44b1b4e48e66fb0d14fe}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!N\_AtBaryCenter@{N\_AtBaryCenter}}
+\index{N\_AtBaryCenter@{N\_AtBaryCenter}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{N\_AtBaryCenter()}{N\_AtBaryCenter()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a6b3e858dccfd44b1b4e48e66fb0d14fe} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+N\+\_\+\+At\+Bary\+Center (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the values of the interpolation functions at the center of gravity of the element 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a6df28d2a7b4bcaff49cb726d6ef0890b}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_abbb38dc34933853889110f5c5f71c3bb}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!N\_AtIntegrationPoint@{N\_AtIntegrationPoint}}
+\index{N\_AtIntegrationPoint@{N\_AtIntegrationPoint}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{N\_AtIntegrationPoint()}{N\_AtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_abbb38dc34933853889110f5c5f71c3bb} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+N\+\_\+\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{ip}{, }\item[{std\+::vector$<$ double $>$ \&}]{N}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+reports the values of the interpolation functions at the given quadrature point 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac1168c0c1cc280d1a1ecba676877d13b}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a7cb1010a94ac0091fbdbea69c330f3e6}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!NodesConnectedTo@{NodesConnectedTo}}
+\index{NodesConnectedTo@{NodesConnectedTo}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{NodesConnectedTo()}{NodesConnectedTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a7cb1010a94ac0091fbdbea69c330f3e6} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Nodes\+Connected\+To (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{node}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the local numbers of the nodes at the other end of the sgment that the argument node is on 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ab7196476d9fb740d91384c6c4521b0f5}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a2a79285fc241b8d71ea374eefd7ca950}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!NodesOfFace@{NodesOfFace}}
+\index{NodesOfFace@{NodesOfFace}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{NodesOfFace()}{NodesOfFace()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a2a79285fc241b8d71ea374eefd7ca950} 
+\mbox{\hyperlink{classvector}{vector}}$<$ uint32\+\_\+t $>$ csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Nodes\+Of\+Face (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{node\+\_\+id}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Method returns into its argument vector the local node number of either of its 2 faces located at its nodes. Convention\+: face 0 has only one node which is the first node of the element and face 1 contains the second node. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a32fc14575277846326041fe914209f9a}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_afa90ba0142300bc094ced138d0be8048}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!NodesOfSegment@{NodesOfSegment}}
+\index{NodesOfSegment@{NodesOfSegment}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{NodesOfSegment()}{NodesOfSegment()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_afa90ba0142300bc094ced138d0be8048} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Nodes\+Of\+Segment (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{segm\+\_\+id}{, }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{snids}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+segments are numbered like faces 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a443213e98dc0cc9692bd3eef5a168295}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a5ada67d18b85fa985842e2119739c301}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!Nr@{Nr}}
+\index{Nr@{Nr}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{Nr()}{Nr()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a5ada67d18b85fa985842e2119739c301} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Nr (\begin{DoxyParamCaption}\item[{double}]{r}{, }\item[{std\+::vector$<$ double $>$ \&}]{nr}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Cheung et al. p. 26, Cook et al., p. 164. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_af583becda82f4fef39bbe2d4c3b41cea}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a439923c83ce6c4b65eb53dac5a40b3f1}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!OutputNodeDataToVTK@{OutputNodeDataToVTK}}
+\index{OutputNodeDataToVTK@{OutputNodeDataToVTK}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{OutputNodeDataToVTK()}{OutputNodeDataToVTK()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a439923c83ce6c4b65eb53dac5a40b3f1} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Output\+Node\+Data\+To\+VTK (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{var\+\_\+name}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DATA}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a67341585f83bc9d941c67e7a84801248}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_isoparametric_quadratic_line_element_a439923c83ce6c4b65eb53dac5a40b3f1_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_af9bfb14b864c0cd601c245f5f69ab510}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!ReferenceCoordinates@{ReferenceCoordinates}}
+\index{ReferenceCoordinates@{ReferenceCoordinates}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{ReferenceCoordinates()}{ReferenceCoordinates()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_af9bfb14b864c0cd601c245f5f69ab510} 
+void csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Reference\+Coordinates (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{mat\+Coords}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+for element types defined using a local coordinate system, returns the node coordinates into the argument matrix 
+
+Returns the reference coordinates of the element.
+
+\doxylink{classcsmp_1_1_dense_matrix}{Dense\+Matrix$<$\+DM\+\_\+\+MIN$>$} \& mat\+Coords; -\/\texorpdfstring{$>$}{>} Holds the reference coordinates of the finite element. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a34a5c030987c7e9842af332f5ed0d61b}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a9f2f72929c24c047b0b05851a21d0879}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!UnitNormal@{UnitNormal}}
+\index{UnitNormal@{UnitNormal}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{UnitNormal()}{UnitNormal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a9f2f72929c24c047b0b05851a21d0879} 
+\mbox{\hyperlink{classvector}{vector}}$<$ double $>$ csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Unit\+Normal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+here the normal is calculated using the derivative of the shape function at the middle node 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a1dedbd91a6e8765f57dfdaf999494b76}{csmp\+::\+Finite\+Element}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{classcsmp_1_1_isoparametric_quadratic_line_element_a9f2f72929c24c047b0b05851a21d0879_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a7e615d4d48fd60773e35d2659608fcc8}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!Volume@{Volume}}
+\index{Volume@{Volume}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{Volume()}{Volume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a7e615d4d48fd60773e35d2659608fcc8} 
+double csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The finite element which supplies the nodal coordinates from which the area is computed.
+
+\begin{DoxyReturn}{Returns}
+The volume (m3) of the finite element. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_a16025c5d7f2ac217d2dbedad5d561a06}{csmp\+::\+Finite\+Element}}.
+
+\Hypertarget{classcsmp_1_1_isoparametric_quadratic_line_element_a2921abddd5332d414fac7e83627e8a91}\index{csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}!WeightAtIntegrationPoint@{WeightAtIntegrationPoint}}
+\index{WeightAtIntegrationPoint@{WeightAtIntegrationPoint}!csmp::IsoparametricQuadraticLineElement@{csmp::IsoparametricQuadraticLineElement}}
+\doxysubsubsection{\texorpdfstring{WeightAtIntegrationPoint()}{WeightAtIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_isoparametric_quadratic_line_element_a2921abddd5332d414fac7e83627e8a91} 
+double csmp\+::\+Isoparametric\+Quadratic\+Line\+Element\+::\+Weight\+At\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+returns the integration weight of the desired quadrature point 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_finite_element_ac224265aa216deebfcf44b54d2689d1d}{csmp\+::\+Finite\+Element}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+elements/Isoparametric\+Quadratic\+Line\+Element.\+h\item 
+source/modules/integration/finite\+\_\+elements/Isoparametric\+Quadratic\+Line\+Element.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,536 @@
+\doxysection{csmp\+::Finite\+Volume\+Policy\texorpdfstring{$<$}{<} 3U, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4}{}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+
+
+Policy of the \doxylink{classcsmp_1_1_element}{Element} class which provides it with the functionality needed for finite-\/volume stencil formation, i.\+e. node-\/centered finite-\/volume computations.  
+
+
+
+
+{\ttfamily \#include $<$Finite\+Volume\+Policy.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Finite\+Volume\+Policy\texorpdfstring{$<$}{<} 3U, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Finite\+Volume\+Policy\texorpdfstring{$<$}{<} 3U, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ab992ac9833aa630ffc96e0f30720c25b}{Finite\+Volume\+Policy}} (const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ 3U $>$ \texorpdfstring{$\ast$}{*}=nullptr)
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a50bdb1a185e0154bd0549d219a35dc22}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a50bdb1a185e0154bd0549d219a35dc22} 
+{\bfseries Finite\+Volume\+Policy} (const \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy}} \&p)
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_afcfe0026b6b4c222b9112979d26df3b9}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_afcfe0026b6b4c222b9112979d26df3b9} 
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy}} \&p)
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a0465c2e90f2434205435319c2f572aba}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a0465c2e90f2434205435319c2f572aba} 
+{\bfseries Finite\+Volume\+Policy} (\mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy}} \&\&p) noexcept
+\begin{DoxyCompactList}\small\item\em move semantics \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aa91c3e89a1b12dbe2dfad347682bd35b}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aa91c3e89a1b12dbe2dfad347682bd35b} 
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy}} \& {\bfseries operator=} (\mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy}} \&\&p) noexcept
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aa8b80b29bca011452c3683040c7b14dd}{Assign\+Finite\+Volume}} (const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ 3U $>$ \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em connect policy to a finite-\/volume stencil that must match the parent element \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aec46d50fcefcb34095457a6e98baa6b8}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aec46d50fcefcb34095457a6e98baa6b8} 
+void {\bfseries Assign\+Finite\+Volume\+Null\+Ptr} ()
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a34c6716e22b6048c60fd0e09870fa71a}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a34c6716e22b6048c60fd0e09870fa71a} 
+const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil}}$<$ 3U $>$ \texorpdfstring{$\ast$}{*}const {\bfseries FV} () const
+\begin{DoxyCompactList}\small\item\em access the stencil functionality directly \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6da63f30f2f836a5a8378cb981bcba4a}{Facets}} () const
+\begin{DoxyCompactList}\small\item\em the surface patches that constitute the outside walls of the finite volume \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a1954cb65fe8587751fae5f21f9444da2}{Sectors}} () const
+\begin{DoxyCompactList}\small\item\em the volumetric partitions of the finite elements that belong to the different node-\/centered finite volumes \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a744221302258cfd179b94ccf648270b7}{Integration\+Points\+Per\+Sector}} () const
+\begin{DoxyCompactList}\small\item\em volume quadrature points\+: usually one, but there may be multiple \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ac501a6b378d8940150481e9ee76fdafc}{Integration\+Points\+Per\+Facet}} () const
+\begin{DoxyCompactList}\small\item\em surface quadrature points\+: usually one, but there may be multiple \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a8ca20d8d7e1579d565f7a5afaf51eb23}{N\+\_\+\+At\+Facet\+Integration\+Point}} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em finite-\/element interpolation function values Ni output to NRST vector (stored by the current finite element) at the numbered facet integration point \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_af06b13191f570eecab441c8845a6871d}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_af06b13191f570eecab441c8845a6871d} 
+void {\bfseries N\+\_\+\+At\+Facet\+Integration\+Point} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip, std\+::vector$<$ double $>$ \&NRST) const
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_afb249541c8acca58327eedeb97580c53}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_afb249541c8acca58327eedeb97580c53} 
+void {\bfseries N\+\_\+\+At\+Sector\+Integration\+Point} (uint32\+\_\+t i\+Sector, uint32\+\_\+t ip) const
+\begin{DoxyCompactList}\small\item\em SKM add-\/on. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a38416013e2862526399d9ebec5e54588}{Local\+\_\+d\+N\+\_\+\+At}} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&rst) const
+\begin{DoxyCompactList}\small\item\em interpolation function derivatives at point specified in local coordinates; result is returned into NRST vector of current finite element \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_af6e758392fcc00e86b3dc7390558d1d9}{d\+N\+\_\+\+At}} (const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&rst, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&DN) const
+\begin{DoxyCompactList}\small\item\em interpolation function derivatives at point specified in local coordinates returned into NRST vector of current finite element + detJ for integration \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aecb109f17aeb99df83eb7fb106fa6486}{Property\+Value\+At\+Facet\+Integration\+Point}} (uint32\+\_\+t i\+Facet, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em interpolates value of scalar node variable to facet integration point (XYZ) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a8ee3e488bfd62dd2f35f3a01d70ee1e9}{Property\+Value\+At\+Sector\+Integration\+Point}} (uint32\+\_\+t i\+Sector, uint32\+\_\+t ip, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em interpolates value of scalar node variable to sector integration point (XYZ) \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Var$>$ }\\void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aea32b1dc8d6c6d71987cdbe0661fdb96}{Property\+Value\+At\+Facet\+Integration\+Point}} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t i\+Facet, uint32\+\_\+t ip, Var \&) const
+\begin{DoxyCompactList}\small\item\em interpolate values of any node variable to facet integration point (XYZ) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a46db2c49967904b2e3f621347661dc2f}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a46db2c49967904b2e3f621347661dc2f} 
+{\footnotesize template$<$class Var$>$ }\\void {\bfseries Property\+Value\+At\+Sector\+Integration\+Point} (const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t i\+Sector, uint32\+\_\+t ip, Var \&) const
+\begin{DoxyCompactList}\small\item\em interpolate values of any node variable to sector integration point (XYZ) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a564d4b69f259ce9d73ebedfa46f9ddc2}{Facet\+Integral}} (uint32\+\_\+t i\+Facet, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em integrates value of property over the area of the facet \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a835c243e5c30bc2abbdf05232af755d4}{Sector\+Integral}} (uint32\+\_\+t i\+Sector, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em integrates value of property over the sector \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a10ea17794e3f015ad754da8afaa5f1a7}{Projection\+On\+Facet\+Normal}} (uint32\+\_\+t i\+Facet, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&) const
+\begin{DoxyCompactList}\small\item\em reads value of vector property and projects it onto facet normal in physical space; returns projected value \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6980a1fa814a0dcf7a028617049da238}{Projection\+On\+Facet\+Normal}} (uint32\+\_\+t i\+Facet, const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 3U $>$ \&) const
+\begin{DoxyCompactList}\small\item\em projects value of vector property onto facet normal in physical space; returns projection \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a99ee84c149f207425e57c92be3130592}{Sector\+Volume}} (uint32\+\_\+t i\+Sector) const
+\begin{DoxyCompactList}\small\item\em returns subvolume of finite element that corresponds to the requested finite volume sector \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ae8e04953b780e75651c2c1c516208150}{Facet\+Area}} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em returns the area of the finite-\/volume facet in physical space as obtained by construction of facet in physical space \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a0f42aada684b805a5f7462e1853f92c0}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a0f42aada684b805a5f7462e1853f92c0} 
+double {\bfseries Facet\+Area\+Mapped} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em returns the area of the finite volume facet in physical space as obtained by Jacobian transformation of area in parametric space \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_acf5ae7bb7f86ca947261f2c8c4edf8a8}{Facet\+Normal}} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em returns the unit normal to the finite-\/volume facet \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a0e7a76c03bf9a8f4b5a2fc6ec972c7a1}{Facet\+Normal\+Mapped}} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em transforms the facet normal from parametric to physical space and optionally normalises it to obtain a unit length \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a69dc3e0bb8cc4356f8ad9061257cf601}{Parametric\+Facet\+Area}} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em returns the facet area in parametric space \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6fe24b07b0fa3a78b51262dd146fe435}{Parametric\+Facet\+Normal}} (uint32\+\_\+t i\+Facet) const
+\begin{DoxyCompactList}\small\item\em returns the normal to the facet in parametric space \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a55fec87d00f0b60a951d49f94bb7fea2}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a55fec87d00f0b60a951d49f94bb7fea2} 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ {\bfseries Facet\+Point} (uint32\+\_\+t i\+Facet, uint32\+\_\+t i\+Point) const
+\begin{DoxyCompactList}\small\item\em returns facet corner point in physical coordinates using RST\+\_\+to\+\_\+\+XYX \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a5d420d2fff307c1e102007c2d7f9130f}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a5d420d2fff307c1e102007c2d7f9130f} 
+class {\bfseries Element$<$ 3\+U $>$}
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a634f4a22a7fdd129dfe3051bb24bb3f9}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a634f4a22a7fdd129dfe3051bb24bb3f9} 
+class {\bfseries Face$<$ 3\+U $>$}
+\item 
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ac954dd95cd007f35251cc68157403686}\label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ac954dd95cd007f35251cc68157403686} 
+class {\bfseries Inter\+Face$<$ 3\+U $>$}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$\newline
+class csmp\+::\+Finite\+Volume\+Policy$<$ 3\+U, CELL $>$}
+Policy of the \doxylink{classcsmp_1_1_element}{Element} class which provides it with the functionality needed for finite-\/volume stencil formation, i.\+e. node-\/centered finite-\/volume computations. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2003
+\end{DoxyDate}
+Class is the implementation of the TRAITS design pattern. The traits template technique, pioneered by Nathan Myers,is a means of bundling type-\/dependent declarations together.\+In essence, using traits allows you to mix and match certain types and and values with contexts that use them in a flexible manner, while keeping your code readable and maintainable. ~\newline
+
+
+In our case for example, such code design permits to maintain efficient access to the \doxylink{classcsmp_1_1_element}{Element} class, thus giving the possibility to tie up Finite Volume and Finite \doxylink{classcsmp_1_1_element}{Element} parts of the stencil implementation. ~\newline
+\hypertarget{classcsmp_1_1_tensor_variable_3_013_u_01_4_functionality}{}\doxysubsection{\texorpdfstring{Functionality}{Functionality}}\label{classcsmp_1_1_tensor_variable_3_013_u_01_4_functionality}
+Provides a set of functionality to perform operations, used in the CVCELL transport method, implemented in CSMP. This includes calculation of volumes of sectors and surfaces of internal division walls -\/ facets -\/ inside the element, definition of projections of the velocity at the facet integration point on the normal to the facet, required for flux calculation, etc.\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+Part of a consistent framework for generation of the Finite Element/\+Finite Volume method in CSP. Uses the concept of the TRAITS design pattern for efficient access to the the \doxylink{classcsmp_1_1_element}{Element} class of CSP. Give the possibility for elegant coupling and access to Finite \doxylink{classcsmp_1_1_element}{Element} and Finite Volume frameworks inside CSMP.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Uses the traints desigh pattern. Currently the class is supporting linear iso-\/parametric family of Finite Elements with reduced polynomial interpolation basis. Distinctive feature of the \doxylink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy} class is the possibility to access\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+No specific application examples are required, as the method is multiply ~\newline
+ called the great code CSP, within the implementation of the classes Explicit\+Finite\+Volume\+Processor and others. ~\newline
+
+
+TODO\+: \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000027}{Todo}}](3) Put finite\+Volume\+Auxiliary\+Functions into \doxylink{classcsmp_1_1_finite_volume_policy}{Finite\+Volume\+Policy} class (A) TODO\+: 
+
+SKM try to do computations in parametric space\end{DoxyRefDesc}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ab992ac9833aa630ffc96e0f30720c25b}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!FiniteVolumePolicy@{FiniteVolumePolicy}}
+\index{FiniteVolumePolicy@{FiniteVolumePolicy}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{FiniteVolumePolicy()}{FiniteVolumePolicy()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ab992ac9833aa630ffc96e0f30720c25b} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Finite\+Volume\+Policy (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ 3U $>$ \texorpdfstring{$\ast$}{*}}]{fvptr}{ = {\ttfamily nullptr}}\end{DoxyParamCaption})}
+
+Default constructor of the traits class.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The Traits constructor is called numerous times, it must not allocate memory or do expensive things. It initialises the private variable of the class, associated with the element and Memory\+Manager and updates Coordinate \doxylink{classcsmp_1_1_matrix}{Matrix} of the element. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aa8b80b29bca011452c3683040c7b14dd}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!AssignFiniteVolume@{AssignFiniteVolume}}
+\index{AssignFiniteVolume@{AssignFiniteVolume}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{AssignFiniteVolume()}{AssignFiniteVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aa8b80b29bca011452c3683040c7b14dd} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Assign\+Finite\+Volume (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_finite_volume_stencil}{csmp\+::\+Finite\+Volume\+Stencil}}$<$ 3U $>$ \texorpdfstring{$\ast$}{*}}]{fvptr}{}\end{DoxyParamCaption})}
+
+
+
+connect policy to a finite-\/volume stencil that must match the parent element 
+
+Connects policy to a finite-\/volume stencil that must match the parent element. Check is performed in DEBUG mode that the stencil matches parent element. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_af6e758392fcc00e86b3dc7390558d1d9}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!dN\_At@{dN\_At}}
+\index{dN\_At@{dN\_At}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{dN\_At()}{dN\_At()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_af6e758392fcc00e86b3dc7390558d1d9} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::d\+N\+\_\+\+At (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&}]{rst}{, }\item[{\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&}]{DN}{}\end{DoxyParamCaption}) const}
+
+
+
+interpolation function derivatives at point specified in local coordinates returned into NRST vector of current finite element + detJ for integration 
+
+\begin{DoxyAttention}{Attention}
+SKM\+: Caution! -\/ not clear what FEM matrices have to do with FV traits 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ae8e04953b780e75651c2c1c516208150}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!FacetArea@{FacetArea}}
+\index{FacetArea@{FacetArea}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{FacetArea()}{FacetArea()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ae8e04953b780e75651c2c1c516208150} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Facet\+Area (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the area of the finite-\/volume facet in physical space as obtained by construction of facet in physical space 
+
+Method calculates the surface area for the given facet.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet inside the FE;\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+This method takes the tabulated facet points, converts them to physical space, and then calculates the area of the given facet. If the element is a surface element, then only two points describe the facet, therefore, only the distance between these two points will be calculated. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a564d4b69f259ce9d73ebedfa46f9ddc2}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!FacetIntegral@{FacetIntegral}}
+\index{FacetIntegral@{FacetIntegral}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{FacetIntegral()}{FacetIntegral()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a564d4b69f259ce9d73ebedfa46f9ddc2} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Facet\+Integral (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{}\end{DoxyParamCaption}) const}
+
+
+
+integrates value of property over the area of the facet 
+
+Method calculates the surface integral for given scalar property and finite volume sector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Sector} & index (No) of the target sector of the FE; \\
+\hline
+{\em prop\+\_\+key} & key of the integrated property name;\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+As the method calculates the value of the surface integral for given property and facet, the value is returned by the method. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_acf5ae7bb7f86ca947261f2c8c4edf8a8}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!FacetNormal@{FacetNormal}}
+\index{FacetNormal@{FacetNormal}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{FacetNormal()}{FacetNormal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_acf5ae7bb7f86ca947261f2c8c4edf8a8} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Facet\+Normal (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the unit normal to the finite-\/volume facet 
+
+Normal is generated in physical space, using quadrilateral patch, fitted to the facet. Method returns the determinant of the Jacobian for the surface at integration point (=facet area).
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet is inside the FE;\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classcsmp_1_1_point}{Point} containing physical normal coordinates.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+This method defines the normal to the facet in physical space, using standard FE methodology of normal definition, fitting the quadrilateral patch to the corner points of the facet in physical space-\/\texorpdfstring{$>$}{>} This method could be rather computationally expensive, therefore parametric definition of the surface normal is more efficient.
+
+For current implementation index ip is constrained to 0 only, i.\+e-\/\texorpdfstring{$>$}{>} the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a0e7a76c03bf9a8f4b5a2fc6ec972c7a1}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!FacetNormalMapped@{FacetNormalMapped}}
+\index{FacetNormalMapped@{FacetNormalMapped}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{FacetNormalMapped()}{FacetNormalMapped()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a0e7a76c03bf9a8f4b5a2fc6ec972c7a1} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Facet\+Normal\+Mapped (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{}\end{DoxyParamCaption}) const}
+
+
+
+transforms the facet normal from parametric to physical space and optionally normalises it to obtain a unit length 
+
+Maps the normal from parametric space to physical space using a 1D to 3D Jacobian in a volumetric element \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6da63f30f2f836a5a8378cb981bcba4a}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!Facets@{Facets}}
+\index{Facets@{Facets}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{Facets()}{Facets()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6da63f30f2f836a5a8378cb981bcba4a} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Facets (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+the surface patches that constitute the outside walls of the finite volume 
+
+Returns number of facets, 0 if no \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} assigned. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ac501a6b378d8940150481e9ee76fdafc}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!IntegrationPointsPerFacet@{IntegrationPointsPerFacet}}
+\index{IntegrationPointsPerFacet@{IntegrationPointsPerFacet}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPointsPerFacet()}{IntegrationPointsPerFacet()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_ac501a6b378d8940150481e9ee76fdafc} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Integration\+Points\+Per\+Facet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+surface quadrature points\+: usually one, but there may be multiple 
+
+Returns number of integration points per facet, 0 if no \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} assigned. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a744221302258cfd179b94ccf648270b7}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!IntegrationPointsPerSector@{IntegrationPointsPerSector}}
+\index{IntegrationPointsPerSector@{IntegrationPointsPerSector}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{IntegrationPointsPerSector()}{IntegrationPointsPerSector()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a744221302258cfd179b94ccf648270b7} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Integration\+Points\+Per\+Sector (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+volume quadrature points\+: usually one, but there may be multiple 
+
+Returns number of integration points per sector, 0 if no \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} assigned. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a38416013e2862526399d9ebec5e54588}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!Local\_dN\_At@{Local\_dN\_At}}
+\index{Local\_dN\_At@{Local\_dN\_At}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{Local\_dN\_At()}{Local\_dN\_At()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a38416013e2862526399d9ebec5e54588} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Local\+\_\+d\+N\+\_\+\+At (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&}]{rst}{}\end{DoxyParamCaption}) const}
+
+
+
+interpolation function derivatives at point specified in local coordinates; result is returned into NRST vector of current finite element 
+
+The method gets parametric derivatives of interpolation functions at given parametric coordinates.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Normally the method is called in connection with all the operations, using the transformation from parametric to physical space and back. For that purpose, the user can use public variable of the \doxylink{classcsmp_1_1_element}{Element} class, containing derivateves\+: stl vectors DNR,DNS,DNT. For example, before constructing the Jacobian matrix of the transformation rst-\/\texorpdfstring{$>$}{>}xyz the user should always call this method. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a8ca20d8d7e1579d565f7a5afaf51eb23}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!N\_AtFacetIntegrationPoint@{N\_AtFacetIntegrationPoint}}
+\index{N\_AtFacetIntegrationPoint@{N\_AtFacetIntegrationPoint}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{N\_AtFacetIntegrationPoint()}{N\_AtFacetIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a8ca20d8d7e1579d565f7a5afaf51eb23} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+N\+\_\+\+At\+Facet\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t}]{ip}{}\end{DoxyParamCaption}) const}
+
+
+
+finite-\/element interpolation function values Ni output to NRST vector (stored by the current finite element) at the numbered facet integration point 
+
+SKM add-\/on (no rst vector needed !) \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a69dc3e0bb8cc4356f8ad9061257cf601}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!ParametricFacetArea@{ParametricFacetArea}}
+\index{ParametricFacetArea@{ParametricFacetArea}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ParametricFacetArea()}{ParametricFacetArea()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a69dc3e0bb8cc4356f8ad9061257cf601} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Parametric\+Facet\+Area (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the facet area in parametric space 
+
+Method calculates the value of the facet area in the parametric space of the given finite element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet isnside the FE;\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The method is applicable to the algorithm of the parametric calculation of fluxes. It should be used together with the method Parametric\+Projection\+On\+Facet\+Normal(). \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6fe24b07b0fa3a78b51262dd146fe435}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!ParametricFacetNormal@{ParametricFacetNormal}}
+\index{ParametricFacetNormal@{ParametricFacetNormal}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ParametricFacetNormal()}{ParametricFacetNormal()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6fe24b07b0fa3a78b51262dd146fe435} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Parametric\+Facet\+Normal (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{}\end{DoxyParamCaption}) const}
+
+
+
+returns the normal to the facet in parametric space 
+
+\begin{DoxyReturn}{Returns}
+Reference normal is returned.
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet isnside the FE;\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference to STL vector of the reference normal coordinates.
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Application of the method gives the reference normal. This reference normal is used to find outwards pointing normal to the facet, not taking care of the orientation of the boundary loop of the facet. Dot product of the reference normal and any normal in physical or parametric realisation can be used to define outward pointing normal. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a10ea17794e3f015ad754da8afaa5f1a7}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!ProjectionOnFacetNormal@{ProjectionOnFacetNormal}}
+\index{ProjectionOnFacetNormal@{ProjectionOnFacetNormal}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ProjectionOnFacetNormal()}{ProjectionOnFacetNormal()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a10ea17794e3f015ad754da8afaa5f1a7} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Projection\+On\+Facet\+Normal (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{}\end{DoxyParamCaption}) const}
+
+
+
+reads value of vector property and projects it onto facet normal in physical space; returns projected value 
+
+Method carries out projection of the given by name vector property on the normal of the internal facet. In this implementation of the method, projection is done in physical space-\/\texorpdfstring{$>$}{>} The surface parameter corresponds to local number of surfaces per node, 3 or 4 for vertice 5 of the pyramid.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet inside the FE; \\
+\hline
+{\em prop\+\_\+key} & key of the property name;\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returned value of the determinant of the transformation of the topologically quadrilateral facet from parametric space of that surface to physical space;
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+The method defines the normal to the facet in physical space, using standard FE methodology of normal definition, fitting the quadrilateral patch to the corner points of the facet in physical space-\/\texorpdfstring{$>$}{>} This method could be rather computationally expensive, therefore parametric projection on surface normal is more efficient.
+
+For current implementation index ip is constrained to 0 only, i.\+e-\/\texorpdfstring{$>$}{>} the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6980a1fa814a0dcf7a028617049da238}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!ProjectionOnFacetNormal@{ProjectionOnFacetNormal}}
+\index{ProjectionOnFacetNormal@{ProjectionOnFacetNormal}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ProjectionOnFacetNormal()}{ProjectionOnFacetNormal()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a6980a1fa814a0dcf7a028617049da238} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Projection\+On\+Facet\+Normal (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{const \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ 3U $>$ \&}]{vc}{}\end{DoxyParamCaption}) const}
+
+
+
+projects value of vector property onto facet normal in physical space; returns projection 
+
+Overloaded method carries out projection of the given vector property on the normal of the internal facet. In this implementation of the method, projection is done in physical space-\/\texorpdfstring{$>$}{>} The surface parameter corresponds to local number of surfaces per node, 3 or 4 for vertice 5 of the pyramid.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet isnside the FE; \\
+\hline
+{\em vc} & vector variable (not by database name) for projection;\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returned value of the determinant of the transformation of the topologically quadrilateral facet from parametric space of that surface to physical space;
+\end{DoxyReturn}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+This overloaded method defines the normal to the facet in physical space, using standard FE methodology of normal definition, fitting the quadrilateral patch to the corner points of the facet in physical space-\/\texorpdfstring{$>$}{>} This method could be rather computationally expensive, therefore parametric projection on surface normal is more efficient.
+
+For current implementation index ip is constrained to 0 only, i.\+e-\/\texorpdfstring{$>$}{>} the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aea32b1dc8d6c6d71987cdbe0661fdb96}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!PropertyValueAtFacetIntegrationPoint@{PropertyValueAtFacetIntegrationPoint}}
+\index{PropertyValueAtFacetIntegrationPoint@{PropertyValueAtFacetIntegrationPoint}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyValueAtFacetIntegrationPoint()}{PropertyValueAtFacetIntegrationPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aea32b1dc8d6c6d71987cdbe0661fdb96} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+template$<$class Var$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Property\+Value\+At\+Facet\+Integration\+Point (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{, }\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{Var \&}]{var}{}\end{DoxyParamCaption}) const}
+
+
+
+interpolate values of any node variable to facet integration point (XYZ) 
+
+\begin{DoxyAttention}{Attention}
+Does not work for array variables at the moment. 
+\end{DoxyAttention}
+\Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aecb109f17aeb99df83eb7fb106fa6486}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!PropertyValueAtFacetIntegrationPoint@{PropertyValueAtFacetIntegrationPoint}}
+\index{PropertyValueAtFacetIntegrationPoint@{PropertyValueAtFacetIntegrationPoint}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyValueAtFacetIntegrationPoint()}{PropertyValueAtFacetIntegrationPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_aecb109f17aeb99df83eb7fb106fa6486} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Property\+Value\+At\+Facet\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Facet}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{}\end{DoxyParamCaption}) const}
+
+
+
+interpolates value of scalar node variable to facet integration point (XYZ) 
+
+Returns double value of property at given internal facet integration point.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Facet} & index (No) of the internal facet isnside the FE \\
+\hline
+{\em ip} & index (No) of the integration point on the facet \\
+\hline
+{\em prop\+\_\+key} & key of the property name\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For current implementation index ip is constrained to 0 only, i.\+e-\/\texorpdfstring{$>$}{>} the FVPEM method is working with 1 facet integration point only. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a8ee3e488bfd62dd2f35f3a01d70ee1e9}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!PropertyValueAtSectorIntegrationPoint@{PropertyValueAtSectorIntegrationPoint}}
+\index{PropertyValueAtSectorIntegrationPoint@{PropertyValueAtSectorIntegrationPoint}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyValueAtSectorIntegrationPoint()}{PropertyValueAtSectorIntegrationPoint()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a8ee3e488bfd62dd2f35f3a01d70ee1e9} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Property\+Value\+At\+Sector\+Integration\+Point (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{, }\item[{uint32\+\_\+t}]{ip}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{}\end{DoxyParamCaption}) const}
+
+
+
+interpolates value of scalar node variable to sector integration point (XYZ) 
+
+Returns double value of property at given volume integration point, inside the volumetric sector of FE, composing FV.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & index (No) of the integration point on the facet; \\
+\hline
+{\em prop\+\_\+key} & key of the property name;\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+For current implementation index ip is constrained to 0 only, i.\+e-\/\texorpdfstring{$>$}{>} the FVPEM method is working with 1 volume sector integration point only. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a835c243e5c30bc2abbdf05232af755d4}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!SectorIntegral@{SectorIntegral}}
+\index{SectorIntegral@{SectorIntegral}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{SectorIntegral()}{SectorIntegral()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a835c243e5c30bc2abbdf05232af755d4} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Sector\+Integral (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{, }\item[{const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&}]{prop\+\_\+key}{}\end{DoxyParamCaption}) const}
+
+
+
+integrates value of property over the sector 
+
+Method calculates the value of the volume integral for given scalar property and volume sector of finite element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Sector} & index (No) of the internal sector inside the FE; \\
+\hline
+{\em prop\+\_\+key} & key of the integrated property name;\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+As the method calculates the value of the volume integral for the given property and volume sector, the value is returned by the method. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a1954cb65fe8587751fae5f21f9444da2}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!Sectors@{Sectors}}
+\index{Sectors@{Sectors}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{Sectors()}{Sectors()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a1954cb65fe8587751fae5f21f9444da2} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Sectors (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+the volumetric partitions of the finite elements that belong to the different node-\/centered finite volumes 
+
+Returns number of sectors, 0 if no \doxylink{classcsmp_1_1_finite_volume_stencil}{Finite\+Volume\+Stencil} assigned. \Hypertarget{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a99ee84c149f207425e57c92be3130592}\index{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}!SectorVolume@{SectorVolume}}
+\index{SectorVolume@{SectorVolume}!csmp::FiniteVolumePolicy$<$ 3U, CELL $>$@{csmp::FiniteVolumePolicy$<$ 3U, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{SectorVolume()}{SectorVolume()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_finite_volume_policy_3_013_u_00_01_c_e_l_l_01_4_a99ee84c149f207425e57c92be3130592} 
+template$<$template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_finite_volume_policy}{csmp\+::\+Finite\+Volume\+Policy}}$<$ 3U, CELL $>$\+::\+Sector\+Volume (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i\+Sector}{}\end{DoxyParamCaption}) const}
+
+
+
+returns subvolume of finite element that corresponds to the requested finite volume sector 
+
+Method calculates the volume for the given volumetric sector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+Sector} & index (No) of the internal facet isnside the FE;\\
+\hline
+\end{DoxyParams}
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Method automatically takes into account composite nature of the sector at the apex of the pyramid. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/finite\+\_\+volumes/Finite\+Volume\+Policy.\+h\item 
+source/modules/integration/finite\+\_\+volumes/Finite\+Volume\+Policy3.\+cpp\end{DoxyCompactItemize}

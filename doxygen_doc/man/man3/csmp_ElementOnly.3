@@ -1,0 +1,96 @@
+.TH "csmp::ElementOnly< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::ElementOnly< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <ElementPolicyIntegrity_Test\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBElementOnly\fP (size_t id, size_t nodes, size_t nbors)"
+.br
+.ti -1c
+.RI "\fBElementOnly\fP & \fBoperator=\fP (const \fBElementOnly\fP &)"
+.br
+.ti -1c
+.RI "void \fBAccept\fP (\fBcsmp::Visitor\fP< dim > &)"
+.br
+.ti -1c
+.RI "void \fBAssign\fP (size_t nbor, \fBElementOnly\fP< dim > *const e_ptr)"
+.br
+.ti -1c
+.RI "void \fBAssign\fP (size_t node, \fBNode\fP< dim > *const n_ptr)"
+.br
+.ti -1c
+.RI "\fBcsmp::Node\fP< dim > * \fBN\fP (size_t n_local) const"
+.br
+.ti -1c
+.RI "\fBcsmp::ElementOnly\fP< dim > * \fBNeighbor\fP (size_t nbor) const"
+.br
+.ti -1c
+.RI "void \fBIdx\fP (size_t idx) const"
+.br
+.ti -1c
+.RI "size_t \fBIdx\fP () const"
+.br
+.ti -1c
+.RI "void \fBAtBoundary\fP (\fBBOX_BOUNDARY\fP b)"
+.br
+.ti -1c
+.RI "\fBBOX_BOUNDARY\fP \fBAtBoundary\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBNodes\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBNeighbors\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBFaces\fP () const"
+.br
+.ti -1c
+.RI "void \fBCoordinateMatrix\fP () const"
+.br
+.ti -1c
+.RI "void \fBCoordinateMatrix\fP (\fBDenseMatrix\fP< DM_MIN > &XY) const"
+.br
+.ti -1c
+.RI "double \fBLengthInDirection\fP (const \fBVectorVariable\fP< dim > &vecDirection) const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBBaryCenter\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSegments\fP () const"
+.br
+.ti -1c
+.RI "\fBPoint\fP< dim > \fBSegmentMidPoint\fP (size_t segm) const"
+.br
+.ti -1c
+.RI "double \fBSegmentLength\fP (size_t segm) const"
+.br
+.ti -1c
+.RI "void \fBSegmentLengths\fP (std::vector< double > &) const"
+.br
+.ti -1c
+.RI "double \fBAspectRatio\fP () const"
+.br
+.ti -1c
+.RI "double \fBInnerRadius\fP () const"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::ElementOnly< dim >"Building an \fBElement\fP only element with only the functionality that is stand-alone\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

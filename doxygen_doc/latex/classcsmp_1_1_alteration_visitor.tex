@@ -1,0 +1,372 @@
+\doxysection{csmp\+::Alteration\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_alteration_visitor}{}\label{classcsmp_1_1_alteration_visitor}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+
+
+Permforms node-\/by-\/node computations of aqueous -\/ solid phase equilibria using the \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} in a reaction based aproach.  
+
+
+
+
+Inheritance diagram for csmp\+::Alteration\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=248pt]{classcsmp_1_1_alteration_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Alteration\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=248pt]{classcsmp_1_1_alteration_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_alteration_visitor_a4cfd1fd6aef4ec765b0bfde708c998a5}{Alteration\+Visitor}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&sg, const char \texorpdfstring{$\ast$}{*}rea\+\_\+file, double dt)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor_a8740ecc7d1ef1230ba5e5779c4e3cb1d}{Equilibrate}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&sg, bool show\+\_\+results=true)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor_a70dc8e220ee89edd00b1ea0bfcd758b7}{Adjust\+Time\+Increment}} (double new\+\_\+dt)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor_a402bd05256fb5261a7d472eced2db099}{Precision}} (double tol)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor_afc928c2c9b6032e4856405e84fd0ed5a}{Threshold\+Reactant\+Change\+Factor}} (double fac)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor_a3860890769ecfd7ee651a7657c3c429f}{Threshold\+Reactant\+Change\+Rate}} (double rate)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classcsmp_1_1_alteration_visitor_a36f0d6a770e0f94666fde6a251859d04}\label{classcsmp_1_1_alteration_visitor_a36f0d6a770e0f94666fde6a251859d04} 
+void {\bfseries Verbose} (bool print\+\_\+all\+\_\+results)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a07433f464353062d91f21684b9378dec}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a1a3ed57d253eef9a0097232c7359627c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Alteration\+Visitor$<$ dim $>$}
+Permforms node-\/by-\/node computations of aqueous -\/ solid phase equilibria using the \doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver} in a reaction based aproach. 
+
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthaei 
+
+S. Geiger 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999
+\end{DoxyDate}
+\hypertarget{compare_floats_8h_motivation}{}\doxysubsection{\texorpdfstring{Motivation}{Motivation}}\label{compare_floats_8h_motivation}
+In order to carry out rate-\/dependent reaction calculations, one needs to visit the nodes or elements of the finite-\/element mesh, retrieve aqueous species concentrations (moles m-\/3) and mineral fractions (X), respectively, carry out speciation calculation for the alloted time increment, and map the results back to the \doxylink{classcsmp_1_1_model}{Model}.
+
+Since full equilibrium calculations are meaningful only for fracture-\/channelled flow and its interaction with the matrix but not for matrix flow where disequilibrium may persist between pore fluid and matrix minerals, the scheme should also allow rate-\/dependent calculations. ~\newline
+
+
+The scheme should be simple. This is achieved by the SNIA approach.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}{}\doxysubsection{\texorpdfstring{Design Intent}{Design Intent}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_design}
+Encapsulation appears critical in order to deal accurately with the complexity of the aqueous systems. It is achieved by delegating the numerics of the equilibration calculation to a solver object for stiff systems of ordinary differential equations. Critical properties of aqueous solutes, minerals, and gases are encapsulated into \doxylink{classcsmp_1_1_reactant}{Reactant} objects. ~\newline
+
+
+Zero-\/dimensional reaction calculations can be carried out outside of a more complex CSP-\/reactive-\/transport model. This is the method of choice for designing and testing chemical systems before looking at their spatial implications by means of a CSP model. Design and testing is done by iteratively creating and modifying a reaction file which is used to initialize the solver for ordinary differential equations, both inside and outside of CSP. The design-\/proofed text file is then read by the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} to initialize the reaction calculations. In this approach, the dependent variables defined in the input file must also be known to the \doxylink{classcsmp_1_1_property_database}{Property\+Database}. Hence, they must be incorporated into the \textquotesingle{}CSP\+\_\+variables.\+txt\textquotesingle{} file. In addition to the reactions file the constructor of the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} also expects a datafile which lists the reactants again, specifying their phase state (solid, aqueous, gas) charge, density, and molar weight, as applicable. This file is read after the ODE solver is initialized and it is tested for a mismatch of species names.
+
+Robustness is quint-\/essential since an inability of the A.\+V. to treat the chemical system at just a single node would bring the whole reactive transport model to a halt. This goal is achieved only partly. Importantly, as is documented in more detail for the \textquotesingle{}\doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver}\textquotesingle{} object, rate coefficients in a single system may not vary by more than about 12 orders of magnitude among the different dependent variables. Otherwise a solution cannot be assured, while a calculation may still perform correctly in most cases. Usually, a large number of bad steps taken by the ODE solver is an indication that a chemical system is problematic. ~\newline
+
+
+Flexibility is dictated by the need to iteratively refine the aqueous system calculation and to test the functionality of such refinements for the modeled geological system of interest. To achieve this goal, hardcoding of reactant names is avoided except for the variable H2\+O\+\_\+aq which must be present and which is also used to decide whether a chemical calculation is carried out or not\+: If the variable H2\+O\+\_\+aq is flagged DIRICH, chemical calculations are prohibited at the respective \doxylink{classcsmp_1_1_node}{Node}. ~\newline
+
+
+Apart from the variable "{}\+H2\+O\+\_\+aq"{} some physical properties are also hardwired since they are likely to be needed for every conceivable reactive transport calculation.\+Their names are ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}nodal\ porosity"{}}}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}fluid\ density"{}}}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}rock\ density"{}}}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}nodal\ fluid\ source"{}}}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}H2O\_aq"{}}}
+
+\end{DoxyCode}
+
+
+They must be specified in the "{}\+CSP\+\_\+variables.\+txt"{} file if the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} object shall be used.
+
+Efficiency of the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} is very important since calls to its \doxylink{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}{Visit()} method usually prove to be the main time sink of a transient CSP calculation (worse than advection requirements). The main culprit in terms of runtime is the \doxylink{classcsmp_1_1_o_d_e___stiff_solver_a6c0b5900d596870a228a27e9370b0572}{ODE\+\_\+\+Stiff\+Solver\+::\+Solve()} method. For this reason, the invocation of the solver is limited to scenarios where, either, the absolute concentration / volume fraction of a mineral has changed by a user-\/specified factor. This factor can be set with the method \textquotesingle{}\doxylink{classcsmp_1_1_alteration_visitor_afc928c2c9b6032e4856405e84fd0ed5a}{Threshold\+Reactant\+Change\+Factor()}\textquotesingle{}, An additional criterion is whether equilibration was obtained in the previous timestep. The latter is indicated by the rates of change of the reactants in the final finite-\/difference timestep taken by the solver during the last visitation of the node. Again, a threshold rate above which the solver will be invoked can be set using the method \textquotesingle{}\doxylink{classcsmp_1_1_alteration_visitor_a3860890769ecfd7ee651a7657c3c429f}{Threshold\+Reactant\+Change\+Rate()}\textquotesingle{}.\hypertarget{classcsmp_1_1_visitor_applicability}{}\doxysubsection{\texorpdfstring{Applicability}{Applicability}}\label{classcsmp_1_1_visitor_applicability}
+This specific implementation of the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} is suitable for arbitrary chemical calculations in which the reactants are specified as CSP node variables.\hypertarget{classcsmp_1_1_v_data_structure}{}\doxysubsection{\texorpdfstring{Structure}{Structure}}\label{classcsmp_1_1_v_data_structure}
+See general description of visitors in the User\textquotesingle{}s Guide.\hypertarget{classcsmp_1_1_solver_participants}{}\doxysubsection{\texorpdfstring{Participants}{Participants}}\label{classcsmp_1_1_solver_participants}
+Participating objects are the \textquotesingle{}\doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver}\textquotesingle{} and the \textquotesingle{}\doxylink{classcsmp_1_1_reactant}{Reactant}\textquotesingle{} classes.\hypertarget{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_collaboration}{}\doxysubsection{\texorpdfstring{Collaboration}{Collaboration}}\label{classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_collaboration}
+Alike other visitors, the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} achieves its functionality through collaborations with the \doxylink{classcsmp_1_1_model}{Model}, \doxylink{classcsmp_1_1_region}{Region} and \doxylink{classcsmp_1_1_node}{Node} objects.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+Each visitation involves reading nodal properties from the \doxylink{classcsmp_1_1_model}{Model} storage (1), a conversion of these mineral fractions and concentrations per unit volume (m3) into molalities (2), an invocation of the ODE solver if reactant concentrations / fractions changed above a tolerance value since the last visitation or if the previous rate of change was still high (4). The computed molalities are converted back into concentrations and fractions and stored back into the \doxylink{classcsmp_1_1_model}{Model} (5). From these results, a new porosity and rock density is calculated (6), and a potential "{}nodal fluid source"{} term is computed and stored (7). Finally, the absolute reactant quantities and reaction rates for each dependent variable are stored as solver invocation criteria for the next timestep (8).
+
+The results of each visitation can be output if the visitor is set to verbose mode. This is done using the second argument of the \doxylink{classcsmp_1_1_alteration_visitor_a8740ecc7d1ef1230ba5e5779c4e3cb1d}{Equilibrate()} method and is the default.\hypertarget{classcsmp_1_1_visitor_examples}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{classcsmp_1_1_visitor_examples}
+An \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} is instantiated after a \doxylink{classcsmp_1_1_model}{Model} was constructed\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcsmp_1_1_alteration_visitor_a4cfd1fd6aef4ec765b0bfde708c998a5}{AlterationVisitor}}\ \ reactor(\ sg\_model,\ \textcolor{stringliteral}{"{}rea-\/file1"{}},\ time\_increment\ );}
+
+\end{DoxyCode}
+
+
+and is applied, for instance in a time-\/stepping loop by calling\+: ~\newline
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{reactor.Equilibrate(\ model,\ \textcolor{keyword}{false}\ );}
+
+\end{DoxyCode}
+
+
+In this example the verbose output of each speciation calculation is disabled by setting the second \textquotesingle{}boolean\textquotesingle{} argument. 
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_alteration_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_alteration_visitor_a4cfd1fd6aef4ec765b0bfde708c998a5}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}!AlterationVisitor@{AlterationVisitor}}
+\index{AlterationVisitor@{AlterationVisitor}!csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AlterationVisitor()}{AlterationVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_alteration_visitor_a4cfd1fd6aef4ec765b0bfde708c998a5} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_alteration_visitor}{csmp\+::\+Alteration\+Visitor}}$<$ dim $>$\+::\+Alteration\+Visitor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{rea\+\_\+file}{, }\item[{double}]{dt}{}\end{DoxyParamCaption})}
+
+The constructor of the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} reads the property indices of the required variables from the property database and initializes, from two corresponding text files("{}.\+txt"{}, "{}-\/prop.\+txt"{}), the solver for the system of ordinary differential equations which describes the reactions. A check is performed whether the reactants in the 2 input files correspond to another or whether reactants are missing from the "{}-\/prop.\+txt"{} file. ~\newline
+
+
+The constructor also initializes the vectors which will hold the reactant quantities and reaction rates used to test whether the system is out of equilibrium such that the solver must be invoked. In order to always invoke the solver during first visitations, the absolute quantities are set to 0.\+0 and the rates are set to 1.\+0. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The first constructor argument is a reference to the \doxylink{classcsmp_1_1_model}{Model} which the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} uses to query and initialize a range of variables.
+
+The second input argument specifies the name of a text file. This name specifies from where the chemical reactions are input to initialize the ODE solver. It is specified without the extension "{}.\+txt"{} which is however expected to follow the filename. A second textfile must exist containing critical properties of the reactants (state\+: solid, aqueous, gas; charge or density, and molar weight). The name of this file must be the same as that of the reaction file, but with the suffix "{}-\/props"{} attached before the extension "{}.\+txt"{}.
+
+The third argument fixes the time increment over which reactions shall be carried out at each node that is visited. If equilibrium calculations shall be carried out the time increment must be set to a large value. 1.\+0e+10 will do. Because of a sophisticated algorithm used this larger increment will rarely noticeably slow the calculations down.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+The input text files are read by the \textquotesingle{}\doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver}\textquotesingle{} and by the private method \textquotesingle{}Read\+Dependent\+Variable\+Phase\+State()\textquotesingle{}. The variable indices are retrieved from the \doxylink{classcsmp_1_1_property_database}{Property\+Database}.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The \textquotesingle{}\doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver}\textquotesingle{} and the method \textquotesingle{}Read\+Dependent\+Variable\+Phase\+State()\textquotesingle{} will report reading problems and/or the absence of the necessary text files. In this constructor a test is performed whether the number of depedendent variables in the reaction file is the same as in the properties input file (it should be). If not, an error is reported. Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_alteration_visitor_a4cfd1fd6aef4ec765b0bfde708c998a5_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{classcsmp_1_1_alteration_visitor_a4cfd1fd6aef4ec765b0bfde708c998a5_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_alteration_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_alteration_visitor_a70dc8e220ee89edd00b1ea0bfcd758b7}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}!AdjustTimeIncrement@{AdjustTimeIncrement}}
+\index{AdjustTimeIncrement@{AdjustTimeIncrement}!csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{AdjustTimeIncrement()}{AdjustTimeIncrement()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_alteration_visitor_a70dc8e220ee89edd00b1ea0bfcd758b7} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor}{csmp\+::\+Alteration\+Visitor}}$<$ dim $>$\+::\+Adjust\+Time\+Increment (\begin{DoxyParamCaption}\item[{double}]{new\+\_\+dt}{}\end{DoxyParamCaption})}
+
+Sets the integration time for the ODE solver. If the realistic reaction rates are used this time corresponds to the time which the chemical system has to evolve. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The new integration time for the ODE solver. \Hypertarget{classcsmp_1_1_alteration_visitor_a8740ecc7d1ef1230ba5e5779c4e3cb1d}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}!Equilibrate@{Equilibrate}}
+\index{Equilibrate@{Equilibrate}!csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Equilibrate()}{Equilibrate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_alteration_visitor_a8740ecc7d1ef1230ba5e5779c4e3cb1d} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor}{csmp\+::\+Alteration\+Visitor}}$<$ dim $>$\+::\+Equilibrate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{bool}]{show\+\_\+results}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+Submits the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} to the \doxylink{classcsmp_1_1_model}{Model} initiating the visitation of all nodes during which the reaction calculations will be carried out.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+A reference to the model (\doxylink{classcsmp_1_1_model}{Model}) to which the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor} is applied and a boolean flag which determines whether the visitation is done quietly or whether the results of the speciation calculation are output as the nodes get visited. The default is verbose. Depending on the \textquotesingle{}stdout\textquotesingle{} interface of the computer system in use, calling the visitor in verbose mode is about 5-\/25 \% slower than if the verbose mode is disabled. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+The \doxylink{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}{Visit()} method as well as the ODE solver report errors and other information during their execution. \Hypertarget{classcsmp_1_1_alteration_visitor_a402bd05256fb5261a7d472eced2db099}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}!Precision@{Precision}}
+\index{Precision@{Precision}!csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Precision()}{Precision()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_alteration_visitor_a402bd05256fb5261a7d472eced2db099} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor}{csmp\+::\+Alteration\+Visitor}}$<$ dim $>$\+::\+Precision (\begin{DoxyParamCaption}\item[{double}]{tol}{}\end{DoxyParamCaption})}
+
+Sets the accuracy to which a reactant or product concentration shall be calculated at each reaction step of the solver. The default value is 1.\+0e-\/12. This is a fairly high precision which is used to ascertain that the solver progresses to a final solution. At lower accuracy the risk that the solver stalls before integrating over the desired timespan is increased. The maximum accuracy that can be achieved theoretically is about 1.\+0e-\/16. This is due to the fact that the depedendent variables are represented in double precision (18 significant digits).\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The accuracy to which all reactant and product concentrations shall be calculated. \Hypertarget{classcsmp_1_1_alteration_visitor_afc928c2c9b6032e4856405e84fd0ed5a}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}!ThresholdReactantChangeFactor@{ThresholdReactantChangeFactor}}
+\index{ThresholdReactantChangeFactor@{ThresholdReactantChangeFactor}!csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ThresholdReactantChangeFactor()}{ThresholdReactantChangeFactor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_alteration_visitor_afc928c2c9b6032e4856405e84fd0ed5a} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor}{csmp\+::\+Alteration\+Visitor}}$<$ dim $>$\+::\+Threshold\+Reactant\+Change\+Factor (\begin{DoxyParamCaption}\item[{double}]{fac}{}\end{DoxyParamCaption})}
+
+Sets the factor which controls the invocation of the solver during a visitation. Thus, if a reactant concentration changed by more than the the total quantity times the factor, the solver will be called. The default factor is 1.\+5.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The multiplication factor for absolute reactant concentrations. \Hypertarget{classcsmp_1_1_alteration_visitor_a3860890769ecfd7ee651a7657c3c429f}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}!ThresholdReactantChangeRate@{ThresholdReactantChangeRate}}
+\index{ThresholdReactantChangeRate@{ThresholdReactantChangeRate}!csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ThresholdReactantChangeRate()}{ThresholdReactantChangeRate()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_alteration_visitor_a3860890769ecfd7ee651a7657c3c429f} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor}{csmp\+::\+Alteration\+Visitor}}$<$ dim $>$\+::\+Threshold\+Reactant\+Change\+Rate (\begin{DoxyParamCaption}\item[{double}]{rate}{}\end{DoxyParamCaption})}
+
+Sets the threshold rate of change of any reactant concentration. If this rate was exceeded during the final step of the ODE solver in the last invocation of the solver, the solver will be called again in the current node visitation.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The new rate above which the solver shall be applied to the chemical system of interest. \Hypertarget{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}\index{csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::AlterationVisitor$<$ dim $>$@{csmp::AlterationVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_alteration_visitor}{csmp\+::\+Alteration\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The method \doxylink{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}{Visit()} provides the core functionality of the \doxylink{classcsmp_1_1_alteration_visitor}{Alteration\+Visitor}. It queries the visited nodes for the aqueous species concentrations and mineral fractions, converting these into molalities. It then initializes the \textquotesingle{}\doxylink{classcsmp_1_1_o_d_e___stiff_solver}{ODE\+\_\+\+Stiff\+Solver}\textquotesingle{} object which carries out a speciation calculation evolving the chemical system toward a new equilibrium. If the timespan allotted for this evolution (= ODE integration time) is set to a large value, equilibrium will be obtained provided that the system of ordinary differential equations which are being integrated and which represent the chemical reactions is well posed. ~\newline
+
+
+The computed molalities are converted back into moles per cubic metre of fluid and mineral volume fractions. From these the new porosity and composite density of the fluid saturated rock are computed. The amount of water which was liberated or consumed by the reactions is translated into the variable "{}nodal fluid source"{}. If this quantity exceeds the tolerance specified for the solver, it is added to this CSMP variable stored in the \doxylink{classcsmp_1_1_model}{Model}. ~\newline
+
+
+In summary, apart from the speciation calculation, \doxylink{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}{Visit()} calculates the variable "{}nodal porosity"{}, "{}rock density"{}, and "{}nodal fluid source"{}. The rock density is the composite density of the minerals and the fluid stored in the pore space. The effects of the aqueous solutes are ignored at this stage.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The method takes a pointer to the visited node as argument. It permits access to the public interface of the \doxylink{classcsmp_1_1_node}{Node}.\hypertarget{namespacecsmp_implementation}{}\doxysubsection{\texorpdfstring{Implementation}{Implementation}}\label{namespacecsmp_implementation}
+
+\begin{DoxyEnumerate}
+\item Dirichlet nodes are tested by checking the variable "{}\+H2\+O\+\_\+aq"{} and ignoring these nodes ever after if "{}\+H2\+O\+\_\+aq"{} is flagged DIRICH.
+\end{DoxyEnumerate}
+
+The initial composition of the fluid rock system at a node is specified in terms of per-\/unit-\/volume properties. The composition of the pore fluid is specified in \mbox{[}moles m-\/3\mbox{]} and that of the rock in terms of mineral volume fractions. The latter is equivalent to the mode of a rock and is convienient to visualize using transparency. ~\newline
+
+
+It appears as a useful convention adhered to in chemical reaction calculations to consider what is happening in 1 kg of fluid with dissolved species and in contact with elements /minerals. To achieve this, one needs molalities of the aqueous species dissolved in the pore fluid of the rock and molar quantities for the minerals making up the rock matrix. This requires conversion of the fluid-\/flow / geologically oriented per-\/unit-\/volume quantities. ~\newline
+
+
+In CSP reactive-\/transport simulations we carry out these conversion before and after the speciation calculation, partly already because the scale of a model and the porosity of the represented rock may vary greatly such that a molality-\/based treatment is more illustrative. However, for a rock with a specific pore volume this requires a mapping of the solid phases to the per-\/kg reaction calculation. This mapping is done by first converting the mineral volume fractions into moles and then dividing the latter by the fluid mass which resides in the pore space of this unit volume of rock. In detail, the conversion steps are\+: ~\newline
+
+
+
+\begin{DoxyEnumerate}
+\item Calculation of fluid mass M\textquotesingle{}f from porosity, phi, and fluid density, rho\textquotesingle{}f ~\newline
+
+\end{DoxyEnumerate}
+
+M\textquotesingle{}f = phi rho\textquotesingle{}f ~\newline
+
+
+
+\begin{DoxyEnumerate}
+\item Calculation of how many moles H2O reside in one kg of fluid ~\newline
+
+\end{DoxyEnumerate}
+
+N\textquotesingle{}h2o = 1000 / molar weight\textquotesingle{}h2o
+
+
+\begin{DoxyEnumerate}
+\item Conversion of dissolved aqueous species a\textquotesingle{}i in moles per cubic metre of fluid into molalities am\textquotesingle{}i (moles per kg fluid) ~\newline
+
+\end{DoxyEnumerate}
+
+am\textquotesingle{}i = a\textquotesingle{}i / rho\textquotesingle{}f ~\newline
+
+
+
+\begin{DoxyEnumerate}
+\item Conversion of mineral fractions X\textquotesingle{}i to molalities N\textquotesingle{}i ~\newline
+
+\end{DoxyEnumerate}
+
+N\textquotesingle{}i = (X\textquotesingle{}i rho\textquotesingle{}i / molar-\/weight\textquotesingle{}i) / M\textquotesingle{}f ~\newline
+
+
+
+\begin{DoxyEnumerate}
+\item Re-\/calculation of fluid mass after reaction occurred ~\newline
+
+\end{DoxyEnumerate}
+
+M\textquotesingle{}f(t+1) = N\textquotesingle{}f(t+1) molar-\/weigth\textquotesingle{}f phi ~\newline
+
+
+
+\begin{DoxyEnumerate}
+\item Calculation of new porosity as 1 -\/ sum of the newly calculated mineral fractions ~\newline
+
+\end{DoxyEnumerate}
+
+phi(t+1) = 1 -\/ sum\textquotesingle{}1-\/n over (N\textquotesingle{}i(t+1) molar-\/weigth\textquotesingle{}i fmass(t+1)) / rho\textquotesingle{}i ~\newline
+
+
+It follows that the molar weights of H2O and the minerals must be known in order to calculate the porosity changes due to the reactions. These are queried from the \doxylink{classcsmp_1_1_reactant}{Reactant} objects which store the properties of the reactants and reside in the reactant STL map \textquotesingle{}phase\+\_\+properties\textquotesingle{}. ~\newline
+
+
+Summing up the mineral-\/fraction mineral-\/density products and adding the porosity-\/fluid density product gives the new composite density of the fluid-\/saturated rock. ~\newline
+
+
+From the deviation of the H2O molality from 55.\+2 upon completion of the solver one finally calculates a "{}nodal fluid source"{}, src, for the next fluid-\/pressure computation step\+: ~\newline
+
+
+src = ((am\textquotesingle{}h2o(t+1) -\/ 55.\+2)/55.2) 18.\+02 1.\+0e-\/3 fmass) / rho\textquotesingle{}f ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Reaction calculations where the reactants are specified as node variables.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+\doxylink{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}{Visit()} always reports to \textquotesingle{}stdout\textquotesingle{} how many successful as well as useless steps the ODE solver performed to obtain a solution. Many bad steps usually indicate a problematic reaction system. ~\newline
+
+
+If the \textquotesingle{}verbose\textquotesingle{} flag evaluates to true, \doxylink{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b}{Visit()} will report initial and final molalities, final reaction rates, as well as new nodal porosities, fluid-\/rock system densities (kg m-\/3), and fluid sources or sinks caused by the reactions. ~\newline
+
+
+If the ODE solver cannot find a solution it will eventually terminate reporting errors. It can fail either because the matrix coupling the ODEs becomes singular or because the rate of change of some equations becomes so fast that the minimal timestep size limit is reached. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{classcsmp_1_1_alteration_visitor_af6f6c494685fd0e92b0057787bcd8b4b_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/geochemistry/Alteration\+Visitor.\+h\item 
+source/modules/thmc/geochemistry/Alteration\+Visitor.\+cpp\end{DoxyCompactItemize}

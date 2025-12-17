@@ -1,0 +1,880 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_split_boundary_interface" kind="class" language="C++" prot="public">
+    <compoundname>csmp::SplitBoundaryInterface</compoundname>
+    <includes refid="_split_boundary_interface_8h" local="no">SplitBoundaryInterface.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>SPLITBOUNDARY_COMPLEX</declname>
+        <defname>SPLITBOUNDARY_COMPLEX</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classcsmp_1_1_split_boundary_interface_1a459a94f78fd569ddf0e2cff1a970e401" prot="public" static="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_split_boundary" kindref="compound">csmp::SplitBoundary</ref>&lt; dim &gt; &gt;::iterator</type>
+        <definition>typedef std::map&lt;std::string,csmp::SplitBoundary&lt;dim&gt;&gt;::iterator csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::splitBoundaryIterator</definition>
+        <argsstring></argsstring>
+        <name>splitBoundaryIterator</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::splitBoundaryIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="36" column="50" bodyfile="source/includes/model/SplitBoundaryInterface.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classcsmp_1_1_split_boundary_interface_1a3f4f82c375ed9ab373c4b3d976bd8b92" prot="public" static="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_split_boundary" kindref="compound">csmp::SplitBoundary</ref>&lt; dim &gt; &gt;::const_iterator</type>
+        <definition>typedef std::map&lt;std::string,csmp::SplitBoundary&lt;dim&gt;&gt;::const_iterator csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::splitBoundaryConstIterator</definition>
+        <argsstring></argsstring>
+        <name>splitBoundaryConstIterator</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::splitBoundaryConstIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="37" column="50" bodyfile="source/includes/model/SplitBoundaryInterface.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_split_boundary_interface_1a8b0e0207c170947f916a79ced2262ef7" prot="protected" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_split_boundary" kindref="compound">csmp::SplitBoundary</ref>&lt; dim &gt; &gt;</type>
+        <definition>std::map&lt;std::string,csmp::SplitBoundary&lt;dim&gt; &gt; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::splitBoundaryMap_</definition>
+        <argsstring></argsstring>
+        <name>splitBoundaryMap_</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::splitBoundaryMap_</qualifiedname>
+        <briefdescription>
+<para>boundary name &amp; boundary container of key-value pairs </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="111" column="15" bodyfile="source/includes/model/SplitBoundaryInterface.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a93b412f12c1ab04c06cbceec5a545a98" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundaryInterface</definition>
+        <argsstring>()</argsstring>
+        <name>SplitBoundaryInterface</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundaryInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="25" column="5" bodyfile="source/includes/model/SplitBoundaryInterface.h" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a20748edabb55c2ee0ed069a3b62a3e63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundaryInterface</definition>
+        <argsstring>(const SplitBoundaryInterface &amp;bd)=delete</argsstring>
+        <name>SplitBoundaryInterface</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundaryInterface</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_split_boundary_interface" kindref="compound">SplitBoundaryInterface</ref> &amp;</type>
+          <declname>bd</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="26" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a196823862fcb230a82e5d0ca21a47142" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::~SplitBoundaryInterface</definition>
+        <argsstring>()</argsstring>
+        <name>~SplitBoundaryInterface</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::~SplitBoundaryInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="27" column="5" bodyfile="source/includes/model/SplitBoundaryInterface.h" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a5bba3cfaaf7f3ae8a1f4f29d8809e796" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_split_boundary" kindref="compound">csmp::SplitBoundary</ref>&lt; dim &gt; &amp;</type>
+        <definition>csmp::SplitBoundary&lt; dim &gt; &amp; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundary</definition>
+        <argsstring>(const std::string &amp;)</argsstring>
+        <name>SplitBoundary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="32" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a747742bc97068310b66e8cb299f5b29b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classcsmp_1_1_split_boundary" kindref="compound">csmp::SplitBoundary</ref>&lt; dim &gt; &amp;</type>
+        <definition>const csmp::SplitBoundary&lt; dim &gt; &amp; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundary</definition>
+        <argsstring>(const std::string &amp;) const</argsstring>
+        <name>SplitBoundary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="33" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1afb450a873c86b4ce2468d4d29920cb2d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::ContainsSplitBoundary</definition>
+        <argsstring>(const std::string &amp;) const</argsstring>
+        <name>ContainsSplitBoundary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::ContainsSplitBoundary</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reports whether a <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> with the corresponding name exists inside the model. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="34" column="39" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="64" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a6810f0a2f352d7e258c592583d4288f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>splitBoundaryIterator</type>
+        <definition>map&lt; string, csmp::SplitBoundary&lt; dim &gt; &gt;::iterator csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundariesBegin</definition>
+        <argsstring>()</argsstring>
+        <name>SplitBoundariesBegin</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundariesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="39" column="34" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="73" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1ab4643e71e068ffcebc662ea4ee9e7403" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>splitBoundaryIterator</type>
+        <definition>map&lt; string, csmp::SplitBoundary&lt; dim &gt; &gt;::iterator csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundariesEnd</definition>
+        <argsstring>()</argsstring>
+        <name>SplitBoundariesEnd</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundariesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="40" column="34" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="79" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a666e4696fff5790a581ce3518c6a30b6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>splitBoundaryConstIterator</type>
+        <definition>map&lt; string, csmp::SplitBoundary&lt; dim &gt; &gt;::const_iterator csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundariesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>SplitBoundariesBegin</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundariesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="41" column="34" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="84" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1aa21299ee0bdbf11a6cb31a1243fd10ae" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>splitBoundaryConstIterator</type>
+        <definition>map&lt; string, csmp::SplitBoundary&lt; dim &gt; &gt;::const_iterator csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundariesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>SplitBoundariesEnd</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundariesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="42" column="34" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="89" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a3d663bc8af57097f34baa6bb0a4242d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundaries</definition>
+        <argsstring>() const</argsstring>
+        <name>SplitBoundaries</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundaries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="43" column="34" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="94" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a30cbaf4eabbcff716be8742b47e0c869" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::FormSplitBoundariesFrom</definition>
+        <argsstring>(const ModelTopology &amp;)</argsstring>
+        <name>FormSplitBoundariesFrom</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::FormSplitBoundariesFrom</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_model_topology" kindref="compound">ModelTopology</ref> &amp;</type>
+          <defname>topo</defname>
+        </param>
+        <briefdescription>
+<para>uses the <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="50" column="12" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="853" bodyend="904"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a34e5f96c416a4e88a8b189b7700515f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; std::set&lt; std::string &gt;, bool &gt;</type>
+        <definition>pair&lt; set&lt; string &gt;, bool &gt; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::DetectAndCreateSplitBoundaries</definition>
+        <argsstring>()</argsstring>
+        <name>DetectAndCreateSplitBoundaries</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::DetectAndCreateSplitBoundaries</qualifiedname>
+        <briefdescription>
+<para>Creates SplitBoundaries detecting disconnected but node-matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates SplitBoundaries detecting, them in the (ANSYS) input model as node-matched interfaces, connecting such disconnected perimeter element faces in mesh; these are detected and grouped by bordering regions and turned into <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> objects with names following the same conventions as for <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> objects.</para>
+<para><simplesect kind="attention"><para>this method does not prompt the generation of any nodes because they are expected to be already there in ANSYS.</para>
+</simplesect>
+<simplesect kind="attention"><para>this method relies on the existing numbering of nodes, elements, faces and interfaces.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>20/03/2018 updated 5/9/2021 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="53" column="16" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="630" bodyend="751"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a69879ca6a06d881fe3ef71251cca84ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SeparateUniqueRegionsBySplitBoundaries</definition>
+        <argsstring>()</argsstring>
+        <name>SeparateUniqueRegionsBySplitBoundaries</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SeparateUniqueRegionsBySplitBoundaries</qualifiedname>
+        <briefdescription>
+<para>creates consistently named split boundaries between all unique regions in the model </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Form consistently named split boundaries between all the unique regions in the current model, while detecting and honouring already existing <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> and <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> objects identified by INTERNAL boundary flags. These lower-dimensional model subdomains will not be touched. Only those unique regions are considered which have the same spatial dimension as the model.</para>
+<para><simplesect kind="attention"><para>all perimeter nodes / contact points between split boundaries in 2D will become NodeManifolds connecting as many <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> objects as regions are in contact with one another at that split boundary. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="56" column="12" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="765" bodyend="839"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1aabc87e8481fc15687fdb428da104a5d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; std::set&lt; std::string &gt;, bool &gt;</type>
+        <definition>pair&lt; set&lt; string &gt;, bool &gt; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::CreateSplitBoundaryFrom</definition>
+        <argsstring>(const char *dim_1_region, bool retain_elmts_as_intervening_elements)</argsstring>
+        <name>CreateSplitBoundaryFrom</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::CreateSplitBoundaryFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>dim_1_region</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>retain_elmts_as_intervening_elements</declname>
+        </param>
+        <briefdescription>
+<para>creation of one or multiple SplitBoundaries from a lower dimensional region </para>
+        </briefdescription>
+        <detaileddescription>
+<para>1) Checks dim-1 region exists 2) Checks no Nodes on the dim-1 region have the label INTERNAL before proceeding 3) Counts Unique Regions and creates property &quot;region identifyier&quot; for all elements within each region with a region-specific integer (to be identified after node duplication for region updating) 4) For each <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> in the dim-1 <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref>, it constructs <ref refid="classcsmp_1_1_face_construction_data" kindref="compound">FaceConstructionData</ref>, which stores: i) Inner/Outer Parents of dim-1 element, ii) Faces of inner/outer parent elements that are sharing the dim-1 element. iii) Region_identifier (<ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> property) of the Inside and Outside Parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> -&gt; (materials_) (THIS HOWEVER IS NOT ALL THE ELEMENTS THAT SHARE THE NODE) iii) Region_Identifier of the dim-1 element (material_) iv) PatchNumber which is the unique identifier of the subregions determined by the n_juxtoposition (Patch is the same if you have the same inside/outside materials_ (region identifier))</para>
+<para>Creates SplitBoundar(ies) from lower dimensional region without the need for a user to create <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> objects first. The underlying region is removed in the process.</para>
+<para>4.2) Breaks dim-1 region into smaller subregions based on t 5) Breaks dim-1 <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> into smaller subregions, and gives each one a unique name </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="59" column="16" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="931" bodyend="1289"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a0a4e52dd0e6018a0b751be1dfc4b13a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; std::string, bool &gt;</type>
+        <definition>pair&lt; string, bool &gt; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::CreateSplitBoundaryBetween</definition>
+        <argsstring>(const char *region1, const char *region2)</argsstring>
+        <name>CreateSplitBoundaryBetween</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::CreateSplitBoundaryBetween</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>region1</declname>
+          <defname>region1_name</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>region2</declname>
+          <defname>region2_name</defname>
+        </param>
+        <briefdescription>
+<para>creates <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> between two unique regions that share nodes along their perimeter. The first region will be placed on the inside of the new split boundary.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>region1_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>name of the unique region that shall be on the inside of the new split boundary </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>region2_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of the unique region that touches (shares nodes with) region1 and shall become the outside region of the new split boundary</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>Method will add new <ref refid="classcsmp_1_1_node" kindref="compound">Node</ref> and <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> objects to the model</para>
+</simplesect>
+<simplesect kind="note"><para>method does not create a temporary <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> on the way to the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> construction</para>
+</simplesect>
+<simplesect kind="note"><para>method ignores Elements that are lines</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>25/1/20 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="62" column="16" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="1317" bodyend="1394"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a0f810da61d370f5942a8478c3b32ccbc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; std::string, bool &gt;</type>
+        <definition>pair&lt; string, bool &gt; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::InsertRegionIntoSplitBoundary</definition>
+        <argsstring>(const char *split_boundary, int32_t material_id_for_new_elements)</argsstring>
+        <name>InsertRegionIntoSplitBoundary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::InsertRegionIntoSplitBoundary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>split_boundary</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>material_id_for_new_elements</declname>
+          <defname>material_id</defname>
+        </param>
+        <briefdescription>
+<para>inserts a lower-dimensional <ref refid="classcsmp_1_1_region" kindref="compound">Region</ref> inside of the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref>, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> followed by _REGION </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>@author E.P
+@date 07/2/2020
+
+@brief
+Creates lower dimensional elements and adds them to
+1) interface object as middle element
+2) Region of all the middle elements in the split boundary
+3) Model Region
+
+@note This method can be used either
+1) Create an entirely new lower dimensional Region within the SplitBoundary with its name followed by the string &quot;_REGION&quot;.
+or
+2) Extends an already existing lower dimensional middle region of the split boundary to include any new interface objects which have the Middle_Element = nullptr.
+</verbatim></para>
+<para>E.P TODO: Setting boundary flags to Elements which have faces on a boundary must be done for 3D case! <verbatim>TODO: May be do this mainly in the MeshManager using one of the methds that takes the adjacent higher-dim elements as an input
+TODO: In this case, the input information is similar to entries of a VSet: new &apos;nodes&apos;, &apos;pelmt&apos; and &apos;plist&apos; vectors
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="65" column="16" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="1421" bodyend="1496"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a01c9167b824ee1726bd64390319bcd47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::set&lt; std::string &gt;</type>
+        <definition>set&lt; string &gt; csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::InsertLowerDimensionalRegionsIntoSplitBoundaries</definition>
+        <argsstring>(int32_t material_id_for_new_elements)</argsstring>
+        <name>InsertLowerDimensionalRegionsIntoSplitBoundaries</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::InsertLowerDimensionalRegionsIntoSplitBoundaries</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>material_id_for_new_elements</declname>
+          <defname>material_id</defname>
+        </param>
+        <briefdescription>
+<para>Creates isolated lower-dimensional mesh regions between split boundaries with unique names matching those of the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> objects; set will be empty if none created. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Insert a lower-dimensional element mesh into the model, which is fully disconnected from the model, to represent a fracture that coincides with a <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> according to the desire to use <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> objects for lower-dimensional fractures for the modelling of both, fluid flow and geomechanics. It only shares the locations of the nodes (if the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> has not been modified) or lies in the symmetry plane of the 2 sides if the nodes have been separated by deformation.</para>
+<para><simplesect kind="author"><para>JCK updated 26/08/2019</para>
+</simplesect>
+TODO: like <ref refid="classcsmp_1_1_boundary" kindref="compound">Boundary</ref> patches, the split boundary patches should have unique names that reflect juxtaposition relationships of regions In all SplitBoundaries of the model, lower dimensional <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> regions are inserted.</para>
+<para>As many lower-dimensional element regions are created as there SplitBoundaries in the model <simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>26/1/2020 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="68" column="15" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="1654" bodyend="1678"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a85db4d8207a4baec857b7352926900a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::RemoveSplitBoundary</definition>
+        <argsstring>(const char *split_boundary, bool erase_interfaces)</argsstring>
+        <name>RemoveSplitBoundary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::RemoveSplitBoundary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>split_boundary</declname>
+          <defname>splitboundary</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>erase_interfaces</declname>
+        </param>
+        <briefdescription>
+<para>Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes splitboundary including interfaces, but does not fuse the mesh back together again</para>
+<para>Removes the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> object with the given name if it exists inside the model; else returns with a warning.</para>
+<para>Removing a <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> will also prompt the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> to delete the corresponding <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> elements from the model, potentially turning it into a disconnected group of mesh patches.</para>
+<para><simplesect kind="note"><para>he mesh is not fused together again.</para>
+</simplesect>
+<xrefsect id="todo_1_todo000187"><xreftitle>Todo</xreftitle><xrefdescription><para>Provide the option to fuse the mesh back together again. </para>
+</xrefdescription></xrefsect><verbatim>   @author SKM (refactored - since design was flawed)
+   @date 15/8/2020
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="74" column="10" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="115" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a2cc52158fc2fe9373902219e62fb925b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::RemoveSplitBoundary</definition>
+        <argsstring>(csmp::SplitBoundary&lt; dim &gt; &amp;, bool erase_interfaces)</argsstring>
+        <name>RemoveSplitBoundary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::RemoveSplitBoundary</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_split_boundary" kindref="compound">csmp::SplitBoundary</ref>&lt; dim &gt; &amp;</type>
+          <defname>split_boundary</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>erase_interfaces</declname>
+        </param>
+        <briefdescription>
+<para>Removes splitboundary including interfaces, but does not fuse the mesh back together again. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> object with the given name if it exists inside the model; else returns with a warning.</para>
+<para>Removing a <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> will also prompt the <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref> to delete the corresponding <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref> elements from the model, potentially turning it into a disconnected group of mesh patches.</para>
+<para><simplesect kind="note"><para>he mesh is not fused together again.</para>
+</simplesect>
+<xrefsect id="todo_1_todo000188"><xreftitle>Todo</xreftitle><xrefdescription><para>Provide the option to fuse the mesh back together again. </para>
+</xrefdescription></xrefsect><verbatim>   @author SKM (refactored - since design was flawed)
+   @date 15/8/2020
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="77" column="10" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="174" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a932d9bf33ebc1f1feff208c0a8a5e900" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::MergeSplitBoundaries</definition>
+        <argsstring>(const char *new_sb_name, std::set&lt; std::string &gt; splitboundaries)</argsstring>
+        <name>MergeSplitBoundaries</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::MergeSplitBoundaries</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>new_sb_name</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt;</type>
+          <declname>splitboundaries</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Merges splitboundary objects and gives resultant Splitboundary a new name, original Splitboundaries no longer exist. Original interfaces are not deleted. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="79" column="17" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="208" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a523aa296793f798a9aa89e3f6334a66d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::SplitBoundariesOut</definition>
+        <argsstring>() const</argsstring>
+        <name>SplitBoundariesOut</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::SplitBoundariesOut</qualifiedname>
+        <briefdescription>
+<para>prints current split boundaries to screen and returns how many there are </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Prints current SplitBoundaries to screen </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="87" column="12" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="1690" bodyend="1723"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a4ddcf39d8581ca63a8b618741a5385d5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::OutputSplitBoundariesToBinary</definition>
+        <argsstring>(const char *fileName) const</argsstring>
+        <name>OutputSplitBoundariesToBinary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::OutputSplitBoundariesToBinary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fileName</declname>
+          <defname>file_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> objects to file using the section tags: <verbatim> SBDFHEDR
+ SPLITBDRY
+ ONE_BDRY
+ SBDRYVAR
+ SBDFFOTR
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="89" column="10" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="256" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a56710d6c84622848e351e794f8e71381" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::InputSplitBoundariesFromBinary</definition>
+        <argsstring>(const char *fileName, const std::set&lt; std::string &gt; &amp;subset_variables)</argsstring>
+        <name>InputSplitBoundariesFromBinary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::InputSplitBoundariesFromBinary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>fileName</declname>
+        </param>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>subset_variables</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads all split boundary objects in a model from binary file, expecting that interfaces and their connectivity are already present in <ref refid="classcsmp_1_1_mesh_manager" kindref="compound">MeshManager</ref>. <simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>6/9/2021 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="90" column="10" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="319" bodyend="389"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1acb2fac24571ca74f7ffae218347d80b0" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::CreateSplitBoundaryName</definition>
+        <argsstring>(const std::pair&lt; std::string, std::string &gt; &amp;juxtaposed_regions) const</argsstring>
+        <name>CreateSplitBoundaryName</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::CreateSplitBoundaryName</qualifiedname>
+        <param>
+          <type>const std::pair&lt; std::string, std::string &gt; &amp;</type>
+          <declname>juxtaposed_regions</declname>
+        </param>
+        <briefdescription>
+<para>creating name for the case when the <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> was already present in the input mesh </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a name like SPLITBOUNDARY_region1_region2 adding a number if this is necessary to make the name unique.</para>
+<para><simplesect kind="attention"><para>the facing relationships of the boundary are preserved so that region1 is the first in the argument pair.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>January 2018 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="95" column="17" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="450" bodyend="463"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1ac2f3505cd6c6368e76cc7fbbdf3a5361" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>string csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::CreateSplitBoundaryNameFrom</definition>
+        <argsstring>(const FaceConstructionData&lt; dim &gt; &amp;, const std::vector&lt; std::string &gt; &amp;region_names) const</argsstring>
+        <name>CreateSplitBoundaryNameFrom</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::CreateSplitBoundaryNameFrom</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_face_construction_data" kindref="compound">FaceConstructionData</ref>&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; std::string &gt; &amp;</type>
+          <declname>region_names</declname>
+        </param>
+        <briefdescription>
+<para>creates name for one specific patch of the new split boundary </para>
+        </briefdescription>
+        <detaileddescription>
+<para>protected METHOD (not known beyond this compilation unit)</para>
+<para>creates underscore-separated unique names for the region patches based on the juxtapositions relationships across the lower-dimensional regions, the names are composed of:</para>
+<para><orderedlist>
+<listitem><para>the name of the master region</para>
+</listitem><listitem><para>&quot;SPLITBOUNDARY&quot;</para>
+</listitem><listitem><para>the patch identifier number attached to boundary</para>
+</listitem><listitem><para>the name of the inner region, i.e. the region that the lower-dimensional element normals point away from</para>
+</listitem><listitem><para>the name of the outer region, i.e. that into which the normals point</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="attention"><para>where the boundary just intersects a single layer (same material on either side), the layer name appears only once. The second instance is replaced by INTERSECTION. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="98" column="17" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="504" bodyend="521"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a8c05e87268deed28098c8770b79fb183" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::FindSplitBoundaryByNames</definition>
+        <argsstring>(const std::set&lt; std::string &gt; &amp;intersected_regions, std::set&lt; std::string &gt; &amp;region_patches_found) const</argsstring>
+        <name>FindSplitBoundaryByNames</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::FindSplitBoundaryByNames</qualifiedname>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>intersected_regions</declname>
+        </param>
+        <param>
+          <type>std::set&lt; std::string &gt; &amp;</type>
+          <declname>region_patches_found</declname>
+        </param>
+        <briefdescription>
+<para>searches the split boundary map for split-boundary names that contain the names of the regions stored in the first set </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Searches the model for splitboundaries the name of which contains the search strings provided via the first set. The results are returnd into the second set.</para>
+<para><simplesect kind="note"><para>Use this method, for example, to retrieve multiple splitboundary patches that were generated from a single lower-dimensional regon, like a fault surface.</para>
+</simplesect>
+<simplesect kind="author"><para>SKM </para>
+</simplesect>
+<simplesect kind="date"><para>March 2016 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="102" column="12" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="540" bodyend="572"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_split_boundary_interface_1a0ef20e1c34990ef368737e0060a84b1c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;::AddSplitBoundary</definition>
+        <argsstring>(const char *name, typename std::vector&lt; InterFace&lt; dim &gt; * &gt;::iterator first, typename std::vector&lt; InterFace&lt; dim &gt; * &gt;::iterator last, BOX_BOUNDARY)</argsstring>
+        <name>AddSplitBoundary</name>
+        <qualifiedname>csmp::SplitBoundaryInterface::AddSplitBoundary</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>&lt; dim &gt; * &gt;::iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; <ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>&lt; dim &gt; * &gt;::iterator</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type><ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref></type>
+          <defname>bflag</defname>
+        </param>
+        <briefdescription>
+<para>creates split boundary from already interconnected faces that also know their parent elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/SplitBoundaryInterface.h" line="106" column="10" bodyfile="source/modules/model/SplitBoundaryInterface.cpp" bodystart="581" bodyend="608"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Creation, management and deletion of <ref refid="classcsmp_1_1_split_boundary" kindref="compound">SplitBoundary</ref> objects.</para>
+<para>Split boundaries can be created for:<orderedlist>
+<listitem><para>internal model boundaries</para>
+</listitem><listitem><para>node-matched disconnected boundaries of the mesh </para>
+</listitem></orderedlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>csmp::ANSYS_Model2D</label>
+        <link refid="classcsmp_1_1_a_n_s_y_s___model2_d"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::ANSYS_Model3D</label>
+        <link refid="classcsmp_1_1_a_n_s_y_s___model3_d"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>csmp::CGNS_Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_c_g_n_s___model"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::EclipseModel</label>
+        <link refid="classcsmp_1_1_eclipse_model"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::Model1D&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model1_d"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>csmp::Model1D&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_model1_d"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::Model&lt; 1U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 1U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Model&lt; 2U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 2U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>csmp::Model&lt; 3 &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::Model&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SKUA_Model</label>
+        <link refid="classcsmp_1_1_s_k_u_a___model"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::SplitBoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/SplitBoundaryInterface.h" line="23" column="1" bodyfile="source/includes/model/SplitBoundaryInterface.h" bodystart="23" bodyend="112"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0ef20e1c34990ef368737e0060a84b1c" prot="protected" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>AddSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1afb450a873c86b4ce2468d4d29920cb2d" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>ContainsSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0a4e52dd0e6018a0b751be1dfc4b13a5" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>CreateSplitBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1aabc87e8481fc15687fdb428da104a5d2" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>CreateSplitBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1acb2fac24571ca74f7ffae218347d80b0" prot="protected" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>CreateSplitBoundaryName</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ac2f3505cd6c6368e76cc7fbbdf3a5361" prot="protected" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>CreateSplitBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a34e5f96c416a4e88a8b189b7700515f8" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>DetectAndCreateSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8c05e87268deed28098c8770b79fb183" prot="protected" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>FindSplitBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a30cbaf4eabbcff716be8742b47e0c869" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>FormSplitBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a56710d6c84622848e351e794f8e71381" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>InputSplitBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a01c9167b824ee1726bd64390319bcd47" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>InsertLowerDimensionalRegionsIntoSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0f810da61d370f5942a8478c3b32ccbc" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>InsertRegionIntoSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a932d9bf33ebc1f1feff208c0a8a5e900" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>MergeSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a4ddcf39d8581ca63a8b618741a5385d5" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>OutputSplitBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a85db4d8207a4baec857b7352926900a2" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>RemoveSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a2cc52158fc2fe9373902219e62fb925b" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>RemoveSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a69879ca6a06d881fe3ef71251cca84ff" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SeparateUniqueRegionsBySplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3d663bc8af57097f34baa6bb0a4242d9" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a6810f0a2f352d7e258c592583d4288f0" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a666e4696fff5790a581ce3518c6a30b6" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ab4643e71e068ffcebc662ea4ee9e7403" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1aa21299ee0bdbf11a6cb31a1243fd10ae" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a523aa296793f798a9aa89e3f6334a66d" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundariesOut</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a5bba3cfaaf7f3ae8a1f4f29d8809e796" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a747742bc97068310b66e8cb299f5b29b" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3f4f82c375ed9ab373c4b3d976bd8b92" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>splitBoundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a93b412f12c1ab04c06cbceec5a545a98" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a20748edabb55c2ee0ed069a3b62a3e63" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>SplitBoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a459a94f78fd569ddf0e2cff1a970e401" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>splitBoundaryIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8b0e0207c170947f916a79ced2262ef7" prot="protected" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>splitBoundaryMap_</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a196823862fcb230a82e5d0ca21a47142" prot="public" virt="non-virtual"><scope>csmp::SplitBoundaryInterface</scope><name>~SplitBoundaryInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,48 @@
+\doxysection{Kahan\+Summation.\+h}
+\hypertarget{_kahan_summation_8h_source}{}\label{_kahan_summation_8h_source}\index{source/includes/math/KahanSummation.h@{source/includes/math/KahanSummation.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ KahanSummation.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ CSMP\_unit\_tests}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \ Created\ by\ Stephan\ Matthai\ on\ 29/8/21.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ Copyright\ ©\ 2021\ Stephan\ Matthai.\ All\ rights\ reserved.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{KahanSummation\_h}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{KahanSummation\_h}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00013\ \textcolor{comment}{}}
+\DoxyCodeLine{00014\ \textcolor{comment}{Kahan\ summation\ algorithm,\ also\ known\ as\ compensated\ summation,[1]\ significantly\ reduces\ the\ numerical\ error\ in\ the\ total\ obtained\ by\ adding\ a\ sequence\ of\ finite-\/precision\ floating-\/point\ numbers,\ compared\ to\ the\ obvious\ approach.\ This\ is\ done\ by\ keeping\ a\ separate\ running\ compensation\ (a\ variable\ to\ accumulate\ small\ errors).}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{In\ particular,\ simply\ summing\ n\ numbers\ in\ sequence\ has\ a\ worst-\/case\ error\ that\ grows\ proportional\ to\ n,\ and\ a\ root\ mean\ square\ error\ that\ grows\ as}}
+\DoxyCodeLine{00017\ \textcolor{comment}{n}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\{\(\backslash\)sqrt\ \{n\}\}\ for\ random\ inputs\ (the\ roundoff\ errors\ form\ a\ random\ walk).[2]\ With\ compensated\ summation,\ the\ worst-\/case\ error\ bound\ is\ effectively\ independent\ of\ n,\ so\ a\ large\ number\ of\ values\ can\ be\ summed\ with\ an\ error\ that\ only\ depends\ on\ the\ floating-\/point\ precision.[2]}}
+\DoxyCodeLine{00019\ \textcolor{comment}{}}
+\DoxyCodeLine{00020\ \textcolor{comment}{See\ Wikipedia}}
+\DoxyCodeLine{00021\ \textcolor{comment}{}}
+\DoxyCodeLine{00022\ \textcolor{comment}{-\/\ alternatively,\ order\ the\ values\ by\ number\ and\ then\ start\ the\ summation\ with\ the\ smallest\ values\ !}}
+\DoxyCodeLine{00023\ \textcolor{comment}{}}
+\DoxyCodeLine{00024\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/*\ pseudo\ code}}
+\DoxyCodeLine{00027\ \textcolor{comment}{}}
+\DoxyCodeLine{00028\ \textcolor{comment}{function\ KahanSum(input)}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ var\ sum\ =\ 0.0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ Prepare\ the\ accumulator.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ var\ c\ =\ 0.0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ A\ running\ compensation\ for\ lost\ low-\/order\ bits.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ for\ i\ =\ 1\ to\ input.length\ do\ \ \ \ \ //\ The\ array\ input\ has\ elements\ indexed\ input[1]\ to\ input[input.length].}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ \ \ \ var\ y\ =\ input[i]\ -\/\ c\ \ \ \ \ \ \ \ \ //\ c\ is\ zero\ the\ first\ time\ around.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ \ \ \ var\ t\ =\ sum\ +\ y\ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ Alas,\ sum\ is\ big,\ y\ small,\ so\ low-\/order\ digits\ of\ y\ are\ lost.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ \ \ \ c\ =\ (t\ -\/\ sum)\ -\/\ y\ \ \ \ \ \ \ \ \ \ \ \ //\ (t\ -\/\ sum)\ cancels\ the\ high-\/order\ part\ of\ y;\ subtracting\ y\ recovers\ negative\ (low\ part\ of\ y)}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ \ \ \ sum\ =\ t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ Algebraically,\ c\ should\ always\ be\ zero.\ Beware\ overly-\/aggressive\ optimizing\ compilers!}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ next\ i\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ Next\ time\ around,\ the\ lost\ low\ part\ will\ be\ added\ to\ y\ in\ a\ fresh\ attempt.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ return\ sum}}
+\DoxyCodeLine{00040\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ KahanSummation\_h\ */}}
+
+\end{DoxyCode}

@@ -1,0 +1,143 @@
+.TH "csmp::CriticalCurve" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::CriticalCurve \- Computation of temperature-pressure-compsition relations for the critical curve of the system H2O-NaCl, non-lookup\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include 'eos/h2o_nacl/CriticalCurve\&.h'\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCriticalCurve\fP (const double &externaltemperature)"
+.br
+.ti -1c
+.RI "\fB~CriticalCurve\fP ()"
+.br
+.ti -1c
+.RI "double \fBPressure\fP ()"
+.br
+.ti -1c
+.RI "double \fBMassFractionNaCl\fP ()"
+.br
+.ti -1c
+.RI "double \fBMoleFractionNaCl\fP ()"
+.br
+.ti -1c
+.RI "double \fBTfromP\fP (const double &press_)"
+.br
+.ti -1c
+.RI "double \fBTfromMolefractionNaCl\fP (const double &molefraction_)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Computation of temperature-pressure-compsition relations for the critical curve of the system H2O-NaCl, non-lookup\&. 
+
+
+.br
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.br
+ 
+.RE
+.PP
+.SH "Contact"
+.PP
+
+.br
+ thomas.driesner@erdw.ethz.ch 
+.br
+.SH "Motivation"
+.PP
+
+.br
+ Although "CriticalCurve" is legacy code from Thomas Driesner's developments for the H2O-NaCl system, it is REQUIRED in the CSMP++ context\&. There, it is essential to build accurate lookup tables for the H2O-NaCl system, which are then actually used by CSMP++\&. As long as we don't distribute the lookup tables per se for the various platforms, the "CriticalCurve" legacy will remain in CSMP++\&. 
+.br
+
+.PP
+"CriticalCurve" computes the temperature-pressure-molefraction [Celsius, Pa, mole fraction NaCl] coordinates of the critical curve of the system H2O-NaCl, according to the paper 
+.br
+
+.PP
+Driesner T\&. and Heinrich C\&.A\&. (2007): The system H2O-NaCl\&. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl\&. Geochimica et Cosmochimica Acta 71, 4880-4901\&.
+.SH "Usage"
+.PP
+
+.br
+ Construct an instance of "CriticalCurve" with the temperature (in C) as constructor variable\&. "CriticalCurve" has an internal mechanism to make sure that it always uses the current value of that temperature\&. Public member names should be self-explanatory, I hope\&.
+
+.PP
+.PP
+.nf
+double t; // temperature [C] in user's application                                                             
+CriticalCurve critcurve(t);                                                                                      
+.fi
+.PP
+.SH "Dependencies"
+.PP
+
+.br
+ requires "CriticalPointH2O\&.h" 
+.br
+.SH "Known issues"
+.PP
+
+.br
+ Molefraction() is in mole fraction NaCl, to convert to other units, the functions in "ConvertConcentrationUnitsNaCl\&.h" may be useful 
+.br
+.SH "Testing"
+.PP
+
+.br
+ testing was done in the period before publication in 2007, prior to writing this documentation, no details are available anymore 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::CriticalCurve::CriticalCurve (const double & externaltemperature)"
+custom constructor 
+.PP
+\fBAttention\fP
+.RS 4
+Use only this conctructor\&. \fBCriticalCurve\fP computes results a function of temperature, which istypically computed somewhere outside this class\&. By using const ref to that external temperature as constructor argument, \fBCriticalCurve\fP is able to decipher the current value and report correct results when being queried\&. Only this constructor is allowed to ensure that functionality, default constructor has been made private\&. 
+.RE
+.PP
+
+.SS "csmp::CriticalCurve::~CriticalCurve ()"
+destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "double csmp::CriticalCurve::MassFractionNaCl ()"
+Mass fraction NaCl on critical curve for given temperature 
+.SS "double csmp::CriticalCurve::MoleFractionNaCl ()"
+Mole fraction NaCl on critical curve for given temperature 
+.SS "double csmp::CriticalCurve::Pressure ()"
+Pressure [Pa] on critical curve for given temperature 
+.SS "double csmp::CriticalCurve::TfromMolefractionNaCl (const double & molefraction_)"
+Find mole fractions NaCl on critical curve for given pressure [Pa] 
+.PP
+\fBAttention\fP
+.RS 4
+NO RANGE CHECK is being performed 
+.RE
+.PP
+
+.SS "double csmp::CriticalCurve::TfromP (const double & press_)"
+Find temperature [C] on critical curve for given pressure [Pa] 
+.PP
+\fBAttention\fP
+.RS 4
+NO RANGE CHECK is being performed 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

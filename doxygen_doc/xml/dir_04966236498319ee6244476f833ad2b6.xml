@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_04966236498319ee6244476f833ad2b6" kind="dir">
+    <compoundname>source/includes/interfaces/Eclipse</compoundname>
+    <innerfile refid="_cell_generator_8h">CellGenerator.h</innerfile>
+    <innerfile refid="_eclipse_interface_8h">EclipseInterface.h</innerfile>
+    <innerfile refid="_eclipse_model_8h">EclipseModel.h</innerfile>
+    <innerfile refid="_eclipse_text_file_interface_8h">EclipseTextFileInterface.h</innerfile>
+    <innerfile refid="_grid_i_j_k_8h">GridIJK.h</innerfile>
+    <innerfile refid="_meshing_tools_8h">MeshingTools.h</innerfile>
+    <innerfile refid="_pillar_8h">Pillar.h</innerfile>
+    <innerfile refid="_polygon_cell_8h">PolygonCell.h</innerfile>
+    <innerfile refid="_polygon_grid_8h">PolygonGrid.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/interfaces/Eclipse/"/>
+  </compounddef>
+</doxygen>

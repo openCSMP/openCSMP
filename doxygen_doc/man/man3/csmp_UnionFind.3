@@ -1,0 +1,42 @@
+.TH "csmp::UnionFind< Item >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::UnionFind< Item >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <UnionFind\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBSameComponent\fP (Item x, Item y)"
+.br
+.RI "Say that two items are in the same subset\&. "
+.ti -1c
+.RI "template<typename Container> void \fBComponents\fP (Container &container) const"
+.br
+.RI "Extract the components and their sizes\&. "
+.ti -1c
+.RI "Item \fBresolve\fP (Item item)"
+.br
+.RI "Resolve an item to its representative\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Item>
+.br
+class csmp::UnionFind< Item >"Union-find algorithm\&. This data structure takes connections between two elements, and finds all of the connected components and their sizes\&. A "component" is represented by a single representative item\&.
+
+.PP
+See:
+
+.PP
+Tarjan, Robert Endre (1975)\&. "Efficiency of a Good But Not Linear    Set Union Algorithm"\&. JACM\&. 22 (2): 215–225\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

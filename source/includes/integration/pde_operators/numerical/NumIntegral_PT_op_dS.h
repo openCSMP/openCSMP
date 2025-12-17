@@ -26,13 +26,11 @@ class NumIntegral_PT_op_dS : public MathOperatorRHS<dim,Face> {
     NumIntegral_PT_op_dS( const PropertyDatabase<dim>& p, 
                           const char* oper,    // VECTOR/SCALAR variable on FACE   
                           const char* test );  // VECTOR variable on NODE
-                          
-    virtual ~NumIntegral_PT_op_dS() {}
     
-    virtual void GetOperands( const Face<dim>& );
-    virtual void ComputeContribution( const Face<dim>& );
+    void GetOperands( const Face<dim>& ) override final;
+    void ComputeContribution( const Face<dim>& ) override final;
   
-    virtual ::csmp::NumIntegral_PT_op_dS<dim>* clone() const { return new NumIntegral_PT_op_dS<dim> (*this); }
+    ::csmp::NumIntegral_PT_op_dS<dim>* clone() const override { return new NumIntegral_PT_op_dS<dim> (*this); }
 
   private:
     VectorVariable<dim>  oper_;            ///< Face variable value

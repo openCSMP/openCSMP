@@ -1,0 +1,96 @@
+\doxysection{Local\+Variables.\+h}
+\hypertarget{_local_variables_8h_source}{}\label{_local_variables_8h_source}\index{source/includes/model/LocalVariables.h@{source/includes/model/LocalVariables.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LOCAL\_VARIABLES\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LOCAL\_VARIABLES\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{///\ Data\ class\ to\ store\ physical\ variable\ count\ at\ given\ placement}}
+\DoxyCodeLine{00007\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{comment}{//\ TODO:\ make\ all\ these\ uint16\_t\ (the\ smallest\ size\ that\ can\ hold\ total\ datadepth\ in\ many-\/variable\ models)?}}
+\DoxyCodeLine{00010\ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{int\_type}}\ =\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{uint32\_t}};\ \textcolor{comment}{///<\ unsigned\ integer\ type\ that\ is\ big\ enough\ to\ hold\ 'totalDataDepth'}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ LocalVariables()}
+\DoxyCodeLine{00013\ \ \ \ \ :\ scalars\ \ \ \ \ \ \ \ \ \ \ (0),}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ vectors\ \ \ \ \ \ \ \ \ \ \ (0),}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ tensors\ \ \ \ \ \ \ \ \ \ \ (0),}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ arrayCount\ \ \ \ \ \ \ \ (0),}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ arrayLength\ \ \ \ \ \ \ (0),}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ flaggedArrayCount\ (0),}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ flaggedArrayLength(0),}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ totalDataDepth\ \ \ \ (0),}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ totalFlagDepth\ \ \ \ (0)}
+\DoxyCodeLine{00022\ \ \ \{\}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ LocalVariables(\ int\_type\ scalarsVars,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ vectorVars,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ tensorVars,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ array\_count,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ array\_length,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ flag\_array\_count,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ flag\_array\_length,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ total\_data\_depth,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int\_type\ total\_flag\_depth\ )}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ :\ scalars\ \ \ \ \ \ \ \ \ \ \ (scalarsVars),}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ vectors\ \ \ \ \ \ \ \ \ \ \ (vectorVars),}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ tensors\ \ \ \ \ \ \ \ \ \ \ (tensorVars),}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ arrayCount\ \ \ \ \ \ \ \ (array\_count),}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ arrayLength\ \ \ \ \ \ \ (array\_length),}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ flaggedArrayCount\ (flag\_array\_count),}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ flaggedArrayLength(flag\_array\_length),}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ totalDataDepth\ \ \ \ (total\_data\_depth),}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ totalFlagDepth\ \ \ \ (total\_flag\_depth)}
+\DoxyCodeLine{00043\ \ \ \{\}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ LocalVariables(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\&\ lvs\ )}
+\DoxyCodeLine{00046\ \ \ \ \ :\ scalars\ \ \ \ \ \ \ \ \ \ \ (lvs.scalars),}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ vectors\ \ \ \ \ \ \ \ \ \ \ (lvs.vectors),}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ tensors\ \ \ \ \ \ \ \ \ \ \ (lvs.tensors),}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ arrayCount\ \ \ \ \ \ \ \ (lvs.arrayCount),}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ arrayLength\ \ \ \ \ \ \ (lvs.arrayLength),}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ flaggedArrayCount\ (lvs.flaggedArrayCount),}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ flaggedArrayLength(lvs.flaggedArrayLength),}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ totalDataDepth\ \ \ \ (lvs.totalDataDepth),}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ totalFlagDepth\ \ \ \ (lvs.totalFlagDepth)}
+\DoxyCodeLine{00055\ \ \ \{\}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\&\ lvs\ )}
+\DoxyCodeLine{00058\ \ \ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordflow}{if}(\ \textcolor{keyword}{this}\ !=\ \&lvs\ )}
+\DoxyCodeLine{00060\ \ \ \ \ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ scalars\ \ \ \ \ \ \ \ \ \ \ \ \ =\ lvs.scalars;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ vectors\ \ \ \ \ \ \ \ \ \ \ \ \ =\ lvs.vectors;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ tensors\ \ \ \ \ \ \ \ \ \ \ \ \ =\ lvs.tensors;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ arrayCount\ \ \ \ \ \ \ \ \ \ =\ lvs.arrayCount;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ arrayLength\ \ \ \ \ \ \ \ \ =\ lvs.arrayLength;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ flaggedArrayCount\ \ \ =\ lvs.flaggedArrayCount;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ flaggedArrayLength\ \ =\ lvs.flaggedArrayLength;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ totalDataDepth\ \ \ \ \ \ =\ lvs.totalDataDepth;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ totalFlagDepth\ \ \ \ \ \ =\ lvs.totalFlagDepth;}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00072\ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \textcolor{keywordtype}{bool}\ Empty()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ (\ scalars==0U\ \&\&\ vectors==0U\ \&\&\ tensors==0U\ \&\&\ arrayCount==0U\ \&\&\ flaggedArrayCount==0U\ );\ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ int\_type\ \ scalars,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ vectors,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ tensors,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ arrayCount,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ arrayLength,}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ flaggedArrayCount,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ flaggedArrayLength,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ totalDataDepth,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ totalFlagDepth;}
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

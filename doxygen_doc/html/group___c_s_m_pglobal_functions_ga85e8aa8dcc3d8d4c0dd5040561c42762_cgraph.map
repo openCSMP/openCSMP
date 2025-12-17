@@ -1,0 +1,7 @@
+<map id="mjl::clipEdgeToPolygon" name="mjl::clipEdgeToPolygon">
+<area shape="rect" id="Node000001" title="variation of clipPolygonToEdge(), MJL, p. 127" alt="" coords="5,31,163,56"/>
+<area shape="rect" id="Node000002" href="$classmjl_1_1_polygon.html#a60d02a09517d791ccc0252730ddc1ac5" title=" " alt="" coords="218,5,339,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,31,202,25,203,31,164,36"/>
+<area shape="rect" id="Node000003" href="$classmjl_1_1_edge.html#a977fdbbbeae30e368545c71835aa7fd9" title=" " alt="" coords="211,55,346,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,51,195,55,195,60,163,56"/>
+</map>

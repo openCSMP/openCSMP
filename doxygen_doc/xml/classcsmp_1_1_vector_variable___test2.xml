@@ -1,0 +1,539 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_vector_variable___test2" kind="class" language="C++" prot="public">
+    <compoundname>csmp::VectorVariable_Test2</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_vector_variable___test2_1a84a0014f860a72214114a491c562362c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VectorVariable_Test2::fTolerance</definition>
+        <argsstring></argsstring>
+        <name>fTolerance</name>
+        <qualifiedname>csmp::VectorVariable_Test2::fTolerance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="48" column="10" bodyfile="tests/unit/VectorVar_Test2.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1ab3dae5c1e052ea6117e14708e6937fca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VectorVariable_Test2::VectorVariable_Test2</definition>
+        <argsstring>()</argsstring>
+        <name>VectorVariable_Test2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::VectorVariable_Test2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="15" column="1" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="17" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1abb1aeac715cd0bdc3b471a09c048d035" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VectorVariable_Test2::~VectorVariable_Test2</definition>
+        <argsstring>()</argsstring>
+        <name>~VectorVariable_Test2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::~VectorVariable_Test2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="16" column="1" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="22" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1afaf7829a112d1e47874aa4a68698ef21" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::VectorVariable_Test2::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="17" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="26" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a8b79ff257e2cba33b5942e96e8f091c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Assignment_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Assignment_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Assignment_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="18" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="50" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1aca493c83bf6398a5d767b0085baea6ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Addition_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Addition_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Addition_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="19" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="94" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1af07aadb4267bdb7f9254a5adb2a2a20a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Subtraction_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Subtraction_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Subtraction_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="20" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="130" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a53fe6a4a6e1a9136c9ceab04d23ce7cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Multiplication_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Multiplication_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Multiplication_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="21" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="166" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a591bde48936856a0e737e17cad496c59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Division_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Division_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Division_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="22" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="202" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a8b9205f8fceead92d462354b3004d76c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Addition_Assignment_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Addition_Assignment_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Addition_Assignment_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="23" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="238" bodyend="271"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1aeb74cb625af20eac412494d83535aa69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Subtraction_Assignment_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Subtraction_Assignment_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Subtraction_Assignment_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="24" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="273" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1aaff29b2f85b2755f61bf9fc03e015b8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Multiplication_Assignment_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Multiplication_Assignment_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Multiplication_Assignment_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="25" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="308" bodyend="341"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a3b14ad2c4829fb396036370313b07f28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Division_Assignment_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Division_Assignment_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Division_Assignment_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="26" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="343" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a2ad55458550d57f8ed65285c2838c8a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Equality_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Equality_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Equality_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="27" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="378" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1adaed4f6bafbd105ff2afb7973cd5282a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Ampersand_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Ampersand_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Ampersand_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="28" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1ad1a4729a57cadeec126ae42c17e96afb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::LessThan_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>LessThan_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::LessThan_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="29" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1aa5f06be2faf1eda6120c7c81263046a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Power_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>Power_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Power_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="30" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="396" bodyend="405"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1ac0358a3b664abec3eaafe68e7094df7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::CrossProduct_Operator2</definition>
+        <argsstring>()</argsstring>
+        <name>CrossProduct_Operator2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::CrossProduct_Operator2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="31" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a98aa73a9a48e246aed1b7d0de8f82055" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Zero_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Zero_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Zero_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="32" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a1985d50d7681971a6b01934e0c624464" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Average_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Average_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Average_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="33" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1aa04f6223d8ee638a9001d0fdde18e08b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Length_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Length_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Length_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="34" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="409" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a5686c1c8835cb8d42bf1fac5139de240" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::EuclideanNormalize_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>EuclideanNormalize_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::EuclideanNormalize_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="35" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="417" bodyend="428"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a5555bc9e9c35b0797aad80fac473bdc8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::DotProduct_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>DotProduct_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::DotProduct_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="36" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="430" bodyend="443"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a23eeb261220a9c5cdd165aa301388a3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::CrossProduct_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>CrossProduct_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::CrossProduct_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="37" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="445" bodyend="461"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a1a1295b26913cf46d4c7b1382016aa17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::IsWithinRange_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>IsWithinRange_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::IsWithinRange_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="38" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="463" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1adf37f7a74e927bf8686084ca905a8473" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Fabs_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Fabs_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Fabs_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="39" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a66d53b3652a34b1e692a9f8ace1e986d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Ln_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Ln_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Ln_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="40" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1aec8667c66b214953adfcb677cdc7c5bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Log10_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Log10_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Log10_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="41" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a84564069583bdabdf4792b14beb422ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Sqrt_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Sqrt_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Sqrt_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="42" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a3615e3779d91cbfc74f7b54b7d9857c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::Flip_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>Flip_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::Flip_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="43" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="480" bodyend="492"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1ad264ea01d487ddf12847dfe575707e4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::AngleTo_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>AngleTo_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::AngleTo_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="44" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="494" bodyend="512"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_vector_variable___test2_1a31ac2e8bf494b1919af4b9e0fe039677" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VectorVariable_Test2::ProjectOnto_Function2</definition>
+        <argsstring>()</argsstring>
+        <name>ProjectOnto_Function2</name>
+        <qualifiedname>csmp::VectorVariable_Test2::ProjectOnto_Function2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/VectorVar_Test2.h" line="45" column="6" bodyfile="tests/unit/VectorVar_Test2.cpp" bodystart="514" bodyend="538"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+      <node id="1">
+        <label>csmp::VectorVariable_Test2</label>
+        <link refid="classcsmp_1_1_vector_variable___test2"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+      <node id="1">
+        <label>csmp::VectorVariable_Test2</label>
+        <link refid="classcsmp_1_1_vector_variable___test2"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/VectorVar_Test2.h" line="11" column="1" bodyfile="tests/unit/VectorVar_Test2.h" bodystart="12" bodyend="50"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a8b9205f8fceead92d462354b3004d76c" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Addition_Assignment_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1aca493c83bf6398a5d767b0085baea6ca" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Addition_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1adaed4f6bafbd105ff2afb7973cd5282a" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Ampersand_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1ad264ea01d487ddf12847dfe575707e4b" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>AngleTo_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a8b79ff257e2cba33b5942e96e8f091c6" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Assignment_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a1985d50d7681971a6b01934e0c624464" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Average_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a23eeb261220a9c5cdd165aa301388a3a" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>CrossProduct_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1ac0358a3b664abec3eaafe68e7094df7c" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>CrossProduct_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a3b14ad2c4829fb396036370313b07f28" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Division_Assignment_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a591bde48936856a0e737e17cad496c59" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Division_Operator2</name></member>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a5555bc9e9c35b0797aad80fac473bdc8" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>DotProduct_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a2ad55458550d57f8ed65285c2838c8a2" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Equality_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a5686c1c8835cb8d42bf1fac5139de240" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>EuclideanNormalize_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1adf37f7a74e927bf8686084ca905a8473" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Fabs_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a3615e3779d91cbfc74f7b54b7d9857c2" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Flip_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a84a0014f860a72214114a491c562362c" prot="private" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>fTolerance</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a1a1295b26913cf46d4c7b1382016aa17" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>IsWithinRange_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1aa04f6223d8ee638a9001d0fdde18e08b" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Length_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1ad1a4729a57cadeec126ae42c17e96afb" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>LessThan_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a66d53b3652a34b1e692a9f8ace1e986d" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Ln_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1aec8667c66b214953adfcb677cdc7c5bd" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Log10_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1aaff29b2f85b2755f61bf9fc03e015b8c" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Multiplication_Assignment_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a53fe6a4a6e1a9136c9ceab04d23ce7cb" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Multiplication_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1aa5f06be2faf1eda6120c7c81263046a7" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Power_Operator2</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a31ac2e8bf494b1919af4b9e0fe039677" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>ProjectOnto_Function2</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::VectorVariable_Test2</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1afaf7829a112d1e47874aa4a68698ef21" prot="public" virt="virtual"><scope>csmp::VectorVariable_Test2</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a84564069583bdabdf4792b14beb422ac" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Sqrt_Function2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1aeb74cb625af20eac412494d83535aa69" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Subtraction_Assignment_Operator2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1af07aadb4267bdb7f9254a5adb2a2a20a" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Subtraction_Operator2</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1ab3dae5c1e052ea6117e14708e6937fca" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>VectorVariable_Test2</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1a98aa73a9a48e246aed1b7d0de8f82055" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>Zero_Function2</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::VectorVariable_Test2</scope><name>~Test</name></member>
+      <member refid="classcsmp_1_1_vector_variable___test2_1abb1aeac715cd0bdc3b471a09c048d035" prot="public" virt="non-virtual"><scope>csmp::VectorVariable_Test2</scope><name>~VectorVariable_Test2</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

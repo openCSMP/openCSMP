@@ -1,0 +1,152 @@
+\doxysection{csmp\+::Steady\+State\+Diffusion\+Profile\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_steady_state_diffusion_profile}{}\label{classcsmp_1_1_steady_state_diffusion_profile}\index{csmp::SteadyStateDiffusionProfile$<$ dim $>$@{csmp::SteadyStateDiffusionProfile$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Steady\+State\+Diffusion\+Profile\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=225pt]{classcsmp_1_1_steady_state_diffusion_profile__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Steady\+State\+Diffusion\+Profile\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=225pt]{classcsmp_1_1_steady_state_diffusion_profile__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusion_profile_af35d9bf7b5fb6a33b53586d98fbcf68a}{Steady\+State\+Diffusion\+Profile}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const char \texorpdfstring{$\ast$}{*}diffusivity, const char \texorpdfstring{$\ast$}{*}diffusing\+Variable, const char \texorpdfstring{$\ast$}{*}spatial\+Source\+Variable)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusion_profile_ab023c368cf59459fff54a99019ac098b}{Steady\+State\+Diffusion\+Profile}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const char \texorpdfstring{$\ast$}{*}diffusivity, const char \texorpdfstring{$\ast$}{*}diffusing\+Variable, const char \texorpdfstring{$\ast$}{*}spatial\+Source\+Variable, const char \texorpdfstring{$\ast$}{*}gradient\+Variable, double gradient\+\_\+multiplier)
+\item 
+virtual bool \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusion_profile_ad64b384fc5380f1670002d4adab93024}{Solve}} (double model\+Time)
+\begin{DoxyCompactList}\small\item\em Solve for steadystate pressure diffusion. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_steady_state_diffusion_profile_a6db9617003bbec48cba6d29a8091e47f}\label{classcsmp_1_1_steady_state_diffusion_profile_a6db9617003bbec48cba6d29a8091e47f} 
+\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusor}{Steady\+State\+Diffusor}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_element}{Element}} $>$ \& {\bfseries Solver} ()
+\begin{DoxyCompactList}\small\item\em bridging to solver \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___profile}{csmp\+::\+SAMG\+\_\+\+Profile}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries File\+Dump\+Name} () const
+\item 
+void {\bfseries File\+Dump\+Name} (const std\+::string \&dump\+File\+Name)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___profile}{csmp\+::\+SAMG\+\_\+\+Profile}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries dump\+File\+Name\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_steady_state_diffusion_profile_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_steady_state_diffusion_profile_af35d9bf7b5fb6a33b53586d98fbcf68a}\index{csmp::SteadyStateDiffusionProfile$<$ dim $>$@{csmp::SteadyStateDiffusionProfile$<$ dim $>$}!SteadyStateDiffusionProfile@{SteadyStateDiffusionProfile}}
+\index{SteadyStateDiffusionProfile@{SteadyStateDiffusionProfile}!csmp::SteadyStateDiffusionProfile$<$ dim $>$@{csmp::SteadyStateDiffusionProfile$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SteadyStateDiffusionProfile()}{SteadyStateDiffusionProfile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_steady_state_diffusion_profile_af35d9bf7b5fb6a33b53586d98fbcf68a} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusion_profile}{csmp\+::\+Steady\+State\+Diffusion\+Profile}}$<$ dim $>$\+::\+Steady\+State\+Diffusion\+Profile (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{diffusivity}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{diffusing\+Variable}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{spatial\+Source\+Variable}{}\end{DoxyParamCaption})}
+
+Adjust SAMG SettingsHere is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classcsmp_1_1_steady_state_diffusion_profile_af35d9bf7b5fb6a33b53586d98fbcf68a_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classcsmp_1_1_steady_state_diffusion_profile_af35d9bf7b5fb6a33b53586d98fbcf68a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_steady_state_diffusion_profile_ab023c368cf59459fff54a99019ac098b}\index{csmp::SteadyStateDiffusionProfile$<$ dim $>$@{csmp::SteadyStateDiffusionProfile$<$ dim $>$}!SteadyStateDiffusionProfile@{SteadyStateDiffusionProfile}}
+\index{SteadyStateDiffusionProfile@{SteadyStateDiffusionProfile}!csmp::SteadyStateDiffusionProfile$<$ dim $>$@{csmp::SteadyStateDiffusionProfile$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{SteadyStateDiffusionProfile()}{SteadyStateDiffusionProfile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_steady_state_diffusion_profile_ab023c368cf59459fff54a99019ac098b} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_steady_state_diffusion_profile}{csmp\+::\+Steady\+State\+Diffusion\+Profile}}$<$ dim $>$\+::\+Steady\+State\+Diffusion\+Profile (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{model}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{diffusivity}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{diffusing\+Variable}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{spatial\+Source\+Variable}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{gradient\+Variable}{, }\item[{double}]{gradient\+\_\+multiplier}{}\end{DoxyParamCaption})}
+
+Adjust SAMG SettingsHere is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classcsmp_1_1_steady_state_diffusion_profile_ab023c368cf59459fff54a99019ac098b_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classcsmp_1_1_steady_state_diffusion_profile_ab023c368cf59459fff54a99019ac098b_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_steady_state_diffusion_profile_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_steady_state_diffusion_profile_ad64b384fc5380f1670002d4adab93024}\index{csmp::SteadyStateDiffusionProfile$<$ dim $>$@{csmp::SteadyStateDiffusionProfile$<$ dim $>$}!Solve@{Solve}}
+\index{Solve@{Solve}!csmp::SteadyStateDiffusionProfile$<$ dim $>$@{csmp::SteadyStateDiffusionProfile$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Solve()}{Solve()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_steady_state_diffusion_profile_ad64b384fc5380f1670002d4adab93024} 
+template$<$uint32\+\_\+t dim$>$ \\
+bool \mbox{\hyperlink{classcsmp_1_1_steady_state_diffusion_profile}{csmp\+::\+Steady\+State\+Diffusion\+Profile}}$<$ dim $>$\+::\+Solve (\begin{DoxyParamCaption}\item[{double}]{model\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Solve for steadystate pressure diffusion. 
+
+Reconfiguration of SAMG solver settings after completing first solver call\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+Under provision of a separate SAMG instance (SAMG\+\_\+\+MULTIPLE\+\_\+\+INSTANCES) or applicaton of the IMPES solution scheme the below defined SAMG input parameters are re-\/adjusted to gain additional solver performance.
+
+
+\begin{DoxyItemize}
+\item SAMG input parameters reconfigured after first SAMG solver call\+:
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item Provide solution of the previous time step as initial guess -\/\texorpdfstring{$>$}{>} Set\+\_\+itypu
+\item Reuse SAMG solver setup if not initialized in automatic mode Set\+\_\+iswit(7)
+\item Change absolute convergence criterion -\/\texorpdfstring{$>$}{>} Set\+\_\+eps() or
+\item Switch to relative convergence criterion -\/\texorpdfstring{$>$}{>} Set\+\_\+eps()
+\end{DoxyEnumerate}
+
+The gained functionality concerns SAMG input arguments that are required to be set in a different way at the initial solver call. The if-\/loop "{}first\+Call\+\_\+"{} has been implemented to cater for changed SAMG solver settings after the solver routine has been called for the first time. Changed settings take effect with the second call of the the SAMG solver instance.
+
+ad 1. For faster numeric convergence SAMG settings can be changed in order to provide the result of the previous solver call as initial guess. The setting (Set\+\_\+itypu(0) has to be called succeeding an initial solver call.
+
+ad 2. Handling the SAMG solver memory is done in a similar manner\+: The coarsening setup created at the initial solver call is kept in the memory with any setting other than Set\+\_\+iswit(5). Subsequent calls shall reuse the setup.
+
+Manual (no primary solver control) setup refresh check, iswit(4) is adjusted immediately after the first SAMG solver call as seen below to iswit(3). In the event of exceeding a defined benchmark of iteration cycles in \doxylink{classcsmp_1_1_s_a_m_g___solver_a6721dbfffe7ae94fdd7ea94128d7c873}{SAMG\+\_\+\+Solver\+::\+Check\+Cycle\+Criterion} a new setup will be forced in the upcoming solver call. Since the paramter iswit remains unchanged, the new setup is reused from the following solver calls until the criterion is failed again. The benchmark case is set within the first\+Call\+\_\+ sequence as well.
+
+Automatic primary solver control performs setup refresh check (convegence control, ...) with iswit(7) which corresponds iswit(3) functionality. Whenever possible and reasonable, SAMG runs with partial setup. Otherwise, SAMG makes a full setup. In contrast to this, the automatic control does not assume a full hierarchy to be available from a previous run. If no setup is available, SAMG will automatically perform a fresh setup.
+
+ad 3. After the first solution has converged with an absolut convergence set to the round-\/off error, a less strict convergence criterion, either absolute or residual, is subsequently used as stopping criterion. Absolute convergence is defined by "{}res $<$= eps"{}.
+
+ad.\+4 Relative convergence is defined by "{}res $<$= eps.\+res0"{} (res0 = starting residual). SAMG output to file
+
+Solve
+
+Implements \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___profile_a5031ac63d62abfe968f5002d4cf9c4b0}{csmp\+::\+SAMG\+\_\+\+Profile}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/modules/integration/solver/\+SAMG\+\_\+profiles/Steady\+State\+Diffusion\+Profile.\+h\item 
+source/modules/integration/solver/\+SAMG\+\_\+profiles/Steady\+State\+Diffusion\+Profile.\+cpp\end{DoxyCompactItemize}

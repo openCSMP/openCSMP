@@ -21,7 +21,7 @@ class LinearTriangle : public FiniteElement {
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     virtual uint32_t       CornerNodes() const  { return 3U; }
     virtual void           CornerNodes( std::vector<uint32_t>& ids ) const;
-    virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
+    virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return LINEAR_BAR; };
 
     /// outward-pointing normals

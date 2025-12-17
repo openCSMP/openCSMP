@@ -1,0 +1,49 @@
+\doxysection{Integral\+\_\+var\+\_\+\+NT\+\_\+lhsop\+\_\+\+N\+\_\+d\+V\+\_\+\+Test.\+h}
+\hypertarget{_integral__var___n_t__lhsop___n__d_v___test_8h_source}{}\label{_integral__var___n_t__lhsop___n__d_v___test_8h_source}\index{tests/unit/Integral\_var\_NT\_lhsop\_N\_dV\_Test.h@{tests/unit/Integral\_var\_NT\_lhsop\_N\_dV\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{\_\_Integral\_var\_NT\_lhsop\_N\_dV\_Test\_h\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{\_\_Integral\_var\_NT\_lhsop\_N\_dV\_Test\_h\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_set_8h}{"{}VSet.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_a_n_s_y_s___interface_8h}{"{}ANSYS\_Interface.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_topology_8h}{"{}ModelTopology.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_p_d_e___integrator_8h}{"{}PDE\_Integrator.h"{}}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_integral__var___n_t__lhsop___n__d_v_8h}{"{}Integral\_var\_NT\_lhsop\_N\_dV.h"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_integral___n_t__lhsop___n__d_v_8h}{"{}Integral\_NT\_lhsop\_N\_dV.h"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_concatenate_8h}{"{}Concatenate.h"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_integral__var___n_t__lhsop___n__d_v___test}{Integral\_var\_NT\_lhsop\_N\_dV\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ Integral\_var\_NT\_lhsop\_N\_dV\_Test(\ \textcolor{keywordtype}{bool}\ verbose\ );}
+\DoxyCodeLine{00020\ \ \ \ \ \string~Integral\_var\_NT\_lhsop\_N\_dV\_Test();}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ valueTest();}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ compareConsistentTest();}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ compareLumpedTest();}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ lumpedTest();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ rowSumTest();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ compareTest(\textcolor{keywordtype}{bool}\ lumped);}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ setNodeVariable(std::vector<\textcolor{keywordtype}{double}>\&\ var,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name);}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ showNodeVariable(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ setElementVariable(std::vector<\textcolor{keywordtype}{double}>\&\ var,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ var\_name);}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ calculateGlobalMatrix(\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ sm,\ MathOperatorLHS<2U>\&\ oper);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{double}\ tol\_;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<2U>*\ sg\_\ =\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_;}
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

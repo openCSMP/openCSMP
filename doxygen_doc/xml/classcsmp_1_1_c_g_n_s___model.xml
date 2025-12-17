@@ -1,0 +1,565 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_c_g_n_s___model" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CGNS_Model</compoundname>
+    <basecompoundref refid="classcsmp_1_1_model" prot="public" virt="non-virtual">csmp::Model&lt; dim &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1ad596640ea9b66ab97b82df75a73d7955" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CGNS_Model&lt; dim &gt;::CGNS_Model</definition>
+        <argsstring>(const std::string &amp;mesh_file_set, const std::string &amp;regions_file_prefix, const std::string &amp;variable_file, bool use_regions_file=true, bool create_boundaries=true)</argsstring>
+        <name>CGNS_Model</name>
+        <qualifiedname>csmp::CGNS_Model::CGNS_Model</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file_set</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>regions_file_prefix</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>use_regions_file</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>create_boundaries</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>input from CGNS *.cgns, *.dat, *-variable.txt and *-regions.txt files. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor of <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> is called. The model is built from the &apos;mesh_file_set&apos;, variables file, and the regions file prefix is used to read the regions file. Uses the method Initialize. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="17" column="7" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="21" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1afd4055c6da73740f3a4eedca5f64e0ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CGNS_Model&lt; dim &gt;::CGNS_Model</definition>
+        <argsstring>(const std::string &amp;mesh_file_set, const std::string &amp;variable_file, bool use_regions_file=true, bool create_boundaries=true)</argsstring>
+        <name>CGNS_Model</name>
+        <qualifiedname>csmp::CGNS_Model::CGNS_Model</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file_set</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>use_regions_file</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>create_boundaries</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>input from CGNS *.cgns, *.dat, *-variable.txt and *-regions.txt files. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="24" column="7" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="38" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1a3bf4aed2e4df42b1f2d993521b681b58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CGNS_Model&lt; dim &gt;::CGNS_Model</definition>
+        <argsstring>(const std::string &amp;mesh_file_set, bool use_regions_file=true, bool create_boundaries=true)</argsstring>
+        <name>CGNS_Model</name>
+        <qualifiedname>csmp::CGNS_Model::CGNS_Model</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file_set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>use_regions_file</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>create_boundaries</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>input from CGNS *.cgns, *.dat and *-regions.txt files. creates empty property database </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="31" column="7" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="55" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1abc41ab1f5eb0f9c058e5d488d7e498eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CGNS_Model&lt; dim &gt;::CGNS_Model</definition>
+        <argsstring>(const std::string &amp;vset_dat_files, const std::string &amp;variable_file)</argsstring>
+        <name>CGNS_Model</name>
+        <qualifiedname>csmp::CGNS_Model::CGNS_Model</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>vset_dat_files</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>variable_file</declname>
+        </param>
+        <briefdescription>
+<para>input from CSMP binary *.vset *-regions.dat, *-boundaries.dat and *-variables.txt files </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="36" column="7" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="70" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1a495ce916f528bfd26bcf7ce15bbc140c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CGNS_Model&lt; dim &gt;::CGNS_Model</definition>
+        <argsstring>(const std::string &amp;vset_dat_files)</argsstring>
+        <name>CGNS_Model</name>
+        <qualifiedname>csmp::CGNS_Model::CGNS_Model</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>vset_dat_files</declname>
+        </param>
+        <briefdescription>
+<para>input from CSMP binary *.vset *-regions.dat, *-boundaries.dat files </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="40" column="7" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="78" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1a0ae97cf9cff46ffdf49150dcc24e8a3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::CGNS_Model&lt; dim &gt;::~CGNS_Model</definition>
+        <argsstring>()</argsstring>
+        <name>~CGNS_Model</name>
+        <qualifiedname>csmp::CGNS_Model::~CGNS_Model</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="42" column="15" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="85" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1ac35ba23604d87edf529e4dce32a0e630" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CGNS_Model&lt; dim &gt;::Write_CGNS_Mesh</definition>
+        <argsstring>(const std::string &amp;mesh_file_set)</argsstring>
+        <name>Write_CGNS_Mesh</name>
+        <qualifiedname>csmp::CGNS_Model::Write_CGNS_Mesh</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file_set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="44" column="12" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="90" bodyend="95"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_g_n_s___model_1a47b1bf6ce6e76b98177c6960fc391226" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::CGNS_Model&lt; dim &gt;::Initialize</definition>
+        <argsstring>(const std::string &amp;mesh_file_set, const std::string &amp;regions_file_prefix, bool use_regions_file, bool create_boundaries)</argsstring>
+        <name>Initialize</name>
+        <qualifiedname>csmp::CGNS_Model::Initialize</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>mesh_file_set</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>regions_file_prefix</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>use_regions_file</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>create_boundaries</declname>
+        </param>
+        <briefdescription>
+<para>Builds <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> after it was constructed with the default constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="48" column="12" bodyfile="source/modules/interfaces/CGNS/CGNS_Model.cpp" bodystart="99" bodyend="182"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>R. Manasipov </para>
+</simplesect>
+<simplesect kind="date"><para>2015 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="6">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+      <node id="5">
+        <label>csmp::BoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::CGNS_Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_c_g_n_s___model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="9">
+        <label>csmp::LocalVariableStorage&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::RegionInterface&lt; dim, REGION_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+      </node>
+      <node id="3">
+        <label>csmp::RegionInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+      <node id="7">
+        <label>csmp::SplitBoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>csmp::BoundaryInterface&lt; dim, BOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+      </node>
+      <node id="5">
+        <label>csmp::BoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_boundary_interface"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::CGNS_Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_c_g_n_s___model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::LocalVariableStorage&lt; dim, STOREE &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+      </node>
+      <node id="9">
+        <label>csmp::LocalVariableStorage&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_local_variable_storage"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Model&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_model"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::RegionInterface&lt; dim, REGION_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+      </node>
+      <node id="3">
+        <label>csmp::RegionInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_region_interface"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::SplitBoundaryInterface&lt; dim, SPLITBOUNDARY_COMPLEX &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+      </node>
+      <node id="7">
+        <label>csmp::SplitBoundaryInterface&lt; dim, Model &gt;</label>
+        <link refid="classcsmp_1_1_split_boundary_interface"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; dim, Model &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/interfaces/CGNS/CGNS_Model.h" line="11" column="3" bodyfile="source/includes/interfaces/CGNS/CGNS_Model.h" bodystart="12" bodyend="52"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_model_1a2e12f259012989765f3269d8ea721092" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Accept</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a9bdc4e94ff3dbf306bdcccfefd721969" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AddBoundary</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ae81c2b297f4166821bc3de2856e055ae" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AddProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0ef20e1c34990ef368737e0060a84b1c" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AddSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a1f470e567edc05fb61d72ba12dbda6b8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_model_1adcad1b38a55c3151ced7288baa9c3ed1" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_model_1a9e6d3ec7fd281e91fd5baf8c6e651ba8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_model_1a28ffc2f8cf7ef32fe539acdba05bcdea" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_model_1a69231d1cb462e79a12392b70ee1c1d53" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Apply</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0f98d57cdb8354375492e1ecab895b05" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AssertFiniteVolumeIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a5143bb03ae0bda92a0c01260dee54615" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AssertIntegrationPointPlacement</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4cc75be181f8519badea275810fe8275" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AssertPlacement</name></member>
+      <member refid="classcsmp_1_1_model_1afa95b2a116d4772dcc7ef61c4a7b6c2c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AssignCellCharacteristicsTo</name></member>
+      <member refid="classcsmp_1_1_model_1a0da00f2577ff08d7ee4d6cc1ede60d34" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AssignNodeCoordinatesTo</name></member>
+      <member refid="classcsmp_1_1_model_1a52ecee415c0d8a3259e7347fbb5f535e" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AssignNodeCoordinatesTo</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a3a5c416879b0f17829f989a65c4a18a1" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>AssimilateRegion</name></member>
+      <member refid="classcsmp_1_1_model_1a935a4dea2784b6a57ff0f6d1b888323b" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BinaryBoundariesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a9ab51937d76c554fee2f22a31220f9c0" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BinaryRegionsFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a233cebc02de94805352d84bbb3936d89" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BinarySplitBoundariesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1aee11ba02736a22c1b82c8f70d63519bb" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BinaryVariablesFileName</name></member>
+      <member refid="classcsmp_1_1_model_1a04cff6fae0c64ae7a8dce5f57ad8eee6" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BinaryVsetFileName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1afc9322d44807e26716d48f2c616d3b78" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Boundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a2771e6533d70e579027431c1ee070926" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a1c2e56d21a8535986a71d7a2e37f03ee" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae4bfaeada6c1968a38b739272df2e8a5" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BoundariesOut</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ab40b76a0d54da3105648ed8e454cdd98" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Boundary</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a093f6e8261b159874d8537dd3abc0927" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>boundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a995b5c3880056bdc0f2e9940be241b7d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad9e5b080197df15de0fc223a7793de2d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>boundaryIterator</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a9ec05234ca81cb71c04c9b5e57064a8c" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>boundaryMap_</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a170a0b5502f6e14e6ea475714b6764db" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>BoxShaped</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1ad596640ea9b66ab97b82df75a73d7955" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CGNS_Model</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1afd4055c6da73740f3a4eedca5f64e0ff" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CGNS_Model</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1a3bf4aed2e4df42b1f2d993521b681b58" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CGNS_Model</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1abc41ab1f5eb0f9c058e5d488d7e498eb" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CGNS_Model</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1a495ce916f528bfd26bcf7ce15bbc140c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CGNS_Model</name></member>
+      <member refid="classcsmp_1_1_model_1a79de9bdafebf73cfe8d7472b46c5ac54" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ChangePropertyStatus</name></member>
+      <member refid="classcsmp_1_1_model_1a8175c191fb82044c968d087ce6ca5c20" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ChangePropertyStatusWhere</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab61ce01e8782b79e4e2b1bdbc619a9dc" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CheckRegionIdentifierIsUpToDate</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad82b6e1229b2eaa3311dc068aa3f0ba6" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ContainsBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aad7bc91dc4450d45f48103c85ae940e5" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ContainsRegion</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1afb450a873c86b4ce2468d4d29920cb2d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ContainsSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a28e317bfa74330d1b2ce9763e52803c6" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CopyGradientOfProperty_A_To_B</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ad6890490309612e7b94004a89026b392" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CopyRegion</name></member>
+      <member refid="classcsmp_1_1_model_1acf6ea2249b3f45d733262b3977a61a1f" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CopyReplace</name></member>
+      <member refid="classcsmp_1_1_region_interface_1adf554e6b22902ffe7e6793538a05f8d4" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CountAndLabelUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad24b7f5db1277b6a7837a700d103d153" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateBoundaryAround</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e8a32b74b875851b1805944812b3a70" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7f343a42577037dff47093f62a90b84b" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateBoundaryName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a7aef8cb4f10754a119e7df1309b9d98a" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a46772c373bade27cc1bfd5de6a7f2cb1" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateExternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a41271a0826a7dfae74abdb5cf4856b4f" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateInternalBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_model_1aff7668a969afb1b8934e63a27b47ca31" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0a4e52dd0e6018a0b751be1dfc4b13a5" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateSplitBoundaryBetween</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1aabc87e8481fc15687fdb428da104a5d2" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateSplitBoundaryFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1acb2fac24571ca74f7ffae218347d80b0" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateSplitBoundaryName</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ac2f3505cd6c6368e76cc7fbbdf3a5361" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>CreateSplitBoundaryNameFrom</name></member>
+      <member refid="classcsmp_1_1_model_1a538d966f27bfa2c6a791f5ed4fd7f446" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Database</name></member>
+      <member refid="classcsmp_1_1_model_1a852712c93887341ee7533c2b1bc39b8b" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Database</name></member>
+      <member refid="classcsmp_1_1_model_1a6c9c1075f4048ab03276569f580fce19" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3b56bab7bc4a1db37bfc4d4176457349" prot="public" virt="non-virtual" ambiguityscope="csmp::LocalVariableStorage&lt; dim, Model &gt;::"><scope>csmp::CGNS_Model</scope><name>DeleteProperty</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a34e5f96c416a4e88a8b189b7700515f8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>DetectAndCreateSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a110040be6c3f197163729b7c4ea81069" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>EmptyLVS</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad0eed3c326997f854db44d5a7320a1e2" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>EstablishBoundariesFromRegions</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1aa3b79631cd879e55338d14803caae786" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>EstablishBoxBoundaries</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a806f539a7761ee70feaa892a22d040ff" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>EstablishBoxBoundariesFromNodeFlags</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a432e8ca3268d6ef31eaf6b9fd23a3e7c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>EstablishBoxBoundariesFromOrientation</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad1c6156ff7aa50d5a1c26d12d32006f7" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>EstablishEdgeBoundariesOfBoxShapedModel</name></member>
+      <member refid="classcsmp_1_1_model_1a13852cb18c944af4b5f132e5714f4d7a" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ExtrapolateCellToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_model_1a4bfc03c69ae4b2523a1b9d40da381823" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ExtrapolateIntegrationPointToNodeProperty</name></member>
+      <member refid="classcsmp_1_1_model_1a527ae316cdaa330e3e1897dc10eda71c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FE_Manager</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ad66b7d53568c18e4241ad24ef51f51d7" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FindBoundaryByName</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8c12cd3934001fdeea4d927a94bd4e9d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FindBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8c05e87268deed28098c8770b79fb183" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FindSplitBoundaryByNames</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1abc0392784790ae33fdc9759a7bf19615" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a01c89d70b2cc76f81224c318f0840bb8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormModelRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afdab232b6b3ef6880224f6f72ade4cb5" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormRectangularRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a54852db0700b343b2c21d420fa387797" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormRegionFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a47865ffc9553be4af8b2f5ed92bb5061" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormRegionInBoundingBox</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aefd55525755bb027d8b6204b2ce604c3" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormRegionsFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aba5ce4ad7998c91591500e6385bd5fe3" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormRegionsFromMaterialIDs</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a893076f9f7bf4711e6d4897f719bb2b5" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormRegionsFromPropertyValues</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a30cbaf4eabbcff716be8742b47e0c869" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>FormSplitBoundariesFrom</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4e541b2682544636c2cd62d569716946" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>HasValidModelRegion</name></member>
+      <member refid="classcsmp_1_1_model_1ac629d1175ce8e74dbdc3974553b14531" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>IndexByPropertyValues</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1a47b1bf6ce6e76b98177c6960fc391226" prot="private" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model_1a659628e032169aace551f8493bb8d64e" prot="protected" virt="non-virtual" ambiguityscope="csmp::Model::"><scope>csmp::CGNS_Model</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model_1a39ea35f227cce6d32a794fd379086fd9" prot="protected" virt="non-virtual" ambiguityscope="csmp::Model::"><scope>csmp::CGNS_Model</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model_1a755401f7f803d98572dd9cff1b2b1b1f" prot="protected" virt="non-virtual" ambiguityscope="csmp::Model::"><scope>csmp::CGNS_Model</scope><name>Initialize</name></member>
+      <member refid="classcsmp_1_1_model_1a3beebcda9fd039ea50be5e7b41948bfe" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InitializeLocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a573cc9956b043b7010b5c70eebc47a40" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a0420507bc518fc8f233ecdccfaaf531e" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputBoundaryFlags</name></member>
+      <member refid="classcsmp_1_1_model_1af02c3aae20950e871acfafd520dd532f" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputBoundaryValue</name></member>
+      <member refid="classcsmp_1_1_model_1a54b42649c2116beae5b32cb0e8750dab" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputFromBinaryFile</name></member>
+      <member refid="classcsmp_1_1_model_1ab7e40578f44ca6ced2cf05db309f122e" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputPropertyValue</name></member>
+      <member refid="classcsmp_1_1_region_interface_1abf1c6bc80311fc070ff4da11211093d8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputRegionsFromBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a56710d6c84622848e351e794f8e71381" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputSplitBoundariesFromBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a82b425b078cfc8840ff14f44eb818e99" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputVariableFrom</name></member>
+      <member refid="classcsmp_1_1_model_1a9d88f8a2aa52d8c26944faf4ae8c5e6c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputVariableFrom</name></member>
+      <member refid="classcsmp_1_1_model_1a1c8cd5a8dabcd4733b9545d813e78559" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InputVariablesFrom</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a01c9167b824ee1726bd64390319bcd47" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InsertLowerDimensionalRegionsIntoSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a0f810da61d370f5942a8478c3b32ccbc" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InsertRegionIntoSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_model_1a8a437f9aa192afd88f871720f320bd8e" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InstantiateFiniteVolumes</name></member>
+      <member refid="classcsmp_1_1_model_1a69f9911b3ea97c2db09cd990442126f9" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InterpolateBoundaryValues</name></member>
+      <member refid="classcsmp_1_1_model_1a67bae937ff0d191ecf5c85d3ede0b3d6" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InterpolateBoundaryValues</name></member>
+      <member refid="classcsmp_1_1_model_1a242fb0eb48c3c42c69a204882d5704e4" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InterpolateIntegrationPointToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_1acec8aaf9553395187eef0cd4105e5197" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InterpolateNodeToCellProperty</name></member>
+      <member refid="classcsmp_1_1_model_1ac613db5a43becbf675a09fab65ff37a4" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>InterpolateNodeToIntegrationPointProperty</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1af8d883b322003e0e831b114a53120eef" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>IsBoundaryName</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6ee3292130db84d62ea9b3ddbb81461d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>IsUnique</name></member>
+      <member refid="classcsmp_1_1_model_1ae5e7ec4fee6a39db1fa287bdbc88f77e" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa8f995011429356bfd7e7744794c9b9b" prot="public" virt="non-virtual" ambiguityscope="csmp::LocalVariableStorage&lt; dim, Model &gt;::"><scope>csmp::CGNS_Model</scope><name>IsWithinRange</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1aa711649557c9cd84c0a69e7e1ffe301b" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>LocalVariableStorage</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a3568b1d87af863a457f038ca8982bcea" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>LVS</name></member>
+      <member refid="classcsmp_1_1_region_interface_1accd91c4d081a411697194ba99b0b9d88" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>MergeRegions</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a932d9bf33ebc1f1feff208c0a8a5e900" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>MergeSplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_model_1acdd487a168aedd26d138cb74127f87b0" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Mesh</name></member>
+      <member refid="classcsmp_1_1_model_1a761d9a1146bf05b15149777d6fc37558" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Mesh</name></member>
+      <member refid="classcsmp_1_1_model_1af05be8dbc1bdfd766ae01def456e8314" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>MinMaxCoordinates</name></member>
+      <member refid="classcsmp_1_1_model_1ae98b627c7aa1d3422044856e211fdf96" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>MinMaxOf</name></member>
+      <member refid="classcsmp_1_1_model_1acefd52598cd77133895e29d4f9cf8814" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1a28b988391b86accb7a10b4142ccbccb6" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1a4c7cbe12b7b17cb780bd50b3217f248c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1a285e92528e4ada80cb2d0cca89346737" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1aac3940066bc4937c014dc70f549de458" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1adc5f64b4ccf63178b80a72b27c6c02fc" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1a0c9c473b8a6341e01a0efe65b9f4b2fe" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1a5859d42a2bdba2dc28c5027ef5890ecb" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Model</name></member>
+      <member refid="classcsmp_1_1_model_1a1215540ea41e232f4e5c845e5466f92d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>MoveNodeCoordinatesBy</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afc081b026c8c072b1fef0c9df85b6ce6" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>MoveToNonUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab4d772d282e5e1a4a529f0d0cf9aedcf" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>MoveToUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_model_1ad122aa50ee0c315e3aa2720f81ad0f74" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_model_1ae67872561c2c8b9234a60eb3062be4e9" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1add3acd9ec49db71e0e5bf4f8dda13744" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_model_1a39c10e94cf437465bf27cf9b6b53b0a8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1ade5ec5a8e9afb482c1619924cf8259b2" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutLVS</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a4e58d1c493b2e439a430621ea11df640" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutputBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a359e24041d64774eb63b4c583a2c08bc" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutputMeshTo</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4baedc0566e529f2a54d46a56e62a138" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutputRegionsToBinary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a4ddcf39d8581ca63a8b618741a5385d5" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutputSplitBoundariesToBinary</name></member>
+      <member refid="classcsmp_1_1_model_1a40267f0970a5f782de8ae9916da1e005" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutputToBinaryFile</name></member>
+      <member refid="classcsmp_1_1_model_1adf5297f19ae1481d29afd513aaa29699" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutputVariableTo</name></member>
+      <member refid="classcsmp_1_1_model_1a1f918e53e2331dbe07719e023535152b" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>OutputVariableToScreen</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac9096a4b2be14096aafa13fc61322bce" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>PartitionRegionIntoContiguousSubRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a1261d193620bc36dfed780945f7f6751" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>PartitionRegionIntoContiguousSubRegions_Bromage</name></member>
+      <member refid="classcsmp_1_1_model_1a0d0aad3ae1bce2e9ae382ef3aa6d284f" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Placement</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a7317f73445deb0ffe24f8d7c2d8fa705" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>PrintDomainIndices</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Read</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a15454666d6c782ff34dc7cbcd5654881" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ReadArrayEntry</name></member>
+      <member refid="classcsmp_1_1_region_interface_1aa4904242d78be33ce82cca5065e35c5b" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RebuildUniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a726722b33ee2b3fe7e739de1cc23ef61" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Region</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a76b7f2f0b92cb59c95116e06d31a120a" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionByDomainIndex</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ad3c0608a067423428f7123c13a80346b" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>regionConstIterator</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a24356853ec2de423c20a55b22c7244b8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionDifference</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a4167afbf2ee98fda0fd380bcbcbb1fb8" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionIncludes</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6b3627eec17360f841826792fc846e3e" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionInterface</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a35cbd8c6094105001f9b2bc740263939" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionIntersection</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac93adcf7fe57c7630ea5f07af6e7bada" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>regionIterator</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ae9135b7a7051bdd188b1ea03c9e1078b" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>regionMap_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab4e46d0953e5ac0004b53d240b4c79dc" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Regions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a039af112e1af659415de489780acc0fc" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionsBegin</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a42be1c04db6a8b874ebe54724c72eb6d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionsEnd</name></member>
+      <member refid="classcsmp_1_1_region_interface_1abcf00391fd601c027d59e03ecacc7023" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionsOut</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a8b2d9d622d7203e8e050cb9ca7811b46" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionSymmetricDifference</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a21a8c8d8c50e40797b13e059d83a0773" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>regionTraits_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a02754829ba2beb42af7bdf232f646188" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RegionUnion</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1ae8976912d2d26ce92222880798dba583" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RemoveBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1afdc209398fea9597da430153ace32208" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RemoveFromRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a753c2b6332c5c14f228abbf81568123c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RemoveRegion</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a830b59da55e4235995ebfc6affa254e6" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RemoveRegionPartitionsFor</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a85db4d8207a4baec857b7352926900a2" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RemoveSplitBoundary</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a0a622ed266b74e15e39f8ad734ad7a3d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>RenameRegion</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a7a7f6185d60844c2f5acc1bcf475e215" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>ResizePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a69879ca6a06d881fe3ef71251cca84ff" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SeparateUniqueRegionsBySplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a6eb99206ead464836c322df187ef4d2f" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SharedPerimeterFaces</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3d663bc8af57097f34baa6bb0a4242d9" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SplitBoundaries</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a6810f0a2f352d7e258c592583d4288f0" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SplitBoundariesBegin</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1ab4643e71e068ffcebc662ea4ee9e7403" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SplitBoundariesEnd</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a523aa296793f798a9aa89e3f6334a66d" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SplitBoundariesOut</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a5bba3cfaaf7f3ae8a1f4f29d8809e796" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SplitBoundary</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a3f4f82c375ed9ab373c4b3d976bd8b92" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>splitBoundaryConstIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a93b412f12c1ab04c06cbceec5a545a98" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>SplitBoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a459a94f78fd569ddf0e2cff1a970e401" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>splitBoundaryIterator</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a8b0e0207c170947f916a79ced2262ef7" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>splitBoundaryMap_</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a13c8a3dae3a8ba916f712f7e96d000d1" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Status</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a8642fe6f83bb6981e7c0d6ab5b2c0248" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Store</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a0e9b7ddb382ce5e6bbb03158289dd5d4" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>StoreArrayEntry</name></member>
+      <member refid="classcsmp_1_1_local_variable_storage_1a482c445697287f2ae4d8b76319725d7a" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>StoreLocalState</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a45d2da858a30e67ffd9993c81705c180" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>uniqueRegionMap_</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ac86acab5c8c0c3412e429f321f9b3553" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>UniqueRegions</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a916ae01f21232f48b60fe780f252bdd1" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>UniqueRegionsBegin</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a96069c1357b77587e58f698593f10e34" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>UniqueRegionsEnd</name></member>
+      <member refid="classcsmp_1_1_region_interface_1a0f61dad58f69e668195d5a8bbcfdc9cf" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>UpdateRegions</name></member>
+      <member refid="classcsmp_1_1_model_1aa508619f940dab016d03df48e4a2bd7e" prot="protected" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>UpdateSubdomainPropertyStorage</name></member>
+      <member refid="classcsmp_1_1_model_1ab53b48cf02b4209d52a47484189168b6" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_model_1a6ed011a5ed0b218c4b36ae260eecfb69" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1ac35ba23604d87edf529e4dce32a0e630" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>Write_CGNS_Mesh</name></member>
+      <member refid="classcsmp_1_1_boundary_interface_1a8e78dcdf294a7c03e43880b5e362fa73" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>~BoundaryInterface</name></member>
+      <member refid="classcsmp_1_1_c_g_n_s___model_1a0ae97cf9cff46ffdf49150dcc24e8a3e" prot="public" virt="virtual"><scope>csmp::CGNS_Model</scope><name>~CGNS_Model</name></member>
+      <member refid="classcsmp_1_1_model_1a5330b8f1f65b441691a80a749f5e0015" prot="public" virt="virtual"><scope>csmp::CGNS_Model</scope><name>~Model</name></member>
+      <member refid="classcsmp_1_1_region_interface_1ab3dd95b675711d592d29496e48d0726c" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>~RegionInterface</name></member>
+      <member refid="classcsmp_1_1_split_boundary_interface_1a196823862fcb230a82e5d0ca21a47142" prot="public" virt="non-virtual"><scope>csmp::CGNS_Model</scope><name>~SplitBoundaryInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -353,13 +353,6 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
 
 
 
-template<uint32_t dim, template<uint32_t> class CELL>
-VelocityAndVolumeFlux<dim,CELL>::~VelocityAndVolumeFlux()
- {
-    // no dynamically allocated variables
- }
-
-
 
 /** Switch to verbose mode (results are reported to stdout).
 */

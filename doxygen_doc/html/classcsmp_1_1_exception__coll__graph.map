@@ -1,0 +1,5 @@
+<map id="csmp::Exception" name="csmp::Exception">
+<area shape="rect" id="Node000001" title="base class for CSMP&#45;specific exception handling using an exception qualifier (CSMP_MESSAGE),..." alt="" coords="5,120,114,369"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="13,5,106,72"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="62,87,62,120,57,120,57,87"/>
+</map>

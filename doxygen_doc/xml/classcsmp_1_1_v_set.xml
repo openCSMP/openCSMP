@@ -1,0 +1,1143 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_v_set" kind="class" language="C++" prot="public">
+    <compoundname>csmp::VSet</compoundname>
+    <basecompoundref refid="classcsmp_1_1_v_data" prot="public" virt="non-virtual">csmp::VData</basecompoundref>
+    <includes refid="_v_set_8h" local="no">VSet.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_1af4f607958e69dcabb4df01dcd0c20230" prot="protected" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> &gt;</type>
+        <definition>std::map&lt;std::string,PropertyData&gt; csmp::VSet&lt; dim &gt;::property_map_</definition>
+        <argsstring></argsstring>
+        <name>property_map_</name>
+        <qualifiedname>csmp::VSet::property_map_</qualifiedname>
+        <briefdescription>
+<para>container for variables distributed on the mesh </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="147" column="15" bodyfile="source/includes/integration/finite_elements/VSet.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_1acdd960f28be068d5d81a2086e76fa6b7" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; int32_t &gt;</type>
+        <definition>std::vector&lt;int32_t&gt; csmp::VSet&lt; dim &gt;::pmtrl_</definition>
+        <argsstring></argsstring>
+        <name>pmtrl_</name>
+        <qualifiedname>csmp::VSet::pmtrl_</qualifiedname>
+        <briefdescription>
+<para>rocktype identifiers; one per element; for transfer to &apos;material_id_&apos; </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="148" column="32" bodyfile="source/includes/integration/finite_elements/VSet.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classcsmp_1_1_v_set_1afbb45b2ddbbc68194e590b96b4238bbf" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class VSet_Test</definition>
+        <argsstring></argsstring>
+        <name>VSet_Test</name>
+        <qualifiedname>csmp::VSet::VSet_Test</qualifiedname>
+        <param>
+          <type>VSet_Test</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="150" column="18" bodyfile="source/includes/integration/finite_elements/VSet.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a400370ba5b6ab7af15a31222c20d10cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VSet&lt; dim &gt;::VSet</definition>
+        <argsstring>()</argsstring>
+        <name>VSet</name>
+        <qualifiedname>csmp::VSet::VSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="25" column="5" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="19" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a703fc687a8f7cc06f79581f9ad20e7e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VSet&lt; dim &gt;::VSet</definition>
+        <argsstring>(uint32_t nodes_per_element, uint32_t nbors_per_element, int8_t csmp_etype, size_t nodes, size_t elmts)</argsstring>
+        <name>VSet</name>
+        <qualifiedname>csmp::VSet::VSet</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nodes_per_element</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>nbors_per_element</declname>
+        </param>
+        <param>
+          <type>int8_t</type>
+          <declname>csmp_etype</declname>
+          <defname>etype</defname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nodes</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elmts</declname>
+        </param>
+        <briefdescription>
+<para>single element type constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Allocates storage for mono-element mesh from finite element blue-print and the number of nodes and elements.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> types gets a size of 1 in this case which is just enough to store the type of the single element of which the mesh consists. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="28" column="5" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="34" bodyend="42"/>
+        <references refid="classcsmp_1_1_v_set_1a703fc687a8f7cc06f79581f9ad20e7e7" compoundref="_v_set_8cpp" startline="34" endline="42">csmp::VSet&lt; dim &gt;::VSet</references>
+        <referencedby refid="classcsmp_1_1_v_set_1a703fc687a8f7cc06f79581f9ad20e7e7" compoundref="_v_set_8cpp" startline="34" endline="42">csmp::VSet&lt; dim &gt;::VSet</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aa6b0485e4efb2e124ccb94b384ffc902" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VSet&lt; dim &gt;::VSet</definition>
+        <argsstring>(const std::vector&lt; int8_t &gt; &amp;fem_types, const std::deque&lt; uint32_t &gt; &amp;npes, const std::deque&lt; uint32_t &gt; &amp;epes, size_t nodes)</argsstring>
+        <name>VSet</name>
+        <qualifiedname>csmp::VSet::VSet</qualifiedname>
+        <param>
+          <type>const std::vector&lt; int8_t &gt; &amp;</type>
+          <declname>fem_types</declname>
+        </param>
+        <param>
+          <type>const std::deque&lt; uint32_t &gt; &amp;</type>
+          <declname>npes</declname>
+        </param>
+        <param>
+          <type>const std::deque&lt; uint32_t &gt; &amp;</type>
+          <declname>epes</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nodes</declname>
+        </param>
+        <briefdescription>
+<para>multiple element type constructor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="34" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1ab985b7a8a99a9c5202398e14e124bb1b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::Resize</definition>
+        <argsstring>(uint32_t nodes_per_element, uint32_t nbors_per_element, int8_t csmp_etype, size_t nodes, size_t elmts)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::VSet::Resize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>nodes_per_element</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>nbors_per_element</declname>
+        </param>
+        <param>
+          <type>int8_t</type>
+          <declname>csmp_etype</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nodes</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elmts</declname>
+        </param>
+        <briefdescription>
+<para>resizing meshes with only a single element type </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Resizes the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> internal containers to hold a mono-element type mesh of the specified size. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="40" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="67" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a9a7936e4b01781de7cd84b60682a7532" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::Resize</definition>
+        <argsstring>(const std::deque&lt; int8_t &gt; &amp;etypes, const std::deque&lt; uint32_t &gt; &amp;npes, const std::deque&lt; uint32_t &gt; &amp;epes, size_t nodes, size_t faces, size_t interfaces)</argsstring>
+        <name>Resize</name>
+        <qualifiedname>csmp::VSet::Resize</qualifiedname>
+        <param>
+          <type>const std::deque&lt; int8_t &gt; &amp;</type>
+          <declname>etypes</declname>
+        </param>
+        <param>
+          <type>const std::deque&lt; uint32_t &gt; &amp;</type>
+          <declname>npes</declname>
+        </param>
+        <param>
+          <type>const std::deque&lt; uint32_t &gt; &amp;</type>
+          <declname>epes</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nodes</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>faces</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>interfaces</declname>
+        </param>
+        <briefdescription>
+<para>use for meshes with multiple element sizes </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="46" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1acccb3188c54e7bb89ece4da5437a3597" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddXYZ</definition>
+        <argsstring>(const std::deque&lt; double &gt; &amp;x, const std::deque&lt; double &gt; &amp;y, const std::deque&lt; double &gt; &amp;z)</argsstring>
+        <name>AddXYZ</name>
+        <qualifiedname>csmp::VSet::AddXYZ</qualifiedname>
+        <param>
+          <type>const std::deque&lt; double &gt; &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const std::deque&lt; double &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>const std::deque&lt; double &gt; &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>node coordinates </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds node coordinates to <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="52" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="124" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aab1a113f6c7f3fa64291df8c6c534105" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddPlist</definition>
+        <argsstring>(typename std::map&lt; size_t, std::vector&lt; size_t &gt; &gt;::const_iterator first, typename std::map&lt; size_t, std::vector&lt; size_t &gt; &gt;::const_iterator last)</argsstring>
+        <name>AddPlist</name>
+        <qualifiedname>csmp::VSet::AddPlist</qualifiedname>
+        <param>
+          <type>typename std::map&lt; size_t, std::vector&lt; size_t &gt; &gt;::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::map&lt; size_t, std::vector&lt; size_t &gt; &gt;::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>the IDs of the nodes that make up each element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="57" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aa36e481a5edbe8ce0100ad7dcbeb30c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddPlist</definition>
+        <argsstring>(typename std::deque&lt; std::vector&lt; size_t &gt; &gt;::const_iterator first, typename std::deque&lt; std::vector&lt; size_t &gt; &gt;::const_iterator last)</argsstring>
+        <name>AddPlist</name>
+        <qualifiedname>csmp::VSet::AddPlist</qualifiedname>
+        <param>
+          <type>typename std::deque&lt; std::vector&lt; size_t &gt; &gt;::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::deque&lt; std::vector&lt; size_t &gt; &gt;::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="60" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1affbb39c13eaf1e1fe8d4d5f93284ca65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddPfverts</definition>
+        <argsstring>(typename std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt;::const_iterator first, typename std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt;::const_iterator last)</argsstring>
+        <name>AddPfverts</name>
+        <qualifiedname>csmp::VSet::AddPfverts</qualifiedname>
+        <param>
+          <type>typename std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt;::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::map&lt; size_t, std::vector&lt; int64_t &gt; &gt;::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>the equi-dimensional neighbors adjacent to the numbered element faces plus boundary identifiers where there is no neighbor </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="64" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aac5bb591bbe366c90951bfbd3495a3b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddPfverts</definition>
+        <argsstring>(typename std::deque&lt; std::vector&lt; int64_t &gt; &gt;::const_iterator first, typename std::deque&lt; std::vector&lt; int64_t &gt; &gt;::const_iterator last)</argsstring>
+        <name>AddPfverts</name>
+        <qualifiedname>csmp::VSet::AddPfverts</qualifiedname>
+        <param>
+          <type>typename std::deque&lt; std::vector&lt; int64_t &gt; &gt;::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::deque&lt; std::vector&lt; int64_t &gt; &gt;::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="67" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1af4cf0571e7b6cb5853771594ed48cca9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddBFlags</definition>
+        <argsstring>(typename std::vector&lt; std::int8_t &gt;::const_iterator first, typename std::vector&lt; std::int8_t &gt;::const_iterator last)</argsstring>
+        <name>AddBFlags</name>
+        <qualifiedname>csmp::VSet::AddBFlags</qualifiedname>
+        <param>
+          <type>typename std::vector&lt; std::int8_t &gt;::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; std::int8_t &gt;::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>adds <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flag values to <ref refid="classcsmp_1_1_v_data" kindref="compound">VData</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds a map that stores the indices of the boundary nodes as keys and <ref refid="group___c_s_m_pglobal_enums_1ga8e4421c3cd02f67e535bceb2dc74bfb6" kindref="member">BOX_BOUNDARY</ref> flags as values. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="71" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="249" bodyend="268"/>
+        <references refid="classcsmp_1_1_v_data_1aa12cc17feb932518d0dbc2db9d27e3b1" compoundref="_v_data_8cpp" startline="816" endline="823">csmp::VData::ResizeBFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a2fd0d4caf092b150c100cbbf744c5ea8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddBREP_Flags</definition>
+        <argsstring>(typename std::vector&lt; std::int8_t &gt;::const_iterator first, typename std::vector&lt; std::int8_t &gt;::const_iterator last)</argsstring>
+        <name>AddBREP_Flags</name>
+        <qualifiedname>csmp::VSet::AddBREP_Flags</qualifiedname>
+        <param>
+          <type>typename std::vector&lt; std::int8_t &gt;::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; std::int8_t &gt;::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>adds boundary representation geometry identifiers for the nodes to the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="75" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="275" bodyend="288"/>
+        <references refid="classcsmp_1_1_v_data_1a47959a5eb202606453adff6041e08c31" compoundref="_v_data_8cpp" startline="829" endline="836">csmp::VData::ResizeBREP_Flags</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aea58c55699c0081c1ca7e1f0ec1467dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddPmtrl</definition>
+        <argsstring>(typename std::vector&lt; int32_t &gt;::const_iterator first, typename std::vector&lt; int32_t &gt;::const_iterator last)</argsstring>
+        <name>AddPmtrl</name>
+        <qualifiedname>csmp::VSet::AddPmtrl</qualifiedname>
+        <param>
+          <type>typename std::vector&lt; int32_t &gt;::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>typename std::vector&lt; int32_t &gt;::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>rocktype identifiers for elements only </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Material ID identifiers need to be provided for all elements, boundaries and split boundaries. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="79" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="298" bodyend="305"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a4328a7668a5b30c0e65cc77c49cd70ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::AddPmanifold</definition>
+        <argsstring>(VData::manifoldContainer::const_iterator first, VData::manifoldContainer::const_iterator last)</argsstring>
+        <name>AddPmanifold</name>
+        <qualifiedname>csmp::VSet::AddPmanifold</qualifiedname>
+        <param>
+          <type>VData::manifoldContainer::const_iterator</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>VData::manifoldContainer::const_iterator</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+<para>adds node-manifold information to the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="83" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="321" bodyend="325"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aa44de0912a218fe42f8c70e9fc0cb8f8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::DataEmpty</definition>
+        <argsstring>() const</argsstring>
+        <name>DataEmpty</name>
+        <qualifiedname>csmp::VSet::DataEmpty</qualifiedname>
+        <briefdescription>
+<para>checks whether the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> contains any distributed variable values stored in <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> objects </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Reports whether the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> contains distributed variable values stored in <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> object.s </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="87" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="337" bodyend="340"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1afaf25c1d237ed5e98f5d6f81e2ae5aec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::AddData</definition>
+        <argsstring>(const char *s, const PropertyData &amp;)</argsstring>
+        <name>AddData</name>
+        <qualifiedname>csmp::VSet::AddData</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> &amp;</type>
+          <defname>data</defname>
+        </param>
+        <briefdescription>
+<para>adds variable dataset to &apos;property_map_&apos; data member of <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds variable dataset to &apos;property_map_&apos; data member of <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> New much more memory efficient variable storage framework.</para>
+<para><simplesect kind="author"><para>SKM @data 4/4/2016</para>
+</simplesect>
+<simplesect kind="note"><para>NEW! </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="90" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="355" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aa1be86d1c82d8e397b8eb137128f0f61" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref></type>
+        <definition>PropertyData csmp::VSet&lt; dim &gt;::Data</definition>
+        <argsstring>(const char *s) const</argsstring>
+        <name>Data</name>
+        <qualifiedname>csmp::VSet::Data</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+<para>retrieves property data from <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> (if any) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Retrieves property data from <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> (if any)</para>
+<para><simplesect kind="author"><para>SKM @data 4/4/2016</para>
+</simplesect>
+<simplesect kind="note"><para>NEW! </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="93" column="19" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="398" bodyend="406"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a6b28f2f5355e3b2d15d88bb4ca6a1cbd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::ContainsFiniteVolumeIntegrationPointData</definition>
+        <argsstring>() const</argsstring>
+        <name>ContainsFiniteVolumeIntegrationPointData</name>
+        <qualifiedname>csmp::VSet::ContainsFiniteVolumeIntegrationPointData</qualifiedname>
+        <briefdescription>
+<para>if the property records contain FV data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="96" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="429" bodyend="439"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a5b71e9e3aac2a8fb04f80eb6ddde279d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; int32_t &gt;::const_iterator</type>
+        <definition>std::vector&lt; int32_t &gt;::const_iterator csmp::VSet&lt; dim &gt;::PmtrlBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>PmtrlBegin</name>
+        <qualifiedname>csmp::VSet::PmtrlBegin</qualifiedname>
+        <briefdescription>
+<para>const iterators for the material ID record (one for each element; none for face and interface objects) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="99" column="34" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="309" bodyend="310"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a8537f3c39c483ce713a55a66d122fdb3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; int32_t &gt;::const_iterator</type>
+        <definition>std::vector&lt; int32_t &gt;::const_iterator csmp::VSet&lt; dim &gt;::PmtrlEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>PmtrlEnd</name>
+        <qualifiedname>csmp::VSet::PmtrlEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="100" column="34" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="313" bodyend="314"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a40fa87e4d4bc20fd41f71e0b99984659" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::VSet&lt; dim &gt;::Pmtrl</definition>
+        <argsstring>(size_t elmt) const</argsstring>
+        <name>Pmtrl</name>
+        <qualifiedname>csmp::VSet::Pmtrl</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>elmt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="102" column="13" bodyfile="source/includes/integration/finite_elements/VSet.h" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a8668099934372aa8b1eb55f38830e914" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> &gt;::const_iterator</type>
+        <definition>std::map&lt; std::string, PropertyData &gt;::const_iterator csmp::VSet&lt; dim &gt;::PropertyValuesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>PropertyValuesBegin</name>
+        <qualifiedname>csmp::VSet::PropertyValuesBegin</qualifiedname>
+        <briefdescription>
+<para>const iterators for the propery collection </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Iterator to map of <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> records </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="105" column="31" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="413" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a6cb88b03576f3173d1191de606c8ebf0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> &gt;::const_iterator</type>
+        <definition>std::map&lt; std::string, PropertyData &gt;::const_iterator csmp::VSet&lt; dim &gt;::PropertyValuesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>PropertyValuesEnd</name>
+        <qualifiedname>csmp::VSet::PropertyValuesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Iterator to map of <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> records </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="106" column="31" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="422" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1ae15918ac1c6556022cddd32f63b30f91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::map&lt; std::string, <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> &gt;::iterator</type>
+        <definition>std::map&lt; std::string, PropertyData &gt;::iterator csmp::VSet&lt; dim &gt;::RemoveData</definition>
+        <argsstring>(const char *s)</argsstring>
+        <name>RemoveData</name>
+        <qualifiedname>csmp::VSet::RemoveData</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>To delete a dataset <simplesect kind="return"><para>iterator to next element after the deleted one in the property map </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="108" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="371" bodyend="383"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1ab216d43dfc58d8eea308f9af1928aba1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::OutputTo</definition>
+        <argsstring>(const char *bin_file, double time) const</argsstring>
+        <name>OutputTo</name>
+        <qualifiedname>csmp::VSet::OutputTo</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_file</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+<para>writes complete <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> to binary file with the given time stamp </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes the content of the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> to a binary data file (including property data. This output is ordered in the following way:</para>
+<para><orderedlist>
+<listitem><para>File header: char* s.</para>
+</listitem><listitem><para>Mesh connectivity: px, py, pz, plist, pfverts, bflags, bvals.</para>
+</listitem><listitem><para>Property data: scalars, vectors, tensors.</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The binary writing is done with the templatized set of functions declared in &apos;<ref refid="binary_read_write_8h" kindref="compound">binaryReadWrite.h</ref>&apos;. These can read and write all CSMP type of datasets. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="111" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="458" bodyend="531"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aebbdf15340e8f8f3bd6b29bfe21fbbdd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::InputFrom</definition>
+        <argsstring>(const char *bin_file, double &amp;time)</argsstring>
+        <name>InputFrom</name>
+        <qualifiedname>csmp::VSet::InputFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_file</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+<para>reads binary files written with <ref refid="classcsmp_1_1_v_set_1ab216d43dfc58d8eea308f9af1928aba1" kindref="member">OutputTo()</ref> and initialises the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> with it; the time stamp is returned in second argument </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Key method for recovery of a model from binary file. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="114" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="539" bodyend="543"/>
+        <references refid="classcsmp_1_1_v_set_1aebbdf15340e8f8f3bd6b29bfe21fbbdd" compoundref="_v_set_8cpp" startline="539" endline="543">csmp::VSet&lt; dim &gt;::InputFrom</references>
+        <referencedby refid="classcsmp_1_1_v_set_1aebbdf15340e8f8f3bd6b29bfe21fbbdd" compoundref="_v_set_8cpp" startline="539" endline="543">csmp::VSet&lt; dim &gt;::InputFrom</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1aa43d6b4cdbfa5752ee5873ffdac6bc75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::InputFrom</definition>
+        <argsstring>(const char *bin_file, double &amp;time, const std::set&lt; std::string &gt; &amp;subset_variables)</argsstring>
+        <name>InputFrom</name>
+        <qualifiedname>csmp::VSet::InputFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_file</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>const std::set&lt; std::string &gt; &amp;</type>
+          <declname>subset_variables</declname>
+        </param>
+        <briefdescription>
+<para>reads binary files written with <ref refid="classcsmp_1_1_v_set_1ab216d43dfc58d8eea308f9af1928aba1" kindref="member">OutputTo()</ref> and initialises the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> with it; the time stamp is returned in second argument; it can read only a subset of variables by using third argument </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="117" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a35e642227b0475434ac4de1f943b5b14" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::InputFromTextFile</definition>
+        <argsstring>(const char *file_dot_txt)</argsstring>
+        <name>InputFromTextFile</name>
+        <qualifiedname>csmp::VSet::InputFromTextFile</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>file_dot_txt</declname>
+          <defname>text_file</defname>
+        </param>
+        <briefdescription>
+<para>permits to initialise a <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> from a text file (see detailed DOxygen documentation for format) </para>
+        </briefdescription>
+        <detaileddescription>
+<para>reads -in polygonal dataset to internal <ref refid="classcsmp_1_1_v_data" kindref="compound">VData</ref> container</para>
+<para><xrefsect id="todo_1_todo000087"><xreftitle>Todo</xreftitle><xrefdescription><para>read &apos;pmtrl&apos; and property data as well</para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="120" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="749" bodyend="773"/>
+        <references refid="classcsmp_1_1_v_data_1a455aeb93544c98fc36baf6f628db4c07" compoundref="_v_data_8cpp" startline="1088" endline="1144">csmp::VData::CheckFix</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a2288211530bdce3c1d1d63258ab93bca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::ParallelOutputTo</definition>
+        <argsstring>(const char *bin_file, double time, size_t first_outerhalo) const</argsstring>
+        <name>ParallelOutputTo</name>
+        <qualifiedname>csmp::VSet::ParallelOutputTo</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_file</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>first_outerhalo</declname>
+        </param>
+        <briefdescription>
+<para>output <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> to binary file which has partitions and halos defining their overlap </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes the content of the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> to a binary data file (including property data. This output is ordered in the following way:</para>
+<para><orderedlist>
+<listitem><para>File header: char* s.</para>
+</listitem><listitem><para>Mesh connectivity: px, py, pz, plist, pfverts, bflags, bvals.</para>
+</listitem><listitem><para>Property data: scalars, vectors, tensors.</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The binary writing is done with the templatized set of functions declared in &apos;<ref refid="binary_read_write_8h" kindref="compound">binaryReadWrite.h</ref>&apos;. These can read and write all CSMP type of datasets.</para>
+<para>TODO: <xrefsect id="todo_1_todo000085"><xreftitle>Todo</xreftitle><xrefdescription><para>Refactor to work with <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> based variable storage</para>
+</xrefdescription></xrefsect></para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="123" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="659" bodyend="694"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a56928e1c755e628dcd551077a69704d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::VSet&lt; dim &gt;::ParallelInputFrom</definition>
+        <argsstring>(const char *bin_file, double &amp;time, size_t &amp;first_outerhalo)</argsstring>
+        <name>ParallelInputFrom</name>
+        <qualifiedname>csmp::VSet::ParallelInputFrom</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>bin_file</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>first_outerhalo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>TODO: <xrefsect id="todo_1_todo000086"><xreftitle>Todo</xreftitle><xrefdescription><para>Refactor to work with <ref refid="classcsmp_1_1_property_data" kindref="compound">PropertyData</ref> based variable storage </para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="124" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="701" bodyend="738"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a9c3b964f898e7cb427cd31ac295b9d85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::ReduceTo</definition>
+        <argsstring>(const std::map&lt; size_t, size_t &gt; &amp;old_and_new_consecutive_element_ids)</argsstring>
+        <name>ReduceTo</name>
+        <qualifiedname>csmp::VSet::ReduceTo</qualifiedname>
+        <param>
+          <type>const std::map&lt; size_t, size_t &gt; &amp;</type>
+          <declname>old_and_new_consecutive_element_ids</declname>
+        </param>
+        <briefdescription>
+<para>selects specific elements from the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> that shall be retained while all others are deleted (including nodes), returns new range </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Reduces the number of elements in the &apos;vset&apos; to those identified by their ID number (1...n) in the supplied set. Then the correspond element material property data containers are also reduced.</para>
+<para>@parameter o_n_elmt_ids is a mapping that allows to retrieve the new element IDs by their old ones.</para>
+<para><simplesect kind="note"><para>revised by SKM 4/12/20 - to include properties placed on the node as well and warning user about errors for properties with any other placement. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="127" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="900" bodyend="961"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a41931ddf441b74f8c54566999adfa61d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::UpdatePropertyStorage</definition>
+        <argsstring>()</argsstring>
+        <name>UpdatePropertyStorage</name>
+        <qualifiedname>csmp::VSet::UpdatePropertyStorage</qualifiedname>
+        <briefdescription>
+<para>updates pmtrl and property storage to size changes in <ref refid="classcsmp_1_1_v_data" kindref="compound">VData</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>updates pmtrl and property storage to size changes in <ref refid="classcsmp_1_1_v_data" kindref="compound">VData</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="130" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="859" bodyend="883"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1ac1e76ff26b8868ea0487c854fa829af3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::Erase</definition>
+        <argsstring>()</argsstring>
+        <name>Erase</name>
+        <qualifiedname>csmp::VSet::Erase</qualifiedname>
+        <briefdescription>
+<para>deletes all content of the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Frees up all the storage in the VSet&lt;dim&gt;; all contained data are deleted.</para>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>Use method to economize on memory usage in computations. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="133" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="974" bodyend="981"/>
+        <references refid="classcsmp_1_1_v_data_1ab682ddf35a3fb622b898a3d69db0d048" compoundref="_v_data_8cpp" startline="1868" endline="1880">csmp::VData::Erase</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a4a4aac3e7fc919ce099dc79ca55da251" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t csmp::VSet&lt; dim &gt;::MeshDimension</definition>
+        <argsstring>(bool check_coordinates=false) const</argsstring>
+        <name>MeshDimension</name>
+        <qualifiedname>csmp::VSet::MeshDimension</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>check_coordinates</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>uses the node coordinates to infer the model dimension: if Z-range=zero, dim=2, if Y-range=2, dim=1, else dim=3 </para>
+        </briefdescription>
+        <detaileddescription>
+<para>uses the node coordinates to infer the model dimension: if Z-range=zero, dim=2, if Y-range=2, dim=1, else dim=3 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="136" column="13" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="989" bodyend="1004"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a3e761eabf0f84f3192c1ff9d55062886" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::Out</definition>
+        <argsstring>(bool data_as_well=true) const</argsstring>
+        <name>Out</name>
+        <qualifiedname>csmp::VSet::Out</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>data_as_well</declname>
+          <defname>print_data_as_well</defname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>prints the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> to the console </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Writes <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> to text file.</para>
+<para><xrefsect id="todo_1_todo000088"><xreftitle>Todo</xreftitle><xrefdescription><para>write non-scalar property data as well</para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="139" column="11" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="785" bodyend="807"/>
+        <references refid="classcsmp_1_1_v_data_1a10bc32dde8add16280605edd9c3e254a" compoundref="_v_data_8cpp" startline="1634" endline="1733">csmp::VData::Out</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_1a873b43f136a1e9d69d842a9c1ce57697" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSet&lt; dim &gt;::OutCPP17</definition>
+        <argsstring>(const char *cpp_file) const</argsstring>
+        <name>OutCPP17</name>
+        <qualifiedname>csmp::VSet::OutCPP17</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>cpp_file</declname>
+        </param>
+        <briefdescription>
+<para>writes C++17 code that reproduces a hardwired version of the current <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSet.h" line="142" column="10" bodyfile="source/modules/integration/finite_elements/VSet.cpp" bodystart="817" bodyend="848"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Container for polygonal data and associated properties implemented on the basis of NCSA (Urbana, Champagne, Illinois, USA) <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> that forms part of their HDF data file storage. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Stephan K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>1996 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::VData</label>
+        <link refid="classcsmp_1_1_v_data"/>
+      </node>
+      <node id="3">
+        <label>csmp::VSet&lt; 3U &gt;</label>
+        <link refid="classcsmp_1_1_v_set"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; 3U &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::VSet&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_v_set"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>csmp::VData</label>
+        <link refid="classcsmp_1_1_v_data"/>
+      </node>
+      <node id="1">
+        <label>csmp::VSet&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_v_set"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/VSet.h" line="21" column="1" bodyfile="source/includes/integration/finite_elements/VSet.h" bodystart="21" bodyend="151"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_v_set_1af4cf0571e7b6cb5853771594ed48cca9" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddBFlags</name></member>
+      <member refid="classcsmp_1_1_v_set_1a2fd0d4caf092b150c100cbbf744c5ea8" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddBREP_Flags</name></member>
+      <member refid="classcsmp_1_1_v_set_1afaf25c1d237ed5e98f5d6f81e2ae5aec" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddData</name></member>
+      <member refid="classcsmp_1_1_v_data_1ae8b41de9a51d2710a622bc7db190e214" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddElementTypes</name></member>
+      <member refid="classcsmp_1_1_v_data_1a734f2d8ec3c636e2ae93e4c972c14824" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddElementTypes</name></member>
+      <member refid="classcsmp_1_1_v_data_1a6f5a4218a0142286f265615ab579dcdc" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddNodeManifolds</name></member>
+      <member refid="classcsmp_1_1_v_set_1affbb39c13eaf1e1fe8d4d5f93284ca65" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddPfverts</name></member>
+      <member refid="classcsmp_1_1_v_set_1aac5bb591bbe366c90951bfbd3495a3b1" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddPfverts</name></member>
+      <member refid="classcsmp_1_1_v_set_1aab1a113f6c7f3fa64291df8c6c534105" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddPlist</name></member>
+      <member refid="classcsmp_1_1_v_set_1aa36e481a5edbe8ce0100ad7dcbeb30c3" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddPlist</name></member>
+      <member refid="classcsmp_1_1_v_set_1a4328a7668a5b30c0e65cc77c49cd70ad" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddPmanifold</name></member>
+      <member refid="classcsmp_1_1_v_set_1aea58c55699c0081c1ca7e1f0ec1467dd" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddPmtrl</name></member>
+      <member refid="classcsmp_1_1_v_set_1acccb3188c54e7bb89ece4da5437a3597" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>AddXYZ</name></member>
+      <member refid="classcsmp_1_1_v_data_1a19541640aedc5ff62661bd0b7af1a7f1" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>AngleBetweenLineElements2D</name></member>
+      <member refid="classcsmp_1_1_v_data_1a78220ddaa9a72a61af69964ee425d05e" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>AngleBetweenLineElements3D</name></member>
+      <member refid="classcsmp_1_1_v_data_1af1977be81364d2e40ced9b0ad206293d" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>AngleBetweenSurfaceElements3D</name></member>
+      <member refid="classcsmp_1_1_v_data_1aa96f72ece0a20c4203ff116e2cebb508" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BFlag</name></member>
+      <member refid="classcsmp_1_1_v_data_1accb7e2566bf65c1e78f0133adfc8def7" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BFlag</name></member>
+      <member refid="classcsmp_1_1_v_data_1a81e8712aad75b89e5206a1a5037cea92" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BFlags</name></member>
+      <member refid="classcsmp_1_1_v_data_1ae3b0426fbf6d9b4b68ed85bea1fa4627" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BFlagsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a150cc5c2b4bbf81cc5d035d87c0b4329" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BFlagsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1aa18bbb49a2efac371f914c17b9924d8c" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BFlagsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a41ac395e8cfea56737ed6df6e4d3607a" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BFlagsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a0e80f89df663998272b1b51bd445e279" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BoundaryFlag</name></member>
+      <member refid="classcsmp_1_1_v_data_1a7e668095f6f35ca4fd47976be563ea4e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BREP_Flag</name></member>
+      <member refid="classcsmp_1_1_v_data_1a49014f18b39f2edf7fffd5ded12a9cc0" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BREP_Flag</name></member>
+      <member refid="classcsmp_1_1_v_data_1af6d5b90ee018214ca3139f5f03700e21" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BREP_FlagsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1ac9c5b6b3cc4b919d0d349cb5d504bf00" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BREP_FlagsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1aabee63c543cde36e1ece7e1bf17fdc18" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BREP_FlagsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a92786e6e7d89d70fe72128355f80f691" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>BREP_FlagsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1af6aa847088b79e836b903cee1eb8df37" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Cells</name></member>
+      <member refid="classcsmp_1_1_v_data_1a455aeb93544c98fc36baf6f628db4c07" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>CheckFix</name></member>
+      <member refid="classcsmp_1_1_v_set_1a6b28f2f5355e3b2d15d88bb4ca6a1cbd" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ContainsFiniteVolumeIntegrationPointData</name></member>
+      <member refid="classcsmp_1_1_v_data_1aba224e8cb623ef2d4b706d3473d2f70e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>CoordinateRange</name></member>
+      <member refid="classcsmp_1_1_v_data_1a190d2221d876aeeda273af6c0dc85402" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>CreateConsistentLineElementOrientations2D</name></member>
+      <member refid="classcsmp_1_1_v_set_1aa1be86d1c82d8e397b8eb137128f0f61" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Data</name></member>
+      <member refid="classcsmp_1_1_v_set_1aa44de0912a218fe42f8c70e9fc0cb8f8" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>DataEmpty</name></member>
+      <member refid="classcsmp_1_1_v_data_1aa06324c260fe35e8a492bab10135e8d9" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>DetectAndEliminateDuplicateCells</name></member>
+      <member refid="classcsmp_1_1_v_data_1a130f868561474dd308750c5b1b73e4e4" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>DetectAndEliminateOrphanNodes</name></member>
+      <member refid="classcsmp_1_1_v_data_1a1738519f0a3d6104f9239598800b936f" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ElementNeighbors</name></member>
+      <member refid="classcsmp_1_1_v_data_1ac3fc50ff1c5445567e9b91bd40c8d872" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Elements</name></member>
+      <member refid="classcsmp_1_1_v_data_1a4fc303b5ec818e2ec5970f3739e34786" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_v_data_1a1be7b113ed6a74b4eacded63b4726a53" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_v_data_1a73a77cd86b952db68850667456588c17" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ElementTypes</name></member>
+      <member refid="classcsmp_1_1_v_data_1a85de5119e5b52aaaf7eec0ca3c2f701a" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ElementTypes</name></member>
+      <member refid="classcsmp_1_1_v_set_1ac1e76ff26b8868ea0487c854fa829af3" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Erase</name></member>
+      <member refid="classcsmp_1_1_v_data_1a32818b04bd9be0b469ea0459424fbf52" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>EstablishElementConnectivity2D</name></member>
+      <member refid="classcsmp_1_1_v_data_1a0b188c1c5071424637d016df39f4409e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>EstablishElementConnectivity3D</name></member>
+      <member refid="classcsmp_1_1_v_data_1a6b65d7c2be9a7f90773b7fdde43cfe6b" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>EstablishNodeNeighborConnectivity</name></member>
+      <member refid="classcsmp_1_1_v_data_1ab206ce2bccedee112a4cbbc42e7169e1" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>EstablishZeroBasedNumbering</name></member>
+      <member refid="classcsmp_1_1_v_data_1a6346e145cb570f0f9d016555d7221207" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_v_data_1aeefbee5ba35b5eff9ab7c17751404c08" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>HybridElementTypeMesh</name></member>
+      <member refid="classcsmp_1_1_v_data_1a6dbefa05a25c4f468c921a8a3cc55874" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>HybridElementTypeMesh</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad4d69d587254f954389ff09941200d83" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>InBinary</name></member>
+      <member refid="classcsmp_1_1_v_data_1a349fc8561f753782dda1f2468e48996a" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>InitialiseNodeTopologyIdentifiers</name></member>
+      <member refid="classcsmp_1_1_v_set_1aebbdf15340e8f8f3bd6b29bfe21fbbdd" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>InputFrom</name></member>
+      <member refid="classcsmp_1_1_v_set_1aa43d6b4cdbfa5752ee5873ffdac6bc75" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>InputFrom</name></member>
+      <member refid="classcsmp_1_1_v_set_1a35e642227b0475434ac4de1f943b5b14" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>InputFromTextFile</name></member>
+      <member refid="classcsmp_1_1_v_data_1aad8b568226db8990910b0ed7961372f8" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Interfaces</name></member>
+      <member refid="classcsmp_1_1_v_data_1a61738dbcfd728e6680c82092f7f824ec" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>InText</name></member>
+      <member refid="classcsmp_1_1_v_data_1a2a0ee730d7fa7a3bc0496607356cb7a2" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>IsoparametricElementMesh</name></member>
+      <member refid="classcsmp_1_1_v_data_1a4295d4f3feb4044e03e204e5e6f6b962" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>manifoldContainer</name></member>
+      <member refid="classcsmp_1_1_v_set_1a4a4aac3e7fc919ce099dc79ca55da251" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>MeshDimension</name></member>
+      <member refid="classcsmp_1_1_v_data_1ac5b78350e8672303e6dd3dd65f2359fc" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>NodeManifolds</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad956e29a975907120ca61bd3e048927a" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>operator==</name></member>
+      <member refid="classcsmp_1_1_v_data_1a551323ed5f5844d7ed2059f10b46b0da" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>OrderOfFiniteElementInterpolationFunctions</name></member>
+      <member refid="classcsmp_1_1_v_set_1a3e761eabf0f84f3192c1ff9d55062886" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_v_data_1a10bc32dde8add16280605edd9c3e254a" prot="public" virt="non-virtual" ambiguityscope="csmp::VData::"><scope>csmp::VSet</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_v_data_1a93b866fd71bd8dfb564c30f46cd49400" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>OutASCII</name></member>
+      <member refid="classcsmp_1_1_v_data_1a7dd535bc7dec0f98d05dcd0dcdafdcfa" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>OutBinary</name></member>
+      <member refid="classcsmp_1_1_v_set_1a873b43f136a1e9d69d842a9c1ce57697" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>OutCPP17</name></member>
+      <member refid="classcsmp_1_1_v_data_1a38a760389e3fcc1ef805123211eb0197" prot="public" virt="non-virtual" ambiguityscope="csmp::VData::"><scope>csmp::VSet</scope><name>OutCPP17</name></member>
+      <member refid="classcsmp_1_1_v_set_1ab216d43dfc58d8eea308f9af1928aba1" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>OutputTo</name></member>
+      <member refid="classcsmp_1_1_v_data_1a7006bd71c86b36c7234f5e72109cb82d" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>P</name></member>
+      <member refid="classcsmp_1_1_v_data_1a51a1a4337efadf403d2f3b5c8c9739a1" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>P</name></member>
+      <member refid="classcsmp_1_1_v_set_1a56928e1c755e628dcd551077a69704d9" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ParallelInputFrom</name></member>
+      <member refid="classcsmp_1_1_v_set_1a2288211530bdce3c1d1d63258ab93bca" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ParallelOutputTo</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad81aac781b2cbc0d046e1e594813ab9b" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PelmtBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a10533704bb7a014bc86e6a445085c32b" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PelmtEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a2b736098f987e0d04edf6e5ee6f5d267" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PelmtFacesBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a85ce473b491618c3f71a6aee70cc1f0b" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PelmtInterfacesBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1abbf321e598ad073877c016678155d5e5" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Pfvert</name></member>
+      <member refid="classcsmp_1_1_v_data_1a7002fd0286e0ff1b480c043b725240e0" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Pfvert</name></member>
+      <member refid="classcsmp_1_1_v_data_1ab7e443c1cdc3f649cbedfc8f0eab99dd" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad4ebce17db67a4f179eb46d595f43c1c" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1aef6a4a9182a5e135d6c13f6f1737fe32" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a35e1bf0cc8eae85d4aa999256b13d7e2" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1aaf3729e49d375efa5208c7aefe2b9c95" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1aacd96b92b70aa0736e700c15929bba87" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1adbd10014279bbc056413aaf06eb54229" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a4a048af8ccc1a0bc9d7aeffeb597e079" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a74b0b473987d7f43e8da1860375332a6" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsFacesBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1ac7f0e66607a1d05e5678f75776fd528b" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsInterfaceBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a00ae6181b33be23cba1ecac0671851fc" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PfvertsSize</name></member>
+      <member refid="classcsmp_1_1_v_data_1a73422b5ca3073b9f64b6c9161b8b12f6" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Plist</name></member>
+      <member refid="classcsmp_1_1_v_data_1a4245fc8d4c644a74d448409be40198fb" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Plist</name></member>
+      <member refid="classcsmp_1_1_v_data_1a6205f23fd9a88aaeadea8a972792daf9" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a3277cc742918549edbdf41b8db165a2e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a9667aa86ec5e53034a1d3a2a4de11e27" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1ac081af20702a6d14a3a6139f21b46737" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a96ff5407b80e7f825a2baa44002cfefe" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistElmtsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a7ce96db5303d1b2489cb8a5f35a8d0a5" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistElmtsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1aad244a4d6b51a46d87ad5d1a4adf9826" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a01269007a366a5576a7c7a12bea2076e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a5b35ababb9873a31215311a48d6f262d" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1af5a0d92826ea9d8e2e2f9cf8d46f55e5" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a7bd21bbae04242a7fd6f306b790ce20d" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistFacesBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1ae57834b7349ae0a8e464bf298598ce9e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistFacesEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1aed3708a4a19a67ba9cb093a3703705e5" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistInterFacesBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1a2d3be20d98fef4fa96bd5c857b476438" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistInterFacesEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1abcd2c938c616d16a5258dd5bccdf51c8" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PlistSize</name></member>
+      <member refid="classcsmp_1_1_v_data_1a24f56a0291148073a4dd99365de94c8e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PmanifoldsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1abd9a59a8ab15c611887b5115164ea848" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PmanifoldsBegin</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad2e654185f084242b198b19e21602c01" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PmanifoldsEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a851ec43d71916b2c9f3a4230daed7308" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PmanifoldsEnd</name></member>
+      <member refid="classcsmp_1_1_v_set_1a40fa87e4d4bc20fd41f71e0b99984659" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Pmtrl</name></member>
+      <member refid="classcsmp_1_1_v_set_1acdd960f28be068d5d81a2086e76fa6b7" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>pmtrl_</name></member>
+      <member refid="classcsmp_1_1_v_set_1a5b71e9e3aac2a8fb04f80eb6ddde279d" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PmtrlBegin</name></member>
+      <member refid="classcsmp_1_1_v_set_1a8537f3c39c483ce713a55a66d122fdb3" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PmtrlEnd</name></member>
+      <member refid="classcsmp_1_1_v_set_1af4f607958e69dcabb4df01dcd0c20230" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>property_map_</name></member>
+      <member refid="classcsmp_1_1_v_set_1a8668099934372aa8b1eb55f38830e914" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PropertyValuesBegin</name></member>
+      <member refid="classcsmp_1_1_v_set_1a6cb88b03576f3173d1191de606c8ebf0" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>PropertyValuesEnd</name></member>
+      <member refid="classcsmp_1_1_v_data_1a26b90a1b66992810d86242fdda17af11" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Px</name></member>
+      <member refid="classcsmp_1_1_v_data_1a510ba7508e529ff481ec97b126d4e9e7" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Px</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad79b5ec530f199ca62afb814b7e1bb76" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Py</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad601eaf27ede277be86425013d37e1a7" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Py</name></member>
+      <member refid="classcsmp_1_1_v_data_1a04876d4eed272b70f4dde600780a62c2" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Pz</name></member>
+      <member refid="classcsmp_1_1_v_data_1a4c247f1b1e26f8c7683c2ca61a11ae12" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Pz</name></member>
+      <member refid="classcsmp_1_1_v_set_1a9c3b964f898e7cb427cd31ac295b9d85" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ReduceTo</name></member>
+      <member refid="classcsmp_1_1_v_data_1a24afd3ac14d8f51d66a95f1c182da141" prot="protected" virt="non-virtual" ambiguityscope="csmp::VData::"><scope>csmp::VSet</scope><name>ReduceTo</name></member>
+      <member refid="classcsmp_1_1_v_data_1ad3c29afadfbae2275fe284304380f5c4" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>RemeshCornerSpanningTetrahedra</name></member>
+      <member refid="classcsmp_1_1_v_data_1adf14217e68f8c3f2f21f5b39fb853766" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>RemoveBflags</name></member>
+      <member refid="classcsmp_1_1_v_set_1ae15918ac1c6556022cddd32f63b30f91" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>RemoveData</name></member>
+      <member refid="classcsmp_1_1_v_data_1ae17f48026469d7f3c586a9f033bf5231" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>RemovePfverts</name></member>
+      <member refid="classcsmp_1_1_v_data_1a81d3a8ec01ee4c71f3b60e4b2a752a22" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>RenumberElementsCounterClockwise2D</name></member>
+      <member refid="classcsmp_1_1_v_set_1ab985b7a8a99a9c5202398e14e124bb1b" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_v_set_1a9a7936e4b01781de7cd84b60682a7532" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_v_data_1aa6a7afa105430fb89eee07213c1f0a73" prot="public" virt="non-virtual" ambiguityscope="csmp::VData::"><scope>csmp::VSet</scope><name>Resize</name></member>
+      <member refid="classcsmp_1_1_v_data_1aa12cc17feb932518d0dbc2db9d27e3b1" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizeBFlags</name></member>
+      <member refid="classcsmp_1_1_v_data_1a47959a5eb202606453adff6041e08c31" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizeBREP_Flags</name></member>
+      <member refid="classcsmp_1_1_v_data_1af3003acea7e264db7207aa01c6fceaae" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizeElementNeighbors</name></member>
+      <member refid="classcsmp_1_1_v_data_1a612243c97f254fa2ef5859d77478580c" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizeElementNodes</name></member>
+      <member refid="classcsmp_1_1_v_data_1a1806d2fbe8b80da702d3d373c2d7e51c" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizeElementTypes</name></member>
+      <member refid="classcsmp_1_1_v_data_1a49d54c31881e4095fffa5092691a5351" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizeNodes</name></member>
+      <member refid="classcsmp_1_1_v_data_1a721d565094d53f0d104d6f2af335a307" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizePfverts</name></member>
+      <member refid="classcsmp_1_1_v_data_1a9667602c7e9b0805f1220ccffe98880e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizePfverts</name></member>
+      <member refid="classcsmp_1_1_v_data_1ae093fa473d9c5b7e9cb3594a03d7fd8f" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizePfverts</name></member>
+      <member refid="classcsmp_1_1_v_data_1af011a3ad7b84c804ad73915b3d91a4a9" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizePlist</name></member>
+      <member refid="classcsmp_1_1_v_data_1a42efb39e767bcdb1c27de012a5864210" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizePlist</name></member>
+      <member refid="classcsmp_1_1_v_data_1a742918879d39e8130af73df6a5791aef" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ResizePlist</name></member>
+      <member refid="classcsmp_1_1_v_data_1a523b13143104dd2b68cb2f0a57d056c2" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>ScaleCoordinateToRange</name></member>
+      <member refid="classcsmp_1_1_v_data_1a466d128ce771a317fe02b4bd49e60549" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>SingleElementType</name></member>
+      <member refid="classcsmp_1_1_v_data_1a52244b653843639a646b1545c91c9f5c" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>SpatialDimension</name></member>
+      <member refid="classcsmp_1_1_v_data_1ae10c93c2be7161b03910a7163cc11109" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>SwitchCornerTriangles2D</name></member>
+      <member refid="classcsmp_1_1_v_set_1a41931ddf441b74f8c54566999adfa61d" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>UpdatePropertyStorage</name></member>
+      <member refid="classcsmp_1_1_v_data_1aa671d43d9a394cb97787580ca3395c5e" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>VData</name></member>
+      <member refid="classcsmp_1_1_v_data_1a21603cb89ccffdfb46ed09f12340f5b3" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>VData</name></member>
+      <member refid="classcsmp_1_1_v_data_1a2fc3303a52e1d21e20d84e45228b6d0d" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>VData</name></member>
+      <member refid="classcsmp_1_1_v_data_1a177fcbaba5f9e18ec90f3f4f0d325145" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Vertices</name></member>
+      <member refid="classcsmp_1_1_v_set_1a400370ba5b6ab7af15a31222c20d10cc" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>VSet</name></member>
+      <member refid="classcsmp_1_1_v_set_1a703fc687a8f7cc06f79581f9ad20e7e7" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>VSet</name></member>
+      <member refid="classcsmp_1_1_v_set_1aa6b0485e4efb2e124ccb94b384ffc902" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>VSet</name></member>
+      <member refid="classcsmp_1_1_v_set_1afbb45b2ddbbc68194e590b96b4238bbf" prot="protected" virt="non-virtual"><scope>csmp::VSet</scope><name>VSet_Test</name></member>
+      <member refid="classcsmp_1_1_v_data_1ae2c82d430dfa59388a724463d25d1237" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>WithNeighbourConnectivity</name></member>
+      <member refid="classcsmp_1_1_v_data_1af21d7b1c6425e3946ecfdec6602c98e8" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>X_Range</name></member>
+      <member refid="classcsmp_1_1_v_data_1a417e0e7061887e463a7a6f92b00ffe15" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Y_Range</name></member>
+      <member refid="classcsmp_1_1_v_data_1a0601a516f6f889a1f0319cfa07c13faf" prot="public" virt="non-virtual"><scope>csmp::VSet</scope><name>Z_Range</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

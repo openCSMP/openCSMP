@@ -1,0 +1,92 @@
+.TH "csmp::StencilProcessorPHX< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::StencilProcessorPHX< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <StencilProcessorPHX\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStencilProcessorPHX\fP ()"
+.br
+.ti -1c
+.RI "void \fBDetermineFluxOutWithGravity\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBDenseMatrix\fP< DM_MIN > &upwind, std::vector< std::vector< double > > &facet_flux, std::vector< double > &flux_out, \fBcsmp::Index\fP rhs_key, \fBcsmp::Index\fP rho_key, \fBcsmp::Index\fP k_key)"
+.br
+.ti -1c
+.RI "void \fBDetermineFluxOutWithoutGravity\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, \fBDenseMatrix\fP< DM_MIN > &upwind, std::vector< std::vector< double > > &facet_flux, std::vector< double > &flux_out, \fBcsmp::Index\fP rhs_key)"
+.br
+.ti -1c
+.RI "void \fBDetermineFluxIn\fP (const \fBElement\fP< dim > &e, std::vector< std::vector< double > > &facet_flux, std::vector< double > &flux_in, std::vector< double > &mass_balance)"
+.br
+.ti -1c
+.RI "void \fBDetermineFluxOut\fP (const \fBFV_Parameter\fP &param, const \fBElement\fP< dim > &e, std::vector< std::vector< double > > &facet_flux, std::vector< double > &flux_out, \fBcsmp::Index\fP rhs_key)"
+.br
+.ti -1c
+.RI "\fB~StencilProcessorPHX\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::StencilProcessorPHX< dim >"Stencil processor for finitive volume calculations within CVFEM scheme (Weis et al\&., Geofluids, 2014)\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+Philipp Weis, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+philipp.weis@erdw.ethz.ch
+
+.PP
+@changes changes Latest Changes
+.SH "Motivation"
+.PP
+Specialized stencil processor for PHX scheme\&.
+.SH "Usage"
+.PP
+To be used within the CVFEM scheme (Weis et al\&., Geofluids, 2014)\&.
+
+.PP
+.PP
+.nf
+Performs finite volume fluxes across facets\&.
+.fi
+.PP
+.SH "Dependencies"
+.PP
+The functions are tailored for use in \fBExplicitFiniteVolumeTransportPHX\fP
+.SH "Known issues"
+.PP
+.SH "Testing"
+.PP
+testing was done in the period before publication in 2014\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::StencilProcessorPHX\fP< dim >::StencilProcessorPHX ()"
+custom destructor 
+.SS "template<uint32_t dim> \fBcsmp::StencilProcessorPHX\fP< dim >::~\fBStencilProcessorPHX\fP ()"
+default destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessorPHX\fP< dim >::DetermineFluxIn (const \fBElement\fP< dim > & e, std::vector< std::vector< double > > & facet_flux, std::vector< double > & flux_in, std::vector< double > & mass_balance)"
+Calculating fluxes into the control volumes 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessorPHX\fP< dim >::DetermineFluxOut (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e, std::vector< std::vector< double > > & facet_flux, std::vector< double > & flux_out, \fBcsmp::Index\fP rhs_key)"
+Calculating fluxes out of the control volumes without pre-defined upwind nodes 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessorPHX\fP< dim >::DetermineFluxOutWithGravity (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e, \fBDenseMatrix\fP< DM_MIN > & upwind, std::vector< std::vector< double > > & facet_flux, std::vector< double > & flux_out, \fBcsmp::Index\fP rhs_key, \fBcsmp::Index\fP rho_key, \fBcsmp::Index\fP k_key)"
+Calculating fluxes out of the control volumes, including gravity 
+.SS "template<uint32_t dim> void \fBcsmp::StencilProcessorPHX\fP< dim >::DetermineFluxOutWithoutGravity (const \fBFV_Parameter\fP & param, const \fBElement\fP< dim > & e, \fBDenseMatrix\fP< DM_MIN > & upwind, std::vector< std::vector< double > > & facet_flux, std::vector< double > & flux_out, \fBcsmp::Index\fP rhs_key)"
+Calculating fluxes out of the control volumes without a gravity component 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

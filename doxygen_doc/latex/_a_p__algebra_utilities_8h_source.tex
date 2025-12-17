@@ -1,0 +1,218 @@
+\doxysection{AP\+\_\+algebra\+Utilities.\+h}
+\hypertarget{_a_p__algebra_utilities_8h_source}{}\label{_a_p__algebra_utilities_8h_source}\index{source/includes/math/AP\_algebraUtilities.h@{source/includes/math/AP\_algebraUtilities.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{AP\_ALGEBRA\_UTILITIES\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{AP\_ALGEBRA\_UTILITIES\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_finite_volume_stencil_8h}{"{}FiniteVolumeStencil.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{comment}{/**\ Calculates\ the\ dot\ product\ between\ two\ vectors.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ @section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ The\ two\ vectors\ to\ be\ computed.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ @return\ The\ result\ value\ of\ the\ dot\ product.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ @section\ implementation\ Implementation}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ The\ std::inner\_product\ between\ the\ two\ vectors\ is\ returned.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ @section\ application\ Application}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ This\ may\ be\ used\ to\ calculate\ the\ projection\ of\ one\ vector\ onto\ another,\ as}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ well\ as\ one\ of\ the\ step\ in\ the\ calculation\ of\ the\ vector\ norm.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_ae8d81738b2e5e6ea6f7e13822f11c11f}{dotProduct}}(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ vec1,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ vec2)}
+\DoxyCodeLine{00028\ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ assert(vec1.size()\ ==\ vec2.size());}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordflow}{return}\ std::inner\_product(vec1.begin(),\ vec1.end(),\ vec2.begin(),\ 0.);}
+\DoxyCodeLine{00031\ \ \ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \mbox{\hyperlink{namespacecsmp_ad33d443ce66f5e1d0328f68373f95e46}{std}}::\mbox{\hyperlink{namespacecsmp_ad33d443ce66f5e1d0328f68373f95e46}{vector}}<\textcolor{keywordtype}{double}>\ \mbox{\hyperlink{namespacecsmp_ad33d443ce66f5e1d0328f68373f95e46}{crossProduct}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \mbox{\hyperlink{namespacecsmp_a1e28de8c6044a6c44b5256d1bd8ef958}{std}}::\mbox{\hyperlink{namespacecsmp_a1e28de8c6044a6c44b5256d1bd8ef958}{vector}}<\textcolor{keywordtype}{double}>\ \mbox{\hyperlink{namespacecsmp_a1e28de8c6044a6c44b5256d1bd8ef958}{crossProduct3by3}}(\textcolor{comment}{/*1st\ std::vector*/}\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*2nd\ std::vector*/}\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\&);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00044\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a56c4b6f875098ffc4ffde92507f0f66b}{areaCenterOfMass}}(\textcolor{keyword}{const}\ std::vector<Point<dim>\ >\&,\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ );}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{bool}\ normalOfPolygon(\textcolor{keyword}{const}\ std::vector<\ Point<3U>\ >\&\ vecPolygon,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ vecNormalAt,\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ vecNormal);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00050\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a84475261e7279b15bc7c28a37524fa9e}{areaOfPolygon}}(\textcolor{keyword}{const}\ std::vector<\ Point<dim>\ >\&\ vecPolygon,\ \textcolor{keyword}{const}\ size\_t\&\ iNrOfFacetPoints,\ \textcolor{keywordtype}{double}\ \&\ fArea);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00053\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a585b4ae594df629002f27488f1935614}{localSurfaceNormal}}(\textcolor{keyword}{const}\ std::vector<\ Point<\ dim>\ >\&\ vecPoints,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ vecNormalAt,\ \textcolor{keyword}{const}\ size\_t\&\ iLevelOfRefinement,\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ vecNormal);}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00056\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_ab5b99883bd8a1ce8a2b779a2f3a4cfe3}{intersection}}(\textcolor{comment}{/*1st\ line*/}\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<\ dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<\ dim>\&,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*2nd\ line*/}\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<\ dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<\ dim>\&,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<\ dim>\&);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_ad0fddfb18d0411cad3b2b251293f98c8}{distanceBetweenPoints}}(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&,\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \textcolor{comment}{/**\ Calculates\ the\ norm\ of\ a\ given\ vector.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ @section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ The\ vector\ to\ be\ normed.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ @return\ The\ normed\ vector.\ However,\ the\ normed\ vector\ is\ returned\ in\ the\ same\ input}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ variable,\ which\ is\ passed\ by\ reference.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ @section\ implementation\ Implementation}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ Calculates\ the\ square\ root\ of\ the\ dot\ product\ of\ the\ vector\ by\ itself.}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ @section\ application\ Application}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ The\ main\ objective\ is\ to\ calculate\ the\ length\ /\ norm\ of\ a\ given\ vector\ in}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ order\ to\ evaluate\ its\ magnitude.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00082\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp_ad9503fcda6bd2a50671d68559f5dc98b}{normOfVector}}(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ vector1)}
+\DoxyCodeLine{00083\ \ \ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordflow}{return}\ std::sqrt(dotProduct(vector1,\ vector1));}
+\DoxyCodeLine{00085\ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ Normalizes\ the\ vector\ using\ a\ Euclidean\ norm,\ thus\ dividing\ each\ term\ of}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ the\ vector\ by\ the\ total\ length\ of\ the\ vector.}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ @section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ @param\ vectorToNormalize\ The\ vector\ to\ be\ normalized.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ @section\ implementation\ Implementation}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ At\ first\ the\ norm\ of\ the\ vector\ is\ calculated,\ then\ each\ component\ of\ the}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ vector\ is\ divided\ by\ this\ quantity.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ @section\ application\ Application}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ This\ method\ is\ used\ to\ make\ the\ input\ vector\ a\ unitary\ vector,\ thus\ to\ make}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ its\ length\ equal\ to\ one,\ preserving\ its\ original\ direction\ and\ orientation.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ @note\ SKM\ -\/\ replaced\ -\/\ std::bind2nd(std::multiplies<double>(),\ fNorm\ -\/\ by\ lambda\ function}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00111\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a93c1e031498b987ba2a0f26fed468f4f}{euclideanNormalize}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\textcolor{keywordtype}{double}>\&\ \mbox{\hyperlink{namespacecsmp}{vectorToNormalize}}\ )}
+\DoxyCodeLine{00112\ \ \ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp}{fNorm}}(1.0\ /\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{sqrt}}(\mbox{\hyperlink{namespacecsmp}{dotProduct}}(\mbox{\hyperlink{namespacecsmp}{vectorToNormalize}},\ \mbox{\hyperlink{namespacecsmp}{vectorToNormalize}})));}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespacecsmp}{fNorm}}\ !=\ 0)}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{transform}}(\ \mbox{\hyperlink{namespacecsmp}{vectorToNormalize}}.\mbox{\hyperlink{namespacecsmp}{begin}}(),\ \mbox{\hyperlink{namespacecsmp}{vectorToNormalize}}.\mbox{\hyperlink{namespacecsmp}{end}}(),\ \mbox{\hyperlink{namespacecsmp}{vectorToNormalize}}.\mbox{\hyperlink{namespacecsmp}{begin}}(),}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [\mbox{\hyperlink{namespacecsmp}{fNorm}}](\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecsmp}{val}})\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecsmp}{val}}\ *\ \mbox{\hyperlink{namespacecsmp}{fNorm}};\ \}\ );}
+\DoxyCodeLine{00117\ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \textcolor{comment}{/**\ Binary\ predicate\ used\ to\ compare\ elements\ of\ a\ set\ to\ be\ order\ by\ magnitude.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ original\ set:\ -\/10,\ -\/4,\ 1,\ 5,\ 9}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ This\ set:\ -\/10,\ 9,\ 5,\ -\/4,\ 1}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ @section\ implementation\ Implementation}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ This\ is\ just\ an\ operator\ that\ takes\ two\ input\ parameters:\ x\ and\ y,\ and\ returns}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ true\ if\ the\ absolute\ value\ of\ x\ is\ greater\ than\ the\ absolute\ value\ of\ y.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ @section\ application\ Application}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ An\ example\ of\ usage\ is\ the\ following:}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ @code}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ std::set<\ greater\_fabs\ >\ vals;}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ vals.insert(9);}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ vals.insert(-\/10);}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ vals.insert(11);}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ @endcode}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ The\ order\ of\ the\ elements\ will\ be:\ 11,\ -\/10,\ 9}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ This\ is\ used\ in\ TensorVariable.cpp\ to\ order\ the\ eigenvalues.}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00143\ \ \ \textcolor{comment}{//binary\ predicate\ for\ the\ larger\ magnitude\ of\ vectors}}
+\DoxyCodeLine{00144\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ fT>}
+\DoxyCodeLine{00145\ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structcsmp_1_1greater__fabs}{greater\_fabs}}}
+\DoxyCodeLine{00146\ \ \ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator()(\textcolor{keyword}{const}\ fT\&\ x,\ \textcolor{keyword}{const}\ fT\&\ y)\ \textcolor{keyword}{const}\ \{\textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{bool}>(std::fabs(x)\ >\ std::fabs(y));\}}
+\DoxyCodeLine{00148\ \ \ \};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ Calculates\ the\ center\ of\ equal\ masses\ at\ the\ vertices\ of\ a\ planar,\ closed,}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ convex\ surface\ defined\ by\ vecPoints.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ @section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ @param\ vecPoints\ The\ points\ representing\ the\ vertices.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ @param\ vecCentroid\ the\ centroid\ of\ the\ point\ cloud.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ @section\ implementation\ Implementation}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ At\ first\ all\ the\ points\ are\ summed,\ and\ then\ each\ of\ these\ summed\ components}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ is\ divided\ by\ the\ total\ number\ of\ vertices.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ @section\ application\ Application}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ The\ main\ idea\ is\ to\ calculate\ the\ center\ of\ mass\ delimited\ by\ the\ given}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ vertices,\ supposing\ that\ the\ body\ is\ of\ constant\ density.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00172\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00173\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a11925707ef64b2959842b3f70f5241ee}{vertexCenterOfMass}}(\ \textcolor{keyword}{const}\ std::vector<Point<dim>\ >\&\ vecPoints,\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ vecCentroid\ )}
+\DoxyCodeLine{00174\ \ \ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordflow}{for}(\ size\_t\ i\{0U\};\ i\ <\ vecPoints.size();\ i++)}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ vecCentroid\ +=\ vecPoints[i];}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ vecCentroid\ /=\ vecPoints.size();}
+\DoxyCodeLine{00179\ \ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ Calculates\ the\ center\ of\ equal\ masses\ at\ the\ vertices\ of\ a\ planar,\ closed,}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ convex\ surface\ defined\ by\ three\ points.}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ @section\ arguments\ Input\ Arguments}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ @param\ vecCentroid\ The\ points\ representing\ the\ vertices.}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ @section\ implementation\ Implementation}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ At\ first\ all\ the\ points\ are\ summed,\ and\ then\ each\ of\ these\ summed\ components}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ is\ divided\ by\ the\ total\ number\ of\ vertices.}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ @section\ application\ Application}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ }}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ The\ main\ idea\ is\ to\ calculate\ the\ center\ of\ mass\ delimited\ by\ the\ three\ given}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ vertices,\ supposing\ that\ the\ body\ is\ of\ constant\ density.}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00203\ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00204\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ab1d3f68f1fc101b77703413770dcc425}{vertexCenterOfMass3Vertices}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ pt1,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ pt2,}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ pt3,\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ vecCentroid\ )}
+\DoxyCodeLine{00206\ \ \ \{}
+\DoxyCodeLine{00207\ \ \ \ \ vecCentroid\ =\ (pt1\ +\ pt2\ +\ pt3)\ /\ 3.;}
+\DoxyCodeLine{00208\ \ \ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \}\ \textcolor{comment}{//\ end\ csmp}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

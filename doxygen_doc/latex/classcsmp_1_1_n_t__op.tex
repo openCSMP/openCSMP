@@ -1,0 +1,234 @@
+\doxysection{csmp\+::NT\+\_\+op\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_n_t__op}{}\label{classcsmp_1_1_n_t__op}\index{csmp::NT\_op$<$ dim, CELL $>$@{csmp::NT\_op$<$ dim, CELL $>$}}
+
+
+Assigns point loads, sources etc. to nodes.  
+
+
+
+
+{\ttfamily \#include $<$NT\+\_\+op.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::NT\+\_\+op\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_n_t__op__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::NT\+\_\+op\texorpdfstring{$<$}{<} dim, CELL \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_n_t__op__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_n_t__op_ae74aff07b39f7de11eab9fe3d3ba2b23}\label{classcsmp_1_1_n_t__op_ae74aff07b39f7de11eab9fe3d3ba2b23} 
+{\bfseries NT\+\_\+op} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}oper, const char \texorpdfstring{$\ast$}{*}test)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_n_t__op_a0c7ea2ac820d5e3164dc641b2a6cbce9}{Get\+Operands}} (const CELL$<$ dim $>$ \&) override final
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_n_t__op_a00dd2359d7e8f608405dcfc66accd6a0}{Compute\+Contribution}} (const CELL$<$ dim $>$ \&) override final
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}} \&)
+\item 
+std\+::string {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em \doxylink{classcsmp_1_1_operand}{Operand} Functions. \end{DoxyCompactList}\item 
+virtual void {\bfseries Out} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Material\+Operand} () const
+\begin{DoxyCompactList}\small\item\em op \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Material\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Material\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Material\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Material\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Material\+Operand\+Data\+Depth} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Basic\+Operand} () const
+\begin{DoxyCompactList}\small\item\em bop \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Basic\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Basic\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Basic\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Basic\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Basic\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Basic\+Operand\+Offset} () const
+\item 
+const \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} \& {\bfseries Test\+Operand} () const
+\begin{DoxyCompactList}\small\item\em top \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structcsmp_1_1_index}{Index}} \& {\bfseries Test\+Operand\+Key} () const
+\item 
+std\+::string {\bfseries Test\+Operand\+Name} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gacbf62c758c46dc45b3f024638bb89274}{VARIABLE\+\_\+\+TYPE}} {\bfseries Test\+Operand\+Type} () const
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Test\+Operand\+Placement} () const
+\item 
+uint32\+\_\+t {\bfseries Test\+Operand\+Data\+Depth} () const
+\item 
+size\+\_\+t {\bfseries Test\+Operand\+Offset} () const
+\item 
+bool \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_af950a8b9a3d4ea2229f60d27ab6a69c2}{Add}} () const
+\begin{DoxyCompactList}\small\item\em Accumulation Process Settings. \end{DoxyCompactList}\item 
+bool {\bfseries Subtract} () const
+\item 
+bool {\bfseries Add\+Later} () const
+\item 
+bool {\bfseries Subtract\+Later} () const
+\item 
+bool {\bfseries Multiply} () const
+\item 
+bool {\bfseries Lumped\+Formulation} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycle} () const
+\item 
+uint32\+\_\+t {\bfseries Application\+Cycles} () const
+\item 
+double {\bfseries Multiply\+By} () const
+\item 
+bool {\bfseries Multiply\+With\+Time\+Increment} () const
+\item 
+bool {\bfseries Divide\+By\+Time\+Increment} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a95426d12ae7f3a6eb1bf10c036505e7b}{Add\+Accumulate}} ()
+\begin{DoxyCompactList}\small\item\em Set Flags and Properties. \end{DoxyCompactList}\item 
+void {\bfseries Subtract\+Accumulate} ()
+\item 
+void {\bfseries Add\+Accumulate\+Later} ()
+\item 
+void {\bfseries Subtract\+Accumulate\+Later} ()
+\item 
+void {\bfseries Multiply\+Accumulate} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a4ac9c3b2f60149cd6cc4a35681b29e0d}{Property\+At\+Integration\+Point}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, const \mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} \&, uint32\+\_\+t ip, \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ \&)
+\begin{DoxyCompactList}\small\item\em interpolation of property if isoparametric elements are used \end{DoxyCompactList}\item 
+virtual void {\bfseries Write\+Operands} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em writing data to the \doxylink{classcsmp_1_1_element}{Element}, \doxylink{classcsmp_1_1_face}{Face}, \doxylink{classcsmp_1_1_inter_face}{Inter\+Face} \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_a5a6138f5b4e123f88a9115e1d9315871}{Multiply\+With\+Time\+Factor}} (double dt)
+\begin{DoxyCompactList}\small\item\em if so specified multiply with time increment \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad9c03f1d3138a22e0bc40778d0032f6a}{Assign\+To\+Global}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&, std\+::vector$<$ double $>$ \&rhs)
+\begin{DoxyCompactList}\small\item\em assigment to the right hand side global vector (after everything was calculated ) \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{Math\+Operator\+RHS}}$<$ dim, \mbox{\hyperlink{classcsmp_1_1_element}{Element}} $>$ \texorpdfstring{$\ast$}{*} {\bfseries clone} () const=0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s}{csmp\+::\+Math\+Operator\+RHS$<$ dim, Element $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string {\bfseries name\+\_\+}
+\begin{DoxyCompactList}\small\item\em name of operator \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}} {\bfseries op}
+\begin{DoxyCompactList}\small\item\em material property operand \end{DoxyCompactList}\item 
+std\+::pair$<$ \mbox{\hyperlink{structcsmp_1_1_parameter}{Parameter}}, size\+\_\+t $>$ {\bfseries top}
+\begin{DoxyCompactList}\small\item\em test function operand \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries RHS}
+\begin{DoxyCompactList}\small\item\em solution \doxylink{classvector}{vector$<$double$>$} to be accumulated \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ $>$ {\bfseries MTRL}
+\begin{DoxyCompactList}\small\item\em material property matrix(es) needed for PDE operand \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_dense_matrix}{Dense\+Matrix}}$<$ DM\+\_\+\+MIN $>$ {\bfseries DERIV}
+\begin{DoxyCompactList}\small\item\em shape function derivative matrix \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ {\bfseries IPOL}
+\begin{DoxyCompactList}\small\item\em shape function vector \end{DoxyCompactList}\item 
+double {\bfseries factor\+\_\+}
+\begin{DoxyCompactList}\small\item\em constant factor \end{DoxyCompactList}\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+}
+\begin{DoxyCompactList}\small\item\em specifies accumulation procedure \end{DoxyCompactList}\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries add\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries subtract\+\_\+accumulate\+\_\+later\+\_\+}
+\item 
+bool {\bfseries multiply\+\_\+accumulate\+\_\+}
+\item 
+bool {\bfseries lump\+\_\+matrices\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycles\+\_\+}
+\item 
+uint32\+\_\+t {\bfseries application\+\_\+cycle\+\_\+}
+\item 
+bool {\bfseries time\+\_\+multiply\+\_\+}
+\begin{DoxyCompactList}\small\item\em time-\/dependent multipliers \end{DoxyCompactList}\item 
+bool {\bfseries time\+\_\+divide\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL = Element$>$\newline
+class csmp\+::\+NT\+\_\+op$<$ dim, CELL $>$}
+Assigns point loads, sources etc. to nodes. 
+
+\begin{DoxyNote}{Note}
+More or less equivalent to Point\+Source.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Author}
+S.\+K. Matthai 
+
+S. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+1999 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_n_t__op_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_n_t__op_a00dd2359d7e8f608405dcfc66accd6a0}\index{csmp::NT\_op$<$ dim, CELL $>$@{csmp::NT\_op$<$ dim, CELL $>$}!ComputeContribution@{ComputeContribution}}
+\index{ComputeContribution@{ComputeContribution}!csmp::NT\_op$<$ dim, CELL $>$@{csmp::NT\_op$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{ComputeContribution()}{ComputeContribution()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_n_t__op_a00dd2359d7e8f608405dcfc66accd6a0} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_n_t__op}{csmp\+::\+NT\+\_\+op}}$<$ dim, CELL $>$\+::\+Compute\+Contribution (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Accumulates nodal vector forces from nodes which are flagged Neumann with regard to the target variable. The \doxylink{classcsmp_1_1_operand}{Operand} is therefore a node variable. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The element from which accumulation into the global matrix takes place and the time-\/increment over which the force will be applied. ~\newline
+
+
+The result is returned into the Math\+Operator vector.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To compute nodal forces acting on the boundary of a model. ~\newline
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000109}{Todo}}](1) Not tested yet, maybe, the loads must be on the midside nodes \end{DoxyRefDesc}
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ab77b3c1f4f078290ec9330a916482ed7}{csmp\+::\+Math\+Operator\+RHS$<$ dim, Element $>$}}.
+
+\Hypertarget{classcsmp_1_1_n_t__op_a0c7ea2ac820d5e3164dc641b2a6cbce9}\index{csmp::NT\_op$<$ dim, CELL $>$@{csmp::NT\_op$<$ dim, CELL $>$}!GetOperands@{GetOperands}}
+\index{GetOperands@{GetOperands}!csmp::NT\_op$<$ dim, CELL $>$@{csmp::NT\_op$<$ dim, CELL $>$}}
+\doxysubsubsection{\texorpdfstring{GetOperands()}{GetOperands()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_n_t__op_a0c7ea2ac820d5e3164dc641b2a6cbce9} 
+template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class CELL$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_n_t__op}{csmp\+::\+NT\+\_\+op}}$<$ dim, CELL $>$\+::\+Get\+Operands (\begin{DoxyParamCaption}\item[{const CELL$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Reads scalar node data for further processing by the \doxylink{classcsmp_1_1_n_t__op_a00dd2359d7e8f608405dcfc66accd6a0}{Compute\+Contribution()} method. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_math_operator_r_h_s_ad5614fa4de569146a684d28635eb9ff7}{csmp\+::\+Math\+Operator\+RHS$<$ dim, Element $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/integration/pde\+\_\+operators/NT\+\_\+op.\+h\item 
+source/modules/integration/pde\+\_\+operators/NT\+\_\+op.\+cpp\end{DoxyCompactItemize}

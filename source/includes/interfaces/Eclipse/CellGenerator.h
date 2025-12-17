@@ -429,13 +429,13 @@ public:
 	/// degenerates to one prism
 
 	std::vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
-    const size_t  vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
-		return getGlobalIDList(cell, 6, vertexIDs);
+    const size_t  vertices[6] = { 0, 3, 4, 1, 2, 5 };
+		return getGlobalIDList(cell, 6, vertices);
 	}
 
 	std::vector<size_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
-		const size_t  vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
-		return getGlobalIDList(cell, 6, vertexIDs );
+		const size_t  vertices[6] = { 0, 5, 1, 3, 6, 2 };
+		return getGlobalIDList(cell, 6, vertices );
 	}
 
 	std::vector<std::vector<size_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010

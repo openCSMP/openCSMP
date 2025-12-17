@@ -1,0 +1,585 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_linear_solver_8h" kind="file" language="C++">
+    <compoundname>LinearSolver.h</compoundname>
+    <includes refid="_eigen_solver_8h" local="yes">EigenSolver.h</includes>
+    <includedby refid="_d_e_s2_phase_flow_with_split_boundary___example_8cpp" local="yes">examples/source/DES2PhaseFlowWithSplitBoundary_Example.cpp</includedby>
+    <includedby refid="_d_e_s2_phase_slightly_compressible_flow___example_8cpp" local="yes">examples/source/DES2PhaseSlightlyCompressibleFlow_Example.cpp</includedby>
+    <includedby refid="_d_e_s_advection_diffusion2_d___example_8cpp" local="yes">examples/source/DESAdvectionDiffusion2D_Example.cpp</includedby>
+    <includedby refid="_effective_stress_dilatation2_d___example_8cpp" local="yes">examples/source/EffectiveStressDilatation2D_Example.cpp</includedby>
+    <includedby refid="_experimental___example_8cpp" local="yes">examples/source/Experimental_Example.cpp</includedby>
+    <includedby refid="_geothermal___example_8cpp" local="yes">examples/source/Geothermal_Example.cpp</includedby>
+    <includedby refid="_intrepid___example_8cpp" local="yes">examples/source/Intrepid_Example.cpp</includedby>
+    <includedby refid="_linear_solver___example_8h" local="yes">examples/source/LinearSolver_Example.h</includedby>
+    <includedby refid="_parallel_plate_fracture___example_8cpp" local="yes">examples/source/ParallelPlateFracture_Example.cpp</includedby>
+    <includedby refid="_pressure_diffusion___example_8cpp" local="yes">examples/source/PressureDiffusion_Example.cpp</includedby>
+    <includedby refid="_quadratic_pressure__parallel_plate_permeability___example_8cpp" local="yes">examples/source/QuadraticPressure_parallelPlatePermeability_Example.cpp</includedby>
+    <includedby refid="_s_k_u_a___example_8cpp" local="yes">examples/source/SKUA_Example.cpp</includedby>
+    <includedby refid="_slope_mechanics___example_8cpp" local="yes">examples/source/SlopeMechanics_Example.cpp</includedby>
+    <includedby refid="_stokes_discrepancy_measure_quadratic___example_8cpp" local="yes">examples/source/StokesDiscrepancyMeasureQuadratic_Example.cpp</includedby>
+    <includedby refid="_stokes_discrepancy_measure___example_8cpp" local="yes">examples/source/StokesDiscrepancyMeasure_Example.cpp</includedby>
+    <includedby refid="_stream_function___example_8cpp" local="yes">examples/source/StreamFunction_Example.cpp</includedby>
+    <includedby refid="_temperature_density_pressure___example_8cpp" local="yes">examples/source/TemperatureDensityPressure_Example.cpp</includedby>
+    <includedby refid="_thermal_convection_e_t_h_z___example_8cpp" local="yes">examples/source/ThermalConvectionETHZ_Example.cpp</includedby>
+    <includedby refid="_time_stepping_approaches___example_8cpp" local="yes">examples/source/TimeSteppingApproaches_Example.cpp</includedby>
+    <includedby refid="_topography_driven_flow___example_8cpp" local="yes">examples/source/TopographyDrivenFlow_Example.cpp</includedby>
+    <includedby refid="_transient_pressure___example_8cpp" local="yes">examples/source/TransientPressure_Example.cpp</includedby>
+    <includedby refid="_triangulator___example_8cpp" local="yes">examples/source/Triangulator_Example.cpp</includedby>
+    <includedby refid="_tutorial1___example_8cpp" local="yes">examples/source/Tutorial1_Example.cpp</includedby>
+    <includedby refid="_tutorial4___example_8cpp" local="yes">examples/source/Tutorial4_Example.cpp</includedby>
+    <includedby refid="_tutorial4___example__original_8cpp" local="yes">examples/source/deprecated/Tutorial4_Example_original.cpp</includedby>
+    <includedby refid="_integrator_8h" local="yes">source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h</includedby>
+    <includedby refid="_node_centered_finite_volume_algorithm_8h" local="yes">source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h</includedby>
+    <includedby refid="_steady_state_diffusor_8h" local="yes">source/includes/integration/pde_integrators/SteadyStateDiffusor.h</includedby>
+    <includedby refid="_transient_diffusor_8h" local="yes">source/includes/integration/pde_integrators/TransientDiffusor.h</includedby>
+    <includedby refid="_iterative_integrator_8cpp" local="yes">source/modules/integration/pde_integrators/IterativeIntegrator.cpp</includedby>
+    <includedby refid="_p_d_e___integrator_8cpp" local="yes">source/modules/integration/pde_integrators/PDE_Integrator.cpp</includedby>
+    <includedby refid="_p_d_e___integrator___c_r_m_8cpp" local="yes">source/modules/integration/pde_integrators/PDE_Integrator_CRM.cpp</includedby>
+    <includedby refid="point_property_mapping_8cpp" local="yes">source/modules/property_manipulation/pointPropertyMapping.cpp</includedby>
+    <includedby refid="_fracture_8cpp" local="yes">source/modules/thmc/fractures/Fracture.cpp</includedby>
+    <includedby refid="parallel_plate_permeability_from_channel_width_8cpp" local="yes">source/modules/thmc/single_phase_flow/parallelPlatePermeabilityFromChannelWidth.cpp</includedby>
+    <includedby refid="_bore_hole__stability2_d___v_v_case_8cpp" local="yes">tests/integration/BoreHole_stability2D_VVCase.cpp</includedby>
+    <includedby refid="_bore_hole__stability___inclined_well3_d___v_v_case_8cpp" local="yes">tests/integration/BoreHole_stability_InclinedWell3D_VVCase.cpp</includedby>
+    <includedby refid="_bore_hole__stability___vertical_well3_d___v_v_case_8cpp" local="yes">tests/integration/BoreHole_stability_VerticalWell3D_VVCase.cpp</includedby>
+    <includedby refid="_c_f_l___v_v_case_8cpp" local="yes">tests/integration/CFL_VVCase.cpp</includedby>
+    <includedby refid="_dirichlet_pressure_box_model___v_v_case_8cpp" local="yes">tests/integration/DirichletPressureBoxModel_VVCase.cpp</includedby>
+    <includedby refid="_exact_versus_numeric_integration_speed___test_8cpp" local="yes">tests/integration/ExactVersusNumericIntegrationSpeed_Test.cpp</includedby>
+    <includedby refid="_explicit_transport___test_8cpp" local="yes">tests/integration/ExplicitTransport_Test.cpp</includedby>
+    <includedby refid="_geothermal__1_d___v_v_case_8cpp" local="yes">tests/integration/Geothermal_1D_VVCase.cpp</includedby>
+    <includedby refid="_geothermal__2_d___v_v_case_8cpp" local="yes">tests/integration/Geothermal_2D_VVCase.cpp</includedby>
+    <includedby refid="_geothermal__2_d___v_v_case_8h" local="yes">tests/integration/Geothermal_2D_VVCase.h</includedby>
+    <includedby refid="_geothermal__3_d___v_v_case_8cpp" local="yes">tests/integration/Geothermal_3D_VVCase.cpp</includedby>
+    <includedby refid="_geothermal__3_d___v_v_case_8h" local="yes">tests/integration/Geothermal_3D_VVCase.h</includedby>
+    <includedby refid="_geothermal__pseudo1_d___v_v_case_8cpp" local="yes">tests/integration/Geothermal_pseudo1D_VVCase.cpp</includedby>
+    <includedby refid="_gravity_induced_fluid_pressure___test_8cpp" local="yes">tests/integration/GravityInducedFluidPressure_Test.cpp</includedby>
+    <includedby refid="_implicit_transport___test_8cpp" local="yes">tests/integration/ImplicitTransport_Test.cpp</includedby>
+    <includedby refid="_incompressible_single_phase_flow_f_e_m___v_v_case_8cpp" local="yes">tests/integration/IncompressibleSinglePhaseFlowFEM_VVCase.cpp</includedby>
+    <includedby refid="_incompressible_single_phase_flow_tensor_perm2_d_f_e_m___v_v_case_8cpp" local="yes">tests/integration/IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase.cpp</includedby>
+    <includedby refid="_incompressible_single_phase_flow_tensor_perm3_d_f_e_m___v_v_case_8cpp" local="yes">tests/integration/IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase.cpp</includedby>
+    <includedby refid="_incompressible_two_phase_flow_fractures___viscous___v_v_case_8cpp" local="yes">tests/integration/IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.cpp</includedby>
+    <includedby refid="_inflow_outflow_calculation___v_v_case_8cpp" local="yes">tests/integration/InflowOutflowCalculation_VVCase.cpp</includedby>
+    <includedby refid="_linear_elastic_fracture_aperture2_d___v_v_case_8cpp" local="yes">tests/integration/LinearElasticFractureAperture2D_VVCase.cpp</includedby>
+    <includedby refid="_linear_elastic_isotropic_deformation2_d___v_v_case_8cpp" local="yes">tests/integration/LinearElasticIsotropicDeformation2D_VVCase.cpp</includedby>
+    <includedby refid="_linear_elasticity_a___v_v_case_8cpp" local="yes">tests/integration/LinearElasticityA_VVCase.cpp</includedby>
+    <includedby refid="_linear_elasticity_b___v_v_case_8cpp" local="yes">tests/integration/LinearElasticityB_VVCase.cpp</includedby>
+    <includedby refid="_linear_elasticity_c___v_v_case_8cpp" local="yes">tests/integration/LinearElasticityC_VVCase.cpp</includedby>
+    <includedby refid="_linear_elasticity_d___v_v_case_8cpp" local="yes">tests/integration/LinearElasticityD_VVCase.cpp</includedby>
+    <includedby refid="_linear_elasticity_e___v_v_case_8cpp" local="yes">tests/integration/LinearElasticityE_VVCase.cpp</includedby>
+    <includedby refid="_nimble_region___test_8cpp" local="yes">tests/integration/NimbleRegion_Test.cpp</includedby>
+    <includedby refid="_sneddon_crack_coupled3_d___v_v_case_8cpp" local="yes">tests/integration/SneddonCrackCoupled3D_VVCase.cpp</includedby>
+    <includedby refid="_sneddon_crack_coupled___v_v_case_8cpp" local="yes">tests/integration/SneddonCrackCoupled_VVCase.cpp</includedby>
+    <includedby refid="_sneddon_crack___v_v_case_8cpp" local="yes">tests/integration/SneddonCrack_VVCase.cpp</includedby>
+    <includedby refid="_split_boundary_pressure_diffusion___test_8cpp" local="yes">tests/integration/SplitBoundaryPressureDiffusion_Test.cpp</includedby>
+    <includedby refid="_t_p_i_n_c_f_v_t3_d___v_v_case_8cpp" local="yes">tests/integration/TPINCFVT3D_VVCase.cpp</includedby>
+    <includedby refid="_finite_element_manager___test_8cpp" local="yes">tests/unit/FiniteElementManager_Test.cpp</includedby>
+    <includedby refid="_finite_volume_stencil_speed___test_8cpp" local="yes">tests/unit/FiniteVolumeStencilSpeed_Test.cpp</includedby>
+    <includedby refid="_p_d_e___integrator___test_8cpp" local="yes">tests/unit/PDE_Integrator_Test.cpp</includedby>
+    <includedby refid="_p_d_e___integrator___transient___test_8cpp" local="yes">tests/unit/PDE_Integrator_Transient_Test.cpp</includedby>
+    <includedby refid="_region___test_8cpp" local="yes">tests/unit/Region_Test.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>EigenSolver.h</label>
+        <link refid="_eigen_solver_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/integration/solver/LinearSolver.h</label>
+        <link refid="_linear_solver_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Solver.h</label>
+        <link refid="_solver_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>SolverSettings.h</label>
+        <link refid="_solver_settings_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="15">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cctype</label>
+      </node>
+      <node id="13">
+        <label>cfloat</label>
+      </node>
+      <node id="18">
+        <label>chrono</label>
+      </node>
+      <node id="14">
+        <label>climits</label>
+      </node>
+      <node id="5">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdarg</label>
+      </node>
+      <node id="8">
+        <label>cstddef</label>
+      </node>
+      <node id="47">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>cstdio</label>
+      </node>
+      <node id="7">
+        <label>cstdlib</label>
+      </node>
+      <node id="11">
+        <label>cstring</label>
+      </node>
+      <node id="12">
+        <label>ctime</label>
+      </node>
+      <node id="19">
+        <label>deque</label>
+      </node>
+      <node id="20">
+        <label>exception</label>
+      </node>
+      <node id="21">
+        <label>filesystem</label>
+      </node>
+      <node id="22">
+        <label>fstream</label>
+      </node>
+      <node id="23">
+        <label>functional</label>
+      </node>
+      <node id="24">
+        <label>iomanip</label>
+      </node>
+      <node id="25">
+        <label>iostream</label>
+      </node>
+      <node id="26">
+        <label>istream</label>
+      </node>
+      <node id="27">
+        <label>iterator</label>
+      </node>
+      <node id="28">
+        <label>limits</label>
+      </node>
+      <node id="29">
+        <label>list</label>
+      </node>
+      <node id="30">
+        <label>map</label>
+      </node>
+      <node id="31">
+        <label>memory</label>
+      </node>
+      <node id="32">
+        <label>numeric</label>
+      </node>
+      <node id="33">
+        <label>ostream</label>
+      </node>
+      <node id="34">
+        <label>random</label>
+      </node>
+      <node id="35">
+        <label>set</label>
+      </node>
+      <node id="36">
+        <label>sstream</label>
+      </node>
+      <node id="37">
+        <label>stdexcept</label>
+      </node>
+      <node id="38">
+        <label>string</label>
+      </node>
+      <node id="40">
+        <label>type_traits</label>
+      </node>
+      <node id="39">
+        <label>typeinfo</label>
+      </node>
+      <node id="44">
+        <label>unordered_map</label>
+      </node>
+      <node id="43">
+        <label>unordered_set</label>
+      </node>
+      <node id="41">
+        <label>utility</label>
+      </node>
+      <node id="42">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>examples/source/Examples.h</label>
+        <link refid="_examples_8h_source"/>
+      </node>
+      <node id="2">
+        <label>examples/source/LinearSolver_Example.h</label>
+        <link refid="_linear_solver___example_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PHX_Scheme.h</label>
+        <link refid="_c_v_f_e_m___p_h_x___scheme_8h_source"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>source/includes/integration/cvfe_hydrothermal/ExplicitFiniteVolumeTransportPHX.h</label>
+        <link refid="_explicit_finite_volume_transport_p_h_x_8h_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>source/includes/integration/cvfe_hydrothermal/UpwindControlVisitor.h</label>
+        <link refid="_upwind_control_visitor_8h_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>source/includes/integration/finite_volumes/generic_transport_scheme/ImplicitTransport.h</label>
+        <link refid="_implicit_transport_8h_source"/>
+      </node>
+      <node id="4">
+        <label>source/includes/integration/finite_volumes/generic_transport_scheme/Integrator.h</label>
+        <link refid="_integrator_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitMassBasedTransport.h</label>
+        <link refid="_explicit_mass_based_transport_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitNodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_explicit_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeAlgorithm.h</label>
+        <link refid="_node_centered_finite_volume_algorithm_8h_source"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_explicit_node_centered_f_v_transport_8h_source"/>
+      </node>
+      <node id="19">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseImplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_transport_8h_source"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>source/includes/integration/pde_integrators/SteadyStateDiffusor.h</label>
+        <link refid="_steady_state_diffusor_8h_source"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>source/includes/integration/pde_integrators/TransientDiffusor.h</label>
+        <link refid="_transient_diffusor_8h_source"/>
+      </node>
+      <node id="1">
+        <label>source/includes/integration/solver/LinearSolver.h</label>
+        <link refid="_linear_solver_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>source/includes/run_control/SimulatorControl.h</label>
+        <link refid="_simulator_control_8h_source"/>
+      </node>
+      <node id="14">
+        <label>source/includes/run_control/SimulatorSetup.h</label>
+        <link refid="_simulator_setup_8h_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>source/modules/integration/solver/SAMG_profiles/SteadyStateDiffusionProfile.h</label>
+        <link refid="_steady_state_diffusion_profile_8h_source"/>
+      </node>
+      <node id="20">
+        <label>source/modules/integration/solver/SAMG_profiles/TwoPhaseImplicitNodeCenteredFVTransProfile.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_trans_profile_8h_source"/>
+      </node>
+      <node id="10">
+        <label>tests/integration/CVFEM_1D_VVCase.h</label>
+        <link refid="_c_v_f_e_m__1_d___v_v_case_8h_source"/>
+      </node>
+      <node id="16">
+        <label>tests/integration/Geothermal_2D_VVCase.h</label>
+        <link refid="_geothermal__2_d___v_v_case_8h_source"/>
+      </node>
+      <node id="17">
+        <label>tests/integration/Geothermal_3D_VVCase.h</label>
+        <link refid="_geothermal__3_d___v_v_case_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="_linear_solver_8h_1a67f69281c4c153f5d049253c34561031" prot="public" static="no">
+        <name>CSMP_DEFAULT_LINEAR_SOLVER</name>
+        <initializer><ref refid="classcsmp_1_1_eigen_solver" kindref="compound">csmp::EigenSolver</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/LinearSolver.h" line="11" column="9" bodyfile="source/includes/integration/solver/LinearSolver.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="_linear_solver_8h_1a75db968be5e201643bdb320da375fa69" prot="public" static="no">
+        <name>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS</name>
+        <initializer><ref refid="classcsmp_1_1_solver_settings" kindref="compound">csmp::SolverSettings</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/solver/LinearSolver.h" line="12" column="9" bodyfile="source/includes/integration/solver/LinearSolver.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>CSMP_LINEAR_SOLVER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_LINEAR_SOLVER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">========================</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">Linear<sp/>Solvers<sp/>Interface</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">========================</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="comment">//<sp/>define<sp/>CSMP_DEFAULT_LINEAR_SOLVER<sp/>by<sp/>the<sp/>priority<sp/>order</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER<sp/>csmp::EigenSolver<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>csmp::LUdcmp_Solver</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS<sp/>csmp::SolverSettings</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;EigenSolver.h&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>LUdcmp_Solver.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_MESCHACH</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>CSMP_DEFAULT_LINEAR_SOLVER</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER<sp/>csmp::Gauss_Solver</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS<sp/>csmp::Gauss_SolverSettings</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Gauss_Solver.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_DUNE_ISTL</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>CSMP_DEFAULT_LINEAR_SOLVER</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DUNE_VECTOR_BLOCK_FORMAT<sp/>Dune::FieldVector&lt;double,1&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DUNE_MATRIX_BLOCK_FORMAT<sp/>Dune::FieldMatrix&lt;double,1,1&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DUNE_VECTOR_FORMAT<sp/>Dune::BlockVector&lt;<sp/>DUNE_VECTOR_BLOCK_FORMAT<sp/>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DUNE_MATRIX_FORMAT<sp/>Dune::BCRSMatrix&lt;<sp/>DUNE_MATRIX_BLOCK_FORMAT<sp/>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DUNE_SOLVER_INTERFACE<sp/>csmp::DuneISTL_SEQ_BCGS_AMG_SOR&lt;<sp/>3,<sp/>DUNE_MATRIX_FORMAT,<sp/>DUNE_VECTOR_FORMAT<sp/>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER<sp/>csmp::DuneISTL_Solver&lt;<sp/>DUNE_MATRIX_FORMAT,<sp/>DUNE_VECTOR_FORMAT,<sp/>DUNE_VECTOR_FORMAT,<sp/>DUNE_SOLVER_INTERFACE<sp/>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS<sp/>csmp::DuneISTL_Settings</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;DuneISTL_Solver.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CSMP_WITH_SAMG_SOLVER</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>CSMP_DEFAULT_LINEAR_SOLVER</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#undef<sp/>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER<sp/>csmp::SAMG_Solver</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS<sp/>csmp::SAMG_Settings</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;SAMG_Solver.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;SAMG_Settings.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="source/includes/integration/solver/LinearSolver.h"/>
+  </compounddef>
+</doxygen>

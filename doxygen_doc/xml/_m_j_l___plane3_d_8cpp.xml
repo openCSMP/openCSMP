@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_m_j_l___plane3_d_8cpp" kind="file" language="C++">
+    <compoundname>MJL_Plane3D.cpp</compoundname>
+    <includes refid="_m_j_l___plane3_d_8h" local="yes">MJL_Plane3D.h</includes>
+    <includes refid="_m_j_l___edge3_d_8h" local="yes">MJL_Edge3D.h</includes>
+    <includes refid="_m_j_l___point3_d_8h" local="yes">MJL_Point3D.h</includes>
+    <incdepgraph>
+      <node id="10">
+        <label>MJL_Edge3D.h</label>
+        <link refid="_m_j_l___edge3_d_8h_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>MJL_Plane3D.h</label>
+        <link refid="_m_j_l___plane3_d_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>MJL_Point3D.h</label>
+        <link refid="_m_j_l___point3_d_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>MJL_geometry.h</label>
+        <link refid="_m_j_l__geometry_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/modules/discretisation/MJL_Plane3D.cpp</label>
+        <link refid="_m_j_l___plane3_d_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>cmath</label>
+      </node>
+      <node id="4">
+        <label>iostream</label>
+      </node>
+      <node id="7">
+        <label>list</label>
+      </node>
+      <node id="6">
+        <label>map</label>
+      </node>
+      <node id="5">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacemjl">mjl</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;MJL_Plane3D.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;MJL_Edge3D.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;MJL_Point3D.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacemjl" kindref="compound">mjl</ref><sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="namespacemjl_1a348040fdb4ce16d483f82390665a1741" refkind="member"><highlight class="normal">INTERSECTION<sp/><sp/><ref refid="namespacemjl_1a32b3a8d58f823cb167c3f3c499f56224" kindref="member">crossingPoint</ref>(<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>tolerance,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_edge3_d" kindref="compound">mjl::Edge3D</ref>&amp;<sp/>e,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classmjl_1_1_plane3_d" kindref="compound">mjl::Plane3D</ref>&amp;<sp/>pl,<sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref>&amp;<sp/>p<sp/><sp/>)</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref><sp/>u<sp/>=<sp/>e.Destination()<sp/>-<sp/>e.Origin();</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref><sp/>w<sp/>=<sp/><sp/>e.Origin()<sp/>-<sp/>pl.PointP();</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref><sp/>e1(pl.NVector());</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/>d<sp/>=<sp/>u.DotProduct(<sp/>e1<sp/>);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/>nn<sp/>=<sp/>-w.DotProduct(<sp/>e1<sp/>);<sp/></highlight><highlight class="comment">//<sp/>e1=pl.NVector()</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fabs(d)<sp/>&lt;<sp/>tolerance)<sp/>{<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>segment<sp/>is<sp/>parallel<sp/>to<sp/>plane</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fabs(nn)<sp/><sp/>&lt;<sp/>tolerance)<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>segment<sp/>lies<sp/>in<sp/>plane</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>COLLINEAR;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>PARALLEL;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>no<sp/>intersection</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>If<sp/>they<sp/>are<sp/>not<sp/>parallel</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>intersect<sp/>param</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sI<sp/>=<sp/>nn<sp/>/<sp/>d;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(sI<sp/>&lt;<sp/>0.<sp/>||<sp/>sI<sp/>&gt;<sp/>1.)</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>SKEW_NO_CROSS;<sp/><sp/></highlight><highlight class="comment">//<sp/>no<sp/>intersection</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>p<sp/>=<sp/>e.Origin()<sp/>+<sp/>sI<sp/>*<sp/>u;<sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>segment<sp/>intersect<sp/>point</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>SKEW_CROSS;<sp/></highlight><highlight class="comment">//?</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/>}<sp/></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Plane3D::Out()</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/>{<sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/>std::cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\nMJL_Point3D::Out:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>p1_.x_<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/><sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>p1_.y_<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/><sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>p1_.z_<sp/>&lt;&lt;std::<sp/>endl;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/>std::cout<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;\n<sp/>vector::Out:<sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>vc_.x_<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/><sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>vc_.y_<sp/>&lt;&lt;</highlight><highlight class="stringliteral">&quot;<sp/><sp/>&quot;</highlight><highlight class="normal">&lt;&lt;<sp/>vc_.z_<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/>}<sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>namespace<sp/>mjl</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/modules/discretisation/MJL_Plane3D.cpp"/>
+  </compounddef>
+</doxygen>

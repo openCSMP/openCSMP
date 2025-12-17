@@ -1,0 +1,143 @@
+.TH "csmp::StressRotate" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::StressRotate
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStressRotate\fP (const \fBPoint\fP< 3U > &n1, const \fBPoint\fP< 3U > &n3, double sigma1, double sigma2, double sigma3)"
+.br
+.ti -1c
+.RI "\fBStressRotate\fP (const \fBStressRotate\fP &)"
+.br
+.RI "copy constructor "
+.ti -1c
+.RI "void \fBCartesianStressTensor\fP (\fBTensorVariable\fP< 3U > &stress) const"
+.br
+.RI "returns the full Cartesian stress tensor rotated to align principal axes according to internally stored trend "
+.ti -1c
+.RI "void \fBCartesianStressTensor\fP (\fBTensorVariable\fP< 3U > &stress, double iso_stress_offset) const"
+.br
+.RI "as previous, but augmentation modification of principal stresses by user-supplied isostatic stress "
+.ti -1c
+.RI "void \fBRotate\fP (char axis, double angle)"
+.br
+.RI "counter-clockwise rotation of stress vectors (n1,n3) looking down on the rotation axis (use 180-angle to get cw\&.) "
+.ti -1c
+.RI "void \fBReset\fP ()"
+.br
+.RI "loss free restoration of stress to state before rotation "
+.ti -1c
+.RI "double \fBSigma1\fP () const"
+.br
+.RI "maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor "
+.ti -1c
+.RI "double \fBSigma2\fP () const"
+.br
+.RI "intermediate principal stress (Pa/m2) "
+.ti -1c
+.RI "double \fBSigma3\fP () const"
+.br
+.RI "minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "outputs state of object "
+.ti -1c
+.RI "void \fBOutputToVTK\fP (const std::string &filename, const \fBPoint\fP< 3U > &location, bool normalize_by_sigma3=true) const"
+.br
+.RI "output 3 vectors representing the principal axes of the stress tensor "
+.ti -1c
+.RI "void \fBOutputToVTK\fP (const std::string &filename, const \fBPoint\fP< 3U > &location, double scale_factor) const"
+.br
+.RI "output 3 vectors representing the principal axes of the stress tensor and scale them by factor "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoriginal_n1_\fP"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBoriginal_n3_\fP"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBn1_\fP"
+.br
+.ti -1c
+.RI "\fBPoint\fP< 3U > \fBn3_\fP"
+.br
+.ti -1c
+.RI "double \fBsigma1_\fP"
+.br
+.ti -1c
+.RI "double \fBsigma2_\fP"
+.br
+.ti -1c
+.RI "double \fBsigma3_\fP"
+.br
+.ti -1c
+.RI "double \fBx_\fP"
+.br
+.ti -1c
+.RI "double \fBy_\fP"
+.br
+.ti -1c
+.RI "double \fBz_\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::StressRotate::StressRotate (const \fBPoint\fP< 3U > & n1, const \fBPoint\fP< 3U > & n3, double sigma1, double sigma2, double sigma3)"
+constructs class from the orientations (vectors) of sigma1 and 3, and the magnitudes of the principal stresses 1, 2 and 3
+
+.PP
+\fBAttention\fP
+.RS 4
+the orientations of sigma1 and sigma must be perpendicular to eachother\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::StressRotate::CartesianStressTensor (\fBTensorVariable\fP< 3U > & stress) const"
+
+.PP
+returns the full Cartesian stress tensor rotated to align principal axes according to internally stored trend Finds the the Cartesion stresses from the principal stresses using the formulae (6\&.86, 6\&.87, and 6\&.88) from Pollard & Fletcher's "Fundamentals of Structural Geology", see p\&. 225 
+.SS "void csmp::StressRotate::CartesianStressTensor (\fBTensorVariable\fP< 3U > & stress, double iso_stress_offset) const"
+
+.PP
+as previous, but augmentation modification of principal stresses by user-supplied isostatic stress CartesianStressTensor
+
+.PP
+Same as previous method but with principal stresses augmented by isostatic stress in order to take into account offset of current location from where the stress was measured\&. 
+.SS "void csmp::StressRotate::Reset ()"
+
+.PP
+loss free restoration of stress to state before rotation converts to state initialized by default constructor 
+.SS "void csmp::StressRotate::Rotate (char axis, double angle)"
+
+.PP
+counter-clockwise rotation of stress vectors (n1,n3) looking down on the rotation axis (use 180-angle to get cw\&.) Rotates the internally stored stress state around one of the principal coordinate axes, x, y or z by the parameter angle (in degrees)\&.
+
+.PP
+Method applies the Standard Rotation Matrices to each principal stress vector individually Weisstein, Eric W\&. "Rotation Matrix\&." From MathWorld--A Wolfram Web Resource\&. http://mathworld.wolfram.com/RotationMatrix.html
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIaxis\fP is either of the x, y or z coordinate axes in the Kartesian system 
+.br
+\fIangle\fP is the angle in degress (0\&.\&.360) 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

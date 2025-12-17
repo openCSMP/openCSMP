@@ -92,7 +92,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     // 4. BOX_BOUNDARY flags are identified 
     // ------------------------------------
     FlagBoundaryElements( pfverts, plist, x, y );
-    FlagBoundaryNodes( pfverts, plist, bflags );
+    FlagBoundaryNodes( pfverts, plist, bflags );    
     FlagCornerNodes( bflags, x, y, z );
 
     // 5. Assigning and testing the permeability data
@@ -1219,17 +1219,17 @@ throw logic_error("TRIANGLE_Interface::FlagCornerNodes: this code must consider 
           else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
             it.second = CNR_MAX;
           else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
-            it.second = CNR_MIN_MAXX;
+            it.second = CNR_X;
           else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps) )
-            it.second = CNR_MIN_MAXXZ;
+            it.second = CNR_XZ;
           else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
-            it.second = CNR_MIN_MAXZ;
+            it.second = CNR_Z;
           else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
-            it.second = CNR_MAX_MINXZ;
+            it.second = CNR_Y;
           else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
-            it.second = CNR_MAX_MAXX;
+            it.second = CNR_XZ;
           else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
-            it.second = CNR_MAX_MAXZ;
+            it.second = CNR_YZ;
        }    
  
  } // end FlagCornerNodes  

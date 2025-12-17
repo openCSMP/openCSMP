@@ -1,0 +1,66 @@
+\doxysection{csmp\+::Sum\+Of\+Products Class Reference}
+\hypertarget{classcsmp_1_1_sum_of_products}{}\label{classcsmp_1_1_sum_of_products}\index{csmp::SumOfProducts@{csmp::SumOfProducts}}
+
+
+Collaboration diagram for csmp\+::Sum\+Of\+Products\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=188pt]{classcsmp_1_1_sum_of_products__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_af47b57f0028c1ac199e60416f03fc129}\label{classcsmp_1_1_sum_of_products_af47b57f0028c1ac199e60416f03fc129} 
+{\bfseries Sum\+Of\+Products} (const \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{Sum\+Of\+Products}} \&s)
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_a123d9aeee1ab782c0d887c5453a265f1}\label{classcsmp_1_1_sum_of_products_a123d9aeee1ab782c0d887c5453a265f1} 
+\mbox{\hyperlink{classcsmp_1_1_sum_of_products}{Sum\+Of\+Products}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_sum_of_products}{Sum\+Of\+Products}} \&s)
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_a2adfc426af619a245ac7bf7ddd7fbdf2}\label{classcsmp_1_1_sum_of_products_a2adfc426af619a245ac7bf7ddd7fbdf2} 
+void {\bfseries Add\+Product} (const std\+::map$<$ int32\+\_\+t, double $>$ \&product)
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_sum_of_products_a41ec3c48e508565ea48ce2fc9870c307}{Sum}} (const double a\mbox{[}$\,$\mbox{]}) const
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_a05f1d5f0da62dfd885a66e3327202cf8}\label{classcsmp_1_1_sum_of_products_a05f1d5f0da62dfd885a66e3327202cf8} 
+void {\bfseries Erase} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}{Initialize\+From}} (const char \texorpdfstring{$\ast$}{*}s, std\+::map$<$ std\+::string, std\+::pair$<$ int, double $>$ $>$ \&withval, std\+::map$<$ std\+::string, int $>$ \&withoutval)
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_ae41ee804211806a80f8aaa46d6679d35}\label{classcsmp_1_1_sum_of_products_ae41ee804211806a80f8aaa46d6679d35} 
+void {\bfseries Tokenize\+String} (char \texorpdfstring{$\ast$}{*}s, const char \texorpdfstring{$\ast$}{*}delim, std\+::list$<$ std\+::string $>$ \&li) const
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_a6d84d2a354b3aa0dfd42c17885cb9cff}\label{classcsmp_1_1_sum_of_products_a6d84d2a354b3aa0dfd42c17885cb9cff} 
+std\+::vector$<$ std\+::map$<$ int, double $>$ $>$\+::iterator {\bfseries Begin} ()
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_a785cffbf7802f42199d5709b6ea65a74}\label{classcsmp_1_1_sum_of_products_a785cffbf7802f42199d5709b6ea65a74} 
+std\+::vector$<$ std\+::map$<$ int, double $>$ $>$\+::iterator {\bfseries End} ()
+\item 
+\Hypertarget{classcsmp_1_1_sum_of_products_abb1124eefb83dec13a4dd14f6eda479d}\label{classcsmp_1_1_sum_of_products_abb1124eefb83dec13a4dd14f6eda479d} 
+void {\bfseries Out} () const
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_sum_of_products_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1}\index{csmp::SumOfProducts@{csmp::SumOfProducts}!InitializeFrom@{InitializeFrom}}
+\index{InitializeFrom@{InitializeFrom}!csmp::SumOfProducts@{csmp::SumOfProducts}}
+\doxysubsubsection{\texorpdfstring{InitializeFrom()}{InitializeFrom()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sum_of_products_afb634129c30d27dd4acf2f9e1e97dfb1} 
+void csmp\+::\+Sum\+Of\+Products\+::\+Initialize\+From (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{, }\item[{std\+::map$<$ std\+::string, std\+::pair$<$ int, double $>$ $>$ \&}]{withval}{, }\item[{std\+::map$<$ std\+::string, int $>$ \&}]{withoutval}{}\end{DoxyParamCaption})}
+
+takes character string containing the righthandside of the Algebraic equation and builds itself from this string. \Hypertarget{classcsmp_1_1_sum_of_products_a41ec3c48e508565ea48ce2fc9870c307}\index{csmp::SumOfProducts@{csmp::SumOfProducts}!Sum@{Sum}}
+\index{Sum@{Sum}!csmp::SumOfProducts@{csmp::SumOfProducts}}
+\doxysubsubsection{\texorpdfstring{Sum()}{Sum()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_sum_of_products_a41ec3c48e508565ea48ce2fc9870c307} 
+double csmp\+::\+Sum\+Of\+Products\+::\+Sum (\begin{DoxyParamCaption}\item[{const double}]{a}{\mbox{[}$\,$\mbox{]}}\end{DoxyParamCaption}) const}
+
+Add all the terms in the sum, using the supplied values in \textquotesingle{}a\textquotesingle{} if the product term index is greater than zero and the stored terms (constants) where the index is less than zero. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/math/Sum\+Of\+Products.\+h\item 
+source/modules/math/Sum\+Of\+Products.\+cpp\end{DoxyCompactItemize}

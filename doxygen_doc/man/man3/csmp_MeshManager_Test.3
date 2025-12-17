@@ -1,0 +1,134 @@
+.TH "csmp::MeshManager_Test" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::MeshManager_Test
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <MeshManager_Test\&.h>\fP
+.PP
+Inherits \fBcsmp::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshManager_Test\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBrun\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "long \fBgetNumPassed\fP () const"
+.br
+.ti -1c
+.RI "long \fBgetNumFailed\fP () const"
+.br
+.ti -1c
+.RI "const std::ostream * \fBgetStream\fP () const"
+.br
+.ti -1c
+.RI "void \fBsetStream\fP (std::ostream *osptr)"
+.br
+.ti -1c
+.RI "void \fBsetName\fP (std::string testName)"
+.br
+.ti -1c
+.RI "std::string \fBgetName\fP () const"
+.br
+.ti -1c
+.RI "bool \fBhasName\fP () const"
+.br
+.ti -1c
+.RI "void \fBdo_succeed\fP ()"
+.br
+.ti -1c
+.RI "long \fBreport\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBreset\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "void \fBdo_equal\fP (double expr, double value, double tol, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_test\fP (bool cond, const std::string &lbl, const char *fname, long lineno)"
+.br
+.ti -1c
+.RI "void \fBdo_fail\fP (const std::string &lbl, const char *fname, long lineno)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBcsmp::Test\fP
+.in +1c
+.ti -1c
+.RI "const char * \fBprefix_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Testing checklist
+.IP "\(bu" 2
+buid mesh from \fBVSet\fP
+.IP "\(bu" 2
+verify node connectivity (nodes connected to eachother)
+.IP "\(bu" 2
+verify node numbering through basic calculations
+.IP "\(bu" 2
+verify neighbor connectivity (all volume elements with eachother, all surface \&.\&.\&.)
+.IP "\(bu" 2
+creation and deletion of \fBFace\fP objects
+.PP
+
+.PP
+\fBTest\fP Dependencies 
+.PP
+\fBTodo\fP
+.RS 4
+\fBFiniteElementManager_Test\fP 
+
+.PP
+FiniteVolumeManager_Test
+.RE
+.PP
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+23/8/2018 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::MeshManager_Test::MeshManager_Test ()"
+custom models uses "CSMP-1phase-variables\&.txt" 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::MeshManager_Test::run ()\fR [virtual]\fP"
+THE MASTER TEST FUNCTION 
+.PP
+Implements \fBcsmp::Test\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

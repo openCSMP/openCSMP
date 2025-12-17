@@ -56,7 +56,7 @@ struct MechanicalProperties {
    double  nu_;         ///< Poisson's ratio
    double  C_;          ///< cohesive strength = inherent shear strength
   
-   // TODO: here we need the correlations that relate the properties to variations in the parent rock type
+   // TODO: here we need correlations that relate properties to variations in the parent rock type
    // derived properties for fault rocks: dilatation, compaction etc.
   
    void Out() const;

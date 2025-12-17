@@ -1,0 +1,11 @@
+<map id="csmp::PolygonGridManager::AddNode" name="csmp::PolygonGridManager::AddNode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="214,72,396,113"/>
+<area shape="rect" id="Node000002" href="$namespacecsmp.html#a19ecc57bb9af10e0f707f09a6c603c23" title=" " alt="" coords="8,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,69,165,45,132,34,133,29,167,40,236,64"/>
+<area shape="rect" id="Node000003" href="$namespacecsmp.html#ac1cd94f62068355e1c3327fecc5dc82b" title=" " alt="" coords="5,55,166,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,83,166,79,167,74,199,78"/>
+<area shape="rect" id="Node000004" href="$namespacecsmp.html#a49ddef3a60773134a6d2f199e228c28e" title=" " alt="" coords="5,104,166,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,107,166,111,166,105,198,102"/>
+<area shape="rect" id="Node000005" href="$namespacecsmp.html#ab8129f70f96ff06440bff401c6ba36ea" title=" " alt="" coords="5,153,166,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="233,121,167,145,133,155,132,150,165,140,232,116"/>
+</map>

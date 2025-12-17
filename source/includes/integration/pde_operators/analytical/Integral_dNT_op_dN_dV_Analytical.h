@@ -14,9 +14,9 @@ class Integral_dNT_op_dN_dV_Analytical : public MathOperatorLHS<dim,CELL> {
 		Integral_dNT_op_dN_dV_Analytical( const PropertyDatabase<dim>&,
 			                                const char* oper, const char* basic, const char* test);
 
-		virtual void ComputeContribution( const CELL<dim>& );
+		void ComputeContribution( const CELL<dim>& )  override final;
     
-		virtual Integral_dNT_op_dN_dV_Analytical<dim, CELL>* clone() const { return new Integral_dNT_op_dN_dV_Analytical<dim, CELL>(*this); }
+		Integral_dNT_op_dN_dV_Analytical<dim, CELL>* clone() const override final { return new Integral_dNT_op_dN_dV_Analytical<dim, CELL>(*this); }
 	};
 
 

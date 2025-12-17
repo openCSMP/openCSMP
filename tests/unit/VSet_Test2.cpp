@@ -19,9 +19,6 @@ VSet_Test2::VSet_Test2( bool verbose )
 }
 
 
-VSet_Test2::~VSet_Test2()
-{
-}
 
 
 /**

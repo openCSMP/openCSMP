@@ -17,18 +17,16 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class CVFEM_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim,CELL> {
   public:
     CVFEM_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>&,
-                        const char* oper, 
-                        const char* basic, 
-                        const char* test );
+                                    const char* oper,
+                                    const char* basic,
+                                    const char* test );
+     
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual ~CVFEM_NumIntegral_dNT_op_dN_dV();
-    
-    virtual void ComputeContribution( const CELL<dim>& ) override;
-    
-    virtual CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const override { return new CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
-  private:
-    DenseMatrix<DM_MIN>  B, BT; 
+    CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const override final { return new CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
 
+private:
+    DenseMatrix<DM_MIN>  B, BT;
 };
 
   /**

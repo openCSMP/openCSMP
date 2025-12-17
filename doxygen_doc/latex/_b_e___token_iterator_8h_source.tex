@@ -1,0 +1,81 @@
+\doxysection{BE\+\_\+\+Token\+Iterator.\+h}
+\hypertarget{_b_e___token_iterator_8h_source}{}\label{_b_e___token_iterator_8h_source}\index{source/includes/utilities/BE\_TokenIterator.h@{source/includes/utilities/BE\_TokenIterator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00002\ \textcolor{comment}{}}
+\DoxyCodeLine{00003\ \textcolor{comment}{C07:TokenIterator.h}}
+\DoxyCodeLine{00004\ \textcolor{comment}{From\ "{}Thinking\ in\ C++,\ Volume\ 2"{},\ by\ Bruce\ Eckel\ \&\ Chuck\ Allison.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{(c)\ 1995-\/2004\ MindView,\ Inc.\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{See\ source\ code\ use\ permissions\ stated\ in\ the\ file\ 'License.txt',}}
+\DoxyCodeLine{00007\ \textcolor{comment}{distributed\ with\ the\ code\ package\ available\ at\ www.MindView.net.*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{TOKEN\_ITERATOR\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{TOKEN\_ITERATOR\_H}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{algorithm}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cctype}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iterator}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_isalpha}{Isalpha}}\ \{}
+\DoxyCodeLine{00018\ \ \ \textcolor{keywordtype}{bool}\ operator()(\textcolor{keywordtype}{char}\ c)\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{bool}>(std::isalpha(c));\ \}}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_delimiters}{Delimiters}}\ \{}
+\DoxyCodeLine{00022\ \ \ std::string\ exclude;}
+\DoxyCodeLine{00023\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ Delimiters()\ \{\}}
+\DoxyCodeLine{00025\ \ \ Delimiters(\textcolor{keyword}{const}\ std::string\&\ excl)\ :\ exclude(excl)\ \{\}}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{bool}\ operator()(\textcolor{keywordtype}{char}\ c)\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordflow}{return}\ exclude.find(c)\ ==\ std::string::npos;}
+\DoxyCodeLine{00028\ \ \ \}}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ InputIter,\ \textcolor{keyword}{class}\ Pred\ =\ Isalpha>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_token_iterator}{TokenIterator}}\ \{}
+\DoxyCodeLine{00033\ \ \ InputIter\ first;}
+\DoxyCodeLine{00034\ \ \ InputIter\ last;}
+\DoxyCodeLine{00035\ \ \ std::string\ word;}
+\DoxyCodeLine{00036\ \ \ Pred\ predicate;}
+\DoxyCodeLine{00037\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00038\ \ \ TokenIterator(InputIter\ begin,\ InputIter\ end,}
+\DoxyCodeLine{00039\ \ \ \ \ Pred\ pred\ =\ Pred())}
+\DoxyCodeLine{00040\ \ \ \ \ :\ first(begin),\ last(end),\ predicate(pred)\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ ++*\textcolor{keyword}{this};}
+\DoxyCodeLine{00042\ \ \ \}}
+\DoxyCodeLine{00043\ \ \ TokenIterator()\ \{\}\ \textcolor{comment}{//\ End\ sentinel}}
+\DoxyCodeLine{00044\ \ \ \textcolor{comment}{//\ Prefix\ increment:}}
+\DoxyCodeLine{00045\ \ \ \mbox{\hyperlink{class_token_iterator}{TokenIterator}}\&\ operator++()\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ word.resize(0);}
+\DoxyCodeLine{00047\ \ \ \ \ first\ =\ std::find\_if(first,\ last,\ predicate);}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordflow}{while}(first\ !=\ last\ \&\&\ predicate(*first))}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ word\ +=\ *first++;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00051\ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \textcolor{comment}{//\ Postfix\ increment}}
+\DoxyCodeLine{00053\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_token_iterator_1_1_capture_state}{CaptureState}}\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ std::string\ word;}
+\DoxyCodeLine{00055\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00056\ \ \ \ \ CaptureState(\textcolor{keyword}{const}\ std::string\&\ w)\ :\ word(w)\ \{\}}
+\DoxyCodeLine{00057\ \ \ \ \ std::string\ operator*()\ \{\ \textcolor{keywordflow}{return}\ word;\ \}}
+\DoxyCodeLine{00058\ \ \ \};}
+\DoxyCodeLine{00059\ \ \ \mbox{\hyperlink{class_token_iterator_1_1_capture_state}{CaptureState}}\ operator++(\textcolor{keywordtype}{int})\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{class_token_iterator_1_1_capture_state}{CaptureState}}\ d(word);}
+\DoxyCodeLine{00061\ \ \ \ \ ++*\textcolor{keyword}{this};}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordflow}{return}\ d;}
+\DoxyCodeLine{00063\ \ \ \}}
+\DoxyCodeLine{00064\ \ \ \textcolor{comment}{//\ Produce\ the\ actual\ value:}}
+\DoxyCodeLine{00065\ \ \ std::string\ operator*()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ word;\ \}}
+\DoxyCodeLine{00066\ \ \ \textcolor{keyword}{const}\ std::string*\ operator-\/>()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \&word;\ \}}
+\DoxyCodeLine{00067\ \ \ \textcolor{comment}{//\ Compare\ iterators:}}
+\DoxyCodeLine{00068\ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_token_iterator}{TokenIterator}}\&)\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordflow}{return}\ word.size()\ ==\ 0\ \&\&\ first\ ==\ last;}
+\DoxyCodeLine{00070\ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \textcolor{keywordtype}{bool}\ operator!=(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_token_iterator}{TokenIterator}}\&\ rv)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordflow}{return}\ !(*\textcolor{keyword}{this}\ ==\ rv);}
+\DoxyCodeLine{00073\ \ \ \}}
+\DoxyCodeLine{00074\ \};}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ TOKENITERATOR\_H\ ///:\string~}}
+
+\end{DoxyCode}

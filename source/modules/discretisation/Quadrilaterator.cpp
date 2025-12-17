@@ -26,11 +26,6 @@ Quadrilaterator::Quadrilaterator( bool harmonic_permeability_averaging )
 
 
 
-Quadrilaterator::~Quadrilaterator()
- {
- }
-
-
 /**
  
 Calculates the harmonic permeability average of the four corner nodes of the 
@@ -327,27 +322,27 @@ void Quadrilaterator::GenerateVSet( VSet<2U>& vset ) const
 
         // 5. assigning boundary flags (node) 
         if ( i == 1 ) {
-            if ( j == 1 )        vset.BFlag( plist[n][3], CNR_MAX_MINXZ );  // CNR4
+            if ( j == 1 )        vset.BFlag( plist[n][3], CNR4 );  // CNR4
             else                 vset.BFlag( plist[n][3], TOP_OUTSIDE );
-            if ( j == (cols-1) ) vset.BFlag( plist[n][2], CNR_MAX_MAXX );   // CNR3
+            if ( j == (cols-1) ) vset.BFlag( plist[n][2], CNR3 );   // CNR3
             else                 vset.BFlag( plist[n][2], TOP_OUTSIDE );
           }
         if ( i == (rows-1) ) {
             if ( j == 1 )        vset.BFlag( plist[n][0], CNR_MIN );        // CNR1
             else                 vset.BFlag( plist[n][0], BOTTOM_OUTSIDE );
-            if ( j == (cols-1) ) vset.BFlag( plist[n][1], CNR_MIN_MAXX );   // CNR2
+            if ( j == (cols-1) ) vset.BFlag( plist[n][1], CNR2 );   // CNR2
             else                 vset.BFlag( plist[n][1], BOTTOM_OUTSIDE );
           }
         if ( j == 1 ) {
-            if ( i == 1 )        vset.BFlag( plist[n][3], CNR_MAX_MINXZ );  // CNR4
+            if ( i == 1 )        vset.BFlag( plist[n][3], CNR4 );  // CNR4
             else                 vset.BFlag( plist[n][3], LEFT_OUTSIDE );
             if ( i == (rows-1) ) vset.BFlag( plist[n][0], CNR_MIN );        // CNR1
             else                 vset.BFlag( plist[n][0], LEFT_OUTSIDE );
           }
         if ( j == (cols-1) ) {
-            if ( i == 1 )        vset.BFlag( plist[n][2], CNR_MAX_MAXX );   // CNR3
+            if ( i == 1 )        vset.BFlag( plist[n][2], CNR3 );   // CNR3
             else                 vset.BFlag( plist[n][2], RIGHT_OUTSIDE );
-            if ( i == (rows-1) ) vset.BFlag( plist[n][1], CNR_MIN_MAXX );   // CNR2
+            if ( i == (rows-1) ) vset.BFlag( plist[n][1], CNR2 );   // CNR2
             else                 vset.BFlag( plist[n][1], RIGHT_OUTSIDE );
           }
 

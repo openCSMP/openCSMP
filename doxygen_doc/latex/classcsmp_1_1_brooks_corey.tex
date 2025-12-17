@@ -1,0 +1,591 @@
+\doxysection{csmp\+::Brooks\+Corey\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_brooks_corey}{}\label{classcsmp_1_1_brooks_corey}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+
+
+{\ttfamily \#include $<$Brooks\+Corey.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Brooks\+Corey\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_brooks_corey__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Brooks\+Corey\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_brooks_corey__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_ad7ec6a204296bcb48eee88246609d5cb}\label{classcsmp_1_1_brooks_corey_ad7ec6a204296bcb48eee88246609d5cb} 
+{\bfseries Brooks\+Corey} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&database, const char \texorpdfstring{$\ast$}{*}lamda, const char \texorpdfstring{$\ast$}{*}pc\+\_\+entry, const bool sw\+\_\+ro\+\_\+mu\+\_\+placement=true)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_brooks_corey_a885bd26294b1a5180bb9eff610138531}{Brooks\+Corey}} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&database, const char \texorpdfstring{$\ast$}{*}permeability, double viscosity\+\_\+nw, double viscosity\+\_\+w, double density\+\_\+nw, double density\+\_\+w, const char \texorpdfstring{$\ast$}{*}lamda, const char \texorpdfstring{$\ast$}{*}pc\+\_\+entry, const bool sw\+\_\+ro\+\_\+mu\+\_\+placement=true)
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_a8aebbb43de8df4246896eabf7e9cd46c}\label{classcsmp_1_1_brooks_corey_a8aebbb43de8df4246896eabf7e9cd46c} 
+{\bfseries Brooks\+Corey} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&database, const char \texorpdfstring{$\ast$}{*}permeability, const char \texorpdfstring{$\ast$}{*}viscosity\+\_\+nw, const char \texorpdfstring{$\ast$}{*}viscosity\+\_\+w, const char \texorpdfstring{$\ast$}{*}density\+\_\+nw, const char \texorpdfstring{$\ast$}{*}density\+\_\+w, const char \texorpdfstring{$\ast$}{*}lamda, const char \texorpdfstring{$\ast$}{*}pc\+\_\+entry, const char \texorpdfstring{$\ast$}{*}sat\+\_\+w, const char \texorpdfstring{$\ast$}{*}res\+\_\+sat\+\_\+nw, const char \texorpdfstring{$\ast$}{*}res\+\_\+sat\+\_\+w, const bool sw\+\_\+ro\+\_\+mu\+\_\+placement=true)
+\begin{DoxyCompactList}\small\item\em constructor for constant capillary pressure equal to entry pressure in case if lambda = 0 \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_af47af4e27766bf2f7529e452d1f43c07}\label{classcsmp_1_1_brooks_corey_af47af4e27766bf2f7529e452d1f43c07} 
+{\bfseries Brooks\+Corey} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&database, const char \texorpdfstring{$\ast$}{*}permeability, const char \texorpdfstring{$\ast$}{*}viscosity\+\_\+nw, const char \texorpdfstring{$\ast$}{*}viscosity\+\_\+w, const char \texorpdfstring{$\ast$}{*}density\+\_\+nw, const char \texorpdfstring{$\ast$}{*}density\+\_\+w, const char \texorpdfstring{$\ast$}{*}lamda, const char \texorpdfstring{$\ast$}{*}pc\+\_\+entry, const char \texorpdfstring{$\ast$}{*}maximum\+\_\+pc, const char \texorpdfstring{$\ast$}{*}sat\+\_\+w, const char \texorpdfstring{$\ast$}{*}res\+\_\+sat\+\_\+nw, const char \texorpdfstring{$\ast$}{*}res\+\_\+sat\+\_\+w, const bool sw\+\_\+ro\+\_\+mu\+\_\+placement=true)
+\begin{DoxyCompactList}\small\item\em constructor for linear capillary pressure in case if lambda = 0 \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_brooks_corey_ab632f54034ce47136356bce772f57054}{Initialize}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e)
+\begin{DoxyCompactList}\small\item\em Reading parameters for the linear \& BC relperm models. \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a40e50451890b1dc8b3c02fcf36791f3e}{krn\+\_\+\+Phase}} () const
+\begin{DoxyCompactList}\small\item\em as in Helmig 97, eqn.\+2.\+57, p. 75 \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a0b82831fcaee9769d27a332cf1f672b3}{krw\+\_\+\+Phase}} () const
+\begin{DoxyCompactList}\small\item\em relative permeabilities \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a009297404a97b1a2ec1bf2c683126f4a}{dkrnds\+\_\+\+Phase}} () const
+\begin{DoxyCompactList}\small\item\em derivatives of relative permeabilities \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_ad62e53a71931fd242f190fd8321db655}{dkrwds\+\_\+\+Phase}} () const
+\begin{DoxyCompactList}\small\item\em derivatives of relative permeabilities \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a60d9c0bb282cde45b580244be2fc8cee}{pc\+\_\+\+Phase}} () const
+\begin{DoxyCompactList}\small\item\em pc covers the full saturation range, pc is capped based on maximum dpcds \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_ae7b84dc38ba2f913913be944ac0ef30a}{dpcds\+\_\+\+Phase}} () const
+\begin{DoxyCompactList}\small\item\em dpcdS covers the full saturation range, dpcds is capped based on maximum dpcds \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a7b5237f7a922503261e452531ced6b77}{Sw\+\_\+\+Phase}} (double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a60d9c0bb282cde45b580244be2fc8cee}{pc\+\_\+\+Phase}}) const
+\begin{DoxyCompactList}\small\item\em inverse capillary pressure function \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_ac9fd4dc5adf31a2a6c49c5b5eb72a449}{dsdpc\+\_\+\+Phase}} (double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a60d9c0bb282cde45b580244be2fc8cee}{pc\+\_\+\+Phase}}) const
+\begin{DoxyCompactList}\small\item\em derivatives of inverse capillary pressure function \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a78020f5366cb40aa725f50ae40bb58a6}{dfds}} () const
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_aeca78297e0a8eb947ad89a072f2d0967}{d\+Gds}} () const
+\begin{DoxyCompactList}\small\item\em derivatives of gravitational flow (advection multipliers) \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_ad30020f8bd5115bf5a91b2df0c7a3b37}{Max\+Fractional\+Flow\+Derivative}} () const
+\begin{DoxyCompactList}\small\item\em for the wetting phase \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a82151596aaf5ecea507fbc3bb7fa443b}{Shock\+Speed}} () const
+\begin{DoxyCompactList}\small\item\em linearized fractional flow derivative \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_brooks_corey_a69ee95c4936176a8ebf286734c987316}{Shock\+Height}} () const
+\begin{DoxyCompactList}\small\item\em look this one up in the book by Randy Le\+Veque \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_brooks_corey_af910b8eb5013340eb1886596842d1bfa}{Out}} (uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em default is the wetting phase \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_ac8d5c6ad1f3c07f1b2708043d211fd23}\label{classcsmp_1_1_brooks_corey_ac8d5c6ad1f3c07f1b2708043d211fd23} 
+void {\bfseries Lambda} (double lambda)
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_accfbe35c7fa971c8aed803a58d0f1760}\label{classcsmp_1_1_brooks_corey_accfbe35c7fa971c8aed803a58d0f1760} 
+double {\bfseries Lambda} () const
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_a50b9e283df27012ccf605901bc8678b9}\label{classcsmp_1_1_brooks_corey_a50b9e283df27012ccf605901bc8678b9} 
+void {\bfseries Pd} (double pd)
+\item 
+\Hypertarget{classcsmp_1_1_brooks_corey_af5d815f43806304d2026ba25c5d558df}\label{classcsmp_1_1_brooks_corey_af5d815f43806304d2026ba25c5d558df} 
+double {\bfseries Pd} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Two\+Phase\+Model} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&database, double viscosity\+\_\+nw, double viscosity\+\_\+w, double density\+\_\+nw, double density\+\_\+w, const char \texorpdfstring{$\ast$}{*}kkk, const char \texorpdfstring{$\ast$}{*}sat, const char \texorpdfstring{$\ast$}{*}snr, const char \texorpdfstring{$\ast$}{*}swr, const bool sw\+\_\+ro\+\_\+mu\+\_\+placement=true)
+\begin{DoxyCompactList}\small\item\em for fixed values of fluid viscosities and densities \end{DoxyCompactList}\item 
+{\bfseries Two\+Phase\+Model} (const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&database, const char \texorpdfstring{$\ast$}{*}kkk, const char \texorpdfstring{$\ast$}{*}mun, const char \texorpdfstring{$\ast$}{*}muw, const char \texorpdfstring{$\ast$}{*}rhn, const char \texorpdfstring{$\ast$}{*}rhw, const char \texorpdfstring{$\ast$}{*}sat, const char \texorpdfstring{$\ast$}{*}snr, const char \texorpdfstring{$\ast$}{*}swr, const bool sw\+\_\+ro\+\_\+mu\+\_\+placement=true)
+\begin{DoxyCompactList}\small\item\em for interpolated values \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_two_phase_model_aea34aa1fb3b86a30fd8876ffd6b832df}{Initialize\+And\+Store}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e)
+\begin{DoxyCompactList}\small\item\em read and modify element properties when the saturation functions are history dependent \end{DoxyCompactList}\item 
+virtual void {\bfseries Initialize\+For\+Bary\+Center} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e)
+\begin{DoxyCompactList}\small\item\em interpolates node properties to element barycenter \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a4946a65cddfb1d2b244bd9202ef6a7c6}{Initialize\+For\+Node}} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e, uint32\+\_\+t node)
+\item 
+virtual void {\bfseries Initialize\+For\+Integration\+Point} (uint32\+\_\+t ip, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e)
+\begin{DoxyCompactList}\small\item\em finite element integration points \end{DoxyCompactList}\item 
+virtual void {\bfseries Initialize\+For\+Facet\+Integration\+Point} (uint32\+\_\+t facet, uint32\+\_\+t ip, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e)
+\begin{DoxyCompactList}\small\item\em finite volume facets \end{DoxyCompactList}\item 
+virtual void {\bfseries Initialize\+For\+Sector\+Integration\+Point} (uint32\+\_\+t sector, uint32\+\_\+t ip, const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e)
+\begin{DoxyCompactList}\small\item\em finite volume sectors \end{DoxyCompactList}\item 
+virtual void {\bfseries Interpolate\+Node\+Properties} (const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&e)
+\item 
+void {\bfseries Saturation\+Wetting\+Phase} (double s\+\_\+wetting)
+\begin{DoxyCompactList}\small\item\em to set properties on the fly for compressible flow modelling \end{DoxyCompactList}\item 
+void {\bfseries Viscosity\+Non\+Wetting\+Phase} (double visc)
+\item 
+void {\bfseries Viscosity\+Wetting\+Phase} (double visc)
+\item 
+void {\bfseries Density\+Non\+Wetting\+Phase} (double dens)
+\item 
+void {\bfseries Density\+Wetting\+Phase} (double dens)
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries Wetting\+Phase\+Saturation\+Key} () const
+\begin{DoxyCompactList}\small\item\em Return of keys for calculation of two phase mobilities in transport. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries Non\+Wetting\+Phase\+Saturation\+Key} () const
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries Total\+Mobility\+Key} () const
+\item 
+double {\bfseries Permeability} () const
+\begin{DoxyCompactList}\small\item\em accessors \end{DoxyCompactList}\item 
+void {\bfseries Permeability} (double permeability)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ {\bfseries Tensor\+Permeability} () const
+\item 
+void {\bfseries Tensor\+Permeability} (\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ permeability)
+\item 
+double {\bfseries Swr} () const
+\item 
+double {\bfseries Snr} () const
+\item 
+void {\bfseries Swr} (double swr)
+\item 
+void {\bfseries Snr} (double snr)
+\item 
+double {\bfseries Viscosity\+Non\+Wetting\+Phase} () const
+\begin{DoxyCompactList}\small\item\em fluid properties \end{DoxyCompactList}\item 
+double {\bfseries Viscosity\+Wetting\+Phase} () const
+\item 
+double {\bfseries Density\+Non\+Wetting\+Phase} () const
+\item 
+double {\bfseries Density\+Wetting\+Phase} () const
+\item 
+double {\bfseries Saturation} (uint32\+\_\+t phase) const
+\item 
+double {\bfseries Mobility\+Phase} (uint32\+\_\+t phase) const
+\item 
+double {\bfseries Viscosity\+Ratio} () const
+\item 
+double {\bfseries Total\+Mobility} () const
+\begin{DoxyCompactList}\small\item\em sum of all phase mobilities \texorpdfstring{$\ast$}{*} k \end{DoxyCompactList}\item 
+double {\bfseries Total\+Mobility\+Multiplier} () const
+\begin{DoxyCompactList}\small\item\em sum of all phase mobilities \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_af6fc4c52013d567bc9b2c2acb680becd}{Diffusion\+Multiplier}} (size\+\_\+t phase) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a503aab2ef0cdb43b39ae52ed277dfceb}{Capillary\+Diffusion\+Multiplier}} () const
+\begin{DoxyCompactList}\small\item\em driven by capillary pressure gradient \end{DoxyCompactList}\item 
+double {\bfseries Gravity\+Term} () const
+\begin{DoxyCompactList}\small\item\em multipliers for gravity-\/driven flow (advection multiplier and source term) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a6245a32bb53cd9abcf67a5bcded9bf4f}{Gravity\+Multiplier\+\_\+G}} () const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a697acaf5dd0aad5ed586a9756d8d6875}{Gravity\+Multiplier\+\_\+d\+Gds}} () const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a116a6eb34e3be5a267f519b865b89468}{G}} () const
+\begin{DoxyCompactList}\small\item\em G multiplier. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a29b1cf1676c8fac2faeea06d341e1e03}{Advection\+Multiplier}} () const
+\begin{DoxyCompactList}\small\item\em multiplier for advection viscosity coefficient in the case of non-\/linear advection \end{DoxyCompactList}\item 
+virtual double {\bfseries Diffusion\+Characteristic} (size\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em linearized diffusion multiplier for large-\/timestep calculations \end{DoxyCompactList}\item 
+void {\bfseries Shock\+Speed\+Height} (double \&speed, double \&height) const
+\item 
+double {\bfseries Max\+Capillary\+Pressure} (uint32\+\_\+t phase=1U) const
+\begin{DoxyCompactList}\small\item\em maximum value of dpcdS \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_ac796aeb19755c2905f7f5969c66f7f8c}{Effective\+Saturation}} () const
+\begin{DoxyCompactList}\small\item\em always of the wetting phase by convention \end{DoxyCompactList}\item 
+virtual double {\bfseries Seff\+To\+Sw} () const
+\begin{DoxyCompactList}\small\item\em return wetting-\/phase saturation based on effective saturation \end{DoxyCompactList}\item 
+virtual double {\bfseries Seff\+To\+Sw} (double \mbox{\hyperlink{namespacecsmp_ad5f148f07d290165871424c6a79b2c1b}{seff}}) const
+\begin{DoxyCompactList}\small\item\em return wetting-\/phase saturation based on effective saturation ( useful for numerical calculations ) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_af5f9ba8fd94fe48d40cca93a042c6618}{f\+\_\+\+Phase}} (uint32\+\_\+t phase) const
+\begin{DoxyCompactList}\small\item\em fractional flow \end{DoxyCompactList}\item 
+double {\bfseries fw\+\_\+at} (double sw) const
+\begin{DoxyCompactList}\small\item\em fractional flow of water at water saturation sw \end{DoxyCompactList}\item 
+double {\bfseries fn\+\_\+at} (double sw) const
+\item 
+virtual double {\bfseries dlnds} () const
+\begin{DoxyCompactList}\small\item\em derivative of non-\/wetting phase mobility \end{DoxyCompactList}\item 
+virtual double {\bfseries dlwds} () const
+\begin{DoxyCompactList}\small\item\em derivative of wetting phase mobility \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a8d1dc7daff33c410ba77b49517707b61}{mobility\+\_\+w\+\_\+at}} (double) const
+\begin{DoxyCompactList}\small\item\em Numerical derivatives. \end{DoxyCompactList}\item 
+double {\bfseries mobility\+\_\+n\+\_\+at} (double) const
+\item 
+double {\bfseries krw\+\_\+at} (double) const
+\item 
+double {\bfseries krn\+\_\+at} (double) const
+\item 
+double {\bfseries dkrwds\+\_\+at} (double) const
+\item 
+double {\bfseries dkrnds\+\_\+at} (double) const
+\item 
+double {\bfseries dfds\+\_\+at} (double se) const
+\item 
+double {\bfseries G\+\_\+at} (double se) const
+\item 
+double {\bfseries pc\+\_\+at} (double se) const
+\item 
+double {\bfseries dpcds\+\_\+at} (double se) const
+\item 
+double {\bfseries Sw\+\_\+at} (double se) const
+\item 
+double {\bfseries dsdpc\+\_\+at} (double se) const
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a7734fabaf23e67cac34ca1ccac9dfea5}{dlwds\+\_\+numerical}} (double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}=0.\+001) const
+\begin{DoxyCompactList}\small\item\em Numerical derivatives. \end{DoxyCompactList}\item 
+virtual double {\bfseries dlnds\+\_\+numerical} (double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}=0.\+001) const
+\begin{DoxyCompactList}\small\item\em derivative of non-\/wetting phase mobility \end{DoxyCompactList}\item 
+virtual double {\bfseries dkrwds\+\_\+numerical} (double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}=0.\+001) const
+\item 
+virtual double {\bfseries dkrnds\+\_\+numerical} (double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}=0.\+001) const
+\item 
+virtual double \mbox{\hyperlink{classcsmp_1_1_two_phase_model_aebb908311eff09132a9741b18115c310}{dfds\+\_\+numerical}} (double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}=0.\+001) const
+\item 
+virtual double {\bfseries d\+Gds\+\_\+numerical} (double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}=0.\+000001) const
+\item 
+virtual double {\bfseries dpcds\+\_\+numerical} (double \mbox{\hyperlink{class_h2_o_na_cl_thermal_equilibrator_1_1h}{h}}=0.\+00001) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries perm\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries sat\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries snr\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries swr\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries ift\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries mun\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries muw\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries rhw\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries rhn\+\_\+key\+\_\+}
+\item 
+\mbox{\hyperlink{structcsmp_1_1_index}{csmp\+::\+Index}} {\bfseries lt\+\_\+key\+\_\+}
+\item 
+double {\bfseries swr\+\_\+}
+\item 
+double {\bfseries snr\+\_\+}
+\item 
+double {\bfseries k\+\_\+}
+\item 
+double {\bfseries ift\+\_\+}
+\item 
+double {\bfseries mun\+\_\+}
+\item 
+double {\bfseries muw\+\_\+}
+\item 
+double {\bfseries rhn\+\_\+}
+\item 
+double {\bfseries rhw\+\_\+}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ {\bfseries K\+\_\+}
+\item 
+double {\bfseries sat\+\_\+}
+\item 
+double {\bfseries seff\+\_\+}
+\item 
+const double {\bfseries acc\+\_\+gravity\+\_\+}
+\item 
+const double {\bfseries tolerance\+\_\+}
+\item 
+const double {\bfseries MAX\+\_\+\+CAPILLARY\+\_\+\+PRESSURE\+\_\+}
+\item 
+const double {\bfseries MAX\+\_\+\+CAPILLARY\+\_\+\+PRESSURE\+\_\+\+SLOPE\+\_\+}
+\item 
+const bool {\bfseries interpolate\+\_\+fluid\+\_\+properties\+\_\+}
+\item 
+const bool {\bfseries sw\+\_\+ro\+\_\+mu\+\_\+placement\+\_\+}
+\item 
+bool {\bfseries tensor\+\_\+permeability\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Brooks\+Corey$<$ dim $>$}
+\begin{DoxyNote}{Note}
+for lambda=0, this implementation of Brooks-\/\+Corey model switches to linear 
+
+for linear case capillary pressure is a constant value equal to entry pressure 
+
+base class pm1 and pm2 are used for pd and lambda, respectively 
+\end{DoxyNote}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_brooks_corey_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_brooks_corey_a885bd26294b1a5180bb9eff610138531}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!BrooksCorey@{BrooksCorey}}
+\index{BrooksCorey@{BrooksCorey}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{BrooksCorey()}{BrooksCorey()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a885bd26294b1a5180bb9eff610138531} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::\+Brooks\+Corey (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_property_database}{Property\+Database}}$<$ dim $>$ \&}]{database}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{permeability}{, }\item[{double}]{viscosity\+\_\+nw}{, }\item[{double}]{viscosity\+\_\+w}{, }\item[{double}]{density\+\_\+nw}{, }\item[{double}]{density\+\_\+w}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{lamda}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{pc\+\_\+entry}{, }\item[{const bool}]{sw\+\_\+ro\+\_\+mu\+\_\+placement}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+One also has to initialize the material parameter key in the base class in this case the material parameter is used as the lambda parameter of the Brooks-\/\+Corey model Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{classcsmp_1_1_brooks_corey_a885bd26294b1a5180bb9eff610138531_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{classcsmp_1_1_brooks_corey_a885bd26294b1a5180bb9eff610138531_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_brooks_corey_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_brooks_corey_a78020f5366cb40aa725f50ae40bb58a6}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!dfds@{dfds}}
+\index{dfds@{dfds}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{dfds()}{dfds()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a78020f5366cb40aa725f50ae40bb58a6} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::dfds (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Calculates the derivative of water fractional flow respect to water saturation for Brooks-\/\+Corey and Linear relative permeability models. The derivative is conducted by analytical differentiation. 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a295c4bd526a0f939f2d810a99a5843b9}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brooks_corey_a78020f5366cb40aa725f50ae40bb58a6_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_brooks_corey_aeca78297e0a8eb947ad89a072f2d0967}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!dGds@{dGds}}
+\index{dGds@{dGds}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{dGds()}{dGds()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_aeca78297e0a8eb947ad89a072f2d0967} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::d\+Gds (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+derivatives of gravitational flow (advection multipliers) 
+
+derivatives of gravitational flow 
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_ae46b8290e476e6d16ebcf239481e915d}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brooks_corey_aeca78297e0a8eb947ad89a072f2d0967_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_brooks_corey_a009297404a97b1a2ec1bf2c683126f4a}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!dkrnds\_Phase@{dkrnds\_Phase}}
+\index{dkrnds\_Phase@{dkrnds\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{dkrnds\_Phase()}{dkrnds\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a009297404a97b1a2ec1bf2c683126f4a} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::dkrnds\+\_\+\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+derivatives of relative permeabilities 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a443ab083ab0a009e2976d420099610a9}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_ad62e53a71931fd242f190fd8321db655}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!dkrwds\_Phase@{dkrwds\_Phase}}
+\index{dkrwds\_Phase@{dkrwds\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{dkrwds\_Phase()}{dkrwds\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_ad62e53a71931fd242f190fd8321db655} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::dkrwds\+\_\+\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+derivatives of relative permeabilities 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_aee63123cf9276045d351d0f832a41ef0}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_ae7b84dc38ba2f913913be944ac0ef30a}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!dpcds\_Phase@{dpcds\_Phase}}
+\index{dpcds\_Phase@{dpcds\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{dpcds\_Phase()}{dpcds\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_ae7b84dc38ba2f913913be944ac0ef30a} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::dpcds\+\_\+\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+dpcdS covers the full saturation range, dpcds is capped based on maximum dpcds 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_two_phase_model_aac4bba423c4d31322d744ea5d77d8830}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_ac9fd4dc5adf31a2a6c49c5b5eb72a449}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!dsdpc\_Phase@{dsdpc\_Phase}}
+\index{dsdpc\_Phase@{dsdpc\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{dsdpc\_Phase()}{dsdpc\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_ac9fd4dc5adf31a2a6c49c5b5eb72a449} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::dsdpc\+\_\+\+Phase (\begin{DoxyParamCaption}\item[{double}]{pc\+\_\+\+Phase}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+derivatives of inverse capillary pressure function 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a9cfa41794233d9fb6854e0b4a00f8ddf}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_ab632f54034ce47136356bce772f57054}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Initialize()}{Initialize()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_ab632f54034ce47136356bce772f57054} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::\+Initialize (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \&}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reading parameters for the linear \& BC relperm models. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_affc076dda4e95cfbdc9c3e12dfbd68a5}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_a40e50451890b1dc8b3c02fcf36791f3e}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!krn\_Phase@{krn\_Phase}}
+\index{krn\_Phase@{krn\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{krn\_Phase()}{krn\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a40e50451890b1dc8b3c02fcf36791f3e} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::krn\+\_\+\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+as in Helmig 97, eqn.\+2.\+57, p. 75 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_two_phase_model_ab6127c81bce3b1af871ec4cc83b165f7}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brooks_corey_a40e50451890b1dc8b3c02fcf36791f3e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_brooks_corey_a0b82831fcaee9769d27a332cf1f672b3}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!krw\_Phase@{krw\_Phase}}
+\index{krw\_Phase@{krw\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{krw\_Phase()}{krw\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a0b82831fcaee9769d27a332cf1f672b3} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::krw\+\_\+\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+relative permeabilities 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_two_phase_model_ab2460fc60f9beaf1c6ffc9f7a4d1200b}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcsmp_1_1_brooks_corey_a0b82831fcaee9769d27a332cf1f672b3_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classcsmp_1_1_brooks_corey_ad30020f8bd5115bf5a91b2df0c7a3b37}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!MaxFractionalFlowDerivative@{MaxFractionalFlowDerivative}}
+\index{MaxFractionalFlowDerivative@{MaxFractionalFlowDerivative}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{MaxFractionalFlowDerivative()}{MaxFractionalFlowDerivative()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_ad30020f8bd5115bf5a91b2df0c7a3b37} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::\+Max\+Fractional\+Flow\+Derivative (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+for the wetting phase 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a46e4e125f5c5eb3c78f081027179d40f}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_af910b8eb5013340eb1886596842d1bfa}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!Out@{Out}}
+\index{Out@{Out}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Out()}{Out()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_af910b8eb5013340eb1886596842d1bfa} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::\+Out (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{phase}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+default is the wetting phase 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_a9c8b70b4cb55a2028b78aa0ec631f400}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_a60d9c0bb282cde45b580244be2fc8cee}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!pc\_Phase@{pc\_Phase}}
+\index{pc\_Phase@{pc\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{pc\_Phase()}{pc\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a60d9c0bb282cde45b580244be2fc8cee} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::pc\+\_\+\+Phase (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+pc covers the full saturation range, pc is capped based on maximum dpcds 
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_two_phase_model_aa22fa0a162c0e3d38012fc24d6ed59f4}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_a69ee95c4936176a8ebf286734c987316}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!ShockHeight@{ShockHeight}}
+\index{ShockHeight@{ShockHeight}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ShockHeight()}{ShockHeight()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a69ee95c4936176a8ebf286734c987316} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::\+Shock\+Height (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+look this one up in the book by Randy Le\+Veque 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_a82151596aaf5ecea507fbc3bb7fa443b}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!ShockSpeed@{ShockSpeed}}
+\index{ShockSpeed@{ShockSpeed}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ShockSpeed()}{ShockSpeed()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a82151596aaf5ecea507fbc3bb7fa443b} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::\+Shock\+Speed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+linearized fractional flow derivative 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_ac160a98a72d2a12fcda59cc513f17fb6}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_brooks_corey_a7b5237f7a922503261e452531ced6b77}\index{csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}!Sw\_Phase@{Sw\_Phase}}
+\index{Sw\_Phase@{Sw\_Phase}!csmp::BrooksCorey$<$ dim $>$@{csmp::BrooksCorey$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Sw\_Phase()}{Sw\_Phase()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_brooks_corey_a7b5237f7a922503261e452531ced6b77} 
+template$<$uint32\+\_\+t dim$>$ \\
+double \mbox{\hyperlink{classcsmp_1_1_brooks_corey}{csmp\+::\+Brooks\+Corey}}$<$ dim $>$\+::\+Sw\+\_\+\+Phase (\begin{DoxyParamCaption}\item[{double}]{pc\+\_\+\+Phase}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+inverse capillary pressure function 
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_two_phase_model_aeb29d7ad37775ec0753fe935ac5e2cc6}{csmp\+::\+Two\+Phase\+Model$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/two\+\_\+phase\+\_\+flow/Brooks\+Corey.\+h\item 
+source/modules/thmc/two\+\_\+phase\+\_\+flow/Brooks\+Corey.\+cpp\end{DoxyCompactItemize}

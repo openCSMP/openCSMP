@@ -1,0 +1,75 @@
+.TH "BE_Time" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+BE_Time
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <BE_Time\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBE_Time\fP ()"
+.br
+.RI "constructor records current system time "
+.ti -1c
+.RI "void \fBmark\fP ()"
+.br
+.ti -1c
+.RI "const char * \fBascii\fP ()"
+.br
+.RI "time as a day/month/year string "
+.ti -1c
+.RI "double \fBdelta\fP (const \fBBE_Time\fP &dt) const"
+.br
+.RI "difference in seconds "
+.ti -1c
+.RI "int \fBDaylightSavings\fP ()"
+.br
+.ti -1c
+.RI "int \fBDayOfYear\fP ()"
+.br
+.RI "days since January 1 "
+.ti -1c
+.RI "int \fBDayOfWeek\fP ()"
+.br
+.RI "days since Sunday "
+.ti -1c
+.RI "int \fBSince1900\fP ()"
+.br
+.RI "years since 1/1/1900 "
+.ti -1c
+.RI "int \fBMonth\fP ()"
+.br
+.RI "since January "
+.ti -1c
+.RI "int \fBDayOfMonth\fP ()"
+.br
+.ti -1c
+.RI "int \fBHour\fP ()"
+.br
+.RI "since midnight (24 hour clock) "
+.ti -1c
+.RI "int \fBMinute\fP ()"
+.br
+.ti -1c
+.RI "int \fBSecond\fP ()"
+.br
+.ti -1c
+.RI "void \fBTime\fP (long &yr, long &hr, long &mi, long &sec)"
+.br
+.RI "gets ascii hours,minutes, seconds and tenth's of seconds out of the time-string "
+.ti -1c
+.RI "void \fBTime\fP (long &year, long &month, long &day)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Bruce Eckel's Time class from "Thinking in C++" p\&. 314 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

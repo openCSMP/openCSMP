@@ -1,0 +1,100 @@
+.TH "csmp::NaClSublimationCurve" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::NaClSublimationCurve \- Vapor pressure on the NaCl sublimation curve\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include 'eos/h2o_nacl/NaClSublimationCurve\&.h'\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNaClSublimationCurve\fP (const double &externaltemperature)"
+.br
+.ti -1c
+.RI "\fB~NaClSublimationCurve\fP ()"
+.br
+.ti -1c
+.RI "double \fBVaporPressure\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Vapor pressure on the NaCl sublimation curve\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich, thomas.driesner@erdw.ethz.ch
+.RE
+.PP
+.SH "Motivation"
+.PP
+"NaClSublimationCurve" is legacy code from Thomas Driesner's developments for the H2O-NaCl system, and computes the vapor pressure at sublimation (NaCl vapor / halite phase transition)\&. It can be used standalone if only this information is needed\&. Otherwise, it is only used in the CSMP++ context for building accurate lookup tables for the H2O-NaCl system, which are significantly faster if the full system properties are needed\&.
+
+.PP
+Details of the underlying formulation can be found in
+
+.PP
+Driesner T\&. and Heinrich C\&.A\&. (2007): The system H2O-NaCl\&. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl\&. Geochimica et Cosmochimica Acta 71, 4880-4901\&.
+.SH "Usage"
+.PP
+Construct an instance of "NaClSublimationCurve" with the temperature (in C) as constructor argument\&. "NaClSublimationCurve" has an internal mechanism to make sure that it always uses the current value of that temperature as they exist in your code\&. Public member names should be self-explanatory, I hope\&.
+
+.PP
+.PP
+.nf
+double t(somevalue); // temperature [C] in user's application
+\&.\&.\&.
+NaClSublimationCurve naclboil(t); 
+\&.\&.\&.
+// here, t may be updated
+\&.\&.\&.
+cout << "new NaCl sublimation pressure: " << naclboil\&.VaporPressure() << "Pa\\n"; // compute and output vapor pressure on sublimation curve [Pa] for new temperature
+.fi
+.PP
+.SH "Known issues"
+.PP
+The underlying equations are valid only in a restricted temperature-pressure range; range checking and error handling has not yet been implemented
+.SH "Testing"
+.PP
+tested against CSP version (ok), which in turn was tested in the period before publication in 2007, prior to writing this documentation, no details are available anymore 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::NaClSublimationCurve::NaClSublimationCurve (const double & externaltemperature)"
+custom constructor 
+.PP
+\fBAttention\fP
+.RS 4
+Use only this conctructor\&. \fBNaClSublimationCurve\fP computes the vapor pressure of NaCl sublimation as a function of temperature\&. The latter is typically computed somewhere outside this class\&. By using const ref to that external variable as constructor argument, \fBNaClSublimationCurve\fP is able to decipher the current temperature value when being queried for the vapor pressure\&. Only this constructor is allowed to ensure that functionality, default constructor has been made private\&. 
+.RE
+.PP
+
+.SS "csmp::NaClSublimationCurve::~NaClSublimationCurve ()"
+destructor 
+.SH "Member Function Documentation"
+.PP 
+.SS "double csmp::NaClSublimationCurve::VaporPressure ()"
+vapor pressure at sublimation for given temperature (eqn\&. ? of Driesner & Heinrich (2007))
+
+.PP
+\fBAttention\fP
+.RS 4
+No range check is performed, function makes only sense below NaCl triple point temperature (800\&.7 C)\&. 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Implement range checking and error handling 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

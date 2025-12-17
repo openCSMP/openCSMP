@@ -1,0 +1,604 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_v_set_converter" kind="class" language="C++" prot="public">
+    <compoundname>csmp::VSetConverter</compoundname>
+    <includes refid="_v_set_converter_8h" local="no">VSetConverter.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_converter_1a8c50335102f52b816141756a1c2d2f4a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VSetConverter&lt; dim &gt;::xmin</definition>
+        <argsstring></argsstring>
+        <name>xmin</name>
+        <qualifiedname>csmp::VSetConverter::xmin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="50" column="12" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_converter_1a51e3db143a1505eedd7fd5da121068f9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VSetConverter&lt; dim &gt;::xmax</definition>
+        <argsstring></argsstring>
+        <name>xmax</name>
+        <qualifiedname>csmp::VSetConverter::xmax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="50" column="17" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_converter_1af3fc804c76e82fbfdd2683a864684bfd" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VSetConverter&lt; dim &gt;::ymin</definition>
+        <argsstring></argsstring>
+        <name>ymin</name>
+        <qualifiedname>csmp::VSetConverter::ymin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="50" column="22" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_converter_1a3a38780740041c9acafa39e24e1650b1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VSetConverter&lt; dim &gt;::ymax</definition>
+        <argsstring></argsstring>
+        <name>ymax</name>
+        <qualifiedname>csmp::VSetConverter::ymax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="50" column="27" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_converter_1afb3bd90debfd9e34977407203fbcad3b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VSetConverter&lt; dim &gt;::zmin</definition>
+        <argsstring></argsstring>
+        <name>zmin</name>
+        <qualifiedname>csmp::VSetConverter::zmin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="50" column="32" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_v_set_converter_1a6957c5e85207e139f52a0365c655142b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::VSetConverter&lt; dim &gt;::zmax</definition>
+        <argsstring></argsstring>
+        <name>zmax</name>
+        <qualifiedname>csmp::VSetConverter::zmax</qualifiedname>
+        <briefdescription>
+<para>coordinates values of bounding box of model </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="50" column="37" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a2df5ff8aa18692fd493718bddadc7f2c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VSetConverter&lt; dim &gt;::VSetConverter</definition>
+        <argsstring>()</argsstring>
+        <name>VSetConverter</name>
+        <qualifiedname>csmp::VSetConverter::VSetConverter</qualifiedname>
+        <briefdescription>
+<para>the coordinates of the bounding box are initialized to Not A Number </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="22" column="5" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="22" bodyend="24"/>
+        <references refid="classcsmp_1_1_v_set_converter_1a2df5ff8aa18692fd493718bddadc7f2c" compoundref="_v_set_converter_8h" startline="22" endline="24">csmp::VSetConverter&lt; dim &gt;::VSetConverter</references>
+        <referencedby refid="classcsmp_1_1_v_set_converter_1a2df5ff8aa18692fd493718bddadc7f2c" compoundref="_v_set_converter_8h" startline="22" endline="24">csmp::VSetConverter&lt; dim &gt;::VSetConverter</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a352b8df10b462a2f67c051100beba5b5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::VSetConverter&lt; dim &gt;::~VSetConverter</definition>
+        <argsstring>()</argsstring>
+        <name>~VSetConverter</name>
+        <qualifiedname>csmp::VSetConverter::~VSetConverter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="26" column="5" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a6e7f7d0387418fd6def0a470cfdc45c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::ConvertElementTypesToOnesUsingLocalCoordinateSystem</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ConvertElementTypesToOnesUsingLocalCoordinateSystem</name>
+        <qualifiedname>csmp::VSetConverter::ConvertElementTypesToOnesUsingLocalCoordinateSystem</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>replaces straight-sided global element types with isoparametric ones </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="29" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="19" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1affb0868a4eac284c4586f7935c31e376" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::EstablishBoundaryFlagsForBoxModel</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;, double tolerance=0.2)</argsstring>
+        <name>EstablishBoundaryFlagsForBoxModel</name>
+        <qualifiedname>csmp::VSetConverter::EstablishBoundaryFlagsForBoxModel</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+          <defname>tol</defname>
+          <defval>0.2</defval>
+        </param>
+        <briefdescription>
+<para>applies the naming conventions TOP, BOTTOM etc. to sides, edges and cornier points of the box </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim> Applies box boundary flags assuming that the model stored in the VSet is box-shaped.
+ Brute force approach: based on the position the nodes are flagged as boundary nodes
+</verbatim></para>
+<para>tested: O.K. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="32" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="2195" bodyend="2266"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a8e7622587391dbe8df253ddeabb1bd35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::ConvertLinearToQuadraticTriangles</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ConvertLinearToQuadraticTriangles</name>
+        <qualifiedname>csmp::VSetConverter::ConvertLinearToQuadraticTriangles</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>turn triangular element mesh data to target element data </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Takes the plist, px, py, pz etc. data from the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref> and changes the order of the interpolation functions of linear triangular elements to quadratic.</para>
+<para>The Vset is modified according to the new specifications and the property values are interpolated onto the newly generated points just as the node coordinates are.</para>
+<para>In the process the &apos;plist&apos;, &apos;px&apos;, &apos;py&apos;, &apos;pz&apos;, &apos;bflags&apos; arrays in the Vdata are changed to adapt to the quadratic element.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the initialized <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> with the data described above as needed to carry out the conversion. <linebreak/>
+</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The numbering of the new nodes starts from previous-nodes+1 and goes to new-total nodes of the mesh.</para>
+<para><simplesect kind="attention"><para>This approach implies that, if node numbers are used to determine the placement in global solution matrices, nodes from a single triangle will be separated by many rows/cols in the global solution matrix. If a solver is used, which applies no pre-conditioning of the solution matrix, before inverting the solution matrix, this numbering leads to high storage requirements and long convergence times. In this case, an algorithm like the Cuthill-McKhee node-numbering graph-tree traversal should be used to improve the matrix occupancy and to reduce the number of nodes which are far off the diagonal. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="35" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="88" bodyend="240"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1aa3ef5186be8a3bb7a92cf7f2364ca591" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::ConvertLinearToQuadraticTriangles3D</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ConvertLinearToQuadraticTriangles3D</name>
+        <qualifiedname>csmp::VSetConverter::ConvertLinearToQuadraticTriangles3D</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>turn triangular element mesh data to target 3D surface element data </para>
+        </briefdescription>
+        <detaileddescription>
+<para>as <ref refid="classcsmp_1_1_v_set_converter_1a8e7622587391dbe8df253ddeabb1bd35" kindref="member">ConvertLinearToQuadraticTriangles()</ref> but for surface elements in 3D space </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="38" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="252" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1ac44f3466d98863e6486b6efa763515e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::ConvertLinearToBarycentricTriangles</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ConvertLinearToBarycentricTriangles</name>
+        <qualifiedname>csmp::VSetConverter::ConvertLinearToBarycentricTriangles</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>create a mesh of 7-noded barycentric triangular finite elements </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Takes the plist, px, py, pz etc. data from the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref> and changes the the linear triagular element to a 7-noded quadratic barycentric triangle according to the element specifications supplied by the barycentric 7-noded triangular finite element. <linebreak/>
+</para>
+<para>The Vset is modified according to the new specifications and the property values are interpolated onto the newly generated points just as the node coordinates are.</para>
+<para>In the process the &apos;plist&apos;, &apos;px&apos;, &apos;py&apos;, &apos;pz&apos;, &apos;bflags&apos; arrays in the Vdata are changed to adapt to the higher-order element.</para>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The numbering of the new nodes starts from previous-nodes+1 and goes to new-total nodes of the mesh. This approach implies that, if node numbers are used to determine the placement in global solution matrices, nodes from a single triangle will be separated by many rows/cols in the global solution matrix. If a solver is used, which applies no pre-conditioning of the solution matrix, before inverting the solution matrix, this numbering leads to high storage requirements and long convergence times. In this case, an algorithm like the Cuthill-McKhee node-numbering graph-tree traversal should be used to improve the matrix occupancy and to reduce the number of nodes which are far off the diagonal. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="41" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="464" bodyend="650"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1afdbdb8cae8f0840f8f4c59d7b1ee1fb1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::ConvertLinearToQuadraticTetrahedra</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ConvertLinearToQuadraticTetrahedra</name>
+        <qualifiedname>csmp::VSetConverter::ConvertLinearToQuadraticTetrahedra</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>create 10-noded tetrahedra from 4-noded ones </para>
+        </briefdescription>
+        <detaileddescription>
+<para>void <ref refid="classcsmp_1_1_v_set_converter_1afdbdb8cae8f0840f8f4c59d7b1ee1fb1" kindref="member">VSetConverter&lt;dim&gt;::ConvertLinearToQuadraticTetrahedra( VSet&lt;dim&gt;&amp; vset )</ref></para>
+<para><linebreak/>
+ <bold>Description</bold> </para>
+<para>Interpolates midside node locations onto the sides of the quadratic tetrahedron and adds these points as nodes to the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref> which is returned. <linebreak/>
+</para>
+<para>The node numbering of the tetrahedron is: <verbatim>      ^ t
+      |
+      |
+
+    4 o
+      | \
+      |   \
+   10 o     o 9
+      |      \
+</verbatim> 8 o | \ 1 o <ndash/> o <mdash/> o 3 --&gt; s / 7 / <linebreak/>
+ 5 o o 6 / / o 2 <linebreak/>
+ r <linebreak/>
+</para>
+<para><linebreak/>
+ <bold>Input</bold> <bold>Arguments</bold> </para>
+<para>A reference to the <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref> which shall be modified by the function. <linebreak/>
+</para>
+<para><linebreak/>
+ <bold>Output</bold> <bold>Arguments</bold> &amp; Return Value</para>
+<para>The modified <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet&lt;dim&gt;</ref> in returned into the first method argument. <linebreak/>
+</para>
+<para><linebreak/>
+ <bold>Implementation</bold> </para>
+<para><linebreak/>
+ <bold>Application</bold> </para>
+<para>To facilitate computations with quadratic tetrahedral elements on the basis of simple tetrahedral element meshes. <linebreak/>
+</para>
+<para><linebreak/>
+ <bold>Messages</bold> </para>
+<para>tested: O.K. SKM 4/3/02 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="44" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="1916" bodyend="2178"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a2cc77c224a475d09752a9e689f93c8f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::ConvertLinearToBarycentricTetrahedra</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;)</argsstring>
+        <name>ConvertLinearToBarycentricTetrahedra</name>
+        <qualifiedname>csmp::VSetConverter::ConvertLinearToBarycentricTetrahedra</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+<para>turn linear tetrahedral mesh into 11-noded barycentric tetrahedral mesh </para>
+        </briefdescription>
+        <detaileddescription>
+<para>void <ref refid="classcsmp_1_1_v_set_converter_1a2cc77c224a475d09752a9e689f93c8f0" kindref="member">VSetConverter&lt;dim&gt;::ConvertLinearToBarycentricTetrahedra( VSet&lt;dim&gt;&amp; vset )</ref></para>
+<para><linebreak/>
+ <bold>Description</bold> </para>
+<para><ref refid="classcsmp_1_1_v_set_converter_1a2cc77c224a475d09752a9e689f93c8f0" kindref="member">ConvertLinearToBarycentricTetrahedra()</ref> transforms a &apos;plist&apos; with linear tetrahedral elements into a corresponding Vdata for 11-noded barycentric tetrahedral elements numbered as follows.</para>
+<para>^ t | / s | 9 / 3 o <ndash/> o <mdash/> o 2 | \ / | | \ / | 7 o 6 o \ o 5 | / 8 o | | / | 0 o <ndash/> o <mdash/> o 1 ----&gt; r 4 <linebreak/>
+</para>
+<para>The center node of the barycentric tetrahedron has the number 10 (numbering 0...n). The missing node coordinates are calculated from the node coordinates of the linear tetrahedra and the lists px, py, pz&apos; are extended correspondingly. <linebreak/>
+</para>
+<para>The property values are interpolated onto the newly generated points just as the node coordinates are. <linebreak/>
+</para>
+<para><linebreak/>
+ <bold>Input</bold> <bold>Arguments</bold> </para>
+<para>The supplied <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref> must hold the &quot;P-data&quot; &apos;plist&apos;, &apos;pfverts&apos; &apos;px&apos;, &apos;py&apos;, &apos;pz&apos;, in order to be processable. <linebreak/>
+</para>
+<para><linebreak/>
+ <bold>Implementation</bold> </para>
+<para>The numbering of the new nodes starts from previous-nodes+1 and goes to new-total nodes of the mesh. This approach implies that, if node numbers are used to determine the placement in global solution matrices, nodes from a single triangle will be separated by many rows/cols in the global solution matrix. If a solver is used, which applies no pre-conditioning of the solution matrix, before inverting the solution matrix, this numbering leads to high storage requirements and long convergence times. In this case, an algorithm like the Cuthill-McKhee node-numbering graph-tree traversal should be used to improve the matrix occupancy and to reduce the number of nodes which are far off the diagonal. <linebreak/>
+</para>
+<para><linebreak/>
+ <bold>Application</bold> </para>
+<para><linebreak/>
+ <bold>Messages</bold> </para>
+<para>tested: </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="47" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="1568" bodyend="1853"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a6b282cb7b71ed746150898dd92f92160" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::FlagCornerNodes</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;, bool three_dimensional=false) const</argsstring>
+        <name>FlagCornerNodes</name>
+        <qualifiedname>csmp::VSetConverter::FlagCornerNodes</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>three_dimensional</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>rectangular model in 2 and 3D, flagging of corner node </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="56" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="1124" bodyend="1219"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a07a7be68b6f80586f1e05adc65b5e658" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t csmp::VSetConverter&lt; dim &gt;::TestForBoundaryFlags</definition>
+        <argsstring>(const std::vector&lt; std::int8_t &gt; &amp;bflags, size_t nID1, size_t nID2) const</argsstring>
+        <name>TestForBoundaryFlags</name>
+        <qualifiedname>csmp::VSetConverter::TestForBoundaryFlags</qualifiedname>
+        <param>
+          <type>const std::vector&lt; std::int8_t &gt; &amp;</type>
+          <declname>bflags</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nID1</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nID2</declname>
+        </param>
+        <briefdescription>
+<para>returns 0 if face is not at the model boundary </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For input data from linear triangular elements the function get the boundary flags of the face nodes and determines from it the face on which the midpoint lies. An error is reported if one of the nodes does not lie on the model boundary.</para>
+<para>At this stage the corner nodes have not been identified yet !.</para>
+<para>tested: O.K. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="59" column="13" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="674" bodyend="741"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a5b961e8af00ac8b245d385d50987d3ef" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::VSetConverter&lt; dim &gt;::BoundaryValue</definition>
+        <argsstring>(const std::map&lt; size_t, double &gt; &amp;bvals, size_t nID1, size_t nID2) const</argsstring>
+        <name>BoundaryValue</name>
+        <qualifiedname>csmp::VSetConverter::BoundaryValue</qualifiedname>
+        <param>
+          <type>const std::map&lt; size_t, double &gt; &amp;</type>
+          <declname>bvals</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nID1</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nID2</declname>
+        </param>
+        <briefdescription>
+<para>interpolation between value pairs </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Interpolation of variable values on the boundary, assuming that it lies in one of the coordinate planes. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="63" column="12" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="39" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a02071cae935cd6407fa2b7e48533bb53" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::OrderQuadraticTriangleCoordinateOrigins</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;) const</argsstring>
+        <name>OrderQuadraticTriangleCoordinateOrigins</name>
+        <qualifiedname>csmp::VSetConverter::OrderQuadraticTriangleCoordinateOrigins</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="69" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="1226" bodyend="1298"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1af0a0354e8ac4fb6b93afcfc0ecb3a5ac" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::OrderBarycentricQuadraticTriangleCoordinateOrigins</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;) const</argsstring>
+        <name>OrderBarycentricQuadraticTriangleCoordinateOrigins</name>
+        <qualifiedname>csmp::VSetConverter::OrderBarycentricQuadraticTriangleCoordinateOrigins</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="71" column="10" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="1417" bodyend="1493"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1a171f2801b8f14090eb1a22bb08afaf5e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::VSetConverter&lt; dim &gt;::FlagEdges</definition>
+        <argsstring>(VSet&lt; dim &gt; &amp;vset, double tolerance=1.0e-4) const</argsstring>
+        <name>FlagEdges</name>
+        <qualifiedname>csmp::VSetConverter::FlagEdges</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; dim &gt; &amp;</type>
+          <declname>vset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tolerance</declname>
+          <defname>tol</defname>
+          <defval>1.0e-4</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG dependent on their location. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="75" column="12" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="1309" bodyend="1412"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1ae8415d81de32f68c8a6e3253366ba77f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t csmp::VSetConverter&lt; dim &gt;::BoundaryFlags3D</definition>
+        <argsstring>(const std::vector&lt; std::int8_t &gt; &amp;bflags, size_t nID1, size_t nID2) const</argsstring>
+        <name>BoundaryFlags3D</name>
+        <qualifiedname>csmp::VSetConverter::BoundaryFlags3D</qualifiedname>
+        <param>
+          <type>const std::vector&lt; std::int8_t &gt; &amp;</type>
+          <declname>bflags</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nID1</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nID2</declname>
+        </param>
+        <briefdescription>
+<para>flag-based check </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="78" column="13" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="747" bodyend="1036"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_v_set_converter_1aa005567e0e0e25551c6a284270d1033d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t csmp::VSetConverter&lt; dim &gt;::TestForBoundaryFlags3D</definition>
+        <argsstring>(double x, double y, double z) const</argsstring>
+        <name>TestForBoundaryFlags3D</name>
+        <qualifiedname>csmp::VSetConverter::TestForBoundaryFlags3D</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>coordinate-based check of whether a node is in on the boundary of a box shaped model </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/VSetConverter.h" line="82" column="13" bodyfile="source/modules/integration/finite_elements/VSetConverter.cpp" bodystart="1042" bodyend="1108"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>To convert linear to quadratic elements and to remove degenerate elements from the input mesh. Methods are only for triangles and tetrahedra.</para>
+<para><simplesect kind="author"><para>Stephan Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>2001 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::VSetConverter&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_v_set_converter"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/VSetConverter.h" line="19" column="1" bodyfile="source/includes/integration/finite_elements/VSetConverter.h" bodystart="19" bodyend="83"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_v_set_converter_1ae8415d81de32f68c8a6e3253366ba77f" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>BoundaryFlags3D</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a5b961e8af00ac8b245d385d50987d3ef" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>BoundaryValue</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a6e7f7d0387418fd6def0a470cfdc45c6" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ConvertElementTypesToOnesUsingLocalCoordinateSystem</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a2cc77c224a475d09752a9e689f93c8f0" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ConvertLinearToBarycentricTetrahedra</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1ac44f3466d98863e6486b6efa763515e5" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ConvertLinearToBarycentricTriangles</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1afdbdb8cae8f0840f8f4c59d7b1ee1fb1" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ConvertLinearToQuadraticTetrahedra</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a8e7622587391dbe8df253ddeabb1bd35" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ConvertLinearToQuadraticTriangles</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1aa3ef5186be8a3bb7a92cf7f2364ca591" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ConvertLinearToQuadraticTriangles3D</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1affb0868a4eac284c4586f7935c31e376" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>EstablishBoundaryFlagsForBoxModel</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a6b282cb7b71ed746150898dd92f92160" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>FlagCornerNodes</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a171f2801b8f14090eb1a22bb08afaf5e" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>FlagEdges</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1af0a0354e8ac4fb6b93afcfc0ecb3a5ac" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>OrderBarycentricQuadraticTriangleCoordinateOrigins</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a02071cae935cd6407fa2b7e48533bb53" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>OrderQuadraticTriangleCoordinateOrigins</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a07a7be68b6f80586f1e05adc65b5e658" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>TestForBoundaryFlags</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1aa005567e0e0e25551c6a284270d1033d" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>TestForBoundaryFlags3D</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a2df5ff8aa18692fd493718bddadc7f2c" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>VSetConverter</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a51e3db143a1505eedd7fd5da121068f9" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>xmax</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a8c50335102f52b816141756a1c2d2f4a" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>xmin</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a3a38780740041c9acafa39e24e1650b1" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ymax</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1af3fc804c76e82fbfdd2683a864684bfd" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>ymin</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a6957c5e85207e139f52a0365c655142b" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>zmax</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1afb3bd90debfd9e34977407203fbcad3b" prot="private" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>zmin</name></member>
+      <member refid="classcsmp_1_1_v_set_converter_1a352b8df10b462a2f67c051100beba5b5" prot="public" virt="non-virtual"><scope>csmp::VSetConverter</scope><name>~VSetConverter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

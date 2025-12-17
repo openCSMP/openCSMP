@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_region___test" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Region_Test</compoundname>
+    <basecompoundref refid="classcsmp_1_1_test" prot="public" virt="non-virtual">csmp::Test</basecompoundref>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_region___test_1a5a2ac339f6b15b761be5fa3f606a1f3d" prot="private" static="yes" mutable="no">
+        <type>const bool</type>
+        <definition>const bool csmp::Region_Test::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::Region_Test::verbose_</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Region_Test.h" line="22" column="23" bodyfile="tests/unit/Region_Test.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_region___test_1a8758bbbdf4e87a4aeef282d3fe504c1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::Region_Test::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <qualifiedname>csmp::Region_Test::run</qualifiedname>
+        <reimplements refid="classcsmp_1_1_test_1af63cd2af47d8d03819b05cf8bfb27eac">run</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>SKM revised 8/3/2016</para>
+<para><xrefsect id="todo_1_todo000264"><xreftitle>Todo</xreftitle><xrefdescription><para>test for <ref refid="classcsmp_1_1_model" kindref="compound">Model</ref> as non-unique region is commented out because rest of code is broken</para>
+</xrefdescription></xrefsect></para>
+<para><xrefsect id="todo_1_todo000265"><xreftitle>Todo</xreftitle><xrefdescription><para>check again for code coverage: a number of important methods are not tested yet like: CreateBetween() CorrectLowDimRegionOrientation() VolumeIntegral_x_Thickness()</para>
+</xrefdescription></xrefsect></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Region_Test.h" line="13" column="11" bodyfile="tests/unit/Region_Test.cpp" bodystart="46" bodyend="326"/>
+        <references refid="namespacecsmp_1a045796fbaba7d5053c66ae8e794e5f9b" compoundref="_scalar_variable_8cpp" startline="222" endline="225">csmp::makeScalar</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_region___test_1a2f915c2b50d97de7b4adf019be518f0b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Region_Test::TestBoundaryFaceFunctionality</definition>
+        <argsstring>()</argsstring>
+        <name>TestBoundaryFaceFunctionality</name>
+        <qualifiedname>csmp::Region_Test::TestBoundaryFaceFunctionality</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>vsetMaker version of previous method</para>
+<para>uses SurfaceArea() to test whether the face connectivity is preserved when a model is saved to disk and reloaded afterwards.</para>
+<para>try input models &quot;cube_flag&quot; and a hexahedral one</para>
+<para><simplesect kind="attention"><para>the model must be box-shaped else, surface area computation will fail. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Region_Test.h" line="16" column="11" bodyfile="tests/unit/Region_Test.cpp" bodystart="341" bodyend="447"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region___test_1abd9ddd18767a2c76d3d41d026659c993" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Region_Test::TestBoundaryFaceFunctionality</definition>
+        <argsstring>(const std::string &amp;)</argsstring>
+        <name>TestBoundaryFaceFunctionality</name>
+        <qualifiedname>csmp::Region_Test::TestBoundaryFaceFunctionality</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Region_Test.h" line="17" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_region___test_1afa56e877dae755ff4a74d4d3036c970e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Region_Test::TestRegionFileInputOutput</definition>
+        <argsstring>(Model&lt; 3U &gt; &amp;model, const char *region)</argsstring>
+        <name>TestRegionFileInputOutput</name>
+        <qualifiedname>csmp::Region_Test::TestRegionFileInputOutput</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; 3U &gt; &amp;</type>
+          <declname>model</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>region</declname>
+        </param>
+        <briefdescription>
+<para>test covers functionality of the base class <ref refid="classcsmp_1_1_model_sub_domain" kindref="compound">ModelSubDomain</ref> </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Compares whether the data of the region class are correctly recovered from binary file. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/unit/Region_Test.h" line="20" column="11" bodyfile="tests/unit/Region_Test.cpp" bodystart="503" bodyend="570"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::Region_Test</label>
+        <link refid="classcsmp_1_1_region___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Region_Test</label>
+        <link refid="classcsmp_1_1_region___test"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Test</label>
+        <link refid="classcsmp_1_1_test"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/unit/Region_Test.h" line="10" column="3" bodyfile="tests/unit/Region_Test.h" bodystart="11" bodyend="23"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_test_1ad3346b23b36fbe34ac5f306a2a5d0e28" prot="protected" virt="non-virtual"><scope>csmp::Region_Test</scope><name>do_equal</name></member>
+      <member refid="classcsmp_1_1_test_1aee0da28e82775ce7d1ebd3b9fae9bf7d" prot="protected" virt="non-virtual"><scope>csmp::Region_Test</scope><name>do_fail</name></member>
+      <member refid="classcsmp_1_1_test_1a9976e7601c20a057d2f0ed2f8318c862" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>do_succeed</name></member>
+      <member refid="classcsmp_1_1_test_1a0bf5d355d1455b2bc113ba2572e95ad8" prot="protected" virt="non-virtual"><scope>csmp::Region_Test</scope><name>do_test</name></member>
+      <member refid="classcsmp_1_1_test_1ab8d7cbdfd0588aa57d7ce4d2574d665b" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>getName</name></member>
+      <member refid="classcsmp_1_1_test_1a47920cfd13f92f0860ca62ade4f2e150" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>getNumFailed</name></member>
+      <member refid="classcsmp_1_1_test_1af0f3b897ba4ff0cb7c94cde8be1fb32b" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>getNumPassed</name></member>
+      <member refid="classcsmp_1_1_test_1ac340370a07ff5fd4bd85bae93f0a3dac" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>getStream</name></member>
+      <member refid="classcsmp_1_1_test_1adfad3f1f85aa766958ffcc59070e2d2d" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>hasName</name></member>
+      <member refid="classcsmp_1_1_test_1a73afdd22caa8aac000b0d07fb3ae42e5" prot="protected" virt="non-virtual"><scope>csmp::Region_Test</scope><name>prefix_</name></member>
+      <member refid="classcsmp_1_1_test_1aa241dcb3adf0ec6716ed08739bd3f79b" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>report</name></member>
+      <member refid="classcsmp_1_1_test_1a5d334e867a3de4afd434dd9b0034234c" prot="public" virt="virtual"><scope>csmp::Region_Test</scope><name>reset</name></member>
+      <member refid="classcsmp_1_1_region___test_1a8758bbbdf4e87a4aeef282d3fe504c1c" prot="public" virt="virtual"><scope>csmp::Region_Test</scope><name>run</name></member>
+      <member refid="classcsmp_1_1_test_1a3e006cad54b35d9e20561f4a64843b4e" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>setName</name></member>
+      <member refid="classcsmp_1_1_test_1a20ba6ab18fcaaf806df6348a3b2e032b" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>setStream</name></member>
+      <member refid="classcsmp_1_1_test_1aa4e274174d16215448eab6198bdb5979" prot="public" virt="non-virtual"><scope>csmp::Region_Test</scope><name>Test</name></member>
+      <member refid="classcsmp_1_1_region___test_1a2f915c2b50d97de7b4adf019be518f0b" prot="private" virt="non-virtual"><scope>csmp::Region_Test</scope><name>TestBoundaryFaceFunctionality</name></member>
+      <member refid="classcsmp_1_1_region___test_1abd9ddd18767a2c76d3d41d026659c993" prot="private" virt="non-virtual"><scope>csmp::Region_Test</scope><name>TestBoundaryFaceFunctionality</name></member>
+      <member refid="classcsmp_1_1_region___test_1afa56e877dae755ff4a74d4d3036c970e" prot="private" virt="non-virtual"><scope>csmp::Region_Test</scope><name>TestRegionFileInputOutput</name></member>
+      <member refid="classcsmp_1_1_region___test_1a5a2ac339f6b15b761be5fa3f606a1f3d" prot="private" virt="non-virtual"><scope>csmp::Region_Test</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_test_1ac154a16a5e086fe52e032c30722f5060" prot="public" virt="virtual"><scope>csmp::Region_Test</scope><name>~Test</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

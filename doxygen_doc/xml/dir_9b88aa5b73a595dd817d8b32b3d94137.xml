@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_9b88aa5b73a595dd817d8b32b3d94137" kind="dir">
+    <compoundname>source/includes/interfaces/CGNS</compoundname>
+    <innerfile refid="_c_g_n_s___element_specifications_8h">CGNS_ElementSpecifications.h</innerfile>
+    <innerfile refid="_c_g_n_s___interface_8h">CGNS_Interface.h</innerfile>
+    <innerfile refid="_c_g_n_s___model_8h">CGNS_Model.h</innerfile>
+    <innerfile refid="cgnslib_8h">cgnslib.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/interfaces/CGNS/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,189 @@
+\doxysection{csmp\+::Property\+At\+Point\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_property_at_point_visitor}{}\label{classcsmp_1_1_property_at_point_visitor}\index{csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}}
+
+
+Inheritance diagram for csmp\+::Property\+At\+Point\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_property_at_point_visitor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Property\+At\+Point\+Visitor\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=215pt]{classcsmp_1_1_property_at_point_visitor__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor_a049ccec529fe1710edd14aa1d63e703d}{Property\+At\+Point\+Visitor}} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const std\+::map$<$ size\+\_\+t, std\+::vector$<$ double $>$ $>$ \&points\+\_\+to\+\_\+search, const char \texorpdfstring{$\ast$}{*}node\+\_\+property\+\_\+name)
+\begin{DoxyCompactList}\small\item\em attempts to retrieve the value of the property at the point in the mesh \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor_ad713c8cf371c38ab1033379d7c677f1c}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor_a6a0f87fa8b130276fb22d1464dd72fcc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a54024fa88cb2473d0f5f05ce1b425d51}\label{classcsmp_1_1_property_at_point_visitor_a54024fa88cb2473d0f5f05ce1b425d51} 
+std\+::map$<$ size\+\_\+t, size\+\_\+t $>$ \& {\bfseries Target\+Found} ()
+\item 
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor_ab9896fbfb90b80cb1cd19cb54ca33f83}{Element\+That\+Contains}} (size\+\_\+t point) const
+\begin{DoxyCompactList}\small\item\em returns a pointer to the element that contains the point of interest \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_afbba0ae7b20773a818907dd7d6e76e45}\label{classcsmp_1_1_property_at_point_visitor_afbba0ae7b20773a818907dd7d6e76e45} 
+void {\bfseries Property\+Value\+At} (size\+\_\+t point, \mbox{\hyperlink{classcsmp_1_1_scalar_variable}{Scalar\+Variable}} \&out\+Property)
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a9e4bb50eaf5ccf5d63a81785c9a28b05}\label{classcsmp_1_1_property_at_point_visitor_a9e4bb50eaf5ccf5d63a81785c9a28b05} 
+void {\bfseries Property\+Value\+At} (size\+\_\+t point, \mbox{\hyperlink{classcsmp_1_1_vector_variable}{Vector\+Variable}}$<$ dim $>$ \&out\+Property)
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_aa10c436fb5baad9e3f263c05a752de6a}\label{classcsmp_1_1_property_at_point_visitor_aa10c436fb5baad9e3f263c05a752de6a} 
+void {\bfseries Property\+Value\+At} (size\+\_\+t point, \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{Tensor\+Variable}}$<$ dim $>$ \&out\+Property)
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a3f6e3051230dc1c8d825d524f54a4d94}\label{classcsmp_1_1_property_at_point_visitor_a3f6e3051230dc1c8d825d524f54a4d94} 
+void {\bfseries Property\+Value\+At} (size\+\_\+t point, \mbox{\hyperlink{classcsmp_1_1_array_variable}{Array\+Variable}} \&out\+Property)
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_ad8152b43840b8790599b5e8a05387346}\label{classcsmp_1_1_property_at_point_visitor_ad8152b43840b8790599b5e8a05387346} 
+void {\bfseries Property\+Value\+At} (size\+\_\+t point, \mbox{\hyperlink{classcsmp_1_1_flagged_array_variable}{Flagged\+Array\+Variable}} \&out\+Property)
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a0513e882cdbf3575610a76fe1c706c1c}\label{classcsmp_1_1_property_at_point_visitor_a0513e882cdbf3575610a76fe1c706c1c} 
+void {\bfseries Set\+Property\+Keys} (const char \texorpdfstring{$\ast$}{*}prop\+S\+\_\+)
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a3960fc2f1eb5d2d01412bd0db3855c36}\label{classcsmp_1_1_property_at_point_visitor_a3960fc2f1eb5d2d01412bd0db3855c36} 
+void {\bfseries Set\+Debug\+On} ()
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a20aa2d99d3f5f4f6ba75db7bf16fc19f}\label{classcsmp_1_1_property_at_point_visitor_a20aa2d99d3f5f4f6ba75db7bf16fc19f} 
+void {\bfseries Set\+Continue\+Search\+Off} ()
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a90b7c930fab05c91b9601c3ec63f1ba6}\label{classcsmp_1_1_property_at_point_visitor_a90b7c930fab05c91b9601c3ec63f1ba6} 
+void {\bfseries Set\+Brute\+Force\+Off} ()
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_ab27a70437c5e06bc14f53db704479139}\label{classcsmp_1_1_property_at_point_visitor_ab27a70437c5e06bc14f53db704479139} 
+void {\bfseries Set\+Brute\+Force\+On} ()
+\item 
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a26107518f8f010aa2113032093e27f67}\label{classcsmp_1_1_property_at_point_visitor_a26107518f8f010aa2113032093e27f67} 
+bool {\bfseries Check\+Results} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcsmp_1_1_visitor_a1097abaa59d3a35d65c0cb6335e2719c}{Visitor}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} level=MODEL, \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} target=ELEMENT)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a04cef3d343b9721c4d636f5496ccfa42}{Application\+Level}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Level} () const
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_visitor_a05b9c8127e47ce0ca524e2804c14251a}{Application\+Target}} (\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} p)
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries Application\+Target} () const
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a005bb17978ed03376bc3f7c1c329c936}{Set\+Initial\+Properties}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}model)
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac71cf14aab11139d8b03b39d4e4709bc}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_region}{Region}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_ac735e758870331b6639ea969504c47bf}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_boundary}{Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_split_boundary}{Split\+Boundary}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_abdca6daa1802e3727868d2d614c65015}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_face}{Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a0f21f0cfcf5328584883eb38effb58d4}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_inter_face}{Inter\+Face}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void {\bfseries Visit} (\mbox{\hyperlink{classcsmp_1_1_edge}{Edge}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_visitor_a46449d8a657dbe4a2db5f1126e08323d}{Visit}} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*})
+\item 
+bool {\bfseries Verbose} ()
+\item 
+void {\bfseries Verbose} (bool verbose)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+level\+\_\+}
+\item 
+\mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}} {\bfseries application\+\_\+target\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a049ccec529fe1710edd14aa1d63e703d}\index{csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}!PropertyAtPointVisitor@{PropertyAtPointVisitor}}
+\index{PropertyAtPointVisitor@{PropertyAtPointVisitor}!csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{PropertyAtPointVisitor()}{PropertyAtPointVisitor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_at_point_visitor_a049ccec529fe1710edd14aa1d63e703d} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor}{csmp\+::\+Property\+At\+Point\+Visitor}}$<$ dim $>$\+::\+Property\+At\+Point\+Visitor (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{}{, }\item[{const std\+::map$<$ size\+\_\+t, std\+::vector$<$ double $>$ $>$ \&}]{points\+\_\+to\+\_\+search}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{node\+\_\+property\+\_\+name}{}\end{DoxyParamCaption})}
+
+
+
+attempts to retrieve the value of the property at the point in the mesh 
+
+\begin{DoxyAuthor}{Author}
+Andrey Mezentsev (10/2004) 
+\end{DoxyAuthor}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_property_at_point_visitor_a049ccec529fe1710edd14aa1d63e703d_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classcsmp_1_1_property_at_point_visitor_a049ccec529fe1710edd14aa1d63e703d_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_ab9896fbfb90b80cb1cd19cb54ca33f83}\index{csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}!ElementThatContains@{ElementThatContains}}
+\index{ElementThatContains@{ElementThatContains}!csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{ElementThatContains()}{ElementThatContains()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_at_point_visitor_ab9896fbfb90b80cb1cd19cb54ca33f83} 
+template$<$uint32\+\_\+t dim$>$ \\
+\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor}{csmp\+::\+Property\+At\+Point\+Visitor}}$<$ dim $>$\+::\+Element\+That\+Contains (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{point}{}\end{DoxyParamCaption}) const}
+
+
+
+returns a pointer to the element that contains the point of interest 
+
+returns NULL pointer if the element cannot be found \Hypertarget{classcsmp_1_1_property_at_point_visitor_ad713c8cf371c38ab1033379d7c677f1c}\index{csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_at_point_visitor_ad713c8cf371c38ab1033379d7c677f1c} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor}{csmp\+::\+Property\+At\+Point\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_element}{Element}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Processing of the properties for output
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+\Hypertarget{classcsmp_1_1_property_at_point_visitor_a6a0f87fa8b130276fb22d1464dd72fcc}\index{csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}!Visit@{Visit}}
+\index{Visit@{Visit}!csmp::PropertyAtPointVisitor$<$ dim $>$@{csmp::PropertyAtPointVisitor$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{Visit()}{Visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_property_at_point_visitor_a6a0f87fa8b130276fb22d1464dd72fcc} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_property_at_point_visitor}{csmp\+::\+Property\+At\+Point\+Visitor}}$<$ dim $>$\+::\+Visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}}]{m}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcsmp_1_1_visitor}{csmp\+::\+Visitor$<$ dim $>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Property\+At\+Point\+Visitor.\+h\item 
+source/modules/model/Property\+At\+Point\+Visitor.\+cpp\end{DoxyCompactItemize}

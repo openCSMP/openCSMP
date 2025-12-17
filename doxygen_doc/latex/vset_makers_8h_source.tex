@@ -1,0 +1,95 @@
+\doxysection{vset\+Makers.\+h}
+\hypertarget{vset_makers_8h_source}{}\label{vset_makers_8h_source}\index{source/includes/utilities/vsetMakers.h@{source/includes/utilities/vsetMakers.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{VSET\_MAKERS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{VSET\_MAKERS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_v_set_8h}{"{}VSet.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_topology_8h}{"{}ModelTopology.h"{}}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{comment}{///\ mesh\ of\ a\ 4\ linear\ quadrilateral\ elements}}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\ \ \mbox{\hyperlink{namespacecsmp_af1fe89db7a9b2bd85f7babe0da313d2b}{create\_Quadrilateral\_VSet}}();}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\ 2D\ single\ element-\/type\ meshes}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{///\ mesh\ patch\ with\ 10\ triangles}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a1efaa453e719fbed47a9f7814ef196fb}{create\_TrianglePatch\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ );}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ create\_1Square\_VSet(\mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&,\ \textcolor{keywordtype}{double}\ length\_of\_sides,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{///\ creates\ a\ \ mesh\ of\ rectangles\ the\ dimensions\ of\ which\ are\ defined\ by\ the\ user.\ The\ model\ has\ a\ zero\ width\ slit\ in\ the\ middle\ where\ nodes\ are\ duplicated}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a0e1ced1988d430754262e01b5973ce9d}{create\_SlitRectangle\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&,\ \textcolor{keywordtype}{int}\ x\_dimension,\ \textcolor{keywordtype}{int}\ y\_dimension,\ \textcolor{keywordtype}{double}\ x\_length,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ y\_length,\ \textcolor{keywordtype}{int}\ depth\_of\_slit,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{///\ creates\ either\ 1\ square\ or\ 1\ split\ rectangle\ mesh\ using\ the\ methods\ above}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ad589eecdcb48b66d8e1fcf819b3aa285}{create\_Square\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&,\ \textcolor{keywordtype}{int}\ size\_sides,\ \textcolor{keywordtype}{double}\ dimension,\ \textcolor{keywordtype}{bool}\ skewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ 2D\ poly-\/element\ type\ meshes\ wirh\ topology\ info}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ \ Rectangle-\/shaped\ MODEL\_TINY,\ consisting\ of\ 1\ line\ element\ two\ triangles,\ 1\ quadrilateral\ and\ 6\ face\ object\ marking\ the\ box\ boundary.}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\ \ \mbox{\hyperlink{namespacecsmp_a54820d41b7b0b602c9ce2803c4b0cc73}{create\_SimplePolyElement2DModel}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ );}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{///\ Rectangle\ shaped\ mixed\ model\ with\ 2\ intersecting\ line\ element\ regions}}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\ \ \mbox{\hyperlink{namespacecsmp_a08468a452c95d4f46907582c28cb08da}{create\_MeshPatchWithLineElements\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{///\ model\ SPLIT22\_BASIC\ with\ box\ boundaries\ (Faces)\ and\ one\ through-\/going\ and\ one\ internal\ crossing\ split\ boundary}}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\ \ \mbox{\hyperlink{namespacecsmp_abdc9b9fa9e86ff5a5417795446caface}{create\_BoundarySplitBoundaryPatch}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{///\ 2D\ rectangular\ model\ the\ two\ halfs\ of\ each\ are\ offset\ from\ one\ another}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_adaf58e3e7d7a6d4cb4efd42577be602c}{create\_Disconnected2D\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<2U>\&\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ 3D\ single-\/elememt\ meshes}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ single\ 8-\/noded\ hexahedron}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a21e3d16b8a41023fd7ad1eff6a69024b}{create\_1Hexahedron\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&,\ \textcolor{keywordtype}{bool}\ bSkewed\ =\ \textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ single\ 6-\/noded\ prism\ element}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a809a49588c41e3d709c1dfcf46d3eacc}{create\_1Prism\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ 3D\ poly-\/elememt\ meshes}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{///\ 6\ four-\/noded\ tetrahedra\ filling\ a\ cube,\ no\ midside\ nodes}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_abdd3827f503fb175b6dcf432ecbeedd1}{create\_Tetra\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ );}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{///\ 27\ pyramids\ packed\ into\ cube}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a9953e1e4cdab45ff327b4990f9d976c5}{create\_Pyramid\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{///\ Rubik\ cube\ of\ 27\ hexahedra,\ three\ XY\ planes\ of\ 3x3\ elements,\ numbered\ from\ the\ left\ to\ the\ right\ (x=0..3),\ from\ the\ bottom\ to\ the\ top\ (y=0..3)}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_aa342d3bcc612eab8bbd7e1942b2784ad}{create\_RubikCube\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ );}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{///\ 27\ hexahedra\ forming\ a\ \ cube}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ TODO:\ fix\ neighbor\ conectivity\ /\ elment\ numbering}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a8f83c65cbfadca7865be2a363faf9f8f}{create\_Hexahedra\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ mesh\ with\ 54\ prism\ elements}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ad33a20dbd1f24bbc9e89444c26560507}{create\_Prism\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ 3D\ element\ sets\ with\ different\ types\ of\ elements}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{//\ TODO:\ fix\ neighbor\ conectivity\ /\ elment\ numbering}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_aca692e5648068a213cf50fbc84eec6fc}{create\_Pyramid\_Hexa\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{///\ three\ layers\ of\ 3\ x\ 3\ hexahedral\ elements\ (in\ the\ XY\ plane,\ but\ with\ a\ Z-\/axis\ aligned\ stack\ of\ prism\ elements\ in\ the\ middle}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ TODO:\ fix\ neighbor\ conectivity\ /\ elment\ numbering}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a340899fd8ea754e3f30c78431bf23f67}{create\_Prism\_Hexa\_VSet}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&,\ \textcolor{keywordtype}{bool}\ bSkewed=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ more\ complex\ models\ created\ externally\ but\ available\ as\ VSets}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{///\ simplex\ mesh\ with\ tetra,\ triangles\ and\ line\ elements}}
+\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_model_topology}{ModelTopology}}\ \mbox{\hyperlink{namespacecsmp_ab1a843803beb1037bca356d28b861836}{create\_FracBox}}(\ \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}<3U>\&\ );}
+\DoxyCodeLine{00087\ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

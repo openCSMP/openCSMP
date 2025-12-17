@@ -1,0 +1,63 @@
+\doxysection{Node\+Manifold\+Manager\+\_\+\+Test.\+h}
+\hypertarget{_node_manifold_manager___test_8h_source}{}\label{_node_manifold_manager___test_8h_source}\index{tests/unit/NodeManifoldManager\_Test.h@{tests/unit/NodeManifoldManager\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{NODE\_MANIFOLD\_MANAGER\_TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{NODE\_MANIFOLD\_MANAGER\_TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_node_manifold_manager_8h}{"{}NodeManifoldManager.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_model_8h}{"{}Model.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ NodeManifoldManager\_Test\ unit\ test\ tests\ all\ functionality\ related\ to\ the\ creation\ and\ destruction\ of\ NodeManifold\ objects.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node_manifold_manager___test}{NodeManifoldManager\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}}
+\DoxyCodeLine{00016\ \ \ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \textcolor{comment}{//template<uint32\_t\ dim>}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \textcolor{comment}{//void\ Create\_splitboundary\_between\_regions(\ const\ std::string\&\ model\_name\ );}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_nodemanifolds\_created\_from\_splitboundaries\_between\_regions(\ \textcolor{keyword}{const}\ std::string\&\ model\_name\ );}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_nodemanifolds\_created\_from\_splitboundaries\_around\_regions(\ \textcolor{keyword}{const}\ std::string\&\ model\_name\ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Test\_created\_manifolds(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ modelIN\ );}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Create\_splitboundary\_between\_regions(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ modelIN\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Create\_splitboundary\_around\_regions(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ interfaces\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_manifold_manager___test_a272785356f65bcc296c305a06a210bb4}{InputFromFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::string>\&\ fractures\_basic\_set\ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ EstablishContiguousRegionsList(\ \mbox{\hyperlink{classcsmp_1_1_model}{Model}}<dim>\&\ model,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::set<std::string>\&\ fractures\_basic\_set,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::set<std::string>\&\ fractures\ );}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_manifold_manager___test_ac93dd230f89a07ae15bf9429ceeef605}{OutputToFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file\_name,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ fractures\ );}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ verbose\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00053\ \ \ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{/*\ NODE\_MANIFOLD\_MANAGER\_TEST\_H\ */}}
+
+\end{DoxyCode}

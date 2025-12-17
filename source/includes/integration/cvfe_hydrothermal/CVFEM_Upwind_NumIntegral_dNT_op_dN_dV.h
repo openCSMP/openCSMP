@@ -57,17 +57,14 @@ class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim,C
                                            const char* test,
                                            const char* upwind,
                                            const char* grav_trigger );
-
-    virtual ~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV();
     
-    void ComputeContribution( const CELL<dim>& );
-    void GetOperands( const CELL<dim>& );
-    void GetOperandsCVFEM( const CELL<dim>&, csmp::Index upwind_var_key );
+    void ComputeContribution( const CELL<dim>& ) override final;
+    void GetOperands( const CELL<dim>& ) override final;
+    void GetOperandsCVFEM( const CELL<dim>&, csmp::Index upwind_var_key ) override final;
 
     void GetUpwindMatrix( const CELL<dim>& );
     
-    virtual CVFEM_Upwind_NumIntegral_dNT_op_dN_dV <dim,CELL>* clone() const
-        { return new CVFEM_Upwind_NumIntegral_dNT_op_dN_dV <dim,CELL>(*this); }
+    CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const override final { return new CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
 
   private:
     UpwindControlVisitor<dim>& UpwindVisitor;

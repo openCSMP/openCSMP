@@ -1,0 +1,122 @@
+\doxysection{csmp\+::Node\+Manifold\+Manager\+\_\+\+Test Class Reference}
+\hypertarget{classcsmp_1_1_node_manifold_manager___test}{}\label{classcsmp_1_1_node_manifold_manager___test}\index{csmp::NodeManifoldManager\_Test@{csmp::NodeManifoldManager\_Test}}
+
+
+{\ttfamily \#include $<$Node\+Manifold\+Manager\+\_\+\+Test.\+h$>$}
+
+
+
+Inheritance diagram for csmp\+::Node\+Manifold\+Manager\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_node_manifold_manager___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for csmp\+::Node\+Manifold\+Manager\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classcsmp_1_1_node_manifold_manager___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcsmp_1_1_node_manifold_manager___test_a02440ad917b2820e30885feca18ee046}{run}} ()
+\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_adb4c61c04a2bcb1a24af05589184aa54}\label{classcsmp_1_1_node_manifold_manager___test_adb4c61c04a2bcb1a24af05589184aa54} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Test\+\_\+nodemanifolds\+\_\+created\+\_\+from\+\_\+splitboundaries\+\_\+between\+\_\+regions} (const std\+::string \&model\+\_\+name)
+\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_a4ad157b0c37d08092fcedff513ad86bf}\label{classcsmp_1_1_node_manifold_manager___test_a4ad157b0c37d08092fcedff513ad86bf} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Test\+\_\+nodemanifolds\+\_\+created\+\_\+from\+\_\+splitboundaries\+\_\+around\+\_\+regions} (const std\+::string \&model\+\_\+name)
+\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_acb944d8fbc573956fa7d1239fccd4921}\label{classcsmp_1_1_node_manifold_manager___test_acb944d8fbc573956fa7d1239fccd4921} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Test\+\_\+created\+\_\+manifolds} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model\+IN)
+\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_a04c2349fbb40470a521a5700b45be59b}\label{classcsmp_1_1_node_manifold_manager___test_a04c2349fbb40470a521a5700b45be59b} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Create\+\_\+splitboundary\+\_\+between\+\_\+regions} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model\+IN)
+\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_a203ef23f51e981c13078ce45c8a29464}\label{classcsmp_1_1_node_manifold_manager___test_a203ef23f51e981c13078ce45c8a29464} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Create\+\_\+splitboundary\+\_\+around\+\_\+regions} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, std\+::vector$<$ std\+::string $>$ \&interfaces)
+\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_a272785356f65bcc296c305a06a210bb4}\label{classcsmp_1_1_node_manifold_manager___test_a272785356f65bcc296c305a06a210bb4} 
+void {\bfseries Input\+From\+File} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, std\+::set$<$ std\+::string $>$ \&fractures\+\_\+basic\+\_\+set)
+\begin{DoxyCompactList}\small\item\em Input name of regions to split. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_abcab03f80c6a172447855b17e75d1b69}\label{classcsmp_1_1_node_manifold_manager___test_abcab03f80c6a172447855b17e75d1b69} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Establish\+Contiguous\+Regions\+List} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const std\+::set$<$ std\+::string $>$ \&fractures\+\_\+basic\+\_\+set, std\+::set$<$ std\+::string $>$ \&fractures)
+\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_ac93dd230f89a07ae15bf9429ceeef605}\label{classcsmp_1_1_node_manifold_manager___test_ac93dd230f89a07ae15bf9429ceeef605} 
+void {\bfseries Output\+To\+File} (const char \texorpdfstring{$\ast$}{*}file\+\_\+name, const std\+::vector$<$ std\+::string $>$ \&fractures)
+\begin{DoxyCompactList}\small\item\em Write contiguous regions. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_a738d690e0c7bf74ef42a11a07a82bddc}\label{classcsmp_1_1_node_manifold_manager___test_a738d690e0c7bf74ef42a11a07a82bddc} 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries Establish\+Contiguous\+Regions\+List} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const std\+::set$<$ string $>$ \&interface\+\_\+basic\+\_\+set, std\+::set$<$ string $>$ \&interface\+\_\+sets)
+\begin{DoxyCompactList}\small\item\em Input name of regions to split. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Test} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr=0)
+\item 
+long {\bfseries get\+Num\+Passed} () const
+\item 
+long {\bfseries get\+Num\+Failed} () const
+\item 
+const std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries get\+Stream} () const
+\item 
+void {\bfseries set\+Stream} (std\+::ostream \texorpdfstring{$\ast$}{*}osptr)
+\item 
+void {\bfseries set\+Name} (std\+::string test\+Name)
+\item 
+std\+::string {\bfseries get\+Name} () const
+\item 
+bool {\bfseries has\+Name} () const
+\item 
+void {\bfseries do\+\_\+succeed} ()
+\item 
+long {\bfseries report} () const
+\item 
+virtual void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries do\+\_\+equal} (double expr, double value, double tol, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+test} (bool cond, const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\item 
+void {\bfseries do\+\_\+fail} (const std\+::string \&lbl, const char \texorpdfstring{$\ast$}{*}fname, long lineno)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries prefix\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{classcsmp_1_1_node_manifold_manager___test}{Node\+Manifold\+Manager\+\_\+\+Test} unit test tests all functionality related to the creation and destruction of \doxylink{classcsmp_1_1_node_manifold}{Node\+Manifold} objects. 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_node_manifold_manager___test_a02440ad917b2820e30885feca18ee046}\index{csmp::NodeManifoldManager\_Test@{csmp::NodeManifoldManager\_Test}!run@{run}}
+\index{run@{run}!csmp::NodeManifoldManager\_Test@{csmp::NodeManifoldManager\_Test}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_node_manifold_manager___test_a02440ad917b2820e30885feca18ee046} 
+void csmp\+::\+Node\+Manifold\+Manager\+\_\+\+Test\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcsmp_1_1_test}{csmp\+::\+Test}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tests/unit/Node\+Manifold\+Manager\+\_\+\+Test.\+h\item 
+tests/unit/Node\+Manifold\+Manager\+\_\+\+Test.\+cpp\end{DoxyCompactItemize}

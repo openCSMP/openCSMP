@@ -1,0 +1,50 @@
+\doxysection{Extract\+Tensor\+Variable\+Row.\+h}
+\hypertarget{_extract_tensor_variable_row_8h_source}{}\label{_extract_tensor_variable_row_8h_source}\index{source/includes/property\_manipulation/ExtractTensorVariableRow.h@{source/includes/property\_manipulation/ExtractTensorVariableRow.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{EXTRACT\_TENSOR\_VARIABLE\_ROW\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{EXTRACT\_TENSOR\_VARIABLE\_ROW\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_interrelation_8h}{"{}Interrelation.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \textcolor{comment}{/**\ Interrelation\ which\ maps\ the\ user-\/specified\ row\ of\ a\ tensor\ variable}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ into\ the\ user-\/supplied\ vector\ variable.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ @author\ A\ Paluszny}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ @date\ 6/2006}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ */}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_extract_tensor_variable_row}{ExtractTensorVariableRow}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_interrelation}{Interrelation}}<dim>\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ \ \ \ \ \ t;}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_operand}{Operand}}<dim>\&\ \ \ \ \ \ \ \ v;}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<dim>\ \ ts;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{const}\ uint32\_t\ \ \ \ \ \ \ row;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ ExtractTensorVariableRow(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ p,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ tens\_var,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ vector\_var,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ r\ );}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_extract_tensor_variable_row_a3e768c7d42699a779dd22a08cbf4de11}{Calculate}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00036\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_extract_tensor_variable_row}{ExtractTensorVariableRow}}<dim>::\mbox{\hyperlink{classcsmp_1_1_extract_tensor_variable_row_a3e768c7d42699a779dd22a08cbf4de11}{Calculate}}()}
+\DoxyCodeLine{00037\ \ \{}
+\DoxyCodeLine{00038\ \ \ \ \ t.AssignTo(\ ts\ );}
+\DoxyCodeLine{00039\ \ \ \ \ v\ =\ ts.Row(row);}
+\DoxyCodeLine{00040\ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

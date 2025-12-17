@@ -1,0 +1,544 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_f_v___parameter_8h" kind="file" language="C++">
+    <compoundname>FV_Parameter.h</compoundname>
+    <includes refid="_vector_variable_8h" local="yes">VectorVariable.h</includes>
+    <includedby refid="_stencil_processor_p_h_x_8h" local="yes">source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h</includedby>
+    <includedby refid="_node_centered_finite_volume_transport_8h" local="yes">source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.h</includedby>
+    <includedby refid="_explicit_stencil_processor_8cpp" local="yes">source/modules/integration/finite_volumes/legacy_transport_scheme/ExplicitStencilProcessor.cpp</includedby>
+    <includedby refid="_f_v___parameter_8cpp" local="yes">source/modules/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.cpp</includedby>
+    <includedby refid="_mass_based_stencil_processor_8cpp" local="yes">source/modules/integration/finite_volumes/legacy_transport_scheme/MassBasedStencilProcessor.cpp</includedby>
+    <includedby refid="_stencil_processor_8cpp" local="yes">source/modules/integration/finite_volumes/legacy_transport_scheme/StencilProcessor.cpp</includedby>
+    <includedby refid="_f_v___parameter___test_8cpp" local="yes">tests/unit/FV_Parameter_Test.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h</label>
+        <link refid="_f_v___parameter_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="3">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="15">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cctype</label>
+      </node>
+      <node id="13">
+        <label>cfloat</label>
+      </node>
+      <node id="18">
+        <label>chrono</label>
+      </node>
+      <node id="14">
+        <label>climits</label>
+      </node>
+      <node id="5">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdarg</label>
+      </node>
+      <node id="8">
+        <label>cstddef</label>
+      </node>
+      <node id="47">
+        <label>cstdint</label>
+      </node>
+      <node id="6">
+        <label>cstdio</label>
+      </node>
+      <node id="7">
+        <label>cstdlib</label>
+      </node>
+      <node id="11">
+        <label>cstring</label>
+      </node>
+      <node id="12">
+        <label>ctime</label>
+      </node>
+      <node id="19">
+        <label>deque</label>
+      </node>
+      <node id="20">
+        <label>exception</label>
+      </node>
+      <node id="21">
+        <label>filesystem</label>
+      </node>
+      <node id="22">
+        <label>fstream</label>
+      </node>
+      <node id="23">
+        <label>functional</label>
+      </node>
+      <node id="24">
+        <label>iomanip</label>
+      </node>
+      <node id="25">
+        <label>iostream</label>
+      </node>
+      <node id="26">
+        <label>istream</label>
+      </node>
+      <node id="27">
+        <label>iterator</label>
+      </node>
+      <node id="28">
+        <label>limits</label>
+      </node>
+      <node id="29">
+        <label>list</label>
+      </node>
+      <node id="30">
+        <label>map</label>
+      </node>
+      <node id="31">
+        <label>memory</label>
+      </node>
+      <node id="32">
+        <label>numeric</label>
+      </node>
+      <node id="33">
+        <label>ostream</label>
+      </node>
+      <node id="34">
+        <label>random</label>
+      </node>
+      <node id="35">
+        <label>set</label>
+      </node>
+      <node id="36">
+        <label>sstream</label>
+      </node>
+      <node id="37">
+        <label>stdexcept</label>
+      </node>
+      <node id="38">
+        <label>string</label>
+      </node>
+      <node id="40">
+        <label>type_traits</label>
+      </node>
+      <node id="39">
+        <label>typeinfo</label>
+      </node>
+      <node id="44">
+        <label>unordered_map</label>
+      </node>
+      <node id="43">
+        <label>unordered_set</label>
+      </node>
+      <node id="41">
+        <label>utility</label>
+      </node>
+      <node id="42">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="4">
+        <label>source/includes/integration/cvfe_hydrothermal/CVFEM_PHX_Scheme.h</label>
+        <link refid="_c_v_f_e_m___p_h_x___scheme_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>source/includes/integration/cvfe_hydrothermal/ExplicitFiniteVolumeTransportPHX.h</label>
+        <link refid="_explicit_finite_volume_transport_p_h_x_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h</label>
+        <link refid="_stencil_processor_p_h_x_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>source/includes/integration/cvfe_hydrothermal/UpwindControlVisitor.h</label>
+        <link refid="_upwind_control_visitor_8h_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitMassBasedTransport.h</label>
+        <link refid="_explicit_mass_based_transport_8h_source"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/ExplicitNodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_explicit_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h</label>
+        <link refid="_f_v___parameter_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/NodeCenteredFiniteVolumeTransport.h</label>
+        <link refid="_node_centered_finite_volume_transport_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseExplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_explicit_node_centered_f_v_transport_8h_source"/>
+      </node>
+      <node id="15">
+        <label>source/includes/integration/finite_volumes/legacy_transport_scheme/TwoPhaseImplicitNodeCenteredFVTransport.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_transport_8h_source"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>source/includes/run_control/SimulatorControl.h</label>
+        <link refid="_simulator_control_8h_source"/>
+      </node>
+      <node id="10">
+        <label>source/includes/run_control/SimulatorSetup.h</label>
+        <link refid="_simulator_setup_8h_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>source/modules/integration/solver/SAMG_profiles/TwoPhaseImplicitNodeCenteredFVTransProfile.h</label>
+        <link refid="_two_phase_implicit_node_centered_f_v_trans_profile_8h_source"/>
+      </node>
+      <node id="5">
+        <label>tests/integration/CVFEM_1D_VVCase.h</label>
+        <link refid="_c_v_f_e_m__1_d___v_v_case_8h_source"/>
+      </node>
+      <node id="12">
+        <label>tests/integration/Geothermal_2D_VVCase.h</label>
+        <link refid="_geothermal__2_d___v_v_case_8h_source"/>
+      </node>
+      <node id="13">
+        <label>tests/integration/Geothermal_3D_VVCase.h</label>
+        <link refid="_geothermal__3_d___v_v_case_8h_source"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcsmp_1_1_f_v___parameter" prot="public">csmp::FV_Parameter</innerclass>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>CSMP_FV_PARAMETER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CSMP_FV_PARAMETER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;VectorVariable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10" refid="classcsmp_1_1_f_v___parameter" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">FV_Parameter<sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>FV_Parameter()<sp/>{}</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>FV_Parameter(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>sectors,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facets,<sp/>uint32_t<sp/>dim,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>with_normals=</highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>mutators</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Resize(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>sectors,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facets,<sp/>uint32_t<sp/>dim,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>with_normals=</highlight><highlight class="keyword">false</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>SectorVolume(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>sector,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>vol<sp/>);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FacetArea(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>area<sp/>);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FacetNormal(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>fnxyz<sp/>);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FacetNormalVelocity(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>flux<sp/>);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Initialize(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>flux,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>area<sp/>);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>accessors</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Sectors()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Facets()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>SectorVolume(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>sector<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FacetArea(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FacetNormalVelocity(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FacetNormalComponent(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>x_or_y_or_z<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" kindref="member">FacetNormalProjection</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>cxyz<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>universal<sp/>versions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" kindref="member">FacetNormalProjection</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;1U&gt;</ref>&amp;<sp/>cxyz<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" kindref="member">FacetNormalProjection</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;2U&gt;</ref>&amp;<sp/>cxyz<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" kindref="member">FacetNormalProjection</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;3U&gt;</ref>&amp;<sp/>cxyz<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Bytes()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><sp/><sp/>Out()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;double&gt;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sector_volume_;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;std::pair&lt;double,double&gt;<sp/>&gt;<sp/><sp/>facet_v_and_A_;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;std::vector&lt;double&gt;<sp/>&gt;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>facet_unit_normal_;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FV_Parameter::SectorVolume(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>sector,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>vol<sp/>)</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/>{<sp/>sector_volume_[sector]<sp/>=<sp/>vol;<sp/>}</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FV_Parameter::FacetNormalVelocity(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>flux<sp/>)</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/>{<sp/>facet_v_and_A_[facet].first<sp/>=<sp/>flux;<sp/>}</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FV_Parameter::FacetArea(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>area<sp/>)</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/>{<sp/>facet_v_and_A_[facet].second<sp/>=<sp/>area;<sp/>}</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="comment">//<sp/>assign<sp/>the<sp/>facet<sp/>unit<sp/>normal<sp/>for<sp/>the<sp/>facet</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FV_Parameter::FacetNormal(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>fnxyz<sp/>)</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>facet_unit_normal_[facet]<sp/>=<sp/>fnxyz;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>FV_Parameter::Initialize(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>flux,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>area<sp/>)</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/>{<sp/></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>facet_v_and_A_[facet].first<sp/><sp/>=<sp/>flux;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>facet_v_and_A_[facet].second<sp/>=<sp/>area;<sp/></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>FV_Parameter::Sectors()</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="75"><highlight class="keyword"><sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>sector_volume_.size();<sp/>}</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>FV_Parameter::Facets()</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="79"><highlight class="keyword"><sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>facet_v_and_A_.size();<sp/>}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FV_Parameter::SectorVolume(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>sector<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="83"><highlight class="keyword"><sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>sector_volume_[sector];<sp/>}</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FV_Parameter::FacetNormalVelocity(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="87"><highlight class="keyword"><sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>facet_v_and_A_[facet].first;<sp/>}</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FV_Parameter::FacetNormalComponent(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>x_or_y_or_z<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="91"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>facet_unit_normal_[facet][x_or_y_or_z];</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97" refid="classcsmp_1_1_f_v___parameter_1a9c5be6ece7227e4e45b510b6cf4c5b1f" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" kindref="member">FV_Parameter::FacetNormalProjection</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;1U&gt;</ref>&amp;<sp/>vc<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="98"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dot<sp/>product<sp/>fn<sp/>.<sp/>vc</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>facet_unit_normal_[facet][0]<sp/>*<sp/>vc[0];</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" kindref="member">FV_Parameter::FacetNormalProjection</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable&lt;2U&gt;</ref>&amp;<sp/>vc<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="104"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dot<sp/>product<sp/>fn<sp/>.<sp/>vc</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>facet_unit_normal_[facet][0]<sp/>*<sp/>vc[0]<sp/>+<sp/>facet_unit_normal_[facet][1]<sp/>*<sp/>vc[1];</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_f_v___parameter_1af07181c42af271541efbce2e45988e15" kindref="member">FV_Parameter::FacetNormalProjection</ref>(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>VectorVariable&lt;3U&gt;&amp;<sp/>vc<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="110"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dot<sp/>product<sp/>fn<sp/>.<sp/>vc</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>facet_unit_normal_[facet][0]<sp/>*<sp/>vc[0]<sp/>+<sp/>facet_unit_normal_[facet][1]<sp/>*<sp/>vc[1]<sp/>+<sp/>facet_unit_normal_[facet][2]<sp/>*<sp/>vc[2];</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>FV_Parameter::FacetArea(<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>facet<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="118"><highlight class="keyword"><sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>facet_v_and_A_[facet].second;<sp/>}</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>namespace<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="source/includes/integration/finite_volumes/legacy_transport_scheme/FV_Parameter.h"/>
+  </compounddef>
+</doxygen>

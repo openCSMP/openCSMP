@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_is_same_placement" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::IsSamePlacement</compoundname>
+    <templateparamlist>
+      <param>
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <declname>A</declname>
+        <defname>A</defname>
+      </param>
+      <param>
+        <type><ref refid="group___c_s_m_p__global__enumerations_1gac35734252a71b0a9768a54a364137cf8" kindref="member">PLACEMENT</ref></type>
+        <declname>B</declname>
+        <defname>B</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_is_same_placement_1adf8933d5ec2878402b8da2f0caaae988" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::IsSamePlacement&lt; A, B &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>csmp::IsSamePlacement::value</qualifiedname>
+        <initializer>= A == B</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/property_manipulation/FieldVariable.h" line="75" column="25" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::IsSamePlacement&lt; A, B &gt;</label>
+        <link refid="structcsmp_1_1_is_same_placement"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/property_manipulation/FieldVariable.h" line="74" column="1" bodyfile="source/includes/property_manipulation/FieldVariable.h" bodystart="74" bodyend="76"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_is_same_placement_1adf8933d5ec2878402b8da2f0caaae988" prot="public" virt="non-virtual"><scope>csmp::IsSamePlacement</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

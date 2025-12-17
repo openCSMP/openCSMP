@@ -213,6 +213,11 @@ bool findCollocatedCells( typename std::vector<CELL<dim>*>::const_iterator first
                           typename std::vector<CELL<dim>*>::const_iterator last,
                           std::vector<CELL<dim>*>& collocated_cells_to_eliminate );
 
+/// verifies that the normals to the cell faces as computed with FiniteElement::UnitNormalToFace(face) are outward pointing
+template<uint32_t dim>
+bool areUnitNormalsToFacesAreOutwardPointing( const Element<dim>* eptr );
+
+
 
 // UTILITIES FOR TESTING ETC
 

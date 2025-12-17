@@ -1,10 +1,10 @@
-#ifndef COPYREPLACEVISITOR_TEST_H
-#define COPYREPLACEVISITOR_TEST_H
+#ifndef CSMP_COPY_REPLACE_VISITOR_TEST_H
+#define CSMP_COPY_REPLACE_VISITOR_TEST_H
 
 #include "Test.h"
 
 
-namespace csmp{
+namespace csmp {
 
   template<uint32_t> class Model;
 
@@ -33,4 +33,4 @@ private:
 
 } // csmp
 
-#endif // COPYREPLACEVISITOR_TEST_H
+#endif // CSMP_COPY_REPLACE_VISITOR_TEST_H

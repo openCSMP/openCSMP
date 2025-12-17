@@ -14,7 +14,7 @@ namespace csmp {
   See:
 
     Tarjan, Robert Endre (1975). "Efficiency of a Good But Not Linear
-      Set Union Algorithm". JACM. 22 (2): 215–225.
+      Set Union Algorithm". JACM. 22 (2): 215225.
  */
 template<typename Item>
 class UnionFind {

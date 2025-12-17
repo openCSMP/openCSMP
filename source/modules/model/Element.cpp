@@ -323,21 +323,21 @@ void Element<dim>::Accept( csmp::Visitor<dim>& vis )
 
   /// number of nodes of this element
 template<uint32_t dim>
-uint32_t  Element<dim>::Nodes() const
+uint32_t  Element<dim>::Nodes() const noexcept
 {
   return static_cast<uint32_t>(node_connector_.size());
 }
 
 /// number of equidimensional neighbor elements of this element (not necessarily connected)
 template<uint32_t dim>
-uint32_t  Element<dim>::Neighbors() const
+uint32_t  Element<dim>::Neighbors() const noexcept
 {
   return static_cast<uint32_t>(elmt_connector_.size());
 }
 
 /// number of equidimensional neighbor elements of this element (necessarily connected)
 template<uint32_t dim>
-uint32_t  Element<dim>::ConnectedNeighbors() const
+uint32_t  Element<dim>::ConnectedNeighbors() const noexcept
 {
   uint32_t nulls{0u};
   for ( auto& f : elmt_connector_ )
@@ -347,7 +347,7 @@ uint32_t  Element<dim>::ConnectedNeighbors() const
 
 /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
 template<uint32_t dim>
-uint32_t  Element<dim>::Faces() const
+uint32_t  Element<dim>::Faces() const noexcept
 {
   return static_cast<uint32_t>(elmt_connector_.size());
 }
@@ -357,13 +357,13 @@ uint32_t  Element<dim>::Faces() const
 /// iterator to the element nodes
 
 template<uint32_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const noexcept
 {
   return node_connector_.begin();
 }
 
 template<uint32_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const noexcept
 {
   return node_connector_.end();
 }
@@ -373,13 +373,13 @@ typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd()
 
 /// assuming that the corner nodes are the first, the midside nodes the second, and the .. in the elements node set according to CSMP_FEM_conventions.pdf
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator Element<dim>::CornerNodesBegin() const
+typename vector<csmp::Node<dim>*>::const_iterator Element<dim>::CornerNodesBegin() const noexcept
 {
   return node_connector_.begin();
 }
 
 template<uint32_t dim>
-typename vector<csmp::Node<dim>*>::const_iterator Element<dim>::CornerNodesEnd() const
+typename vector<csmp::Node<dim>*>::const_iterator Element<dim>::CornerNodesEnd() const noexcept
 {
   return next(node_connector_.begin(),this->FE()->CornerNodes());
 }
@@ -388,13 +388,13 @@ typename vector<csmp::Node<dim>*>::const_iterator Element<dim>::CornerNodesEnd()
 
 
 template<uint32_t dim>
-typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
+typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const noexcept
 {
   return elmt_connector_.begin();
 }
 
 template<uint32_t dim>
-typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const
+typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const noexcept
 {
   return elmt_connector_.end();
 }
@@ -477,7 +477,7 @@ void Element<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
 
 
 template<uint32_t dim>
-void  Element<dim>::Idx( size_t idx_to_assign ) const
+void  Element<dim>::Idx( size_t idx_to_assign ) const noexcept
 {
   idx_ = idx_to_assign;
 }
@@ -485,28 +485,28 @@ void  Element<dim>::Idx( size_t idx_to_assign ) const
 
 /// unique material identifier that matches number of parent unique region
 template<uint32_t dim>
-int32_t Element<dim>::Material_ID() const
+int32_t Element<dim>::Material_ID() const noexcept
  {
     return material_id_;
  }
  
  
 template<uint32_t dim>
-void Element<dim>::Material_ID( int32_t id )
+void Element<dim>::Material_ID( int32_t id ) noexcept
  {
     material_id_ = id;
  }
 
 
 template<uint32_t dim>
-int32_t Element<dim>::Region_ID() const
+int32_t Element<dim>::Region_ID() const noexcept
  {
     return region_id_;
  }
  
  
 template<uint32_t dim>
-void Element<dim>::Region_ID( int32_t id )
+void Element<dim>::Region_ID( int32_t id ) noexcept
  {
     region_id_ = id;
  }
@@ -516,7 +516,7 @@ void Element<dim>::Region_ID( int32_t id )
 // ACCESSORS
 
 template<uint32_t dim>
-size_t   Element<dim>::Idx() const
+size_t   Element<dim>::Idx() const noexcept
 {
   return idx_;
 }
@@ -531,13 +531,13 @@ BOX_BOUNDARY  Element<dim>::AtBoundary( uint32_t boundary_face ) const
 }
 
 template<uint32_t dim>
-typename  std::vector<csmp::Node<dim>*>&  Element<dim>::NodeVector()
+typename  std::vector<csmp::Node<dim>*>&  Element<dim>::NodeVector() noexcept
 {
   return node_connector_;
 }
 
 template<uint32_t dim>
-typename std::vector<csmp::Element<dim>*>&  Element<dim>::NeighborElementVector()
+typename std::vector<csmp::Element<dim>*>&  Element<dim>::NeighborElementVector() noexcept
 {
   return elmt_connector_;
 }
@@ -588,7 +588,7 @@ const csmp::Node<dim>*  Element<dim>::N( uint32_t n ) const
 */
 
 template<uint32_t dim>
-csmp::Node<dim>*  const Element<dim>::N( uint32_t n ) const
+csmp::Node<dim>*  const Element<dim>::N( uint32_t n ) const  noexcept
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
@@ -604,14 +604,14 @@ numbering scheme).
 before you are trying to use it.
 */
 template<uint32_t dim>
-const csmp::Element<dim>* const Element<dim>::Neighbor( uint32_t n ) const
+const csmp::Element<dim>* const Element<dim>::Neighbor( uint32_t n ) const noexcept
 {
   assert( n < elmt_connector_.size() );
   return elmt_connector_[n];
 }
 
 template<uint32_t dim>
-csmp::Element<dim>* const Element<dim>::Neighbor( uint32_t n )
+csmp::Element<dim>* const Element<dim>::Neighbor( uint32_t n ) noexcept
 {
   assert( n < elmt_connector_.size() );
   return elmt_connector_[n];

@@ -1,0 +1,395 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_stencil_processor_p_h_x" kind="class" language="C++" prot="public">
+    <compoundname>csmp::StencilProcessorPHX</compoundname>
+    <includes refid="_stencil_processor_p_h_x_8h" local="no">StencilProcessorPHX.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1a86343fcb865f95a8a6c7a21d26bc7326" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_vector_variable" kindref="compound">VectorVariable</ref>&lt; dim &gt;</type>
+        <definition>VectorVariable&lt;dim&gt; csmp::StencilProcessorPHX&lt; dim &gt;::gravity_</definition>
+        <argsstring></argsstring>
+        <name>gravity_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::gravity_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="83" column="20" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1aa881b3076d370d4a84d34eb77e151e17" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::StencilProcessorPHX&lt; dim &gt;::eidx_</definition>
+        <argsstring></argsstring>
+        <name>eidx_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::eidx_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="85" column="23" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1a6b8cad0d76318c24afc2db069298593b" prot="private" static="no" mutable="yes">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::StencilProcessorPHX&lt; dim &gt;::inside_node_</definition>
+        <argsstring></argsstring>
+        <name>inside_node_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::inside_node_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="86" column="23" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1a7bed0e0c8b7e7a0770e783df1bdf1bff" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t csmp::StencilProcessorPHX&lt; dim &gt;::outside_node_</definition>
+        <argsstring></argsstring>
+        <name>outside_node_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::outside_node_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="86" column="36" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1aeba0cd0c8e8a18b9519253e9d47afd8e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::StencilProcessorPHX&lt; dim &gt;::rhs_property_</definition>
+        <argsstring></argsstring>
+        <name>rhs_property_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::rhs_property_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="88" column="23" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1a9a506145db9db6beef52f48d14b828f4" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::StencilProcessorPHX&lt; dim &gt;::density_</definition>
+        <argsstring></argsstring>
+        <name>density_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::density_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="88" column="37" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1a5f86d81a72814b3c9637561501a7b753" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::StencilProcessorPHX&lt; dim &gt;::perm_</definition>
+        <argsstring></argsstring>
+        <name>perm_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::perm_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="88" column="46" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1aece594c6e412f519856d4dd5dd50902c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::StencilProcessorPHX&lt; dim &gt;::grav_</definition>
+        <argsstring></argsstring>
+        <name>grav_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::grav_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="89" column="23" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1a5412747fd32b45c36308290fecf327a4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::StencilProcessorPHX&lt; dim &gt;::g_component_</definition>
+        <argsstring></argsstring>
+        <name>g_component_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::g_component_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="89" column="29" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_stencil_processor_p_h_x_1ae364265ab1197b6741163bb51126ad43" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::StencilProcessorPHX&lt; dim &gt;::vel_</definition>
+        <argsstring></argsstring>
+        <name>vel_</name>
+        <qualifiedname>csmp::StencilProcessorPHX::vel_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="89" column="42" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_stencil_processor_p_h_x_1a25201ee08639dbfa335391a0f410ce1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StencilProcessorPHX&lt; dim &gt;::StencilProcessorPHX</definition>
+        <argsstring>()</argsstring>
+        <name>StencilProcessorPHX</name>
+        <qualifiedname>csmp::StencilProcessorPHX::StencilProcessorPHX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="50" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/StencilProcessorPHX.cpp" bodystart="12" bodyend="20"/>
+        <references refid="group___c_s_m_pglobal_functions_1gaf74e7967f030170c3046146f7b5fc229" compoundref="_c_s_m_p__math_utilities_8cpp" startline="476" endline="479">csmp::g</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stencil_processor_p_h_x_1a584a44e7c01b5cbd93626587b6792bcd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StencilProcessorPHX&lt; dim &gt;::DetermineFluxOutWithGravity</definition>
+        <argsstring>(const FV_Parameter &amp;param, const Element&lt; dim &gt; &amp;e, DenseMatrix&lt; DM_MIN &gt; &amp;upwind, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;facet_flux, std::vector&lt; double &gt; &amp;flux_out, csmp::Index rhs_key, csmp::Index rho_key, csmp::Index k_key)</argsstring>
+        <name>DetermineFluxOutWithGravity</name>
+        <qualifiedname>csmp::StencilProcessorPHX::DetermineFluxOutWithGravity</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_v___parameter" kindref="compound">FV_Parameter</ref> &amp;</type>
+          <declname>param</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>upwind</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>facet_flux</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>flux_out</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+          <declname>rhs_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+          <declname>rho_key</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+          <declname>k_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculating fluxes out of the control volumes, including gravity </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="52" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/StencilProcessorPHX.cpp" bodystart="32" bodyend="81"/>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stencil_processor_p_h_x_1af41e695e4a59639065e11a37e6f232ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StencilProcessorPHX&lt; dim &gt;::DetermineFluxOutWithoutGravity</definition>
+        <argsstring>(const FV_Parameter &amp;param, const Element&lt; dim &gt; &amp;e, DenseMatrix&lt; DM_MIN &gt; &amp;upwind, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;facet_flux, std::vector&lt; double &gt; &amp;flux_out, csmp::Index rhs_key)</argsstring>
+        <name>DetermineFluxOutWithoutGravity</name>
+        <qualifiedname>csmp::StencilProcessorPHX::DetermineFluxOutWithoutGravity</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_v___parameter" kindref="compound">FV_Parameter</ref> &amp;</type>
+          <declname>param</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>upwind</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>facet_flux</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>flux_out</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+          <declname>rhs_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculating fluxes out of the control volumes without a gravity component </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="61" column="6" bodyfile="source/modules/integration/cvfe_hydrothermal/StencilProcessorPHX.cpp" bodystart="86" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stencil_processor_p_h_x_1abde9e7ac7d7563fa83f8294c5f31091b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StencilProcessorPHX&lt; dim &gt;::DetermineFluxIn</definition>
+        <argsstring>(const Element&lt; dim &gt; &amp;e, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;facet_flux, std::vector&lt; double &gt; &amp;flux_in, std::vector&lt; double &gt; &amp;mass_balance)</argsstring>
+        <name>DetermineFluxIn</name>
+        <qualifiedname>csmp::StencilProcessorPHX::DetermineFluxIn</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>facet_flux</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>flux_in</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>mass_balance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculating fluxes into the control volumes </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="68" column="10" bodyfile="source/modules/integration/cvfe_hydrothermal/StencilProcessorPHX.cpp" bodystart="127" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stencil_processor_p_h_x_1aefd83f7d78dfe442c19a2bb87790378f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::StencilProcessorPHX&lt; dim &gt;::DetermineFluxOut</definition>
+        <argsstring>(const FV_Parameter &amp;param, const Element&lt; dim &gt; &amp;e, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;facet_flux, std::vector&lt; double &gt; &amp;flux_out, csmp::Index rhs_key)</argsstring>
+        <name>DetermineFluxOut</name>
+        <qualifiedname>csmp::StencilProcessorPHX::DetermineFluxOut</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_f_v___parameter" kindref="compound">FV_Parameter</ref> &amp;</type>
+          <declname>param</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+          <declname>facet_flux</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>flux_out</declname>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+          <declname>rhs_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Calculating fluxes out of the control volumes without pre-defined upwind nodes </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="73" column="6" bodyfile="source/modules/integration/cvfe_hydrothermal/StencilProcessorPHX.cpp" bodystart="150" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_stencil_processor_p_h_x_1a3a087f5f4624b227be6030aefcfbb408" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::StencilProcessorPHX&lt; dim &gt;::~StencilProcessorPHX</definition>
+        <argsstring>()</argsstring>
+        <name>~StencilProcessorPHX</name>
+        <qualifiedname>csmp::StencilProcessorPHX::~StencilProcessorPHX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>default destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="79" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/StencilProcessorPHX.cpp" bodystart="25" bodyend="27"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Stencil processor for finitive volume calculations within CVFEM scheme (Weis et al., Geofluids, 2014).</para>
+<para><simplesect kind="author"><para>Philipp Weis, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:philipp.weis@erdw.ethz.ch">philipp.weis@erdw.ethz.ch</ulink></para>
+<para>@changes changes Latest Changes</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Specialized stencil processor for PHX scheme.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>To be used within the CVFEM scheme (Weis et al., Geofluids, 2014).</para>
+<para><programlisting><codeline><highlight class="normal">Performs<sp/>finite<sp/>volume<sp/>fluxes<sp/>across<sp/>facets.</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title><para>The functions are tailored for use in <ref refid="classcsmp_1_1_explicit_finite_volume_transport_p_h_x" kindref="compound">ExplicitFiniteVolumeTransportPHX</ref></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title></sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>testing was done in the period before publication in 2014. </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::StencilProcessorPHX&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_stencil_processor_p_h_x"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" line="48" column="1" bodyfile="source/includes/integration/cvfe_hydrothermal/StencilProcessorPHX.h" bodystart="48" bodyend="91"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a9a506145db9db6beef52f48d14b828f4" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>density_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1abde9e7ac7d7563fa83f8294c5f31091b" prot="public" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>DetermineFluxIn</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1aefd83f7d78dfe442c19a2bb87790378f" prot="public" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>DetermineFluxOut</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a584a44e7c01b5cbd93626587b6792bcd" prot="public" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>DetermineFluxOutWithGravity</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1af41e695e4a59639065e11a37e6f232ef" prot="public" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>DetermineFluxOutWithoutGravity</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1aa881b3076d370d4a84d34eb77e151e17" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>eidx_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a5412747fd32b45c36308290fecf327a4" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>g_component_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1aece594c6e412f519856d4dd5dd50902c" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>grav_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a86343fcb865f95a8a6c7a21d26bc7326" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>gravity_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a6b8cad0d76318c24afc2db069298593b" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>inside_node_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a7bed0e0c8b7e7a0770e783df1bdf1bff" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>outside_node_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a5f86d81a72814b3c9637561501a7b753" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>perm_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1aeba0cd0c8e8a18b9519253e9d47afd8e" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>rhs_property_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a25201ee08639dbfa335391a0f410ce1c" prot="public" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>StencilProcessorPHX</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1ae364265ab1197b6741163bb51126ad43" prot="private" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>vel_</name></member>
+      <member refid="classcsmp_1_1_stencil_processor_p_h_x_1a3a087f5f4624b227be6030aefcfbb408" prot="public" virt="non-virtual"><scope>csmp::StencilProcessorPHX</scope><name>~StencilProcessorPHX</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,9 @@
+<map id="csmp::Boundary::CreateFrom" name="csmp::Boundary::CreateFrom">
+<area shape="rect" id="Node000001" title="create faces from lower dimensional region, deleting these and assigning nullptr values" alt="" coords="5,70,199,96"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_boundary.html#a2659398d8dd019df44213d161adf1ba0" title="returns local variables stored at face integration points" alt="" coords="247,5,461,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,67,246,47,247,53,162,72"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_boundary.html#ae07661ed0e4b5b7aeb7a191f1ac91420" title="returns local variables stored at on the boundary faces" alt="" coords="251,70,457,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,80,235,80,235,86,199,86"/>
+<area shape="rect" id="Node000004" href="$classcsmp_1_1_boundary.html#ae15c93c5e4ce935f481648789afc23a1" title="assigns box boundary flags to nodes unless they do not have a NOT value" alt="" coords="268,120,440,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="162,94,253,115,252,120,161,99"/>
+</map>

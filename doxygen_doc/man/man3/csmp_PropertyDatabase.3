@@ -1,0 +1,706 @@
+.TH "csmp::PropertyDatabase< dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::PropertyDatabase< dim > \- Specifications of the variables used by the current model, i\&.e\&. name, notation, SI-unit, placement, type etc\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <PropertyDatabase\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPropertyDatabase\fP ()"
+.br
+.RI "default constructor: all variable counters are set to zero "
+.ti -1c
+.RI "\fBPropertyDatabase\fP (const char *variablesFileName)"
+.br
+.RI "reads all variables from variables text file "
+.ti -1c
+.RI "\fBPropertyDatabase\fP (const char *variablesBinaryFileName, const std::set< std::string > &subset_variables)"
+.br
+.RI "reads all variables from binary variables file unless a subset of variables is supplied for the reading "
+.ti -1c
+.RI "\fBPropertyDatabase\fP (const \fBPropertyDatabase\fP< dim > &)"
+.br
+.ti -1c
+.RI "\fBPropertyDatabase\fP< dim > & \fBoperator=\fP (const \fBPropertyDatabase\fP< dim > &p)"
+.br
+.ti -1c
+.RI "const char * \fBVariablesFile\fP () const"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBStorageKey\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "\fBcsmp::Parameter\fP \fBParameter\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBPlacement\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "uint32_t \fBIndex\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "\fBVARIABLE_TYPE\fP \fBType\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "uint32_t \fBComponents\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "const char * \fBName\fP (const \fBcsmp::Index\fP &idx) const"
+.br
+.ti -1c
+.RI "const char * \fBUnit\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "const char * \fBUsage\fP (const char *property_name) const"
+.br
+.RI "reports how the variable is normally used (as input by user vs\&. computed) "
+.ti -1c
+.RI "bool \fBIsDefined\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "bool \fBIsDefined\fP (const \fBcsmp::Index\fP &idx) const"
+.br
+.ti -1c
+.RI "void \fBRangeOf\fP (const char *property_name, double &min, double &max) const"
+.br
+.ti -1c
+.RI "void \fBSetRangeOf\fP (const char *property_name, double vmin, double vmax)"
+.br
+.ti -1c
+.RI "double \fBLowerLimitOf\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "double \fBUpperLimitOf\fP (const char *property_name) const"
+.br
+.ti -1c
+.RI "void \fBCheckRange\fP (const char *property_name, double &var) const"
+.br
+.RI "prints details of the range check to screen and terminates program is value is out of range "
+.ti -1c
+.RI "bool \fBCheckRange\fP (const char *property_name, const \fBScalarVariable\fP &) const"
+.br
+.RI "checks value against the range specified in the database; "
+.ti -1c
+.RI "bool \fBCheckRange\fP (const char *property_name, const \fBVectorVariable\fP< dim > &) const"
+.br
+.RI "checks whether the magnitude of the specified variable value is within database range "
+.ti -1c
+.RI "bool \fBCheckRange\fP (const char *property_name, const \fBTensorVariable\fP< dim > &) const"
+.br
+.RI "checks whether the determinant of the tensor is within range assuming that it is symmetric, diagonally dominant "
+.ti -1c
+.RI "bool \fBCheckRange\fP (const char *property_name, const \fBArrayVariable\fP &) const"
+.br
+.RI "L1 norm of the supplied arrays\&. "
+.ti -1c
+.RI "bool \fBCheckRange\fP (const char *property_name, const \fBFlaggedArrayVariable\fP &) const"
+.br
+.ti -1c
+.RI "\fBLocalVariables\fP \fBLocalVariablesAt\fP (\fBPLACEMENT\fP within) const"
+.br
+.ti -1c
+.RI "\fBIntegrationPointVariables\fP \fBIntegrationPointVariablesAt\fP (\fBPLACEMENT\fP within) const"
+.br
+.ti -1c
+.RI "void \fBVariableCountAt\fP (\fBPLACEMENT\fP within, uint32_t &scalars, uint32_t &vectors, uint32_t &tensors, uint32_t &arrayCount, uint32_t &arrayLength) const"
+.br
+.ti -1c
+.RI "double \fBUnitConversionFactor\fP (const char *current_system, const char *desired_system, const char *unit) const"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBAddProperty\fP ()"
+.br
+.RI "adding a property at runtime from the command line (NB: you should call method CreateProperty() of model to do this) "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBAddProperty\fP (const char *property_name, const char *notation, const char *unit, uint32_t last_max_index, \fBVARIABLE_TYPE\fP, \fBPLACEMENT\fP, uint32_t vsize=1, double vmin=\-1\&.0e+30, double vmax=1\&.0e+30, std::string usage='???')"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBAddProperty\fP (const char *property_name, const char *notation, const char *unit, \fBVARIABLE_TYPE\fP, \fBPLACEMENT\fP, uint32_t vsize=1, double vmin=\-1\&.0e+30, double vmax=1\&.0e+30, std::string usage='???')"
+.br
+.ti -1c
+.RI "void \fBDeleteProperty\fP (const char *property_name)"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::Parameter\fP >::const_iterator \fBBegin\fP () const"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBcsmp::Parameter\fP >::const_iterator \fBEnd\fP () const"
+.br
+.ti -1c
+.RI "std::map< \fBPLACEMENT\fP, std::map< \fBVARIABLE_TYPE\fP, uint32_t > >::const_iterator \fBVariableCountBegin\fP () const"
+.br
+.ti -1c
+.RI "std::map< \fBPLACEMENT\fP, std::map< \fBVARIABLE_TYPE\fP, uint32_t > >::const_iterator \fBVariableCountEnd\fP () const"
+.br
+.ti -1c
+.RI "const \fBIndexTracker\fP & \fBVariableIndexes\fP () const"
+.br
+.ti -1c
+.RI "void \fBFlushToScreen\fP () const"
+.br
+.RI "Prints all parameter records in the database to std output\&. "
+.ti -1c
+.RI "void \fBFlushToScreen\fP (const char *propname) const"
+.br
+.ti -1c
+.RI "void \fBListVariableNames\fP () const"
+.br
+.ti -1c
+.RI "void \fBListKeys\fP (std::list< \fBcsmp::Index\fP > &keys) const"
+.br
+.ti -1c
+.RI "void \fBListVariables\fP () const"
+.br
+.ti -1c
+.RI "void \fBListVariables\fP (std::map< std::string, \fBcsmp::Index\fP > &props) const"
+.br
+.ti -1c
+.RI "void \fBListVariables\fP (const std::set< std::string > &, std::set< \fBPLACEMENT\fP > &props) const"
+.br
+.ti -1c
+.RI "uint32_t \fBListVariables\fP (\fBPLACEMENT\fP place, std::map< std::string, \fBcsmp::Index\fP > &props) const"
+.br
+.ti -1c
+.RI "uint32_t \fBListVariables\fP (\fBPLACEMENT\fP place, std::set< std::string > &props) const"
+.br
+.ti -1c
+.RI "uint32_t \fBListVariables\fP (\fBPLACEMENT\fP, \fBVARIABLE_TYPE\fP, std::set< std::string > &props) const"
+.br
+.ti -1c
+.RI "uint32_t \fBVariableCount\fP (\fBPLACEMENT\fP) const"
+.br
+.ti -1c
+.RI "uint32_t \fBVariableCount\fP (\fBVARIABLE_TYPE\fP) const"
+.br
+.ti -1c
+.RI "uint32_t \fBVariableCount\fP (\fBPLACEMENT\fP, \fBVARIABLE_TYPE\fP) const"
+.br
+.ti -1c
+.RI "uint32_t \fBVariableCount\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBArrayLengthTotal\fP (\fBPLACEMENT\fP place) const"
+.br
+.ti -1c
+.RI "void \fBArrayLengths\fP (\fBPLACEMENT\fP place, std::vector< uint32_t > &arrayLengths) const"
+.br
+.RI "Clears arrayLengths and inserts depth of ARRAY variables for place in order of index\&. "
+.ti -1c
+.RI "uint32_t \fBFlaggedArrayLengthTotal\fP (\fBPLACEMENT\fP place) const"
+.br
+.ti -1c
+.RI "void \fBFlaggedArrayLengths\fP (\fBPLACEMENT\fP place, std::vector< uint32_t > &arrayLengths) const"
+.br
+.RI "Clears arrayLengths and inserts depth of FLAGGEDARRAY variables for place in order of index\&. "
+.ti -1c
+.RI "bool \fBWriteVariablesFile\fP (const char *fileName) const"
+.br
+.RI "writes a csmp variables text file\&. NB: parameter is fully specified fileName(incl extension) "
+.ti -1c
+.RI "void \fBWriteVariableSetToHeaderFile\fP (const char *header_file, const char *variable_set_name) const"
+.br
+.RI "writes templatized \fBINDEX\fP variable definitions of the current variables into header file and instantiates their keys "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.RI "write current content of database to screen "
+.ti -1c
+.RI "void \fBIndexTrackerOut\fP () const"
+.br
+.RI "write current \fBIndex\fP objects in \fBModel\fP to screen including state (values of stored variables) "
+.ti -1c
+.RI "bool \fBBinaryOut\fP (const char *fileName) const"
+.br
+.RI "Writes to binary file, appends '_variables\&.dat' to fileName if necessary\&. "
+.ti -1c
+.RI "bool \fBBinaryOut\fP (std::fstream &fp) const"
+.br
+.ti -1c
+.RI "bool \fBBinaryIn\fP (const char *fileName, const std::set< std::string > &subset_variables)"
+.br
+.ti -1c
+.RI "bool \fBBinaryIn\fP (std::fstream &fp, const std::set< std::string > &subset_variables)"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::PropertyDatabase< dim >"Specifications of the variables used by the current model, i\&.e\&. name, notation, SI-unit, placement, type etc\&. 
+
+to be applied to entire model
+
+.PP
+\fBAuthor\fP
+.RS 4
+S\&. K\&. Matthaei 
+
+.PP
+P\&. Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1994-2012
+.RE
+.PP
+.SH "Motivation"
+.PP
+To manage access to physical variables in the numerical simulation\&. Depending on their purpose such variables have a different type such as scalar, vector, tensor or array\&. In addition, they have a different placement in the mesh: model, region, element node etc\&. Thus, housekeeping is required to keep track of such different variables\&. Firstly, one must be able to search for them by name\&. Secondly, their values have to be checked against a physically meaningful range\&. Thirdly, one needs to know how a variable was defined (as a scalar, vector or tensor) and at which locations in a discretization it shall be computed (nodes, integration points or elements etc\&.)\&. To accomplish this there must be a unique access key for each variable in order to retrueve it in a computationally efficient way\&.
+.SH "Design Intent"
+.PP
+The design intent of the \fBPropertyDatabase\fP is to have a single object in the CSMP code which manages the physical variables of a simulation and can be queried for their type, placement, and property index\&. These three characteristics combine into the structure \fBcsmp::Index\fP which serves the role of an access keys to distributed variable values\&.
+
+.PP
+The records in the \fBPropertyDatabase\fP are \fBParameter\fP class instances which contain the variable name, its \fBcsmp::Index\fP, and a physically meaningful range for each variable\&. This range can be queried to test whether implausible results were computed\&.
+
+.PP
+Finally, the database must ascertain uniqueness of the variable 'string' identifiers and allow to retrieve these in a reverse approach, starting from the inside of a computation in which only the efficient access keys are known\&. This capability is needed for error reporting\&.
+
+.PP
+The creation or deletion of variables at runtime is a further task of the \fBPropertyDatabase\fP\&.
+.SH "Structure"
+.PP
+The \fBPropertyDatabase\fP represents a binary tree of fixed-size physical-variable records which are accessed via name strings\&. Access of variable specifications benefits from the tree structure, but the reverse search for a variable name using the \fBcsmp::Index\fP as a key has a linear time complexity\&. Due to the typically small number of physical variables in a model, this is not important\&.
+.SH "Participants"
+.PP
+The \fBPropertyDatabase\fP uses \fBParameter\fP class objects as variable records\&. These are accessed by the variable names which are stored in std::string objects\&.
+.SH "Collaborations"
+.PP
+The \fBPropertyDatabase\fP is a data member of the \fBModel\fP object and collaborates with \fBIndex\fP and \fBParameter\fP records\&.
+
+.PP
+\fBAttention\fP
+.RS 4
+The \fBPropertyDatabase\fP does not store any variable values! These are stored in the \fBLocalVariableStorage\fP associated with the basic tree objects: \fBNode\fP, \fBElement\fP, etc\&.
+.RE
+.PP
+.SH "Consequences"
+.PP
+As is described in the CSMP User's Guide, properties of a physical variable and \fBcsmp::Index\fP structures can be obtained from the \fBPropertyDatabase\fP\&. As additional functionality, the \fBPropertyDatabase\fP can be used for unit conversions and to add or delete physical variables at runtime\&.
+.SH "Implementation"
+.PP
+The \fBPropertyDatabase\fP contains an STL map of variable names serving as keys to \fBParameter\fP objects which hold the variable specifications\&. The variable names are stored in the map in alphabetical order and the map is initialized from a text file when the \fBPropertyDatabase\fP is constructed\&. After all variable records have been added to the map, they are counted and \fBcsmp::Index\&.index\fP integers are issued\&. These indices are used to access the right \fBLocalVariableStorage\fP object\&.
+.SH "Application Examples"
+.PP
+An example of a variable entry in the text input file which is read by the constructor to initialize the \fBPropertyDatabase\fP, is shown below:
+
+.PP
+.PP
+.nf
+name  parameter  unit  index  min\&.  max\&.  place  usage  explanation  reference
+                                    
+fluid pressure PF Pa 1 0\&.00E+00 1\&.00E+10 node   absolute value  fluid pressure at node  alpha version doc
+.fi
+.PP
+
+.PP
+In this example, the string 'fluid pressure' defines the variable name which is used in the top level interfaces of the \fBModel\fP, the Algorithm, \fBInterrelation\fP or \fBVisitor\fP objects\&. The second variable 'PF' is an abbreviation which relates this variable name to the notation which the modeler uses in his/her equations\&. 'index' defines the variable type: '1' for a scalar, '2' for a vector, and '3' for a tensor variable\&. The following two floating point values in scientific notation, define a physically meaningful range for the variable, and the third parameter denotes the variable placement in the finite-element mesh\&.
+
+.PP
+The second examples illustrates how to get a \fBcsmp::Index\fP from a variable name:
+
+.PP
+.PP
+.nf
+// get a reference to the property database from the Model
+const PropertyDatabase<dim>&  p_ref = moab\&.Database();
+// get the access key for the variable "fluid pressure"
+csmp::Index property_key = p_ref\&.StorageKey("fluid pressure");
+.fi
+.PP
+
+.PP
+This code retrieves the \fBcsmp::Index\fP from the variable database\&. Typically, one retrieves the property key only once if one needs to access variable values\&. Once the key is established it can be used instead of the property name for fast property access\&.
+.SH "Array Variables"
+.PP
+Worth mentioning is the variable file syntax for \fBArrayVariable\fP handling\&. Array variables are created by assigning a number greater than 3 where the variable type is specified\&. The number indicates the size of the array, which as of now (9/3/2012) may not be changed at runtime\&. 
+.PP
+.nf
+element array               EA    X   22    0\&.  1\&.  element
+
+.fi
+.PP
+ here we instantiated an array on the element of size 22\&. So to recap the variable type options: 1 \&.\&. \fBScalarVariable\fP 2 \&.\&. \fBVectorVariable\fP 3 \&.\&. \fBTensorVariable\fP 4 to max<uint32_t> \fBArrayVariable\fP of that size
+
+.PP
+\fBAttention\fP
+.RS 4
+in addition to the old numbered style a the new way of reading variable types is now supported: The type's can be represented by name and size specification For types SCALAR, VECTOR, TENSOR there is no need to specify the size For ARRAY and FLAGGEDARRAY size should be specified after the "space" following the name of the variable,, e\&.g\&. ARRAY 1000, FLAGGEDARRAY 2, but SCALAR, VECTOR, TENSOR
+.RE
+.PP
+\fBNote\fP
+.RS 4
+name of the variable is not case sensitive, i\&.e\&. one can put FlaggedArray or FLAGGEDARRAY or flaggedarray 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::PropertyDatabase\fP< dim >::PropertyDatabase (const char * variablesFileName)\fR [explicit]\fP"
+
+.PP
+reads all variables from variables text file Initializes variables database from text variables file 
+.SS "template<uint32_t dim> \fBcsmp::PropertyDatabase\fP< dim >::PropertyDatabase (const \fBPropertyDatabase\fP< dim > & p)"
+
+.PP
+\fBAttention\fP
+.RS 4
+We do not copy the \fBIndexTracker\fP here! 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> \fBcsmp::Index\fP \fBcsmp::PropertyDatabase\fP< dim >::AddProperty ()"
+
+.PP
+adding a property at runtime from the command line (NB: you should call method CreateProperty() of model to do this) Interactive method allowing to a add a property at runtime, provided that the user knows which storage-vector index he can assign (this can be established by first calling ScalarProperties() or an equivalent method to establish how many properties of the desired type there already are\&. The index of the new property should use the next higher integer such that the property can be allocated by the MemoryManager at the end of the current property storage\&.
+
+.PP
+\fBWarning\fP
+.RS 4
+Any runtime change in variables invalidates existing \fBIndex\fP objects! They need to be updated\&.
+.RE
+.PP
+.SH "Input Arguments"
+.PP
+The user will be prompted to enter the \fBParameter\fP record specifications\&.
+
+.PP
+A \fBcsmp::Index\fP for the new property\&.
+.SH "Implementation"
+.PP
+The method will first prompt the user to define the characteristics of the new variable\&. Then CountVariables() is called to update the variable number lists inside of the \fBPropertyDatabase\fP\&. Finally, the updated variable list will be written to file\&.
+.SH "Application Examples"
+.PP
+To define a new variable at runtime\&.
+.SH "Messages"
+.PP
+The method will report a warning and print the existing variable record if the new variable already exists in the property database\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+The \fBIndex\fP reflecting the new state ov \fBLocalVariables\fP and \fBIntegrationPointVariables\fP, including added property\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+(3-D) These cout should become either \fBException\fP or errors using \fBErrorHandler\fP 
+
+.PP
+(3-D) Refactor to use overload internally 
+.RE
+.PP
+Roman,2013: Added explicit way of reading the size of variable provided by user input in function added_prop\&.DefineFromStdin()
+.SS "template<uint32_t dim> bool \fBcsmp::PropertyDatabase\fP< dim >::CheckRange (const char * s, const \fBScalarVariable\fP & var) const"
+
+.PP
+checks value against the range specified in the database; 
+.PP
+\fBNote\fP
+.RS 4
+not fast; use only for selected values
+.RE
+.PP
+returns true if tha value of the supplied variable is within the range stored in the database, else false 
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::CheckRange (const char * s, double & var) const"
+
+.PP
+prints details of the range check to screen and terminates program is value is out of range Tests whether the supplied value of the target variable is within the physical meaningful range which was specified for the variable in the database file\&. 
+.br
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The first method argument give the name of the target variable\&.
+.br
+\fIvar\fP The second method argument specifies the actual physical-variable value which will be overwritten by the closest range bound if the target variable is out of range\&.
+.RE
+.PP
+.SH "Implementation"
+.PP
+Checks range of variable *s\&. A warning is issued if the variable is out of range and the variable is set to the closest range bound\&.
+.SH "Messages"
+.PP
+If the target variable has not been defined in the property database, an error will be reported\&. 
+.SS "template<uint32_t dim> uint32_t \fBcsmp::PropertyDatabase\fP< dim >::Components (const char * s) const"
+Returns the number of components of a variable\&.
+
+.PP
+Scalar: 1 Vector: 2 Tensor: 3
+
+.PP
+Array: variable (as defined in the variables file) FlaggedArray: variable (as defined in the variables file)
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the physical variable whose type shall be established\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of components of a variable\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+If the variable is not defined, an error will be reported\&. 
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::DeleteProperty (const char * s)"
+Deletes the target property from the property database\&.
+
+.PP
+\fBWarning\fP
+.RS 4
+Existing \fBIndex\fP objects may be invalidated after invoking this function
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the physical variable whose database entry shall be deleted\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+A warning will be issued, if the target variable does not exist in the property database\&. 
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::FlushToScreen (const char * propname) const"
+Prints the parameter record of the target variable to stdout\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIpropname\fP name of variable to be output
+.RE
+.PP
+.SH "Implementation"
+.PP
+The method uses the '\fBOut()\fP' interface of the \fBParameter\fP class to print the variable record(s)\&. 
+.SS "template<uint32_t dim> uint32_t \fBcsmp::PropertyDatabase\fP< dim >::Index (const char * s) const"
+Returns the \fBcsmp::Index\&.index\fP of the target physical variable\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the physical variable whose index shall be determined\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The variable index which defines the number of the corresponding property vector inside of the MemoryManager\&. If undefined, numeric_limits<uint32_t>::max() is returned\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+If the variable is not defined, an error will be reported\&. 
+.SS "template<uint32_t dim> \fBIntegrationPointVariables\fP \fBcsmp::PropertyDatabase\fP< dim >::IntegrationPointVariablesAt (\fBPLACEMENT\fP within) const"
+only for \fBElement\fP / \fBFace\fP / \fBInterFace\fP and their \fBIntegrationPointVariables\fP
+
+.PP
+for all others zero
+.SS "template<uint32_t dim> bool \fBcsmp::PropertyDatabase\fP< dim >::IsDefined (const char * s) const"
+Tells the user whether a variable exists in the property database\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name or \fBcsmp::Index\fP of the variable which shall be searched for in the database\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The boolean variable 'true' or 'false'\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> bool \fBcsmp::PropertyDatabase\fP< dim >::IsDefined (const \fBcsmp::Index\fP & idx) const"
+Tells the user whether a variable exists in the property database\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIidx\fP The \fBcsmp::Index\fP of the variable which shall be searched for in the database\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The boolean variable 'true' or 'false'\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::ListKeys (std::list< \fBcsmp::Index\fP > & keys) const"
+Creates a list of \fBIndex\fP class objects corresponding to the current set of physical variables stored in the property database\&.
+
+.PP
+The first argument is a reference to an STL list of \fBIndex\fP class objects\&. If this list already contains data, it is erased before the new indices are entered\&. 
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::ListVariableNames () const"
+Prints an alphabetically ordered list of all current physical variables to 'stdout'\&.
+
+.PP
+\fBTest\fP
+.RS 4
+last modified: SKM 25/10/14: fixed segmentation fault caused by printing empty variable\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::ListVariables () const"
+Prints the \fBParameter\fP records of all current physical variables to stdout\&.
+.SH "Implementation"
+.PP
+Method calls the \fBOut()\fP interface of the \fBParameter\fP class\&.
+.SH "Application Examples"
+.PP
+To get full descriptions of the characteristics of all model variables\&. 
+.SS "template<uint32_t dim> const char * \fBcsmp::PropertyDatabase\fP< dim >::Name (const \fBcsmp::Index\fP & idx) const"
+Finds the name of the physical variable on the basis of its \fBIndex\fP\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIidx\fP The \fBIndex\fP of the target physical variable whose name shall be retrieved\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The name of the physical variable returned in C-string format\&. If the variable has not been defined in the property database, the output string will be 'undefined'\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim> \fBPLACEMENT\fP \fBcsmp::PropertyDatabase\fP< dim >::Placement (const char * s) const"
+Returns the placement (\fBNode\fP, IntegrationPoint or \fBElement\fP) of the target physical variable\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the physical variable whose placement shall be determined\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The variable placement\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+If the variable is not defined, an error will be reported\&. 
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::RangeOf (const char * s, double & mn, double & mx) const"
+Outputs the physically meaningful range of the target variable\&. This range is equivalent to the range which was specified in the variable database file\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the physical variable whose range shall be established\&.
+.br
+\fImn\fP The second and third method arguments will store the mininum and maximum permitted values of the target variable\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+If the target variable has not been defined in the property database, an error will be reported\&. 
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::SetRangeOf (const char * property_name, double vmin, double vmax)"
+Sets of the range of the target variable at runtime in case relevant information becomes available\&. 
+.SS "template<uint32_t dim> \fBcsmp::Index\fP \fBcsmp::PropertyDatabase\fP< dim >::StorageKey (const char * s) const"
+Returns the \fBIndex\fP type for the target physical variable\&. This index is an efficient access key for the physical variable andcan be used in repeated operations on the property storage, such as Read() / Write() operations of variable values\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the variable whose \fBIndex\fP shall be retrieved\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+\fBcsmp::Index\fP initialised with variable specifications
+.RE
+.PP
+A \fBIndex\fP class object specifying the type, placement and property-array index of the target variable\&. If the variable cannot be found in the database the returned \fBIndex\fP will be initialized using its default constructor\&.
+.SH "Application Examples"
+.PP
+\fBStorageKey()\fP is used inside \fBInterrelation\fP, Algorithm, \fBVisitor\fP and other class objects to derive \fBIndex\fP keys for computations\&.
+.SH "Messages"
+.PP
+If the variable does not exist in the property database, an error will be reported\&. 
+.SS "template<uint32_t dim> \fBVARIABLE_TYPE\fP \fBcsmp::PropertyDatabase\fP< dim >::Type (const char * s) const"
+Reports whether the target physical variable is of scalar, vector or tensor type\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the physical variable whose type shall be established\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The type of the physical variable\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+If the variable is not defined, an error will be reported\&. 
+.SS "template<uint32_t dim> const char * \fBcsmp::PropertyDatabase\fP< dim >::Unit (const char * s) const"
+Returns the unit record string of the \fBParameter\fP record which describes the target variable\&.
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP The name of the target physical variable\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The unit string record in the \fBParameter\fP object which stores the specifications of the physical variable\&. If the variable record cannot be found, a NULL pointer is returned\&.
+.RE
+.PP
+.SH "Messages"
+.PP
+An error is reported if the variable cannot be found in the property database\&. 
+.SS "template<uint32_t dim> double \fBcsmp::PropertyDatabase\fP< dim >::UnitConversionFactor (const char * sys_in, const char * sys_out, const char * unit) const"
+Reports conversion factors which allow the user to convert variable values from the SI to the CGS system or vice versa\&.
+.SH "Input Arguments"
+.PP
+The method expects three string arguments, the name of the system from which the variable is converted (options are SI or CGS), the name of the system into which the variable is converted (SI or CGS), and the unit which is converted\&. The SI unit options are the following:
+
+.PP
+"oC","m","MPa","kg m-3","yr","m Ma-1","W m-2","m2","J m-1 K-1 s-1","kg m-2 s-1"
+
+.PP
+and the available CGS (and other) units which can be converted are:
+
+.PP
+"cm", "cm2", "cm-2", "m","feet","dyne cm-2 s-1","g cm-1 s-1", "g cm-2 s-1", "g cm-3", "cal", "cal g-1 oC-1", "cal cm-1 s-1 oC-1","cal cm-2 s-1","oC", "bars", "cm s-1"\&.
+
+.PP
+\fBReturns\fP
+.RS 4
+A floating point conversion factor\&.
+.RE
+.PP
+.SH "Application Examples"
+.PP
+To get conversion factors which allow to output variables in non SI units for comparison with simulation results from non CSP simulation tools\&.
+.SH "Messages"
+.PP
+The method will report an error if it cannot identify one of its string arguments\&. 
+.SS "template<uint32_t dim> void \fBcsmp::PropertyDatabase\fP< dim >::WriteVariableSetToHeaderFile (const char * header_file, const char * variable_set_name) const"
+
+.PP
+writes templatized \fBINDEX\fP variable definitions of the current variables into header file and instantiates their keys Writes templatized \fBINDEX\fP variable definitions of the current variables into header file and instantiates their keys\&. If the variable set name is empty, the variables are inserted into the global namespace\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

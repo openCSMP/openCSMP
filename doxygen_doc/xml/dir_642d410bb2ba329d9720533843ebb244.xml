@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_642d410bb2ba329d9720533843ebb244" kind="dir">
+    <compoundname>source/modules/integration/cvfe_hydrothermal</compoundname>
+    <innerfile refid="_c_v_f_e_m___math_operator_l_h_s_8cpp">CVFEM_MathOperatorLHS.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___math_operator_r_h_s_8cpp">CVFEM_MathOperatorRHS.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___num_integral__d_n_t__op__d_n__d_v_8cpp">CVFEM_NumIntegral_dNT_op_dN_dV.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___p_h_x___scheme_8cpp">CVFEM_PHX_Scheme.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___point_source__rhsop_8cpp">CVFEM_PointSource_rhsop.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___pressure_gradient_visitor_8cpp">CVFEM_PressureGradientVisitor.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_8cpp">CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_8cpp">CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.cpp</innerfile>
+    <innerfile refid="_c_v_f_e_m___visitor_8cpp">CVFEM_Visitor.cpp</innerfile>
+    <innerfile refid="_explicit_finite_volume_transport_p_h_x_8cpp">ExplicitFiniteVolumeTransportPHX.cpp</innerfile>
+    <innerfile refid="_limiter_8cpp">Limiter.cpp</innerfile>
+    <innerfile refid="_na_cl_h2_o_properties_visitor_p_h_x_8cpp">NaClH2OPropertiesVisitorPHX.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__lhs__nodal__op___n__d_v_8cpp">NumIntegral_NT_lhs_nodal_op_N_dV.cpp</innerfile>
+    <innerfile refid="_num_integral___n_t__rhs__nodal__op___n__d_v_8cpp">NumIntegral_NT_rhs_nodal_op_N_dV.cpp</innerfile>
+    <innerfile refid="_pore_volume_visitor_8cpp">PoreVolumeVisitor.cpp</innerfile>
+    <innerfile refid="_stencil_processor_p_h_x_8cpp">StencilProcessorPHX.cpp</innerfile>
+    <innerfile refid="_two_phase_transport_p_h_x_8cpp">TwoPhaseTransportPHX.cpp</innerfile>
+    <innerfile refid="_upwind_control_visitor_8cpp">UpwindControlVisitor.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/modules/integration/cvfe_hydrothermal/"/>
+  </compounddef>
+</doxygen>

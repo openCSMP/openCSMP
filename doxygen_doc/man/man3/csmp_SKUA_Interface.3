@@ -1,0 +1,192 @@
+.TH "csmp::SKUA_Interface" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::SKUA_Interface
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <SKUA_Interface\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<uint32_t dim> bool \fBImportElementPropertyValuesFromSKUA\fP (\fBModel\fP< dim > &, const std::string &data_file=std::string())"
+.br
+.RI "region-by-region property assignment from column-based texfile (Kuncho Kurtev) "
+.ti -1c
+.RI "void \fBOutputElementNumbersAndBaryCentresRegionByRegion\fP (const \fBModel\fP< 3U > &)"
+.br
+.RI "output of element barycentre points transformed into SKUA (lefthanded) coordinate system for property interpolation and transfer to CSMP "
+.ti -1c
+.RI "void \fBVariableToPointCloud\fP (const \fBModel\fP< 3U > &, const std::set< std::string > &regions_of_interest, const char *filename, const char *element_var) const"
+.br
+.RI "exports element variable from selected regions to SKUA barycenter-point cloud (ASCII table) format "
+.ti -1c
+.RI "void \fBVariablesToPointCloud\fP (const \fBModel\fP< 3U > &, const std::set< std::string > &regions_of_interest, const char *filename, const std::set< std::string > &element_var) const"
+.br
+.RI "exports multiple element variables from selected regions to SKUA barycenter-point cloud (ASCII table) format "
+.ti -1c
+.RI "void \fBSurfaceArrayVariableToPointCloud\fP (const \fBModel\fP< 3U > &, const std::set< std::string > &regions_of_interest, const char *filename, const char *element_var) const"
+.br
+.RI "creates cloud of points offset along the barycenter surface normal of the element of interest using the 'thickness' attribute "
+.ti -1c
+.RI "void \fBConvertRockTypesIntoRegions\fP (\fBModel\fP< 3U > &, const std::string &rocktype_info_file)"
+.br
+.RI "For each rock type the elements will be converted into regions with the corresponding name\&. "
+.ti -1c
+.RI "void \fBErase_NO_DATA_ElementsFromModel\fP (\fBModel\fP< 3U > &, const std::string &target_region, std::set< size_t > &no_data_elmt_numbers)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SH "conventions regarding neighbor connectivity"
+.PP
+In CSMP, only the neighbors of equidimensional elements are recorded: the volumetric neighbors of volumetric elements, the surface neighbors of surface elements and the line element neighbors of bar elements\&. Now, on the outer perimeter of the model, elements that make up the boundary surfaces would normally have the elements of adjacent boundary surfaces as neighbors\&. This connectivity is ignored\&. Instead, missing neighbors are indicated in the \fBVSet::VData\fP by the \fBBOX_BOUNDARY\fP flags that correspond to the model edges\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::SKUA_Interface::ConvertRockTypesIntoRegions (\fBModel\fP< 3U > & , const std::string & rocktype_info_file)"
+
+.PP
+For each rock type the elements will be converted into regions with the corresponding name\&. Reads file with the mapping from integer codes to region names and creates corresponding model regions\&. Elements with rocktype identifiers that are not contained in the regions file are ignore, but the unrecognised codes are reported to screen and file\&. The file has the following format:
+
+.PP
+.PP
+.nf
+headline (printed to screen)
+identifier value  tab  region name (can contain white space)
+.fi
+.PP
+
+.PP
+\fBAttention\fP
+.RS 4
+if the rocktype file info file is omitted, the function will search for a file called: "model_name-rocktype-identifiers\&.txt"
+.RE
+.PP
+\fBNote\fP
+.RS 4
+only the first 2 tokens in each line of the file are read, allowing the user to add comments afterwards
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+22/8/2018 
+.RE
+.PP
+
+.SS "void csmp::SKUA_Interface::Erase_NO_DATA_ElementsFromModel (\fBModel\fP< 3U > & , const std::string & target_region, std::set< size_t > & no_data_elmt_numbers)"
+removes the elements for which NO_DATA values (-9999, -99999) in the target region of the model\&. After removing the elements, the unique regions, boundaries, and split boundaries are updated accordingly\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+JC revised by SKM 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+26/2/2019 
+
+.PP
+22/5/2021 
+.RE
+.PP
+
+.SS "template<uint32_t dim> template bool csmp::SKUA_Interface::ImportElementPropertyValuesFromSKUA (\fBModel\fP< dim > & , const std::string & data_file = \fRstd::string()\fP)"
+
+.PP
+region-by-region property assignment from column-based texfile (Kuncho Kurtev) Using the supplied region names and "element number" values, maps the data from the input file onto the current model\&. The input file is expected to be named after the current model with the extension "-element_barycentres\&.txt"\&. Its expected format is:
+
+.PP
+header line axes titles: region-name(string), region-id(number 0\&.\&.n-1), element-id(number 0\&.\&.n-1), - comma-separated list of property names comma-seperated data\&.\&.\&. EOF
+
+.PP
+\fBAttention\fP
+.RS 4
+properties are mapped region by region so that values do not spill across region boundaries; not found non-NON-DATA values are reported
+
+.PP
+property values are mapped only if they are within range; out-of range values are reported, but ignored\&.
+
+.PP
+if a region does not exist, an error is reported
+
+.PP
+property values will only be written to elements whose property flag is not DIRICH or fixed
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+TODO: expand to handle tensor properties as well
+.RE
+.PP
+
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+
+.SS "void csmp::SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion (const \fBModel\fP< 3U > & model)"
+
+.PP
+output of element barycentre points transformed into SKUA (lefthanded) coordinate system for property interpolation and transfer to CSMP Writes file with the element barycentre coordinates, preceded by region-name(string), region-id(number), element-id(number)\&. since SKUA doesn't import string type, a corresponding region-map and element-map will be generated to map their corresponding region-name and element-key from the region-id and the element-id\&.
+
+.PP
+The file format is
+
+.PP
+header line axes titles: region-name(string), region-id(number 0\&.\&.n-1), element-id(number 0\&.\&.n-1), x, y, z comma-seperated data\&.\&.\&. EOF
+
+.PP
+\fBNote\fP
+.RS 4
+to function correctly, the method needs the region id and the element invariable "element number" that must not change from run to run like CSMP's Idx() values do\&.
+
+.PP
+ideally the region names should be echo'ed back from SKUA, but because this is a string and a unique integer code is written out and read in backwards as an alternative\&.
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+SKM 
+.RE
+.PP
+
+.SS "void csmp::SKUA_Interface::SurfaceArrayVariableToPointCloud (const \fBModel\fP< 3U > & , const std::set< std::string > & regions_of_interest, const char * filename, const char * element_var) const"
+
+.PP
+creates cloud of points offset along the barycenter surface normal of the element of interest using the 'thickness' attribute creates point clouds around surface of interest using the 'thickness' attribute 
+.SS "void csmp::SKUA_Interface::VariablesToPointCloud (const \fBModel\fP< 3U > & , const std::set< std::string > & regions_of_interest, const char * filename, const std::set< std::string > & element_var) const"
+
+.PP
+exports multiple element variables from selected regions to SKUA barycenter-point cloud (ASCII table) format like previous method, but for multiple output variables discretized on the elements 
+.SS "void csmp::SKUA_Interface::VariableToPointCloud (const \fBModel\fP< 3U > & , const std::set< std::string > & regions_of_interest, const char * filename, const char * element_var) const"
+
+.PP
+exports element variable from selected regions to SKUA barycenter-point cloud (ASCII table) format VariableToPointCloud
+
+.PP
+Outputs any element variable from CSMP to SKUA point cloud (ASCII table) format\&. Variables discretized on volume, surface or line elements will be output as point data placed on the barycenter of respective elements\&. 
+.br
+
+.PP
+\fBAttention\fP
+.RS 4
+methods outputs coordinates in SKUA format where y=-z and z=-y 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

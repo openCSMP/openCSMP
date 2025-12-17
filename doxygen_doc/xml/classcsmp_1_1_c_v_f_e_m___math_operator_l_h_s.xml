@@ -1,0 +1,394 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s" kind="class" language="C++" prot="public">
+    <compoundname>csmp::CVFEM_MathOperatorLHS</compoundname>
+    <basecompoundref refid="classcsmp_1_1_math_operator_l_h_s" prot="public" virt="non-virtual">csmp::MathOperatorLHS&lt; dim, Element &gt;</basecompoundref>
+    <includes refid="_c_v_f_e_m___math_operator_l_h_s_8h" local="no">CVFEM_MathOperatorLHS.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+      <param>
+        <type>template&lt; uint32_t &gt; class</type>
+        <declname>CELL</declname>
+        <defname>CELL</defname>
+        <defval><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref></defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a7590eaaf241c5a8be564d252fe5cf1f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;::CVFEM_MathOperatorLHS</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const char *basic, const char *test)</argsstring>
+        <name>CVFEM_MathOperatorLHS</name>
+        <qualifiedname>csmp::CVFEM_MathOperatorLHS::CVFEM_MathOperatorLHS</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>basic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="53" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.cpp" bodystart="19" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a51b6f8a2eed8aac894ff446bc4b0fb73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;::CVFEM_MathOperatorLHS</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;, const char *oper, const char *basic, const char *test)</argsstring>
+        <name>CVFEM_MathOperatorLHS</name>
+        <qualifiedname>csmp::CVFEM_MathOperatorLHS::CVFEM_MathOperatorLHS</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <defname>pref</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>oper</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>basic</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>test</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="57" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.cpp" bodystart="28" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a05d5f4a2d0ba812bc69e0ac490d1fc83" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;::~CVFEM_MathOperatorLHS</definition>
+        <argsstring>()</argsstring>
+        <name>~CVFEM_MathOperatorLHS</name>
+        <qualifiedname>csmp::CVFEM_MathOperatorLHS::~CVFEM_MathOperatorLHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>default destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="60" column="13" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.cpp" bodystart="15" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1af66e2a19d8df3b26d8aa586ecde672bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;::GetOperandsCVFEM</definition>
+        <argsstring>(const CELL&lt; dim &gt; &amp;, csmp::Index upwind_var_key)</argsstring>
+        <name>GetOperandsCVFEM</name>
+        <qualifiedname>csmp::CVFEM_MathOperatorLHS::GetOperandsCVFEM</qualifiedname>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_1a33b503cb1a11a3fb946637387bbab928">GetOperandsCVFEM</reimplementedby>
+        <param>
+          <type>const CELL&lt; dim &gt; &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+          <declname>upwind_var_key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>virtual function for <ref refid="classcsmp_1_1_c_v_f_e_m___visitor" kindref="compound">CVFEM_Visitor</ref> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="62" column="18" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.cpp" bodystart="39" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a770bb95dc95841d78847702578e3814c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt;</type>
+        <definition>DenseMatrix&lt; DM_MIN &gt; csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;::GetContribution</definition>
+        <argsstring>()</argsstring>
+        <name>GetContribution</name>
+        <qualifiedname>csmp::CVFEM_MathOperatorLHS::GetContribution</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>access function for <ref refid="classcsmp_1_1_c_v_f_e_m___visitor" kindref="compound">CVFEM_Visitor</ref> to the matrix entries </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="64" column="25" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.cpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1acdd28ed240ef5dd43311683e223324a8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s" kindref="compound">CVFEM_MathOperatorLHS</ref>&lt; dim, CELL &gt; *</type>
+        <definition>virtual CVFEM_MathOperatorLHS&lt; dim, CELL &gt; * csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;::clone</definition>
+        <argsstring>() const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>csmp::CVFEM_MathOperatorLHS::clone</qualifiedname>
+        <reimplements refid="classcsmp_1_1_math_operator_l_h_s_1ab834fae1d8f3c54fe7eea683273aab17">clone</reimplements>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___num_integral__d_n_t__op__d_n__d_v_1a99bfa14ccd00e2c6db824eecff3d6a29">clone</reimplementedby>
+        <reimplementedby refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_1a39acc8ec812415d2faa8c6564da33ff4">clone</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="66" column="35" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" bodystart="66" bodyend="66"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a99af7441af2e10d4c0df82fab612687c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;::CVFEM_MathOperatorLHS</definition>
+        <argsstring>()</argsstring>
+        <name>CVFEM_MathOperatorLHS</name>
+        <qualifiedname>csmp::CVFEM_MathOperatorLHS::CVFEM_MathOperatorLHS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>default constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="69" column="5" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.cpp" bodystart="11" bodyend="11"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classcsmp_1_1_base" kindref="compound">Base</ref> class for CVFEM Math Operators (LHS) that enable the use for control volume calculations as a post-processing step.</para>
+<para><simplesect kind="author"><para>Philipp Weis, ETH Zuerich </para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1contact">
+<title>Contact</title><para><ulink url="mailto:philipp.weis@erdw.ethz.ch">philipp.weis@erdw.ethz.ch</ulink></para>
+<para>@changes changes Latest Changes</para>
+</sect1>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>In the development for the CVFEM scheme, we tested the consistency of the pressure equation and mass advection.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Can be used within the CVFEM scheme (Weis et al., Geofluids, 2014). PDE Operators that use these Math Operators as base classes can be used with the <ref refid="classcsmp_1_1_c_v_f_e_m___visitor" kindref="compound">CVFEM_Visitor</ref>.</para>
+<para><programlisting><codeline><highlight class="normal">Usage<sp/>and<sp/>functionality<sp/>as<sp/>the<sp/>MathOperatorLHS<sp/>with<sp/>the<sp/>addition<sp/>of<sp/>access<sp/>functions<sp/>that<sp/>are<sp/>used<sp/>by<sp/>the<sp/>CVFEM_Visitor.</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1dependencies">
+<title>Dependencies</title></sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1issues">
+<title>Known issues</title><para>This construct is redundant if CVFEM_Visitors are not used.</para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>testing was done in the period before publication in 2014. </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::CVFEM_MathOperatorLHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::CVFEM_NumIntegral_dNT_op_dN_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___num_integral__d_n_t__op__d_n__d_v"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::CVFEM_Upwind_NumIntegral_dNT_op_dN_dV&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorLHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="8">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="6">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="10">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::MathOperatorLHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" line="50" column="1" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_MathOperatorLHS.h" bodystart="50" bodyend="70"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a071174805944988e79eb90d220825fc6" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>Add</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6e8ba5063d8f63ae9be81cf35707ce45" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>add_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac7b08a240ef6983652e87ae66b9bb89d" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>add_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a656e2058fe8befd10867c14daf913fb4" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>AddAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1adc666d51a1d079eb31768b937b575d15" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>AddAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2d4eb297a16ea6a4ee4f352fac80595b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>AddLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a03e47eec17a8af0f737d899ab20aeb9f" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>application_cycle_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad64786ff609174d2370889cbab765780" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>application_cycles_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1afb93bb032bf499e831315fb542610f6a" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>ApplicationCycle</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6b5f4238adbb0777f28fdc4fc74d5e4b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>ApplicationCycles</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ab63fa0d4cdd2e842a7bd9e72cad20760" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>AssignToGlobal</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa3596e878f26280060468a9bdec46dca" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>BasicOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a58c2a9a26dd513f31518787e3db2b0f4" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>BasicOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af4a984063854fb3cae9a7540a04b5c03" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>BasicOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a4ff9ba8ce51005017b733dc19c81d515" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>BasicOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acc4999e50046c13accb00f8d107b2c96" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>BasicOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad9337ca684d7bcb3ec3e95962896a8b6" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>BasicOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2a7e46d92ed93c59de74ed51316892ff" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>BasicOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa9df1530e82365639a558cf33d23aa4a" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>bop</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1acdd28ed240ef5dd43311683e223324a8" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>clone</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad218c9a90bfa910a988f540a8fe802ea" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>ComputeContribution</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a7590eaaf241c5a8be564d252fe5cf1f7" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>CVFEM_MathOperatorLHS</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a51b6f8a2eed8aac894ff446bc4b0fb73" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>CVFEM_MathOperatorLHS</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a99af7441af2e10d4c0df82fab612687c" prot="private" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>CVFEM_MathOperatorLHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a9f509141a8a09632215b8ae825ed0d86" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>DERIV</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a11b450090896b6cea8c30e824c1ee873" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>DivideByTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aca21df7e825c1c079e50ac88762ff309" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>factor_</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a770bb95dc95841d78847702578e3814c" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>GetContribution</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acaaa0a607351dfb0c857249573a26e47" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>GetOperands</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1af66e2a19d8df3b26d8aa586ecde672bc" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>GetOperandsCVFEM</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a84eb241e3c064c802e1344eb587fc403" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>IPOL</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a62aa16ddf9b80b53fd8b71ab6c8cc348" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>LHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a34ca5ce934dec80b9a82ec99abb43a22" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>lump_matrices_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a381dab79b9e88de89392fe9d2f4125af" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>LumpedFormulation</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a98c6cf1dbe2d55bce775249a985e04cf" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MaterialOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae2b75f9c674166a0f7c65505a4a766c1" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MaterialOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1adb94e7db577721029487225af1acc83a" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MaterialOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2630c48202f13587ecf0ce8c04f85207" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MaterialOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a06d7da89656114db3efb370b760f2174" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MaterialOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ada8f0c4132529a89c9def2a1ec94db62" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MaterialOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af7fa5ce4bebcb0332eb22f8f72866014" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MathOperatorLHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MTRL</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a80caf626696a711f04c0ed1acd14ab2e" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>Multiply</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a11a964940ae410af4cbd9c33f03d5a9f" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>multiply_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a60cb3c4a87feb41ce07cb229e1341f35" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MultiplyAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae76aa6b2c8d1fca49eaf5baeef46819d" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MultiplyBy</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0e51a52a9730c9733a40058dfb65d7f7" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MultiplyWithTimeFactor</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a87d8c6442bfa7e06d796210bf2ea61b2" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>MultiplyWithTimeIncrement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2fa244d3942f5dd01ffa311db88fe0ea" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>Name</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a68c1743b2d8b239538b1de4bc647757c" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>name_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a2d15a8ce98eaf9fe68bb64f7a08fc969" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>op</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a93c785d11a531c3e9371d3588900ba0a" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a63cf7c372948f3c06e163252b6e4e42d" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a3e0f634988ada2fc5655833a1d0b8ded" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>PropertyAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a12809a59cb96c185152239f7708cc50d" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>Subtract</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a414bbbf7690a21c7b80a20eda75926df" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>subtract_accumulate_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a5e1d45c6cbf6aebf197093ac5a40bf37" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>subtract_accumulate_later_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1acceb5f9b0a038e6d49fbbf3aff3e4b70" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>SubtractAccumulate</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1afb45ea755a584e29e8dcc9f705cfd941" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>SubtractAccumulateLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a4539598cf1ba6c874c918861213a2de0" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>SubtractLater</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae5e3432ee76f4911b81ad13ccf2286de" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>TestOperand</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1af3ace5585d1d9835499792d8c8797c21" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>TestOperandDataDepth</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0f538bbce5bc1a0deac458a8b8dd1b7b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>TestOperandKey</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a1d12fc442933080ca6c939d42440cc60" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>TestOperandName</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a20ff9915e8e84050a01bc585a6696b12" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>TestOperandOffset</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ae28df9f0db9f00bff29cd6aea77d8f81" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>TestOperandPlacement</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ad0e65ecc822a0cd27a3464067ca6be85" prot="public" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>TestOperandType</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1abb898750a0af12e4f2346998a7870202" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>time_divide_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac28e437cd2e78cb8be5c0140d511ad28" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>time_multiply_</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a6e1a9ac42d450cbbb0b00edeb2b56874" prot="protected" virt="non-virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>top</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1a0972c226f26ae57084c7d22343560e3e" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>WriteOperands</name></member>
+      <member refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s_1a05d5f4a2d0ba812bc69e0ac490d1fc83" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>~CVFEM_MathOperatorLHS</name></member>
+      <member refid="classcsmp_1_1_math_operator_l_h_s_1ac8bb4ff902250b18d841cacccd0b5dee" prot="public" virt="virtual"><scope>csmp::CVFEM_MathOperatorLHS</scope><name>~MathOperatorLHS</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

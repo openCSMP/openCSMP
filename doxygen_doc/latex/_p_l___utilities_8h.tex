@@ -1,0 +1,112 @@
+\doxysection{source/includes/utilities/\+PL\+\_\+\+Utilities.h File Reference}
+\hypertarget{_p_l___utilities_8h}{}\label{_p_l___utilities_8h}\index{source/includes/utilities/PL\_Utilities.h@{source/includes/utilities/PL\_Utilities.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$iterator$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include "{}Model.\+h"{}}\newline
+{\ttfamily \#include "{}Property\+Handle.\+h"{}}\newline
+Include dependency graph for PL\+\_\+\+Utilities.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_p_l___utilities_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_p_l___utilities_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcsmp_1_1_compile_time_error_3_01true_01_4}{csmp\+::\+Compile\+Time\+Error$<$ true $>$}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecsmp}{csmp}}
+\begin{DoxyCompactList}\small\item\em Complex System Modeling Platform. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_p_l___utilities_8h_aa7d921cda07f5efb9d08bbd36ee22f1b}{STATIC\+\_\+\+ASSERT}}(expr)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T$>$ }\\bool {\bfseries csmp\+::within\+Tolerance} (T value1, T value2, T tolerance)
+\begin{DoxyCompactList}\small\item\em returns whether values are within tolerance \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T$>$ }\\bool {\bfseries csmp\+::smaller\+Than\+Within\+Tolerance} (T value\+In\+Question, T reference\+Value, T tolerance)
+\begin{DoxyCompactList}\small\item\em returns whether values are within tolerance \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class Node\+Or\+Element$>$ }\\double {\bfseries csmp\+::maximum\+Difference} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const char \texorpdfstring{$\ast$}{*}node\+Prop1, const char \texorpdfstring{$\ast$}{*}node\+Prop2, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\begin{DoxyCompactList}\small\item\em returns the maximum difference found on any node/element between two properties property \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class Node\+Or\+Element$>$ }\\double {\bfseries csmp\+::average\+Difference} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const char \texorpdfstring{$\ast$}{*}node\+Prop1, const char \texorpdfstring{$\ast$}{*}node\+Prop2, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\begin{DoxyCompactList}\small\item\em returns the averaged difference found on all nodes/elements between two properties property \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class Node\+Or\+Element$>$ }\\double {\bfseries csmp\+::maximum\+Of\+Property} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const char \texorpdfstring{$\ast$}{*}prop, const char \texorpdfstring{$\ast$}{*}region="{}Model"{})
+\begin{DoxyCompactList}\small\item\em returns the maximum value on any node/element of a property \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\double {\bfseries csmp\+::element\+To\+Node\+Property} (\mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ dim $>$ \texorpdfstring{$\ast$}{*}node, \mbox{\hyperlink{structcsmp_1_1_index}{Index}} key)
+\begin{DoxyCompactList}\small\item\em returns arithmetic average of parent elements prop to node \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T$>$ }\\void {\bfseries csmp\+::vector\+Out} (const std\+::vector$<$ T $>$ \&v, std\+::string message="{}"{})
+\begin{DoxyCompactList}\small\item\em prints the content of a vector to std\+::cout, optional title std\+::string \textquotesingle{}message\textquotesingle{} \end{DoxyCompactList}\item 
+void {\bfseries csmp\+::ignore\+Istream} (std\+::istream \&i\+Stream, size\+\_\+t no\+Of\+Terms)
+\begin{DoxyCompactList}\small\item\em discards given number of istream objects \end{DoxyCompactList}\item 
+bool {\bfseries csmp\+::copy\+File} (std\+::string file\+Source, std\+::string file\+Copy)
+\begin{DoxyCompactList}\small\item\em copies any given file \end{DoxyCompactList}\item 
+void {\bfseries csmp\+::bubble\+Sort\+Nodes1D} (std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ 1U $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator NODES\+\_\+\+BEGIN, std\+::vector$<$ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}$<$ 1U $>$ \texorpdfstring{$\ast$}{*} $>$\+::iterator NODES\+\_\+\+END)
+\begin{DoxyCompactList}\small\item\em orders node indices so that the follow the x position(distance from 0) \end{DoxyCompactList}\item 
+void {\bfseries csmp\+::scale\+Model\+By\+Factor} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 3U $>$ \&model, double x\+Factor, double y\+Factor, double z\+Factor)
+\begin{DoxyCompactList}\small\item\em adjusts the size of the model by the provided factor \end{DoxyCompactList}\item 
+void {\bfseries csmp\+::min\+Max\+XYZ} (\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&min, \mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ \&max, const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 3U $>$ \&model, const char \texorpdfstring{$\ast$}{*}region\+Name="{}Model"{})
+\begin{DoxyCompactList}\small\item\em returns points which CONTAIN the lowest and largest x,y,z coordinates. not equal to Min\+Max\+Coordinates() !!! \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_point}{Point}}$<$ 3U $>$ {\bfseries csmp\+::model\+Midpoint} (const \mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ 3U $>$ \&model, const char \texorpdfstring{$\ast$}{*}region\+Name="{}Model"{})
+\begin{DoxyCompactList}\small\item\em returns the true center of a csmp model \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\double {\bfseries csmp\+::boundary\+Inflow} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, \mbox{\hyperlink{classcsmp_1_1_boundary}{csmp\+::\+Boundary}}$<$ dim $>$ \&boundary)
+\begin{DoxyCompactList}\small\item\em NCFVT bug workaround to calculate inflow across a boundary with PP conditions. Requires add. \textquotesingle{}nodal volume flux\textquotesingle{}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\double {\bfseries csmp\+::region\+Inflow} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, \mbox{\hyperlink{classcsmp_1_1_region}{csmp\+::\+Region}}$<$ dim $>$ \&region)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim$>$ }\\void {\bfseries csmp\+::single\+Phase\+Velocity} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&model, const std\+::string \&region\+Name, const std\+::string velocity\+Name="{}velocity"{}, const std\+::string pressure\+Name="{}fluid pressure"{}, const std\+::string conductivity\+Name="{}conductivity"{}, const std\+::string volume\+Flux\+Name="{}volume flux"{})
+\begin{DoxyCompactList}\small\item\em establishes \textquotesingle{}velocity\textquotesingle{} and \textquotesingle{}volume flux\textquotesingle{} for a single phase system (\textquotesingle{}conductivity\textquotesingle{}), beware of surface elements \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Key\+Type, typename Value\+Type$>$ }\\bool {\bfseries csmp\+::map\+Find} (const Key\+Type \&KEY, Value\+Type \&VALUE, const std\+::map$<$ Key\+Type, Value\+Type $>$ \&map\+To\+Write\+To)
+\begin{DoxyCompactList}\small\item\em looks up value for given key and passes it to parameter; returns true if found, false otherwise \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Key\+Type, typename Value\+Type$>$ }\\bool {\bfseries csmp\+::map\+Find} (const Key\+Type \&KEY, const std\+::map$<$ Key\+Type, Value\+Type $>$ \&map\+To\+Write\+To)
+\begin{DoxyCompactList}\small\item\em returns if value is to be found \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Key\+Type, typename Value\+Type$>$ }\\bool {\bfseries csmp\+::map\+Out} (const std\+::map$<$ Key\+Type, Value\+Type $>$ \&map\+To\+Output, const char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Writes map to tab-\/seperated ascii file, (given types have \textquotesingle{}\texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<}\textquotesingle{} overload) and returns success. \end{DoxyCompactList}\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class Domain$>$ }\\bool {\bfseries csmp\+::connected} (const Domain$<$ dim $>$ \&d1, const Domain$<$ dim $>$ \&d2)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class Domain$>$ }\\double {\bfseries csmp\+::average\+Distance\+Between} (const Domain$<$ dim $>$ \&d1, const Domain$<$ dim $>$ \&d2)
+\item 
+{\footnotesize template$<$uint32\+\_\+t dim, template$<$ uint32\+\_\+t $>$ class Domain$>$ }\\double \mbox{\hyperlink{group___c_s_m_pglobal_functions_gac39e1cc2826fce87c457e092c660ae03}{csmp\+::minimum\+Distance\+Between}} (const Domain$<$ dim $>$ \&d1, const Domain$<$ dim $>$ \&d2)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+P. Lang 
+\end{DoxyAuthor}
+
+
+\label{doc-define-members}
+\Hypertarget{_p_l___utilities_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{_p_l___utilities_8h_aa7d921cda07f5efb9d08bbd36ee22f1b}\index{PL\_Utilities.h@{PL\_Utilities.h}!STATIC\_ASSERT@{STATIC\_ASSERT}}
+\index{STATIC\_ASSERT@{STATIC\_ASSERT}!PL\_Utilities.h@{PL\_Utilities.h}}
+\doxysubsubsection{\texorpdfstring{STATIC\_ASSERT}{STATIC\_ASSERT}}
+{\footnotesize\ttfamily \label{_p_l___utilities_8h_aa7d921cda07f5efb9d08bbd36ee22f1b} 
+\#define STATIC\+\_\+\+ASSERT(\begin{DoxyParamCaption}\item[{}]{expr}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ (\ CompileTimeError<(expr)\ !=\ 0>()\ )}
+
+\end{DoxyCode}

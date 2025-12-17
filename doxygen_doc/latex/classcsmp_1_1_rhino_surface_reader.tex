@@ -1,0 +1,136 @@
+\doxysection{csmp\+::Rhino\+Surface\+Reader Class Reference}
+\hypertarget{classcsmp_1_1_rhino_surface_reader}{}\label{classcsmp_1_1_rhino_surface_reader}\index{csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}}
+
+
+{\ttfamily \#include $<$Rhino\+Surface\+Reader.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Rhino\+Surface\+Reader\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=233pt]{classcsmp_1_1_rhino_surface_reader__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_a42fee74a8a8bfa5dcd741d164ee33fe7}\label{classcsmp_1_1_rhino_surface_reader_a42fee74a8a8bfa5dcd741d164ee33fe7} 
+{\bfseries Rhino\+Surface\+Reader} (const char \texorpdfstring{$\ast$}{*}raw\+\_\+file)
+\item 
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_aad6ea29a90bd6154da61340571034cf5}\label{classcsmp_1_1_rhino_surface_reader_aad6ea29a90bd6154da61340571034cf5} 
+{\bfseries Rhino\+Surface\+Reader} (const \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader}{Rhino\+Surface\+Reader}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_a75aa65d7c0a5dd36a0769f7a3462ea8a}\label{classcsmp_1_1_rhino_surface_reader_a75aa65d7c0a5dd36a0769f7a3462ea8a} 
+\mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader}{Rhino\+Surface\+Reader}} \& {\bfseries operator=} (const \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader}{Rhino\+Surface\+Reader}} \&)
+\item 
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_a63b481a58fd24abe414560c4f6e12798}\label{classcsmp_1_1_rhino_surface_reader_a63b481a58fd24abe414560c4f6e12798} 
+void {\bfseries Output\+Object\+To} (const char \texorpdfstring{$\ast$}{*}obj, \mbox{\hyperlink{classcsmp_1_1_v_set}{VSet}}$<$ 3U $>$ \&) const
+\begin{DoxyCompactList}\small\item\em conversion of triangulated surface object \textquotesingle{}obj\textquotesingle{} into polygonal data set stored in NCSA \doxylink{classcsmp_1_1_v_set}{VSet} format \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_aef22807b8d0f0bfd1605990154dd74ee}\label{classcsmp_1_1_rhino_surface_reader_aef22807b8d0f0bfd1605990154dd74ee} 
+void {\bfseries Erase\+Objects} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader_ab91f0c09b4ac8f307e3d526a7ee6e2ca}{Write\+Object\+To\+TSurf}} (const char \texorpdfstring{$\ast$}{*}obj, std\+::ofstream \&) const
+\begin{DoxyCompactList}\small\item\em Go\+CAD output\+: TSurf format\+: a single selected surface. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader_a7b1968304819f761d75dbba83f11e765}{Write\+Objects\+To\+TSurf}} (const char \texorpdfstring{$\ast$}{*}tsurf\+\_\+file, const char \texorpdfstring{$\ast$}{*}GEOLOGICAL\+\_\+\+TYPE="{}fault"{}) const
+\begin{DoxyCompactList}\small\item\em Go\+CAD output\+: TSurf format\+: all surfaces in the file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader_af99ddf426dfac3dc4892eb753fd21078}{Write\+Selected\+Objects\+To\+TSurf}} (const char \texorpdfstring{$\ast$}{*}tsurf\+\_\+file) const
+\begin{DoxyCompactList}\small\item\em Go\+CAD output\+: TSurf format\+: surfaces selected by the user through stdin. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader_a0678b5034972e65455a6fc9c53b90d91}{Exchange\+Coordinate\+Axes}} (int axis\+\_\+a, int axis\+\_\+b)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader_a8fe91dcf0022464ead1ffb2f63eda9af}{Scale\+Coordinates}} (double x\+\_\+fac, double y\+\_\+fac, double z\+\_\+fac)
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_rhino_surface_reader_a60c9a3796985ac4fab200d746661d153}{Move\+Coordinates}} (double x\+\_\+move, double y\+\_\+move, double z\+\_\+move)
+\item 
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_a26decb2bf5f397d2783c850d28dbb894}\label{classcsmp_1_1_rhino_surface_reader_a26decb2bf5f397d2783c850d28dbb894} 
+size\+\_\+t {\bfseries Objects} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Reads triangulated render meshes of surfaces output from Rhinoceros (Mc\+Neel\&Associates) and converts them into a 3D \doxylink{classcsmp_1_1_v_set}{VSet} that can be read by CSMP.
+
+Multiple surfaces are distinguished using the object names from Rhino.
+
+\begin{DoxyAuthor}{Author}
+S. K. Matthai 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2002 
+\end{DoxyDate}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_rhino_surface_reader_a0678b5034972e65455a6fc9c53b90d91}\index{csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}!ExchangeCoordinateAxes@{ExchangeCoordinateAxes}}
+\index{ExchangeCoordinateAxes@{ExchangeCoordinateAxes}!csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}}
+\doxysubsubsection{\texorpdfstring{ExchangeCoordinateAxes()}{ExchangeCoordinateAxes()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_rhino_surface_reader_a0678b5034972e65455a6fc9c53b90d91} 
+void csmp\+::\+Rhino\+Surface\+Reader\+::\+Exchange\+Coordinate\+Axes (\begin{DoxyParamCaption}\item[{int}]{axis\+\_\+a}{, }\item[{int}]{axis\+\_\+b}{}\end{DoxyParamCaption})}
+
+Swaps the specified coordinate axis which are assumed to be labeled 0=x, 1=y, and 2=z.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The two integer arguments refer to the axis which shall be changed. ~\newline
+\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To adapt surface data to another frame of reference.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If the axes do not exist (are below 0 or greater than 2) the method will quit emitting a message. \Hypertarget{classcsmp_1_1_rhino_surface_reader_a60c9a3796985ac4fab200d746661d153}\index{csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}!MoveCoordinates@{MoveCoordinates}}
+\index{MoveCoordinates@{MoveCoordinates}!csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}}
+\doxysubsubsection{\texorpdfstring{MoveCoordinates()}{MoveCoordinates()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_rhino_surface_reader_a60c9a3796985ac4fab200d746661d153} 
+void csmp\+::\+Rhino\+Surface\+Reader\+::\+Move\+Coordinates (\begin{DoxyParamCaption}\item[{double}]{x\+\_\+move}{, }\item[{double}]{y\+\_\+move}{, }\item[{double}]{z\+\_\+move}{}\end{DoxyParamCaption})}
+
+Moves the triangle coordinates by the specified amounts in the x, y, and z, directions.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The three method arguments specify the amount by which each point coordinate is to be moved. A value of zero leaves the coordinates in place.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To transform the stored surfaces to another space position.\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+If no objects are stored, Nothing is done. \Hypertarget{classcsmp_1_1_rhino_surface_reader_a8fe91dcf0022464ead1ffb2f63eda9af}\index{csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}!ScaleCoordinates@{ScaleCoordinates}}
+\index{ScaleCoordinates@{ScaleCoordinates}!csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}}
+\doxysubsubsection{\texorpdfstring{ScaleCoordinates()}{ScaleCoordinates()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_rhino_surface_reader_a8fe91dcf0022464ead1ffb2f63eda9af} 
+void csmp\+::\+Rhino\+Surface\+Reader\+::\+Scale\+Coordinates (\begin{DoxyParamCaption}\item[{double}]{x\+\_\+fac}{, }\item[{double}]{y\+\_\+fac}{, }\item[{double}]{z\+\_\+fac}{}\end{DoxyParamCaption})}
+
+Muliplies the triangle coordinates by the supplied factors and reorganises the triangles if their sense of rotation changes.\hypertarget{group___c_s_m_pglobal_functions_arguments}{}\doxysubsection{\texorpdfstring{Input Arguments}{Input Arguments}}\label{group___c_s_m_pglobal_functions_arguments}
+The scale factors for the x, y, and z axis are entered. A factor of
+\begin{DoxyEnumerate}
+\item is to be entered if an axis shall not be scaled and a factor of -\/1. if an axis shall be inverted.
+\end{DoxyEnumerate}\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+To scale an object for a new frame of reference. ~\newline
+\hypertarget{group___c_s_m_pglobal_functions_messages}{}\doxysubsection{\texorpdfstring{Messages}{Messages}}\label{group___c_s_m_pglobal_functions_messages}
+Nothing is done if no objects are present. \Hypertarget{classcsmp_1_1_rhino_surface_reader_a7b1968304819f761d75dbba83f11e765}\index{csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}!WriteObjectsToTSurf@{WriteObjectsToTSurf}}
+\index{WriteObjectsToTSurf@{WriteObjectsToTSurf}!csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}}
+\doxysubsubsection{\texorpdfstring{WriteObjectsToTSurf()}{WriteObjectsToTSurf()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_rhino_surface_reader_a7b1968304819f761d75dbba83f11e765} 
+void csmp\+::\+Rhino\+Surface\+Reader\+::\+Write\+Objects\+To\+TSurf (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{tsurf\+\_\+file}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{GEOLOGICAL\+\_\+\+TYPE}{ = {\ttfamily "{}fault"{}}}\end{DoxyParamCaption}) const}
+
+
+
+Go\+CAD output\+: TSurf format\+: all surfaces in the file. 
+
+Writes all objects from the Rhino output file into a single Gocad file.\hypertarget{group___c_s_m_pglobal_enums_application}{}\doxysubsection{\texorpdfstring{Application Examples}{Application Examples}}\label{group___c_s_m_pglobal_enums_application}
+Not necessarily recommended since Go\+Cad often has difficulties in reading individual surfaces. \Hypertarget{classcsmp_1_1_rhino_surface_reader_ab91f0c09b4ac8f307e3d526a7ee6e2ca}\index{csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}!WriteObjectToTSurf@{WriteObjectToTSurf}}
+\index{WriteObjectToTSurf@{WriteObjectToTSurf}!csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}}
+\doxysubsubsection{\texorpdfstring{WriteObjectToTSurf()}{WriteObjectToTSurf()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_rhino_surface_reader_ab91f0c09b4ac8f307e3d526a7ee6e2ca} 
+void csmp\+::\+Rhino\+Surface\+Reader\+::\+Write\+Object\+To\+TSurf (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{obj}{, }\item[{std\+::ofstream \&}]{}{}\end{DoxyParamCaption}) const}
+
+
+
+Go\+CAD output\+: TSurf format\+: a single selected surface. 
+
+The surface will be written to file without associating any properties with it. \Hypertarget{classcsmp_1_1_rhino_surface_reader_af99ddf426dfac3dc4892eb753fd21078}\index{csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}!WriteSelectedObjectsToTSurf@{WriteSelectedObjectsToTSurf}}
+\index{WriteSelectedObjectsToTSurf@{WriteSelectedObjectsToTSurf}!csmp::RhinoSurfaceReader@{csmp::RhinoSurfaceReader}}
+\doxysubsubsection{\texorpdfstring{WriteSelectedObjectsToTSurf()}{WriteSelectedObjectsToTSurf()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_rhino_surface_reader_af99ddf426dfac3dc4892eb753fd21078} 
+void csmp\+::\+Rhino\+Surface\+Reader\+::\+Write\+Selected\+Objects\+To\+TSurf (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{tsurf\+\_\+file}{}\end{DoxyParamCaption}) const}
+
+
+
+Go\+CAD output\+: TSurf format\+: surfaces selected by the user through stdin. 
+
+Writes a series of files which contain one surface each corresponding to the selected surfaces from the Rhino \textquotesingle{}.raw\textquotesingle{} dataset. The names of the objects are appended to the output file names which start with the supplied file name. A hyphen is put between the filename and the object name. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/interfaces/\+Rhinoceros/Rhino\+Surface\+Reader.\+h\item 
+source/modules/interfaces/\+Rhinoceros/Rhino\+Surface\+Reader.\+cpp\end{DoxyCompactItemize}

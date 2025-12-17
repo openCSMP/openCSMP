@@ -1,0 +1,759 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_linear_line_element" kind="class" language="C++" prot="public">
+    <compoundname>csmp::LinearLineElement</compoundname>
+    <basecompoundref refid="classcsmp_1_1_finite_element" prot="public" virt="non-virtual">csmp::FiniteElement</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1a3ce8a39da5515a7890f8e7625ac2a929" prot="private" static="no" mutable="yes">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point csmp::LinearLineElement::org2</definition>
+        <argsstring></argsstring>
+        <name>org2</name>
+        <qualifiedname>csmp::LinearLineElement::org2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="45" column="26" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1ae0189c12b9aee82bbd50dca27ee48159" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point csmp::LinearLineElement::dest2</definition>
+        <argsstring></argsstring>
+        <name>dest2</name>
+        <qualifiedname>csmp::LinearLineElement::dest2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="45" column="31" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1a33ae2822551e0a9bd18badb8e212dcbc" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point" kindref="compound">mjl::Point</ref></type>
+        <definition>mjl::Point csmp::LinearLineElement::p2</definition>
+        <argsstring></argsstring>
+        <name>p2</name>
+        <qualifiedname>csmp::LinearLineElement::p2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="45" column="37" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1af52396a2cd35d22e3fbce14d969d2607" prot="private" static="no" mutable="yes">
+        <type><ref refid="classmjl_1_1_edge" kindref="compound">mjl::Edge</ref></type>
+        <definition>mjl::Edge csmp::LinearLineElement::edge2</definition>
+        <argsstring></argsstring>
+        <name>edge2</name>
+        <qualifiedname>csmp::LinearLineElement::edge2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="46" column="26" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1a0c7442f438f55217aff6d78daaf3b6a0" prot="private" static="no" mutable="yes">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref></type>
+        <definition>mjl::Point3D csmp::LinearLineElement::org3</definition>
+        <argsstring></argsstring>
+        <name>org3</name>
+        <qualifiedname>csmp::LinearLineElement::org3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="47" column="26" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1a4e9da971a11560d73b504b5b533e16ba" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref></type>
+        <definition>mjl::Point3D csmp::LinearLineElement::dest3</definition>
+        <argsstring></argsstring>
+        <name>dest3</name>
+        <qualifiedname>csmp::LinearLineElement::dest3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="47" column="31" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1a4c391747ca22d008716fe73e36562f38" prot="private" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_point3_d" kindref="compound">mjl::Point3D</ref></type>
+        <definition>mjl::Point3D csmp::LinearLineElement::p3</definition>
+        <argsstring></argsstring>
+        <name>p3</name>
+        <qualifiedname>csmp::LinearLineElement::p3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="47" column="37" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_linear_line_element_1af99dd447aaed4fac1399a576a721ad8a" prot="private" static="no" mutable="yes">
+        <type><ref refid="classmjl_1_1_edge3_d" kindref="compound">mjl::Edge3D</ref></type>
+        <definition>mjl::Edge3D csmp::LinearLineElement::edge3</definition>
+        <argsstring></argsstring>
+        <name>edge3</name>
+        <qualifiedname>csmp::LinearLineElement::edge3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="48" column="26" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a962da5524d9b45777d5e27f460e1daab" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::LinearLineElement::LinearLineElement</definition>
+        <argsstring>(uint32_t dimensions=2)</argsstring>
+        <name>LinearLineElement</name>
+        <qualifiedname>csmp::LinearLineElement::LinearLineElement</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dimensions</declname>
+          <defval>2</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="12" column="14" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="8" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a1047e6fc3cdc0df73a6eed7a31a57c5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearLineElement::Volume</definition>
+        <argsstring>()</argsstring>
+        <name>Volume</name>
+        <qualifiedname>csmp::LinearLineElement::Volume</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a16025c5d7f2ac217d2dbedad5d561a06">Volume</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The finite element which supplies the nodal coordinates from which the area is computed.</para>
+<para><simplesect kind="return"><para>The volume (m3) of the finite element. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="14" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="219" bodyend="232"/>
+        <referencedby refid="classcsmp_1_1_linear_line_element_1a4eb52dec9f686e2e86f79cb7c67457cf" compoundref="_linear_line_element_8cpp" startline="427" endline="431">IntegralNN</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a4d611ce4de6668298b92ef4a7add8560" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::CornerNodes</definition>
+        <argsstring>(std::vector&lt; uint32_t &gt; &amp;ids) const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::LinearLineElement::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ae3f0ae4a9ad3424ccc4553ff270b155e">CornerNodes</reimplements>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>ids</declname>
+        </param>
+        <briefdescription>
+<para>reports only the corner nodes (0..nodes-1) of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="15" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="42" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a98e3784208477211bc107f4f88dde574" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>virtual uint32_t csmp::LinearLineElement::CornerNodes</definition>
+        <argsstring>() const</argsstring>
+        <name>CornerNodes</name>
+        <qualifiedname>csmp::LinearLineElement::CornerNodes</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1abf2597e5cf0563435169689ee94d57a1">CornerNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="16" column="22" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a395f2fcbc697c64dd64d542c855348c3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::NodesOfSegment</definition>
+        <argsstring>(uint32_t segm_id, std::vector&lt; uint32_t &gt; &amp;snids) const</argsstring>
+        <name>NodesOfSegment</name>
+        <qualifiedname>csmp::LinearLineElement::NodesOfSegment</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a443213e98dc0cc9692bd3eef5a168295">NodesOfSegment</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>segm_id</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint32_t &gt; &amp;</type>
+          <declname>snids</declname>
+        </param>
+        <briefdescription>
+<para>segments are numbered like faces </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="18" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="51" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a089cc3227093acbfc9ad9ab8f40d7bf6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::LinearLineElement::NodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>NodesOfFace</name>
+        <qualifiedname>csmp::LinearLineElement::NodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a32fc14575277846326041fe914209f9a">NodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>the <ref refid="classcsmp_1_1_face" kindref="compound">Face</ref> of a line element is located opposite to the node with the same number </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="20" column="26" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="72" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1aac1fd396ebf2c8e481694dbb491234d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::LinearLineElement::CornerNodesOfFace</definition>
+        <argsstring>(uint32_t face_id) const</argsstring>
+        <name>CornerNodesOfFace</name>
+        <qualifiedname>csmp::LinearLineElement::CornerNodesOfFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a9614d03193a707898a0b26336a61d9d9">CornerNodesOfFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the corner nodes of the face </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="21" column="26" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="80" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1af5356f974435d771c0895f4951211a83" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>vector&lt; uint32_t &gt; csmp::LinearLineElement::NodesConnectedTo</definition>
+        <argsstring>(uint32_t node_id) const</argsstring>
+        <name>NodesConnectedTo</name>
+        <qualifiedname>csmp::LinearLineElement::NodesConnectedTo</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1ab7196476d9fb740d91384c6c4521b0f5">NodesConnectedTo</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>returns the local numbers of the nodes at the other end of the sgment that the argument node is on </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="22" column="26" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="88" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a3c54fba043f023c0828cc3c9f318b6eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::N</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>N</name>
+        <qualifiedname>csmp::LinearLineElement::N</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1aac8b400d7e198282e0b8196df3338858">N</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the values of the interpolation functions at the global coordinate &apos;xyz&apos;. Since a Jacobian matrix can only be obtained for points which lie inside the local tetrahedron, such a transformation cannot be performed here. Because of this reason global area-coordinate functions are employed to obtain the interpolation function values at the global point.</para>
+<para>Note, that the use of global interpolation functions implies that the method only gives highly accurate results if the element boundaries are not curved.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>, the vector which will hold the interpolation function values, and the coordinate vector &apos;xyz&apos; in the global coordinate system. Note that if the global coordinates given by &apos;xyz&apos; do not lie within the global extent of the quadratic triangular element, the interpolation function values will no longer add to one and the interpolation will then be erroneous.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>FN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The second method argument, the vector FN, will hold the interpolation function values as computed at the point &apos;xyz&apos;.</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+<sect1 id="namespacecsmp_1implementation">
+<title>Implementation</title><para>The inverse of the Jacobian matrix is found for the global point &apos;xyz&apos;. Then &apos;xyz&apos; transposed is pre-multiplied with the Jacobian to find the local coordinate pair &apos;rs&apos; corresponding to &apos;xyz&apos;. Using these local coordinates the interpolation function values are found.</para>
+</sect1>
+<sect1 id="group___c_s_m_pglobal_enums_1application">
+<title>Application Examples</title><para>To interpolate a property value withing the quadratic triangular element. </para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="24" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="271" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a3215d59d15de7f29788814eb62b99831" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::dN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>dN</name>
+        <qualifiedname>csmp::LinearLineElement::dN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a3bf543b54ba24535aced15598495730f">dN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>DN</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Compute derivatives of interpolation functions at corresponding nodes with respect to the global coordinate system.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global interpolation of the tetrahedron and the interpolation function derivatives at each node are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DN</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The interpolation-function derivative matrix is returned into the second method argument. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="25" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="117" bodyend="148"/>
+        <referencedby refid="classcsmp_1_1_linear_line_element_1a1541852d4c86a22d6aeaa825fb938987" compoundref="_linear_line_element_8cpp" startline="359" endline="376">dN_AtBarycenter</referencedby>
+        <referencedby refid="classcsmp_1_1_linear_line_element_1af803b107c2669bb061dff681f7424304" compoundref="_linear_line_element_8cpp" startline="338" endline="355">dN_AtNode</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a010aa55943e1a52ca704395db8bf347b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearLineElement::dN_At</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;DN2, const std::vector&lt; double &gt; &amp;xyz)</argsstring>
+        <name>dN_At</name>
+        <qualifiedname>csmp::LinearLineElement::dN_At</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1adb4103981ca8a56bbea237ef71c0cdc1">dN_At</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DN2</declname>
+          <defname>DN</defname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>xyz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes derivatives of interpolation functions at a point XYZ given in global coordinates within the element (also given in global coordinates). Since this element is linear, the derivatives are constant in the element and the point location therefore has no influence on the result.</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The element is used to obtain the global interpolation of the tetrahedron and the interpolation function derivatives at the point XYZ are returned into the matrix M of dimensions rows = spatial dimensions x columns = nodes.</para>
+<para><simplesect kind="return"><para>The interpolation-function derivative matrix is returned into the second method argument and the length of the Line element is returned as a double variable. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="26" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="170" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1af803b107c2669bb061dff681f7424304" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearLineElement::dN_AtNode</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M, uint32_t node)</argsstring>
+        <name>dN_AtNode</name>
+        <qualifiedname>csmp::LinearLineElement::dN_AtNode</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a89d6f320e17b4cfe1f9ddbeade1c9255">dN_AtNode</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+          <defname>DN</defname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><orderedlist>
+<listitem><para>Pre-multiplies local interpolation function derivative matrix, B, with node coordinates to obtain the Jacobian matrix, J at the desired node point.</para>
+</listitem><listitem><para>The Jacobian matrix J is inverted and multiplied with B to obtain the global interpolation function derivative matrix at the point i (i=0...i=gauss points-1).</para>
+</listitem></orderedlist>
+</para>
+<sect1 id="group___c_s_m_pglobal_functions_1arguments">
+<title>Input Arguments</title><para>The first argument is a reference to the parent <ref refid="classcsmp_1_1_element" kindref="compound">Element</ref> object, the second argument is the result matrix, the third argument indicates the gauss point at which the derivative matrix is computed and the fourth argument specifies the degrees of freedom per node, for which the B matrix shall be transformed.</para>
+<para><simplesect kind="return"><para>The global interpolation function derivative matrix is returned into the second method argument. The method also returns the determinant of the Jacobian matrix since it is often needed in integration procedures. </para>
+</simplesect>
+</para>
+</sect1>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="27" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="338" bodyend="355"/>
+        <references refid="classcsmp_1_1_linear_line_element_1a3215d59d15de7f29788814eb62b99831" compoundref="_linear_line_element_8cpp" startline="117" endline="148">dN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a1541852d4c86a22d6aeaa825fb938987" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double csmp::LinearLineElement::dN_AtBarycenter</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>dN_AtBarycenter</name>
+        <qualifiedname>csmp::LinearLineElement::dN_AtBarycenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a703b7ce9d818248bbd9864dffee30b7c">dN_AtBarycenter</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>DM</defname>
+        </param>
+        <briefdescription>
+<para>returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="28" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="359" bodyend="376"/>
+        <references refid="classcsmp_1_1_linear_line_element_1a3215d59d15de7f29788814eb62b99831" compoundref="_linear_line_element_8cpp" startline="117" endline="148">dN</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a8d83bfbb8a1a74408e6968480082f83a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::N_AtBaryCenter</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;N)</argsstring>
+        <name>N_AtBaryCenter</name>
+        <qualifiedname>csmp::LinearLineElement::N_AtBaryCenter</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a6df28d2a7b4bcaff49cb726d6ef0890b">N_AtBaryCenter</reimplements>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+<para>reports the values of the interpolation functions at the center of gravity of the element </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="29" column="20" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="378" bodyend="384"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1ae5f83d2655b6332d22b7afb759dfe9ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::IntegralN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>IntegralN</name>
+        <qualifiedname>csmp::LinearLineElement::IntegralN</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="31" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="420" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a4eb52dec9f686e2e86f79cb7c67457cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::IntegralNN</definition>
+        <argsstring>(DenseMatrix&lt; DM_MIN &gt; &amp;M)</argsstring>
+        <name>IntegralNN</name>
+        <qualifiedname>csmp::LinearLineElement::IntegralNN</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a84a69958fd3567565d4dc83037664d97">IntegralNN</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <defname>DM</defname>
+        </param>
+        <briefdescription>
+<para>initialises interpolation function product matrix N^T x N for analytically integrated elements </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="32" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="427" bodyend="431"/>
+        <references refid="classcsmp_1_1_linear_line_element_1a1047e6fc3cdc0df73a6eed7a31a57c5c" compoundref="_linear_line_element_8cpp" startline="219" endline="232">Volume</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1a09d559393f0dd7ff9f7a505ca337167b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::UnitNormal</definition>
+        <argsstring>(std::vector&lt; double &gt; &amp;vc) const</argsstring>
+        <name>UnitNormal</name>
+        <qualifiedname>csmp::LinearLineElement::UnitNormal</qualifiedname>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>vc</declname>
+        </param>
+        <briefdescription>
+<para>returns the unit normal computed as the cross-product between the line and the supplied vector vc </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In 3D, the input vector must contain the rotation axis around which the edge is turned to create the unit normal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="35" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="392" bodyend="416"/>
+        <references refid="classmjl_1_1_edge3_d_1a123634a7e645399bb07768b1628a5fbc" compoundref="_m_j_l___edge3_d_8cpp" startline="33" endline="60">mjl::Edge3D::Rot</references>
+        <references refid="classmjl_1_1_edge_1aa096f2213bacb2ee22c408a94a0f19ff" compoundref="_m_j_l___edge_8cpp" startline="42" endline="51">mjl::Edge::Rot</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1ae445b9033b859831fcda99a0c6124e17" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::UnitNormalToFace</definition>
+        <argsstring>(uint32_t face, std::vector&lt; double &gt; &amp;unrml) const</argsstring>
+        <name>UnitNormalToFace</name>
+        <qualifiedname>csmp::LinearLineElement::UnitNormalToFace</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a39eb6d5a1827783a679870277b4c68b8">UnitNormalToFace</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>unrml</declname>
+        </param>
+        <briefdescription>
+<para>2 normals located on the nodes and aligned with the elements </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Line element has 2 faces located at the nodes. The normals point outward in the direction of the element.</para>
+<para><simplesect kind="note"><para>convention: face 1 is located at the first node. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="38" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="442" bodyend="510"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_linear_line_element_1af01d9b22d26956eb7f761f27a9f2185d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::LinearLineElement::OutputNodeDataToVTK</definition>
+        <argsstring>(const char *file_name, const char *var_name, DenseMatrix&lt; DM_MIN &gt; &amp;DATA) const</argsstring>
+        <name>OutputNodeDataToVTK</name>
+        <qualifiedname>csmp::LinearLineElement::OutputNodeDataToVTK</qualifiedname>
+        <reimplements refid="classcsmp_1_1_finite_element_1a67341585f83bc9d941c67e7a84801248">OutputNodeDataToVTK</reimplements>
+        <param>
+          <type>const char *</type>
+          <declname>file_name</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>var_name</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix</ref>&lt; DM_MIN &gt; &amp;</type>
+          <declname>DATA</declname>
+        </param>
+        <briefdescription>
+<para>prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="40" column="22" bodyfile="source/modules/integration/finite_elements/LinearLineElement.cpp" bodystart="520" bodyend="602"/>
+        <references refid="group___c_s_m_p__global__enumerations_1ga8413f7c3b4f238c5a98a846198d49469">csmp::NAME_STRING</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="date"><para>2002 </para>
+</simplesect>
+<simplesect kind="author"><para>S.K. Matthaei </para>
+</simplesect>
+<simplesect kind="author"><para>S. Geiger </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+      </node>
+      <node id="1">
+        <label>csmp::LinearLineElement</label>
+        <link refid="classcsmp_1_1_linear_line_element"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="3">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::FiniteElement</label>
+        <link refid="classcsmp_1_1_finite_element"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>#M</edgelabel>
+          <edgelabel>+JAC</edgelabel>
+          <edgelabel>+JINV</edgelabel>
+          <edgelabel>+XY</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::LinearLineElement</label>
+        <link refid="classcsmp_1_1_linear_line_element"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/finite_elements/LinearLineElement.h" line="10" column="1" bodyfile="source/includes/integration/finite_elements/LinearLineElement.h" bodystart="10" bodyend="49"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_finite_element_1a6c6148f7a38b639b721013dbd8f8d3f5" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>AspectRatio</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab4ad41c705b9691a4d01ee979b6214cc" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>cne</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a4d611ce4de6668298b92ef4a7add8560" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a98e3784208477211bc107f4f88dde574" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>CornerNodes</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1aac1fd396ebf2c8e481694dbb491234d9" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>CornerNodesOfFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9831bfb64a8fa07f20eb7024fc5a22f2" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab44758c4df00ff2cac338fbf7580b8d0" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>CurrentID</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1ae0189c12b9aee82bbd50dca27ee48159" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>dest2</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a4e9da971a11560d73b504b5b533e16ba" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>dest3</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a93be3242020acc01e32f26ee56c5d487" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Dim</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ab749771eccc931e112125efe7bf8252c" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>dim</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a3215d59d15de7f29788814eb62b99831" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dN</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a010aa55943e1a52ca704395db8bf347b" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dN_At</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a1541852d4c86a22d6aeaa825fb938987" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dN_AtBarycenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a885bb35784705f295c5f8ad9aa47f227" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dN_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1af803b107c2669bb061dff681f7424304" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dN_AtNode</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8602e2b2682d1734501fa44da5f4a230" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>DNR</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a84befa0a4da0b4b8469ec5e7be89860e" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af159e5f99a0281ae603ca6ddde9bf6bf" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5b77ad8925c75b096867822e83bed7cd" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dNr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1a9d9ee7a3326164b35a523273dc54c9" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>DNS</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6d2fb4557b0681959501365138c9d3c3" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1c5cfe76807ea0d685c8e22d74c5582e" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dNs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a203a9d019620abee39fdbe7847ee8df0" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>DNT</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a6c22543bd89563413954beb8697fa914" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>dNt</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1af52396a2cd35d22e3fbce14d969d2607" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>edge2</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1af99dd447aaed4fac1399a576a721ad8a" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>edge3</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac2348fa774457d4adde9354189277d9e" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>EdgeLengths</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac2a37f7440f83acbcda169280fcb84b0" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac0a98e18654722a181c17a7e01b67e56" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>ElementType</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a066cbd92cd983a3c2e73859286280587" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>ElementTypeOfFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a136f53aa9d4cd295a984ca46c0864ff7" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>ElementTypeOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5684660784d3f15adffb485e8f47d9f3" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>epe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae7ea6940dcaa8403c7c35e70db4ba21c" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>ExtrapolateIntegrationPointVariableToNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9666661fa30a04d97f6c04a059a6bba6" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Faces</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a746f7ba1b4acf8dd74f39e3962f0707f" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa7a383bc5d1c0ee8f71ecb6c604db2ec" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa61e202519a3523f70da1f1854170c64" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>FiniteElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a36972113f6f8351c891431038f8514bd" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>fpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a0729a0486b6febb96160f3e184c3f33f" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>gpe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a564e0da11c00c28430fb146d5597c6ce" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>IDX</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4aaeb22c3a8da44a33361057ef2097f" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>InitialID</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3ad8c30e7136d47df5ca95907647c538" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>InnerRadius</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa5c7e3d4b60cdaa863b70edad755b09a" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Integral_dNT_K_dN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d79c3309e261dd0939e5b733aac83d9" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>IntegraldNdN</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1ae5f83d2655b6332d22b7afb759dfe9ba" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>IntegralN</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a4eb52dec9f686e2e86f79cb7c67457cf" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>IntegralNN</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aef00dcb02705580693988e47924a055d" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>IntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a35ee85b7635207926c97d4bf0bec7d1d" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>IntegrationPoints</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8439ec45c22a2741b8782de67de98862" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2d45ffc4fd8598af124125bfe93a2597" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>InteriorNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae2d5d559efe7f2b27dc5ec5e271c9b68" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Interpolation</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4390186773409c6a5e30feb449e55f17" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>IsLine</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5d0543e1e432fdf65177495d72e4d51c" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac57108260f93ab6ef491448def2e9c50" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Isoparametric</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aca610ffda39cad1d959db0ec403c3019" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>IsSimplex</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a09d0c59e19d2cd5a6e46b7dc60fd5f07" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>IsSurface</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7ffd856e7bb1b9c1009d572775925c8d" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>IsVolume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac8f4f6ea8649710e01ea018c61d93a30" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>itp</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5de71dcc5e56c2e814d31d798969f437" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>JAC</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae62e0c447141f0e2b7f7a4eb8412278b" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a81d93860f25ffe781837581f45caac4c" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af63fe74d4b20b02d72574d8380f5e41a" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Jacobian</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a246043f81c66c9f65e08c6a5190ea381" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>JacobianAt</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac6a31722bbf25abad86ccea3b653953e" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>JacobianAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae758e82d3b214e9f9c5bda10cd20b515" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>JacobianDeterminant</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3639fc962596899333d6a65cb1ef66ce" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>JacobianInverse</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a5c3fd117b986587599dcb441feeb000a" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>JINV</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a962da5524d9b45777d5e27f460e1daab" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>LinearLineElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac3204e22e57b8658797037802003c490" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>LineElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a64381c8d0e2f4840551c2da986fb9a25" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>M</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8149423046e10426a7eb520164ad3a38" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aec5a871df4af8c883e496f6283872780" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>MidSideNodes</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a3c54fba043f023c0828cc3c9f318b6eb" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>N</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a8d83bfbb8a1a74408e6968480082f83a" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>N_AtBaryCenter</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac1168c0c1cc280d1a1ecba676877d13b" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>N_AtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad75cb0ef9bea852c900e58b74662b0d4" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Neighbors</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a2509e6d8ab556b6a65a9036a62485df4" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>nne</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad1e29de6aed41fb434a485b875d7d8d4" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Nodes</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1af5356f974435d771c0895f4951211a83" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>NodesConnectedTo</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a089cc3227093acbfc9ad9ab8f40d7bf6" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>NodesOfFace</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a395f2fcbc697c64dd64d542c855348c3" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>NodesOfSegment</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a3cb7bc938ad00c9f4dbfbfa94c13e781" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>NodesPerFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a329300ec856aa91bfe492daf93556b04" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>npe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a9d9ced72fa35fd6a9fc755a219590820" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>npf</name></member>
+      <member refid="classcsmp_1_1_finite_element_1af583becda82f4fef39bbe2d4c3b41cea" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Nr</name></member>
+      <member refid="classcsmp_1_1_finite_element_1adb2baab01a52b040d73c10623a0605b2" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Nrs</name></member>
+      <member refid="classcsmp_1_1_finite_element_1aa13754bef9eb502c77561f216d0258e7" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>NRST</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a34bd4d39b1a026b1de15f028e9692bd8" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Nrst</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1aa0c4f0fabe88be0c254f121d5a483b" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a698633a6c268ac88c82929093cd65cc1" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>operator=</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a94820d970b7a970757c91dac9934b424" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>OrderOfShapeFunctions</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a3ce8a39da5515a7890f8e7625ac2a929" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>org2</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a0c7442f438f55217aff6d78daaf3b6a0" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>org3</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae963674dc3ef25ce0e7bd8d2937c75ee" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Out</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1af01d9b22d26956eb7f761f27a9f2185d" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>OutputNodeDataToVTK</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a33ae2822551e0a9bd18badb8e212dcbc" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>p2</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a4c391747ca22d008716fe73e36562f38" prot="private" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>p3</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a34a5c030987c7e9842af332f5ed0d61b" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>ReferenceCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a7f488b707067cb6d1ee0b25a97c883a2" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>Segments</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a609a2f0f70b086a278d112761c07c9de" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>spe</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a930e53402dc4847a3084e38853d3bfd6" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>SurfaceElement</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a09d559393f0dd7ff9f7a505ca337167b" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a1dedbd91a6e8765f57dfdaf999494b76" prot="public" virt="virtual" ambiguityscope="csmp::FiniteElement::"><scope>csmp::LinearLineElement</scope><name>UnitNormal</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae600307171225f53a2615aaffd5afb18" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>UnitNormalAtFaceBarycenter</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1ae445b9033b859831fcda99a0c6124e17" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>UnitNormalToFace</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad4d20a792255fd2b0984b255ec3e6817" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a8211ac6a7c8734f142eaa51f459d25af" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>UsesLocalCoordinates</name></member>
+      <member refid="classcsmp_1_1_linear_line_element_1a1047e6fc3cdc0df73a6eed7a31a57c5c" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>Volume</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ad92268835407ea5fc1df04583a754637" prot="protected" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>VolumeElement</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ac224265aa216deebfcf44b54d2689d1d" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>WeightAtIntegrationPoint</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>XY</name></member>
+      <member refid="classcsmp_1_1_finite_element_1ae4bd0bcbccb811f852c26668f6959f14" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a56c5bc7db73c50f4448380eeee48fa3f" prot="public" virt="non-virtual"><scope>csmp::LinearLineElement</scope><name>XYZ</name></member>
+      <member refid="classcsmp_1_1_finite_element_1a4e65701c3dcf1f2c98688d3204bccb6d" prot="public" virt="virtual"><scope>csmp::LinearLineElement</scope><name>~FiniteElement</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

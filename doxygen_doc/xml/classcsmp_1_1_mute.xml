@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_mute" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Mute</compoundname>
+    <includes refid="_mute_8h" local="no">Mute.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_mute_1ad3d08e524bcdd202486aaf0124da7339" prot="private" static="no" mutable="no">
+        <type>std::streambuf *</type>
+        <definition>std::streambuf* csmp::Mute::cachebf_</definition>
+        <argsstring></argsstring>
+        <name>cachebf_</name>
+        <qualifiedname>csmp::Mute::cachebf_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="54" column="28" bodyfile="source/includes/run_control/Mute.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mute_1a22240482bf4eb381eef2affe5ad1fcba" prot="private" static="no" mutable="no">
+        <type>std::ofstream *</type>
+        <definition>std::ofstream* csmp::Mute::fileRedirect_</definition>
+        <argsstring></argsstring>
+        <name>fileRedirect_</name>
+        <qualifiedname>csmp::Mute::fileRedirect_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="55" column="28" bodyfile="source/includes/run_control/Mute.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_mute_1a0ca1c710836d5989cd46f7e7f54038b2" prot="private" static="no" mutable="no">
+        <type>std::ofstream *const</type>
+        <definition>std::ofstream* const csmp::Mute::nullOut_</definition>
+        <argsstring></argsstring>
+        <name>nullOut_</name>
+        <qualifiedname>csmp::Mute::nullOut_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="56" column="28" bodyfile="source/includes/run_control/Mute.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_mute_1a789a77470e352b0baaa1426fbea9ce3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Mute::Mute</definition>
+        <argsstring>()</argsstring>
+        <name>Mute</name>
+        <qualifiedname>csmp::Mute::Mute</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="38" column="7" bodyfile="source/modules/run_control/Mute.cpp" bodystart="14" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mute_1ad0f13cf67b2878438e903e4d38da4639" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Mute::~Mute</definition>
+        <argsstring>()</argsstring>
+        <name>~Mute</name>
+        <qualifiedname>csmp::Mute::~Mute</qualifiedname>
+        <briefdescription>
+<para>Dtor does not reinstate ostream. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="39" column="7" bodyfile="source/modules/run_control/Mute.cpp" bodystart="21" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mute_1aa7ac9ea583f5bfc26aaa6c076f3da5f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Mute::Null</definition>
+        <argsstring>(std::ostream &amp;)</argsstring>
+        <name>Null</name>
+        <qualifiedname>csmp::Mute::Null</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <defname>os</defname>
+        </param>
+        <briefdescription>
+<para>inactivates output to given stream </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Redirects to null stream, returns false if stream already redirected, true if redirection successful. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="42" column="12" bodyfile="source/modules/run_control/Mute.cpp" bodystart="27" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mute_1a8dc10c38b444203aa2800f9e614ff89b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Mute::File</definition>
+        <argsstring>(std::ostream &amp;, const char *text_file)</argsstring>
+        <name>File</name>
+        <qualifiedname>csmp::Mute::File</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <defname>os</defname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>text_file</declname>
+        </param>
+        <briefdescription>
+<para>redirects output to text file </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Redirects to file, returns false if stream already redirected, true if redirection successful. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="45" column="12" bodyfile="source/modules/run_control/Mute.cpp" bodystart="39" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mute_1aef180f23de34453a5038786f84ea4764" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Mute::Reinstate</definition>
+        <argsstring>(std::ostream &amp;)</argsstring>
+        <name>Reinstate</name>
+        <qualifiedname>csmp::Mute::Reinstate</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <defname>os</defname>
+        </param>
+        <briefdescription>
+<para>brings back original settings </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Reinstates screen output, returns false if no redirection current, true if reinstation successful. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="48" column="12" bodyfile="source/modules/run_control/Mute.cpp" bodystart="56" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_mute_1a7a2ac13c6054fc8c3d2a196f9cff6310" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool csmp::Mute::Redirected</definition>
+        <argsstring>() const</argsstring>
+        <name>Redirected</name>
+        <qualifiedname>csmp::Mute::Redirected</qualifiedname>
+        <briefdescription>
+<para>releases redirection to file </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/run_control/Mute.h" line="51" column="12" bodyfile="source/modules/run_control/Mute.cpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Allows redirection of the output streams cout and cerr from the screen to null (output goes nowhere) and file (ascii file) </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Class is used to suppress output on systems where the user has no access to the console and/or where sceen output would dramatically slow the computations.</para>
+<para>Only a single stream can be handled by an instance, so return values will reflect that.</para>
+<para>Application example: <programlisting><codeline><highlight class="normal">Mute<sp/>mute;</highlight></codeline>
+<codeline><highlight class="normal">cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nMute<sp/>mode...\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal">mute.Null(cout);<sp/></highlight><highlight class="comment">//<sp/>or<sp/>i.e.<sp/>mute.File(<sp/>cout,<sp/>&quot;Output.txt&quot;);</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...<sp/>here<sp/>goes<sp/>the<sp/>main<sp/>code<sp/>with<sp/>supressed<sp/>output</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">mute.Reinstate(cout);</highlight></codeline>
+</programlisting></para>
+<para>a note &apos;just in case&apos;: if you want to supress samg output too, call following for <ref refid="classcsmp_1_1_s_a_m_g___settings" kindref="compound">SAMG_Settings</ref> instance (here &apos;settings&apos;) <programlisting><codeline><highlight class="normal">settings.Set_idmp(-1);</highlight></codeline>
+<codeline><highlight class="normal">settings.Set_iout1(-1);</highlight></codeline>
+<codeline><highlight class="normal">settings.Set_iout2(-1);</highlight></codeline>
+</programlisting> </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Mute</label>
+        <link refid="classcsmp_1_1_mute"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/run_control/Mute.h" line="36" column="3" bodyfile="source/includes/run_control/Mute.h" bodystart="36" bodyend="57"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_mute_1ad3d08e524bcdd202486aaf0124da7339" prot="private" virt="non-virtual"><scope>csmp::Mute</scope><name>cachebf_</name></member>
+      <member refid="classcsmp_1_1_mute_1a8dc10c38b444203aa2800f9e614ff89b" prot="public" virt="non-virtual"><scope>csmp::Mute</scope><name>File</name></member>
+      <member refid="classcsmp_1_1_mute_1a22240482bf4eb381eef2affe5ad1fcba" prot="private" virt="non-virtual"><scope>csmp::Mute</scope><name>fileRedirect_</name></member>
+      <member refid="classcsmp_1_1_mute_1a789a77470e352b0baaa1426fbea9ce3a" prot="public" virt="non-virtual"><scope>csmp::Mute</scope><name>Mute</name></member>
+      <member refid="classcsmp_1_1_mute_1aa7ac9ea583f5bfc26aaa6c076f3da5f3" prot="public" virt="non-virtual"><scope>csmp::Mute</scope><name>Null</name></member>
+      <member refid="classcsmp_1_1_mute_1a0ca1c710836d5989cd46f7e7f54038b2" prot="private" virt="non-virtual"><scope>csmp::Mute</scope><name>nullOut_</name></member>
+      <member refid="classcsmp_1_1_mute_1a7a2ac13c6054fc8c3d2a196f9cff6310" prot="public" virt="non-virtual"><scope>csmp::Mute</scope><name>Redirected</name></member>
+      <member refid="classcsmp_1_1_mute_1aef180f23de34453a5038786f84ea4764" prot="public" virt="non-virtual"><scope>csmp::Mute</scope><name>Reinstate</name></member>
+      <member refid="classcsmp_1_1_mute_1ad0f13cf67b2878438e903e4d38da4639" prot="public" virt="non-virtual"><scope>csmp::Mute</scope><name>~Mute</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

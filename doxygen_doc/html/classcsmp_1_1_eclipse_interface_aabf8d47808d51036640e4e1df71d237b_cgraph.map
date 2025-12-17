@@ -1,0 +1,7 @@
+<map id="csmp::EclipseInterface::ReadFile" name="csmp::EclipseInterface::ReadFile">
+<area shape="rect" id="Node000001" title="MASTER METHOD not only reads the Eclipse input files, but also creates grid objects and converts them..." alt="" coords="5,39,161,79"/>
+<area shape="rect" id="Node000002" href="$classcsmp_1_1_eclipse_interface.html#a6fa057d3cad82b5112916627b969fa7f" title="inserts wells in the Eclipse data" alt="" coords="209,5,364,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,44,193,38,193,44,161,49"/>
+<area shape="rect" id="Node000003" href="$classcsmp_1_1_model_topology.html#a9889be49c4614fd925b1159f21f54f9f" title="general model info" alt="" coords="212,71,360,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,69,197,74,197,80,160,74"/>
+</map>

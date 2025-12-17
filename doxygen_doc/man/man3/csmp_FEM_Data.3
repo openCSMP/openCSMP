@@ -1,0 +1,124 @@
+.TH "csmp::FEM_Data< csp_type >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::FEM_Data< csp_type >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <FEM_Data\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFEM_Data\fP (\fBPLACEMENT\fP, size_t i)"
+.br
+.ti -1c
+.RI "\fBFEM_Data\fP (\fBPLACEMENT\fP, const std::vector< csp_type > &)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBFEM_Data\fP< csp_type > &) const"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBPlacement\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBSize\fP () const"
+.br
+.ti -1c
+.RI "void \fBReset\fP (const \fBcsmp::Index\fP &, size_t size, const csp_type &)"
+.br
+.RI "changing container size "
+.ti -1c
+.RI "void \fBExtend\fP (size_t new_size)"
+.br
+.ti -1c
+.RI "void \fBReduceTo\fP (const std::map< size_t, size_t > &o_n_elmt_ids)"
+.br
+.ti -1c
+.RI "csp_type & \fBoperator[]\fP (size_t i)"
+.br
+.RI "access "
+.ti -1c
+.RI "const csp_type & \fBoperator[]\fP (size_t i) const"
+.br
+.ti -1c
+.RI "csp_type \fBoperator()\fP (size_t i) const"
+.br
+.ti -1c
+.RI "void \fBMinMaxOf\fP (csp_type &tmin, csp_type &tmax) const"
+.br
+.RI "checking range "
+.ti -1c
+.RI "void \fBScaleRangeTo\fP (const csp_type &tmin, const csp_type &tmax)"
+.br
+.RI "rescaling "
+.ti -1c
+.RI "void \fBOffsetRangeBy\fP (csp_type df)"
+.br
+.RI "add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes) "
+.ti -1c
+.RI "bool \fBOutBinary\fP (std::fstream &fp) const"
+.br
+.RI "Out binary\&. "
+.ti -1c
+.RI "void \fBInBinary\fP (std::fstream &fp)"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBplace\fP"
+.br
+.ti -1c
+.RI "std::vector< csp_type > \fBdata\fP"
+.br
+.ti -1c
+.RI "bool \fBlogarithmitized\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename csp_type>
+.br
+class csmp::FEM_Data< csp_type >"flexible-size container for CSMP data types, providing range-check and conversion functions
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM: since this class is used to store models to disk, padded CSMP types rather than short int's and doubles are stored\&. This makes models on disk very big\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename csp_type> bool \fBcsmp::FEM_Data\fP< csp_type >::OutBinary (std::fstream & fp) const"
+
+.PP
+Out binary\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIcsp_type\fP Type of the csp type\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIfp\fP If non-null, the fp\&. 
+.RE
+.PP
+
+.SS "template<typename csp_type> void \fBcsmp::FEM_Data\fP< csp_type >::Reset (const \fBcsmp::Index\fP & setting, size_t size, const csp_type & val)"
+
+.PP
+changing container size you may only reset using a key of the same <csp_type> (i\&.e\&., ELEMENT ) 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

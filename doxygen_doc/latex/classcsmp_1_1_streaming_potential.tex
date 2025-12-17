@@ -1,0 +1,54 @@
+\doxysection{csmp\+::Streaming\+Potential\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcsmp_1_1_streaming_potential}{}\label{classcsmp_1_1_streaming_potential}\index{csmp::StreamingPotential$<$ dim $>$@{csmp::StreamingPotential$<$ dim $>$}}
+
+
+algorithm and interrelation required to compute streaming potential  
+
+
+
+
+{\ttfamily \#include $<$Streaming\+Potential.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Streaming\+Potential\texorpdfstring{$<$}{<} dim \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classcsmp_1_1_streaming_potential__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_streaming_potential_adaa6823338e03ba6c8715c474abd6724}\label{classcsmp_1_1_streaming_potential_adaa6823338e03ba6c8715c474abd6724} 
+{\bfseries Streaming\+Potential} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&)
+\begin{DoxyCompactList}\small\item\em the streaming potential method \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_streaming_potential_a531a9df5066ab5d422d882a66a726ba7}{Evaluate\+Potential}} (\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&, const char \texorpdfstring{$\ast$}{*}potential="{}streaming potential"{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint32\+\_\+t dim$>$\newline
+class csmp\+::\+Streaming\+Potential$<$ dim $>$}
+algorithm and interrelation required to compute streaming potential 
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_streaming_potential_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_streaming_potential_a531a9df5066ab5d422d882a66a726ba7}\index{csmp::StreamingPotential$<$ dim $>$@{csmp::StreamingPotential$<$ dim $>$}!EvaluatePotential@{EvaluatePotential}}
+\index{EvaluatePotential@{EvaluatePotential}!csmp::StreamingPotential$<$ dim $>$@{csmp::StreamingPotential$<$ dim $>$}}
+\doxysubsubsection{\texorpdfstring{EvaluatePotential()}{EvaluatePotential()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_streaming_potential_a531a9df5066ab5d422d882a66a726ba7} 
+template$<$uint32\+\_\+t dim$>$ \\
+void \mbox{\hyperlink{classcsmp_1_1_streaming_potential}{csmp\+::\+Streaming\+Potential}}$<$ dim $>$\+::\+Evaluate\+Potential (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_model}{Model}}$<$ dim $>$ \&}]{sg}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{potential}{ = {\ttfamily "{}streaming~potential"{}}}\end{DoxyParamCaption})}
+
+0 = div\texorpdfstring{$^\wedge$}{\string^}2 phi -\/ c div\texorpdfstring{$^\wedge$}{\string^}2 p
+
+an arbitrary point somewhere in the model is used as a reference "{}electrode"{} it is assigned a Dirichlet potential value of zero. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/thmc/single\+\_\+phase\+\_\+flow/Streaming\+Potential.\+h\item 
+source/modules/thmc/single\+\_\+phase\+\_\+flow/Streaming\+Potential.\+cpp\end{DoxyCompactItemize}

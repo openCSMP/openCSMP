@@ -1,0 +1,273 @@
+\doxysection{Node.\+h}
+\hypertarget{_node_8h_source}{}\label{_node_8h_source}\index{source/includes/model/Node.h@{source/includes/model/Node.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{CSMP\_NODE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{CSMP\_NODE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_box_8h}{"{}Box.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_point_8h}{"{}Point.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__global__enumerations_8h}{"{}CSMP\_global\_enumerations.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_local_variable_storage_8h}{"{}LocalVariableStorage.h"{}}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_node_parent_element_vector_8h}{"{}NodeParentElementVector.h"{}}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_visitor}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_element}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_node_manifold}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node_manifold}{NodeManifold}};}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{FiniteElement\_TestData}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{@brief\ Node\ =\ lowest\ class\ of\ the\ model\ hierarchy.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{@author\ S.K.\ Matthaei}}
+\DoxyCodeLine{00022\ \textcolor{comment}{@author\ Stephen\ G.\ Roberts}}
+\DoxyCodeLine{00023\ \textcolor{comment}{@date\ 1999}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{@section\ motivation\ Motivation}}
+\DoxyCodeLine{00026\ \textcolor{comment}{}}
+\DoxyCodeLine{00027\ \textcolor{comment}{Node\ class\ in\ the\ finite\ element\ mesh\ hierarchy}}
+\DoxyCodeLine{00028\ \textcolor{comment}{stores\ the\ coordinate\ of\ the\ node\ point\ and\ the\ variables}}
+\DoxyCodeLine{00029\ \textcolor{comment}{associated\ with\ the\ node.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00031\ \textcolor{comment}{@section\ design\ Design\ Intent}}
+\DoxyCodeLine{00032\ \textcolor{comment}{}}
+\DoxyCodeLine{00033\ \textcolor{comment}{Mesh\ vertex\ with\ coordinates\ and\ associated\ flags.\ \ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{@section\ participants\ Participants}}
+\DoxyCodeLine{00037\ \textcolor{comment}{}}
+\DoxyCodeLine{00038\ \textcolor{comment}{Uses\ Point<>\ template\ to\ represent\ the\ coordinate.\ \ }}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{@section\ collaborations\ Collaborations}}
+\DoxyCodeLine{00042\ \textcolor{comment}{}}
+\DoxyCodeLine{00043\ \textcolor{comment}{Elements\ are\ registered\ as\ parents,\ Faces\ and\ InterFaces\ are\ not.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00046\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00047\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_node}{LocalVariableStorage}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}},\mbox{\hyperlink{classcsmp_1_1_node}{Node}}>\ \{}
+\DoxyCodeLine{00048\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_ab80fa439107feaca2630d1eb2d5ee524}{Node}}();}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{///\ custom\ constructor\ used\ when\ model\ is\ reconstructed\ from\ binary\ file}}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_aa1ddbf0cf9ffbdc0065e0483cb6f4964}{Node}}(\ size\_t\ idx,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcsmp_1_1_local_variables}{LocalVariables}}\&,\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858}{NOT}},\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}}\ =\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga65b4b9788928fc2599d5cc1d1960942aac19e2573a57305f2328a9d45aeb508d1}{MESH\_VERTEX}}\ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_a82b9fda5b3cc11a6432f64c7e23f649e}{Node}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ );}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ );}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ move\ semantics\ for\ colony}}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_a8538cd11cc36e6ac7f76d5d0167c0b1a}{Node}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\&\ );}
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ \mbox{\hyperlink{classcsmp_1_1_node_ada7c8ae104c6930bf4ff05af79d0c75e}{operator}}=(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\&\ );}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \string~Node();}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{///\ compares\ memory\ location,\ idx\_,\ BREP\ classifier\ and\ boundary\ flag}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_node_a0173cbf2b8e36e4b1096440a9bdad844}{operator}}==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ );}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ Local\ variable\ storage\ interface}}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gac35734252a71b0a9768a54a364137cf8}{PLACEMENT}}\ \mbox{\hyperlink{classcsmp_1_1_node_a772867802c39c117d2b896ead13e0360}{Placement}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ NODE;\ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ for\ node\ forming\ part\ of\ line\ elements\ (2D)\ or\ surface\ elements\ (3D),\ method\ returns\ a\ unit\ normal\ that\ represents\ the\ average\ of\ the\ normals\ of\ the\ connected\ elements}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_node_ab3845b54da91f94db6a044b415d0b9c3}{UnitNormal}}(\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ unrml\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{///\ normal\ to\ surface\ mesh\ at\ the\ Node\ as\ based\ on\ its\ connectivity\ with\ the\ surrounding\ nodes\ on\ the\ surface\ \ (cf.,\ computer\ graphics)\ TODO:\ fails\ for\ quadrilateral\ meshes}}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{VertexNormal}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{vector}}<\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{Node}}<\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{first}},}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{vector}}<\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{Node}}<\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_node_af7c829566316696dadd19d4d5782b93a}{last}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{///\ which\ geometric\ part\ of\ the\ discretisation\ of\ the\ initial\ boundary\ representation\ (BREP)\ of\ the\ model\ geometry\ the\ node\ belongs\ to}}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}}\ \mbox{\hyperlink{classcsmp_1_1_node_a01d216a1ca3dbb5468fda45c5c7b1233}{Attribute}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ BREP\_entity\_;\ \}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ Attribute(\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}}\ geom\_feature\ )\ \{\ BREP\_entity\_\ =\ geom\_feature;\ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{//\ node\ to\ parent\ element\ connectivity\ (sorted\ vector\ that\ is\ searchable)}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{///\ if\ it\ is\ known\ how\ many\ parent\ elements\ will\ have\ to\ be\ assigned\ this\ can\ be\ done\ more\ efficiently\ with\ the\ optional\ help\ of\ this}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_aa7ce86784de00bbfb3785bad89d16046}{ReserveParentStorage}}(\ size\_t\ capacity\ )\ \{\ parents\_.Reserve(\ capacity\ );\ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{///\ assign\ new\ parent\ element\ where\ there\ is\ a\ \ NOT\_INITIALISED\ \ slot\ in\ the\ parent\ element\ storage,\ else\ adds\ new\ one}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_a8a15ed57856e17990f8b9b8d43809499}{Assign}}(\ uint32\_t\ parent\_elmt\_node\_number,\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ parent\_elmt\ );}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{///\ if\ found,\ sets\ matching\ parent\ element\ pointer\ to\ nullptr\ and\ the\ corresponding\ node\ number\ to\ NOT\_INITIALIZED}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_a977d09d4774948b75a196c56bfc7db41}{Unassign}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ parent\_elmt\ );}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{///\ remove\ all\ current\ parent\ elements}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_a9d9041421b4f83f734c73d3fcdfd8800}{EraseParents}}();}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{///\ returns\ how\ many\ elements\ share\ this\ node}}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_ae1be0800f6df20027261c903b5833bd6}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_node_ae1be0800f6df20027261c903b5833bd6}{Parents}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{///\ access\ to\ the\ (0..n-\/1)\ parent\ element}}
+\DoxyCodeLine{00095\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \mbox{\hyperlink{classcsmp_1_1_node_a292a5befc5e1bad35187627e492f9e08}{Parent}}(\ \mbox{\hyperlink{classcsmp_1_1_node_a292a5befc5e1bad35187627e492f9e08}{uint32\_t}}\ );}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ Parent(\ uint32\_t\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{///\ the\ local\ number\ of\ this\ node\ within\ the\ node-\/numbering\ scheme\ of\ parent\ element\ (and\ equal\ to\ sector\ number)}}
+\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_a6a23d90851aa006348fe9c53a138e41d}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_node_a6a23d90851aa006348fe9c53a138e41d}{ParentNodeNumber}}(\ uint32\_t\ parent\_element\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ Element\ is\ a\ parent\ of\ the\ node;\ call\ SortParents()\ first\ !!!}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_node_a6751bdcc8a4f83e0dc7e6f49bf3a91de}{IsParent}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{vector}}<\mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{pair}}<\mbox{\hyperlink{classcsmp_1_1_node}{Element}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}}>*,\textcolor{keywordtype}{short}>>::\mbox{\hyperlink{classcsmp_1_1_node}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_node}{ParentElementsBegin}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_node}{parents\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{ParentsBegin}}();\ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{vector}}<\mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{pair}}<\mbox{\hyperlink{classcsmp_1_1_node}{Element}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}}>*,\textcolor{keywordtype}{short}>>::\mbox{\hyperlink{classcsmp_1_1_node}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_node}{ParentElementsEnd}}()\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_node}{parents\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{ParentsEnd}}();\ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\ node\ neighbors\ (sort\ vector\ to\ make\ it\ searchable\ by\ binary\_search\ and\ other\ stl\ algorithms)}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{///\ initialises\ the\ corner-\/node\ to\ neighbor\ corner\ node\ pointer\ vector}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node}{Assign}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{set}}<\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}}>*>\&\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_nodes}}\ );}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{///\ expects\ a\ sorted\ vector\ without\ duplicates}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_ac7e8f8b32a6904510f8191764a3ae36e}{Assign}}(\ std::vector<Node<dim>*>\&\ neighbor\_nodes,\ \textcolor{keywordtype}{bool}\ sort\_neighbors=\textcolor{keyword}{false}\ );}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{///\ copies\ property\ values\ from\ the\ argument\ node\ to\ the\ current\ node}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_a370bcf702dab4c4797918b23c5420cb2}{CopyPropertyValuesFrom}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>\&\ );}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{///\ builds\ the\ neighbor\ connectivity\ working\ through\ higher-\/dimensional\ parent\ element\ edges\ that\ the\ node\ is\ part\ of;\ returns\ new\ number\ of\ neighbors}}
+\DoxyCodeLine{00119\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_a1ed11501ad4ad3153358a5b80c02fb3e}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_node_a1ed11501ad4ad3153358a5b80c02fb3e}{AssignNodeNeighbors}}();}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{///\ removes\ null\ pointers\ and\ potential\ duplicates\ returning\ the\ resulting\ number\ of\ neighbors}}
+\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_ade278c160680c6ede0742396b5589538}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_node_ade278c160680c6ede0742396b5589538}{UpdateNeighbors}}();}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsNeighbor(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{void}\ AddNeighbor(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ neighbor\_node\ );}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_aa0ef4c1fa15bba30daf6fa8ff15d9d05}{RemoveNeighbor}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ neighbor\_node\ );}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{///\ releases\ all\ the\ memory\ used}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_ae0b3805bbdf3786b581a8b8fdddc6f32}{EraseNeighbors}}();}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{///\ the\ number\ of\ corner\ nodes\ that\ this\ node\ is\ directly\ connected\ with\ via\ segments}}
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_ab00c4c1b3113b81f29dcc87ae7264393}{uint32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_node_ab00c4c1b3113b81f29dcc87ae7264393}{Neighbors}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{///\ access\ to\ any\ of\ the\ neighbor\ nodes}}
+\DoxyCodeLine{00134\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \mbox{\hyperlink{classcsmp_1_1_node_a2ce1e1373c810b976331e948c732bdab}{Neighbor}}(\ \mbox{\hyperlink{classcsmp_1_1_node_a2ce1e1373c810b976331e948c732bdab}{uint32\_t}}\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{vector}}<\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_node}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_node}{NeighborsBegin}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{begin}}();\ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{vector}}<\mbox{\hyperlink{classcsmp_1_1_node}{Node}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}}>*>::\mbox{\hyperlink{classcsmp_1_1_node}{const\_iterator}}\ \mbox{\hyperlink{classcsmp_1_1_node}{NeighborsEnd}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{end}}();\ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \textcolor{comment}{///\ check\ whether\ a\ node\ is\ neighbor\ \ of\ this\ node\ via\ linear\ search\ algorithm}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_node}{LinearSearch}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}}>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{nptr}}\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{find}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{begin}}(),}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{end}}(),\ \mbox{\hyperlink{classcsmp_1_1_node}{nptr}}\ )\ !=\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{end}}();\ \}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{///\ checks\ whether\ a\ node\ is\ neighbor\ of\ this\ node\ (\ since\ a\ sorted\ vector\ is\ required\ call\ SortNeighbors()\ first)}}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_node}{BinarySearch}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<\mbox{\hyperlink{classcsmp_1_1_node}{dim}}>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{nptr}}\ )\ \textcolor{keyword}{const}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcsmp_1_1_node}{std}}::\mbox{\hyperlink{classcsmp_1_1_node}{binary\_search}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{begin}}(),\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{end}}(),\ \mbox{\hyperlink{classcsmp_1_1_node}{nptr}}\ );\ \}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{///\ \ to\ prepare\ neighbor\ vector\ for\ binary\ search}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node}{SortNeighbors}}()\ \{\ \mbox{\hyperlink{classcsmp_1_1_node}{sort}}(\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{begin}}(),\ \mbox{\hyperlink{classcsmp_1_1_node}{neighbor\_node\_pointers\_}}.\mbox{\hyperlink{classcsmp_1_1_node}{end}}()\ );\ \};}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{comment}{//\ node\ manifolds\ (where\ nodes\ have\ been\ multiplicated\ at\ material\ interfaces)}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{///\ connects\ the\ node\ to\ other\ topologically\ collocated\ nodes\ if\ any}}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_af6ed446d9422671abdafd68f21ad6092}{Assign}}(\ \mbox{\hyperlink{classcsmp_1_1_node_manifold}{NodeManifold}}<dim>\&\ );}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{///\ access\ to\ manifold\ if\ any;\ returns\ nullptr\ if\ the\ node\ is\ not\ a\ manifold}}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_node_a610a5812fa01a04055e670b750b94ddb}{IsManifold}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{///\ access\ to\ other\ topologically\ collocarted\ Node\ objects\ through\ manifold\ if\ any;\ returns\ nullptr\ if\ the\ node\ is\ not\ a\ manifold}}
+\DoxyCodeLine{00161\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_manifold}{NodeManifold}}<dim>*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node_a658c978449007540a0de069a0ddbc347}{Manifold}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{//\ basic\ functionality\ of\ the\ Node}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{///\ support\ of\ the\ vistor\ design\ pattern}}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_ab174c8ca72f6ef98da824186dcd967d0}{Accept}}(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_visitor}{Visitor}}<dim>\&\ );}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{///\ on-\/the-\/fly\ 0..n-\/1\ numbering\ stored\ in\ a\ mutable\ local\ variable\ (therefore\ const)}}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_a051b23082644bb2ec3deea446eb9cb68}{Idx}}(\ size\_t\ id\_0\_to\_n\_minus\_1\ )\ \textcolor{keyword}{const};\ \textcolor{comment}{//\ since\ idx\ is\ mutable}}
+\DoxyCodeLine{00171\ \ \ \ \ size\_t\ Idx()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordtype}{void}\ Coordinate(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ );}
+\DoxyCodeLine{00173\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ Coordinate()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{///\ flagging\ for\ box-\/shaped\ models:\ NOT,\ LEFT,\ BOTTOM,\ RIGHT,\ TOP,\ BACK,\ FRONT\ etc.}}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_af16c2518b96975730e4a5dc02c58037a}{AtBoundary}}(\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ );}
+\DoxyCodeLine{00176\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ AtBoundary()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{///\ accessors/mutators\ for\ specific\ node\ coordinates\ x=0,\ y=1,\ z=2\ (z\ exists\ only\ in\ 3D)}}
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \mbox{\hyperlink{classcsmp_1_1_node_ade577e9b2d27a92e45ba9aaf9225c614}{operator}}[](\ uint32\_t\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordtype}{double}\&\ operator[](\ uint32\_t\ i\ );}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{double}\&\ operator()(\ uint32\_t\ i\ );}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_a4692885734714defff43ab45026df542}{x}}(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{void}\ y(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{void}\ z(\ \textcolor{keywordtype}{double}\ );}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordtype}{double}\ x()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{double}\ y()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{double}\ z()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{///\ output\ current\ state\ of\ class\ Node}}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_node_a3ed80521d49889a0920f99ecfe302577}{Out}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{comment}{///\ private\ because\ these\ operators\ are\ owned\ by\ the\ MeshManager}}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{classcsmp_1_1_mesh_manager}{uint32\_t}}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_mesh_manager}{MeshManager}};}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{void}*\ operator\ \textcolor{keyword}{new}(\ size\_t\ size\ );}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{void}\ \ operator\ \textcolor{keyword}{delete}(\ \textcolor{keywordtype}{void}*\ );}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00201\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xyz\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ coordinate\ array}}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{mutable}\ size\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ idx\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ 0..n-\/1}}
+\DoxyCodeLine{00203\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_parent_element_vector}{NodeParentElementVector}}<dim>\ \ \ parents\_;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ parent\ element\ pointers\ and\ corresponding\ local\ node\ numbers}}
+\DoxyCodeLine{00204\ \ \ \ \ std::vector<Node<dim>*>\ \ \ \ \ \ \ \ neighbor\_node\_pointers\_;\ \ \ \textcolor{comment}{///<\ corner\ node\ to\ corner\ node\ on\ opposite\ end\ of\ the\ segment\ pointer}}
+\DoxyCodeLine{00205\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node_manifold}{NodeManifold}}<dim>*\ \ \ \ \ \ \ \ \ \ \ \ \ manifold\_\ =\ \textcolor{keywordtype}{nullptr};\ \ \ \ \ \ \ \textcolor{comment}{///<\ node\ manifold\ pointer}}
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_pglobal_enums_ga8e4421c3cd02f67e535bceb2dc74bfb6}{BOX\_BOUNDARY}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ at\_boundary\_\ =\ \mbox{\hyperlink{group___c_s_m_pglobal_enums_gga8e4421c3cd02f67e535bceb2dc74bfb6aa75032f56e77653ffaa7e2eb85566858}{NOT}};\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ which\ model\ boundary\ the\ Node\ is\ on}}
+\DoxyCodeLine{00207\ \ \ \ \ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BREP\_entity\_\ =\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_gga65b4b9788928fc2599d5cc1d1960942aac19e2573a57305f2328a9d45aeb508d1}{MESH\_VERTEX}};\ \textcolor{comment}{///<\ the\ topologic\ feature\ of\ the\ boundary\ representation\ that\ the\ node\ belongs\ to}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{FiniteElement\_TestData}};\ \textcolor{comment}{//\ for\ testing}}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de}{std}}::\mbox{\hyperlink{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de}{istream}}\&\ \mbox{\hyperlink{classcsmp_1_1_node_ae378a11cba45cb58e2f94f35f6e137de}{operator}}\ >>\ (\ std::istream\&,\ \mbox{\hyperlink{classcsmp_1_1_finite_element___test_data}{FiniteElement\_TestData}}\&\ );}
+\DoxyCodeLine{00211\ \};}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \textcolor{comment}{//\ FUNCTIONS\ INVOLVING\ NODES}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \textcolor{comment}{///\ checks\ whether\ \ Node\ is\ contained\ in\ the\ rectangular\ (or\ cubic)\ bounding\ box\ defined\ by\ the\ corner\ points\ provided}}
+\DoxyCodeLine{00217\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00218\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecsmp_a7e0ae32c6f5146a54c18370df88532cf}{isWithinBoundingBox}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ pmin,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<dim>\&\ pmax,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ nptr\ );}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \textcolor{comment}{///\ Erases\ cells\ from\ the\ vector\ that\ have\ a\ different\ dimension\ than\ the\ supplied\ cell}}
+\DoxyCodeLine{00221\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00222\ \mbox{\hyperlink{namespacecsmp_a340414beff72e1ede527fbbab56c9cad}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a340414beff72e1ede527fbbab56c9cad}{eraseDifferentDimensionalOrInvalidCells}}(\ \textcolor{keyword}{const}\ CELL<dim>*\ \textcolor{keyword}{const}\ cptr,\ std::vector<CELL<dim>*>\&\ );}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \textcolor{comment}{///\ Eliminates\ surface\ and\ line\ elements\ from\ cell\ range\ in\ 3D,\ and\ line\ elements\ from\ cell\ range\ in\ 2D.}}
+\DoxyCodeLine{00225\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp_a134ac332082c45b24d04c96ec85e64c0}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp_a134ac332082c45b24d04c96ec85e64c0}{dim}},\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp_a134ac332082c45b24d04c96ec85e64c0}{uint32\_t}}>\ \textcolor{keyword}{class}\ \mbox{\hyperlink{namespacecsmp_a134ac332082c45b24d04c96ec85e64c0}{CELL}}>}
+\DoxyCodeLine{00226\ \mbox{\hyperlink{namespacecsmp_a134ac332082c45b24d04c96ec85e64c0}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a134ac332082c45b24d04c96ec85e64c0}{eraseLowerDimensionalOrInvalidCells}}(\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{CELL}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*>\&\ );}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \textcolor{comment}{///\ Finds\ the\ number\ of\ the\ cell\ face\ which\ consists\ of\ the\ supplied\ range\ of\ nodes.}}
+\DoxyCodeLine{00229\ \textcolor{keyword}{template}<uint32\_t\ dim,\ \textcolor{keyword}{template}<uint32\_t>\ \textcolor{keyword}{class}\ CELL>}
+\DoxyCodeLine{00230\ \mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{faceWithCornerNodes}}(\ \textcolor{keyword}{const}\ CELL<dim>*\ \textcolor{keyword}{const}\ cell\_ptr,}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{std}}::\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{vector}}<\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{Node}}<\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{first}},}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{std}}::\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{vector}}<\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{Node}}<\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp_a6562695eb6493f009bd308995aab0794}{last}}\ );}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \textcolor{comment}{///\ Find\ all\ parent\ elements\ that\ contain\ the\ supplied\ range\ of\ nodes}}
+\DoxyCodeLine{00235\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00236\ \mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{std}}::\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{vector}}<\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{Element}}<\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{dim}}>*>\ \mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{parentElementsContaining}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{std}}::\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{vector}}<\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{Node}}<\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{first}},}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{std}}::\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{vector}}<\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{Node}}<\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp_a803cf90b5530a4f86ec2b140d6f38350}{last}}\ );}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \textcolor{comment}{///\ Finds\ the\ 2\ higher-\/dim\ parent\ elements\ that\ share\ face\ identified\ by\ its\ nodes,\ inner\ element\ is\ reported\ first;\ outer\ next;\ face-\/nodes\ of\ dim-\/1\ element\ must\ be\ in\ correct\ order}}
+\DoxyCodeLine{00240\ \textcolor{keyword}{template}<\mbox{\hyperlink{namespacecsmp}{uint32\_t}}\ \mbox{\hyperlink{namespacecsmp}{dim}}>\ \textcolor{comment}{//\ input\ corner\ nodes\ only}}
+\DoxyCodeLine{00241\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{Element}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*,\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>,\mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{pair}}<\mbox{\hyperlink{namespacecsmp}{Element}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*,\mbox{\hyperlink{namespacecsmp}{uint32\_t}}>>\ \ \mbox{\hyperlink{namespacecsmp}{parentElements}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{Node}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*>::\mbox{\hyperlink{namespacecsmp}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp}{first}},}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp}{std}}::\mbox{\hyperlink{namespacecsmp}{vector}}<\mbox{\hyperlink{namespacecsmp}{Node}}<\mbox{\hyperlink{namespacecsmp}{dim}}>*>::\mbox{\hyperlink{namespacecsmp}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp}{last}}\ );}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \textcolor{comment}{///\ Finds\ the\ 1\ higher-\/dim\ parent\ element\ of\ element\ face\ on\ model\ outside,\ throws\ if\ \ face\ is\ within\ the\ model\ //\ USED}}
+\DoxyCodeLine{00245\ \textcolor{keyword}{template}<uint32\_t\ dim>\ \textcolor{comment}{//\ input\ corner\ nodes\ only}}
+\DoxyCodeLine{00246\ \mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{std}}::\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{pair}}<\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{Element}}<\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{dim}}>*,\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{uint32\_t}}>\ \ \mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{parentElement}}(\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{std}}::\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{vector}}<\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{Node}}<\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{first}},}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{std}}::\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{vector}}<\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{Node}}<\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{dim}}>*>::\mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{const\_iterator}}\ \mbox{\hyperlink{namespacecsmp_ab5312795404fe0c6a4033dd370e840f9}{last}}\ );}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \textcolor{comment}{///\ for\ Node\ in\ manifold\ finds\ which\ TOPOTYPE\ node\ has,\ also\ using\ the\ node's\ \ BOX\ flag\ and\ parent\ element\ connectivity}}
+\DoxyCodeLine{00250\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00251\ \mbox{\hyperlink{group___c_s_m_p__global__enumerations_ga65b4b9788928fc2599d5cc1d1960942a}{TOPOTYPE}}\ \mbox{\hyperlink{namespacecsmp_ac81fc388ac6adc11b803051b1c086049}{checkModelPartThatNodeBelongsTo}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \textcolor{comment}{///\ prints\ Idx\ of\ node\ and\ boundary\ flag\ values\ of\ the\ nodes\ that\ this\ node\ is\ connected\ with}}
+\DoxyCodeLine{00254\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00255\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a9bc5e5bde1e8c078d2651593fdd8d964}{printNeighbors}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \textcolor{comment}{///\ prints\ current\ parent\ information\ and\ checks\ for\ duplicate\ parents}}
+\DoxyCodeLine{00258\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00259\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a0efe6a872be4d25f7e48bb8838ede35f}{printParents}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \textcolor{comment}{///\ estimates\ size\ of\ the\ Node\ class\ including\ dynamically\ allocated\ parts}}
+\DoxyCodeLine{00262\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00263\ \mbox{\hyperlink{namespacecsmp_a3056d1455bc11f778112bd1d50211d7a}{size\_t}}\ \mbox{\hyperlink{namespacecsmp_a3056d1455bc11f778112bd1d50211d7a}{sizeOf}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<dim>*\ \textcolor{keyword}{const}\ );}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

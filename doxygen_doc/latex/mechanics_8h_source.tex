@@ -1,0 +1,155 @@
+\doxysection{mechanics.\+h}
+\hypertarget{mechanics_8h_source}{}\label{mechanics_8h_source}\index{source/includes/thmc/mechanics/mechanics.h@{source/includes/thmc/mechanics/mechanics.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{MECHANICS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{MECHANICS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_dense_matrix_8h}{"{}DenseMatrix.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_tensor_variable_8h}{"{}TensorVariable.h"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga7ab283eb10c9e89ef6b1f0af9479202f}{planeStressMatrix}}(\ \textcolor{keywordtype}{double}\ E,\ \textcolor{keywordtype}{double}\ nu,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ D\ );}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaeb43b03757e8293bd1d95594e10224b7}{planeStrainMatrix}}(\ \textcolor{keywordtype}{double}\ E,\ \textcolor{keywordtype}{double}\ nu,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ D\ );}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga16c150c8585efb91530047000c62e9a7}{stiffnessMatrix}}(\ \textcolor{keywordtype}{double}\ E,\ \textcolor{keywordtype}{double}\ nu,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ D\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gad9b5b897b13cad988a89b6708809bc98}{stiffnessMatrix}}(\ \textcolor{keywordtype}{double}\ E,\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ D,\ \textcolor{keywordtype}{double}\ length\ );}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga6cc79ceb4011b2f922502140a08c11dc}{planeStressMatrix}}(\ \textcolor{keyword}{const}\ std::vector<ScalarVariable\ >\&\ E,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<ScalarVariable\ >\&\ nu,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\&\ D\ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga6a9dc24267f230af3ce935d625f794a9}{planeStrainMatrix}}(\ \textcolor{keyword}{const}\ std::vector<ScalarVariable\ >\&\ E,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<ScalarVariable\ >\&\ nu,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\&\ D\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga4d28e78d720a503795049534acf2222e}{stiffnessMatrix}}(\ \textcolor{keyword}{const}\ std::vector<ScalarVariable\ >\&\ E,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<ScalarVariable\ >\&\ nu,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<DenseMatrix<DM\_MIN>\ >\&\ D\ );}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{//\ by\ the\ magnitude\ of\ the\ Eigenvalues}}
+\DoxyCodeLine{00042\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_ga3d349d3b35b6c15fa79cfa127f460556}{sortEigenVectorsAndValues}}(\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\&\ vc,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<2U>\&\ ts\ );}
+\DoxyCodeLine{00043\ \textcolor{keywordtype}{void}\ sortEigenVectorsAndValues(\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\&\ vc,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\&\ ts\ );}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a2f65acf861793db99274bed29076e8d8}{convertColumnTo}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,\ uint32\_t\ column,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<2U>\&\ ts\ );}
+\DoxyCodeLine{00046\ \textcolor{keywordtype}{void}\ convertColumnTo(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,\ uint32\_t\ column,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\&\ ts\ );}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ad9bfb2a61229538de00d45d401d28ee6}{convertTo}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ INP,\ uint32\_t\ entry,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<2U>\&\ ts\ );}
+\DoxyCodeLine{00049\ \textcolor{keywordtype}{void}\ convertTo(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ INP,\ uint32\_t\ entry,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\&\ ts\ );}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ab30ba04dc75944bfbb26e30e7ed5a874}{extractRowTo}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,\ uint32\_t\ row,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\&\ vc\ );}
+\DoxyCodeLine{00052\ \textcolor{keywordtype}{void}\ extractRowTo(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,\ uint32\_t\ row,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\&\ vc\ );}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{comment}{//\ various\ utile\ functions}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{///\ uses\ Cauchy's\ formula\ to\ resolve\ normal\ and\ magnitude\ of\ shear\ stress\ on\ a\ surface\ defined\ by\ its\ normal}}
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gaaed9830eb54757d56522091db4889913}{normalAndShearStressOnPlane}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\&\ cartesian\_stress,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ plane\_normal,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ sigma\_n,\ \textcolor{keywordtype}{double}\&\ sigma\_s\ );}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{///\ uses\ Cauchy's\ formula\ to\ resolve\ normal\ and\ shear\ stress\ on\ a\ surface\ defined\ by\ its\ normal}}
+\DoxyCodeLine{00063\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group___c_s_m_pglobal_functions_gac67cb152df69248d5121bd9ef1049900}{normalAndShearStressOnPlane}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\&\ cartesian\_stress,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_point}{Point}}<3U>\&\ plane\_normal,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\&\ sigma\_n,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\&\ sigma\_s\ );}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{comment}{//\ inline\ function\ definitions}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{comment}{/**\ Extracts\ row\ of\ DenseMatrix\ into\ VectorVariable.}}
+\DoxyCodeLine{00076\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00077\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ab30ba04dc75944bfbb26e30e7ed5a874}{extractRowTo}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ row,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<2U>\&\ vc\ )}
+\DoxyCodeLine{00079\ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ vc(0)\ =\ INP(row,0);}
+\DoxyCodeLine{00081\ \ \ \ \ vc(1)\ =\ INP(row,1);}
+\DoxyCodeLine{00082\ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ extractRowTo(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ row,\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<3U>\&\ vc\ )}
+\DoxyCodeLine{00086\ \ \{}
+\DoxyCodeLine{00087\ \ \ \ \ vc(0)\ =\ INP(row,0);}
+\DoxyCodeLine{00088\ \ \ \ \ vc(1)\ =\ INP(row,1);}
+\DoxyCodeLine{00089\ \ \ \ \ vc(2)\ =\ INP(row,1);}
+\DoxyCodeLine{00090\ \ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{comment}{/**\ Extracts\ column\ of\ DenseMatrix\ into\ TensorVariable.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00095\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_a2f65acf861793db99274bed29076e8d8}{convertColumnTo}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ column,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<2U>\&\ ts\ )}
+\DoxyCodeLine{00097\ \ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \textcolor{comment}{//\ building\ symmetric\ 2D\ tensor}}
+\DoxyCodeLine{00099\ \ \ \ \ \ ts(0,0)\ =\ INP(0,column);}
+\DoxyCodeLine{00100\ \ \ \ \ \ ts(1,1)\ =\ INP(1,column);}
+\DoxyCodeLine{00101\ \ \ \ \ \ ts(0,1)\ =\ ts(1,0)\ =\ INP(2,column);}
+\DoxyCodeLine{00102\ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ convertColumnTo(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\&\ INP,}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ column,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\&\ ts\ )}
+\DoxyCodeLine{00106\ \ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \textcolor{comment}{//\ building\ symmetric\ 3D\ tensor}}
+\DoxyCodeLine{00108\ \ \ \ \ \ ts(0,0)\ =\ INP(0,column);}
+\DoxyCodeLine{00109\ \ \ \ \ \ ts(1,1)\ =\ INP(1,column);}
+\DoxyCodeLine{00110\ \ \ \ \ \ ts(2,2)\ =\ INP(2,column);}
+\DoxyCodeLine{00111\ \ \ \ \ \ ts(0,1)\ =\ ts(1,0)\ =\ INP(3,column);}
+\DoxyCodeLine{00112\ \ \ \ \ \ ts(0,2)\ =\ ts(2,0)\ =\ INP(5,column);}
+\DoxyCodeLine{00113\ \ \ \ \ \ ts(1,2)\ =\ ts(2,1)\ =\ INP(4,column);}
+\DoxyCodeLine{00114\ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{comment}{/**\ Extracts\ linearily\ stored\ tensor\ from\ vector\ into\ TensorVariable.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00120\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecsmp_ad9bfb2a61229538de00d45d401d28ee6}{convertTo}}(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ INP,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<2U>\&\ ts\ )}
+\DoxyCodeLine{00122\ \ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{const}\ uint32\_t\ components(3U);}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{//\ diagonal\ elements}}
+\DoxyCodeLine{00125\ \ \ \ \ ts(0,0)\ =\ INP[\ ip\ *\ components\ ];}
+\DoxyCodeLine{00126\ \ \ \ \ ts(1,1)\ =\ INP[\ ip\ *\ components\ +\ 1U\ ];}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{//\ offdiagonal\ elements\ of\ symmetric\ tensor}}
+\DoxyCodeLine{00128\ \ \ \ \ ts(0,1)\ =\ ts(1,0)\ =\ INP[\ ip\ *\ components\ +\ 2U\ ];}
+\DoxyCodeLine{00129\ \ \}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ convertTo(\ \textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{double}>\&\ INP,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ip,\ \mbox{\hyperlink{classcsmp_1_1_tensor_variable}{TensorVariable}}<3U>\&\ ts\ )}
+\DoxyCodeLine{00134\ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{const}\ uint32\_t\ components(6U);}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{//\ diagonal\ elements}}
+\DoxyCodeLine{00137\ \ \ \ \ ts(0,0)\ =\ INP[\ ip\ *\ components\ ];}
+\DoxyCodeLine{00138\ \ \ \ \ ts(1,1)\ =\ INP[\ ip\ *\ components\ +\ 1U\ ];}
+\DoxyCodeLine{00139\ \ \ \ \ ts(2,2)\ =\ INP[\ ip\ *\ components\ +\ 2U\ ];}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{//\ off-\/diagonal\ elements\ of\ symmetric\ tensor}}
+\DoxyCodeLine{00141\ \ \ \ \ ts(0,1)\ =\ ts(1,0)\ =\ INP[\ ip\ *\ components\ +\ 3U\ ];}
+\DoxyCodeLine{00142\ \ \ \ \ ts(0,2)\ =\ ts(2,0)\ =\ INP[\ ip\ *\ components\ +\ 4U\ ];}
+\DoxyCodeLine{00143\ \ \ \ \ ts(1,2)\ =\ ts(2,1)\ =\ INP[\ ip\ *\ components\ +\ 5U\ ];}
+\DoxyCodeLine{00144\ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

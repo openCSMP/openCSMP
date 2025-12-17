@@ -2,14 +2,7 @@
 #define CSMP_FINITE_VOLUME_STENCIL_MANAGER_H
 
 #include "FiniteElement.h"
-
-// #define FV_STENCIL_TESTING - has to be defined as preprocessor macro
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
 #include "FiniteVolumeStencil.h"
-#endif
 
 namespace csmp {
 

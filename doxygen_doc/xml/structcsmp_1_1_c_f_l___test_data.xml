@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_c_f_l___test_data" kind="struct" language="C++" prot="public">
+    <compoundname>csmp::CFL_TestData</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a75645d2b1a5e0f78ecc98e142decc9a0" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <qualifiedname>csmp::CFL_TestData::time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="10" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1aaf9e84214893ed6510971e805fc1f73a" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::CFLmultiplier</definition>
+        <argsstring></argsstring>
+        <name>CFLmultiplier</name>
+        <qualifiedname>csmp::CFL_TestData::CFLmultiplier</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="15" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1ac3851e8d71274dc52352a78b1174bf12" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::mobilityRatio</definition>
+        <argsstring></argsstring>
+        <name>mobilityRatio</name>
+        <qualifiedname>csmp::CFL_TestData::mobilityRatio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="29" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a6bfc789fc79feacf0b9a8c61af525ea3" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::phi</definition>
+        <argsstring></argsstring>
+        <name>phi</name>
+        <qualifiedname>csmp::CFL_TestData::phi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="43" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1aef5101d7c6b1e8100c5606c9ce13b318" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::velX</definition>
+        <argsstring></argsstring>
+        <name>velX</name>
+        <qualifiedname>csmp::CFL_TestData::velX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="47" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a382015156db27312de2188b3afbe6a29" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::frontSat</definition>
+        <argsstring></argsstring>
+        <name>frontSat</name>
+        <qualifiedname>csmp::CFL_TestData::frontSat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="52" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a791efd8fedeb680dfd1d874ef53c5027" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::frontX</definition>
+        <argsstring></argsstring>
+        <name>frontX</name>
+        <qualifiedname>csmp::CFL_TestData::frontX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="61" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a56da658d2f02aa551a92864c873f5c8f" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::lenghtInFlowDir</definition>
+        <argsstring></argsstring>
+        <name>lenghtInFlowDir</name>
+        <qualifiedname>csmp::CFL_TestData::lenghtInFlowDir</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="68" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a10e5e375afafd5489c527f7b814254fc" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::frontSat_fw_Derivative</definition>
+        <argsstring></argsstring>
+        <name>frontSat_fw_Derivative</name>
+        <qualifiedname>csmp::CFL_TestData::frontSat_fw_Derivative</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="84" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1aa974b0e9b8fda144c2dff6a5c725b309" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::testCFL</definition>
+        <argsstring></argsstring>
+        <name>testCFL</name>
+        <qualifiedname>csmp::CFL_TestData::testCFL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="107" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a6180dd92096f7390fe14a1b6a8276a9e" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::anisotropicCFL</definition>
+        <argsstring></argsstring>
+        <name>anisotropicCFL</name>
+        <qualifiedname>csmp::CFL_TestData::anisotropicCFL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="115" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1aa7ce3ee5772df3348762271fdcf984a2" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::CFL_TestData::difference</definition>
+        <argsstring></argsstring>
+        <name>difference</name>
+        <qualifiedname>csmp::CFL_TestData::difference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="39" column="130" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a04461a7159b12b09efbfa00e10b6aec0" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string csmp::CFL_TestData::testName</definition>
+        <argsstring></argsstring>
+        <name>testName</name>
+        <qualifiedname>csmp::CFL_TestData::testName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="40" column="10" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a94f7376ae835735c4df0f59cfc070e05" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string csmp::CFL_TestData::testVersion</definition>
+        <argsstring></argsstring>
+        <name>testVersion</name>
+        <qualifiedname>csmp::CFL_TestData::testVersion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="40" column="19" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a142f2c3daf869c1d4e747b5e99c7fdaa" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string csmp::CFL_TestData::inflowBoundary</definition>
+        <argsstring></argsstring>
+        <name>inflowBoundary</name>
+        <qualifiedname>csmp::CFL_TestData::inflowBoundary</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="40" column="31" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_f_l___test_data_1a1ea87c31191deb6a92040d591035c84d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::CFL_TestData::passed</definition>
+        <argsstring></argsstring>
+        <name>passed</name>
+        <qualifiedname>csmp::CFL_TestData::passed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="tests/integration/CFL_VVCase.cpp" line="41" column="8" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::CFL_TestData</label>
+        <link refid="structcsmp_1_1_c_f_l___test_data"/>
+      </node>
+    </collaborationgraph>
+    <location file="tests/integration/CFL_VVCase.cpp" line="37" column="1" bodyfile="tests/integration/CFL_VVCase.cpp" bodystart="38" bodyend="42"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a6180dd92096f7390fe14a1b6a8276a9e" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>anisotropicCFL</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1aaf9e84214893ed6510971e805fc1f73a" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>CFLmultiplier</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1aa7ce3ee5772df3348762271fdcf984a2" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>difference</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a382015156db27312de2188b3afbe6a29" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>frontSat</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a10e5e375afafd5489c527f7b814254fc" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>frontSat_fw_Derivative</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a791efd8fedeb680dfd1d874ef53c5027" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>frontX</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a142f2c3daf869c1d4e747b5e99c7fdaa" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>inflowBoundary</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a56da658d2f02aa551a92864c873f5c8f" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>lenghtInFlowDir</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1ac3851e8d71274dc52352a78b1174bf12" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>mobilityRatio</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a1ea87c31191deb6a92040d591035c84d" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>passed</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a6bfc789fc79feacf0b9a8c61af525ea3" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>phi</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1aa974b0e9b8fda144c2dff6a5c725b309" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>testCFL</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a04461a7159b12b09efbfa00e10b6aec0" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>testName</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a94f7376ae835735c4df0f59cfc070e05" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>testVersion</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1a75645d2b1a5e0f78ecc98e142decc9a0" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>time</name></member>
+      <member refid="structcsmp_1_1_c_f_l___test_data_1aef5101d7c6b1e8100c5606c9ce13b318" prot="public" virt="non-virtual"><scope>csmp::CFL_TestData</scope><name>velX</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

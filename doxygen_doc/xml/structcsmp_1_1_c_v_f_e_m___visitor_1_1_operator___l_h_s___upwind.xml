@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind" kind="struct" language="C++" prot="private">
+    <compoundname>csmp::CVFEM_Visitor::Operator_LHS_Upwind</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a42361b4beb2767a6a0ac7a5a8879553a" prot="public" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s" kindref="compound">CVFEM_MathOperatorLHS</ref>&lt; dim, CELL &gt; *</type>
+        <definition>CVFEM_MathOperatorLHS&lt;dim,CELL&gt;* csmp::CVFEM_Visitor&lt; dim, CELL &gt;::Operator_LHS_Upwind::lhs_operator</definition>
+        <argsstring></argsstring>
+        <name>lhs_operator</name>
+        <qualifiedname>csmp::CVFEM_Visitor::Operator_LHS_Upwind::lhs_operator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" line="86" column="52" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a06d151b93998c79f23126a35a478fb19" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::CVFEM_Visitor&lt; dim, CELL &gt;::Operator_LHS_Upwind::basic_operand_key</definition>
+        <argsstring></argsstring>
+        <name>basic_operand_key</name>
+        <qualifiedname>csmp::CVFEM_Visitor::Operator_LHS_Upwind::basic_operand_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" line="87" column="66" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a91efe883e613bd59b8675cd3e5486b40" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref> &gt;</type>
+        <definition>std::vector&lt;ScalarVariable&gt; csmp::CVFEM_Visitor&lt; dim, CELL &gt;::Operator_LHS_Upwind::basic_operands</definition>
+        <argsstring></argsstring>
+        <name>basic_operands</name>
+        <qualifiedname>csmp::CVFEM_Visitor::Operator_LHS_Upwind::basic_operands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" line="88" column="50" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a876aae81642666e790d711e7eef96323" prot="public" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::CVFEM_Visitor&lt; dim, CELL &gt;::Operator_LHS_Upwind::upwind_operand_key</definition>
+        <argsstring></argsstring>
+        <name>upwind_operand_key</name>
+        <qualifiedname>csmp::CVFEM_Visitor::Operator_LHS_Upwind::upwind_operand_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" line="89" column="66" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1aaba79edc8709eb3f2c46f2503ce7f87b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::CVFEM_Visitor&lt; dim, CELL &gt;::Operator_LHS_Upwind::Operator_LHS_Upwind</definition>
+        <argsstring>(const PropertyDatabase&lt; dim &gt; &amp;pref, CVFEM_MathOperatorLHS&lt; dim, CELL &gt; *lhs_op, const char *upwind_variable)</argsstring>
+        <name>Operator_LHS_Upwind</name>
+        <qualifiedname>csmp::CVFEM_Visitor::Operator_LHS_Upwind::Operator_LHS_Upwind</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_property_database" kindref="compound">PropertyDatabase</ref>&lt; dim &gt; &amp;</type>
+          <declname>pref</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s" kindref="compound">CVFEM_MathOperatorLHS</ref>&lt; dim, CELL &gt; *</type>
+          <declname>lhs_op</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>upwind_variable</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" line="91" column="33" bodyfile="source/modules/integration/cvfe_hydrothermal/CVFEM_Visitor.cpp" bodystart="323" bodyend="332"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="12">
+        <label>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::CVFEM_MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_c_v_f_e_m___math_operator_l_h_s"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; dim, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>csmp::CVFEM_Visitor&lt; dim, CELL &gt;::Operator_LHS_Upwind</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+lhs_operator</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+basic_operand_key</edgelabel>
+          <edgelabel>+upwind_operand_key</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>csmp::DenseMatrix&lt; mn_max &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+      </node>
+      <node id="9">
+        <label>csmp::DenseMatrix&lt; DM_MIN &gt;</label>
+        <link refid="classcsmp_1_1_dense_matrix"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; DM_MIN &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>csmp::Index</label>
+        <link refid="structcsmp_1_1_index"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+localVariables</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+integrationPointVariables</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>+indexTracker</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>csmp::IndexTracker</label>
+        <link refid="classcsmp_1_1_index_tracker"/>
+      </node>
+      <node id="7">
+        <label>csmp::IntegrationPointVariables</label>
+        <link refid="structcsmp_1_1_integration_point_variables"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+ipvCell</edgelabel>
+          <edgelabel>+ipvFacet</edgelabel>
+          <edgelabel>+ipvSector</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>csmp::LocalVariables</label>
+        <link refid="structcsmp_1_1_local_variables"/>
+      </node>
+      <node id="11">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::MathOperatorLHS&lt; dim, CELL &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; dim, CELL &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>csmp::MathOperatorLHS&lt; dim, Element &gt;</label>
+        <link refid="classcsmp_1_1_math_operator_l_h_s"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>#op</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>#DERIV</edgelabel>
+          <edgelabel>#LHS</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; dim, Element &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::Parameter</label>
+        <link refid="structcsmp_1_1_parameter"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+key</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" line="86" column="5" bodyfile="source/includes/integration/cvfe_hydrothermal/CVFEM_Visitor.h" bodystart="86" bodyend="94"/>
+    <listofallmembers>
+      <member refid="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a06d151b93998c79f23126a35a478fb19" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Visitor::Operator_LHS_Upwind</scope><name>basic_operand_key</name></member>
+      <member refid="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a91efe883e613bd59b8675cd3e5486b40" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Visitor::Operator_LHS_Upwind</scope><name>basic_operands</name></member>
+      <member refid="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a42361b4beb2767a6a0ac7a5a8879553a" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Visitor::Operator_LHS_Upwind</scope><name>lhs_operator</name></member>
+      <member refid="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1aaba79edc8709eb3f2c46f2503ce7f87b" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Visitor::Operator_LHS_Upwind</scope><name>Operator_LHS_Upwind</name></member>
+      <member refid="structcsmp_1_1_c_v_f_e_m___visitor_1_1_operator___l_h_s___upwind_1a876aae81642666e790d711e7eef96323" prot="public" virt="non-virtual"><scope>csmp::CVFEM_Visitor::Operator_LHS_Upwind</scope><name>upwind_operand_key</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

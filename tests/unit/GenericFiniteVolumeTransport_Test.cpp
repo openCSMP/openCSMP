@@ -36,17 +36,13 @@
 // interrelations
 #include "ConstantFactor.h"
 
-// legacy finite-volume transport scheme
 #include "StencilProcessor.h"
+#include "FiniteVolumeStencil.h"
+
+// legacy finite-volume transport scheme
 #include "ExplicitStencilProcessor.h"
 #include "ExplicitNodeCenteredFiniteVolumeTransport.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
-
-#ifdef FV_STENCIL_TESTING
-#include "FiniteVolumeStencil_refactored.h"
-#else
-#include "FiniteVolumeStencil.h"
-#endif
 
 using namespace std;
 
@@ -500,7 +496,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 //           double vDlength = vD.Length();
            
            jacobian_at_point(it, bctr.Coordinates());
-           const DenseMatrix<DM_MIN> jac_bctr((*it)->FE()->JAC);
+//           const DenseMatrix<DM_MIN> jac_bctr((*it)->FE()->JAC);
 //           double jinvdet_bctr = (*it)->FE()->JacobianInverse();
            const DenseMatrix<DM_MIN> jinv_bctr((*it)->FE()->JINV);
            
@@ -961,7 +957,7 @@ static double  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
-         for ( auto i{0}; i<(*it)->Parents(); i++ )
+         for ( uint32_t i{0u}; i<(*it)->Parents(); i++ )
            cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
          cout << endl << endl;
       }
@@ -1209,7 +1205,7 @@ static void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
-         for ( auto i{0}; i<(*it)->Parents(); i++ )
+         for ( uint32_t i{0u}; i<(*it)->Parents(); i++ )
            cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
          cout << endl << endl;
       }
@@ -1347,13 +1343,13 @@ static void testSchemeAsComponent()
       const csmp::Index swt_key(model3D.Database().StorageKey("node number"));
       // sector storage: writing global node numbers to sector IP's and reading them out
       for ( auto it=flow_domain.CellsBegin(); it!=flow_domain.CellsEnd(); ++it )
-        for ( auto i{0}; i<(*it)->Sectors(); ++i )
+        for ( uint32_t i{0u}; i<(*it)->Sectors(); ++i )
           (*it)->Store( i, 0U, swt_key, makeScalar(PLAIN,(*it)->N(i)->Idx()) );
         
       // reading out node numbers and their double equivalents stored at the sector integration points
       for ( auto it=flow_domain.CellsBegin(); it!=flow_domain.CellsEnd(); ++it ) {
            cerr <<"\nelement: "<< (*it)->Idx() << endl;
-           for ( auto i{0}; i<(*it)->Sectors(); ++i ) {
+           for ( uint32_t i{0u}; i<(*it)->Sectors(); ++i ) {
                 cerr << (*it)->N(i)->Idx() <<":";
                 cerr << (*it)->Read( i, 0U, swt_key ) <<" ";
              }
@@ -1371,7 +1367,7 @@ static void testSchemeAsComponent()
 
       volume = 0.;
       for ( auto it=flow_domain.CellsBegin(); it!=flow_domain.CellsEnd(); ++it )
-        for ( auto i{0}; i<(*it)->Sectors(); ++i )
+        for ( uint32_t i{0u}; i<(*it)->Sectors(); ++i )
           volume += (*it)->Read( i, 0U, sv_key );
       cerr <<"\nFV total volume: "<< volume;
 

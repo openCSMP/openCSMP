@@ -1,0 +1,155 @@
+.TH "csmp::StatisticalAnalyzer< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::StatisticalAnalyzer< dim > \- Class for the generation of volume-weighted and other histograms from CSMP models and their unique regions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <StatisticalAnalyzer\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStatisticalAnalyzer\fP (const \fBModel\fP< dim > &)"
+.br
+.ti -1c
+.RI "void \fBDefineBins\fP (const char *bin_ascii_file, HistogramBins &) const"
+.br
+.RI "specify via ascii input file, the x-axis range of the histogram columns, i\&.e\&. the bin size "
+.ti -1c
+.RI "void \fBDefineBins\fP (HistogramBins &bins, double first_val,\&.\&.\&.) const"
+.br
+.RI "specify the binsize using bin ranges specified by a sequence of double values of user-defined length "
+.ti -1c
+.RI "void \fBDefineBins\fP (const double minimum, const double maximum, const size_t number_of_bins, HistogramBins &data) const"
+.br
+.RI "creats histogram bins by providing the data range and number of devisions "
+.ti -1c
+.RI "void \fBRegionPropertyHistograms\fP (const char *prop, const HistogramBins &bins, std::map< std::string, std::pair< HistogramBins, size_t > > &results) const"
+.br
+.RI "normalizes number of counts by element volume "
+.ti -1c
+.RI "void \fBRegionPropertyHistograms\fP (const char *prop, const HistogramBins &bins, std::map< std::string, std::pair< HistogramBins, size_t > > &results, bool normalize) const"
+.br
+.RI "normalize by counts; "
+.ti -1c
+.RI "void \fBRegionPropertyHistogramsElement\fP (const char *prop, const HistogramBins &bins, std::map< std::string, std::pair< HistogramBins, size_t > > &results) const"
+.br
+.RI "analyzes properties element by element interpolating variables to barycenter if necessary "
+.ti -1c
+.RI "void \fBRegionPropertyHistogramsIntegrationPoint\fP (const char *prop, const HistogramBins &bins, std::map< std::string, std::pair< HistogramBins, size_t > > &results, const std::string &flow_domain) const"
+.br
+.RI "analyzes properties element by element, integral over interpolation points of each element; written for velocity "
+.ti -1c
+.RI "void \fBRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1\fP (const char *prop1, const char *prop2, const HistogramBins &bins, std::map< std::string, std::pair< HistogramBins, size_t > > &results1, std::map< std::string, std::pair< HistogramBins, size_t > > &results2, bool weighted_by_porosity=false) const"
+.br
+.RI "as previous method, but binning second property based on first property occurance "
+.ti -1c
+.RI "void \fBOutputRegionPropertyHistograms\fP (const char *prop, const std::map< std::string, std::pair< HistogramBins, size_t > > &results) const"
+.br
+.RI "for each model region, a separate histogram is created using the user-specified bins "
+.ti -1c
+.RI "void \fBOutputRegionPropertyHistogramsMaple\fP (const char *prop, const HistogramBins &bins, const std::map< std::string, std::pair< HistogramBins, size_t > > &results, bool log10_of_bin_values) const"
+.br
+.RI "writes Maple statlist format with weights; results must be copied and pasted into Maple workbook "
+.ti -1c
+.RI "void \fBOutputRegionPropertyAbundancePolygonsMaple\fP (const char *prop, const HistogramBins &bins, const std::map< std::string, std::pair< HistogramBins, size_t > > &results, bool log10_of_bin_values) const"
+.br
+.RI "for copy/paste to Maple: list of [bin-center,histogram column-height] pairs to plot curves "
+.ti -1c
+.RI "void \fBOutputRegionPropertyAbundancePolygonsMaple\fP (const char *prop, const char *file_name_prefix, const std::vector< std::pair< double, double > > &bins, const std::map< std::string, std::pair< HistogramBins, size_t > > &results, bool log10_of_bin_values) const"
+.br
+.RI "like previous method, but name can include filename etc\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::StatisticalAnalyzer< dim >"Class for the generation of volume-weighted and other histograms from CSMP models and their unique regions\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+refactor such that Maple specific output is done by MapleInterface class\&.
+.RE
+.PP
+
+.PP
+@uthor Stephan Matthai 
+.PP
+\fBDate\fP
+.RS 4
+2001 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> void \fBcsmp::StatisticalAnalyzer\fP< dim >::DefineBins (const char * bin_file, HistogramBins & data) const"
+
+.PP
+specify via ascii input file, the x-axis range of the histogram columns, i\&.e\&. the bin size Function defines the bins for the histogram on the basis of the user input as specified in file which is read by this function\&. The file should contain the following information:
+
+.PP
+title number of bin-dilimiter values (integer) bin bound values (floating point) EOF
+
+.PP
+\fBExample\fP 'myfile\&.bins' 8 1\&.0e-5 2\&.0e-5 4\&.0e-5 6\&.0e-5 8\&.0e-5 1\&.0e-4 2\&.0e-4 6\&.0e-4 EOF 
+.SS "template<uint32_t dim> void \fBcsmp::StatisticalAnalyzer\fP< dim >::OutputRegionPropertyHistogramsMaple (const char * prop, const HistogramBins & bins, const std::map< std::string, std::pair< HistogramBins, size_t > > & results, bool log10_of_bin_values) const"
+
+.PP
+writes Maple statlist format with weights; results must be copied and pasted into Maple workbook In Maple paste the data into the list as shown below:
+
+.PP
+with(stats): 
+.PP
+.RS 4
+with(stats[statplots]): data1:=[ Weight(1\&.\&.3, 5), Weight(3\&.\&.5, 10), Weight(5\&.\&.7, 8)]: histogram(data1, color=cyan); 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::StatisticalAnalyzer\fP< dim >::RegionPropertyHistograms (const char * prop, const HistogramBins & bins, std::map< std::string, std::pair< HistogramBins, size_t > > & results) const"
+
+.PP
+normalizes number of counts by element volume 
+.PP
+\fBParameters\fP
+.RS 4
+\fIprop\fP analysed element variable  
+.br
+\fIbins\fP bin ranges from < to <= 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::StatisticalAnalyzer\fP< dim >::RegionPropertyHistograms (const char * prop, const HistogramBins & bins, std::map< std::string, std::pair< HistogramBins, size_t > > & results, bool normalize) const"
+
+.PP
+normalize by counts; 
+.PP
+\fBAttention\fP
+.RS 4
+this makes sense only for regular grids 
+.RE
+.PP
+
+.SS "template<uint32_t dim> void \fBcsmp::StatisticalAnalyzer\fP< dim >::RegionPropertyHistogramsElement (const char * prop, const HistogramBins & bins, std::map< std::string, std::pair< HistogramBins, size_t > > & results) const"
+
+.PP
+analyzes properties element by element interpolating variables to barycenter if necessary Goes through all Regions of current \fBModel\fP and calculates the area/volume of the region with property values within the ranges defined in 'bins'\&. Normalizes the computed values by the total area/volume of the \fBRegion\fP\&. Returns a map of bins and area/volume normalized values for each region using the region name as key / identifier\&. 
+.SS "template<uint32_t dim> void \fBcsmp::StatisticalAnalyzer\fP< dim >::RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1 (const char * prop1, const char * prop2, const HistogramBins & bins, std::map< std::string, std::pair< HistogramBins, size_t > > & results1, std::map< std::string, std::pair< HistogramBins, size_t > > & results2, bool weighted_by_porosity = \fRfalse\fP) const"
+
+.PP
+as previous method, but binning second property based on first property occurance Whoever wrote this, should explain what it does ! 
+.SS "template<uint32_t dim> void \fBcsmp::StatisticalAnalyzer\fP< dim >::RegionPropertyHistogramsIntegrationPoint (const char * prop, const HistogramBins & bins, std::map< std::string, std::pair< HistogramBins, size_t > > & results, const std::string & flow_domain) const"
+
+.PP
+analyzes properties element by element, integral over interpolation points of each element; written for velocity Goes through all Regions of current \fBModel\fP and calculates the area/volume of the region with property values within the ranges defined in 'bins'\&. Normalizes the computed values by the total area/volume of the \fBRegion\fP\&. Returns a map of bins and area/volume normalized values for each region using the region name as key / identifier\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

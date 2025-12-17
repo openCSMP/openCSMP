@@ -116,19 +116,17 @@ class VelocityAndVolumeFlux : public MathOperatorLHS<dim,CELL> {
                            const char* nodal_velocity = "nodal velocity",
                            const char* nodal_pore_velocity = "nodal pore velocity",
                            const char* nodal_volume_flux = "nodal volume flux");
-                           
-    virtual ~VelocityAndVolumeFlux();
     
     void Verbose( bool stdoutput );
 
-    virtual void GetOperands( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
 
     /// {V} = [grad P]{k}
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
 
-    virtual void WriteOperands( CELL<dim>& );
+    void WriteOperands( CELL<dim>& ) override final;
 
-    virtual VelocityAndVolumeFlux<dim,CELL>* clone() const { return new VelocityAndVolumeFlux<dim,CELL> (*this); }
+    VelocityAndVolumeFlux<dim,CELL>* clone() const override final { return new VelocityAndVolumeFlux<dim,CELL> (*this); }
 
   private:
 

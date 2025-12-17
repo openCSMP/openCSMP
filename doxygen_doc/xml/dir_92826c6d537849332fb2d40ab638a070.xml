@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_92826c6d537849332fb2d40ab638a070" kind="dir">
+    <compoundname>build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles</compoundname>
+    <innerdir refid="dir_c8b009553dd9b446783493c23b623f33">build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/boo.dir</innerdir>
+    <innerdir refid="dir_fb60fee897afa5c89b802ad9513780e1">build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/foo.dir</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/"/>
+  </compounddef>
+</doxygen>

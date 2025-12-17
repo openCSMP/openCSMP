@@ -161,7 +161,7 @@ void VSet<dim>::AddPlist( typename map<size_t, vector<size_t> >::const_iterator 
 						              typename map<size_t, vector<size_t> >::const_iterator last )
 {
 	auto it = PlistBegin();
-  assert( Cells() == distance(first,last) );
+  assert( static_cast<long>(Cells()) == distance(first,last) );
 
 	while (first != last && it != PlistEnd())
     {
@@ -458,7 +458,7 @@ template<uint32_t dim>
 bool  VSet<dim>::OutputTo( const char* bin_file, double time ) const
 {
 	char file_name[200], num[20];
-  snprintf( num, sizeof(num), "%lf", time );
+  snprintf( num, sizeof(num), "%f", time );
 	strcpy(file_name, bin_file);
 	size_t  records(0);
 
@@ -659,14 +659,14 @@ template<uint32_t dim>
 bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double time, size_t first_outerhalo) const
 {
 	char file_name[200], num[20];
-  snprintf( num, sizeof(num), "%lf", time );
+  snprintf( num, sizeof(num), "%zu", static_cast<size_t>(time) );
 	strcpy(file_name, bin_file);
 	char heading[200];
 	strcpy(heading, "VSet<dim>::OutputTo: Binary version of VSet: ");
 	strcat(heading, bin_file);
 	strcat(heading, " saved at time: ");
 	strcat(heading, num);
-  snprintf( num, sizeof(num), "%lu", first_outerhalo );
+  snprintf( num, sizeof(num), "%zu", first_outerhalo );
 	strcat(heading, ", first outerhalo: ");
 	strcat(heading, num);
 
@@ -796,8 +796,7 @@ void VSet<dim>::Out( bool print_data_as_well ) const
       // scalar type data
       if ( distance(PropertyValuesBegin(),PropertyValuesEnd()) > 0 )
         cout << "\nproperty records stored in VSet:\n";
-      for ( map<string, PropertyData>::const_iterator
-            it = property_map_.begin(); it != property_map_.end(); it++ )
+      for ( auto it = property_map_.begin(); it != property_map_.end(); ++it )
         {
           cout << "\n" << (*it).first << endl;
           (*it).second.Out();

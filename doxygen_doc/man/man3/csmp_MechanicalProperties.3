@@ -1,0 +1,92 @@
+.TH "csmp::MechanicalProperties" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::MechanicalProperties
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <MechanicalProperties\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMechanicalProperties\fP ()"
+.br
+.RI "granite properties as default "
+.ti -1c
+.RI "\fBMechanicalProperties\fP (const std::vector< double > &properties)"
+.br
+.RI "from property values supplied as a vector "
+.ti -1c
+.RI "\fBMechanicalProperties\fP (double E, double K, double nu, double tensile_strength, double fric_coeff)"
+.br
+.RI "partial initialisation "
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "double \fBE_\fP"
+.br
+.RI "Young's modulus\&. "
+.ti -1c
+.RI "double \fBB_\fP"
+.br
+.RI "bulk modulus = compressibility of rock skeleton = K_dry "
+.ti -1c
+.RI "double \fBG_\fP"
+.br
+.RI "shear modulus = modulus of rigidity "
+.ti -1c
+.RI "double \fBalpha_\fP"
+.br
+.RI "Biot coefficient alpha = 1 - K_dry/K_grain\&. "
+.ti -1c
+.RI "double \fBTS_\fP"
+.br
+.RI "tensile strength "
+.ti -1c
+.RI "double \fBUCS_\fP"
+.br
+.RI "unconfined compressive strength "
+.ti -1c
+.RI "double \fBpstar_\fP"
+.br
+.RI "crushing pressure of the rock, see Fjaer et al\&. 08', p\&. 68 "
+.ti -1c
+.RI "double \fBmu_\fP"
+.br
+.RI "friction coefficient "
+.ti -1c
+.RI "double \fBnu_\fP"
+.br
+.RI "Poisson's ratio\&. "
+.ti -1c
+.RI "double \fBC_\fP"
+.br
+.RI "cohesive strength = inherent shear strength "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Regional properties shared by multiple elements, but have variations that can be calculated knowing other local properties discretized on the elements\&.
+
+.PP
+\fBExample\fP: Young's modulus can be calculated from the value stored here with corrections based on the deviation of the local porosity from that for which E was determined\&.
+
+.PP
+Such calculations must be informed by petrophysical correlations and the results might have to be perturbed by some randon variable to reflect natural variations\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "csmp::MechanicalProperties::MechanicalProperties ()"
+
+.PP
+granite properties as default granite 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

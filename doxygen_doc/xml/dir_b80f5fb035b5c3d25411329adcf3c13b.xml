@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_b80f5fb035b5c3d25411329adcf3c13b" kind="dir">
+    <compoundname>source/includes/integration/cvfe_hydrothermal</compoundname>
+    <innerfile refid="_c_v_f_e_m___math_operator_l_h_s_8h">CVFEM_MathOperatorLHS.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___math_operator_r_h_s_8h">CVFEM_MathOperatorRHS.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___num_integral__d_n_t__op__d_n__d_v_8h">CVFEM_NumIntegral_dNT_op_dN_dV.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___p_h_x___scheme_8h">CVFEM_PHX_Scheme.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___p_h_x___variable_names_8h">CVFEM_PHX_VariableNames.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___point_source__rhsop_8h">CVFEM_PointSource_rhsop.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___pressure_gradient_visitor_8h">CVFEM_PressureGradientVisitor.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___upwind___num_integral__d_n_t__op__d_n__d_v_8h">CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___upwind___num_integral__d_n_t__rhsop__g__d_v_8h">CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h</innerfile>
+    <innerfile refid="_c_v_f_e_m___visitor_8h">CVFEM_Visitor.h</innerfile>
+    <innerfile refid="_explicit_finite_volume_transport_p_h_x_8h">ExplicitFiniteVolumeTransportPHX.h</innerfile>
+    <innerfile refid="_limiter_8h">Limiter.h</innerfile>
+    <innerfile refid="_na_cl_h2_o_properties_visitor_p_h_x_8h">NaClH2OPropertiesVisitorPHX.h</innerfile>
+    <innerfile refid="_na_cl_h2_o_properties_visitor_p_h_x__initializer__list_8h">NaClH2OPropertiesVisitorPHX_initializer_list.h</innerfile>
+    <innerfile refid="_num_integral___n_t__lhs__nodal__op___n__d_v_8h">NumIntegral_NT_lhs_nodal_op_N_dV.h</innerfile>
+    <innerfile refid="_num_integral___n_t__rhs__nodal__op___n__d_v_8h">NumIntegral_NT_rhs_nodal_op_N_dV.h</innerfile>
+    <innerfile refid="_pore_volume_visitor_8h">PoreVolumeVisitor.h</innerfile>
+    <innerfile refid="_stencil_processor_p_h_x_8h">StencilProcessorPHX.h</innerfile>
+    <innerfile refid="_two_phase_transport_p_h_x_8h">TwoPhaseTransportPHX.h</innerfile>
+    <innerfile refid="_upwind_control_visitor_8h">UpwindControlVisitor.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="source/includes/integration/cvfe_hydrothermal/"/>
+  </compounddef>
+</doxygen>

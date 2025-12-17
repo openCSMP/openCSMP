@@ -8,6 +8,7 @@
 #ifndef DYNAMIC_ARRAY_2D_H
 #define DYNAMIC_ARRAY_2D_H
 
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iterator>

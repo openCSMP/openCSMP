@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_twophase_vapor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::TwophaseVapor</compoundname>
+    <includes refid="_twophase_vapor_8h" local="yes">eos/h2o_nacl/TwophaseVapor.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1acb31cfe8dacd1759701ccb4520410edf" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::TwophaseVapor::temperature_</definition>
+        <argsstring></argsstring>
+        <name>temperature_</name>
+        <qualifiedname>csmp::TwophaseVapor::temperature_</qualifiedname>
+        <briefdescription>
+<para>internal reference to temperature [C] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="37" column="18" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1a64a4622ed80892908f9e916b79c91f71" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::TwophaseVapor::pressure_</definition>
+        <argsstring></argsstring>
+        <name>pressure_</name>
+        <qualifiedname>csmp::TwophaseVapor::pressure_</qualifiedname>
+        <briefdescription>
+<para>internal reference to fluid pressure [P] in flow code </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="38" column="18" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1a69dc78c03c3e50ee2cfb14e558a7fdf6" prot="private" static="no" mutable="no">
+        <type>const double &amp;</type>
+        <definition>const double&amp; csmp::TwophaseVapor::ph2o_</definition>
+        <argsstring></argsstring>
+        <name>ph2o_</name>
+        <qualifiedname>csmp::TwophaseVapor::ph2o_</qualifiedname>
+        <briefdescription>
+<para>internal reference to water boiling pressure (from <ref refid="classcsmp_1_1_water" kindref="compound">Water</ref> object, which must have been constructed with the same temperature and fluid pressure variables as constructor arguments) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="39" column="18" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1af2d40e71af7771b2f69432ad6e547029" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVapor::tcurrent_</definition>
+        <argsstring></argsstring>
+        <name>tcurrent_</name>
+        <qualifiedname>csmp::TwophaseVapor::tcurrent_</qualifiedname>
+        <briefdescription>
+<para>internal temperature variable [C] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="41" column="12" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1aaf0099b3693924176a9d1aa5cf0fbc2f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVapor::pcurrent_</definition>
+        <argsstring></argsstring>
+        <name>pcurrent_</name>
+        <qualifiedname>csmp::TwophaseVapor::pcurrent_</qualifiedname>
+        <briefdescription>
+<para>internal pressure variable [Pa] </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="42" column="12" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1ac876d82d28f0d6ff003b5a5b1c71e456" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::TwophaseVapor::massfractionnacl_</definition>
+        <argsstring></argsstring>
+        <name>massfractionnacl_</name>
+        <qualifiedname>csmp::TwophaseVapor::massfractionnacl_</qualifiedname>
+        <briefdescription>
+<para>internal variable for composition </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="43" column="12" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1a573ee2a9bd16a8fc9014333c9f179bf1" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_halite_liquidus" kindref="compound">HaliteLiquidus</ref></type>
+        <definition>HaliteLiquidus csmp::TwophaseVapor::liquidus</definition>
+        <argsstring></argsstring>
+        <name>liquidus</name>
+        <qualifiedname>csmp::TwophaseVapor::liquidus</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="48" column="28" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1abc45a4bf2e32ad2ff6f9598e20b62ecc" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_twophase_liquid" kindref="compound">TwophaseLiquid</ref></type>
+        <definition>TwophaseLiquid csmp::TwophaseVapor::twophase_l</definition>
+        <argsstring></argsstring>
+        <name>twophase_l</name>
+        <qualifiedname>csmp::TwophaseVapor::twophase_l</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="49" column="28" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_twophase_vapor_1a2c5f305c53e9f624b4726e1aaa937780" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_na_cl_saturated_vapor" kindref="compound">NaClSaturatedVapor</ref></type>
+        <definition>NaClSaturatedVapor csmp::TwophaseVapor::naclsatvap</definition>
+        <argsstring></argsstring>
+        <name>naclsatvap</name>
+        <qualifiedname>csmp::TwophaseVapor::naclsatvap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="50" column="28" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_1a106ce9bbb086b6e21f6bb8056b718fd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwophaseVapor::TwophaseVapor</definition>
+        <argsstring>(const double &amp;externaltemperature, const double &amp;externalpressure, const double &amp;ph2o)</argsstring>
+        <name>TwophaseVapor</name>
+        <qualifiedname>csmp::TwophaseVapor::TwophaseVapor</qualifiedname>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externaltemperature</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>externalpressure</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>ph2o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>custom constructor</para>
+<para><simplesect kind="attention"><para>Use only this conctructor. <ref refid="classcsmp_1_1_twophase_vapor" kindref="compound">TwophaseVapor</ref> computes the NaCl concentration of liquid on the twophase liquid+vapor surface as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, <ref refid="classcsmp_1_1_twophase_vapor" kindref="compound">TwophaseVapor</ref> is able to decipher their current values when being queried for the NaCl concentration. Only this constructor is allowed to ensure that functionality, default constructor has been made private. See remarks on thirs constructor variable in full class documentation and code example. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="26" column="5" bodyfile="source/modules/eos/h2o_nacl/TwophaseVapor.cpp" bodystart="16" bodyend="30"/>
+        <references refid="classcsmp_1_1_halite_liquidus_1aeaca336da1757689f6665244539fb82d" compoundref="_halite_liquidus_8cpp" startline="14" endline="31">csmp::HaliteLiquidus::HaliteLiquidus</references>
+        <references refid="classcsmp_1_1_na_cl_saturated_vapor_1abd993e8f13b163d4832a507285effdfa" compoundref="_na_cl_saturated_vapor_8cpp" startline="14" endline="56">csmp::NaClSaturatedVapor::NaClSaturatedVapor</references>
+        <references refid="classcsmp_1_1_twophase_liquid_1acbc78de0d42d3c379186195beb7672a2" compoundref="_twophase_liquid_8cpp" startline="15" endline="54">csmp::TwophaseLiquid::TwophaseLiquid</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_1ac7c22e15b93c525933306a4a452ad920" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwophaseVapor::~TwophaseVapor</definition>
+        <argsstring>()</argsstring>
+        <name>~TwophaseVapor</name>
+        <qualifiedname>csmp::TwophaseVapor::~TwophaseVapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>destructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="29" column="5" bodyfile="source/modules/eos/h2o_nacl/TwophaseVapor.cpp" bodystart="35" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_1a43b44842ecc708e431e5605358c9dc6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVapor::MassFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MassFractionNaCl</name>
+        <qualifiedname>csmp::TwophaseVapor::MassFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Value of mass fraction of dissolved NaCl in vapor on twophase liquid+vapor surface <simplesect kind="attention"><para>The value is based on converting the mole fraction computed from equations 12-17 in Driesner &amp; Heinrich (2007). Conversion is based on <ref refid="_convert_concentration_units_na_cl_8h_source" kindref="compound">ConvertConcentrationUnitsNaCl.h</ref>; to stay consistent, use values and functions provide therein for further computations if you need unit conversion. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="31" column="12" bodyfile="source/modules/eos/h2o_nacl/TwophaseVapor.cpp" bodystart="43" bodyend="47"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_1a7e0133aaff91bf8bc35d94b5d95b0979" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::TwophaseVapor::TwophaseVapor</definition>
+        <argsstring>()</argsstring>
+        <name>TwophaseVapor</name>
+        <qualifiedname>csmp::TwophaseVapor::TwophaseVapor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="35" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_1af57ead70c905da357885ada4e28df46f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::TwophaseVapor::CheckState</definition>
+        <argsstring>()</argsstring>
+        <name>CheckState</name>
+        <qualifiedname>csmp::TwophaseVapor::CheckState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update internal variables for current temperature and pressure and trigger computation </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="45" column="14" bodyfile="source/modules/eos/h2o_nacl/TwophaseVapor.cpp" bodystart="53" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_twophase_vapor_1a603ffd20d4be8790ededbb4c80628e53" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::TwophaseVapor::MoleFractionNaCl</definition>
+        <argsstring>()</argsstring>
+        <name>MoleFractionNaCl</name>
+        <qualifiedname>csmp::TwophaseVapor::MoleFractionNaCl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Equation 13 of Driesner and Heinrich (2007) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/eos/TwophaseVapor.h" line="46" column="12" bodyfile="source/modules/eos/h2o_nacl/TwophaseVapor.cpp" bodystart="62" bodyend="68"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Composition of vapor phase on twophase vapor+liquid envelope. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Thomas Driesner, ETH Zuerich, <ulink url="mailto:thomas.driesner@erdw.ethz.ch">thomas.driesner@erdw.ethz.ch</ulink></para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>&quot;TwophaseVapor&quot; is legacy code from Thomas Driesner&apos;s developments for the H2O-NaCl system, and computes the composition of vapor on the twophase liquid+vapor envelope as a function of temperature and pressure. It can be used standalone if only this information is needed. Otherwise, it is only used in the CSMP++ context for building accurate lookup tables for the H2O-NaCl system, which are significantly faster if the full system properties are needed.</para>
+<para>Details of the underlying formulation can be found in</para>
+<para>Driesner T. and Heinrich C.A. (2007): The system H2O-NaCl. Part I: Correlation formulae for phase relations in temperature-pressure-molefraction space from 0 to 1000oC, 0 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4880-4901.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_upwind_control_visitor_1usage">
+<title>Usage</title><para>Construct an instance of &quot;TwophaseVapor&quot; with the temperature (&quot;externaltemperature&quot;, in C), fluid pressure (&quot;externalpressure&quot;, in Pa) and water boiling pressure (&quot;ph2o&quot;, in Pa, see attention remark below) as constructor arguments.</para>
+<para>&quot;TwophaseVapor&quot; has an internal mechanism to make sure that it always uses the current value of temperature, fluid pressure, and water boiling pressure as they exist in your code. Public member names should be self-explanatory, I hope.</para>
+<para>The NaCl concentration can be retrieved in units of mass fraction. If you want to convert these or need values for molar masses of NaCl and H2O, please use <ref refid="_convert_concentration_units_na_cl_8h_source" kindref="compound">ConvertConcentrationUnitsNaCl.h</ref> to stay consistent.</para>
+<para><simplesect kind="attention"><para>The water boiling pressure as constructor argument requires that a <ref refid="classcsmp_1_1_water" kindref="compound">Water</ref> object is being instantiated before twophase liquid, with the same temperature and fluid pressure as its constructor arguments. Also, before querying <ref refid="classcsmp_1_1_twophase_vapor_1a43b44842ecc708e431e5605358c9dc6b" kindref="member">TwophaseVapor::MassFractionNaCl()</ref>, one has to make sure that ph2o has been updated. See code example. I apologize for this odd design but for performance reasons it made sense when created originally.</para>
+</simplesect>
+<programlisting><codeline><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>t(somevalue);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>temperature<sp/>[C]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p(anothervalue);<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fluid<sp/>pressure<sp/>[in<sp/>Pa]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ph2o(yetanothervalue);<sp/></highlight><highlight class="comment">//<sp/>water<sp/>boling<sp/>pressure<sp/>[in<sp/>Pa]<sp/>in<sp/>user&apos;s<sp/>application</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal">Water<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>water(t,p);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="classcsmp_1_1_twophase_vapor_1a106ce9bbb086b6e21f6bb8056b718fd8" kindref="member">TwophaseVapor</ref><sp/><sp/>twophase_vapor(t,p,ph2o);<sp/></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Updating<sp/>t,p,ph2o:</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">t<sp/><sp/><sp/><sp/>=<sp/>my_new_t_value;</highlight></codeline>
+<codeline><highlight class="normal">p<sp/><sp/><sp/><sp/>=<sp/>my_new_p_value;</highlight></codeline>
+<codeline><highlight class="normal">ph2o<sp/>=<sp/>water.SaturationPressure();</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>And<sp/>retrieving<sp/>the<sp/>new<sp/>value<sp/>of<sp/>mass<sp/>fraction<sp/>NaCl<sp/>in<sp/>TwophaseVapor:</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">x<sp/>=<sp/>twophase_vapor.MassFractionNaCl();<sp/></highlight><highlight class="comment">//<sp/>compute<sp/>and<sp/>assign<sp/>to<sp/>x<sp/>the<sp/>mass<sp/>fraction<sp/>of<sp/>NaCl<sp/>of<sp/>TwophaseVapor<sp/>at<sp/>t<sp/>and<sp/>p</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">...</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="compare_floats_8h_1testing">
+<title>Testing</title><para>Tested manually against CSP version OK </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::TwophaseVapor</label>
+        <link refid="classcsmp_1_1_twophase_vapor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/eos/TwophaseVapor.h" line="21" column="3" bodyfile="source/includes/eos/TwophaseVapor.h" bodystart="22" bodyend="51"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_twophase_vapor_1af57ead70c905da357885ada4e28df46f" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>CheckState</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a573ee2a9bd16a8fc9014333c9f179bf1" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>liquidus</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a43b44842ecc708e431e5605358c9dc6b" prot="public" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>MassFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1ac876d82d28f0d6ff003b5a5b1c71e456" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>massfractionnacl_</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a603ffd20d4be8790ededbb4c80628e53" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>MoleFractionNaCl</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a2c5f305c53e9f624b4726e1aaa937780" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>naclsatvap</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1aaf0099b3693924176a9d1aa5cf0fbc2f" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>pcurrent_</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a69dc78c03c3e50ee2cfb14e558a7fdf6" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>ph2o_</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a64a4622ed80892908f9e916b79c91f71" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>pressure_</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1af2d40e71af7771b2f69432ad6e547029" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>tcurrent_</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1acb31cfe8dacd1759701ccb4520410edf" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>temperature_</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1abc45a4bf2e32ad2ff6f9598e20b62ecc" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>twophase_l</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a106ce9bbb086b6e21f6bb8056b718fd8" prot="public" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>TwophaseVapor</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1a7e0133aaff91bf8bc35d94b5d95b0979" prot="private" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>TwophaseVapor</name></member>
+      <member refid="classcsmp_1_1_twophase_vapor_1ac7c22e15b93c525933306a4a452ad920" prot="public" virt="non-virtual"><scope>csmp::TwophaseVapor</scope><name>~TwophaseVapor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

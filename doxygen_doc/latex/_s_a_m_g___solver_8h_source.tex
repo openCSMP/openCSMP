@@ -1,0 +1,132 @@
+\doxysection{SAMG\+\_\+\+Solver.\+h}
+\hypertarget{_s_a_m_g___solver_8h_source}{}\label{_s_a_m_g___solver_8h_source}\index{source/includes/integration/solver/SAMG\_Solver.h@{source/includes/integration/solver/SAMG\_Solver.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{SAMG\_SOLVER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{SAMG\_SOLVER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_solver_8h}{"{}Solver.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_sparse_matrix_8h}{"{}SparseMatrix.h"{}}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{\_OPENMP}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{stringliteral}{"{}CSRMatrix.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_compressed_row_matrix_8h}{"{}CompressedRowMatrix.h"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings}{SAMG\_Settings}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{/**\ }}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{@brief\ Subclass\ of\ Solver\ for\ linear\ algebra\ computations\ conducted\ with\ SAMG,\ the\ algebraic\ multigrid\ solver\ for\ systems\ of\ equation\ from\ SCAPOS,\ Fraunhofer,\ Germany.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ Solves\ the\ linear\ algebraic\ system\ A\ x\ =\ b\ using\ the\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ algebraic\ multigrid\ solver\ DLL\ from\ SCAI,\ Fraunhofer\ Gesellschaft\ (St.\ Augustin,\ Bonn),}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ which\ can\ be\ obtained\ from\ SCAPOS.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ }}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ Up\ to\ 2\ istances\ of\ the\ DLL\ can\ be\ communicated\ with.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ Use\ another\ instance\ of\ the\ solver\ if\ you\ have\ multiple\ PDEs\ that\ are\ }}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ solved\ sequentially\ and\ you\ want\ to\ remember\ SAMG\ settings\ from\ step\ to\ step.\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ @section\ segFault\ Segmentation\ Fault\ on\ some\ linux\ based\ os}}
+\DoxyCodeLine{00029\ \textcolor{comment}{}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ We\ have\ noticed\ invalid\ memory\ access\ when\ using\ dynamically\ allocated\ SAMG\_Solver\ objects}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ and\ their\ calls\ to\ SAMG.\ To\ avoid\ that,\ use\ static(stack)\ instantiation.\ Right\ now\ we\ have\ no\ idea}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ why,\ but\ we're\ working\ on\ that...}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ @code}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ //\ i.e.:}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ SAMG\_Settings\ settings;}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ settings.Set\_napproach(2);}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ SAMG\_Solver\ samgSolver(\&settings);}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ PDE\_Integrator<DIM,Region>\ pressure\_diffusion(\&samgSolver);}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ @endcode}}
+\DoxyCodeLine{00040\ \textcolor{comment}{}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ @todo\ (1)\ Check\ line\ 254:\ is\ resetting\ res\_in\ allowed\ if\ we\ use\ relative\ convergence}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ @todo\ (3)\ Convergence\ check\ 670:\ 679\ check\ eps\ or\ fabs(eps)?}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ @todo\ (1)\ Look\ into\ runtime\ debug\ error\ when\ solving\ systems\ with\ vector\ as\ variable\ }}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ @todo\ (3)\ Try\ mpl::is\_volatile\ \ type\ trait\ to\ check\ whether\ they\ should\ manage\ the\ pointers\ they\ are\ supplied\ with\ in\ the\ constructor\ (B)}}
+\DoxyCodeLine{00045\ \textcolor{comment}{}}
+\DoxyCodeLine{00046\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00047\ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\_Solver}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_solver}{Solver}}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \textcolor{comment}{///\ this\ method\ will\ not\ memory\ manage\ the\ SAMG\_Settings\ object}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a830305c72009a8d132347fd16c950156}{SAMG\_Solver}}(\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings}{SAMG\_Settings}}*\ settings\ );}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ SAMG\_Solver();}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ SAMG\_Solver(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\_Solver}}\&\ );}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SAMG\_Solver();}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\_Solver}}\&\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{SAMG\_Solver}}\&\ );}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a387f3ebfa2fb98fb9b24c4f9ef4b37e0}{InputSolverSettings}}(\ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}\&\ settings\ );}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcsmp_1_1_solver_settings}{SolverSettings}}*\ GetSolverSettings();}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_ae6733ea1213d720f643ceaf896ce8efc}{Write\_SAMG\_TextInputFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ Write\_SAMG\_TextOutput(\ \textcolor{keywordtype}{bool}\ write\ );}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ LastSolverResidual()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a8eda482409227c6eca4935468e568580}{CheckSparsityCriterion}}(\ int32\_t\&\ levelx\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a6721dbfffe7ae94fdd7ea94128d7c873}{CheckCycleCriterion}}(\ int32\_t\&\ iswtch\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ UpdateCycleCriterion(\ int32\_t\ iswtch\ );}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a4a43b799061f7080fcbd9065edfcda62}{CheckConvergence}}(\ \textcolor{keywordtype}{double}\ eps\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ OutputVectors()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_a6a4dbbe3dd011d95514026e4bcd52e33}{SolveMatrixEquation}}(\ \mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ A,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ b,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ no\_unknowns\ );}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver_af849b38b8bf9f8500590777e5fd1e7d7}{SolveMatrixEquation}}(\ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{CompressedRowMatrix}}\&\ A,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ b,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&\ x,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size\_t\ no\_unknowns\ );}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___settings}{SAMG\_Settings}}*\ \ \ \ \ \ \ \ settings\_;}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nsys\_;\ \ \ \ \textcolor{comment}{///\ <\ Number\ of\ unknowns}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ npnts\_;\ \ \ \textcolor{comment}{///\ <\ Number\ of\ points\ (in\ mesh)}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nnu\_;\ \ \ \ \ \textcolor{comment}{///\ <\ Number\ of\ variables\ >=\ 1\ (matrix\ size\ nnu\string^2)}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ int32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nna\_;\ \ \ \ \ \textcolor{comment}{///\ <\ Number\ of\ matrix\ entries\ stored\ in\ vector\ a\ >=\ nnu}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ u\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///\ <\ []\ First\ guess\ solution\ to\ A.u=f}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\ f\_;\ \ \ \ \ \ \ \ \ \textcolor{comment}{///\ <\ []\ Right\ hand\ side}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \textcolor{comment}{//\ For\ coupled\ systems}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ std::vector<int32\_t>\ \ \ \ iscale\_;\ \ \textcolor{comment}{///\ <\ []\ which\ unknowns\ require\ scaling\ (nsys\ >=\ 1)}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///\ <\ iscale(k)=0\ means\ k-\/th\ unknown\ does\ NOT\ require\ scaling}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///\ <\ iscale(k)=1\ means\ k-\/th\ unknown\ DOES\ require\ scaling}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ std::vector<int32\_t>\ \ \ \ iu\_;\ \ \ \ \ \ \textcolor{comment}{///\ <\ []\ variable\ to\ unknown\ pointer}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ndiu\_;\ \ \ \ \textcolor{comment}{///\ <\ if\ nsys>1,\ m\_diu=m\_nnu}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ std::vector<int32\_t>\ \ \ \ ip\_;\ \ \ \ \ \ \textcolor{comment}{///\ <\ []}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ndip\_;}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{\_OPENMP}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{CSRMatrix}}\ \mbox{\hyperlink{classcsmp_1_1_s_a_m_g___solver}{crmat\_}};}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_compressed_row_matrix}{CompressedRowMatrix}}\ \ \ crmat\_;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \textcolor{comment}{//\ Output\ parameters}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ res\_in\_;\ \ \ \ \ \ \textcolor{comment}{///\ <\ residual\ of\ first\ guess}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ res\_out\_;\ \ \ \ \ \textcolor{comment}{///\ <\ residual\ of\ final\ approximation}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ int32\_t\ \ \ \ \ ncyc\_done\_;\ \ \ \textcolor{comment}{///\ <\ total\ number\ cycles\ (iterations)\ performed}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ int32\_t\ \ \ \ \ ncyc\_best\_;\ \ \ \textcolor{comment}{///\ <\ stores\ lowest\ number\ of\ iterations\ achieved}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ int32\_t\ \ \ \ \ ierr\_;\ \ \ \ \ \ \ \ \textcolor{comment}{///\ <\ error\ inidicator\ (=\ 0\ no\ error,\ >\ 0\ fatal\ error,\ <\ 0\ completed\ with\ warnings)}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \ newed\_SAMG\_Settings\_object;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ output\_amg\_data\_to\_text\_files\_;}
+\DoxyCodeLine{00119\ \};}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{keywordtype}{void}\ USER\_coo(\ \textcolor{keywordtype}{int}*\ i,\ \textcolor{keywordtype}{int}*\ ndim,\ \textcolor{keywordtype}{double}*\ x,\ \textcolor{keywordtype}{double}*\ y,\ \textcolor{keywordtype}{double}*\ z\ );}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

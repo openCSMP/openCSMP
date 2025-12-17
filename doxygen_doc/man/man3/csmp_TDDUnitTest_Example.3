@@ -1,0 +1,392 @@
+.TH "csmp::TDDUnitTest_Example" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TDDUnitTest_Example \- Introduces to \fBTest\fP Driven Development in general and attempts to provide a CSMP++ specific approach\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <TDDUnitTest_Example\&.h>\fP
+.PP
+Inherits \fBcsmp::Example\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBRun\fP () override final"
+.br
+.ti -1c
+.RI "virtual void \fBSpecifications\fP () override final"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "\fBExample\fP (std::ostream *osptr=0)"
+.br
+.ti -1c
+.RI "void \fBSetTitle\fP (const std::string &text)"
+.br
+.RI "Reporting interface\&. "
+.ti -1c
+.RI "void \fBSetCategory\fP (const std::string &text)"
+.br
+.ti -1c
+.RI "void \fBSetDifficulty\fP (const int &difficulty)"
+.br
+.RI "set function, takes care that 0 < difficulty < 4 "
+.ti -1c
+.RI "void \fBAddDescription\fP (const std::string &text)"
+.br
+.RI "allows to add a descrtiption to an example "
+.ti -1c
+.RI "void \fBAddRequirement\fP (const std::string &text)"
+.br
+.RI "allows to add a requirement to an example (files etc\&.\&.) "
+.ti -1c
+.RI "void \fBAddAuthor\fP (const std::string &text)"
+.br
+.RI "allows to add an author to an example "
+.ti -1c
+.RI "std::string \fBGetTitle\fP () const"
+.br
+.RI "example title return function "
+.ti -1c
+.RI "int \fBGetDifficulty\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::string \fBGetCategory\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetDescriptionsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetAuthorsEnd\fP () const"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsBegin\fP ()"
+.br
+.RI "return function "
+.ti -1c
+.RI "std::list< std::string >::const_iterator \fBGetRequirementsEnd\fP () const"
+.br
+.RI "return function "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBcsmp::Example\fP
+.in +1c
+.ti -1c
+.RI "void \fBInitialize\fP ()"
+.br
+.RI "assures db to contain data "
+.ti -1c
+.RI "std::ostream * \fBGetStream\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetStream\fP (std::ostream *ostream)"
+.br
+.ti -1c
+.RI "std::string \fBGetExampleFileName\fP (const char *path)"
+.br
+.ti -1c
+.RI "void \fBCreateWorkingDirectoryAndCopyInputModelFiles\fP (std::string &example_name, std::string &model_name, std::string &variable_file, std::string config_file='')"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Introduces to \fBTest\fP Driven Development in general and attempts to provide a CSMP++ specific approach\&. 
+
+UnitTests and \fBTest\fP Driven Development increase confidence in the code you write and drastically reduce debugging needs\&. In an environment like CSMP that is not tested bottom up, a different approach to testing new classes may be chosen\&. Also for classes that act on a \fBcsmp::Model\fP, the user might skip test driven development/unit testing due to the high effort required\&. This document tries to provide an approach to CSMP specific TDD\&.
+
+.PP
+\fBAuthor\fP
+.RS 4
+P Lang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+September 2010 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+WORK IN PROGRESS
+.RE
+.PP
+.SH "Outline"
+.PP
+.IP "\(bu" 2
+Unit Tests and Functional Tests
+.IP "  \(bu" 4
+in general XP
+.IP "  \(bu" 4
+interpreted for CSMP
+.PP
+
+.IP "\(bu" 2
+Introduction to TDD
+.IP "\(bu" 2
+Implementation
+.PP
+.SH "Unit Tests and Functional Tests"
+.PP
+.SS "In general XP"
+A Unit \fBTest\fP is designed to test the interface of a single class through proper pass/fail criteria\&. A Functional \fBTest\fP tests the result of class interactions within a bigger context\&. Hence, pass/fail criteria are more complex\&. This also includes performance test and the validation of applications in their whole\&.
+.SS "Interpreted for CSMP"
+To test classes that require a model to act on, multiple Unit Tests may be run within one test function and work with the same model\&. Classes are tested indepently from another, and the \fBTestSuite\fP will spot failures individually\&. To sum it up, we put multiple tests inside a single test function that establishes a model for all of them\&. This is done to reduce the effort that goes into creating a test\&. Functional Tests, or \fBTest\fP Cases, measure performance and compare results of complex applications\&.
+.SH "Introduction to TDD"
+.PP
+Write your Unit \fBTest\fP first, let it fail(because there is no class yet, afterall) then implement your class piecewise to make the tests pass\&. Once the tests pass, improve your code\&. Benefits:
+.IP "\(bu" 2
+improves design
+.IP "  \(bu" 4
+think it through
+.IP "  \(bu" 4
+then implement
+.PP
+
+.IP "\(bu" 2
+reduces amount of code
+.IP "  \(bu" 4
+by sticking to what you really planned to do
+.IP "  \(bu" 4
+by having code that does the job quickly
+.IP "    \(bu" 6
+and improve it when there's time
+.PP
+
+.PP
+
+.IP "\(bu" 2
+used together with SVN, often replaces debugger
+.IP "  \(bu" 4
+revert to revision that works, go form there
+.PP
+
+.IP "\(bu" 2
+YOU CAN TRUST IN YOUR CODE AN SUBSEQUENT USE OF IT
+.IP "\(bu" 2
+IT IS TESTED(what's the alternative?)
+.PP
+
+.PP
+How it's done:
+.IP "1." 4
+Write your test
+.IP "2." 4
+See it fail
+.IP "3." 4
+Implement your code
+.IP "4." 4
+Make the test pass
+.PP
+.SH "Implementation"
+.PP
+Basic Unit \fBTest\fP and TDD with CSMP's \fBcsmp::Test\fP and \fBcsmp::TestSuite\fP class\&. Available Macros: -_test( cond ) tests for logical statement -_fail( stri ) fails -_equal( arg1, arg2, tolerance ) tests if arguments equal within tolerance
+
+.PP
+.PP
+.nf
+  // implementation follos
+  class Unit
+  {
+  public:
+    int foo1( int a ) { return a/a; }
+    int foo2( int a ) { return a*a; }
+  };
+
+  // this comes first(failing)
+  class  UnitTest : public Test
+  {
+  public:
+    virtual void run() { _test( Unit()\&.foo1( 5 ) == 1 );
+                         _test( Unit()\&.foo2( 5 ) > 5 ); }
+  };
+
+int main( int argc, char** argv)
+{
+  TestSuite s("TDD SUITE", &cout);
+
+  s\&.addTest( new UnitTest() );
+
+  s\&.run();
+  int failures = s\&.report();
+
+  return failures;
+ }
+.fi
+.PP
+
+.PP
+Multiple Unit Tests within one test function for a group of classes to be tested, e\&.g\&. Interrelations\&.
+
+.PP
+.PP
+.nf
+// global function to reload model from binary
+void resetModel( Model<DIM>* model )
+{
+  if( model != 0 )
+    delete model;
+  model = new ANSYS_Model3D( "small_prism_bin",
+                             "CSMP\-2phase\-variables\&.txt" );
+}
+
+class  MultipleUnitTest : public Test
+{
+public:
+  virtual void run() {
+
+    // establishing a test model
+    Model<DIM>* model;
+    resetModel( model );
+
+
+    // getting indices to evaluate test criterion
+    const Region<dim>& rref = model\->Region( "Model" );
+    Index porosityKey               = model\->Database()\&.StorageKey( "porosity" );
+    Index frapKey                   = model\->Database()\&.StorageKey( "fracture aperture" );
+
+    // backing up property that will be manipulated
+    PropertyHandle<DIM>* cachePorosity = new PropertyHandle<DIM>( (*model), "cache porosity", SCALAR, ELEMENT );
+    Index cachePorosityKey = model\->Database()\&.StorageKey( "cache porosity" );
+    (*model)\&.CopyReplace( "porosity", "cache porosity" );
+
+    // Applying an Interrelation to the model
+    FracturePorosityFromAperture<DIM> fracturePorosityInterrelation( (*model)\&.Database() );
+    (*model)\&.Apply( fracturePorosityInterrelation );
+
+    // Running a trivial test criterion
+    bool passed( true );
+    const std::vector<Element<DIM>*>::const_iterator elementsEnd = rref\&.CellsEnd();
+    for( std::vector<Element<DIM>*>::const_iterator it = rref\&.CellsBegin();
+         it != elementsEnd; ++it )
+      {
+        if( (*it)\->Read( porosityKey ) != (*it)\->Read( cachePorosityKey ) *
+                                          (*it)\->Read( frapKey ) ) 
+          {
+          passed = false;
+          break;
+          }
+
+        // if we wish to test more than one interrelation within one loop, we do
+        // _equal( (*it)\->Read( cacheValue1Key ), (*it)\->Read( value1Key ) ), tolerance_ );
+        // _equal( (*it)\->Read( cacheValue2Key ), (*it)\->Read( value2Key ) ), tolerance_ );
+        // \&.\&.\&.\&.
+        // as long as the tests still qualify as independent
+      }
+
+      // evaluating test criterion
+      _test( passed );
+
+      // restoring model
+      (*model)\&.CopyReplace( "cache porosity", "porosity" );
+      delete cachePorosity;
+
+      //\&.\&.\&.tests
+
+      // resetting model if required
+      resetModel( model );
+
+      //\&.\&.\&.tests
+
+
+  } // run
+
+};
+
+int main( int argc, char** argv)
+{
+  TestSuite s("TDD SUITE", &cout);
+
+  s\&.addTest( new MultipleUnitTest() );
+
+  s\&.run();
+  int failures = s\&.report();
+
+  return failures;
+ }
+.fi
+.PP
+
+.PP
+Points to consider:
+.IP "\(bu" 2
+load model from a CSMP binary
+.IP "\(bu" 2
+use model\&.CopyReplace(\&.\&.\&.) if possible
+.PP
+
+.PP
+For developers, IMHO there's no alternativ to writing a single test per core class: 
+.PP
+.nf
+int main( int argc, char** argv)
+{
+  TestSuite s("TDD SUITE", &cout);
+
+  // establishing model
+  enum{ DIM = 2 };
+  Model<DIM>* model;
+  resetModel( model )
+
+  // the tests themselve have the responsability to restore the model
+  // to its default
+  s\&.addTest( new UnitTest1( model ) );
+  s\&.addTest( new UnitTest2( model ) );
+  s\&.addTest( new UnitTest3( model ) );
+  s\&.addTest( new UnitTest4( model ) );
+
+  s\&.run();
+  int failures = s\&.report();
+
+  return failures;
+ }
+
+.fi
+.PP
+
+.PP
+\fBNote\fP
+.RS 4
+10 MIN BUILD 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+(3) Implement Suite features for functioal tests(csmp binary comparison, speed, vtk comparison(DONE)\&.\&.\&.) 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void csmp::TDDUnitTest_Example::Run ()\fR [final]\fP, \fR [override]\fP, \fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Example\fP\&.
+.SS "void csmp::TDDUnitTest_Example::Specifications ()\fR [final]\fP, \fR [override]\fP, \fR [virtual]\fP"
+
+.PP
+Implements \fBcsmp::Example\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

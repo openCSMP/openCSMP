@@ -1,0 +1,44 @@
+.TH "csmp::DESAdvectionDiffusion< dim >" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::DESAdvectionDiffusion< dim >
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBajb::detail::FibonacciHeap_Node\fP< double, size_t > \fBHeap_Node\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDESAdvectionDiffusion\fP (\fBModel\fP< dim > &m, const char *target_region, double cfl_multiplier, double PEP_multiplier, bool tensor_k)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable_DES\fP (double model_time, size_t num_threads=1)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable_TDS\fP (double time_interval, size_t num_threads=1)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable_DES_serial\fP (double model_time)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable_DES_parallel\fP (double model_time, size_t num_threads)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable_TDS_serial\fP (double time_interval)"
+.br
+.ti -1c
+.RI "void \fBAdvectVariable_TDS_parallel\fP (double time_interval, size_t num_threads)"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

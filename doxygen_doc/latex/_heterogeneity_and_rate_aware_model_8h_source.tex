@@ -1,0 +1,163 @@
+\doxysection{Heterogeneity\+And\+Rate\+Aware\+Model.\+h}
+\hypertarget{_heterogeneity_and_rate_aware_model_8h_source}{}\label{_heterogeneity_and_rate_aware_model_8h_source}\index{source/includes/thmc/two\_phase\_flow/HeterogeneityAndRateAwareModel.h@{source/includes/thmc/two\_phase\_flow/HeterogeneityAndRateAwareModel.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{HETEROGENEITY\_AND\_RATE\_AWARE\_MODEL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{HETEROGENEITY\_AND\_RATE\_AWARE\_MODEL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_two_phase_model_8h}{"{}TwoPhaseModel.h"{}}}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\#include\ "{}OtwayCRC3\_RockTypes.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\#include\ "{}OtwayCRC3\_RockTypes\_Version\_2.h"{}\ }}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_otway_c_r_c3___rock_types___version__3_8h}{"{}OtwayCRC3\_RockTypes\_Version\_3.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ \ Maartje\ Boons\ \&\ Sally\ Benson\ (Stanford\ visit\ May\ 16-\/23,\ 2019),}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ \ model\ for\ a\ layered\ composite.\ Material\ parameters\ are\ inferred\ from\ rocktype.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ \ \ \ The\ composite\ is\ a\ dual\ of\ averages\ for\ the\ high-\/k\ laminations\ and\ the\ w-\/k\ ones.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ Model\ Concept}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ \ \ \ -\/\ compute\ the\ flow\ rate\ dependent\ saturations\ in\ the\ sublayers\ of\ the\ composite}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ \ \ -\/\ end-\/member\ cases:}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ \ \ \ -\/\ viscous\ limit\ (VL)\ where\ all\ saturations\ are\ the\ same,\ i.e.\ the\ saturation\ is\ uniform\ and\ equal\ to\ that\ of\ the\ cell}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ \ \ \ -\/\ CL\ where\ pc(sw\_cell\_average)\ is\ the\ same\ everywhere,\ but\ the\ saturations\ in\ the\ layers\ reflect\ their\ pc\ curves}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ \ these\ limiting\ cases\ are\ not\ directionaly\ dependent}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ -\/\ compute\ the\ relperms,\ layer\ by\ layer}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ -\/\ apply\ averaging\ to\ find\ the\ horizontal\ (weighted\ mean)\ and\ vertical\ (harmonic\ mean)\ relative\ permeability\ pairs}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ -\/\ since\ this\ model\ does\ drainage\ only,\ relperm\ effects\ of\ spontaneous\ imbibition\ can\ be\ ignored}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ Implementation}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ -\/\ extended\ curve\ fitting\ and\ interpolation\ between\ the\ curves}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ -\/\ there\ are\ only\ 2\ flow\ directions:\ horizontal\ and\ vertical,\ switch\ occurs\ at\ 45o}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ -\/\ the\ anisotropy\ of\ the\ absolute\ permeability,\ is\ treated\ by\ scaling\ the\ vertical\ relative\ permeabilities\ with\ Kv/Kh\ ratio}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ -\/\ capillary\ pressure\ is\ also\ averaged,\ but\ for\ the\ vertical\ CL\ case\ a\ Brooks-\/Corey\ model\ is\ used,}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ \ parameterised\ with\ the\ properties\ of\ the\ low\ permeability\ layer.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ -\/\ for\ primary\ drainage,\ the\ capillary\ entry\ pressure,\ pd\ of\ the\ lowest\ permeability\ layer\ is\ used}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ see\ Maple\ worksheet\ 'BHP/Stanford-\/visit/IMPLEMENTATION/HeterogeneityAwareSaturationFunctions'}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ @note\ thus\ far,\ this\ is\ a\ drainage\ only\ model}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ @note\ an\ alternative\ capillary\ number:\ k\ ||grad\ p||\ /\ sigma\ \ \ is\ used\ to\ get\ around\ the\ viscosity\ problem}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ @todo\ MUST\ WE\ BLEND\ BETWEEN\ HORIZONTAL\ AND\ VERTICAL\ FLOW?}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ @todo:\ perhaps\ define\ irreducible\ water\ saturation\ and\ use\ it\ in\ relperm\ model}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ @todo:\ check\ how\ this\ can\ be\ handled\ efficiently\ for\ a\ suite\ of\ composite\ rocktypes}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ @todo:\ think\ about\ what\ parameters\ to\ keep\ rather\ than\ using\ functions\ to\ compute\ them\ on\ the\ fly\ when\ needed}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ }}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ @todo:\ change\ FlowRateDependentLayerSaturations\ that\ it\ deals\ with\ horizontal\ and\ vertical\ flow\ and\ all\ funky\ cases}}
+\DoxyCodeLine{00048\ \textcolor{comment}{}}
+\DoxyCodeLine{00049\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00050\ \textcolor{keyword}{template}<uint32\_t\ dim>}
+\DoxyCodeLine{00051\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model}{HeterogeneityAndRateAwareModel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_two_phase_model}{TwoPhaseModel}}<dim>\ \{}
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{enum}\ FLOW\_DIRECTION\ \{\ HORIZONTAL,\ VERTICAL\ \}\ flow\_direction\_;}
+\DoxyCodeLine{00054\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00055\ \ \ \ \ HeterogeneityAndRateAwareModel(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_property_database}{PropertyDatabase}}<dim>\&\ database,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ sw\_ro\_mu\_placement\ =\ \textcolor{keyword}{false}\ );\ \textcolor{comment}{//\ NODE=true\ ELEMENT=false}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~HeterogeneityAndRateAwareModel();}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{///\ return\ integer\ key\ of\ rocktype}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a56e3be6bdeaf97206bbc9370f45703a9}{int32\_t}}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a56e3be6bdeaf97206bbc9370f45703a9}{RockType}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{///\ reads\ vt\ and\ makes\ some\ initiaisations}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a8e7dbbfaae8bc5027704b7b0c8eed009}{InitializeVelocity}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ );}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ \ \ \ Computes\ all\ relevant\ values\ for\ the\ single-\/valued\ average\ saturation\ inside\ of\ the\ element.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ \ \ \ Dependent\ on\ flow\ direction\ and\ kv/kh\ ratio,\ averaging\ and\ scaling\ is\ done\ later\ inside\ of\ the\ saturation\ functions.\ }}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_ad8a86de42ee655c035ee0e8d6e727366}{Initialize}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ );}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ updating\ model\ parameters\ for\ testing\ and\ plotting}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a24a1fb8d02084041c9828c30220d1228}{Initialize}}(\ \textcolor{keywordtype}{long}\ rocktype,\ \textcolor{keywordtype}{double}\ Sw,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ vt\ );}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ average\ effective\ saturation\ as\ required\ by\ 2-\/phase\ model}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a7aeb1e0dc66b0ebd53b25977f8a2f8e2}{EffectiveSaturation}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \textcolor{comment}{//\ relative\ permeabilities}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{///\ heterogeneity-\/aware,\ rate-\/dependent\ versions,\ Nc\ is\ calculated\ in\ the\ background}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_abb60a7d47873ad99603a8ec02307a188}{krw\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_ac8d5c3ee555aea1d5c17103eb6624b61}{krn\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ capillary\ pressure\ of\ the\ non-\/wetting\ phase;\ cap\ value\ is\ applied}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a214b824e52da0771d3a1a38374ed4013}{pc\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ pc\_Phase\_at(\textcolor{keywordtype}{double}\ sw)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{///\ numeric\ implementation\ of\ capillary\ pressure\ derivative;\ cap\ value\ is\ applied}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_ae8f09e847030ae2b543fbea9b18c003a}{dpcds\_Phase}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{double}\ dpcds\_Phase\_at(\textcolor{keywordtype}{double}\ sw)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{//\ maximum\ absolute\ value\ returned\ by\ dfdS}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a3a11b2516dfde7b2c7bae9186be0d136}{MaxFractionalFlowDerivative}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{///\ Outputs\ the\ relperms\ for\ the\ current\ model\ initialisation\ to\ a\ plot\ for\ visual\ examination;\ filename\ appends\ rocktype\ and\ Ncap\ calculated}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_aea6f571afb7b19dd3cd8b35edf74cc48}{WriteRelativePermeabilityTable}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename,\ \textcolor{keywordtype}{long}\ rocktype,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ vt\ );}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_heterogeneity_and_rate_aware_model_a3597d8cc29f0388090b1a2e45d24092f}{Out}}(\ uint32\_t\ phase\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{///\ takes\ permeability\ values\ (from\ Model\ or\ Rocktypes)\ and\ initialises\ scalar\ permeability\ k\ and\ tensor\ K\ in\ TwoPhaseModel\ base\ class}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ InitialisePermeability(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ e,\ \textcolor{keywordtype}{bool}\ k\_from\_rocktypes\ );}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ weighted\ average}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{double}\ \ PermeabilityParallelToLaminations()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{///\ harmonic\ mean}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{double}\ \ PermeabilityPerpendicularToLaminations()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{///\ kv,\ kh\ tensor\ decomposition}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{double}\ \ PermeabilityInFlowDirection(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ normalised\_mixture\_velocity\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{///\ Prominent\ direction\ of\ flow}}
+\DoxyCodeLine{00108\ \ \ \ \ FLOW\_DIRECTION\ ProminentFlowDirection(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\&\ vt\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{///\ volume\ averaged\ irreducible\ water\ saturation}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Swr\_Composite()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{///\ Magnitude\ of\ the\ pressure\ gradient}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{double}\ \ PressureGradientMagnitude(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<dim>\&\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{///\ Capillary\ number,\ pressure\ gradient\ form:\ Nc\ =\ k\ ||grad\ p||\ /\ sigma}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Nc\_kgradP\_Version(\ \textcolor{keywordtype}{double}\ pf\_gradient\_magnitude\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{///\ Ratio\ between\ viscous\ and\ capillary\ forces}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{double}\ \ RVC(\ \textcolor{keywordtype}{double}\ Ncap\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{//\ TODO:\ add\ function\ that\ assesses\ whether\ we\ are\ dealing\ with\ imbibition\ or\ drainage}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{structcsmp_1_1_index}{Index}}\ \ RRT\_key\_,\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ \ reservoir\ rock\ type}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pf\_key\_,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ \ (absolute)\ fluid\ pressure}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ kh\_key\_,\ kv\_key\_,\ \textcolor{comment}{///<\ \ horizontal\ and\ vertical\ permeability\ values}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ phi\_key\_,\ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ porosity\ (only\ used\ to\ write\ values\ if\ the\ RT\ values\ are\ to\ be\ used)}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vt\_key\_;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ \ total\ velocity\ of\ the\ fluid\ mixture}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{classcsmp_1_1_dense_matrix}{DenseMatrix}}<DM\_MIN>\ \ DN\_;\ \textcolor{comment}{///<\ \ for\ gradient\ computations}}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ \ \ \ \ \ \ \ \ vt\_;\ \textcolor{comment}{///<\ \ velocity}}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ \ \ \ \ \ \ \ \ vt\_normalised\_;\ \textcolor{comment}{///<\ to\ unit\ length}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{classcsmp_1_1_vector_variable}{VectorVariable}}<dim>\ \ vc\_;\ \textcolor{comment}{///<\ for\ all\ kinds\ of\ purposes}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{//\ dynamic\ variables}}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{mutable}\ \textcolor{keywordtype}{double}\ Sw\_;}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//\ composite\ is\ modelled\ as\ a\ dual\ of\ two\ rock\ types}}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{structcsmp_1_1_otway_rock_types}{OtwayRockTypes}}\ Otway\_;}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{long}\ \ \ \ \ rocktype\_;}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ is\_composite\_;}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{double}\ K\_flow\_direction\_,\ k\_low\_,\ k\_high\_,\ K\_reduction\_in\_flow\_direction\_,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ L\_low\_,\ L\_high\_,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ permeability\ in\ flow\ direction;\ smallest\ over\ highest\ permeability}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ vt\_magnitude\_,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ vt\_magnitude\_x\_,\ vt\_magnitude\_y\_,}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ krw\_,\ krn\_,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{///<\ for\ standard\ rocktypes\ }}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ krw\_parallel\_,\ krw\_crossflow\_,\ \ \textcolor{comment}{///<\ for\ composites\ }}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ krn\_parallel\_,\ krn\_crossflow\_,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ phi\_,\ pd\_,\ pd\_high\_,\ pd\_low\_,}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_VG\_,\ bcp\_,\ bcp\_high\_,\ bcp\_low\_,\ Swi\_pc\_,\ dPc\_,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ pd\_flow\_direction\_,\ pc\_flow\_direction\_;}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{//\ derived\ quantities}}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{double}\ \ grad\_p\_magnitude\_;\ \textcolor{comment}{///<\ magnitude\ of\ the\ fluid\ pressure\ gradient\ reduced\ by\ hydrostatic\ gradient}}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{double}\ \ Nc\_;\ \textcolor{comment}{//\ capillary\ mumber}}
+\DoxyCodeLine{00153\ \};}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \}\ \textcolor{comment}{//\ end\ namespace\ csmp}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

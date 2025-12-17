@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_attorney" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Attorney</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Client</basecompoundref>
+    <includes refid="_attorney_8h" local="no">Attorney.h</includes>
+    <templateparamlist>
+      <param>
+        <type>class Client</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_attorney_1aa03d2cb1ccd20495887c1a0206cf1dfc" prot="private" static="no" mutable="no">
+        <type>Client &amp;</type>
+        <definition>Client&amp; csmp::Attorney&lt; Client &gt;::client_</definition>
+        <argsstring></argsstring>
+        <name>client_</name>
+        <qualifiedname>csmp::Attorney::client_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/Attorney.h" line="67" column="12" bodyfile="source/includes/utilities/Attorney.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_attorney_1abec6039589142cdcf63b9077bc665a51" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Attorney&lt; Client &gt;::Attorney</definition>
+        <argsstring>(Client &amp;client)</argsstring>
+        <name>Attorney</name>
+        <qualifiedname>csmp::Attorney::Attorney</qualifiedname>
+        <param>
+          <type>Client &amp;</type>
+          <declname>client</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/utilities/Attorney.h" line="64" column="5" bodyfile="source/includes/utilities/Attorney.h" bodystart="64" bodyend="65"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classcsmp_1_1_attorney" kindref="compound">Attorney</ref> design pattern gives access to protected / private member variables and methods. </para>
+    </briefdescription>
+    <detaileddescription>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Unit tests may require access to internal variables and methods to test the basic internal works of a class.</para>
+</sect1>
+<sect1 id="classcsmp_1_1_two_phase_implicit_node_centered_f_v_transport_1design">
+<title>Design Intent</title><para>This version is templated to<orderedlist>
+<listitem><para>avoid friend declaration in the class being tested. Cluttering a class with friend declarations which are not relevant to the way the class is used in the code is not helpful to the user.</para>
+</listitem><listitem><para>give selective access to members and methods. A friend declaration gives access to all protected and private members and methods. This templated version requires explicit declaration of which members become accessible.</para>
+</listitem></orderedlist>
+</para>
+</sect1>
+<sect1 id="classcsmp_1_1_flow_functions_module1_1example">
+<title>Example</title><para>Declare an <ref refid="classcsmp_1_1_attorney" kindref="compound">Attorney</ref> of the class to be tested and declare members and methods to be made accessible like so:</para>
+<para><programlisting><codeline><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">PDE_Integrator_Attorney<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>Attorney&lt;class<sp/>PDE_Integrator&lt;dim&gt;&gt;<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Attorney&lt;PDE_Integrator&lt;dim&gt;&gt;::Attorney;<sp/></highlight><highlight class="comment">//<sp/>Inherit<sp/>Attorney<sp/>constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">PDE_Integrator&lt;dim&gt;::EstablishMatrixSetup;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">PDE_Integrator&lt;dim&gt;::lhs_operators_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para>Then, in your test, create an <ref refid="classcsmp_1_1_attorney" kindref="compound">Attorney</ref> and use it like so:</para>
+<para><programlisting><codeline><highlight class="normal">PDE_Integrator&lt;2U,Element&gt;<sp/>pde_integrator(<sp/>...<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">PDE_Integrator_Attorney&lt;2U&gt;<sp/>attorney(<sp/>pde_integrator<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">LHS_FixedValueMatrix&lt;2U&gt;<sp/><sp/>lhs(<sp/>...<sp/>);</highlight></codeline>
+<codeline><highlight class="normal">attorney.Add(&amp;lhs);</highlight></codeline>
+<codeline><highlight class="normal">attorney.EstablishMatrixSetup(<sp/>...<sp/>);<sp/></highlight><highlight class="comment">//<sp/>&lt;-<sp/>Accessing<sp/>protected<sp/>method</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">_test(<sp/>attorney.lhs_operators_.size()<sp/>==<sp/>1<sp/>);<sp/></highlight><highlight class="comment">//<sp/>&lt;-<sp/>Accessing<sp/>protected<sp/>member<sp/>variable</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Client</label>
+      </node>
+      <node id="1">
+        <label>csmp::Attorney&lt; Client &gt;</label>
+        <link refid="classcsmp_1_1_attorney"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>csmp::Attorney&lt; class PDE_Integrator&lt; dim &gt; &gt;</label>
+        <link refid="classcsmp_1_1_attorney"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; class PDE_Integrator&lt; dim &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>csmp::PDE_Integrator_Attorney&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_p_d_e___integrator___attorney"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Client</label>
+      </node>
+      <node id="1">
+        <label>csmp::Attorney&lt; Client &gt;</label>
+        <link refid="classcsmp_1_1_attorney"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/utilities/Attorney.h" line="62" column="1" bodyfile="source/includes/utilities/Attorney.h" bodystart="62" bodyend="68"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_attorney_1abec6039589142cdcf63b9077bc665a51" prot="public" virt="non-virtual"><scope>csmp::Attorney</scope><name>Attorney</name></member>
+      <member refid="classcsmp_1_1_attorney_1aa03d2cb1ccd20495887c1a0206cf1dfc" prot="private" virt="non-virtual"><scope>csmp::Attorney</scope><name>client_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

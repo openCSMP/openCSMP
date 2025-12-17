@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="dir_cd83d16ebdcd30117b59f56e41d3777f" kind="dir">
+    <compoundname>build/CMakeFiles/open-csmp-core.dir/source/modules/integration/finite_volumes</compoundname>
+    <innerdir refid="dir_0a6621057d995c310744cc4fdccfd519">build/CMakeFiles/open-csmp-core.dir/source/modules/integration/finite_volumes/DES_transport_scheme</innerdir>
+    <innerdir refid="dir_294afbb560f4875f68e76345874e638d">build/CMakeFiles/open-csmp-core.dir/source/modules/integration/finite_volumes/generic_transport_scheme</innerdir>
+    <innerdir refid="dir_00223380084069751a9a2ab52f7bee14">build/CMakeFiles/open-csmp-core.dir/source/modules/integration/finite_volumes/legacy_transport_scheme</innerdir>
+    <innerfile refid="finite_volume_auxiliary_functions_8cpp_8o_8d">finiteVolumeAuxiliaryFunctions.cpp.o.d</innerfile>
+    <innerfile refid="_finite_volume_policy1_8cpp_8o_8d">FiniteVolumePolicy1.cpp.o.d</innerfile>
+    <innerfile refid="_finite_volume_policy2_8cpp_8o_8d">FiniteVolumePolicy2.cpp.o.d</innerfile>
+    <innerfile refid="_finite_volume_policy3_8cpp_8o_8d">FiniteVolumePolicy3.cpp.o.d</innerfile>
+    <innerfile refid="_finite_volume_stencil_8cpp_8o_8d">FiniteVolumeStencil.cpp.o.d</innerfile>
+    <innerfile refid="_finite_volume_stencil_manager_8cpp_8o_8d">FiniteVolumeStencilManager.cpp.o.d</innerfile>
+    <innerfile refid="_f_v___integration_points_and_weights_8cpp_8o_8d">FV_IntegrationPointsAndWeights.cpp.o.d</innerfile>
+    <innerfile refid="_generic_node_property_gradient_8cpp_8o_8d">GenericNodePropertyGradient.cpp.o.d</innerfile>
+    <innerfile refid="_generic_node_property_gradient_limiter_8cpp_8o_8d">GenericNodePropertyGradientLimiter.cpp.o.d</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="build/CMakeFiles/open-csmp-core.dir/source/modules/integration/finite_volumes/"/>
+  </compounddef>
+</doxygen>

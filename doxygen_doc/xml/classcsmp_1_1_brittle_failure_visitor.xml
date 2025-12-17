@@ -1,0 +1,367 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_brittle_failure_visitor" kind="class" language="C++" prot="public">
+    <compoundname>csmp::BrittleFailureVisitor</compoundname>
+    <basecompoundref refid="classcsmp_1_1_visitor" prot="public" virt="non-virtual">csmp::Visitor&lt; dim &gt;</basecompoundref>
+    <includes refid="_brittle_failure_visitor_8h" local="no">BrittleFailureVisitor.h</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>dim</declname>
+        <defname>dim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1ad8d644a7f1e4c572e3b7f1bb7aa17576" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Youngs_key_</definition>
+        <argsstring></argsstring>
+        <name>Youngs_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Youngs_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="42" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1a5774638e3cb567599ae5b5c0beeeacb1" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Poissons_key_</definition>
+        <argsstring></argsstring>
+        <name>Poissons_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Poissons_key_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="43" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1aca7c1349d6fecd14102959a581d85b80" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Stress_key_</definition>
+        <argsstring></argsstring>
+        <name>Stress_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Stress_key_</qualifiedname>
+        <briefdescription>
+<para>stress </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="44" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1a78df4bceb39557d9c01c28e049294c38" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Biot_key_</definition>
+        <argsstring></argsstring>
+        <name>Biot_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Biot_key_</qualifiedname>
+        <briefdescription>
+<para>Biot coefficient alpha. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="45" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1acf992b9a9c406dbd2c9607cde1dd729a" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Cohesion_key_</definition>
+        <argsstring></argsstring>
+        <name>Cohesion_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Cohesion_key_</qualifiedname>
+        <briefdescription>
+<para>cohesion </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="46" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1aa228c7db4b8cac2251ccb76065ce7109" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Friction_key_</definition>
+        <argsstring></argsstring>
+        <name>Friction_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Friction_key_</qualifiedname>
+        <briefdescription>
+<para>friction angle 0..90o </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="47" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1af567d6df144b4a630ea3fb259de00d9a" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Failure_key_</definition>
+        <argsstring></argsstring>
+        <name>Failure_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Failure_key_</qualifiedname>
+        <briefdescription>
+<para>failure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="48" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1ae23456fcd8a525d1cac8f07094d13b90" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_index" kindref="compound">csmp::Index</ref></type>
+        <definition>csmp::Index csmp::BrittleFailureVisitor&lt; dim &gt;::Pressure_key_</definition>
+        <argsstring></argsstring>
+        <name>Pressure_key_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Pressure_key_</qualifiedname>
+        <briefdescription>
+<para>fluid pressure </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="49" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1ad65673ea5a27f8d6f0ee1ba400ff166a" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_tensor_variable" kindref="compound">TensorVariable</ref>&lt; dim &gt;</type>
+        <definition>TensorVariable&lt;dim&gt; csmp::BrittleFailureVisitor&lt; dim &gt;::Cartesian_stress_</definition>
+        <argsstring></argsstring>
+        <name>Cartesian_stress_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Cartesian_stress_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="51" column="22" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1adec60961a0ab51b843926669c5d4c048" prot="private" static="no" mutable="no">
+        <type><ref refid="structcsmp_1_1_mechanical_properties" kindref="compound">MechanicalProperties</ref></type>
+        <definition>MechanicalProperties csmp::BrittleFailureVisitor&lt; dim &gt;::mprops_</definition>
+        <argsstring></argsstring>
+        <name>mprops_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::mprops_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="52" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1a08bd0d446bf37601f21c30f8133fe6bb" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_scalar_variable" kindref="compound">ScalarVariable</ref></type>
+        <definition>ScalarVariable csmp::BrittleFailureVisitor&lt; dim &gt;::fluid_pressure_</definition>
+        <argsstring></argsstring>
+        <name>fluid_pressure_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::fluid_pressure_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="53" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_brittle_failure_visitor_1a53519b025825f7749f52eb23cb2d3c07" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool csmp::BrittleFailureVisitor&lt; dim &gt;::verbose_</definition>
+        <argsstring></argsstring>
+        <name>verbose_</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::verbose_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="54" column="27" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_brittle_failure_visitor_1add74625f323e7c618c43a758fbd65c48" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::BrittleFailureVisitor&lt; dim &gt;::BrittleFailureVisitor</definition>
+        <argsstring>(Model&lt; dim &gt; &amp;, bool verbose=false)</argsstring>
+        <name>BrittleFailureVisitor</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::BrittleFailureVisitor</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_model" kindref="compound">Model</ref>&lt; dim &gt; &amp;</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>verbose</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="attention"><para>SKM 28/9/2014 - added documentation, fixed wrong output and formatted code </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="32" column="14" bodyfile="source/modules/thmc/mechanics/BrittleFailureVisitor.cpp" bodystart="19" bodyend="52"/>
+        <references refid="classcsmp_1_1_brittle_failure_visitor_1add74625f323e7c618c43a758fbd65c48" compoundref="_brittle_failure_visitor_8cpp" startline="19" endline="52">csmp::BrittleFailureVisitor&lt; dim &gt;::BrittleFailureVisitor</references>
+        <references refid="group___c_s_m_p__global__enumerations_1gga98d2031b830da37499a1b512d9dca4b9adba268ba55a652b1efcdd9338882eca6" compoundref="_c_s_m_p__global__enumerations_8h" startline="58">csmp::PLAIN</references>
+        <referencedby refid="classcsmp_1_1_brittle_failure_visitor_1add74625f323e7c618c43a758fbd65c48" compoundref="_brittle_failure_visitor_8cpp" startline="19" endline="52">csmp::BrittleFailureVisitor&lt; dim &gt;::BrittleFailureVisitor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brittle_failure_visitor_1aa71508a2e868c999805296c9d0f8f53c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>csmp::BrittleFailureVisitor&lt; dim &gt;::~BrittleFailureVisitor</definition>
+        <argsstring>()</argsstring>
+        <name>~BrittleFailureVisitor</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::~BrittleFailureVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="35" column="13" bodyfile="source/modules/thmc/mechanics/BrittleFailureVisitor.cpp" bodystart="57" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_brittle_failure_visitor_1a23f93dab10d3970cd4229b22691d1201" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void csmp::BrittleFailureVisitor&lt; dim &gt;::Visit</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>Visit</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::Visit</qualifiedname>
+        <reimplements refid="classcsmp_1_1_visitor_1a1a3ed57d253eef9a0097232c7359627c">Visit</reimplements>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <defname>e</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Loops over the element integration points and evaluates shear and tensile failure potential. Where failure occurred the variable &apos;failure&apos; is set to 1. A distinction is made between tensile &apos;tensile failure&apos; and shear failure &apos;failure&apos; variables.</para>
+<para><simplesect kind="attention"><para>it is assumed that the tensile strength is about 1/10 of the cohesive strength of the rock</para>
+</simplesect>
+<simplesect kind="attention"><para>SKM 28/9/2014 - added case where stress is placed on the element. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="36" column="18" bodyfile="source/modules/thmc/mechanics/BrittleFailureVisitor.cpp" bodystart="112" bodyend="170"/>
+        <references refid="classcsmp_1_1_brittle_failure_1aef7c8a0ec1a31e92c7d2cfbb4dddb113" compoundref="_brittle_failure_8cpp" startline="116" endline="168">csmp::BrittleFailure::Evaluate</references>
+        <references refid="classcsmp_1_1_scalar_variable_1a7f0ab5431406d975d6e1de988f369176" compoundref="_scalar_variable_8cpp" startline="6" endline="6">csmp::ScalarVariable::operator()</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_brittle_failure_visitor_1a5087cdb2342742ab3a8018256b8c6fbc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::BrittleFailureVisitor&lt; dim &gt;::InitializeInputProperties</definition>
+        <argsstring>(Element&lt; dim &gt; *)</argsstring>
+        <name>InitializeInputProperties</name>
+        <qualifiedname>csmp::BrittleFailureVisitor::InitializeInputProperties</qualifiedname>
+        <param>
+          <type><ref refid="classcsmp_1_1_element" kindref="compound">Element</ref>&lt; dim &gt; *</type>
+          <defname>eptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reads all relevant rock and fluid properties from the element. Missing parameters are computed from correlations:</para>
+<para><itemizedlist>
+<listitem><para>UCS is calculated from E and the Hoek-Brown failure envelope.</para>
+</listitem><listitem><para>pstar = compactive strength is estimated from UCS</para>
+</listitem><listitem><para>G and B are calculated from E and nu assuming perfect linear elasticity </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="39" column="10" bodyfile="source/modules/thmc/mechanics/BrittleFailureVisitor.cpp" bodystart="74" bodyend="97"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Evaluates (brittle) shear and tensile failure criteria that are output to the element integration points.</para>
+<para>Input variables:<itemizedlist>
+<listitem><para>friction angle</para>
+</listitem><listitem><para>cohesion (scalar)</para>
+</listitem><listitem><para>stress (tensor) = Cartesian stress</para>
+</listitem><listitem><para>fluid pressure (if this variable is not specified its value is assumed to be zero)</para>
+</listitem><listitem><para>Biot coefficient</para>
+<para><xrefsect id="todo_1_todo000220"><xreftitle>Todo</xreftitle><xrefdescription><para>SKM: this visitor should include the influence of pore pressure.</para>
+</xrefdescription></xrefsect></para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>csmp::BrittleFailureVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brittle_failure_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::BrittleFailureVisitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_brittle_failure_visitor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>csmp::Visitor&lt; dim &gt;</label>
+        <link refid="classcsmp_1_1_visitor"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/thmc/mechanics/BrittleFailureVisitor.h" line="30" column="1" bodyfile="source/includes/thmc/mechanics/BrittleFailureVisitor.h" bodystart="30" bodyend="55"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_visitor_1af785c6c9fdbe53d3edcb37e5eebf13ae" prot="protected" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>application_level_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a4ba2f25168d6531e7a850f5f2d0dc9bb" prot="protected" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>application_target_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a04cef3d343b9721c4d636f5496ccfa42" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a221f8440bf8d6aa7ad970d60383f8b0c" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>ApplicationLevel</name></member>
+      <member refid="classcsmp_1_1_visitor_1a05b9c8127e47ce0ca524e2804c14251a" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac7084587d6daea17badc51e2a0caddf8" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>ApplicationTarget</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1a78df4bceb39557d9c01c28e049294c38" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Biot_key_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1add74625f323e7c618c43a758fbd65c48" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>BrittleFailureVisitor</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1ad65673ea5a27f8d6f0ee1ba400ff166a" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Cartesian_stress_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1acf992b9a9c406dbd2c9607cde1dd729a" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Cohesion_key_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1af567d6df144b4a630ea3fb259de00d9a" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Failure_key_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1a08bd0d446bf37601f21c30f8133fe6bb" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>fluid_pressure_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1aa228c7db4b8cac2251ccb76065ce7109" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Friction_key_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1a5087cdb2342742ab3a8018256b8c6fbc" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>InitializeInputProperties</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1adec60961a0ab51b843926669c5d4c048" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>mprops_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1a5774638e3cb567599ae5b5c0beeeacb1" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Poissons_key_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1ae23456fcd8a525d1cac8f07094d13b90" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Pressure_key_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a005bb17978ed03376bc3f7c1c329c936" prot="public" virt="virtual"><scope>csmp::BrittleFailureVisitor</scope><name>SetInitialProperties</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1aca7c1349d6fecd14102959a581d85b80" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Stress_key_</name></member>
+      <member refid="classcsmp_1_1_visitor_1a5dc481fceb0110431c4d1d6cbcc9ceff" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_visitor_1a9361155291d48571710c2a67406ce730" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Verbose</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1a53519b025825f7749f52eb23cb2d3c07" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>verbose_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1a23f93dab10d3970cd4229b22691d1201" prot="public" virt="virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a07433f464353062d91f21684b9378dec" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac71cf14aab11139d8b03b39d4e4709bc" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1ac735e758870331b6639ea969504c47bf" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1af861179da1638c602df6c753cb3026f6" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1abdca6daa1802e3727868d2d614c65015" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a0f21f0cfcf5328584883eb38effb58d4" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a8f1e9b73d04a90ad49171151bc233dbe" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a46449d8a657dbe4a2db5f1126e08323d" prot="public" virt="virtual" ambiguityscope="csmp::Visitor::"><scope>csmp::BrittleFailureVisitor</scope><name>Visit</name></member>
+      <member refid="classcsmp_1_1_visitor_1a1097abaa59d3a35d65c0cb6335e2719c" prot="public" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Visitor</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1ad8d644a7f1e4c572e3b7f1bb7aa17576" prot="private" virt="non-virtual"><scope>csmp::BrittleFailureVisitor</scope><name>Youngs_key_</name></member>
+      <member refid="classcsmp_1_1_brittle_failure_visitor_1aa71508a2e868c999805296c9d0f8f53c" prot="public" virt="virtual"><scope>csmp::BrittleFailureVisitor</scope><name>~BrittleFailureVisitor</name></member>
+      <member refid="classcsmp_1_1_visitor_1ab83b6d2b06153f5b7b1050bfffdb2707" prot="public" virt="virtual"><scope>csmp::BrittleFailureVisitor</scope><name>~Visitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

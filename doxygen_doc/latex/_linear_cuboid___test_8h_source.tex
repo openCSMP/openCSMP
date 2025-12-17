@@ -1,0 +1,52 @@
+\doxysection{Linear\+Cuboid\+\_\+\+Test.\+h}
+\hypertarget{_linear_cuboid___test_8h_source}{}\label{_linear_cuboid___test_8h_source}\index{tests/unit/LinearCuboid\_Test.h@{tests/unit/LinearCuboid\_Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/**\ }}
+\DoxyCodeLine{00002\ \textcolor{comment}{@class\ LinearCuboid\_Test}}
+\DoxyCodeLine{00003\ \textcolor{comment}{@author\ Hani\ Akbari\ (Jan.\ 2017)}}
+\DoxyCodeLine{00004\ \textcolor{comment}{This\ class\ tests\ implementation\ of\ LinearCuboid\ element.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{}}
+\DoxyCodeLine{00006\ \textcolor{comment}{1-\/\ In\ constructor,\ LinearCuboid\_Test(bool)\ we\ define\ 8\ nodes\ of\ a\ cuboid\ element\ }}
+\DoxyCodeLine{00007\ \textcolor{comment}{in\ standard\ oredering\ and\ each\ node\ has\ 3\ coordinates.\ }}
+\DoxyCodeLine{00008\ \textcolor{comment}{}}
+\DoxyCodeLine{00009\ \textcolor{comment}{2-\/\ Run()\ tests\ integral\ of\ NN\ and\ dNdN\ i.e.\ integrates\ multilplication\ of\ shape\ functions\ and\ }}
+\DoxyCodeLine{00010\ \textcolor{comment}{gradient\ of\ shape\ functions\ over\ element\ and\ prints\ the\ result.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{}}
+\DoxyCodeLine{00012\ \textcolor{comment}{3-\/\ Run()\ tests\ values\ of\ shape\ functions\ at\ nodes\ :\ TestSumShapesAtBaryCenter(const\ Element<3U>\&).\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{It\ also\ tests\ sum\ of\ values\ of\ shape\ functions\ at\ barycenter\ that\ must\ be\ one\ :}}
+\DoxyCodeLine{00014\ \textcolor{comment}{TestSumShapesAtBaryCenter(const\ Element<3U>\&\ )}}
+\DoxyCodeLine{00015\ \textcolor{comment}{}}
+\DoxyCodeLine{00016\ \textcolor{comment}{4-\/\ \_equalTest(a,b,tol)\ returns\ false\ if\ |a-\/b|\ >\ tol.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LINEARCUBOID\_TEST\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LINEARCUBOID\_TEST\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_test_8h}{"{}Test.h"{}}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_cuboid_8h}{"{}LinearCuboid.h"{}}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_element_8h}{"{}Element.h"{}}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid___test}{LinearCuboid\_Test}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_test}{Test}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ LinearCuboid\_Test(\textcolor{keywordtype}{bool}\ verbose);}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \string~LinearCuboid\_Test();}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ run();\ \textcolor{comment}{//\ It\ tests\ integrals\ of\ NN\ and\ dNdN\ as\ well.}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ TestInterpolationFunctionValues(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ e);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ TestSumShapesAtBaryCenter(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\&\ e);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \_equalTest(\textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b,\ \textcolor{keywordtype}{double}\ tol)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_cuboid}{LinearCuboid}}\ \ \ \ lcuboid\_;}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_element}{Element}}<3U>\ \ \ \ \ element\_;}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_node}{Node}}<3U>\ \ \ \ \ \ \ \ n0,\ n1,\ n2,\ n3,\ n4,\ n5,\ n6,\ n7;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \ tolerance\_factor\_;}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ verbose\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,84 @@
+.TH "h" 3 "Thu May 29 2025 14:52:18" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+h
+.SH SYNOPSIS
+.br
+.PP
+.SH "Detailed Description"
+.PP 
+)
+
+.PP
+\fBAuthor\fP
+.RS 4
+Thomas Driesner, ETH Zuerich 
+.RE
+.PP
+.SH "Contact"
+.PP
+thomas.driesner@erdw.ethz.ch
+.SH "Motivation"
+.PP
+H2ONaClThermalEquilibrator performs an isobaric thermal equilibration between a mass of rock and a mass of fluid (from the system H2O-NaCl) given a total enthalpy for this system\&.
+.SH "Assumptions"
+.PP
+Currently, we assume that we can consistently treat treat the rock's enthalpy as h_rock = cp_rock*t \&. As only differences are used, this principally wrong formula [rather, it'd be h0+integral(cp_rock(t) dt)], should work here\&. It does, however, fail in the case of a t-dependent heat capacity\&.
+.SH "Usage"
+.PP
+Construct an instance of H2ONaClThermalEquilibrator with references to the following properties (units are given in square brackets) as constructor arguments:
+.IP "\(bu" 2
+const double& external_mass_rock [kg] : the mass of rock that shall be equilibrated with the fluid
+.IP "\(bu" 2
+const double& external_cp_rock [J/kg/K]: the rock's isobaric heat capacity (assumed to be independent of temperature)
+.IP "\(bu" 2
+const double& external_rho_rock [kg/m^3]: the rock's mass density
+.IP "\(bu" 2
+const double& external_porosity [ ] : (currently not used) the rock's porosity (this is allowed to be different from the actual fluid volume);
+.IP "\(bu" 2
+const double& external_mass_fluid [kg] : the mass of "fluid" - this is kg H2O + kg NaCl (solid+dissolved); including the solid is essential here as salt may be dissolved during equilibration
+.IP "\(bu" 2
+const double& external_wt_current [ ] : 100 * [kg NaCl (solid+dissolved)] / [kg NaCl (solid+dissolved) + kg H2O]
+.IP "\(bu" 2
+const double& external_t_previous [C] : temperature at thermal equilibrium from the previous time step
+.IP "\(bu" 2
+const double& external_p_current [bar] : preesure ar which thermal equilibration will be performed
+.IP "\(bu" 2
+const double& external_H_current [J] : total enthalpy in system (total enthalpy of rock + total enthalpy of fluid); this is the result of a transport step, including advection and thermal diffusion
+.IP "\(bu" 2
+const double& external_H_previous [J] : the above at the previous time step
+.IP "\(bu" 2
+const bool& fixed_external_t [ ] : a bool, mostly for use at fixed temperature boundary condition; if true, no thermal equilibration will be performed, the fluid properties and volume at p_current and t_fix (see next entry) will be calculated
+.IP "\(bu" 2
+const double& t_fix [C] : the fixed temperature to be used if fixed_external_t == true
+.IP "\(bu" 2
+const double& external_t_diff [C] : rock temperature after the thermal diffusion step and prior to equilibration\&. By default, if thermal equilibration fails, this will be assumed to be the best proxy to an equilibration result
+.PP
+
+.PP
+H2ONaClThermalEquilibrator is typically used by NaClH2OPropertiesVisitor\&.
+
+.PP
+.PP
+.nf
+.fi
+.PP
+.SH "Dependencies"
+.PP
+.SH "Known issues"
+.PP
+.SH "To do list"
+.PP
+.IP "\(bu" 2
+Constitutive relation for rock enthalpies
+.IP "\(bu" 2
+make t_diff as default in non-equilibration case an option
+.PP
+.SH "Testing"
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

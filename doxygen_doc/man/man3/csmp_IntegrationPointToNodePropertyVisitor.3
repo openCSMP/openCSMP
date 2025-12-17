@@ -1,0 +1,149 @@
+.TH "csmp::IntegrationPointToNodePropertyVisitor< Var, dim >" 3 "Thu May 29 2025 14:52:19" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::IntegrationPointToNodePropertyVisitor< Var, dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <IntegrationPointToNodePropertyVisitor\&.h>\fP
+.PP
+Inherits \fBcsmp::Visitor< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIntegrationPointToNodePropertyVisitor\fP (const \fBPropertyDatabase\fP< dim > &p, const char *cpoint_prop, const char *node_prop, size_t nodes)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBNode\fP< dim > *)"
+.br
+.RI "second application cycle (weighting) "
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBElement\fP< dim > *)"
+.br
+.RI "first application cycle (extrapolation) "
+.ti -1c
+.RI "void \fBApplyWeightingToExtrapolatedValues\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBVisitor\fP (\fBPLACEMENT\fP level=MODEL, \fBPLACEMENT\fP target=ELEMENT)"
+.br
+.ti -1c
+.RI "void \fBApplicationLevel\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationLevel\fP () const"
+.br
+.ti -1c
+.RI "void \fBApplicationTarget\fP (\fBPLACEMENT\fP p)"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBApplicationTarget\fP () const"
+.br
+.ti -1c
+.RI "virtual void \fBSetInitialProperties\fP (\fBModel\fP< dim > *model)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBModel\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBRegion\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBSplitBoundary\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBInterFace\fP< dim > *)"
+.br
+.ti -1c
+.RI "virtual void \fBVisit\fP (\fBEdge\fP< dim > *)"
+.br
+.ti -1c
+.RI "bool \fBVerbose\fP ()"
+.br
+.ti -1c
+.RI "void \fBVerbose\fP (bool verbose)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBcsmp::Visitor< dim >\fP
+.in +1c
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_level_\fP"
+.br
+.ti -1c
+.RI "\fBPLACEMENT\fP \fBapplication_target_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Var, uint32_t dim>
+.br
+class csmp::IntegrationPointToNodePropertyVisitor< Var, dim >"
+.PP
+.nf
+Replaces value of FE-integratiion-point property 'a' with node property value 'b',
+testing (for the case where all the node values are the same) whether the FE interpolation returns the same value\&.
+
+.fi
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+(1) \fBIntegrationPointToNodePropertyVisitor\fP is not extrapolating correctly (A) 
+
+.PP
+(1) SKM: consider using the element specific method ExtrapolateIntegrationPointToNodeProperty for this task
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Var, uint32_t dim> \fBcsmp::IntegrationPointToNodePropertyVisitor\fP< Var, dim >::IntegrationPointToNodePropertyVisitor (const \fBPropertyDatabase\fP< dim > & p, const char * cpoint_prop, const char * node_prop, size_t nodes)"
+Steps:
+
+.PP
+.IP "\(bu" 2
+\fBVisitor\fP requires all nodes in the mesh to be numbered consecutively
+.IP "\(bu" 2
+the target node property has to be set to zero prior to the accumulation
+.IP "\(bu" 2
+Values are interpolated to nodes where these are accumulated
+.IP "\(bu" 2
+the nodal contributions are weighted by the distance of the element barycenter to each node (all weights are summed so that the absolute value can be rectified once the accumulation is complete)\&. 
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::IntegrationPointToNodePropertyVisitor\fP< Var, dim >::Visit (\fBElement\fP< dim > * eptr)\fR [virtual]\fP"
+
+.PP
+first application cycle (extrapolation) 
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+.SS "template<typename Var, uint32_t dim> void \fBcsmp::IntegrationPointToNodePropertyVisitor\fP< Var, dim >::Visit (\fBNode\fP< dim > * nptr)\fR [virtual]\fP"
+
+.PP
+second application cycle (weighting) 
+.PP
+Reimplemented from \fBcsmp::Visitor< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

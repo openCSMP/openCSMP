@@ -108,6 +108,27 @@ if(BUILD_TESTING)
 		)
 		set_tests_properties(csmptest_main PROPERTIES TIMEOUT 36000) 
 	endif()
+
+    # Add SKM tests under BUILD_TESTING
+    option(BUILD_SKM_TESTS "Build SKM unit tests" OFF)
+    if(BUILD_SKM_TESTS)
+        ADD_EXECUTABLE(SKM_tests SKM_unit_tests_main.cpp ${TEST_SOURCES})
+        TARGET_LINK_LIBRARIES(SKM_tests csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
+        if(CMAKE_HOST_WIN32)
+            ADD_TEST(
+                NAME SKM_tests
+                COMMAND ${CMAKE_BINARY_DIR}/tests/Release/SKM_tests.exe
+                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
+            )
+        else()
+            ADD_TEST(
+                NAME SKM_tests
+                COMMAND SKM_tests
+                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
+            )
+        endif()
+        set_tests_properties(SKM_tests PROPERTIES TIMEOUT 36000)
+    endif()
 endif(BUILD_TESTING)
 
 ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})

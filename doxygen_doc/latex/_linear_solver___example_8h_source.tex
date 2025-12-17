@@ -1,0 +1,43 @@
+\doxysection{Linear\+Solver\+\_\+\+Example.\+h}
+\hypertarget{_linear_solver___example_8h_source}{}\label{_linear_solver___example_8h_source}\index{examples/source/LinearSolver\_Example.h@{examples/source/LinearSolver\_Example.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{LINEAR\_SOLVER\_EXAMPLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{LINEAR\_SOLVER\_EXAMPLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_example_8h}{"{}Example.h"{}}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_s_m_p__definitions_8h}{"{}CSMP\_definitions.h"{}}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_linear_solver_8h}{"{}LinearSolver.h"{}}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{fstream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{complex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ \mbox{\hyperlink{namespacecsmp}{csmp}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \ \mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{LinearSolver\_Example}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcsmp_1_1_example}{Example}}\{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Run();}
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Specifications();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{void}\ SetupMatrix(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ A\ );}
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{void}\ SetupVectors(\ \mbox{\hyperlink{namespacecsmp}{csmp}}::\mbox{\hyperlink{classcsmp_1_1_sparse_matrix}{SparseMatrix}}\&\ A,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\textcolor{keywordtype}{double}>\&);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{CSMP\_WITH\_DUNE\_ISTL}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00028\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{SetupMatrix}}(\ \mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{BCRSMatrix}}<\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{FieldMatrix}}<\textcolor{keywordtype}{double},1,1>\ >\&);}
+\DoxyCodeLine{00029\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{SetupVectors}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{BCRSMatrix}}<\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{FieldMatrix}}<\textcolor{keywordtype}{double},1,1>\ >\&,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{BlockVector}}<\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{FieldVector}}<\textcolor{keywordtype}{double},1>\ >\&,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{BlockVector}}<\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{Dune}}::\mbox{\hyperlink{classcsmp_1_1_linear_solver___example}{FieldVector}}<\textcolor{keywordtype}{double},1>\ >\&);}
+\DoxyCodeLine{00032\ \ \ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00033\ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \}\ \textcolor{comment}{//\ csmp}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ LINEAR\_SOLVER\_EXAMPLE\_H}}
+
+\end{DoxyCode}

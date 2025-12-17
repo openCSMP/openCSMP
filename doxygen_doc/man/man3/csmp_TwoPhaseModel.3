@@ -1,0 +1,568 @@
+.TH "csmp::TwoPhaseModel< dim >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TwoPhaseModel< dim >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <TwoPhaseModel\&.h>\fP
+.PP
+Inherited by \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTwoPhaseModel\fP (const \fBPropertyDatabase\fP< dim > &database, double viscosity_nw, double viscosity_w, double density_nw, double density_w, const char *kkk, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)"
+.br
+.RI "for fixed values of fluid viscosities and densities "
+.ti -1c
+.RI "\fBTwoPhaseModel\fP (const \fBPropertyDatabase\fP< dim > &database, const char *kkk, const char *mun, const char *muw, const char *rhn, const char *rhw, const char *sat, const char *snr, const char *swr, const bool sw_ro_mu_placement=true)"
+.br
+.RI "for interpolated values "
+.ti -1c
+.RI "virtual void \fBInitialize\fP (const \fBElement\fP< dim > &e)"
+.br
+.RI "reads element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement "
+.ti -1c
+.RI "virtual void \fBInitializeAndStore\fP (\fBElement\fP< dim > &e)"
+.br
+.RI "read and modify element properties when the saturation functions are history dependent "
+.ti -1c
+.RI "virtual void \fBInitializeForBaryCenter\fP (const \fBElement\fP< dim > &e)"
+.br
+.RI "interpolates node properties to element barycenter "
+.ti -1c
+.RI "virtual void \fBInitializeForNode\fP (const \fBElement\fP< dim > &e, uint32_t node)"
+.br
+.ti -1c
+.RI "virtual void \fBInitializeForIntegrationPoint\fP (uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite element integration points "
+.ti -1c
+.RI "virtual void \fBInitializeForFacetIntegrationPoint\fP (uint32_t facet, uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite volume facets "
+.ti -1c
+.RI "virtual void \fBInitializeForSectorIntegrationPoint\fP (uint32_t sector, uint32_t ip, const \fBElement\fP< dim > &e)"
+.br
+.RI "finite volume sectors "
+.ti -1c
+.RI "virtual void \fBInterpolateNodeProperties\fP (const \fBElement\fP< dim > &e)"
+.br
+.ti -1c
+.RI "void \fBSaturationWettingPhase\fP (double s_wetting)"
+.br
+.RI "to set properties on the fly for compressible flow modelling "
+.ti -1c
+.RI "void \fBViscosityNonWettingPhase\fP (double visc)"
+.br
+.ti -1c
+.RI "void \fBViscosityWettingPhase\fP (double visc)"
+.br
+.ti -1c
+.RI "void \fBDensityNonWettingPhase\fP (double dens)"
+.br
+.ti -1c
+.RI "void \fBDensityWettingPhase\fP (double dens)"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBWettingPhaseSaturationKey\fP () const"
+.br
+.RI "Return of keys for calculation of two phase mobilities in transport\&. "
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBNonWettingPhaseSaturationKey\fP () const"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBTotalMobilityKey\fP () const"
+.br
+.ti -1c
+.RI "double \fBPermeability\fP () const"
+.br
+.RI "accessors "
+.ti -1c
+.RI "void \fBPermeability\fP (double permeability)"
+.br
+.ti -1c
+.RI "\fBTensorVariable\fP< dim > \fBTensorPermeability\fP () const"
+.br
+.ti -1c
+.RI "void \fBTensorPermeability\fP (\fBTensorVariable\fP< dim > permeability)"
+.br
+.ti -1c
+.RI "double \fBSwr\fP () const"
+.br
+.ti -1c
+.RI "double \fBSnr\fP () const"
+.br
+.ti -1c
+.RI "void \fBSwr\fP (double swr)"
+.br
+.ti -1c
+.RI "void \fBSnr\fP (double snr)"
+.br
+.ti -1c
+.RI "double \fBViscosityNonWettingPhase\fP () const"
+.br
+.RI "fluid properties "
+.ti -1c
+.RI "double \fBViscosityWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBDensityNonWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBDensityWettingPhase\fP () const"
+.br
+.ti -1c
+.RI "double \fBSaturation\fP (uint32_t phase) const"
+.br
+.ti -1c
+.RI "double \fBMobilityPhase\fP (uint32_t phase) const"
+.br
+.ti -1c
+.RI "double \fBViscosityRatio\fP () const"
+.br
+.ti -1c
+.RI "double \fBTotalMobility\fP () const"
+.br
+.RI "sum of all phase mobilities * k "
+.ti -1c
+.RI "double \fBTotalMobilityMultiplier\fP () const"
+.br
+.RI "sum of all phase mobilities "
+.ti -1c
+.RI "double \fBDiffusionMultiplier\fP (size_t phase) const"
+.br
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier\fP () const"
+.br
+.RI "driven by capillary pressure gradient "
+.ti -1c
+.RI "double \fBGravityTerm\fP () const"
+.br
+.RI "multipliers for gravity-driven flow (advection multiplier and source term) "
+.ti -1c
+.RI "double \fBGravityMultiplier_G\fP () const"
+.br
+.ti -1c
+.RI "double \fBGravityMultiplier_dGds\fP () const"
+.br
+.ti -1c
+.RI "double \fBG\fP () const"
+.br
+.RI "G multiplier\&. "
+.ti -1c
+.RI "double \fBAdvectionMultiplier\fP () const"
+.br
+.RI "multiplier for advection viscosity coefficient in the case of non-linear advection "
+.ti -1c
+.RI "virtual double \fBDiffusionCharacteristic\fP (size_t phase) const"
+.br
+.RI "linearized diffusion multiplier for large-timestep calculations "
+.ti -1c
+.RI "virtual double \fBShockSpeed\fP () const"
+.br
+.RI "linearized fractional flow derivative "
+.ti -1c
+.RI "virtual double \fBShockHeight\fP () const"
+.br
+.ti -1c
+.RI "void \fBShockSpeedHeight\fP (double &speed, double &height) const"
+.br
+.ti -1c
+.RI "virtual double \fBMaxFractionalFlowDerivative\fP () const"
+.br
+.RI "maximum value of previous derivative "
+.ti -1c
+.RI "double \fBMaxCapillaryPressure\fP (uint32_t phase=1U) const"
+.br
+.RI "maximum value of dpcdS "
+.ti -1c
+.RI "virtual double \fBEffectiveSaturation\fP () const"
+.br
+.RI "always of the wetting phase by convention "
+.ti -1c
+.RI "virtual double \fBSeffToSw\fP () const"
+.br
+.RI "return wetting-phase saturation based on effective saturation "
+.ti -1c
+.RI "virtual double \fBSeffToSw\fP (double \fBseff\fP) const"
+.br
+.RI "return wetting-phase saturation based on effective saturation ( useful for numerical calculations ) "
+.ti -1c
+.RI "double \fBf_Phase\fP (uint32_t phase) const"
+.br
+.RI "fractional flow "
+.ti -1c
+.RI "double \fBfw_at\fP (double sw) const"
+.br
+.RI "fractional flow of water at water saturation sw "
+.ti -1c
+.RI "double \fBfn_at\fP (double sw) const"
+.br
+.ti -1c
+.RI "virtual double \fBkrn_Phase\fP () const =0"
+.br
+.RI "relative permeabilities "
+.ti -1c
+.RI "virtual double \fBkrw_Phase\fP () const =0"
+.br
+.RI "relative permeabilities "
+.ti -1c
+.RI "virtual double \fBdkrnds_Phase\fP () const"
+.br
+.RI "derivatives of relative permeabilities "
+.ti -1c
+.RI "virtual double \fBdkrwds_Phase\fP () const"
+.br
+.RI "derivatives of relative permeabilities "
+.ti -1c
+.RI "virtual double \fBdlnds\fP () const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBdlwds\fP () const"
+.br
+.RI "derivative of wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBpc_Phase\fP () const =0"
+.br
+.RI "capillary pressure "
+.ti -1c
+.RI "virtual double \fBdpcds_Phase\fP () const =0"
+.br
+.RI "capillary pressure derivatives (treat seff as for previous function) "
+.ti -1c
+.RI "virtual double \fBSw_Phase\fP (double \fBpc_Phase\fP) const"
+.br
+.RI "inverse capillary pressure function "
+.ti -1c
+.RI "virtual double \fBdsdpc_Phase\fP (double \fBpc_Phase\fP) const"
+.br
+.RI "derivatives of inverse capillary pressure function "
+.ti -1c
+.RI "virtual double \fBdfds\fP () const"
+.br
+.RI "derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn "
+.ti -1c
+.RI "virtual double \fBdGds\fP () const"
+.br
+.RI "derivatives of gravitational flow (advection multipliers) "
+.ti -1c
+.RI "double \fBmobility_w_at\fP (double) const"
+.br
+.RI "Numerical derivatives\&. "
+.ti -1c
+.RI "double \fBmobility_n_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBkrw_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBkrn_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdkrwds_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdkrnds_at\fP (double) const"
+.br
+.ti -1c
+.RI "double \fBdfds_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBG_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBpc_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBdpcds_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBSw_at\fP (double se) const"
+.br
+.ti -1c
+.RI "double \fBdsdpc_at\fP (double se) const"
+.br
+.ti -1c
+.RI "virtual double \fBdlwds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.RI "Numerical derivatives\&. "
+.ti -1c
+.RI "virtual double \fBdlnds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.ti -1c
+.RI "virtual double \fBdkrwds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdkrnds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdfds_numerical\fP (double \fBh\fP=0\&.001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdGds_numerical\fP (double \fBh\fP=0\&.000001) const"
+.br
+.ti -1c
+.RI "virtual double \fBdpcds_numerical\fP (double \fBh\fP=0\&.00001) const"
+.br
+.ti -1c
+.RI "virtual void \fBOut\fP (uint32_t phase=1U) const"
+.br
+.RI "default is the wetting phase "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBperm_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBsat_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBsnr_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBswr_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBift_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBmun_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBmuw_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBrhw_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBrhn_key_\fP"
+.br
+.ti -1c
+.RI "\fBcsmp::Index\fP \fBlt_key_\fP"
+.br
+.ti -1c
+.RI "double \fBswr_\fP"
+.br
+.ti -1c
+.RI "double \fBsnr_\fP"
+.br
+.ti -1c
+.RI "double \fBk_\fP"
+.br
+.ti -1c
+.RI "double \fBift_\fP"
+.br
+.ti -1c
+.RI "double \fBmun_\fP"
+.br
+.ti -1c
+.RI "double \fBmuw_\fP"
+.br
+.ti -1c
+.RI "double \fBrhn_\fP"
+.br
+.ti -1c
+.RI "double \fBrhw_\fP"
+.br
+.ti -1c
+.RI "\fBTensorVariable\fP< dim > \fBK_\fP"
+.br
+.ti -1c
+.RI "double \fBsat_\fP"
+.br
+.ti -1c
+.RI "double \fBseff_\fP"
+.br
+.ti -1c
+.RI "const double \fBacc_gravity_\fP"
+.br
+.ti -1c
+.RI "const double \fBtolerance_\fP"
+.br
+.ti -1c
+.RI "const double \fBMAX_CAPILLARY_PRESSURE_\fP"
+.br
+.ti -1c
+.RI "const double \fBMAX_CAPILLARY_PRESSURE_SLOPE_\fP"
+.br
+.ti -1c
+.RI "const bool \fBinterpolate_fluid_properties_\fP"
+.br
+.ti -1c
+.RI "const bool \fBsw_ro_mu_placement_\fP"
+.br
+.ti -1c
+.RI "bool \fBtensor_permeability_\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim>
+.br
+class csmp::TwoPhaseModel< dim >"base class for 2-phase flow models
+
+.PP
+base class for 2-phase flow models (Linear, Brooks \fBCorey\fP, Van Genuchten, Richards) now you can inherit BrooksCoreyWetting, BrooksCoreyNonWetting\&.\&.\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::AdvectionMultiplier () const"
+
+.PP
+multiplier for advection viscosity coefficient in the case of non-linear advection If not overloaded, this returns the derivative of the fractional flow function at the current saturation of the wetting phase (see Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 2 (first part)\&. 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::CapillaryDiffusionMultiplier () const"
+
+.PP
+driven by capillary pressure gradient See Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 1\&. This takes into account the permeability in direction of flow x lambda_overbar x pc-gradient\&. 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dfds () const\fR [virtual]\fP"
+
+.PP
+derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn derivative of fractional flow function (advection multipliers) 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, and \fBcsmp::TwoPhaseFileBased< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dfds_numerical (double h = \fR0\&.001\fP) const\fR [virtual]\fP"
+
+.IP "\(bu" 2
+
+.PP
+
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dGds () const\fR [virtual]\fP"
+
+.PP
+derivatives of gravitational flow (advection multipliers) derivatives of gravitational flow 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, and \fBcsmp::TwoPhaseFileBased< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::DiffusionMultiplier (size_t phase) const"
+Returns the diffusion coefficient for the phase of interest\&. If not overloaeded, the hydraulic conductivity is returned\&. 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dkrnds_Phase () const\fR [virtual]\fP"
+
+.PP
+derivatives of relative permeabilities 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dkrwds_Phase () const\fR [virtual]\fP"
+
+.PP
+derivatives of relative permeabilities 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dlwds_numerical (double h = \fR0\&.001\fP) const\fR [virtual]\fP"
+
+.PP
+Numerical derivatives\&. derivative of wetting phase mobility 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dpcds_Phase () const\fR [pure virtual]\fP"
+
+.PP
+capillary pressure derivatives (treat seff as for previous function) capillary pressure derivatives 
+.PP
+Implemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::dsdpc_Phase (double pc_Phase) const\fR [virtual]\fP"
+
+.PP
+derivatives of inverse capillary pressure function 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::EffectiveSaturation () const\fR [virtual]\fP"
+
+.PP
+always of the wetting phase by convention The effective saturation is always computed w\&.r\&.t\&. the wetting phase\&. (compare with Helmig 1997, p\&. 71 and note that phase 1 is the wetting phase; note also that \fBInitialize()\fP must be called first to get input parameters like residual saturations)\&. 
+.PP
+Reimplemented in \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::f_Phase (uint32_t phase) const"
+
+.PP
+fractional flow Computes the fractional flow of the wetting (phase=1) and non-wetting (phase=2) phases using the relative k's\&. and viscosities\&. Note that \fBInitialize()\fP must be called first\&. 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::G () const"
+
+.PP
+G multiplier\&. Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf\&., van Duijn and de Neef (1998)\&. Note that \fBInitialize()\fP must be called first\&. 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::GravityMultiplier_dGds () const"
+Computes multiplier for advection gravity coefficient\&. The divergence lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 2 (second part)\&. 
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::GravityMultiplier_G () const"
+See Sebastian Geiger's thesis (2004), closed form\&. 
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseModel\fP< dim >::Initialize (const \fBElement\fP< dim > & e)\fR [virtual]\fP"
+
+.PP
+reads element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement calculates lambda_t (total mobility) = sum of phase mobilities
+
+.PP
+\fBTodo\fP
+.RS 4
+SKM averages tensor properties, but should create tensor mobilities in stead 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseModel\fP< dim >::InitializeAndStore (\fBElement\fP< dim > & e)\fR [virtual]\fP"
+
+.PP
+read and modify element properties when the saturation functions are history dependent non const version which allows to set parameters on element 
+.PP
+Reimplemented in \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP\&.
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseModel\fP< dim >::InitializeForNode (const \fBElement\fP< dim > & e, uint32_t node)\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::FractureMatrixUpscaled< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::krn_Phase () const\fR [pure virtual]\fP"
+
+.PP
+relative permeabilities 
+.PP
+Implemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::krw_Phase () const\fR [pure virtual]\fP"
+
+.PP
+relative permeabilities 
+.PP
+Implemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::MaxFractionalFlowDerivative () const\fR [virtual]\fP"
+
+.PP
+maximum value of previous derivative 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::mobility_w_at (double se) const"
+
+.PP
+Numerical derivatives\&. General accessory functions\&. 
+.SS "template<uint32_t dim> void \fBcsmp::TwoPhaseModel\fP< dim >::Out (uint32_t phase = \fR1U\fP) const\fR [virtual]\fP"
+
+.PP
+default is the wetting phase 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, and \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::pc_Phase () const\fR [pure virtual]\fP"
+
+.PP
+capillary pressure capillary pressure (limit this to 4e7, the max strength of the rock) do this by computing seff for which pc=4e7, then use this seff as a limiting value 
+.PP
+Implemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::ExperimentalRT< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::FractureMatrixUpscaled< dim >\fP, \fBcsmp::HeterogeneityAndRateAwareModel< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::ShockHeight () const\fR [virtual]\fP"
+
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, and \fBcsmp::BrooksCoreyCO2< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::ShockSpeed () const\fR [virtual]\fP"
+
+.PP
+linearized fractional flow derivative 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::BrooksCoreyWithHysteresis< dim >\fP, and \fBcsmp::BrooksCoreyWithHysteresisCO2< dim >\fP\&.
+.SS "template<uint32_t dim> double \fBcsmp::TwoPhaseModel\fP< dim >::Sw_Phase (double pc_Phase) const\fR [virtual]\fP"
+
+.PP
+inverse capillary pressure function 
+.PP
+Reimplemented in \fBcsmp::BrooksCorey< dim >\fP, \fBcsmp::BrooksCoreyCO2< dim >\fP, \fBcsmp::Corey< dim >\fP, \fBcsmp::FourarLenormand< dim >\fP, \fBcsmp::LinearTwoPhaseModel< dim >\fP, \fBcsmp::TwoPhaseFileBased< dim >\fP, and \fBcsmp::VanGenuchten< dim >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

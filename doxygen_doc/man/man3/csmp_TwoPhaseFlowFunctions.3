@@ -1,0 +1,261 @@
+.TH "csmp::TwoPhaseFlowFunctions< dim, USER >" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+csmp::TwoPhaseFlowFunctions< dim, USER > \- 2-phase multiphase flow functions for immiscible displacement of slightly compressible fluids\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <TwoPhaseFlowFunctions\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "double \fBSw\fP (\fBElement\fP< dim > *const e) const"
+.br
+.RI "current water saturation initialised inside of the model "
+.ti -1c
+.RI "double \fBMobility\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "lambda parameter: 0 for water, 1 for the non-wetting phase "
+.ti -1c
+.RI "double \fBMobility_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.RI "lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw) "
+.ti -1c
+.RI "double \fBMobilityDerivative\fP (\fBElement\fP< dim > *const, uint32_t phase, bool evaluate_numerically=false) const"
+.br
+.RI "d lambda_i / dsw "
+.ti -1c
+.RI "double \fBMobilityDerivative_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.ti -1c
+.RI "double \fBTotalMobility\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "lambda_t: sum of phase mobilities "
+.ti -1c
+.RI "double \fBTotalMobility_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.RI "lambda_t: sum of phase mobilities (using prescribed sw) "
+.ti -1c
+.RI "double \fBMobilityProduct\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G "
+.ti -1c
+.RI "double \fBMobilityProductDerivative\fP (\fBElement\fP< dim > *const, bool evaluate_numerically=false) const"
+.br
+.RI "d lambda overbar / dsw also known as dGds "
+.ti -1c
+.RI "double \fBMobilityProductDerivative_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBf\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "fractional flow; 0=water, 1=non-wetting phase "
+.ti -1c
+.RI "double \fBf_at\fP (\fBElement\fP< dim > *const, uint32_t phase, double sw) const"
+.br
+.RI "fractional flow; 0=water, 1=non-wetting phase (using prescribed sw) "
+.ti -1c
+.RI "double \fBPermeability\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "Permeability\&. "
+.ti -1c
+.RI "double \fBdfds\fP (\fBElement\fP< dim > *const, uint32_t phase) const"
+.br
+.RI "derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn "
+.ti -1c
+.RI "double \fBdfds_at\fP (\fBElement\fP< dim > *const, double sw) const"
+.br
+.ti -1c
+.RI "double \fBMaxFractionalFlowDerivative\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "maximum value of previous derivative "
+.ti -1c
+.RI "double \fBAdvectionMultiplier\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "multiplier for advection viscosity coefficient in the case of non-linear advection "
+.ti -1c
+.RI "double \fBShockSpeed\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "outputs the shock wave celerity "
+.ti -1c
+.RI "double \fBShockHeight\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "outputs the water saturation at the non-wetting phase shock front "
+.ti -1c
+.RI "void \fBShockSpeedAndHeight\fP (\fBElement\fP< dim > *const, double &speed, double &height) const"
+.br
+.RI "calculated shock height and speed "
+.ti -1c
+.RI "void \fBGravityMultiplier\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.RI "multipliers for gravity-driven flow (advection multiplier and source term) "
+.ti -1c
+.RI "void \fBGravityMultiplier_G\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.ti -1c
+.RI "void \fBGravityMultiplier_dGds\fP (\fBElement\fP< dim > *const, \fBVectorVariable\fP< dim > &dip_vec) const"
+.br
+.ti -1c
+.RI "double \fBDiffusionMultiplier\fP (\fBElement\fP< dim > *const, size_t phase) const"
+.br
+.RI "multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase) "
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "driven by capillary pressure gradient "
+.ti -1c
+.RI "double \fBCapillaryDiffusionMultiplier_Phase\fP (\fBElement\fP< dim > *const, size_t phase) const"
+.br
+.ti -1c
+.RI "double \fBShockFrontVelocity\fP (\fBElement\fP< dim > *const) const"
+.br
+.RI "calculating the Shock velocity "
+.ti -1c
+.RI "double \fBdfds_Numerical\fP (\fBElement\fP< dim > *const, uint32_t phase, double delta_s=0\&.001) const"
+.br
+.ti -1c
+.RI "double \fBdfds_at_Numerical\fP (\fBElement\fP< dim > *const, double sw, double delta_s=0\&.001) const"
+.br
+.ti -1c
+.RI "double \fBdGds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.000001) const"
+.br
+.ti -1c
+.RI "double \fBdlwds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.001) const"
+.br
+.RI "derivative of wetting phase mobility "
+.ti -1c
+.RI "double \fBdlnds_Numerical\fP (\fBElement\fP< dim > *const, double delta_s=0\&.001) const"
+.br
+.RI "derivative of non-wetting phase mobility "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<uint32_t dim, template< uint32_t > class USER>
+.br
+class csmp::TwoPhaseFlowFunctions< dim, USER >"2-phase multiphase flow functions for immiscible displacement of slightly compressible fluids\&. 
+
+Generates all relevant input values for 2-phase immiscible (saturation-based volume) transport scheme\&. Uses the SaturationFunctions and \fBFluid\fP module and the constitutive relationships specified therein\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::AdvectionMultiplier (\fBElement\fP< dim > * const e) const"
+
+.PP
+multiplier for advection viscosity coefficient in the case of non-linear advection fractional flow derivative for wetting phase = 0\&.
+
+.PP
+If not overloaded, this returns the derivative of the fractional flow function at the current saturation of the wetting phase (see Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 2 (first part)\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::CapillaryDiffusionMultiplier (\fBElement\fP< dim > * const e) const"
+
+.PP
+driven by capillary pressure gradient See Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 1\&. This takes into account the permeability in direction of flow x lambda_overbar x pc-gradient\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::dfds (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn Derivative of fractional flow function (advection multipliers)\&.
+
+.PP
+\fBTodo\fP
+.RS 4
+check whether code for end-member cases has to be reinstated\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::dfds_at (\fBElement\fP< dim > * const e, double sw) const"
+Derivative of fractional flow function at specific sw, for wetting phase 0
+
+.PP
+\fBTodo\fP
+.RS 4
+check whether code for end-member cases has to be reinstated\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::dfds_at_Numerical (\fBElement\fP< dim > * const e, double sw, double h = \fR0\&.001\fP) const"
+Derivative of fractional flow function at specific sw, for a particular phase (0 = wetting, 1 = non-wetting)
+
+.PP
+\fBTodo\fP
+.RS 4
+check whether code for end-member cases has to be reinstated\&. 
+.RE
+.PP
+
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::DiffusionMultiplier (\fBElement\fP< dim > * const e, size_t phase) const"
+
+.PP
+multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase) Returns the diffusion coefficient for the phase of interest\&. If not overloaeded, the hydraulic conductivity is returned\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::f (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+fractional flow; 0=water, 1=non-wetting phase Computes the fractional flow of the wetting (ehase=1) and non-wetting (ehase=2) phases using the relative k's\&. and viscosities\&. Note that Initialize() must be called first\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::f_at (\fBElement\fP< dim > * const e, uint32_t phase, double sw) const"
+
+.PP
+fractional flow; 0=water, 1=non-wetting phase (using prescribed sw) Computes the fractional flow of the wetting (ehase=1) and non-wetting (ehase=2) phases using prescribed sw value, instead of intepolated value\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::GravityMultiplier (\fBElement\fP< dim > * const e, \fBVectorVariable\fP< dim > & dip_vc) const"
+
+.PP
+multipliers for gravity-driven flow (advection multiplier and source term) k * delta_rho * g 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::GravityMultiplier_dGds (\fBElement\fP< dim > * const e, \fBVectorVariable\fP< dim > & dip_vc) const"
+Computes multiplier for advection gravity coefficient\&. The divergence lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997, p\&. 108, eqn\&. 3\&.74, term 2 (second part)\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> void \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::GravityMultiplier_G (\fBElement\fP< dim > * const e, \fBVectorVariable\fP< dim > & dip_vc) const"
+See Sebastian Geiger's thesis (2004), closed form, i\&.e\&.
+
+.PP
+G = lambda_overbar * k * delta_rho * g 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::MaxFractionalFlowDerivative (\fBElement\fP< dim > * const e) const"
+
+.PP
+maximum value of previous derivative @attension: Generally "MaxFractionalqFlowDerivative" is not speed\&. It is after Buckley-Leverett problem 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::Mobility (\fBElement\fP< dim > * const e, uint32_t phase) const"
+
+.PP
+lambda parameter: 0 for water, 1 for the non-wetting phase Mobility of phase i, kri(sw) / mu_i\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::Mobility_at (\fBElement\fP< dim > * const e, uint32_t phase, double sw) const"
+
+.PP
+lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw) Mobility of phase i, kri(sw) / mu_i\&. Using prescribed sw value, instead of intepolated value\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::MobilityDerivative (\fBElement\fP< dim > * const e, uint32_t phase, bool evaluate_numerically = \fRfalse\fP) const"
+
+.PP
+d lambda_i / dsw Mobility saturation derivative for phase i\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::MobilityDerivative_at (\fBElement\fP< dim > * const e, uint32_t phase, double sw) const"
+Mobility saturation derivative for phase i\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::MobilityProduct (\fBElement\fP< dim > * const e) const"
+
+.PP
+lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G G - parameter known as mobility product, lambda overbar\&.
+
+.PP
+Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf\&., van Duijn and de Neef (1998)\&. Note that Initialize() must be called first\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::MobilityProductDerivative (\fBElement\fP< dim > * const e, bool evaluate_numerically = \fRfalse\fP) const"
+
+.PP
+d lambda overbar / dsw also known as dGds Saturation derivative of mobility product\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::MobilityProductDerivative_at (\fBElement\fP< dim > * const e, double sw) const"
+Saturation derivative of mobility product\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::ShockFrontVelocity (\fBElement\fP< dim > * const e) const"
+
+.PP
+calculating the Shock velocity The Shock front wave calculated after estimation of tangent Saturation point\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::ShockSpeed (\fBElement\fP< dim > * const e) const"
+
+.PP
+outputs the shock wave celerity shock speed base on Buckley Leverett theory 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::TotalMobility (\fBElement\fP< dim > * const e) const"
+
+.PP
+lambda_t: sum of phase mobilities Sum of mobilities (not multiplied with permeability)\&. 
+.SS "template<uint32_t dim, template< uint32_t > class USER> double \fBcsmp::TwoPhaseFlowFunctions\fP< dim, USER >::TotalMobility_at (\fBElement\fP< dim > * const e, double sw) const"
+
+.PP
+lambda_t: sum of phase mobilities (using prescribed sw) Sum of mobilities (not multiplied with permeability)\&. Using prescribed sw value, instead of intepolated value\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

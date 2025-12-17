@@ -1,0 +1,117 @@
+.TH "mjl::Point3D" 3 "Thu May 29 2025 14:52:20" "Version 1.0" "Open-CSMP++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mjl::Point3D
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint3D\fP (double, double, double)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP (const \fBPoint3D\fP &p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP & \fBoperator=\fP (const \fBPoint3D\fP &p)"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBPoint3D\fP &p) const"
+.br
+.ti -1c
+.RI "double \fBoperator[]\fP (int i) const"
+.br
+.ti -1c
+.RI "double & \fBoperator()\fP (int i)"
+.br
+.ti -1c
+.RI "double \fBX\fP () const"
+.br
+.ti -1c
+.RI "double \fBY\fP () const"
+.br
+.ti -1c
+.RI "double \fBZ\fP () const"
+.br
+.ti -1c
+.RI "void \fBSet\fP (double, double, double)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator+\fP (const \fBPoint3D\fP &p) const"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator\-\fP (const \fBPoint3D\fP &p) const"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator+=\fP (const \fBPoint3D\fP &p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator\-=\fP (const \fBPoint3D\fP &p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator*=\fP (const \fBPoint3D\fP &p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator/=\fP (const \fBPoint3D\fP &p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator+=\fP (double p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator\-=\fP (double p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator*=\fP (double p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator/=\fP (double p)"
+.br
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator*\fP (double) const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBPoint3D\fP &) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBPoint3D\fP &) const"
+.br
+.ti -1c
+.RI "double \fBDotProduct\fP (const \fBPoint3D\fP &) const"
+.br
+.ti -1c
+.RI "double \fBLength\fP () const"
+.br
+.ti -1c
+.RI "bool \fBCoincidesWithWithinTolerance\fP (const \fBPoint3D\fP &, double tolerance=1\&.0e\-5) const"
+.br
+.ti -1c
+.RI "void \fBOut\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "double \fBx_\fP"
+.br
+.ti -1c
+.RI "double \fBy_\fP"
+.br
+.ti -1c
+.RI "double \fBz_\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint3D\fP \fBoperator*\fP (double s, const \fBPoint3D\fP &p)"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Open-CSMP++ from the source code\&.

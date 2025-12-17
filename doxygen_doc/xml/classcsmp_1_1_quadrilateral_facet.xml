@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_quadrilateral_facet" kind="class" language="C++" prot="public">
+    <compoundname>csmp::QuadrilateralFacet</compoundname>
+    <includes refid="_quadrilateral_facet_8h" local="no">QuadrilateralFacet.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_quadrilateral_facet_1a3e0aca5d63a3528038b511cbf94dea20" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt;3U&gt; csmp::QuadrilateralFacet::pt0_</definition>
+        <argsstring></argsstring>
+        <name>pt0_</name>
+        <qualifiedname>csmp::QuadrilateralFacet::pt0_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="81" column="11" bodyfile="source/includes/model/QuadrilateralFacet.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_quadrilateral_facet_1a6a5faa4779fb71cc9c4660e24f3ed851" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt;3U&gt; csmp::QuadrilateralFacet::pt1_</definition>
+        <argsstring></argsstring>
+        <name>pt1_</name>
+        <qualifiedname>csmp::QuadrilateralFacet::pt1_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="81" column="16" bodyfile="source/includes/model/QuadrilateralFacet.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_quadrilateral_facet_1a7702e08cbc01ce2c845877880a338cab" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt;3U&gt; csmp::QuadrilateralFacet::pt2_</definition>
+        <argsstring></argsstring>
+        <name>pt2_</name>
+        <qualifiedname>csmp::QuadrilateralFacet::pt2_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="81" column="21" bodyfile="source/includes/model/QuadrilateralFacet.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_quadrilateral_facet_1a3b72eaf3662b1d053815a83a3854670e" prot="private" static="no" mutable="no">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt;3U&gt; csmp::QuadrilateralFacet::pt3_</definition>
+        <argsstring></argsstring>
+        <name>pt3_</name>
+        <qualifiedname>csmp::QuadrilateralFacet::pt3_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="81" column="26" bodyfile="source/includes/model/QuadrilateralFacet.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_quadrilateral_facet_1a1dc35ba4d9ab1f6ce45b2ec6412c0c64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::QuadrilateralFacet::QuadrilateralFacet</definition>
+        <argsstring>(const Point&lt; 3U &gt; &amp;, const Point&lt; 3U &gt; &amp;, const Point&lt; 3U &gt; &amp;, const Point&lt; 3U &gt; &amp;)</argsstring>
+        <name>QuadrilateralFacet</name>
+        <qualifiedname>csmp::QuadrilateralFacet::QuadrilateralFacet</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>p0</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>p1</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>p2</defname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt; &amp;</type>
+          <defname>p3</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="67" column="5" bodyfile="source/modules/model/QuadrilateralFacet.cpp" bodystart="14" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_quadrilateral_facet_1af7cb4a126a94b32bafb3a63a9467a498" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::QuadrilateralFacet::~QuadrilateralFacet</definition>
+        <argsstring>()</argsstring>
+        <name>~QuadrilateralFacet</name>
+        <qualifiedname>csmp::QuadrilateralFacet::~QuadrilateralFacet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="72" column="5" bodyfile="source/modules/model/QuadrilateralFacet.cpp" bodystart="27" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_quadrilateral_facet_1a9049cfa2a981e0403432b01d49c25e92" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcsmp_1_1_point" kindref="compound">Point</ref>&lt; 3U &gt;</type>
+        <definition>Point&lt; 3U &gt; csmp::QuadrilateralFacet::NormalAtCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>NormalAtCenter</name>
+        <qualifiedname>csmp::QuadrilateralFacet::NormalAtCenter</qualifiedname>
+        <briefdescription>
+<para>returns detJ into its argument </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="75" column="12" bodyfile="source/modules/model/QuadrilateralFacet.cpp" bodystart="39" bodyend="42"/>
+        <references refid="namespacecsmp_1a513764b7b083fabb98f5296a7475c9f0" compoundref="_quadrilateral_facet_8cpp" startline="52" endline="77">csmp::normalAtFacetCenter</references>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_quadrilateral_facet_1a41463e6a4d8ba1f1bc83bb0a70f6e049" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double csmp::QuadrilateralFacet::Area</definition>
+        <argsstring>() const</argsstring>
+        <name>Area</name>
+        <qualifiedname>csmp::QuadrilateralFacet::Area</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="76" column="14" bodyfile="source/modules/model/QuadrilateralFacet.cpp" bodystart="32" bodyend="35"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_quadrilateral_facet_1a912386c527fdc266f3f4c7a6b456aece" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::QuadrilateralFacet::QuadrilateralFacet</definition>
+        <argsstring>()</argsstring>
+        <name>QuadrilateralFacet</name>
+        <qualifiedname>csmp::QuadrilateralFacet::QuadrilateralFacet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/model/QuadrilateralFacet.h" line="79" column="5" bodyfile="source/modules/model/QuadrilateralFacet.cpp" bodystart="9" bodyend="11"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>To compute area and unit-normal computations for linear quadrilaterals in 3D space. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Stephan Matthai </para>
+</simplesect>
+<simplesect kind="date"><para>2005</para>
+</simplesect>
+<simplesect kind="note"><para>use triangular facet methods to do same for corresponding elements, but always prefer the native methods of the <ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref> subclasses over this. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::QuadrilateralFacet</label>
+        <link refid="classcsmp_1_1_quadrilateral_facet"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/model/QuadrilateralFacet.h" line="65" column="1" bodyfile="source/includes/model/QuadrilateralFacet.h" bodystart="65" bodyend="82"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a41463e6a4d8ba1f1bc83bb0a70f6e049" prot="public" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>Area</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a9049cfa2a981e0403432b01d49c25e92" prot="public" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>NormalAtCenter</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a3e0aca5d63a3528038b511cbf94dea20" prot="private" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>pt0_</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a6a5faa4779fb71cc9c4660e24f3ed851" prot="private" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>pt1_</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a7702e08cbc01ce2c845877880a338cab" prot="private" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>pt2_</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a3b72eaf3662b1d053815a83a3854670e" prot="private" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>pt3_</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a1dc35ba4d9ab1f6ce45b2ec6412c0c64" prot="public" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>QuadrilateralFacet</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1a912386c527fdc266f3f4c7a6b456aece" prot="private" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>QuadrilateralFacet</name></member>
+      <member refid="classcsmp_1_1_quadrilateral_facet_1af7cb4a126a94b32bafb3a63a9467a498" prot="public" virt="non-virtual"><scope>csmp::QuadrilateralFacet</scope><name>~QuadrilateralFacet</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

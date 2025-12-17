@@ -1,0 +1,230 @@
+\doxysection{csmp\+::Matrix Class Reference}
+\hypertarget{classcsmp_1_1_matrix}{}\label{classcsmp_1_1_matrix}\index{csmp::Matrix@{csmp::Matrix}}
+
+
+Experimental implementation of class for a dense matrix greater than 50x50 matrix that can change its size.  
+
+
+
+
+{\ttfamily \#include $<$Matrix.\+h$>$}
+
+
+
+Collaboration diagram for csmp\+::Matrix\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=161pt]{classcsmp_1_1_matrix__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a7f289c214bec0b71c94fe54099ca5c63}\label{classcsmp_1_1_matrix_a7f289c214bec0b71c94fe54099ca5c63} 
+{\bfseries Matrix} (size\+\_\+t m, size\+\_\+t n)
+\begin{DoxyCompactList}\small\item\em constructor (i,j) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a0dd470869401cc4a4e6a32b62b4355ed}\label{classcsmp_1_1_matrix_a0dd470869401cc4a4e6a32b62b4355ed} 
+{\bfseries Matrix} (size\+\_\+t m, size\+\_\+t n, double val)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a402662d6fcfe9c3f57282718e127dcc1}\label{classcsmp_1_1_matrix_a402662d6fcfe9c3f57282718e127dcc1} 
+size\+\_\+t {\bfseries Rows} () const
+\begin{DoxyCompactList}\small\item\em returns number of rows \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a6e6e53dd0e01107619820ba8b28da0a7}\label{classcsmp_1_1_matrix_a6e6e53dd0e01107619820ba8b28da0a7} 
+size\+\_\+t {\bfseries Cols} () const
+\begin{DoxyCompactList}\small\item\em returns number of columns \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a85d653db0f20ef9c28aab16c70ba6768}\label{classcsmp_1_1_matrix_a85d653db0f20ef9c28aab16c70ba6768} 
+void {\bfseries Resize} (size\+\_\+t m, size\+\_\+t n)
+\item 
+double \& \mbox{\hyperlink{classcsmp_1_1_matrix_a57a5eddf5bbb292526cb926c60efa2e9}{operator()}} (size\+\_\+t m, size\+\_\+t n)
+\begin{DoxyCompactList}\small\item\em accessors M(i,j) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a5aa48279ac6fd5a801ad5d5400f40665}\label{classcsmp_1_1_matrix_a5aa48279ac6fd5a801ad5d5400f40665} 
+const double \& {\bfseries operator()} (size\+\_\+t m, size\+\_\+t n) const
+\begin{DoxyCompactList}\small\item\em operator (i,j) const \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a415d3271adb382777f2941c1a9a53ec1}\label{classcsmp_1_1_matrix_a415d3271adb382777f2941c1a9a53ec1} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \& {\bfseries operator=} (double val)
+\begin{DoxyCompactList}\small\item\em assignment \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_aaafe78e191d64a213cd8f0067a32c3f3}\label{classcsmp_1_1_matrix_aaafe78e191d64a213cd8f0067a32c3f3} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \& {\bfseries operator+=} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&M)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_aa6f90dc66f06f4728c6216c1c7704e2d}\label{classcsmp_1_1_matrix_aa6f90dc66f06f4728c6216c1c7704e2d} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \& {\bfseries operator-\/=} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&M)
+\item 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \& \mbox{\hyperlink{classcsmp_1_1_matrix_ada91936624c494d010255ac296658dd0}{operator\texorpdfstring{$\ast$}{*}=}} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&M)
+\begin{DoxyCompactList}\small\item\em matrix -\/ matrix multiplication -\/\texorpdfstring{$>$}{>} M(A.\+rows,B.\+cols) (operator creates temporary M) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a2f76e34b387d5e127aa5ec80d0b69849}\label{classcsmp_1_1_matrix_a2f76e34b387d5e127aa5ec80d0b69849} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (double val)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a14fbde9914480b34e90a1bab490c342c}\label{classcsmp_1_1_matrix_a14fbde9914480b34e90a1bab490c342c} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \& {\bfseries operator\texorpdfstring{$\ast$}{*}=} (const std\+::vector$<$ double $>$ \&v)
+\begin{DoxyCompactList}\small\item\em matrix vector multiplication \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_ac58f4367dd296d850d06597fc0ec046f}\label{classcsmp_1_1_matrix_ac58f4367dd296d850d06597fc0ec046f} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} {\bfseries operator+} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&M) const
+\begin{DoxyCompactList}\small\item\em adding of same-\/size matrices \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a9aae30c26fab46e705205a3f1494962f}\label{classcsmp_1_1_matrix_a9aae30c26fab46e705205a3f1494962f} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} {\bfseries operator-\/} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&M) const
+\item 
+\Hypertarget{classcsmp_1_1_matrix_adf341aae1ef982dab46be5a6ce753d38}\label{classcsmp_1_1_matrix_adf341aae1ef982dab46be5a6ce753d38} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} {\bfseries operator\texorpdfstring{$\ast$}{*}} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&M) const
+\begin{DoxyCompactList}\small\item\em C = A B, matrix -\/ matrix multiplication -\/\texorpdfstring{$>$}{>} M(A.\+rows,B.\+cols) \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a79920ddc698840bb95be768bfdec856c}\label{classcsmp_1_1_matrix_a79920ddc698840bb95be768bfdec856c} 
+void {\bfseries Identity} ()
+\item 
+void \mbox{\hyperlink{classcsmp_1_1_matrix_a404f594a5c59ce84ef02810490041e5f}{Row\+Condense\+To}} (std\+::vector$<$ double $>$ \&vec) const
+\begin{DoxyCompactList}\small\item\em returns vec = Mat \texorpdfstring{$\ast$}{*} unity vector \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a6edeb2bfe9222440a52f10f83532b996}\label{classcsmp_1_1_matrix_a6edeb2bfe9222440a52f10f83532b996} 
+void {\bfseries Zero} ()
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a63fb8f269867006aba1a82c6b0fc5e24}\label{classcsmp_1_1_matrix_a63fb8f269867006aba1a82c6b0fc5e24} 
+void {\bfseries Zero\+Row} (size\+\_\+t row)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a0f2f0c93b1ea26d7c956024693e02214}\label{classcsmp_1_1_matrix_a0f2f0c93b1ea26d7c956024693e02214} 
+void {\bfseries Zero\+Col} (size\+\_\+t col)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a9b3735109dae1e86e4c210268354b7cc}\label{classcsmp_1_1_matrix_a9b3735109dae1e86e4c210268354b7cc} 
+void {\bfseries Fill} (double val)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_ada434025491464560c208942979401f5}\label{classcsmp_1_1_matrix_ada434025491464560c208942979401f5} 
+void {\bfseries Fill\+Row} (size\+\_\+t row, double val)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a4ea996aa14ef92d9b73cb225332aea19}\label{classcsmp_1_1_matrix_a4ea996aa14ef92d9b73cb225332aea19} 
+void {\bfseries Fill\+Col} (size\+\_\+t col, double val)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a81c4b7b15dc0b26da1fa4722a69eaeb2}\label{classcsmp_1_1_matrix_a81c4b7b15dc0b26da1fa4722a69eaeb2} 
+std\+::vector$<$ double $>$ {\bfseries Return\+Row} (size\+\_\+t row) const
+\item 
+\Hypertarget{classcsmp_1_1_matrix_ab1ca0f12d5db869445bb082c3b793843}\label{classcsmp_1_1_matrix_ab1ca0f12d5db869445bb082c3b793843} 
+std\+::vector$<$ double $>$ {\bfseries Return\+Col} (size\+\_\+t col) const
+\item 
+\Hypertarget{classcsmp_1_1_matrix_aa1dfb533939872b6c257014cd920014b}\label{classcsmp_1_1_matrix_aa1dfb533939872b6c257014cd920014b} 
+void {\bfseries Assign\+To\+Row} (size\+\_\+t row, std\+::vector$<$ double $>$ \&vec)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a6f603e5ebb5c39bde9bbb6fd90fa3592}\label{classcsmp_1_1_matrix_a6f603e5ebb5c39bde9bbb6fd90fa3592} 
+void {\bfseries Assign\+To\+Col} (size\+\_\+t row, std\+::vector$<$ double $>$ \&vec)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a9ef1da71fe2dc2d8b41062cb5ae2fb33}\label{classcsmp_1_1_matrix_a9ef1da71fe2dc2d8b41062cb5ae2fb33} 
+void {\bfseries Transposed} (\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&RES) const
+\begin{DoxyCompactList}\small\item\em RES = M\texorpdfstring{$^\wedge$}{\string^}T into its argument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcsmp_1_1_matrix_a3b0ffc6795e7e19d127645af54da2491}{Transposed\+Product}} (\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&RES) const
+\begin{DoxyCompactList}\small\item\em RES = M\texorpdfstring{$^\wedge$}{\string^}T M. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_af7f96de422740e5074d457c3e05df6a7}\label{classcsmp_1_1_matrix_af7f96de422740e5074d457c3e05df6a7} 
+void {\bfseries Multiply\+With\+Transposed\+Of} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&B, \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&RES) const
+\begin{DoxyCompactList}\small\item\em RES = A B\texorpdfstring{$^\wedge$}{\string^}T. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a06ff85bb325f7c07f8ce7af9354cf790}\label{classcsmp_1_1_matrix_a06ff85bb325f7c07f8ce7af9354cf790} 
+void {\bfseries Multiply\+Transposed\+Of\+With} (const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&B, \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&RES) const
+\begin{DoxyCompactList}\small\item\em RES = A\texorpdfstring{$^\wedge$}{\string^}T B. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_af87963920747d8ea6afb9029e157ecb5}\label{classcsmp_1_1_matrix_af87963920747d8ea6afb9029e157ecb5} 
+double {\bfseries Row\+Sum} (size\+\_\+t row) const
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a4c7b064fe052f81119d61f36977afff5}\label{classcsmp_1_1_matrix_a4c7b064fe052f81119d61f36977afff5} 
+double {\bfseries Col\+Sum} (size\+\_\+t col) const
+\item 
+double \mbox{\hyperlink{classcsmp_1_1_matrix_a01e2e650d691137e6577a5a9c7a70bbe}{Norm\+L1}} () const
+\begin{DoxyCompactList}\small\item\em unscaled matrix norms \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_af34b6abb397621b826061502b2064fcc}\label{classcsmp_1_1_matrix_af34b6abb397621b826061502b2064fcc} 
+double {\bfseries Norm\+L\+\_\+\+Infinity} () const
+\begin{DoxyCompactList}\small\item\em unscaled L\+\_\+infinity matrix norm \texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|}\+A\texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|}inf = max\+\_\+i \texorpdfstring{$\ast$}{*} sum\+\_\+j \texorpdfstring{$\vert$}{|}aij\texorpdfstring{$\vert$}{|} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \mbox{\hyperlink{classcsmp_1_1_matrix_aa6d3b9c6e6ea7874ff4b21e183f36f44}{Minor}} (const size\+\_\+t row, const size\+\_\+t col)
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a99ce28015558eea9e4f2ed66f8d8ec6f}\label{classcsmp_1_1_matrix_a99ce28015558eea9e4f2ed66f8d8ec6f} 
+void {\bfseries In} ()
+\item 
+\Hypertarget{classcsmp_1_1_matrix_a9752c31ff6d0ace913a0016c31974c16}\label{classcsmp_1_1_matrix_a9752c31ff6d0ace913a0016c31974c16} 
+void {\bfseries Out} (long digits=5L) const
+\item 
+\Hypertarget{classcsmp_1_1_matrix_ad54c112959c0096592b37b7d6b7c018b}\label{classcsmp_1_1_matrix_ad54c112959c0096592b37b7d6b7c018b} 
+void {\bfseries LUDecomposition} (std\+::vector$<$ uint32\+\_\+t $>$ \&index, double \&d)
+\begin{DoxyCompactList}\small\item\em LU decomposition and back-\/substitution. \end{DoxyCompactList}\item 
+\Hypertarget{classcsmp_1_1_matrix_a14a0a2f0553e2de709d306e1d305a281}\label{classcsmp_1_1_matrix_a14a0a2f0553e2de709d306e1d305a281} 
+void {\bfseries LUBack\+Substitution} (std\+::vector$<$ uint32\+\_\+t $>$ \&index, std\+::vector$<$ double $>$ \&b)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Experimental implementation of class for a dense matrix greater than 50x50 matrix that can change its size. 
+
+Supported operations (M = dense matrix, v = vector, \+\_\+T = transposed, T = tensor matrix(dim,dim), default vector is a column vector (v = \{ c0,c2..cn-\/1 \}, vc = \doxylink{classvector}{vector(dim)} )
+
+\begin{DoxyAuthor}{Author}
+S. K. Matthai 
+
+S. Geiger 
+
+S. G. Roberts 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2001
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000041}{Todo}}]SKM -\/ implement non-\/member global methods for multiplication etc. \end{DoxyRefDesc}
+
+
+\label{doc-func-members}
+\Hypertarget{classcsmp_1_1_matrix_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcsmp_1_1_matrix_aa6d3b9c6e6ea7874ff4b21e183f36f44}\index{csmp::Matrix@{csmp::Matrix}!Minor@{Minor}}
+\index{Minor@{Minor}!csmp::Matrix@{csmp::Matrix}}
+\doxysubsubsection{\texorpdfstring{Minor()}{Minor()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_matrix_aa6d3b9c6e6ea7874ff4b21e183f36f44} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} csmp\+::\+Matrix\+::\+Minor (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{row}{, }\item[{const size\+\_\+t}]{col}{}\end{DoxyParamCaption})}
+
+Returns a submatrix of the matrix with the dimensions row x col \Hypertarget{classcsmp_1_1_matrix_a01e2e650d691137e6577a5a9c7a70bbe}\index{csmp::Matrix@{csmp::Matrix}!NormL1@{NormL1}}
+\index{NormL1@{NormL1}!csmp::Matrix@{csmp::Matrix}}
+\doxysubsubsection{\texorpdfstring{NormL1()}{NormL1()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_matrix_a01e2e650d691137e6577a5a9c7a70bbe} 
+double csmp\+::\+Matrix\+::\+Norm\+L1 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+unscaled matrix norms 
+
+unscaled L1 matrix norm \texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|}\+A1\texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|} = max\+\_\+j \texorpdfstring{$\ast$}{*} sum\+\_\+i \texorpdfstring{$\vert$}{|}aij\texorpdfstring{$\vert$}{|} \Hypertarget{classcsmp_1_1_matrix_a57a5eddf5bbb292526cb926c60efa2e9}\index{csmp::Matrix@{csmp::Matrix}!operator()@{operator()}}
+\index{operator()@{operator()}!csmp::Matrix@{csmp::Matrix}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_matrix_a57a5eddf5bbb292526cb926c60efa2e9} 
+double \& csmp\+::\+Matrix\+::operator() (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{m}{, }\item[{size\+\_\+t}]{n}{}\end{DoxyParamCaption})}
+
+
+
+accessors M(i,j) 
+
+operator (i,j) \Hypertarget{classcsmp_1_1_matrix_ada91936624c494d010255ac296658dd0}\index{csmp::Matrix@{csmp::Matrix}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
+\index{operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}!csmp::Matrix@{csmp::Matrix}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}=()}{operator*=()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_matrix_ada91936624c494d010255ac296658dd0} 
+\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \& csmp\+::\+Matrix\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&}]{mat}{}\end{DoxyParamCaption})}
+
+
+
+matrix -\/ matrix multiplication -\/\texorpdfstring{$>$}{>} M(A.\+rows,B.\+cols) (operator creates temporary M) 
+
+\begin{DoxyWarning}{Warning}
+creates a temporary 
+\end{DoxyWarning}
+\Hypertarget{classcsmp_1_1_matrix_a404f594a5c59ce84ef02810490041e5f}\index{csmp::Matrix@{csmp::Matrix}!RowCondenseTo@{RowCondenseTo}}
+\index{RowCondenseTo@{RowCondenseTo}!csmp::Matrix@{csmp::Matrix}}
+\doxysubsubsection{\texorpdfstring{RowCondenseTo()}{RowCondenseTo()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_matrix_a404f594a5c59ce84ef02810490041e5f} 
+void csmp\+::\+Matrix\+::\+Row\+Condense\+To (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+
+
+returns vec = Mat \texorpdfstring{$\ast$}{*} unity vector 
+
+vec = Mat \texorpdfstring{$\ast$}{*} unity vector \Hypertarget{classcsmp_1_1_matrix_a3b0ffc6795e7e19d127645af54da2491}\index{csmp::Matrix@{csmp::Matrix}!TransposedProduct@{TransposedProduct}}
+\index{TransposedProduct@{TransposedProduct}!csmp::Matrix@{csmp::Matrix}}
+\doxysubsubsection{\texorpdfstring{TransposedProduct()}{TransposedProduct()}}
+{\footnotesize\ttfamily \label{classcsmp_1_1_matrix_a3b0ffc6795e7e19d127645af54da2491} 
+void csmp\+::\+Matrix\+::\+Transposed\+Product (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcsmp_1_1_matrix}{Matrix}} \&}]{RES}{}\end{DoxyParamCaption}) const}
+
+
+
+RES = M\texorpdfstring{$^\wedge$}{\string^}T M. 
+
+RES = A\texorpdfstring{$^\wedge$}{\string^}T A. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/includes/model/Matrix.\+h\item 
+source/modules/model/Matrix.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classmjl_1_1_node" kind="class" language="C++" prot="public">
+    <compoundname>mjl::Node</compoundname>
+    <derivedcompoundref refid="classmjl_1_1_vertex" prot="public" virt="non-virtual">mjl::Vertex</derivedcompoundref>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classmjl_1_1_node_1ab132157d53c0296879ba04f26f6b45be" prot="protected" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+        <definition>Node* mjl::Node::next_</definition>
+        <argsstring></argsstring>
+        <name>next_</name>
+        <qualifiedname>mjl::Node::next_</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="19" column="10" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classmjl_1_1_node_1a62596d984a251c38610c50a0ad69287d" prot="protected" static="no" mutable="no">
+        <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+        <definition>Node* mjl::Node::prev_</definition>
+        <argsstring></argsstring>
+        <name>prev_</name>
+        <qualifiedname>mjl::Node::prev_</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="20" column="10" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classmjl_1_1_node_1aa5b03ce4d809b027acfe3ed31afa079c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>mjl::Node::Node</definition>
+        <argsstring>()</argsstring>
+        <name>Node</name>
+        <qualifiedname>mjl::Node::Node</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="10" column="5" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_node_1a873fdb7c15a872536cbeaf39a8bd5e00" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>mjl::Node::~Node</definition>
+        <argsstring>()</argsstring>
+        <name>~Node</name>
+        <qualifiedname>mjl::Node::~Node</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="11" column="13" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="30" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_node_1af112963cf49098b127a0c834d31efc84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+        <definition>Node * mjl::Node::Next</definition>
+        <argsstring>()</argsstring>
+        <name>Next</name>
+        <qualifiedname>mjl::Node::Next</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="12" column="10" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="35" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_node_1a7178782e07d01fc0237917bff06fb01f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+        <definition>Node * mjl::Node::Prev</definition>
+        <argsstring>()</argsstring>
+        <name>Prev</name>
+        <qualifiedname>mjl::Node::Prev</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="13" column="10" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="41" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_node_1ab378478b7160bd1b0c7a98ba2f2b7ebb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+        <definition>Node * mjl::Node::Insert</definition>
+        <argsstring>(Node *)</argsstring>
+        <name>Insert</name>
+        <qualifiedname>mjl::Node::Insert</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="14" column="10" bodyfile="source/modules/discretisation/MJL_Node.cpp" bodystart="6" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_node_1ab4cfab625723c7310d88159bc14f8040" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+        <definition>Node * mjl::Node::Remove</definition>
+        <argsstring>()</argsstring>
+        <name>Remove</name>
+        <qualifiedname>mjl::Node::Remove</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="15" column="10" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="47" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classmjl_1_1_node_1acc088eb818e64c7ba4aca383ea7dcd71" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mjl::Node::Splice</definition>
+        <argsstring>(Node *)</argsstring>
+        <name>Splice</name>
+        <qualifiedname>mjl::Node::Splice</qualifiedname>
+        <param>
+          <type><ref refid="classmjl_1_1_node" kindref="compound">Node</ref> *</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/MJL_Node.h" line="16" column="11" bodyfile="source/modules/discretisation/MJL_Node.cpp" bodystart="19" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>mjl::Node</label>
+        <link refid="classmjl_1_1_node"/>
+      </node>
+      <node id="2">
+        <label>mjl::Vertex</label>
+        <link refid="classmjl_1_1_vertex"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>mjl::Node</label>
+        <link refid="classmjl_1_1_node"/>
+        <childnode refid="1" relation="usage">
+          <edgelabel>#next_</edgelabel>
+          <edgelabel>#prev_</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/MJL_Node.h" line="8" column="1" bodyfile="source/includes/discretisation/MJL_Node.h" bodystart="8" bodyend="21"/>
+    <listofallmembers>
+      <member refid="classmjl_1_1_node_1ab378478b7160bd1b0c7a98ba2f2b7ebb" prot="public" virt="non-virtual"><scope>mjl::Node</scope><name>Insert</name></member>
+      <member refid="classmjl_1_1_node_1af112963cf49098b127a0c834d31efc84" prot="public" virt="non-virtual"><scope>mjl::Node</scope><name>Next</name></member>
+      <member refid="classmjl_1_1_node_1ab132157d53c0296879ba04f26f6b45be" prot="protected" virt="non-virtual"><scope>mjl::Node</scope><name>next_</name></member>
+      <member refid="classmjl_1_1_node_1aa5b03ce4d809b027acfe3ed31afa079c" prot="public" virt="non-virtual"><scope>mjl::Node</scope><name>Node</name></member>
+      <member refid="classmjl_1_1_node_1a7178782e07d01fc0237917bff06fb01f" prot="public" virt="non-virtual"><scope>mjl::Node</scope><name>Prev</name></member>
+      <member refid="classmjl_1_1_node_1a62596d984a251c38610c50a0ad69287d" prot="protected" virt="non-virtual"><scope>mjl::Node</scope><name>prev_</name></member>
+      <member refid="classmjl_1_1_node_1ab4cfab625723c7310d88159bc14f8040" prot="public" virt="non-virtual"><scope>mjl::Node</scope><name>Remove</name></member>
+      <member refid="classmjl_1_1_node_1acc088eb818e64c7ba4aca383ea7dcd71" prot="public" virt="non-virtual"><scope>mjl::Node</scope><name>Splice</name></member>
+      <member refid="classmjl_1_1_node_1a873fdb7c15a872536cbeaf39a8bd5e00" prot="public" virt="virtual"><scope>mjl::Node</scope><name>~Node</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

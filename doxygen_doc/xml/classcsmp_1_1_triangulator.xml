@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="classcsmp_1_1_triangulator" kind="class" language="C++" prot="public">
+    <compoundname>csmp::Triangulator</compoundname>
+    <includes refid="_triangulator_8h" local="no">Triangulator.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcsmp_1_1_triangulator_1aeba160163de7d4bed6e7ed5c2c60fbd0" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::Triangulator::m_mtrx</definition>
+        <argsstring></argsstring>
+        <name>m_mtrx</name>
+        <qualifiedname>csmp::Triangulator::m_mtrx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="35" column="13" bodyfile="source/includes/discretisation/Triangulator.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_triangulator_1ad43074e37f78729aecab9e3741ec6fc2" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::Triangulator::n_mtrx</definition>
+        <argsstring></argsstring>
+        <name>n_mtrx</name>
+        <qualifiedname>csmp::Triangulator::n_mtrx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="35" column="20" bodyfile="source/includes/discretisation/Triangulator.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_triangulator_1a226bc7bbdc362b04edca63a124b23a67" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::Triangulator::n_vertices</definition>
+        <argsstring></argsstring>
+        <name>n_vertices</name>
+        <qualifiedname>csmp::Triangulator::n_vertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="36" column="13" bodyfile="source/includes/discretisation/Triangulator.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_triangulator_1a4711de5f18631dc9b417ab3f3c80967e" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t csmp::Triangulator::n_elements</definition>
+        <argsstring></argsstring>
+        <name>n_elements</name>
+        <qualifiedname>csmp::Triangulator::n_elements</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="36" column="24" bodyfile="source/includes/discretisation/Triangulator.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_triangulator_1a6d32710cc53028a48db0508310458a00" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Triangulator::elperm</definition>
+        <argsstring></argsstring>
+        <name>elperm</name>
+        <qualifiedname>csmp::Triangulator::elperm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="37" column="13" bodyfile="source/includes/discretisation/Triangulator.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcsmp_1_1_triangulator_1aa762cff292df16ae41d102f9054419c9" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double csmp::Triangulator::elperm2</definition>
+        <argsstring></argsstring>
+        <name>elperm2</name>
+        <qualifiedname>csmp::Triangulator::elperm2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="37" column="20" bodyfile="source/includes/discretisation/Triangulator.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcsmp_1_1_triangulator_1a86ac7feff79af7ec9980ea80a93d0c6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>csmp::Triangulator::Triangulator</definition>
+        <argsstring>()</argsstring>
+        <name>Triangulator</name>
+        <qualifiedname>csmp::Triangulator::Triangulator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="30" column="5" bodyfile="source/modules/discretisation/Triangulator.cpp" bodystart="17" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triangulator_1ab420a7832700c821881b3916a4bf6021" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void csmp::Triangulator::TrianglesFromRegularGrid</definition>
+        <argsstring>(const Matrix &amp;grid, VSet&lt; 2U &gt; &amp;vs)</argsstring>
+        <name>TrianglesFromRegularGrid</name>
+        <qualifiedname>csmp::Triangulator::TrianglesFromRegularGrid</qualifiedname>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>grid</declname>
+        </param>
+        <param>
+          <type><ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>&lt; 2U &gt; &amp;</type>
+          <declname>vs</declname>
+          <defname>vset</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>A pixel bitmap image is used to generate triangular elements to which a permeability is assigned. The permeability is chosen to be that of the upper left pixel of four pixels that are converted into 4 nodes of two triangular elements generated from the square.</para>
+<para>By default, squares are broken as ||. However, if the permeability of the upward diagonal pixels is the same, and the permeability of the down-diagonal pixels (left to right) differs, the square is split into two upward-diagonal triangles.</para>
+<para>In the course of the mesh generation, nodes which lie at the model boundary are flagged as such. In doing this, a coordinate system is adhered to in which Y points downward while X points to the right. This schemen is in accordance with the pixel data that is used as input as the first row of the pixel matrix represents the top of the image.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>grid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> with 256-integer values representing the color codes for the permeability of the triangular elements which will be generated is the first method argument. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>vset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a <ref refid="classcsmp_1_1_v_set" kindref="compound">VSet</ref>, a data container in which the finite-element data are stored as px, py, pz, plist etc. arrays. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="32" column="10" bodyfile="source/modules/discretisation/Triangulator.cpp" bodystart="130" bodyend="373"/>
+        <referencedby refid="namespacecsmp_1a9ad6d3d57727857fd0252c87eb1ce766" compoundref="_triangulator_8cpp" startline="384" endline="422">csmp::readTextPixelData</referencedby>
+        <referencedby refid="classcsmp_1_1_triangulator___example_1add93822f7629571dbcc04e49c951dc87" compoundref="_triangulator___example_8cpp" startline="79" endline="290">csmp::Triangulator_Example::Run</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcsmp_1_1_triangulator_1a2d6aef98155eb36d8b822e8fe7060a64" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>short</type>
+        <definition>short csmp::Triangulator::TestOutline</definition>
+        <argsstring>(unsigned int m, unsigned int n, const Matrix &amp;perm, double &amp;el_perm)</argsstring>
+        <name>TestOutline</name>
+        <qualifiedname>csmp::Triangulator::TestOutline</qualifiedname>
+        <param>
+          <type>unsigned int</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classcsmp_1_1_matrix" kindref="compound">Matrix</ref> &amp;</type>
+          <declname>perm</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>el_perm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The permeability is output into el_perm for both triangles. Method expects m and n as matrix ij indexes ranging from 1...m and 1...n. The method returns whether a pixed should be split into upward diagonal or downward diagonal triangles. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="39" column="12" bodyfile="source/modules/discretisation/Triangulator.cpp" bodystart="31" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classcsmp_1_1_triangulator_1ae54d55148d6267528c6ee92a55734f67" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>unsigned long</type>
+        <definition>unsigned long csmp::Triangulator::MapVertex</definition>
+        <argsstring>(unsigned int m, unsigned int n)</argsstring>
+        <name>MapVertex</name>
+        <qualifiedname>csmp::Triangulator::MapVertex</qualifiedname>
+        <param>
+          <type>unsigned int</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Vertices are numbered 0..n-1 in accordance with the C/C++ array indexing conventions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="source/includes/discretisation/Triangulator.h" line="40" column="20" bodyfile="source/modules/discretisation/Triangulator.cpp" bodystart="76" bodyend="102"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Creates a triangular element mesh from the pixels of the regular grid. Boundaries that are defined by changes in the pixel values are used to control how the pixels are split such that a smooth boundary is created. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Stephan K. Matthai </para>
+</simplesect>
+<simplesect kind="author"><para>Stephen G. Roberts </para>
+</simplesect>
+<simplesect kind="date"><para>1999</para>
+</simplesect>
+</para>
+<sect1 id="compare_floats_8h_1motivation">
+<title>Motivation</title><para>Have a simple procedure to go from a geometry drawn with a pixel-type tool or defined by a processed image, to go to a simple triangular finite-element mesh for CSP computations. </para>
+</sect1>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>csmp::Triangulator</label>
+        <link refid="classcsmp_1_1_triangulator"/>
+      </node>
+    </collaborationgraph>
+    <location file="source/includes/discretisation/Triangulator.h" line="28" column="1" bodyfile="source/includes/discretisation/Triangulator.h" bodystart="28" bodyend="41"/>
+    <listofallmembers>
+      <member refid="classcsmp_1_1_triangulator_1a6d32710cc53028a48db0508310458a00" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>elperm</name></member>
+      <member refid="classcsmp_1_1_triangulator_1aa762cff292df16ae41d102f9054419c9" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>elperm2</name></member>
+      <member refid="classcsmp_1_1_triangulator_1aeba160163de7d4bed6e7ed5c2c60fbd0" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>m_mtrx</name></member>
+      <member refid="classcsmp_1_1_triangulator_1ae54d55148d6267528c6ee92a55734f67" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>MapVertex</name></member>
+      <member refid="classcsmp_1_1_triangulator_1a4711de5f18631dc9b417ab3f3c80967e" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>n_elements</name></member>
+      <member refid="classcsmp_1_1_triangulator_1ad43074e37f78729aecab9e3741ec6fc2" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>n_mtrx</name></member>
+      <member refid="classcsmp_1_1_triangulator_1a226bc7bbdc362b04edca63a124b23a67" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>n_vertices</name></member>
+      <member refid="classcsmp_1_1_triangulator_1a2d6aef98155eb36d8b822e8fe7060a64" prot="private" virt="non-virtual"><scope>csmp::Triangulator</scope><name>TestOutline</name></member>
+      <member refid="classcsmp_1_1_triangulator_1ab420a7832700c821881b3916a4bf6021" prot="public" virt="non-virtual"><scope>csmp::Triangulator</scope><name>TrianglesFromRegularGrid</name></member>
+      <member refid="classcsmp_1_1_triangulator_1a86ac7feff79af7ec9980ea80a93d0c6a" prot="public" virt="non-virtual"><scope>csmp::Triangulator</scope><name>Triangulator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

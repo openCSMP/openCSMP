@@ -32,7 +32,6 @@ class UpwindControlVisitor : public Visitor<dim> {
                           std::vector<std::string>& pore_velocities); // vapor and liquid pore velocities
 
     virtual ~UpwindControlVisitor();
-    void Verbose();
     
     virtual void Visit(Element<dim>* );
 	  virtual void Visit(Region<dim>* );

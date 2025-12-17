@@ -57,13 +57,11 @@ class Integral_var_NT_rhsop_N_dV : public MathOperatorRHS<dim,CELL> {
                                 const char* test,
                                 const char* var,
                                 const double prefactor = 1.);
-                                
-    virtual ~Integral_var_NT_rhsop_N_dV() {}
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
     
-    virtual Integral_var_NT_rhsop_N_dV<dim,CELL>* clone() const { return new Integral_var_NT_rhsop_N_dV<dim,CELL> (*this); }
+    Integral_var_NT_rhsop_N_dV<dim,CELL>* clone() const override final { return new Integral_var_NT_rhsop_N_dV<dim,CELL> (*this); }
   private:
 
     void ComputeIntegral( const CELL<dim>& );

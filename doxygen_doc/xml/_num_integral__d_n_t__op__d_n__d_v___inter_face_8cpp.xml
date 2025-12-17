@@ -1,0 +1,1078 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.14.0" xml:lang="en-US">
+  <compounddef id="_num_integral__d_n_t__op__d_n__d_v___inter_face_8cpp" kind="file" language="C++">
+    <compoundname>NumIntegral_dNT_op_dN_dV_InterFace.cpp</compoundname>
+    <includes refid="_num_integral__d_n_t__op__d_n__d_v___inter_face_8h" local="yes">NumIntegral_dNT_op_dN_dV_InterFace.h</includes>
+    <includes refid="_element_8h" local="yes">Element.h</includes>
+    <includes refid="_face_8h" local="yes">Face.h</includes>
+    <includes refid="_inter_face_8h" local="yes">InterFace.h</includes>
+    <includes refid="_model_8h" local="yes">Model.h</includes>
+    <includes refid="_exception_8h" local="yes">Exception.h</includes>
+    <incdepgraph>
+      <node id="70">
+        <label>FiniteElement.h</label>
+        <link refid="_finite_element_8h"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>FiniteElementPolicy.h</label>
+        <link refid="_finite_element_policy_8h_source"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="85">
+        <label>VData.h</label>
+        <link refid="_v_data_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>VSet.h</label>
+        <link refid="_v_set_8h_source"/>
+        <childnode refid="85" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+      </node>
+      <node id="72">
+        <label>FiniteVolumePolicy.h</label>
+        <link refid="_finite_volume_policy_8h_source"/>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="73">
+        <label>FiniteVolumeStencil.h</label>
+        <link refid="_finite_volume_stencil_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="93">
+        <label>FiniteVolumeStencilManager.h</label>
+        <link refid="_finite_volume_stencil_manager_8h_source"/>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>NumIntegral_dNT_op_dN_dV_InterFace.h</label>
+        <link refid="_num_integral__d_n_t__op__d_n__d_v___inter_face_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>CompressedRowMatrix.h</label>
+        <link refid="_compressed_row_matrix_8h_source"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>DenseMatrix.h</label>
+        <link refid="_dense_matrix_8h"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="74">
+        <label>DynamicArray2D.h</label>
+        <link refid="_dynamic_array2_d_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>DynamicArray3D.h</label>
+        <link refid="_dynamic_array3_d_8h_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>SparseMatrix.h</label>
+        <link refid="_sparse_matrix_8h_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>ArrayVariable.h</label>
+        <link refid="_array_variable_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="96">
+        <label>BoundaryInterface.h</label>
+        <link refid="_boundary_interface_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>Box.h</label>
+        <link refid="_box_8h"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>CSMP_definitions.h</label>
+        <link refid="_c_s_m_p__definitions_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>CSMP_global_enumerations.h</label>
+        <link refid="_c_s_m_p__global__enumerations_8h_source"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="81">
+        <label>Element.h</label>
+        <link refid="_element_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+      </node>
+      <node id="82">
+        <label>Face.h</label>
+        <link refid="_face_8h_source"/>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="89">
+        <label>FiniteElementManager.h</label>
+        <link refid="_finite_element_manager_8h_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>FlaggedArrayVariable.h</label>
+        <link refid="_flagged_array_variable_8h_source"/>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>Index.h</label>
+        <link refid="_index_8h_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="88">
+        <label>IndexTracker.h</label>
+        <link refid="_index_tracker_8h_source"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>IntegrationPointVariables.h</label>
+        <link refid="_integration_point_variables_8h_source"/>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>InterFace.h</label>
+        <link refid="_inter_face_8h_source"/>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="65">
+        <label>LocalVariableStorage.h</label>
+        <link refid="_local_variable_storage_8h_source"/>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>LocalVariableStorageIndexArithmetic.h</label>
+        <link refid="_local_variable_storage_index_arithmetic_8h_source"/>
+      </node>
+      <node id="47">
+        <label>LocalVariables.h</label>
+        <link refid="_local_variables_8h_source"/>
+      </node>
+      <node id="49">
+        <label>MathOperatorLHS.h</label>
+        <link refid="_math_operator_l_h_s_8h_source"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+      </node>
+      <node id="90">
+        <label>MeshManager.h</label>
+        <link refid="_mesh_manager_8h_source"/>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+      </node>
+      <node id="83">
+        <label>Model.h</label>
+        <link refid="_model_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="95" relation="include">
+        </childnode>
+        <childnode refid="96" relation="include">
+        </childnode>
+        <childnode refid="97" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>ModelSubDomain.h</label>
+        <link refid="_model_sub_domain_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="76">
+        <label>Node.h</label>
+        <link refid="_node_8h_source"/>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+      </node>
+      <node id="91">
+        <label>NodeManifold.h</label>
+        <link refid="_node_manifold_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="92" relation="include">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>NodeParentElementVector.h</label>
+        <link refid="_node_parent_element_vector_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>Parameter.h</label>
+        <link refid="_parameter_8h_source"/>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>Point.h</label>
+        <link refid="_point_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>PropertyData.h</label>
+        <link refid="_property_data_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="87">
+        <label>PropertyDatabase.h</label>
+        <link refid="_property_database_8h"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+      </node>
+      <node id="79">
+        <label>QuadrilateralFacet.h</label>
+        <link refid="_quadrilateral_facet_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="94">
+        <label>Region.h</label>
+        <link refid="_region_8h_source"/>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="95">
+        <label>RegionInterface.h</label>
+        <link refid="_region_interface_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>ScalarVariable.h</label>
+        <link refid="_scalar_variable_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="97">
+        <label>SplitBoundaryInterface.h</label>
+        <link refid="_split_boundary_interface_8h_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>TensorVariable.h</label>
+        <link refid="_tensor_variable_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>TensorVariable1.h</label>
+        <link refid="_tensor_variable1_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>TensorVariable2.h</label>
+        <link refid="_tensor_variable2_8h_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>TriangularFacet.h</label>
+        <link refid="_triangular_facet_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>VectorVariable.h</label>
+        <link refid="_vector_variable_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>VectorVariable1.h</label>
+        <link refid="_vector_variable1_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>VectorVariable2.h</label>
+        <link refid="_vector_variable2_8h_source"/>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="67">
+        <label>enumTypeCompatibilityChecks.h</label>
+        <link refid="enum_type_compatibility_checks_8h_source"/>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="68">
+        <label>localVariableDispatch.h</label>
+        <link refid="local_variable_dispatch_8h_source"/>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="98">
+        <label>Exception.h</label>
+        <link refid="_exception_8h_source"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>source/modules/integration/pde_operators/numerical_integration/NumIntegral_dNT_op_dN_dV_InterFace.cpp</label>
+        <link refid="_num_integral__d_n_t__op__d_n__d_v___inter_face_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="98" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>algorithm</label>
+      </node>
+      <node id="16">
+        <label>array</label>
+      </node>
+      <node id="14">
+        <label>cassert</label>
+      </node>
+      <node id="9">
+        <label>cctype</label>
+      </node>
+      <node id="12">
+        <label>cfloat</label>
+      </node>
+      <node id="17">
+        <label>chrono</label>
+      </node>
+      <node id="13">
+        <label>climits</label>
+      </node>
+      <node id="4">
+        <label>cmath</label>
+      </node>
+      <node id="8">
+        <label>cstdarg</label>
+      </node>
+      <node id="7">
+        <label>cstddef</label>
+      </node>
+      <node id="46">
+        <label>cstdint</label>
+      </node>
+      <node id="5">
+        <label>cstdio</label>
+      </node>
+      <node id="6">
+        <label>cstdlib</label>
+      </node>
+      <node id="10">
+        <label>cstring</label>
+      </node>
+      <node id="11">
+        <label>ctime</label>
+      </node>
+      <node id="18">
+        <label>deque</label>
+      </node>
+      <node id="19">
+        <label>exception</label>
+      </node>
+      <node id="20">
+        <label>filesystem</label>
+      </node>
+      <node id="21">
+        <label>fstream</label>
+      </node>
+      <node id="22">
+        <label>functional</label>
+      </node>
+      <node id="23">
+        <label>iomanip</label>
+      </node>
+      <node id="24">
+        <label>iostream</label>
+      </node>
+      <node id="25">
+        <label>istream</label>
+      </node>
+      <node id="26">
+        <label>iterator</label>
+      </node>
+      <node id="27">
+        <label>limits</label>
+      </node>
+      <node id="28">
+        <label>list</label>
+      </node>
+      <node id="29">
+        <label>map</label>
+      </node>
+      <node id="30">
+        <label>memory</label>
+      </node>
+      <node id="31">
+        <label>numeric</label>
+      </node>
+      <node id="32">
+        <label>ostream</label>
+      </node>
+      <node id="92">
+        <label>plf_colony.h</label>
+      </node>
+      <node id="33">
+        <label>random</label>
+      </node>
+      <node id="34">
+        <label>set</label>
+      </node>
+      <node id="35">
+        <label>sstream</label>
+      </node>
+      <node id="36">
+        <label>stdexcept</label>
+      </node>
+      <node id="37">
+        <label>string</label>
+      </node>
+      <node id="39">
+        <label>type_traits</label>
+      </node>
+      <node id="38">
+        <label>typeinfo</label>
+      </node>
+      <node id="43">
+        <label>unordered_map</label>
+      </node>
+      <node id="42">
+        <label>unordered_set</label>
+      </node>
+      <node id="40">
+        <label>utility</label>
+      </node>
+      <node id="41">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecsmp">csmp</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;NumIntegral_dNT_op_dN_dV_InterFace.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Element.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Face.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;InterFace.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Model.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;Exception.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecsmp" kindref="compound">csmp</ref><sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="20" refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1a8fb190a82239f91d2a8661bec688d95a" refkind="member"><highlight class="normal"><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1a8fb190a82239f91d2a8661bec688d95a" kindref="member">NumIntegral_dNT_op_dN_dV_InterFace&lt;dim&gt;::NumIntegral_dNT_op_dN_dV_InterFace</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_model" kindref="compound">Model&lt;dim&gt;</ref>&amp;<sp/>model,</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><sp/><sp/><sp/><sp/><sp/><sp/>oper,</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><sp/><sp/><sp/><sp/><sp/><sp/>basic,</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><sp/><sp/><sp/><sp/><sp/><sp/>test<sp/>)</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/>:<sp/>MathOperatorLHS&lt;dim,<ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace</ref>&gt;(model.Database(),oper,basic,test),</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>thi_key_(model.Database().StorageKey(</highlight><highlight class="stringliteral">&quot;thickness&quot;</highlight><highlight class="normal">)),</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>pris_ptr_(model.Mesh().FiniteElements().E(<sp/>ISOPARAMETRIC_LINEAR_PRISM<sp/>)<sp/>),</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>hexa_ptr_(model.Mesh().FiniteElements().E(<sp/>ISOPARAMETRIC_LINEAR_HEXAHEDRON<sp/>)<sp/>)</highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1a2fa244d3942f5dd01ffa311db88fe0ea" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::Name</ref>(</highlight><highlight class="stringliteral">&quot;NumIntegral_dNT_op_dN_dV_InterFace&quot;</highlight><highlight class="normal">,<sp/>oper,<sp/>basic,<sp/>test<sp/>);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>MathOperatorLHS&lt;dim,InterFace&gt;::BasicOperandPlacement()<sp/>!=<sp/>NODE<sp/>||</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MathOperatorLHS&lt;dim,InterFace&gt;::BasicOperandType()<sp/>!=<sp/>SCALAR<sp/>)</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_exception" kindref="compound">csmp::Exception</ref>(<sp/>ERROR,<sp/></highlight><highlight class="stringliteral">&quot;NumIntegral_dNT_op_dN_dV_InterFace&lt;dim&gt;::(constructor)&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>basic,<sp/></highlight><highlight class="stringliteral">&quot;Operand<sp/>(basic)<sp/>must<sp/>be<sp/>a<sp/>scalar<sp/>property<sp/>placed<sp/>on<sp/>the<sp/>nodes.&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>MathOperatorLHS&lt;dim,InterFace&gt;::TestOperandPlacement()<sp/>!=<sp/>NODE<sp/>||</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MathOperatorLHS&lt;dim,InterFace&gt;::TestOperandType()<sp/>!=<sp/>SCALAR<sp/>)</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_exception" kindref="compound">csmp::Exception</ref>(<sp/>ERROR,<sp/></highlight><highlight class="stringliteral">&quot;NumIntegral_dNT_op_dN_dV_InterFace&lt;dim&gt;::(constructor)&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>test,<sp/></highlight><highlight class="stringliteral">&quot;Operand<sp/>(test)<sp/>must<sp/>be<sp/>a<sp/>scalar<sp/>property<sp/>placed<sp/>on<sp/>the<sp/>nodes.&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="55" refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1a10e31061481fe1fb518d3beb3a6ba4bb" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1a10e31061481fe1fb518d3beb3a6ba4bb" kindref="member">NumIntegral_dNT_op_dN_dV_InterFace&lt;dim&gt;::GetOperands</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace&lt;dim&gt;</ref>&amp;<sp/>e<sp/>)</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this<sp/>integral<sp/>is<sp/>only<sp/>for<sp/>numerically<sp/>integrated<sp/>isoparametric<sp/>finite<sp/>elements</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>assert(<sp/>e.<ref refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" kindref="member">FE</ref>()-&gt;<ref refid="classcsmp_1_1_finite_element_1a5d0543e1e432fdf65177495d72e4d51c" kindref="member">Isoparametric</ref>()<sp/>==<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>MathOperatorLHS&lt;dim,InterFace&gt;::MaterialOperandPlacement()<sp/>!=<sp/>ELEMENT<sp/>or</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MathOperatorLHS&lt;dim,InterFace&gt;::MaterialOperandPlacement()<sp/>!=<sp/>INTER_FACE<sp/>)</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_exception" kindref="compound">csmp::Exception</ref>(<sp/>ERROR,<sp/></highlight><highlight class="stringliteral">&quot;NumIntegral_dNT_op_dN_dV_InterFace&lt;dim,CELL&gt;::GetOperands&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;material<sp/>operand<sp/>placements<sp/>other<sp/>than<sp/>on<sp/>the<sp/>CELL<sp/>are<sp/>not<sp/>handled<sp/>yet.<sp/>&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>only<sp/>if<sp/>the<sp/>property<sp/>is<sp/>an<sp/>InterFace<sp/>property<sp/>something<sp/>is<sp/>done<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0].Resize(dim,dim);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0].Zero();</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>identity<sp/>matrix<sp/>scaled<sp/>with<sp/>the<sp/>element<sp/>thickness</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0].AssignToDiagonal(<sp/>(thickness_<sp/>=<sp/>e.<ref refid="classcsmp_1_1_local_variable_storage_1a4387c2c28afd79c9142834fc4a976b48" kindref="member">Read</ref>(<sp/>thi_key_<sp/>))<sp/>);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>the<sp/>operand<sp/>variables<sp/>are<sp/>taken<sp/>as<sp/>the<sp/>mean<sp/>of<sp/>the<sp/>variables<sp/>on<sp/>the<sp/>adjacent<sp/>higher<sp/>dim<sp/>elements</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>(note<sp/>that<sp/>higher-dim<sp/>parents<sp/>are<sp/>guaranteed<sp/>to<sp/>exist<sp/>on<sp/>inside<sp/>and<sp/>outside<sp/>of<sp/>InterFace)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>MathOperatorLHS&lt;dim,InterFace&gt;::MaterialOperandType()<sp/>==<sp/>SCALAR<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0](0,0)<sp/>=<sp/>(e.<ref refid="classcsmp_1_1_inter_face_1a86c12fac4a4ea6b2e2fa8b3db6fbd61a" kindref="member">InnerParent</ref>()-&gt;Read(<sp/>MathOperatorLHS&lt;dim,InterFace&gt;::MaterialOperandKey()<sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>e.<ref refid="classcsmp_1_1_inter_face_1af0cd776b8d04e905c494fe0d34926841" kindref="member">OuterParent</ref>()-&gt;Read(<sp/>MathOperatorLHS&lt;dim,InterFace&gt;::MaterialOperandKey()<sp/>)<sp/>)<sp/>/<sp/>2.<sp/>;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(<sp/>dim<sp/>!=<sp/>1U<sp/>)<sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0](1,1)<sp/>=<sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0](0,0);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(<sp/>dim<sp/>==<sp/>3U<sp/>)<sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0](2,2)<sp/>=<sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0](0,0);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_exception" kindref="compound">csmp::Exception</ref>(<sp/>ERROR,<sp/></highlight><highlight class="stringliteral">&quot;NumIntegral_dNT_op_dN_dV_InterFace&lt;dim,CELL&gt;::GetOperands&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;&apos;vector&apos;<sp/>or<sp/>&apos;tensor&apos;<sp/>material<sp/>operands<sp/>are<sp/>not<sp/>handled<sp/>yet.<sp/>&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>TODO:<sp/>later<sp/>on,<sp/>together<sp/>with<sp/>integration<sp/>point<sp/>variables</highlight></codeline>
+<codeline lineno="83"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>MathOperatorLHS&lt;dim&gt;::MaterialOperandType()<sp/>==<sp/>VECTOR<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="84"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>VectorVariable&lt;dim&gt;<sp/><sp/>vc;</highlight></codeline>
+<codeline lineno="85"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>e.Read(<sp/>MathOperatorLHS&lt;dim,CELL&gt;::MaterialOperandKey(),<sp/>vc<sp/>);</highlight></codeline>
+<codeline lineno="86"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MathOperatorLHS&lt;dim,CELL&gt;::MTRL[0](0,0)<sp/>=<sp/>vc[0];</highlight></codeline>
+<codeline lineno="87"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>dim<sp/>!=<sp/>1U<sp/>)<sp/>MathOperatorLHS&lt;dim,CELL&gt;::MTRL[0](1,1)<sp/>=<sp/>vc[1];</highlight></codeline>
+<codeline lineno="88"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>dim<sp/>==<sp/>3U<sp/>)<sp/>MathOperatorLHS&lt;dim,CELL&gt;::MTRL[0](2,2)<sp/>=<sp/>vc[2];</highlight></codeline>
+<codeline lineno="89"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>if<sp/>(<sp/>MathOperatorLHS&lt;dim&gt;::MaterialOperandType()<sp/>==<sp/>TENSOR<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="91"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>TensorVariable&lt;dim&gt;<sp/><sp/>ts;</highlight></codeline>
+<codeline lineno="92"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>e.Read(<sp/>MathOperatorLHS&lt;dim&gt;::MaterialOperandKey(),<sp/>ts<sp/>);</highlight></codeline>
+<codeline lineno="93"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MathOperatorLHS&lt;dim&gt;::MTRL[0]<sp/>=<sp/>ts;</highlight></codeline>
+<codeline lineno="94"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/>}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>GetOperands</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="111" refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1abff081a710954e6a015b19d06220b511" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1abff081a710954e6a015b19d06220b511" kindref="member">NumIntegral_dNT_op_dN_dV_InterFace&lt;dim&gt;::InitialiseCoordinateMatrix</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace&lt;dim&gt;</ref>&amp;<sp/>iface,</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_dense_matrix" kindref="compound">DenseMatrix&lt;DM_MIN&gt;</ref>&amp;<sp/>XYX<sp/>)</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="113"><highlight class="keyword"><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>retrieving<sp/>the<sp/>Interface<sp/>normal<sp/>for<sp/>the<sp/>extrusion<sp/>of<sp/>the<sp/>interface<sp/>from<sp/>the<sp/>INSIDE<sp/>to<sp/>the<sp/>outside</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;dim&gt;</ref><sp/>unrml<sp/>=<sp/>iface.<ref refid="classcsmp_1_1_inter_face_1a5426cc263a39d5e18c78ac5449233c67" kindref="member">UnitNormal</ref>();</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>scaling<sp/>unit<sp/>normal<sp/>by<sp/>element<sp/>thickness</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>unrml[0U]<sp/>*=<sp/>thickness_;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(<sp/>dim<sp/>==<sp/>2U<sp/>)<sp/>unrml[1U]<sp/>*=<sp/>thickness_;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(<sp/>dim<sp/>==<sp/>3U<sp/>)<sp/>unrml[2U]<sp/>*=<sp/>thickness_;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>assert(<sp/>iface.<ref refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" kindref="member">FE</ref>()-&gt;<ref refid="classcsmp_1_1_finite_element_1a94820d970b7a970757c91dac9934b424" kindref="member">OrderOfShapeFunctions</ref>()<sp/>==<sp/>1U<sp/>);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>node<sp/>coordinate<sp/>extrusion;<sp/>procedure<sp/>does<sp/>not<sp/>require<sp/>a<sp/>know<sp/>of<sp/>the<sp/>InterFace<sp/>element</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>the<sp/>triangular<sp/>face<sp/>is<sp/>extruded<sp/>into<sp/>prism<sp/>element<sp/>retaining<sp/>the<sp/>inside<sp/>node<sp/>positions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>resizing<sp/>the<sp/>coordinate<sp/>matrix<sp/>that<sp/>lives<sp/>in<sp/>the<sp/>FE<sp/>base<sp/>class</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>XYX.<ref refid="classcsmp_1_1_dense_matrix_1a906c0bd524510a58ce4fc17e1e32700d" kindref="member">Resize</ref>(<sp/>iface.<ref refid="classcsmp_1_1_inter_face_1a58ef99834e765994942487f1bf4445c8" kindref="member">Nodes</ref>(),<sp/>dim<sp/>);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>assigning<sp/>the<sp/>inside<sp/>nodes</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>--------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>n_side_nodes{<sp/>iface.<ref refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" kindref="member">FE</ref>()-&gt;Nodes()<sp/>};</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>uint32_t<sp/>i{0U};<sp/>i&lt;n_side_nodes;<sp/>i++<sp/>)</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>XYX.<ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>i,<sp/>iface.<ref refid="classcsmp_1_1_inter_face_1abc296812926dcaf14b4955e09c358962" kindref="member">N</ref>(i,INSIDE)-&gt;Coordinate()<sp/>);</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>assigning<sp/>the<sp/>outside<sp/>nodes<sp/>extruding<sp/>their<sp/>position<sp/>by<sp/>interface<sp/>thickness<sp/>along<sp/>the<sp/>unit<sp/>normal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>-------------------------------------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>uint32_t<sp/>node{<sp/>0U<sp/>};</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/>int32_t<sp/>i{<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">int32_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(n_side_nodes)<sp/>*<sp/>2<sp/>-<sp/>1<sp/>};<sp/>i&gt;=0;<sp/>i--<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_point" kindref="compound">Point&lt;dim&gt;</ref><sp/>extr_coord<sp/>=<sp/>iface.<ref refid="classcsmp_1_1_inter_face_1abc296812926dcaf14b4955e09c358962" kindref="member">N</ref>(</highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">uint32_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(i),OUTSIDE)-&gt;Coordinate()<sp/>+<sp/>unrml;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>XYX.<ref refid="classcsmp_1_1_dense_matrix_1ab7be9df1f56cadb41d2c6ad6ff680c0f" kindref="member">AssignRow</ref>(<sp/>node++,<sp/>extr_coord<sp/>);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/>}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>InitialiseCoordinateMatrix</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;u</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">32_t<sp/>dim&gt;</highlight></codeline>
+<codeline lineno="160" refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1a034f745778aebcee8b33cb2a2918c59f" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1a034f745778aebcee8b33cb2a2918c59f" kindref="member">NumIntegral_dNT_op_dN_dV_InterFace&lt;dim&gt;::ComputeContribution</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcsmp_1_1_inter_face" kindref="compound">InterFace&lt;dim&gt;</ref>&amp;<sp/>iface<sp/>)</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this<sp/>integral<sp/>is<sp/>only<sp/>for<sp/>numerically<sp/>integrated<sp/>isoparametric<sp/>finite<sp/>elements</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/>assert(<sp/>iface.UsesLocalCoordinates()<sp/>==<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face_1abff081a710954e6a015b19d06220b511" kindref="member">InitialiseCoordinateMatrix</ref>(<sp/>iface,<sp/>iface.<ref refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" kindref="member">FE</ref>()-&gt;<ref refid="classcsmp_1_1_finite_element_1a022fd86373136421b00ce343508efe52" kindref="member">XY</ref><sp/>);</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>initialize<sp/>output<sp/>matrix,<sp/>InterFace<sp/>already<sp/>has<sp/>the<sp/>right<sp/>number<sp/>of<sp/>nodes<sp/>to<sp/>match<sp/>prism<sp/>or<sp/>hexa</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1a62aa16ddf9b80b53fd8b71ab6c8cc348" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::LHS</ref>.Resize(<sp/>iface.<ref refid="classcsmp_1_1_inter_face_1a58ef99834e765994942487f1bf4445c8" kindref="member">Nodes</ref>(),<sp/>iface.<ref refid="classcsmp_1_1_inter_face_1a58ef99834e765994942487f1bf4445c8" kindref="member">Nodes</ref>()<sp/>);</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1a62aa16ddf9b80b53fd8b71ab6c8cc348" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::LHS</ref>.Zero();</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>thus<sp/>far<sp/>this<sp/>only<sp/>works<sp/>for<sp/>constant<sp/>element<sp/>or<sp/>interface<sp/>properties</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>piecewise_constant_material(<sp/>this-&gt;MaterialOperandPlacement()<sp/>==<sp/>ELEMENT<sp/>or</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this-&gt;MaterialOperandPlacement()<sp/>==<sp/>INTER_FACE<sp/>or</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this-&gt;MaterialOperandPlacement()<sp/>==<sp/>REGION<sp/>or</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this-&gt;MaterialOperandPlacement()<sp/>==<sp/>FACE<sp/>);</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/>assert(<sp/>piecewise_constant_material<sp/>);</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>0.<sp/>Finding<sp/>the<sp/>volumetric<sp/>finite<sp/>element<sp/>that<sp/>corresponds<sp/>to<sp/>the<sp/>Face</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element" kindref="compound">FiniteElement</ref>*<sp/>fptr<sp/>=<sp/>iface.<ref refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" kindref="member">FE</ref>();</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>isTriangular(<sp/>iface.<ref refid="classcsmp_1_1_finite_element_policy_1a37cbda0c98719c47bbf4104117b026f3" kindref="member">FE_Type</ref>()<sp/>)<sp/>)</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>ugly<sp/>way<sp/>to<sp/>get<sp/>to<sp/>the<sp/>base<sp/>class!</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element_policy" kindref="compound">FiniteElementPolicy&lt;dim,InterFace&gt;</ref>(iface).<ref refid="classcsmp_1_1_finite_element_policy_1a8a6b224d1d3482c35e577ffc3b9a1230" kindref="member">Assign</ref>(<sp/>pris_ptr_<sp/>);</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element_policy" kindref="compound">FiniteElementPolicy&lt;dim,InterFace&gt;</ref>(iface).<ref refid="classcsmp_1_1_finite_element_policy_1a8a6b224d1d3482c35e577ffc3b9a1230" kindref="member">Assign</ref>(<sp/>hexa_ptr_<sp/>);</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1.<sp/>Two<sp/>cases<sp/>exist:<sp/>The<sp/>first<sp/>is<sp/>when<sp/>the<sp/>material<sp/>property<sp/>is<sp/>an</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>element<sp/>property.<sp/>In<sp/>this<sp/>case<sp/>the<sp/>material<sp/>property<sp/>matrix<sp/>can</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>be<sp/>used<sp/>as<sp/>is.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>------------------------------------------------------------------</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<sp/>piecewise_constant_material<sp/>)</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>looping<sp/>over<sp/>the<sp/>integration<sp/>points<sp/>of<sp/>the<sp/>prism<sp/>or<sp/>hexahedral<sp/>element</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>i{0U};<sp/>i&lt;iface.<ref refid="classcsmp_1_1_finite_element_policy_1ac5f3d16eb6043c3009d924142f10dc43" kindref="member">IntegrationPoints</ref>();<sp/>i++<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>getting<sp/>global<sp/>intpol.<sp/>function<sp/>derivative<sp/>matrix<sp/>and<sp/>determinant<sp/>of</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>byproduct<sp/>Jacobian<sp/>matrix<sp/>(DN<sp/>is<sp/>already<sp/>in<sp/>global<sp/>coordinates)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>detJ<sp/>=<sp/>iface.<ref refid="classcsmp_1_1_finite_element_policy_1a687f5a139fe956d5e4f77a395888665a" kindref="member">dN_AtIntegrationPoint</ref>(<sp/>DN_,<sp/>i,<sp/>SCALAR<sp/>);</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>transposing<sp/>B<sp/>-&gt;<sp/>BT</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DN_.Transposed(<sp/>DNT_<sp/>);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>multiply<sp/><sp/>BT<sp/>.<sp/>MTRL</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DNT_<sp/>*=<sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[0];</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>multiplying<sp/>BT<sp/>.<sp/>B</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DNT_<sp/>*=<sp/>DN_;</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>multiplying<sp/>with<sp/>determinant<sp/>and<sp/>weights</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DNT_<sp/>*=<sp/>iface.WeightAtIntegrationPoint(i)<sp/>*<sp/>detJ;</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>accumulating<sp/>ME<sp/>Gauss<sp/>point<sp/>integral<sp/>contributions<sp/>into<sp/>element</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>contribution<sp/>to<sp/>global<sp/>conductance<sp/>matrix</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1a62aa16ddf9b80b53fd8b71ab6c8cc348" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::LHS</ref><sp/>+=<sp/>DNT_;</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NODE<sp/>or<sp/>ELEMENT_INTEGRATION_POINT<sp/>material<sp/>placements</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>i{0U};<sp/>i&lt;iface.<ref refid="classcsmp_1_1_finite_element_policy_1aa15ab6c8637cfc881bba2a5068034fa1" kindref="member">FE</ref>()-&gt;IntegrationPoints();<sp/>i++<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>detJ<sp/>=<sp/>iface.<ref refid="classcsmp_1_1_finite_element_policy_1a687f5a139fe956d5e4f77a395888665a" kindref="member">dN_AtIntegrationPoint</ref>(<sp/>DN_,<sp/>i,<sp/>SCALAR<sp/>);</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DN_.Transposed(<sp/>DNT_<sp/>);</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DNT_<sp/>*=<sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1aa1b0a0355f67bab13ac715057106d131" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::MTRL</ref>[i];</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DNT_<sp/>*=<sp/>DN_;</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DNT_<sp/>*=<sp/>iface.WeightAtIntegrationPoint(i)<sp/>*<sp/>detJ;</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcsmp_1_1_math_operator_l_h_s_1a62aa16ddf9b80b53fd8b71ab6c8cc348" kindref="member">MathOperatorLHS&lt;dim,InterFace&gt;::LHS</ref><sp/>+=<sp/>DNT_;</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"></highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3.<sp/>reassigning<sp/>the<sp/>FE<sp/>pointer</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><ref refid="classcsmp_1_1_finite_element_policy" kindref="compound">FiniteElementPolicy&lt;dim,InterFace&gt;</ref>(iface).<ref refid="classcsmp_1_1_finite_element_policy_1a8a6b224d1d3482c35e577ffc3b9a1230" kindref="member">Assign</ref>(<sp/>fptr<sp/>);</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>end<sp/>ComputeContribution</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight><highlight class="comment">//<sp/>FOR<sp/>DEBUGGING</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"></highlight><highlight class="comment">//cout<sp/>&lt;&lt;&quot;\nNumIntegral_dNT_op_dN_dV_InterFace:<sp/>on<sp/>InterFace<sp/>&quot;&lt;&lt;<sp/>e.Idx()<sp/>&lt;&lt;<sp/>endl;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"></highlight><highlight class="comment">//MathOperatorLHS&lt;dim&gt;::LHS.Out();</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="231"><highlight class="normal"></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"></highlight><highlight class="comment">//<sp/>for<sp/>(<sp/>auto<sp/>i{0U};<sp/>i&lt;this-&gt;LHS.Rows();<sp/>i++<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/><sp/>if<sp/>(<sp/>this-&gt;LHS(i,i)<sp/>&lt;<sp/>numeric_limits::epsilon()<sp/>)<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="234"><highlight class="normal"></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;&quot;\nNumIntegral_dNT_op_dN_dV_InterFace:<sp/>zero<sp/>element<sp/>in<sp/>diagonal<sp/>of<sp/>element<sp/>matrix.&quot;;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="235"><highlight class="normal"></highlight></codeline>
+<codeline lineno="236"><highlight class="normal"></highlight></codeline>
+<codeline lineno="237"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face" kindref="compound">NumIntegral_dNT_op_dN_dV_InterFace&lt;1U&gt;</ref>;</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face" kindref="compound">NumIntegral_dNT_op_dN_dV_InterFace&lt;2U&gt;</ref>;</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face" kindref="compound">NumIntegral_dNT_op_dN_dV_InterFace&lt;3U&gt;</ref>;</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"></highlight></codeline>
+<codeline lineno="241"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>csmp</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="242"><highlight class="normal"></highlight></codeline>
+<codeline lineno="243"><highlight class="normal"></highlight></codeline>
+<codeline lineno="244"><highlight class="normal"></highlight></codeline>
+<codeline lineno="245"><highlight class="normal"></highlight></codeline>
+<codeline lineno="246"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight></codeline>
+<codeline lineno="248"><highlight class="normal"></highlight></codeline>
+<codeline lineno="249"><highlight class="normal"></highlight></codeline>
+<codeline lineno="250"><highlight class="normal"></highlight></codeline>
+<codeline lineno="251"><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="source/modules/integration/pde_operators/numerical_integration/NumIntegral_dNT_op_dN_dV_InterFace.cpp"/>
+  </compounddef>
+</doxygen>
